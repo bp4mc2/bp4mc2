@@ -10,8 +10,13 @@ Concepts are ordered based on the following predicates:
 
 The prefix `thes` is the namespace associated with the [SKOS-THES vocabulary](http://purl.org/iso25964/skos-thes).
 
+The concepts are ordered from most generic to least generic (i.e. most specific). This means that:
+- For the triples `A thes:broaderGeneric B` and `A thes:broaderPartitive B`, `B` will be the higher level element.
+- For the triples `A thes:narrowerGeneric B` and `A thes:narrowerPartitive B`, `A` will be the higher level element.
+
 ## Design choices
 The following design choices were made regarding the treeview:
+- Concepts that have no relations to other concepts, or only *other* relations than the ones mentioned above, *are* shown in the tree, as toplevel elements (or directly below a collection if they are part of one).
 - Concepts that are not part of a collection *are* shown in the tree.
   - If they are toplevel concepts, they will be shown as a base element in the tree, on the same level as the collections.
   - If they are not, i.e. they have a parent concept, they will be shown below that parent concept. In this case, there is no way to know, looking at the treeview, that this particular concept is not part of a collection.
