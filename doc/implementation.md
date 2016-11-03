@@ -23,6 +23,7 @@ Each versiongraph contains the following:
 
 ## Algorithm when updating a dataset
 When updating a dataset, the following algorithm is used to properly update the mastergraph and create the new versiongraph:
+
 1. Calculate the signature of all concepts in the new version of the dataset. This is necessary to determine which concepts have changed. It is done by generating a hash based on a concatenation of all predicates and objects of a concept.
 2. Delete the signature of all *deleted* concepts from the mastergraph. This is necessary to ensure that, should the exact same concept be re-added to the dataset at a later time, that will be considered a new version of the concept.
 3. Add all triples of all *changed* concepts to the new versiongraph. This can be done by comparing the calculated signature in step 1 to the signature stored in the mastergraph, and then adding only those concepts that have a changed signature to the new versiongraph.
