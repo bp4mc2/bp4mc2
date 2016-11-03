@@ -2,7 +2,7 @@
 This document describes the way versioning is implemented in the Catalogus.
 
 ## Mastergraph and versiongraphs
-The main idea behind the way versioning is implemented is to work with one **mastergraph** and several **versiongraphs** per dataset. The mastergraph contains all versioned concepts in the dataset and a link to the versiongraph in which all information of the latest version of that concept can be found. A versiongraph contains all information of the concept(s) that were changed in the new version of the dataset.
+The main idea behind the way versioning is implemented is to work with one **mastergraph** and several **versiongraphs** per dataset. The mastergraph contains all versioned concepts that are currently in the dataset or once part of the dataset. It also contains a link to the versiongraph in which all information of the latest version of that concept can be found. A versiongraph contains all information of the concept(s) that were changed in the new version of the dataset.
 
 ### Contents of the mastergraph
 Per versioned concept, the mastergraph contains three triples:
@@ -15,4 +15,8 @@ Each versiongraph contains the following:
 - Some metadata:
   - The date and time the version was created, denoted by the predicate `prov:generatedAtTime`
   - The prov:Activity associated with the creation of the version, denoted by the predicate `prov:wasAssociatedWith`
-  - 
+  - ...
+- All information of the concepts that were changed in this version of the dataset. Here, 'all information' means all triples that have the concept as subject.
+- If this version of the concept is no longer the most recent version, i.e. it was updated (again) in a later versiongraph, then the versiongraph also contains the date and time this version of the concept stopped being the most recent one, denoted by the predicate `prov:invalidatedAtTime`
+
+## Algorithm when updating a dataset
