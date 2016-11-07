@@ -11,6 +11,7 @@ Per versioned concept, the mastergraph contains three triples:
 - The type of the concept, denoted by the predicate `rdf:type`
 - The link to the versiongraph which contains the most recent version of the concept, denoted by the predicate `rdfs:isDefinedBy`
 - A signature, which is necessary to determine whether a concept has changed
+
 Additionaly, the mastergraph includes:
 - Some metadata
 - A list of all versiongraphs, denoted by the predicate `dc:isVersionOf`
