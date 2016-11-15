@@ -18,7 +18,7 @@ An Actor is a subclass of a skos:Concept.
 ### [Agent](http://bp4mc2.org/def/skos-lex#Agent)
 *An Agent is some entity (individual, group or organisation) involved in some Act, without actually performing the Act.*
 An Agent is a subclass of a skos:Concept.
-### [Object](http://bp4mc2.org/def/skos-lex#(Object)
+### [Object](http://bp4mc2.org/def/skos-lex#Object)
 *An Object is some thing (not an Actor) that is created, used or changed during some Act.*
 An Object is a subclass of a skos:Concept.
 ## Properties
