@@ -27,7 +27,7 @@ Refers to | skos:semanticRelation | [http://www.w3.or/2004/02/skos/core#semantic
 **Activity** | skos-lex:Act | [http://bp4mc2.org/def/skos-lex#Act](http://bp4mc2.org/def/skos-lex#Act)
 Is performed by | skos-lex:actor | [http://bp4mc2.org/def/skos-lex#actor](http://bp4mc2.org/def/skos-lex#actor)
 Is performed on | skos-lex:object | [http://bp4mc2.org/def/skos-lex#object](http://bp4mc2.org/def/skos-lex#object)
-
+--- | --- | ---
 **Norm** | skos-lex:Norm | [http://bp4mc2.org/def/skos-lex#Norm](http://bp4mc2.org/def/skos-lex#Norm)
 Affects | skos-lex:affects | [http://bp4mc2.org/def/skos-lex#affects](http://bp4mc2.org/def/skos-lex#affects)
 Refers to | skos-lex:refersTo | [http://bp4mc2.org/def/skos-lex#refersTo](http://bp4mc2.org/def/skos-lex#refersTo)
