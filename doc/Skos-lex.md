@@ -7,19 +7,19 @@ referring to an Act) or affects (to indicate that an Act is affected by a Norm).
 
 ## Classes
 ### [Act](http://bp4mc2.org/def/skos-lex#Act)
-*An Act is a legal construc representing a set of activities, performed by an Actor and with respect to some Object.*
+*An Act is a legal construc representing a set of activities, performed by an Actor and with respect to some Object.*  
 An Act is a subclass of a skos:Concept.
 ### [Norm](http://bp4mc2.org/def/skos-lex#Norm) 
-*A Norm affects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A Norm represents the set of rules that apply to an Act.*
+*A Norm affects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A Norm represents the set of rules that apply to an Act.*  
 A Norm is a subclass of a skos:Concept.
 ### [Actor](http://bp4mc2.org/def/skos-lex#Actor)
-*An Actor is some entity (individual, group or organisation) that performs some Act.*
+*An Actor is some entity (individual, group or organisation) that performs some Act.*  
 An Actor is a subclass of a skos:Concept.
 ### [Agent](http://bp4mc2.org/def/skos-lex#Agent)
-*An Agent is some entity (individual, group or organisation) involved in some Act, without actually performing the Act.*
+*An Agent is some entity (individual, group or organisation) involved in some Act, without actually performing the Act.*  
 An Agent is a subclass of a skos:Concept.
 ### [Object](http://bp4mc2.org/def/skos-lex#Object)
-*An Object is some thing (not an Actor) that is created, used or changed during some Act.*
+*An Object is some thing (not an Actor) that is created, used or changed during some Act.*  
 An Object is a subclass of a skos:Concept.
 ## Properties
 ### [actor](http://bp4mc2.org/def/skos-lex#actor)
