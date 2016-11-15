@@ -1,5 +1,5 @@
 # Treeview
-On most Catalogus pages, a treeview is present. This treeview is a representation of the **collections** in the dataset and their underlying **concepts**. This means that the toplevel elements in the tree are usually collections. The concepts themselves are also ordered based on their predicates.
+On most Catalogus pages, a treeview is present. This treeview is a representation of the **collections** @@de catalogus zal ook meerdere schema's gaan bevatten, dus ook de omgang met schema's meenemen. Het lijkt mij logisch op het hoogste niveau schema's te onderscheiden, daarna collecties en dan vanaf de top-level concepten conform de concept hierarchie@@ in the dataset and their underlying **concepts**. This means that the toplevel elements in the tree are usually collections. The concepts themselves are also ordered based on their predicates.
 
 ## Concept hierarchy
 Concepts are ordered based on the following predicates:
@@ -16,7 +16,7 @@ The concepts are ordered from most generic to least generic (i.e. most specific)
 
 ## Design choices
 The following design choices were made regarding the treeview:
-- Concepts that have no relations to other concepts, or only *other* relations than the ones mentioned above, *are* shown in the tree, as toplevel elements (or directly below a collection if they are part of one).
+- Concepts that have no relations to other concepts, or only *other* relations than the ones mentioned above, *are* shown in the tree, as toplevel elements (or directly below a collection if they are part of one).@@ik denk dat je dit kunt/moet oplossen door een slimme ordening in collecties@@
 - Concepts that are not part of a collection *are* shown in the tree.
   - If they are toplevel concepts, they will be shown as a base element in the tree, on the same level as the collections.
   - If they are not, i.e. they have a parent concept, they will be shown below that parent concept. In this case, there is no way to know, looking at the treeview, that this particular concept is not part of a collection.
