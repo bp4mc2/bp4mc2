@@ -1,5 +1,5 @@
 # Treeview
-On most Catalogus pages, a treeview is present. This treeview is a representation of the **collections** @@de catalogus zal ook meerdere schema's gaan bevatten, dus ook de omgang met schema's meenemen. Het lijkt mij logischp het hoogste niveau schema's te onderschein collecties en dan vanaf de top-level concepten conform de concept hierarchie@@ in the dataset and their underlying **concepts**. This means that the toplevel elements in the tree are usually collections. The concepts themselves are also ordered based on their predicates.
+On most Catalogus pages, a treeview is present. This treeview is a representation of the **collections** @@de catalogus zal ook meerdere schema's gaan bevatten, dus ook de omgang met schema's meenemen. Het lijkt mij logisch op het hoogste niveau schema's te onderscheiden, daarna collecties en dan vanaf de top-level concepten conform de concept hierarchie@@ in the dataset and their underlying **concepts**. This means that the toplevel elements in the tree are usually collections. The concepts themselves are also ordered based on their predicates.
 
 ## Concept hierarchy
 Concepts are ordered based on the following predicates:
