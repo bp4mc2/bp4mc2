@@ -17,7 +17,9 @@ The latter triple is only present if the considerated version of the concept is 
 The technical implementation of formal history (i.e. versioning) in the Catalogus is documented in [implementation.md](implementation.md).
 
 ## Material history
-As said, the material history of a concept addresses its legality. There are several dates relevant to the legality of a concept and several legal statuses a concept can have, such as *announced*, *valid*, *deprecated* etc. For now, the Catalogus only stores the period of time a concept is (legally) valid. For this, the predicate `dcterms:valid` is used, which expects a date range as object. @@in feite modelleren we materiële historie mee. Dit is een belangrijk principe waarmee je ook in een datamodel allerlei genuanceerde soorten historie mee kunt modelleren@@
+As said, the material history of a concept addresses its legality. There are several dates relevant to the legality of a concept and several legal statuses a concept can have, such as *announced*, *valid*, *deprecated* etc. For now, the Catalogus only stores the period of time a concept is (legally) valid. For this, the predicate `dcterms:valid` is used, which expects a date range as object.
+
+In practice, by choosing this implementation, the material history of a concept is included in its data model. This is an important principle which can be used to also register other types of history by means of simply extending the data model.
 
 ## Provenance
 For each **set of changes** to a dataset, the following provenance information is stored:
