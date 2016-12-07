@@ -6,6 +6,18 @@ The main idea behind the way versioning is implemented is to work with one **mas
 
 A concept is considered changed when there has been a change in one of the triples with that concept as subject. That can either be a change in the predicate or object, a newly added triple or a deleted triple.
 
+As an example, consider a situation in which there initially are three concepts in the world: `A`, `C` and `D`. When they are uploaded to the Catalogus, all information about those three concepts is placed in a versiongraph, e.g. `Versiongraph 1`. The three concepts are also added to the mastergraph, along with a link to the versiongraph in which the most recent version of those concepts can be found, which is `Versiongraph 1`. See the picture below.
+
+![Mastergraph and versiongraph 1 after initial upload](https://github.com/bp4mc2/bp4mc2/blob/master/doc/images/mv1.png)
+
+At a certain point in time, concept `C` is replaced by concept `B`. As soon as this change is uploaded to the Catalogus, the effect is that concept `B` is added to a new versiongraph (`Versiongraph 2`) and that concept `C` gets deleted. Effectively, this deletion is done by adding a triple to `Versiongraph 1` which denotes that the version in that graph is no longer up to date. Notice that concept `C` remains in the mastergraph with a link to `Versiongraph 1`. See the picture below.
+
+![Mastergraph and versiongraphs 1 and 2](https://github.com/bp4mc2/bp4mc2/blob/master/doc/images/mv2.png)
+
+Finally, something changes about concept `A`, changing it to a new version of the concept, denoted by `A'`. As soon as this change is uploaded to the Catalogus, all information about the changed concept `A'` is added to the new `Versiongraph 3` and the link in the mastergraph is updated, so that it no longer points to `Versiongraph 1`, where the previous version of `A` can still be found, but to `Versiongraph 3`, which now has the most recent version. See the picture below.
+
+![Mastergraph and versiongraphs 1-3](https://github.com/bp4mc2/bp4mc2/blob/master/doc/images/mv3.png)
+
 ### Contents of the mastergraph
 Per versioned concept, the mastergraph contains three triples:
 - The type of the concept, denoted by the predicate `rdf:type`
@@ -31,4 +43,5 @@ When updating a dataset, the following algorithm is used to properly update the 
 1. Calculate the signature of all concepts in the new version of the dataset. This is necessary to determine which concepts have changed. It is done by generating a hash based on a concatenation of all predicates and objects of a concept.
 2. Delete the signature of all *deleted* concepts from the mastergraph. This is necessary to ensure that, should the exact same concept be re-added to the dataset at a later time, that will be considered a new version of the concept.
 3. Add all triples of all *changed* concepts to the new versiongraph. This can be done by comparing the calculated signature in step 1 to the signature stored in the mastergraph, and then adding only those concepts that have a changed signature to the new versiongraph.
-4. Update the signature and the link to the most recent version in the mastergraph, i.e. delete the old signature and the `rdfs:isDefinedBy` triple and replace them with the new values.
+4. Add a triple to the old versiongraph of the *deleted* and *changed* concepts to denote that the version of those concepts is no longer up to date.
+5. Update the signature and the link to the most recent version in the mastergraph, i.e. delete the old signature and the `rdfs:isDefinedBy` triple and replace them with the new values.
