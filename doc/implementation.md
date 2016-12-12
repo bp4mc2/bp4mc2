@@ -10,11 +10,11 @@ As an example, consider a situation in which there initially are three concepts 
 
 ![Mastergraph and versiongraph 1 after initial upload](https://github.com/bp4mc2/bp4mc2/blob/master/doc/images/mv1.png)
 
-At a certain point in time, concept `C` is replaced by concept `B`. As soon as this change is uploaded to the Catalogus, the effect is that concept `B` is added to a new versiongraph (`Versiongraph 2`) and that concept `C` gets deleted. Effectively, this deletion is done by adding a triple to `Versiongraph 1` which denotes that the version in that graph is no longer up to date. Notice that concept `C` remains in the mastergraph with a link to `Versiongraph 1`. See the picture below.
+At a certain point in time, concept `C` is replaced by concept `B`. As soon as this change is uploaded to the Catalogus, the effect is that concept `B` is added to a new versiongraph (`Versiongraph 2`) and that concept `C` gets deleted. Effectively, this deletion is done by adding a triple to `Versiongraph 1` which denotes that the version in that graph is no longer up to date (and since when). In the picture below, this is depicted by writing concept `C` in red. Notice that `C` remains in the mastergraph with a link to `Versiongraph 1`.
 
 ![Mastergraph and versiongraphs 1 and 2](https://github.com/bp4mc2/bp4mc2/blob/master/doc/images/mv2.png)
 
-Finally, something changes about concept `A`, changing it to a new version of the concept, denoted by `A'`. As soon as this change is uploaded to the Catalogus, all information about the changed concept `A'` is added to the new `Versiongraph 3` and the link in the mastergraph is updated, so that it no longer points to `Versiongraph 1`, where the previous version of `A` can still be found, but to `Versiongraph 3`, which now has the most recent version. See the picture below.
+Finally, something changes about concept `A`, changing it to a new version of the concept, denoted by `A'`. As soon as this change is uploaded to the Catalogus, all information about the changed concept `A'` is added to the new `Versiongraph 3`. Furthermore, the link in the mastergraph is updated, so that it no longer points to `Versiongraph 1`, where the previous version of `A` can still be found, but to `Versiongraph 3`, which now has the most recent version. Finally, a triple is added to `Versiongraph 1` to denote that the version of concept `A` in that graph is no longer up to date (and since when). See the picture below.
 
 ![Mastergraph and versiongraphs 1-3](https://github.com/bp4mc2/bp4mc2/blob/master/doc/images/mv3.png)
 
