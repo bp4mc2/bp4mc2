@@ -7,7 +7,7 @@ referring to an Act) or affects (to indicate that an Act is affected by a Norm).
 
 ## Classes
 ### [Act](http://bp4mc2.org/def/skos-lex#Act)
-*An Act is a legal construc representing a set of activities, performed by an Actor and with respect to some Object.*  
+*An Act is a legal construct representing a set of activities, performed by an Actor and with respect to some Object.*  
 An Act is a subclass of a skos:Concept.
 ### [Norm](http://bp4mc2.org/def/skos-lex#Norm) 
 *A Norm affects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A Norm represents the set of rules that apply to an Act.*  
