@@ -1,0 +1,417 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix foaf: <http://xmlns.com.foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix model:  <http://localhost:8080/tr/def/model/>.
+@prefix n2: <http://localhost:8080/tr/def/model#>.
+@prefix n3: <http://dso/def/dso#>.
+
+### Juridische Tekst
+model:JuridischeTekst a sh:Shape;
+	rdfs:label "Shape voor juridische tekst";
+	sh:scopeClass dctype:Text;
+.
+### Norm
+model:Norm a sh:Shape;
+	rdfs:label "Shape voor Norm";
+	sh:scopeClass skoslex:Norm;
+	sh:property model:Norm_scopeNote;
+	sh:property model:Norm_source;
+	sh:property model:Norm_affects;
+	sh:property model:Norm_refersTo;
+.
+model:Norm_scopeNote a sh:PropertyConstraint;
+	sh:predicate skos:scopeNote;
+.
+model:Norm_source a sh:PropertyConstraint;
+	sh:predicate dct:source;
+.
+model:Norm_affects a sh:PropertyConstraint;
+	sh:predicate skoslex:affects;
+	sh:class skoslex:Act;
+.
+model:Norm_refersTo a sh:PropertyConstraint;
+	sh:predicate skoslex:refersTo;
+	sh:class skoslex:Act;
+.
+### Activiteit
+model:Activiteit a sh:Shape;
+	rdfs:label "Shape voor Activiteit";
+	sh:scopeClass skoslex:Act;
+	sh:property model:Activiteit_scopeNote;
+	sh:property model:Activiteit_actor;
+	sh:property model:Activiteit_object;
+.
+model:Activiteit_scopeNote a sh:PropertyConstraint;
+	sh:predicate skos:scopeNote;
+.
+model:Activiteit_actor a sh:PropertyConstraint;
+	sh:predicate skoslex:actor;
+	sh:class skoslex:Actor;
+.
+model:Activiteit_object a sh:PropertyConstraint;
+	sh:predicate skoslex:object;
+	sh:class skoslex:Object;
+.
+### Actor
+model:Actor a sh:Shape;
+	rdfs:label "Shape voor Actor";
+	sh:scopeClass skoslex:Actor;
+	sh:property model:Actor_definition;
+	sh:property model:Actor_scopeNote;
+.
+model:Actor_definition a sh:PropertyConstraint;
+	sh:predicate skos:definition;
+.
+model:Actor_scopeNote a sh:PropertyConstraint;
+	sh:predicate skos:scopeNote;
+.
+### Agent
+model:Agent a sh:Shape;
+	rdfs:label "Shape voor Agent";
+	sh:scopeClass skoslex:Agent;
+.
+
+### Object
+model:Object a sh:Shape;
+	rdfs:label "Shape voor Object";
+	sh:scopeClass skoslex:Object;
+	sh:property model:Object_definition;
+	sh:property model:Object_scopeNote;
+.
+model:Object_definition a sh:PropertyConstraint;
+	sh:predicate skos:definition;
+.
+model:Object_scopeNote a sh:PropertyConstraint;
+	sh:predicate skos:scopeNote;
+.
+
+### Begrip
+model:Begrip a sh:Shape;
+	rdfs:label "Shape voor Begrip";
+	sh:scopeClass skos:Concept;
+	sh:property model:Begrip_prefLabel;
+	sh:property model:Begrip_inScheme;
+	sh:property model:Begrip_definition;
+	sh:property model:Begrip_comment;
+	sh:property model:Begrip_scopeNote;
+	sh:property model:Begrip_altLabel;
+	sh:property model:Begrip_source;
+	sh:property model:Begrip_broaderGeneric;
+	sh:property model:Begrip_narrowerGeneric;
+	sh:property model:Begrip_broaderPartitive;
+	sh:property model:Begrip_narrowerPartitive;
+	sh:property model:Begrip_semanticRelation;
+	sh:property model:Begrip_closeMatch;
+	sh:property model:Begrip_exactMatch;
+	sh:property model:Begrip_relatedMatch;
+	sh:property model:Begrip_broadMatch;
+	sh:property model:Begrip_narrowMatch;
+	sh:property model:Begrip_GeneratedBy;
+.
+model:Begrip_prefLabel a sh:PropertyConstraint;
+	sh:predicate skos:prefLabel;
+.
+model:Begrip_inScheme a sh:PropertyConstraint;
+	sh:predicate skos:inScheme;
+.
+model:Begrip_definition a sh:PropertyConstraint;
+	sh:predicate skos:definition;
+.
+model:Begrip_comment a sh:PropertyConstraint;
+	sh:predicate skos:comment;
+.
+model:Begrip_scopeNote a sh:PropertyConstraint;
+	sh:predicate skos:scopeNote;
+.
+model:Begrip_altLabel a sh:PropertyConstraint;
+	sh:predicate skos:altLabel;
+.
+model:Begrip_source a sh:PropertyConstraint;
+	sh:predicate dct:source;
+.
+model:Begrip_broaderGeneric a sh:PropertyConstraint;
+	sh:predicate thes:broaderGeneric;
+	sh:class skos:Concept;
+.
+model:Begrip_narrowerGeneric a sh:PropertyConstraint;
+	sh:predicate thes:narrowerGeneric;
+	sh:class skos:Concept;
+.
+model:Begrip_broaderPartitive a sh:PropertyConstraint;
+	sh:predicate thes:broaderPartitive;
+	sh:class skos:Concept;
+.
+model:Begrip_narrowerPartitive a sh:PropertyConstraint;
+	sh:predicate thes:narrowerPartitive;
+	sh:class skos:Concept;
+.
+model:Begrip_semanticRelation a sh:PropertyConstraint;
+	sh:predicate skos:semanticRelation;
+	sh:class skos:Concept;
+.
+model:Begrip_closeMatch a sh:PropertyConstraint;
+	sh:predicate skos:closeMatch;
+	sh:class skos:Concept;
+.
+model:Begrip_exactMatch a sh:PropertyConstraint;
+	sh:predicate skos:exactMatch;
+	sh:class skos:Concept;
+.
+model:Begrip_relatedMatch a sh:PropertyConstraint;
+	sh:predicate skos:relatedMatch;
+	sh:class skos:Concept;
+.
+model:Begrip_broadMatch a sh:PropertyConstraint;
+	sh:predicate skos:broadMatch;
+	sh:class skos:Concept;
+.
+model:Begrip_narrowMatch a sh:PropertyConstraint;
+	sh:predicate skos:narrowMatch;
+	sh:class skos:Concept;
+.	
+model:Begrip_GeneratedBy a sh:PropertyConstraint;
+	sh:predicate prov:wasGeneratedBy;
+	sh:class prov:Entity;
+.
+### Concept Scheme
+model:ConceptScheme a sh:Shape;
+	rdfs:label "Shape voor Concept Scheme";
+	sh:scopeClass skos:ConceptScheme;
+	sh:property model:ConceptScheme_prefLabel;
+	sh:property model:ConceptScheme_Entity;
+.
+model:ConceptScheme_prefLabel a sh:PropertyConstraint;
+	sh:predicate skos:prefLabel;
+.
+model:ConceptScheme_Entity a sh:PropertyConstraint;
+	sh:predicate prov:wasGeneratedBy;
+	sh:class prov:Entity;
+.
+### Catalog
+model:Catalogus a sh:Shape;
+	rdfs:label "Shape voor catalogus";
+	sh:scopeClass dcat:Catalog;
+	sh:property model:Catalogus_Naam;
+	sh:property model:Catalogus_Beschrijving;
+	sh:property model:Catalogus_DatumVanUitgifte;
+	sh:property model:Catalogus_DatumVanWijziging;
+	sh:property model:Catalogus_Taal;
+	sh:property model:Catalogus_Licentie;
+	sh:property model:Catalogus_Rechten;
+	sh:property model:Catalogus_Homepage;
+	sh:property model:Catalogus_GebiedGeldigheid;
+	sh:property model:Catalogus_Uitgever;
+	sh:property model:Catalogus_Record;
+	sh:property model:Catalogus_Dataset;
+	sh:property model:Catalogus_Taxonomy;
+.
+model:Catalogus_Naam a sh:PropertyConstraint;
+	sh:predicate dct:title;
+.
+model:Catalogus_Beschrijving a sh:PropertyConstraint;
+	sh:predicate dct:description;
+.
+model:Catalogus_DatumVanUitgifte a sh:PropertyConstraint;
+	sh:predicate dct:issued;
+.
+model:Catalogus_DatumVanWijziging a sh:PropertyConstraint;
+	sh:predicate dct:modified;
+.
+model:Catalogus_Taal a sh:PropertyConstraint;
+	sh:predicate dct:language;
+.
+model:Catalogus_Licentie a sh:PropertyConstraint;
+	sh:predicate dct:license;
+.
+model:Catalogus_Rechten a sh:PropertyConstraint;
+	sh:predicate dct:rights;
+.
+model:Catalogus_Homepage a sh:PropertyConstraint;
+	sh:predicate foaf:homepage;
+.
+model:Catalogus_GebiedGeldigheid a sh:PropertyConstraint;
+	sh:predicate dct:spatial;
+	sh:class dct:location;
+.
+model:Catalogus_Uitgever a sh:PropertyConstraint;
+	sh:predicate dct:publisher;
+	sh:class foaf:Agent;
+.
+model:Catalogus_Record a sh:PropertyConstraint;
+	sh:predicate dcat:record;
+	sh:class dcat:CatalogRecord;
+.
+model:Catalogus_Dataset a sh:PropertyConstraint;
+	sh:predicate dcat:dataset;
+	sh:class dcat:Dataset;
+.
+model:Catalogus_Taxonomy a sh:PropertyConstraint;
+	sh:predicate dcat:themeTaxonomy;
+	sh:class skos:ConceptScheme;
+.
+### CatalogRecord
+model:CatalogRecord a sh:Shape;
+	rdfs:label "Shape voor een Catalog Record";
+	sh:scopeClass dcat:CatalogRecord;
+	sh:property model:CatalogRecord_Naam;
+	sh:property model:CatalogRecord_Beschrijving;
+	sh:property model:CatalogRecord_DatumVanUitgifte;
+	sh:property model:CatalogRecord_DatumVanWijzinging;
+	sh:property model:CatalogRecord_HoofdOnderwerp;
+.
+model:CatalogRecord_Naam a sh:PropertyConstraint;
+	sh:predicate dct:title;
+.
+model:CatalogRecord_Beschrijving a sh:PropertyConstraint;
+	sh:predicate dct:description;
+.
+model:CatalogRecord_DatumVanUitgifte a sh:PropertyConstraint;
+	sh:predicate dct:issued;
+.
+model:CatalogRecord_DatumVanWijzinging a sh:PropertyConstraint;
+	sh:predicate dct:modified;
+.
+model:CatalogRecord_HoofdOnderwerp a sh:PropertyConstraint;
+	sh:predicate foaf:primaryTopic;
+	sh:class dcat:Dataset;
+.
+### Dataset
+model:Dataset a sh:Shape;
+	rdfs:label "Shape voor een Dataset";
+	sh:scopeClass dcat:Dataset;
+	sh:property model:Dataset_Naam;
+	sh:property model:Dataset_Beschrijving;
+	sh:property model:Dataset_DatumVanUitgifte;
+	sh:property model:Dataset_Taal;
+	sh:property model:Dataset_Informatiemodel;
+	sh:property model:Dataset_dataset;
+	sh:property model:Dataset_Zoekterm;
+	sh:property model:Dataset_GebiedGeldigheid;
+	sh:property model:Dataset_Distributie;
+	sh:property model:Dataset_GeneratedBy;
+.
+model:Dataset_Naam a sh:PropertyConstraint;
+	sh:predicate dct:title;
+.
+model:Dataset_Beschrijving a sh:PropertyConstraint;
+	sh:predicate dct:description;
+.
+model:Dataset_DatumVanUitgifte a sh:PropertyConstraint;
+	sh:predicate dct:issued;
+.
+model:Dataset_Taal a sh:PropertyConstraint;
+	sh:predicate dct:language;
+.
+model:Dataset_Informatiemodel a sh:PropertyConstraint;
+	sh:predicate dct:subject;
+	sh:class rdf:resource;
+.
+model:Dataset_dataset a sh:PropertyConstraint;
+	sh:predicate dctype:dataset;
+.
+model:Dataset_Zoekterm a sh:PropertyConstraint;
+	sh:predicate dcat:keyword;
+.
+model:Dataset_GebiedGeldigheid a sh:PropertyConstraint;
+	sh:predicate dct:spatial;
+	sh:class dct:location;
+.
+model:Dataset_Distributie a sh:PropertyConstraint;
+	sh:predicate dcat:distribution;
+	sh:class dcat:Distribution;
+.
+model:Dataset_GeneratedBy a sh:PropertyConstraint;
+	sh:predicate prov:wasGeneratedBy;
+	sh:class prov:Entity;
+.
+### Agent
+model:Agent a sh:Shape;
+	rdfs:label "Shape voor Agent";
+	sh:scopeClass foaf:Agent;
+.
+### Distributie
+model:Distribution a sh:Shape;
+	rdfs:label "Shape voor een Distribution";
+	sh:scopeClass dcat:Distribution;
+	sh:property model:Distribution_Naam;
+	sh:property model:Distribution_Beschrijving;
+	sh:property model:Distribution_DatumVanUitgifte;
+	sh:property model:Distribution_DatumVanWijzinging;
+	sh:property model:Distribution_Licentie;
+	sh:property model:Distribution_Rechten;
+	sh:property model:Distribution_accessURL;
+	sh:property model:Distribution_GeneratedBy;
+.
+model:Distribution_Naam a sh:PropertyConstraint;
+	sh:predicate dct:title;
+.
+model:Distribution_Beschrijving a sh:PropertyConstraint;
+	sh:predicate dct:description;
+.
+model:Distribution_DatumVanUitgifte a sh:PropertyConstraint;
+	sh:predicate dct:issued;
+.
+model:Distribution_DatumVanWijzinging a sh:PropertyConstraint;
+	sh:predicate dct:modified;
+.
+model:Distribution_Licentie a sh:PropertyConstraint;
+	sh:predicate dct:license;
+.
+model:Distribution_Rechten a sh:PropertyConstraint;
+	sh:predicate dct:rights;
+.
+model:Distribution_accessURL a sh:PropertyConstraint;
+	sh:predicate dcat:accessURL;
+.
+model:Distribution_GeneratedBy a sh:PropertyConstraint;
+	sh:predicate prov:wasGeneratedBy;
+	sh:class prov:Entity;
+.
+### Provenance Entity
+model:Entity a sh:Shape;
+	rdfs:label "Shape voor een provenance Entity";
+	sh:scopeClass prov:Entity;
+	sh:property model:Entity_GemaaktDoor;
+.
+model:Entity_GemaaktDoor a sh:PropertyConstraint;
+	sh:predicate prov:wasGeneratedBy;
+	sh:class prov:Activity;
+.
+### Provenance Activiteit
+model:Activity a sh:Shape;
+	rdfs:label "Shape voor een provenance Activity";
+	sh:scopeClass prov:Activity;
+	sh:property model:Activity_Label;
+	sh:property model:Activity_Door;
+.
+model:Activity_Label a sh:PropertyConstraint;
+	sh:predicate rdfs:label;
+.
+model:Activity_Door a sh:PropertyConstraint;
+	sh:predicate prov:wasAssociatedWith;
+	sh:class prov:Agent;
+.
+### Provenance Agent
+model:ProvAgent a sh:Shape;
+	rdfs:label "Shape voor een provenance Agent";
+	sh:scopeClass prov:Agent;
+	sh:property model:ProvAgent_Naam;
+	sh:property model:ProvAgent_Namens;
+.
+model:ProvAgent_Naam a sh:PropertyConstraint;
+	sh:predicate skos:prefLabel;
+.
+model:ProvAgent_Namens a sh:PropertyConstraint;
+	sh:predicate prov:actedOnBehalfOf;
+	sh:class prov:Agent;
+.
