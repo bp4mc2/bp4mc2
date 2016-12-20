@@ -1,0 +1,240 @@
+@prefix req: <http://localhost:8080/gco/id/requirement/>
+@prefix reqo: <http://localhost;8080/gco/reqo#>
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>
+@prefix shacl: <http://www.w3.org/ns/shacl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix foaf: <http://xmlns.com.foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+
+@prefix kkg: <http://UNKNOWN/kkg#>.
+@prefix adms: <http://UNKNOWN/adms#>.
+
+req:Catalogus01 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "De catalogus heeft een naam";
+	rdf:value "Catalogus Omgevingswet";
+	shacl:predicate dct:title;
+.
+req:Catalogus02 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "De catalogus heeft een duidelijke omschrijving";
+	rdf:value "<welkomsttekst>";
+	shacl:predicate dct:description;
+.
+req:Catalogus03 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "De catalogus is op enig moment life life gegaan";
+	rdf:value "1/10/2016";
+	shacl:predicate dct:issued;
+.
+req:Catalogus04 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "Er wordt bijgehouden wanneer iets in de catalogus zelf is gewijzigd (een van de attributen in dit lijstje of een dataset die is toegevoegd)";
+	rdf:value "1/10/2016";
+	shacl:predicate dct:modified;
+.
+req:Catalogus05 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "De taal van de catalogus";
+	rdf:value "@nl";
+	shacl:predicate dct:language;
+.
+req:Catalogus06 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "De licentie op de catalogus zelf (dus niet die op de datasets of distributies)";
+	rdf:value "uri-beerware";
+	shacl:predicate dct:license;
+.
+req:Catalogus07 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "Een beschrijving van de rechten die gelden voor het de catalogus zelf (dus niet voor de datasets of distributies)";
+	rdf:value "<tekst over de catalogus en de oorsprong van de verschillende datasets>";
+	shacl:predicate dct:rights;
+.
+req:Catalogus08 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "De url van de homepage is gelijk aan de uri van de catalogus omdat die dereferenceble is";
+	rdf:value "https://www.digitaalstelselomgevingswet.nl/catalogus";
+	shacl:predicate foaf:homepage;
+.
+req:Catalogus09 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "Het gebied waarvoor de catalogus geldig is";
+	rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+	shacl:predicate dct:spatial;
+	shacl:class dct:Location;
+.
+req:Catalogus10 a reqo:Requirement;
+	shacl:targetClass dcat:Catalog;
+	rdfs:label "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de dataset";
+	rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
+	shacl:predicate dct:publisher;
+	shacl:class foaf:Agent;
+.
+req:Dataset01 a reqo:Requirement;
+	shacl:targetClass dcat:Dataset;
+	rdfs:label "De dataset heeft een naam";
+	rdf:value "'Omgevingswet','BAL','BRK', etc";
+	shacl:predicate dct:title;
+.
+req:Dataset02 a reqo:Requirement;
+	shacl:targetClass dcat:Dataset;
+	rdfs:label "De dataset heeft een duidelijke beschrijving";
+	rdf:value "<beschrijving>";
+	shacl:predicate dct:description;
+.
+req:Dataset03 a reqo:Requirement;
+	shacl:targetClass dcat:Dataset;
+	rdfs:label "De dataset  is op enig moment gepubliceerd";
+	rdf:value "1/10/2016";
+	shacl:predicate dct:issued;
+.
+req:Dataset04 a reqo:Requirement;
+	shacl:targetClass dcat:Dataset;
+	rdfs:label "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
+	rdf:value "@nl";
+	shacl:predicate dct:language;
+.
+req:Dataset05 a reqo:Requirement;
+	shacl:targetClass dcat:Dataset;
+	rdfs:label "Bij een dataset hoort een informatiemodel.";
+	rdf:value "kadaster.nl/schemas/imkad";
+	shacl:predicate dct:subject;
+	shacl:class rdf:Resource;
+.
+req:Informatiemodel01 a reqo:Requirement;
+	shacl:targetClass kkg:InformationModel;
+	rdfs:label "Het informatiemodel heeft een naam";
+	rdf:value "'IMKAD'";
+	shacl:predicate dct:title;
+.
+req:Informatiemodel02 a reqo:Requirement;
+	shacl:targetClass kkg:InformationModel;
+	rdfs:label "Het informatiemodel heeft een duidelijke beschrijving";
+	rdf:value "<beschrijving>";
+	shacl:predicate dct:description;
+.
+req:Informatiemodel03 a reqo:Requirement;
+	shacl:targetClass kkg:InformationModel;
+	rdfs:label "Het informatiemodel is op enig moment gepubliceerd";
+	rdf:value "8/5/2012";
+	shacl:predicate dct:issued;
+.
+req:Informatiemodel04 a reqo:Requirement;
+	shacl:targetClass kkg:InformationModel;
+	rdfs:label "Het informatiemodel heeft een versie";
+	rdf:value "2.1";
+	shacl:predicate adms:version;
+.
+req:Informatiemodel05 a reqo:Requirement;
+	shacl:targetClass kkg:InformationModel;
+	rdfs:label "Een versie bevat release notes";
+	rdf:value "<release notes>";
+	shacl:predicate adms:versionNotes;
+.
+req:CatalogRecord01 a reqo:Requirement;
+	shacl:targetClass dcat:CatalogRecord;
+	rdfs:label "Het catalog  record geeft aan wanneer de betreffende dataset is gepubliceerd in de catalogus";
+	rdf:value "1/10/2016";
+	shacl:predicate dct:issued;
+.
+req:Distributie01 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "De distributie heeft een naam";
+	rdf:value "'Linked Data omgevingswet'";
+	shacl:predicate dct:title;
+.
+req:Distributie02 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "De distributie heeft een duidelijke beschrijving";
+	rdf:value "<beschrijving>";
+	shacl:predicate dct:description;
+.
+req:Distributie03 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "De publicatiedatum van de distributie (dit is niet perse de datum van opname van de distributie in de catalogus)";
+	rdf:value "1/10/2016";
+	shacl:predicate dct:issued;
+.
+req:Distributie04 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "De licentie op de distributie";
+	rdf:value "uri-beerware";
+	shacl:predicate dct:license;
+.
+req:Distributie05 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "Een beschrijving van de rechten die gelden voor de distributie. Zie ook: svbg:gebruiksvoorwaarden en iso:confidentiality";
+	rdf:value "<tekst over de distributie>";
+	shacl:predicate dct:rights;
+.
+req:Distributie06 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "De url van een API of een webservice";
+	rdf:value "..";
+	shacl:predicate dcat:accessURL;
+.
+req:Distributie07 a reqo:Requirement;
+	shacl:targetClass dcat:Distribution;
+	rdfs:label "De url van de downloadpagina";
+	rdf:value "..";
+	shacl:predicate dcat:downloadURL;
+.
+req:Entiteit01 a reqo:Requirement;
+	shacl:targetClass prov:Entity;
+	rdfs:label "Het begin van de formele historie (de publicatiedatum) wordt vastgelegd";
+	rdf:value "1/7/2017";
+	shacl:predicate prov:generatedAtTime;
+.
+req:Entiteit02 a reqo:Requirement;
+	shacl:targetClass prov:Entity;
+	rdfs:label "Het einde van de formele historie (het moment van de publicatie van een nieuwe versie) wordt vastgelegd";
+	rdf:value "''";
+	shacl:predicate prov:invalidatedAtTime;
+.
+req:Entiteit03 a reqo:Requirement;
+	shacl:targetClass prov:Entity;
+	rdfs:label "Optioneel: het vastleggen van een versie";
+	rdf:value "..";
+	shacl:predicate adms:version;
+.
+req:Entiteit04 a reqo:Requirement;
+	shacl:targetClass prov:Entity;
+	rdfs:label "Optioneel: het vastleggen van release notes";
+	rdf:value "..";
+	shacl:predicate adms:versionNotes;
+.
+req:Entiteit05 a reqo:Requirement;
+	shacl:targetClass prov:Entity;
+	rdfs:label "Verwijzing naar de activiteit van het vastleggen/publiceren";
+	rdf:value "<de betreffende handeling>";
+	shacl:predicate prov:wasGeneratedBy;
+	shacl:class prov:Activity;
+.
+req:Activiteit01 a reqo:Requirement;
+	shacl:targetClass prov:Activity;
+	rdfs:label "Het moment van het vastleggen zelf (de audit trail) wordt vastgelegd";
+	rdf:value "1/10/2016";
+	shacl:predicate prov:startedAtTime;
+.
+req:Activiteit02 a reqo:Requirement;
+	shacl:targetClass prov:Activity;
+	rdfs:label "Verwijzing naar de organisatie die de activiteit heeft uitgevoerd (de audit trail)";
+	rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
+	shacl:predicate prov:wasAssociatedWith;
+.
+req:Agent01 a reqo:Requirement;
+	shacl:targetClass prov:Agent;
+	rdfs:label "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
+	rdf:value "overheid:Rijswaterstaat";
+	shacl:predicate prov:actedOnBehalfOf;
+	shacl:class prov:Agent;
+.
+req:Dimension01 a reqo:Requirement;
+	shacl:targetClass dqv:Dimension;
+	rdfs:label "??";
+	rdf:value "iso:Completeness";
+	shacl:predicate dqv:inCategory;
+.
