@@ -1,0 +1,110 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix foaf: <http://xmlns.com.foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix model:  <http://localhost:8080/tr/def/model/>.
+@prefix n2: <http://localhost:8080/tr/def/model#>.
+@prefix n3: <http://dso/def/dso#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+###OWL Class
+model:Class a sh:Shape;
+	rdfs:label "Shape voor owl:Class";
+	sh:scopeClass owl:Class;
+	sh:property model:Class_label;
+	sh:property model:Class_subject;
+.
+model:Class_label a sh:Shape;
+	sh:predicate rdfs:label;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:Class_subject a sh:PropertyConstraint;
+	sh:predicate dct:subject;
+	sh:class skos:Concept;
+.
+
+###Property
+model:Property a sh:Shape;
+	rdfs:label "Shape voor eigenschap";
+	sh:scopeClass rdf:Property;
+	sh:property model:Property_label;
+	sh:property model:Property_subject;
+.
+model:Property_label a sh:PropertyConstraint;
+	sh:predicate rdfs:label;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:Property_subject a sh:PropertyConstraint;
+	sh:predicate dct:subject;
+	sh:class skos:Concept;
+.
+
+###OWL Datatype property
+model:DatatypeProperty a sh:Shape;
+	rdfs:label "Shape voor attribuut-eigenschap";
+	sh:scopeClass owl:DatatypeProperty;
+.
+
+###OWL Object property
+model:ObjectProperty a sh:Shape;
+	rdfs:label "Shape voor relatie-eigenschap";
+	sh:scopeClass owl:ObjectProperty;
+.
+
+###Shape
+model:Shape a sh:Shape;
+	rdfs:label "Shape voor gegevensstructuur";
+	sh:scopeClass sh:Shape;
+	sh:property model:Shape_targetClass;
+	sh:property model:Shape_property;
+.
+model:Shape_targetClass a sh:PropertyConstraint;
+	sh:predicate sh:targetClass;
+	sh:minCount 1;
+	sh:maxCount 1;
+	sh:class owl:Class;
+.
+model:Shape_property a sh:PropertyConstraint;
+	sh:predicate sh:property;
+	sh:class sh:PropertyConstraint;
+.
+###Property constraint
+model:PropertyConstraint a sh:Shape;
+	rdfs:label "Shape voor gegevensconstraint";
+	sh:scopeClass sh:PropertyConstraint;
+	sh:property model:PropertyConstraint_predicate;
+	sh:property model:PropertyConstraint_class;
+	sh:property model:PropertyConstraint_datatype;
+.
+model:PropertyConstraint_predicate a sh:PropertyConstraint;
+	sh:predicate sh:predicate;
+	sh:minCount 1;
+	sh:maxCount 1;
+	sh:class rdf:Property
+.
+model:PropertyConstraint_class a sh:PropertyConstraint;
+	sh:predicate sh:class;
+	sh:class owl:Class
+.
+model:PropertyConstraint_datatype a sh:PropertyConstraint;
+	sh:predicate sh:datatype;
+	sh:class rdfs:Datatype;
+.
+###Datatype
+model:Datatype a sh:Shape;
+	rdfs:label "Shape voor datatype";
+	sh:scopeClass rdfs:Datatype;
+.

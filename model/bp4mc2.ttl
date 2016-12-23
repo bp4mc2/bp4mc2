@@ -135,9 +135,9 @@ model:Begrip_altLabel rdf:type sh:PropertyConstraint;
 .
 model:Begrip_source rdf:type sh:PropertyConstraint;
 	sh:predicate dct:source;
-	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
+	sh:class dctype:Text;
 .
 model:Begrip_broaderGeneric rdf:type sh:PropertyConstraint;
 	sh:predicate thes:broaderGeneric;
@@ -315,6 +315,11 @@ model:CatalogRecord_DatumVanWijzinging rdf:type sh:PropertyConstraint;
 model:CatalogRecord_HoofdOnderwerp rdf:type sh:PropertyConstraint;
 	sh:predicate foaf:primaryTopic;
 	sh:class dcat:Dataset;
+.
+### Dataset (DCType)
+model:DCTypeDataset a sh:Shape;
+	rdfs:label "Shape voor DCType dataset";
+	sh:scopeClass dctype:Dataset;
 .
 ### Dataset
 model:Dataset rdf:type sh:Shape;
