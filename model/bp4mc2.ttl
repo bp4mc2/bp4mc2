@@ -450,6 +450,7 @@ model:Entity rdf:type sh:Shape;
 	sh:scopeClass prov:Entity;
 	sh:property model:Entity_Naam;
 	sh:property model:Entity_GemaaktDoor;
+	sh:property model:Entity_GemaaktOp;
 .
 model:Entity_Naam rdf:type sh:PropertyConstraint;
 	sh:predicate skos:prefLabel;
@@ -461,12 +462,17 @@ model:Entity_GemaaktDoor rdf:type sh:PropertyConstraint;
 	sh:predicate prov:wasGeneratedBy;
 	sh:class prov:Activity;
 .
+model:Entity_GemaaktOp rdf:type sh:PropertyConstraint;
+	sh:predicate prov:generatedAtTime;
+	sh:datatype xsd:current-dateTime;
+.
 ### Provenance Activiteit
-model:Activity rdf:Type sh:Shape;
+model:Activity rdf:type sh:Shape;
 	rdfs:label "Shape voor een provenance Activity";
 	sh:scopeClass prov:Activity;
 	sh:property model:Activity_Label;
 	sh:property model:Activity_Door;
+	sh:property model:Activity_Tijdstip;
 .
 model:Activity_Label rdf:type sh:PropertyConstraint;
 	sh:predicate rdfs:label;
@@ -477,6 +483,10 @@ model:Activity_Label rdf:type sh:PropertyConstraint;
 model:Activity_Door rdf:type sh:PropertyConstraint;
 	sh:predicate prov:wasAssociatedWith;
 	sh:class prov:Agent;
+.
+model:Activity_Tijdstip rdf:type sh:PropertyConstraint;
+	sh:predicate prov:startedAtTime;
+	sh:datatype xsd:current-dateTime;
 .
 ### Provenance Agent
 model:ProvAgent rdf:type sh:Shape;
@@ -493,7 +503,19 @@ model:ProvAgent_Naam rdf:type sh:PropertyConstraint;
 .
 model:ProvAgent_Namens rdf:type sh:PropertyConstraint;
 	sh:predicate prov:actedOnBehalfOf;
-	sh:class prov:Agent;
+	sh:class prov:Organization;
+.
+### Provenance Organisatie
+model:Organization rdf:Type sh:Shape;
+	rdfs:label "Shape voor een provenance Organization";
+	sh:scopeClass prov:Organization;
+	sh:property model:Organisatie_Naam;
+.
+model:Organisatie_Naam rdf:type sh:PropertyConstraint;
+	sh:predicate skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
 .
 
 
