@@ -1,0 +1,738 @@
+﻿#
+#
+#
+# FRAMEWORK
+#
+#
+#
+
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/shaql/stage#>.
+@prefix updatestage: <http://data.acceptatie.pdok.nl/catalogus/shaql/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://data.acceptatie.pdok.nl/catalogus/shaql/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+#
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+#
+#
+
+
+# Welkomstpagina
+stage:ShaqlWelkomstpagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shaql(|/)$";
+	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Shaql";
+		elmo:html "<div><p>Welkom bij de Catalogus voor het DSO-programma. Vanaf hier kunt u via de conceptenboom of via de alfabetische conceptenlijst navigeren door de verschillende concepten die in de Catalogus zijn vastgelegd.</p><p>Op de Help-pagina staat uitleg over wat de verschillende termen die gebruikt worden in de Catalogus betekenen. Tevens staat daar een instructie over hoe concepten aan de Catalogus kunnen worden toegevoegd, bewerkt of verwijderd.</p></div>"
+	]
+.
+
+# Helppagina
+stage:ShaqlHelp rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shaql/query/help(|/)$";
+	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Help";
+		elmo:html '''Help will always be given to those who ask for it.'''
+	];
+.
+
+# Helppagina beheer
+stage:ShaqlBeheerHelp rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shaql/query/beheerhelp(|/)$";
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Help";
+		elmo:html '''<div>Op deze beheerpagina kunnen de volgende acties worden uitgevoerd:
+				<ul>
+					<li>Hoofdpagina - keer terug naar de hoofdpagina van het Shaql.</li>
+					<li>Upload - kies de wijze van uploaden van nieuwe data uit het menu. Upload vervolgens het bronbestand. Een succesvolle import is te herkennen door het zeer kort verschijnen van het woord 'Succes'.</li>
+					<li>Speciaal
+						<ul>
+							<li>Verwijder alle data - hiermee worden alle gegevens uit de Catalogus verwijderd. Wees hier dus voorzichtig mee!</li>
+						</ul>
+					</li>
+				</ul>
+				</div>'''
+	]
+.
+
+# Hoofdpagina beheer
+stage:ShaqlBeheerpagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shaql/admin(|/)$";
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Shaql";
+		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>"
+	]
+.
+
+
+#
+#
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+#
+#
+
+#
+# Indexloos: Appearance bepaalt plaats op de pagina
+#
+
+# Header
+stage:ShaqlHeader a elmo:Part;
+	elmo:appearance elmo:HeaderAppearance;
+	elmo:data [elmo:html "<a href='http://data.acceptatie.pdok.nl/catalogus/shaql'><img src='http://data.acceptatie.pdok.nl/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
+.
+
+# Menubalk hoofdmenu
+stage:ShaqlMenu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [
+			rdfs:label "Shaql";
+			xhtml:link "/catalogus/shaql";
+			elmo:index "0"
+		];
+		elmo:data [
+			rdfs:label "Modellen";
+			elmo:data [
+				elmo:index "1";
+				rdfs:label "Besluit";
+				xhtml:link "/catalogus/shaql/def/model/Besluit";
+			];
+			elmo:index "3";
+		];
+		elmo:data [
+			rdfs:label "Vocabulaires";
+			elmo:index "4";
+			elmo:data [
+				elmo:index "1";
+				rdfs:label "Besluit";
+				xhtml:link "/catalogus/shaql/def/model";
+			];
+		];
+		elmo:data [
+			rdfs:label "Beheer";
+			xhtml:link "/catalogus/shaql/admin";
+			elmo:index "6"
+		];
+		elmo:data [
+			rdfs:label "Help";
+			xhtml:link "/catalogus/shaql/query/help";
+			elmo:index "7"
+		];
+	]
+.
+
+
+# Beheermenu
+stage:ShaqlBeheermenu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [
+			rdfs:label "BEHEER";
+			xhtml:link "/catalogus/shaql/admin";
+			elmo:index: "0";
+		];
+		elmo:data [ 
+			rdfs:label "Hoofdpagina";
+			elmo:index "1";
+			xhtml:link "/catalogus/shaql";
+		];
+		elmo:data [
+			rdfs:label "Upload";
+			elmo:index "2";
+			elmo:data [
+				rdfs:label "Upload UML-model";
+				elmo:index "3";
+				xhtml:link "/catalogus/shaql/container/umlmodelupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "Acties";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Verwijder alle data";
+				elmo:index "1";
+				xhtml:link "/catalogus/shaql/update/clearalldata";
+			];
+		];
+		elmo:data [
+			rdfs:label "Help";
+			xhtml:link "/catalogus/shaql/query/beheerhelp";
+			elmo:index "6"
+		];
+	]
+.
+
+# Footer
+stage:ShaqlFooter a elmo:Part;
+	elmo:appearance elmo:FooterAppearance;
+	elmo:data [
+		elmo:html '''
+			<div class="row">
+				<div class="col-sm-4">
+					<h4>Links</h4>
+					<ul class="list-unstyled">
+						<li>
+							<a href="http://aandeslagmetdeomgevingswet.nl">Aan de slag met de omgevingswet</a>
+						</li>
+						<li>
+							<a href="http://www.stelselcatalogus.nl">Stelselcatalogus</a>
+						</li>
+						<li>
+							<a href="http://brt.basisregistraties.overheid.nl">BRT</a>
+						</li>
+						<li>
+							<a href="http://brk.basisregistraties.overheid.nl">BRK</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-4">
+					<h4>Contact</h4>
+					<p><a href="mailto:arjen.santema@kadaster.nl">Arjen Santema</a></p>
+				</div>
+				<div class="col-sm-4">
+					<h4>Disclaimer</h4>
+					<p>Dit betreft een eerste versie van de Catalogus. De Catalogus is nog in ontwikkeling.</p>
+					<p>Aan de informatie op deze pagina's kunnen geen rechten worden ontleend.</p>
+				</div>
+			</div>
+		'''^^rdf:html
+	];
+.
+ 
+#
+#
+#
+# BEHEER UMLMODEL
+#
+#
+#
+
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/shaql/stage#>.
+@prefix updatestage: <http://data.acceptatie.pdok.nl/catalogus/shaql/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://data.acceptatie.pdok.nl/catalogus/shaql/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# CONTAINERS
+#
+
+# Uploadcontainer UML-model
+container:umlmodelupload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:translator elmo:XMI21Translator;
+	rdfs:label "Upload UML-model via XMI2.1";
+	elmo:query stage:ShaqlUMLUploadScene;
+.
+
+#
+# SCENES
+#
+
+# Uploadquery UML-model
+stage:ShaqlUMLUploadScene a elmo:Scene;
+	rdfs:label "Postquery UML-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://data.acceptatie.pdok.nl/catalogus/shaql/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		CLEAR GRAPH <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel>
+		
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			<http://data.acceptatie.pdok.nl/catalogus/shaql/def/model> rdf:type owl:Ontology.
+			<http://data.acceptatie.pdok.nl/catalogus/shaql/def/model> rdfs:label "Model".
+		}
+		
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			?class rdf:type owl:Class.
+			?class rdfs:label ?label.
+			?shape rdf:type sh:Shape.
+			?shape rdfs:label ?label.
+			?shape sh:scopeClass ?class.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				?label
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?label.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+				}
+			}
+		}
+		
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			?property rdf:type owl:DatatypeProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(concat(?clabel,'.',?alabel) AS ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					FILTER NOT EXISTS {
+						?a uml:association ?assoc
+					}
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			?property rdf:type owl:ObjectProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+			?pc sh:class ?refclass.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(concat(?clabel,'.',?alabel) as ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?a uml:association ?assoc.
+					?assoc uml:memberEnd ?a.
+					?a uml:type ?rc.
+					?rc rdfs:label ?rclabel.
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			?class rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?clabel.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			?property rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c uml:ownedAttribute ?a.
+					?c rdfs:label ?alabel.
+					?a ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			?subclass rdfs:subClassOf ?class
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?sub uml:generalization ?gen.
+					?gen rdf:type uml:Generalization.
+					?gen uml:general ?c.
+					?sub rdfs:label ?sublabel.
+					?c rdfs:label ?clabel.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:umlmodelupload	
+	''';
+.
+ 
+#
+#
+#
+# CLEAR ALL DATA
+#
+#
+#
+
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/shaql/stage#>.
+@prefix updatestage: <http://data.acceptatie.pdok.nl/catalogus/shaql/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://data.acceptatie.pdok.nl/catalogus/shaql/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle gegevens te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalldata a elmo:Production;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:queryForm stage:ShaqlDummyForm;
+	elmo:contains stage:ClearAllDataScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:ShaqlDummyForm a elmo:Form.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearAllDataScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder alle data";
+	elmo:query '''
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+			FILTER regex(?g, "^http://data.acceptatie.pdok.nl/catalogus/shaql/(?!stage)")
+		}
+	'''
+.
+ 
+#
+#
+#
+# MODEL EN VOCABULAIRE
+#
+#
+#
+
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/shaql/stage#>.
+@prefix updatestage: <http://data.acceptatie.pdok.nl/catalogus/shaql/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://data.acceptatie.pdok.nl/catalogus/shaql/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+# PAGINA'S (REPRESENTATIONS)
+
+# Modelpagina
+stage:ShaqlModel	a	elmo:Representation;
+	elmo:applies-to [rdf:type sh:Shape];
+	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlModelGrafisch;
+.
+
+# Vocabulairepagina
+stage:VocabulairePagina	a	elmo:Representation;
+	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlMenu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:VocabulaireQuery;
+.
+
+# PARTS
+
+# Grafische weergave modellen
+stage:ShaqlModelGrafisch a elmo:Part;
+	elmo:index "10";
+	elmo:appearance elmo:GraphAppearance;
+	elmo:query stage:ShaqlModelGrafischQuery;
+.
+
+# QUERY'S
+
+# Query grafische weergave modellen
+stage:ShaqlModelGrafischQuery a elmo:Query;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		construct {
+			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> rdfs:uitleg ?scomment.
+			<@SUBJECT@> ?sattribute "".
+			<@SUBJECT@> ?pred ?cshape.
+			?cshape rdfs:label ?clabel.
+			?cshape rdfs:uitleg ?ccomment.
+			?cshape ?cattribute "".
+			?rshape ?rpred <@SUBJECT@>.
+			?rshape rdfs:label ?rlabel.
+			?rshape rdfs:uitleg ?rcomment.
+			?rshape ?rattribute "".
+			<@SUBJECT@> rdfs:subClassOf ?supershape.
+			?supershape rdfs:label ?supershapelabel.
+			?supershape rdfs:uitleg ?superclasscomment.
+			?subshape rdfs:subClassOf <@SUBJECT@>.
+			?subshape rdfs:label ?subshapelabel.
+			?subshape rdfs:uitleg ?subclasscomment.
+			rdfs:subClassOf rdfs:label "is een".
+		}
+		WHERE {
+			{ # Subject gedeelte
+				<@SUBJECT@> rdfs:label ?slabel.
+				OPTIONAL {
+					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
+				}
+				OPTIONAL {
+					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
+					?sattribute rdf:type owl:DatatypeProperty.
+				}
+			}
+			UNION
+			{ # Uitgaande specialisaties
+				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
+				?supershape sh:scopeClass ?superclass.
+				?supershape rdfs:label ?supershapelabel.
+				OPTIONAL {
+					?superclass rdfs:comment ?superclasscomment
+				}
+				
+			}
+			UNION
+			{ # Uitgaande relaties
+				<@SUBJECT@> sh:property ?pc.
+				?pc sh:predicate ?pred.
+				?pc sh:class ?class.
+				?class rdfs:label ?clabel.
+				?cshape sh:scopeClass ?class.
+				OPTIONAL {
+					?class rdfs:comment ?ccomment
+				}
+				OPTIONAL {
+					?cshape sh:property/sh:predicate ?cattribute.
+					?cattribute rdf:type owl:DatatypeProperty.
+				}
+			}
+			UNION
+			{ # Inkomende specialisaties
+				<@SUBJECT@> sh:scopeClass ?sclass.
+				?subclass rdfs:subClassOf ?sclass.
+				?subshape sh:scopeClass ?subclass.
+				?subshape rdfs:label ?subshapelabel.
+				OPTIONAL {
+					?subclass rdfs:comment ?subclasscomment
+				}
+			}
+			UNION
+			{ # Inkomende relaties
+				<@SUBJECT@> sh:scopeClass ?sclass.
+				?rpc sh:class ?sclass.
+				?rpc sh:predicate ?rpred.
+				?rshape sh:property ?rpc.
+				?rshape rdfs:label ?rlabel
+				OPTIONAL {
+					?rshape sh:scopeClass/rdfs:comment ?rcomment
+				}
+				OPTIONAL {
+					?rshape sh:property/sh:predicate ?rattribute.
+					?rattribute rdf:type owl:DatatypeProperty.
+				}
+			}
+		}
+	''';
+.
+
+
+# Query voor Vocabulairepagina
+stage:VocabulaireQuery a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			?shape shacl:scopeClass ?element.
+			?shape shacl:property ?pc.
+			?pc shacl:predicate ?pred.
+			?pc shacl:class ?class.
+			?pc shacl:datatype ?datatype.
+			?pc shacl:in ?collection.
+		}
+		WHERE {
+			GRAPH <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
+				OPTIONAL {
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
+				}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					?shape shacl:scopeClass ?element.
+					?shape shacl:property ?pc.
+					?pc shacl:predicate ?pred.
+					OPTIONAL {?pc shacl:class ?class}
+					OPTIONAL {?pc shacl:datatype ?datatype}
+					OPTIONAL {?pc shacl:in ?collection}
+				}
+				FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
+			}
+		}
+	'''
+.
+ 
