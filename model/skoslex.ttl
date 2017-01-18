@@ -10,44 +10,65 @@ skoslex:Act a owl:Class;
 	rdfs:subClassOf skos:Concept;
 	rdfs:label "Act"@en;
 	rdfs:label "Handeling"@nl;
+	rdfs:comment "Een handeling is een concept dat verwijst naar een afgeronde hoeveelheid werk met een overdraagbaar resultaat";
+	rdfs:comment "An act is a concept that refers to a distinct piece of work that produces some result";
 .
 
 skoslex:Norm a owl:Class;
 	rdfs:subClassOf skos:Concept;
 	rdfs:label "Norm"@en;
 	rdfs:label "Norm"@nl;
+	rdfs:comment "Een norm is een concept dat regels stelt waaraan een handeling moet voldoen";
+	rdfs:comment "A norm is a concept that refers to the conditions an act must meet";
 .
 
 skoslex:Actor a owl:Class;
 	rdfs:subClassOf skos:Concept;
 	rdfs:label "Actor"@en;
 	rdfs:label "Actor"@nl;
+	rdfs:comment "An actor is someone who performs an act";
 .
 
 skoslex:Agent a owl:Class;
 	rdfs:subClassOf skoslex:Actor;
 	rdfs:label "Agent"@en;
 	rdfs:label "Agent"@nl;
+	rdfs:comment "An agent is someone who supports an act. The agent is not realy part of the act, but is needed for the act to take place."
 .
 
 skoslex:Object a owl:Class;
 	rdfs:subClassOf skos:Concept;
 	rdfs:label "Object"@en;
 	rdfs:label "Object"@nl;
+	rdfs:comment "An object that is applied with an act";
 .
 
-skoslex:actor a owl:ObjectProperty;
+skoslex:performedBy a owl:ObjectProperty;
 	rdfs:subPropertyOf skos:semanticRelation;
+	rdfs:domain skoslex:Act;
+	rdfs:range skoslex:Actor;
+.
+skoslex:supportedBy a owl:ObjectProperty;
+	rdfs:subPropertyOf skos:semanticRelation;
+	rdfs:domain skoslex:Act;
+	rdfs:range skoslex:Agent;
 .
 
 skoslex:affects a owl:ObjectProperty;
 	rdfs:subPropertyOf skos:semanticRelation;
+	rdfs:comment "States the act that is affected by the norm. The act should meet the conditions of the norm";
 .
 
-skoslex:object a owl:ObjectProperty;
+skoslex:appliedWith a owl:ObjectProperty;
 	rdfs:subPropertyOf skos:semanticRelation;
+	rdfs:domain skoslex:Act;
+	rdfs:range: skoslex:Object;
+	rdfs:comment "States the relationship between an act and the applied object";
 .
 
 skoslex:refersTo a owl:ObjectProperty;
 	rdfs:subPropertyOf skos:semanticRelation;
+	rdfs:domain skoslex:Norm;
+	rdfs:range skoslex:Act;
+	rdfs:comment "States that a norm refers to some act. The norm doesn't set conditions for this act, but the act is in some way part of the condition itself (for example: the act should be performed as a precondition for another act.";
 .
