@@ -135,18 +135,14 @@ stage:ShaqlMenu a elmo:Part;
 			elmo:data [
 				elmo:index "1";
 				rdfs:label "Besluit";
-				xhtml:link "/catalogus/shaql/def/model/Besluit";
+				xhtml:link "/catalogus/shaql/def/IMOD/Besluit";
 			];
 			elmo:index "3";
 		];
 		elmo:data [
 			rdfs:label "Vocabulaires";
 			elmo:index "4";
-			elmo:data [
-				elmo:index "1";
-				rdfs:label "Besluit";
-				xhtml:link "/catalogus/shaql/def/model";
-			];
+			xhtml:link "/catalogus/shaql/query/vocabulary";
 		];
 		elmo:data [
 			rdfs:label "Beheer";
@@ -184,6 +180,11 @@ stage:ShaqlBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/catalogus/shaql/container/umlmodelupload";
 			];
+			elmo:data [
+				rdfs:label "Sync geupload model";
+				elmo:index "4";
+				xhtml:link "/catalogus/shaql/update/syncupload";
+			];
 		];
 		elmo:data [
 			rdfs:label "Acties";
@@ -192,6 +193,11 @@ stage:ShaqlBeheermenu a elmo:Part;
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
 				xhtml:link "/catalogus/shaql/update/clearalldata";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuw model toe";
+				elmo:index "2";
+				xhtml:link "/catalogus/shaql/update/addnewmodel";
 			];
 		];
 		elmo:data [
@@ -284,7 +290,18 @@ container:umlmodelupload a elmo:Container;
 	elmo:contains stage:ShaqlBeheermenu;
 	elmo:translator elmo:XMI21Translator;
 	rdfs:label "Upload UML-model via XMI2.1";
-	elmo:query stage:ShaqlUMLUploadScene;
+.
+
+#
+# PRODUCTIONS
+#
+
+updatestage:syncupload a elmo:Production;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:queryForm stage:ShaqlSelectModel;
+	elmo:contains stage:ShaqlUMLUploadScene;
 .
 
 #
@@ -301,14 +318,29 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		CLEAR GRAPH <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel>
-		
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
-			<http://data.acceptatie.pdok.nl/catalogus/shaql/def/model> rdf:type owl:Ontology.
-			<http://data.acceptatie.pdok.nl/catalogus/shaql/def/model> rdfs:label "Model".
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		}
 		
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
 			?shape rdf:type sh:Shape.
@@ -317,8 +349,8 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?label))) AS ?class)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -332,7 +364,7 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -342,10 +374,10 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) AS ?class)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) AS ?property)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -365,7 +397,7 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -376,11 +408,11 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) as ?property)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel))) as ?shape)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -400,12 +432,12 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?class rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -421,12 +453,12 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -444,13 +476,13 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?subclass rdfs:subClassOf ?class
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://data.acceptatie.pdok.nl/catalogus/shaql/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
 				GRAPH container:umlmodelupload {
 					?sub uml:generalization ?gen.
@@ -543,6 +575,89 @@ stage:ClearAllDataScene a elmo:Scene;
 #
 #
 #
+# CLEAR ALL DATA
+#
+#
+#
+
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/shaql/stage#>.
+@prefix updatestage: <http://data.acceptatie.pdok.nl/catalogus/shaql/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://data.acceptatie.pdok.nl/catalogus/shaql/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om nieuw model toe te voegen
+updatestage:addnewmodel a elmo:Production;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:queryForm stage:ShaqlNameForm;
+	elmo:contains stage:AddNewModelScene;
+.
+
+#
+# FORMS
+#
+
+stage:ShaqlNameForm a elmo:Form;
+	rdfs:label "Voeg model toe";
+    elmo:fragment [
+        elmo:applies-to "name";
+        rdfs:label "Naam model"@nl;
+        rdfs:label "Model name"@en;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "1";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Voeg toe"@nl;
+        elmo:index "2";
+    ]
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:AddNewModelScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Naam toevoegen";
+	elmo:query '''
+		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shaql/def/@NAME@> {
+			<http://data.acceptatie.pdok.nl/catalogus/shaql/def/@NAME@> rdf:type owl:Ontology.
+			<http://data.acceptatie.pdok.nl/catalogus/shaql/def/@NAME@> rdfs:label "@NAME@".
+		}
+	'''
+.
+ 
+#
+#
+#
 # MODEL EN VOCABULAIRE
 #
 #
@@ -586,12 +701,72 @@ stage:ShaqlModel	a	elmo:Representation;
 
 # Vocabulairepagina
 stage:VocabulairePagina	a	elmo:Representation;
-	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:url-pattern "/catalogus/shaql/query/vocabulary";
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
 	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:search_models;
 	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:ShaqlSelectModel;
 	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:ShaqlSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
+.
+
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://data.acceptatie.pdok.nl/catalogus/shaql/(?!stage)")
+            }
+            LIMIT 100
+        }
+    ''';
+.
+
+
+# KAN WEG zodra problemen met valuesFrom zijn opgelost
+stage:ShaqlTempSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
 .
 
 # PARTS
@@ -713,7 +888,7 @@ stage:VocabulaireQuery a elmo:Query;
 			?pc shacl:in ?collection.
 		}
 		WHERE {
-			GRAPH <http://data.acceptatie.pdok.nl/catalogus/shaql/umlmodel> {
+			GRAPH <@MODEL@> {
 				?element rdf:type ?type.
 				OPTIONAL {?element rdfs:label ?label}
 				OPTIONAL {?element rdfs:comment ?def}

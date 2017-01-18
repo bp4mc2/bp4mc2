@@ -44,12 +44,72 @@ stage:ShaqlModel	a	elmo:Representation;
 
 # Vocabulairepagina
 stage:VocabulairePagina	a	elmo:Representation;
-	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:url-pattern "/catalogus/shaql/query/vocabulary";
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
 	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:search_models;
 	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:ShaqlSelectModel;
 	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:ShaqlSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
+.
+
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://localhost:8080/catalogus/shaql/(?!stage)")
+            }
+            LIMIT 100
+        }
+    ''';
+.
+
+
+# KAN WEG zodra problemen met valuesFrom zijn opgelost
+stage:ShaqlTempSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
 .
 
 # PARTS
@@ -171,7 +231,7 @@ stage:VocabulaireQuery a elmo:Query;
 			?pc shacl:in ?collection.
 		}
 		WHERE {
-			GRAPH <http://localhost:8080/catalogus/shaql/umlmodel> {
+			GRAPH <@MODEL@> {
 				?element rdf:type ?type.
 				OPTIONAL {?element rdfs:label ?label}
 				OPTIONAL {?element rdfs:comment ?def}

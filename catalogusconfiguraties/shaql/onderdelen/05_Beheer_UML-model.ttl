@@ -43,7 +43,18 @@ container:umlmodelupload a elmo:Container;
 	elmo:contains stage:ShaqlBeheermenu;
 	elmo:translator elmo:XMI21Translator;
 	rdfs:label "Upload UML-model via XMI2.1";
-	elmo:query stage:ShaqlUMLUploadScene;
+.
+
+#
+# PRODUCTIONS
+#
+
+updatestage:syncupload a elmo:Production;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:queryForm stage:ShaqlSelectModel;
+	elmo:contains stage:ShaqlUMLUploadScene;
 .
 
 #
@@ -60,14 +71,29 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		CLEAR GRAPH <http://localhost:8080/catalogus/shaql/umlmodel>
-		
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
-			<http://localhost:8080/catalogus/shaql/def/model> rdf:type owl:Ontology.
-			<http://localhost:8080/catalogus/shaql/def/model> rdfs:label "Model".
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
 			?shape rdf:type sh:Shape.
@@ -76,8 +102,8 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?label))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -91,7 +117,7 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -101,10 +127,10 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) AS ?property)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -124,7 +150,7 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -135,11 +161,11 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) as ?property)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model/',sql:UCamelCase(?clabel))) as ?shape)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -159,12 +185,12 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?class rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -180,12 +206,12 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -203,13 +229,13 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/shaql/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?subclass rdfs:subClassOf ?class
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/shaql/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
 				GRAPH container:umlmodelupload {
 					?sub uml:generalization ?gen.
