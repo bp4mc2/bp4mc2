@@ -6,13 +6,13 @@
 #
 #
 
-@prefix stage: <http://localhost:8080/catalogus/shaql/stage#>.
-@prefix updatestage: <http://localhost:8080/catalogus/shaql/update/>.
+@prefix stage: <http://localhost:8080/catalogus/shacl/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/shacl/update/>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://localhost:8080/catalogus/shaql/container/>.
+@prefix container: <http://localhost:8080/catalogus/shacl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
 @prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
@@ -35,34 +35,18 @@
 # PRODUCTIONS
 #
 
-# Speciale pagina om nieuw model toe te voegen
-updatestage:addnewmodel a elmo:Production;
-	elmo:contains stage:ShaqlBeheermenu;
-	elmo:contains stage:ShaqlHeader;
-	elmo:contains stage:ShaqlFooter;
-	elmo:queryForm stage:ShaqlNameForm;
-	elmo:contains stage:AddNewModelScene;
+# Speciale pagina om alle gegevens te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalldata a elmo:Production;
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:queryForm stage:ShaclDummyForm;
+	elmo:contains stage:ClearAllDataScene;
 .
 
-#
-# FORMS
-#
-
-stage:ShaqlNameForm a elmo:Form;
-	rdfs:label "Voeg model toe";
-    elmo:fragment [
-        elmo:applies-to "name";
-        rdfs:label "Naam model"@nl;
-        rdfs:label "Model name"@en;
-        elmo:constraint elmo:MandatoryConstraint;
-        elmo:index "1";
-    ];
-    elmo:fragment [
-        elmo:appearance elmo:SubmitAppearance;
-        rdfs:label "Voeg toe"@nl;
-        elmo:index "2";
-    ]
-.
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:ShaclDummyForm a elmo:Form.
 
 
 #
@@ -70,13 +54,20 @@ stage:ShaqlNameForm a elmo:Form;
 #
 
 # Scene gebruikt voor het verwijderen van alle data
-stage:AddNewModelScene a elmo:Scene;
+stage:ClearAllDataScene a elmo:Scene;
 	elmo:index "1";
-	rdfs:label "Naam toevoegen";
+	rdfs:label "Verwijder alle data";
 	elmo:query '''
-		INSERT INTO <http://localhost:8080/catalogus/shaql/def/@NAME@> {
-			<http://localhost:8080/catalogus/shaql/def/@NAME@> rdf:type owl:Ontology.
-			<http://localhost:8080/catalogus/shaql/def/@NAME@> rdfs:label "@NAME@".
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+			FILTER regex(?g, "^http://localhost:8080/catalogus/shacl/(?!stage)")
 		}
 	'''
 .

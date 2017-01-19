@@ -1,0 +1,256 @@
+#
+#
+#
+# FRAMEWORK
+#
+#
+#
+
+@prefix stage: <http://localhost:8080/catalogus/shacl/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/shacl/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://localhost:8080/catalogus/shacl/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+#
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+#
+#
+
+
+# Welkomstpagina
+stage:ShaclWelkomstpagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shacl(|/)$";
+	elmo:contains stage:ShaclMenu;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Shacl";
+		elmo:html "<div><p>Welkom bij de Catalogus voor het DSO-programma. Vanaf hier kunt u via de conceptenboom of via de alfabetische conceptenlijst navigeren door de verschillende concepten die in de Catalogus zijn vastgelegd.</p><p>Op de Help-pagina staat uitleg over wat de verschillende termen die gebruikt worden in de Catalogus betekenen. Tevens staat daar een instructie over hoe concepten aan de Catalogus kunnen worden toegevoegd, bewerkt of verwijderd.</p></div>"
+	]
+.
+
+# Helppagina
+stage:ShaclHelp rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shacl/query/help(|/)$";
+	elmo:contains stage:ShaclMenu;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Help";
+		elmo:html '''Help will always be given to those who ask for it.'''
+	];
+.
+
+# Helppagina beheer
+stage:ShaclBeheerHelp rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shacl/query/beheerhelp(|/)$";
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Help";
+		elmo:html '''<div>Op deze beheerpagina kunnen de volgende acties worden uitgevoerd:
+				<ul>
+					<li>Hoofdpagina - keer terug naar de hoofdpagina van het Shacl.</li>
+					<li>Upload - kies de wijze van uploaden van nieuwe data uit het menu. Upload vervolgens het bronbestand. Een succesvolle import is te herkennen door het zeer kort verschijnen van het woord 'Succes'.</li>
+					<li>Speciaal
+						<ul>
+							<li>Verwijder alle data - hiermee worden alle gegevens uit de Catalogus verwijderd. Wees hier dus voorzichtig mee!</li>
+						</ul>
+					</li>
+				</ul>
+				</div>'''
+	]
+.
+
+# Hoofdpagina beheer
+stage:ShaclBeheerpagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/shacl/admin(|/)$";
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Shacl";
+		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>"
+	]
+.
+
+
+#
+#
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+#
+#
+
+#
+# Indexloos: Appearance bepaalt plaats op de pagina
+#
+
+# Header
+stage:ShaclHeader a elmo:Part;
+	elmo:appearance elmo:HeaderAppearance;
+	elmo:data [elmo:html "<a href='http://localhost:8080/catalogus/shacl'><img src='http://localhost:8080/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
+.
+
+# Menubalk hoofdmenu
+stage:ShaclMenu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [
+			rdfs:label "Shacl";
+			xhtml:link "/catalogus/shacl";
+			elmo:index "0"
+		];
+		elmo:data [
+			rdfs:label "Modellen";
+			elmo:index "3";
+			elmo:data [
+				elmo:index "1";
+				rdfs:label "Bekijk in Catalogus";
+				xhtml:link "query/model";
+			];
+			elmo:data [
+				elmo:index "2";
+				rdfs:label "Download (yEd)";
+				xhtml:link "query/downloadmodel";
+			];
+		];
+		elmo:data [
+			rdfs:label "Vocabulaires";
+			elmo:index "4";
+			xhtml:link "query/vocabulary";
+		];
+		elmo:data [
+			rdfs:label "Beheer";
+			xhtml:link "admin";
+			elmo:index "6"
+		];
+		elmo:data [
+			rdfs:label "Help";
+			xhtml:link "query/help";
+			elmo:index "7"
+		];
+	]
+.
+
+
+# Beheermenu
+stage:ShaclBeheermenu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [
+			rdfs:label "BEHEER";
+			xhtml:link "admin";
+			elmo:index: "0";
+		];
+		elmo:data [ 
+			rdfs:label "Hoofdpagina";
+			elmo:index "1";
+			xhtml:link "/catalogus/shacl";
+		];
+		elmo:data [
+			rdfs:label "Upload";
+			elmo:index "2";
+			elmo:data [
+				rdfs:label "Upload model";
+				elmo:index "2";
+				xhtml:link "container/umlmodelupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload XMI-model (incl ST)";
+				elmo:index "3";
+				xhtml:link "update/syncumlinclupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload XMI-model (excl ST)";
+				elmo:index "5";
+				xhtml:link "update/syncumlupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "Acties";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Verwijder alle data";
+				elmo:index "1";
+				xhtml:link "update/clearalldata";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuw model toe";
+				elmo:index "2";
+				xhtml:link "update/addnewmodel";
+			];
+		];
+		elmo:data [
+			rdfs:label "Help";
+			xhtml:link "query/beheerhelp";
+			elmo:index "6"
+		];
+	]
+.
+
+# Footer
+stage:ShaclFooter a elmo:Part;
+	elmo:appearance elmo:FooterAppearance;
+	elmo:data [
+		elmo:html '''
+			<div class="row">
+				<div class="col-sm-4">
+					<h4>Links</h4>
+					<ul class="list-unstyled">
+						<li>
+							<a href="http://aandeslagmetdeomgevingswet.nl">Aan de slag met de omgevingswet</a>
+						</li>
+						<li>
+							<a href="http://www.stelselcatalogus.nl">Stelselcatalogus</a>
+						</li>
+						<li>
+							<a href="http://brt.basisregistraties.overheid.nl">BRT</a>
+						</li>
+						<li>
+							<a href="http://brk.basisregistraties.overheid.nl">BRK</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-sm-4">
+					<h4>Contact</h4>
+					<p><a href="mailto:arjen.santema@kadaster.nl">Arjen Santema</a></p>
+				</div>
+				<div class="col-sm-4">
+					<h4>Disclaimer</h4>
+					<p>Dit betreft een eerste versie van de Catalogus. De Catalogus is nog in ontwikkeling.</p>
+					<p>Aan de informatie op deze pagina's kunnen geen rechten worden ontleend.</p>
+				</div>
+			</div>
+		'''^^rdf:html
+	];
+.
