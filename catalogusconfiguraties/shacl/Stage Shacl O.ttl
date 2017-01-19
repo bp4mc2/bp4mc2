@@ -131,18 +131,9 @@ stage:ShaclMenu a elmo:Part;
 			elmo:index "0"
 		];
 		elmo:data [
-			rdfs:label "Modellen";
+			rdfs:label "Download model";
 			elmo:index "3";
-			elmo:data [
-				elmo:index "1";
-				rdfs:label "Bekijk in Catalogus";
-				xhtml:link "query/model";
-			];
-			elmo:data [
-				elmo:index "2";
-				rdfs:label "Download (yEd)";
-				xhtml:link "query/downloadmodel";
-			];
+			xhtml:link "query/downloadmodel";
 		];
 		elmo:data [
 			rdfs:label "Vocabulaires";
@@ -899,29 +890,6 @@ stage:AddNewModelScene a elmo:Scene;
 # PAGINA'S (REPRESENTATIONS)
 #
 
-# Modelpagina
-stage:ShaclModelKeuze	a	elmo:Representation;
-	elmo:url-pattern "/catalogus/shacl/query/model";
-	elmo:contains stage:ShaclMenu;
-	elmo:contains stage:ShaclHeader;
-	elmo:contains stage:ShaclFooter;
-	elmo:contains stage:ShaclModelExplanation;
-	elmo:contains stage:search_models;
-	elmo:queryForm stage:ShaclSelectModel;
-	elmo:appearance elmo:TableAppearance;
-	elmo:query stage:ShaclSelectShapeQuery;
-.
-
-# Modelpagina
-stage:ShaclModelPagina	a	elmo:Representation;
-	elmo:applies-to [ rdf:type sh:Shape ];
-	elmo:contains stage:ShaclMenu;
-	elmo:contains stage:ShaclHeader;
-	elmo:contains stage:ShaclFooter;
-	elmo:appearance elmo:GraphAppearance;
-	elmo:query stage:ShaclModelGrafischQuery;
-.
-
 # Vocabulairepagina
 stage:VocabulairePagina	a	elmo:Representation;
 	elmo:url-pattern "/catalogus/shacl/query/vocabulary";
@@ -958,15 +926,6 @@ stage:ShaclSelectModel a elmo:Form;
 
 # PARTS
 
-stage:ShaclModelExplanation a elmo:Part;
-	elmo:appearance elmo:HtmlAppearance;
-	elmo:index "1";
-	elmo:data [
-		rdfs:label "Bekijken model";
-		elmo:html "Selecteer eerst het model en vervolgens de klasse die je grafisch wilt bekijken.";
-	];
-.
-
 # Zoeken van modellen
 stage:search_models a elmo:Part;
     elmo:appearance elmo:HiddenAppearance;
@@ -989,110 +948,6 @@ stage:search_models a elmo:Part;
 .
 
 # QUERY'S
-
-# Zoeken van shapes
-stage:ShaclSelectShapeQuery a elmo:Query;
-    elmo:query '''
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		SELECT *
-		WHERE {
-			GRAPH <@MODEL@> {
-				?shape a sh:Shape.
-				?shape rdfs:label ?shape_label.
-			}
-		}
-    ''';
-.
-
-# Query grafische weergave modellen
-stage:ShaclModelGrafischQuery a elmo:Query;
-	elmo:query '''
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		CONSTRUCT {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?sattribute "".
-			<@SUBJECT@> ?pred ?cshape.
-			?cshape rdfs:label ?clabel.
-			?cshape rdfs:uitleg ?ccomment.
-			?cshape ?cattribute "".
-			?rshape ?rpred <@SUBJECT@>.
-			?rshape rdfs:label ?rlabel.
-			?rshape rdfs:uitleg ?rcomment.
-			?rshape ?rattribute "".
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			?supershape rdfs:uitleg ?superclasscomment.
-			?subshape rdfs:subClassOf <@SUBJECT@>.
-			?subshape rdfs:label ?subshapelabel.
-			?subshape rdfs:uitleg ?subclasscomment.
-			rdfs:subClassOf rdfs:label "is een".
-		}
-		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> rdfs:label ?slabel.
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape rdfs:label ?supershapelabel.
-				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
-				}
-				
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
-				OPTIONAL {
-					?class rdfs:comment ?ccomment
-				}
-				OPTIONAL {
-					?cshape sh:property/sh:predicate ?cattribute.
-					?cattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-			UNION
-			{ # Inkomende specialisaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?subclass rdfs:subClassOf ?sclass.
-				?subshape sh:scopeClass ?subclass.
-				?subshape rdfs:label ?subshapelabel.
-				OPTIONAL {
-					?subclass rdfs:comment ?subclasscomment
-				}
-			}
-			UNION
-			{ # Inkomende relaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?rpc sh:class ?sclass.
-				?rpc sh:predicate ?rpred.
-				?rshape sh:property ?rpc.
-				?rshape rdfs:label ?rlabel
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:comment ?rcomment
-				}
-				OPTIONAL {
-					?rshape sh:property/sh:predicate ?rattribute.
-					?rattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-		}
-	''';
-.
-
 
 # Query voor Vocabulairepagina
 stage:VocabulaireQuery a elmo:Query;
