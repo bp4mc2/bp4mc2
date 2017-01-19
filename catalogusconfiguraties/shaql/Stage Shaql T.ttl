@@ -172,22 +172,17 @@ stage:ShaqlBeheermenu a elmo:Part;
 			rdfs:label "Upload";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Upload model (Turtle)";
+				rdfs:label "Upload model";
 				elmo:index "2";
-				xhtml:link "/catalogus/shaql/container/ttlmodelupload";
-			];
-			elmo:data [
-				rdfs:label "Sync geupload Turtlemodel";
-				elmo:index "3";
-				xhtml:link "/catalogus/shaql/update/syncttlupload";
-			];
-			elmo:data [
-				rdfs:label "Upload model (XMI)";
-				elmo:index "4";
 				xhtml:link "/catalogus/shaql/container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Sync geupload XMI-model";
+				rdfs:label "Sync geupload XMI-model (incl ST)";
+				elmo:index "3";
+				xhtml:link "/catalogus/shaql/update/syncumlinclupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload XMI-model (excl ST)";
 				elmo:index "5";
 				xhtml:link "/catalogus/shaql/update/syncumlupload";
 			];
@@ -288,15 +283,6 @@ stage:ShaqlFooter a elmo:Part;
 # CONTAINERS
 #
 
-# Uploadcontainer Turtle
-container:ttlmodelupload a elmo:Container;
-	elmo:representation elmo:UploadRepresentation;
-	elmo:contains stage:ShaqlHeader;
-	elmo:contains stage:ShaqlFooter;
-	elmo:contains stage:ShaqlBeheermenu;
-	rdfs:label "Upload UML-model via RDF (.xml) of Turtle (.ttl)";
-.
-
 # Uploadcontainer UML-model
 container:umlmodelupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
@@ -319,19 +305,19 @@ updatestage:syncumlupload a elmo:Production;
 	elmo:contains stage:ShaqlUMLUploadScene;
 .
 
-updatestage:syncttlupload a elmo:Production;
+updatestage:syncumlinclupload a elmo:Production;
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
 	elmo:contains stage:ShaqlBeheermenu;
 	elmo:queryForm stage:ShaqlSelectModel;
-	elmo:contains stage:ShaqlTTLUploadScene;
+	elmo:contains stage:ShaqlUMLInclUploadScene;
 .
 
 #
 # SCENES
 #
 
-# Uploadquery UML-model
+# Uploadquery UML-model exclusief stereotype
 stage:ShaqlUMLUploadScene a elmo:Scene;
 	rdfs:label "Postquery UML-upload";
 	elmo:index "1";
@@ -521,10 +507,10 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 	''';
 .
 
-# Uploadquery TTL-model
-stage:ShaqlTTLUploadScene a elmo:Scene;
-	rdfs:label "Postquery TTL-upload";
-	elmo:index "2";
+# Uploadquery UML-model inclusief stereotype
+stage:ShaqlUMLInclUploadScene a elmo:Scene;
+	rdfs:label "Postquery UML-upload";
+	elmo:index "1";
 	elmo:query '''
 		prefix container: <http://data.test.pdok.nl/catalogus/shaql/container/>
 		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
@@ -554,14 +540,160 @@ stage:ShaqlTTLUploadScene a elmo:Scene;
 		CLEAR GRAPH <temp>
 		
 		INSERT INTO <@MODEL@> {
-			?s ?p ?o
-		} WHERE {
-			GRAPH container:ttlmodelupload {
-				?s ?p ?o
+			?class rdf:type owl:Class.
+			?class rdfs:label ?label.
+			?shape rdf:type sh:Shape.
+			?shape rdfs:label ?label.
+			?shape sh:scopeClass ?class.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
+				?label
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?label.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+				}
 			}
 		}
 		
-		CLEAR GRAPH container:ttlmodelupload
+		INSERT INTO <@MODEL@> {
+			?property rdf:type owl:DatatypeProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(concat(?clabel,'.',?alabel) AS ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					FILTER NOT EXISTS {
+						?a uml:association ?assoc
+					}
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?property rdf:type owl:ObjectProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+			?pc sh:class ?refclass.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(concat(?clabel,'.',?alabel) as ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?a uml:association ?assoc.
+					?assoc uml:memberEnd ?a.
+					?a uml:type ?rc.
+					?rc rdfs:label ?rclabel.
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		INSERT INTO <@MODEL@> {
+			?class rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?clabel.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		INSERT INTO <@MODEL@> {
+			?property rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c uml:ownedAttribute ?a.
+					?c rdfs:label ?alabel.
+					?a ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?subclass rdfs:subClassOf ?class
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?sub uml:generalization ?gen.
+					?gen rdf:type uml:Generalization.
+					?gen uml:general ?c.
+					?sub rdfs:label ?sublabel.
+					?c rdfs:label ?clabel.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:umlmodelupload	
 	''';
 . 
 #
