@@ -11,10 +11,10 @@ for %%y in (*.ttl) do (
 )
 cd ..
 echo Creating concatenated file O...
-powershell -Command "(gc 'Stage Shacl local.ttl') -replace 'http://localhost:8080', 'https://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Stage Shacl O.ttl'"
+powershell -Command "(gc 'Stage Shacl local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Stage Shacl O.ttl'"
 echo Creating concatenated file T...
-powershell -Command "(gc 'Stage Shacl local.ttl') -replace 'http://localhost:8080', 'https://data.test.pdok.nl' | Out-File -encoding UTF8 'Stage Shacl T.ttl'"
+powershell -Command "(gc 'Stage Shacl local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Stage Shacl T.ttl'"
 echo Creating concatenated file A...
-powershell -Command "(gc 'Stage Shacl local.ttl') -replace 'http://localhost:8080', 'https://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Stage Shacl A.ttl'"
+powershell -Command "(gc 'Stage Shacl local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Stage Shacl A.ttl'"
 echo Whoohoo! All done!
 pause
