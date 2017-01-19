@@ -132,11 +132,7 @@ stage:ShaqlMenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Modellen";
-			elmo:data [
-				elmo:index "1";
-				rdfs:label "Besluit";
-				xhtml:link "/catalogus/shaql/def/IMOD/Besluit";
-			];
+			xhtml:link "/catalogus/shaql/query/model";
 			elmo:index "3";
 		];
 		elmo:data [
@@ -176,14 +172,24 @@ stage:ShaqlBeheermenu a elmo:Part;
 			rdfs:label "Upload";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Upload UML-model";
+				rdfs:label "Upload model (Turtle)";
+				elmo:index "2";
+				xhtml:link "/catalogus/shaql/container/ttlmodelupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload Turtlemodel";
 				elmo:index "3";
+				xhtml:link "/catalogus/shaql/update/syncttlupload";
+			];
+			elmo:data [
+				rdfs:label "Upload model (XMI)";
+				elmo:index "4";
 				xhtml:link "/catalogus/shaql/container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Sync geupload model";
-				elmo:index "4";
-				xhtml:link "/catalogus/shaql/update/syncupload";
+				rdfs:label "Sync geupload XMI-model";
+				elmo:index "5";
+				xhtml:link "/catalogus/shaql/update/syncumlupload";
 			];
 		];
 		elmo:data [
@@ -282,6 +288,15 @@ stage:ShaqlFooter a elmo:Part;
 # CONTAINERS
 #
 
+# Uploadcontainer Turtle
+container:ttlmodelupload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	rdfs:label "Upload UML-model via RDF (.xml) of Turtle (.ttl)";
+.
+
 # Uploadcontainer UML-model
 container:umlmodelupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
@@ -296,12 +311,20 @@ container:umlmodelupload a elmo:Container;
 # PRODUCTIONS
 #
 
-updatestage:syncupload a elmo:Production;
+updatestage:syncumlupload a elmo:Production;
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
 	elmo:contains stage:ShaqlBeheermenu;
 	elmo:queryForm stage:ShaqlSelectModel;
 	elmo:contains stage:ShaqlUMLUploadScene;
+.
+
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:queryForm stage:ShaqlSelectModel;
+	elmo:contains stage:ShaqlTTLUploadScene;
 .
 
 #
@@ -497,7 +520,50 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		CLEAR GRAPH container:umlmodelupload	
 	''';
 .
- 
+
+# Uploadquery TTL-model
+stage:ShaqlTTLUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "2";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/shaql/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
+		}
+		
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH container:ttlmodelupload
+	''';
+. 
 #
 #
 #
@@ -691,12 +757,26 @@ stage:AddNewModelScene a elmo:Scene;
 # PAGINA'S (REPRESENTATIONS)
 
 # Modelpagina
-stage:ShaqlModel	a	elmo:Representation;
-	elmo:applies-to [rdf:type sh:Shape];
+stage:ShaqlModelKeuze	a	elmo:Representation;
+	elmo:url-pattern "/catalogus/shaql/query/model";
 	elmo:contains stage:ShaqlMenu;
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
-	elmo:contains stage:ShaqlModelGrafisch;
+	elmo:contains stage:ShaqlModelExplanation;
+	elmo:contains stage:search_models;
+	elmo:queryForm stage:ShaqlSelectModel;
+	elmo:appearance elmo:TableAppearance;
+	elmo:query stage:ShaqlSelectShapeQuery;
+.
+
+# Modelpagina
+stage:ShaqlModelPagina	a	elmo:Representation;
+	elmo:applies-to [ rdf:type sh:Shape ];
+	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:appearance elmo:GraphAppearance;
+	elmo:query stage:ShaqlModelGrafischQuery;
 .
 
 # Vocabulairepagina
@@ -717,6 +797,7 @@ stage:VocabulairePagina	a	elmo:Representation;
 
 stage:ShaqlSelectModel a elmo:Form;
 	rdfs:label "Selecteer model";
+	elmo:index "2";
     elmo:fragment [
         elmo:applies-to "model";
         rdfs:label "Selecteer model"@nl;
@@ -732,6 +813,18 @@ stage:ShaqlSelectModel a elmo:Form;
     ]
 .
 
+# PARTS
+
+stage:ShaqlModelExplanation a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:data [
+		rdfs:label "Bekijken model";
+		elmo:html "Selecteer eerst het model en vervolgens de klasse die je grafisch wilt bekijken.";
+	];
+.
+
+# Zoeken van modellen
 stage:search_models a elmo:Part;
     elmo:appearance elmo:HiddenAppearance;
     elmo:query '''
@@ -752,39 +845,27 @@ stage:search_models a elmo:Part;
     ''';
 .
 
-
-# KAN WEG zodra problemen met valuesFrom zijn opgelost
-stage:ShaqlTempSelectModel a elmo:Form;
-	rdfs:label "Selecteer model";
-    elmo:fragment [
-        elmo:applies-to "model";
-        rdfs:label "Selecteer model"@nl;
-        elmo:constraint elmo:MandatoryConstraint;
-        elmo:index "2";
-    ];
-    elmo:fragment [
-        elmo:appearance elmo:SubmitAppearance;
-        rdfs:label "Ga verder"@nl;
-        elmo:index "3";
-    ]
-.
-
-# PARTS
-
-# Grafische weergave modellen
-stage:ShaqlModelGrafisch a elmo:Part;
-	elmo:index "10";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:query stage:ShaqlModelGrafischQuery;
-.
-
 # QUERY'S
+
+# Zoeken van shapes
+stage:ShaqlSelectShapeQuery a elmo:Query;
+    elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		SELECT *
+		WHERE {
+			GRAPH <@MODEL@> {
+				?shape a sh:Shape.
+				?shape rdfs:label ?shape_label.
+			}
+		}
+    ''';
+.
 
 # Query grafische weergave modellen
 stage:ShaqlModelGrafischQuery a elmo:Query;
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
-		construct {
+		CONSTRUCT {
 			<@SUBJECT@> rdfs:label ?slabel.
 			<@SUBJECT@> rdfs:uitleg ?scomment.
 			<@SUBJECT@> ?sattribute "".

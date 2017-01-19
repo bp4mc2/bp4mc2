@@ -35,6 +35,15 @@
 # CONTAINERS
 #
 
+# Uploadcontainer Turtle
+container:ttlmodelupload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	rdfs:label "Upload UML-model via RDF (.xml) of Turtle (.ttl)";
+.
+
 # Uploadcontainer UML-model
 container:umlmodelupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
@@ -49,12 +58,20 @@ container:umlmodelupload a elmo:Container;
 # PRODUCTIONS
 #
 
-updatestage:syncupload a elmo:Production;
+updatestage:syncumlupload a elmo:Production;
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
 	elmo:contains stage:ShaqlBeheermenu;
 	elmo:queryForm stage:ShaqlSelectModel;
 	elmo:contains stage:ShaqlUMLUploadScene;
+.
+
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:contains stage:ShaqlBeheermenu;
+	elmo:queryForm stage:ShaqlSelectModel;
+	elmo:contains stage:ShaqlTTLUploadScene;
 .
 
 #
@@ -248,5 +265,49 @@ stage:ShaqlUMLUploadScene a elmo:Scene;
 		}
 		
 		CLEAR GRAPH container:umlmodelupload	
+	''';
+.
+
+# Uploadquery TTL-model
+stage:ShaqlTTLUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "2";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/shaql/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
+		}
+		
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH container:ttlmodelupload
 	''';
 .

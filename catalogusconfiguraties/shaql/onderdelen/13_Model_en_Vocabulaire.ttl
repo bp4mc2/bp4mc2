@@ -34,12 +34,26 @@
 # PAGINA'S (REPRESENTATIONS)
 
 # Modelpagina
-stage:ShaqlModel	a	elmo:Representation;
-	elmo:applies-to [rdf:type sh:Shape];
+stage:ShaqlModelKeuze	a	elmo:Representation;
+	elmo:url-pattern "/catalogus/shaql/query/model";
 	elmo:contains stage:ShaqlMenu;
 	elmo:contains stage:ShaqlHeader;
 	elmo:contains stage:ShaqlFooter;
-	elmo:contains stage:ShaqlModelGrafisch;
+	elmo:contains stage:ShaqlModelExplanation;
+	elmo:contains stage:search_models;
+	elmo:queryForm stage:ShaqlSelectModel;
+	elmo:appearance elmo:TableAppearance;
+	elmo:query stage:ShaqlSelectShapeQuery;
+.
+
+# Modelpagina
+stage:ShaqlModelPagina	a	elmo:Representation;
+	elmo:applies-to [ rdf:type sh:Shape ];
+	elmo:contains stage:ShaqlMenu;
+	elmo:contains stage:ShaqlHeader;
+	elmo:contains stage:ShaqlFooter;
+	elmo:appearance elmo:GraphAppearance;
+	elmo:query stage:ShaqlModelGrafischQuery;
 .
 
 # Vocabulairepagina
@@ -60,6 +74,7 @@ stage:VocabulairePagina	a	elmo:Representation;
 
 stage:ShaqlSelectModel a elmo:Form;
 	rdfs:label "Selecteer model";
+	elmo:index "2";
     elmo:fragment [
         elmo:applies-to "model";
         rdfs:label "Selecteer model"@nl;
@@ -75,6 +90,18 @@ stage:ShaqlSelectModel a elmo:Form;
     ]
 .
 
+# PARTS
+
+stage:ShaqlModelExplanation a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:data [
+		rdfs:label "Bekijken model";
+		elmo:html "Selecteer eerst het model en vervolgens de klasse die je grafisch wilt bekijken.";
+	];
+.
+
+# Zoeken van modellen
 stage:search_models a elmo:Part;
     elmo:appearance elmo:HiddenAppearance;
     elmo:query '''
@@ -95,39 +122,27 @@ stage:search_models a elmo:Part;
     ''';
 .
 
-
-# KAN WEG zodra problemen met valuesFrom zijn opgelost
-stage:ShaqlTempSelectModel a elmo:Form;
-	rdfs:label "Selecteer model";
-    elmo:fragment [
-        elmo:applies-to "model";
-        rdfs:label "Selecteer model"@nl;
-        elmo:constraint elmo:MandatoryConstraint;
-        elmo:index "2";
-    ];
-    elmo:fragment [
-        elmo:appearance elmo:SubmitAppearance;
-        rdfs:label "Ga verder"@nl;
-        elmo:index "3";
-    ]
-.
-
-# PARTS
-
-# Grafische weergave modellen
-stage:ShaqlModelGrafisch a elmo:Part;
-	elmo:index "10";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:query stage:ShaqlModelGrafischQuery;
-.
-
 # QUERY'S
+
+# Zoeken van shapes
+stage:ShaqlSelectShapeQuery a elmo:Query;
+    elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		SELECT *
+		WHERE {
+			GRAPH <@MODEL@> {
+				?shape a sh:Shape.
+				?shape rdfs:label ?shape_label.
+			}
+		}
+    ''';
+.
 
 # Query grafische weergave modellen
 stage:ShaqlModelGrafischQuery a elmo:Query;
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
-		construct {
+		CONSTRUCT {
 			<@SUBJECT@> rdfs:label ?slabel.
 			<@SUBJECT@> rdfs:uitleg ?scomment.
 			<@SUBJECT@> ?sattribute "".
