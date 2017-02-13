@@ -100,19 +100,23 @@ stage:DSOTreeQuery a elmo:Query;
 		WHERE {
 			{
 				{
-					SELECT *
+					SELECT ?s, ?sLabel, ?o, ?oLabel
 					WHERE {
 						{
 							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
 							WHERE {
 								GRAPH ?broaderSubjectGraph {
-									?broaderSubject rdf:type skos:Concept.
-									?broaderSubject rdfs:label ?broaderSubjectLabel.
-									?broaderSubject ?broaderPredicate ?broaderObject.
-									FILTER(
-										?broaderPredicate = thes:broaderGeneric
-										|| ?broaderPredicate = thes:broaderPartitive
-									)
+									{
+										?broaderSubject rdf:type skos:Concept.
+										?broaderSubject rdfs:label ?broaderSubjectLabel.
+										?broaderSubject thes:broaderGeneric ?broaderObject.
+									}
+									UNION
+									{
+										?broaderSubject rdf:type skos:Concept.
+										?broaderSubject rdfs:label ?broaderSubjectLabel.
+										?broaderSubject thes:broaderPartitive ?broaderObject.									
+									}
 									FILTER NOT EXISTS {
 										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
 									}
@@ -135,13 +139,17 @@ stage:DSOTreeQuery a elmo:Query;
 							SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
 							WHERE {
 								GRAPH ?narrowerSubjectGraph {
-									?narrowerSubject rdf:type skos:Concept.
-									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
-									?narrowerSubject ?narrowerPredicate ?narrowerObject.
-									FILTER(
-										?narrowerPredicate = thes:narrowerGeneric
-										|| ?narrowerPredicate = thes:narrowerPartitive
-									)
+									{
+										?narrowerSubject rdf:type skos:Concept.
+										?narrowerSubject rdfs:label ?narrowerSubjectLabel.
+										?narrowerSubject thes:narrowerGeneric ?narrowerObject.
+									}
+									UNION
+									{
+										?narrowerSubject rdf:type skos:Concept.
+										?narrowerSubject rdfs:label ?narrowerSubjectLabel.
+										?narrowerSubject thes:narrowerPartitive ?narrowerObject.
+									}
 									FILTER NOT EXISTS {
 										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
 									}
@@ -199,7 +207,7 @@ stage:DSOTreeQuery a elmo:Query;
 			UNION
 			{
 				{
-					SELECT *
+					SELECT ?s, ?sLabel, ?o, ?oLabel
 					WHERE {
 						{
 							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel

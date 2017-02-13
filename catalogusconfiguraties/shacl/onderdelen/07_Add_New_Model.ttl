@@ -74,9 +74,15 @@ stage:AddNewModelScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Naam toevoegen";
 	elmo:query '''
-		INSERT INTO <http://localhost:8080/catalogus/shacl/def/@NAME@> {
-			<http://localhost:8080/catalogus/shacl/def/@NAME@> rdf:type owl:Ontology.
-			<http://localhost:8080/catalogus/shacl/def/@NAME@> rdfs:label "@NAME@".
+		INSERT {
+			GRAPH ?graph {
+				?graph rdf:type owl:Ontology.
+				?graph rdfs:label ?label.
+			}
+		}
+		WHERE {
+			BIND( REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) AS ?label )
+			BIND( IRI( CONCAT( "http://localhost:8080/catalogus/shacl/def/", REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) ) ) AS ?graph )
 		}
 	'''
 .

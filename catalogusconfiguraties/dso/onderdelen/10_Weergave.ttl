@@ -632,24 +632,63 @@ stage:WeergaveTabelQuery a elmo:Query;
 		}
 		WHERE {
 			{
-				GRAPH ?g {
-					<@SUBJECT@> ?p ?o.
-					?g prov:wasGeneratedBy ?a.
-					?g prov:generatedAtTime ?t.
+				{
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?g
+					}
+					GRAPH ?g {
+						<@SUBJECT@> ?p ?o.
+						?g prov:wasGeneratedBy ?a.
+						?g prov:generatedAtTime ?t.
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+						&& ?p != dct:title
+					)
+					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
-				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?g
+				UNION
+				{
+					GRAPH <@GRAPH@> {
+						<@SUBJECT@> ?p ?o.
+						?g prov:wasGeneratedBy ?a.
+						?g prov:generatedAtTime ?t.
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+					)
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
-				FILTER (
-					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
-					&& ?p != bp4mc2:signature
-					&& ?p != dct:type
-					&& ?p != skos:member
-					&& ?p != dct:title
-				)
-				
+				UNION {
+					{
+						<@SUBJECT@> rdf:type prov:Activity.
+						<@SUBJECT@> ?p ?o.
+					}
+					UNION
+					{
+						<@SUBJECT@> rdf:type prov:Agent.
+						<@SUBJECT@> ?p ?o.
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+						&& ?p != dct:title
+					)
+				}
 				OPTIONAL {
 					?o rdfs:label ?olabel.
 				}
@@ -657,6 +696,12 @@ stage:WeergaveTabelQuery a elmo:Query;
 					?a rdfs:label ?alabel.
 				}
 				OPTIONAL {
+					?c dct:title ?clabel.
+				}	
+				OPTIONAL {
+					GRAPH doc:mastergraph {
+						?col rdfs:isDefinedBy ?cg.
+					}
 					GRAPH ?cg {
 						?col skos:member <@SUBJECT@>.
 						?col rdfs:label ?col_label.
@@ -664,46 +709,25 @@ stage:WeergaveTabelQuery a elmo:Query;
 							?col prov:invalidatedAtTime ?time.
 						}
 					}
-					GRAPH doc:mastergraph {
-						?col rdfs:isDefinedBy ?cg.
-					}
 				}
-				FILTER( substr("@GRAPH@",2) = "GRAPH@")
 			}
-			UNION
-			{
-				GRAPH <@GRAPH@> {
-					<@SUBJECT@> ?p ?o.
-					?g prov:wasGeneratedBy ?a.
-					?g prov:generatedAtTime ?t.
+			UNION {
+				GRAPH doc:mastergraph {
+					?s rdfs:isDefinedBy ?altSubjectGraph.
 				}
-				FILTER (
-					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
-					&& ?p != bp4mc2:signature
-					&& ?p != dct:type
-					&& ?p != skos:member
-				)
-				OPTIONAL {
-					GRAPH ?cg {
-						?col skos:member <@SUBJECT@>.
-						?col rdfs:label ?col_label.
-						FILTER NOT EXISTS {
-							?col prov:invalidatedAtTime ?time.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?col rdfs:isDefinedBy ?cg.
+				GRAPH ?altSubjectGraph {
+					{ ?s skoslex:affects <@SUBJECT@> }
+					UNION { ?s skoslex:classification <@SUBJECT@> }
+					UNION { ?s skoslex:refersTo <@SUBJECT@> }
+					FILTER NOT EXISTS {
+						?s prov:invalidatedAtTime ?time.
 					}
 				}
 				OPTIONAL {
-					?o rdfs:label ?olabel.
+					GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
+						?s rdfs:label ?slabel.
+					}
 				}
-				OPTIONAL {
-					?a rdfs:label ?alabel.
-				}
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
 			UNION {
 				SERVICE <http://almere.pilod.nl/sparql> {
@@ -723,52 +747,6 @@ stage:WeergaveTabelQuery a elmo:Query;
 							?o rdfs:label ?olabel.
 						}
 					}
-				}
-			}
-			UNION {
-				<@SUBJECT@> rdf:type ?type.
-				<@SUBJECT@> ?p ?o
-				FILTER (
-					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
-					&& ?p != bp4mc2:signature
-					&& ?p != dct:type
-					&& ?p != skos:member
-					&& ?p != dct:title
-				)
-				FILTER (
-					?type = prov:Activity
-					|| ?type = prov:Agent
-				)
-				
-				OPTIONAL {
-					?o rdfs:label ?olabel.
-				}
-				OPTIONAL {
-					?c dct:title ?clabel.
-				}
-				
-			}
-			UNION {
-				GRAPH ?altSubjectGraph {
-					?s ?sp <@SUBJECT@>.
-					FILTER(
-						?sp = skoslex:affects
-						|| ?sp = skoslex:classification
-						|| ?sp = skoslex:refersTo
-					)
-					FILTER NOT EXISTS {
-						?s prov:invalidatedAtTime ?time.
-					}
-				}
-				OPTIONAL {
-					GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
-						?s rdfs:label ?slabel.
-					}
-				}
-				GRAPH doc:mastergraph {
-					?s rdfs:isDefinedBy ?altSubjectGraph.
 				}
 			}
 		}

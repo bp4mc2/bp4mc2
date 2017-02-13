@@ -846,9 +846,15 @@ stage:AddNewModelScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Naam toevoegen";
 	elmo:query '''
-		INSERT INTO <http://data.acceptatie.pdok.nl/catalogus/shacl/def/@NAME@> {
-			<http://data.acceptatie.pdok.nl/catalogus/shacl/def/@NAME@> rdf:type owl:Ontology.
-			<http://data.acceptatie.pdok.nl/catalogus/shacl/def/@NAME@> rdfs:label "@NAME@".
+		INSERT {
+			GRAPH ?graph {
+				?graph rdf:type owl:Ontology.
+				?graph rdfs:label ?label.
+			}
+		}
+		WHERE {
+			BIND( REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) AS ?label )
+			BIND( IRI( CONCAT( "http://data.acceptatie.pdok.nl/catalogus/shacl/def/", REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) ) ) AS ?graph )
 		}
 	'''
 .
