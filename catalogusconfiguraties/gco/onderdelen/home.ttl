@@ -1,0 +1,45 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/gco/stage#>.
+
+stage:Home	a	elmo:Representation;
+	elmo:url-pattern	"/gco(|/)$";
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:Welkom;
+.
+stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:index "~";
+	elmo:data [
+		rdfs:label "GCO";
+		html:link "/";
+		elmo:data [
+			elmo:index "1";
+			rdfs:label "Model"; 
+			elmo:data [ elmo:index "1"; rdfs:label "Vocabulary"; html:link "query/model"];
+			elmo:data [ elmo:index "2"; rdfs:label "Model"; html:link "query/modelview"];
+			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/modelyed.yed"];
+		];
+		elmo:data [elmo:index "2"; rdfs:label "Requirements"; html:link "query/requirements"];
+		elmo:data [
+			elmo:index "3";
+			rdfs:label "Sync";
+			elmo:data [ elmo:index "1"; rdfs:label "Volledige model"; html:link "update/sync"];
+			elmo:data [ elmo:index "2"; rdfs:label "Alle imports"; html:link "update/syncimports"];
+			elmo:data [ elmo:index "3"; rdfs:label "Requirements"; html:link "update/sync-requirements"];
+		]
+	];
+.
+
+stage:Welkom elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Welkom";
+		elmo:html '''
+			<div>
+				<p>Welkom op GCO metamodel site</p>
+ 			</div>''';
+	]
+.

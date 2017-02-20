@@ -1,0 +1,84 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix stage: <http://localhost:8080/gco/stage#>.
+
+stage:Class	a	elmo:Representation;
+	elmo:url-pattern "/resource";
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:Class_content;
+	elmo:contains	stage:Class_model;
+	elmo:layer elmo:BottomLayer;
+.
+stage:Class_content elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to rdf:type;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to skos:definition;
+		rdfs:label "definitie";
+	];
+	elmo:fragment [
+		elmo:applies-to dcterms:subject;
+		rdfs:label "betreft begrip";
+	];
+	elmo:query '''
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> ?p ?o
+				FILTER (lang(?o)="" or lang(?o)="en")
+				OPTIONAL {?o rdfs:label ?olabel}
+			}
+		}
+	''';
+.
+
+stage:Class_model a elmo:Representation;
+	elmo:appearance elmo:ModelAppearance;
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		construct {
+			?class rdfs:label ?clabel.
+			?class rdf:type rdfs:Class.
+			?class rdfs:subClassOf ?super.
+			?shape shacl:targetClass ?class.
+			?shape rdf:type shacl:Shape.
+			?shape shacl:property ?pc.
+			?pc ?ppc ?opc.
+			?pclass rdf:type rdfs:Class.
+			?super rdf:type rdfs:Class.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> rdfs:subClassOf* ?class.
+				OPTIONAL {
+					?class rdfs:label ?clabel
+					FILTER (lang(?clabel)="" or lang(?clabel)="en")
+				}
+				OPTIONAL {
+					?class rdfs:subClassOf ?super.
+				}
+				OPTIONAL {
+					?shape shacl:scopeClass ?class.
+					?shape shacl:property ?pc.
+					?pc ?ppc ?opc.
+					OPTIONAL {
+						?pc shacl:class ?pclass
+					}
+				}
+			}
+		}
+	'''
+.
