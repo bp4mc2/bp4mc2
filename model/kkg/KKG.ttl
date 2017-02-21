@@ -1,0 +1,439 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix model:  <http://localhost:8080/kkg/def/model/>.
+@prefix n2: <http://localhost:8080/kkg/def/model#>.
+
+kkg:Association rdf:type sh:Shape;
+	rdfs:label "Association";
+	sh:scopeClass owl:Class;
+	sh:property kkg:compositionKind;
+	sh:property kkg:direction;
+.
+kkg:Relatiesoort rdf:type sh:Shape;
+	rdfs:label "Relatiesoort";
+	sh:scopeClass owl:Class;
+	sh:property kkg:authentiek;
+	sh:property kkg:code;
+	sh:property kkg:constraint;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:gerelateerdObjecttype;
+	sh:property kkg:herkomst;
+	sh:property kkg:herkomstDefinitie;
+	sh:property kkg:indicatieAfleidbaar;
+	sh:property kkg:indicatieFormeleHistorie;
+	sh:property kkg:indicatieMaterieleHistorie;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:mogelijkGeenWaarde;
+	sh:property kkg:naam;
+	sh:property kkg:objecttype;
+	sh:property kkg:toelichting;
+	sh:property kkg:typeAggregatie;
+	sh:property kkg:uni-directioneel;
+.
+kkg:Attribute rdf:type sh:Shape;
+	rdfs:label "Attribute";
+	sh:scopeClass owl:Class;
+.
+kkg:ExterneKoppeling rdf:type sh:Shape;
+	rdfs:label "Externe Koppeling";
+	sh:scopeClass owl:Class;
+	sh:property kkg:datumOpname;
+	sh:property kkg:gerelateerdObjecttype;
+	sh:property kkg:naam;
+	sh:property kkg:objecttype;
+	sh:property kkg:typeAggregatie;
+	sh:property kkg:uni-directioneel;
+.
+kkg:DataType rdf:type sh:Shape;
+	rdfs:label "DataType";
+	sh:scopeClass owl:Class;
+.
+kkg:Package rdf:type sh:Shape;
+	rdfs:label "Package";
+	sh:scopeClass owl:Class;
+	sh:property kkg:uRI;
+.
+kkg:Enumeratiewaarde rdf:type sh:Shape;
+	rdfs:label "Enumeratiewaarde";
+	sh:scopeClass owl:Class;
+	sh:property kkg:code;
+	sh:property kkg:defintie;
+	sh:property kkg:naam;
+.
+kkg:Datatype rdf:type sh:Shape;
+	rdfs:label "Datatype";
+	sh:scopeClass owl:Class;
+.
+kkg:ComplexDatatype rdf:type sh:Shape;
+	rdfs:label "Complex Datatype";
+	sh:scopeClass owl:Class;
+	sh:property kkg:attribuut;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:formeelPatroon;
+	sh:property kkg:herkomst;
+	sh:property kkg:naam;
+	sh:property kkg:patroon;
+.
+kkg:Extern rdf:type sh:Shape;
+	rdfs:label "Extern";
+	sh:scopeClass owl:Class;
+	sh:property kkg:definitie;
+	sh:property kkg:herkomst;
+	sh:property kkg:locatie;
+	sh:property kkg:naam;
+.
+kkg:UnionElement rdf:type sh:Shape;
+	rdfs:label "Union Element";
+	sh:scopeClass owl:Class;
+	sh:property kkg:constraint;
+	sh:property kkg:definitie;
+	sh:property kkg:formeelPatroon;
+	sh:property kkg:herkomst;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:lengte;
+	sh:property kkg:naam;
+	sh:property kkg:patroon;
+	sh:property kkg:type;
+.
+kkg:Generalization rdf:type sh:Shape;
+	rdfs:label "Generalization";
+	sh:scopeClass owl:Class;
+	sh:property kkg:direction;
+	sh:property kkg:isSubstitutable;
+.
+kkg:Objecttype rdf:type sh:Shape;
+	rdfs:label "Objecttype";
+	sh:scopeClass owl:Class;
+	sh:property kkg:attribuut;
+	sh:property kkg:code;
+	sh:property kkg:constraint;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:gegevensgroep;
+	sh:property kkg:herkomst;
+	sh:property kkg:herkomstDefinitie;
+	sh:property kkg:indicatieAbstractObject;
+	sh:property kkg:kwaliteit;
+	sh:property kkg:naam;
+	sh:property kkg:populatie;
+	sh:property kkg:supertype;
+	sh:property kkg:toelichting;
+	sh:property kkg:uniekeAanduiding;
+.
+kkg:PrimitiefDatatype rdf:type sh:Shape;
+	rdfs:label "Primief Datatype";
+	sh:scopeClass owl:Class;
+	sh:property kkg:naam;
+.
+kkg:Class rdf:type sh:Shape;
+	rdfs:label "Class";
+	sh:scopeClass owl:Class;
+	sh:property kkg:isActive;
+.
+kkg:DataElement rdf:type sh:Shape;
+	rdfs:label "Data Element";
+	sh:scopeClass owl:Class;
+	sh:property kkg:constraint;
+	sh:property kkg:definitie;
+	sh:property kkg:formeelPatroon;
+	sh:property kkg:herkomst;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:lengte;
+	sh:property kkg:naam;
+	sh:property kkg:patroon;
+	sh:property kkg:type;
+.
+kkg:CodeList rdf:type sh:Shape;
+	rdfs:label "Code List";
+	sh:scopeClass owl:Class;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:herkomst;
+	sh:property kkg:locatie;
+	sh:property kkg:naam;
+	sh:property kkg:toelichting;
+.
+kkg:ReferentieElement rdf:type sh:Shape;
+	rdfs:label "Referentie Element";
+	sh:scopeClass owl:Class;
+	sh:property kkg:constraint;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:formeelPatroon;
+	sh:property kkg:herkomst;
+	sh:property kkg:identificatie;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:lengte;
+	sh:property	kkg:naam;
+	sh:property kkg:patroon;
+	sh:property kkg:toelichting;
+	sh:property kkg:type;
+.
+kkg:Attribuutsoort rdf:type sh:Shape;
+	rdfs:label "Attribuutsoort";
+	sh:scopeClass owl:Class;
+	sh:property kkg:authentiek;
+	sh:property kkg:code;
+	sh:property kkg:constraint;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:formeelPatroon;
+	sh:property kkg:herkomst;
+	sh:property kkg:herkomstDefinitie;
+	sh:property kkg:identificerend;
+	sh:property kkg:indicatieAfleidbaar;
+	sh:property kkg:indicatieFormeleHistorie;
+	sh:property kkg:indicatieMaterieleHistorie;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:lengte;
+	sh:property kkg:locatie;
+	sh:property kkg:mogelijkGeenWaarde;
+	sh:property kkg:naam;
+	sh:property kkg:patroon;
+	sh:property kkg:toelichting;
+	sh:property kkg:type;
+.
+kkg:SimpelDatatype rdf:type sh:Shape;
+	rdfs:label "Simpel Datatype";
+	sh:scopeClass owl:Class;
+	sh:property kkg:naam;
+.
+kkg:Union rdf:type sh:Shape;
+	rdfs:label "Union";
+	sh:scopeClass owl:Class;
+	sh:property kkg:attribuut;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:herkomst;
+	sh:property kkg:naam;
+.
+kkg:Gegevensgroeptype rdf:type sh:Shape;
+	rdfs:label "Gegevensgroeptype";
+	sh:scopeClass owl:Class;
+	sh:property kkg:attribuut;
+	sh:property kkg:authentiek;
+	sh:property kkg:code;
+	sh:property kkg:constraint;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:herkomst;
+	sh:property kkg:herkomstDefinitie;
+	sh:property kkg:indicatieFormeleHistorie;
+	sh:property kkg:indicatieMaterieleHistorie;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:mogelijkGeenWaarde;
+	sh:property kkg:naam;
+	sh:property kkg:objecttype;
+	sh:property kkg:toelichting;
+.
+kkg:Enumeration rdf:type sh:Shape;
+	rdfs:label "Enumeration";
+	sh:scopeClass owl:Class;
+.
+kkg:Referentielijst rdf:type sh:Shape;
+	rdfs:label "Referentielijst";
+	sh:scopeClass owl:Class;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:element;
+	sh:property kkg:herkomst;
+	sh:property kkg:locatie;
+	sh:property kkg:naam;
+	sh:property kkg:toelichting;
+.
+kkg:Enumeratie rdf:type sh:Shape;
+	rdfs:label "Enumeratie";
+	sh:scopeClass owl:Class;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:naam;
+	sh:property kkg:toelichting;
+	sh:property kkg:waarde;
+.
+kkg:Generalisatie rdf:type sh:Shape;
+	rdfs:label "Generalisatie";
+	sh:scopeClass owl:Class;
+	sh:property kkg:gerelateerdObjecttype;
+	sh:property kkg:naam;
+	sh:property kkg:objecttype;
+	sh:property kkg:supertype;
+.
+kkg:AssociationEnd rdf:type sh:Shape;
+	rdfs:label "Association End";
+	sh:scopeClass owl:Class;
+.
+kkg:Relatierol rdf:type sh:Shape;
+	rdfs:label "Relatierol";
+	sh:scopeClass owl:Class;
+	sh:property kkg:authentiek;
+	sh:property kkg:datumOpname;
+	sh:property kkg:definitie;
+	sh:property kkg:herkomst;
+	sh:property kkg:herkomstDefinitie;
+	sh:property kkg:indicatieFormeleHistorie;
+	sh:property kkg:indicatieMaterieleHistorie;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:mogelijkGeenWaarde;
+	sh:property kkg:naam;
+	sh:property kkg:toelichting;
+.
+kkg:GegevensgroepCompositie rdf:type sh:Shape;
+	rdfs:label "Gegevensgroep Compositie";
+	sh:scopeClass owl:Class;
+	sh:property kkg:attribuut;
+	sh:property kkg:gerelateerdGegevensgroeptype;
+	sh:property kkg:kardinaliteit;
+	sh:property kkg:naam;
+	sh:property kkg:objecttype;
+	sh:property kkg:typeAggregatie;
+	sh:property kkg:uni-directioneel;
+.
+kkg:Constraint rdf:type sh:Shape;
+	rdfs:label "Constraint";
+	sh:scopeClass owl:Class;
+	sh:property kkg:naam;
+	sh:property kkg:specificatieFormeel;
+	sh:property kkg:specificatieTekst;
+.
+kkg:Relatieklasse rdf:type sh:Shape;
+	rdfs:label "Relatieklasse";
+	sh:scopeClass owl:Class;
+	sh:property kkg:attribuut;
+	sh:property kkg:definitie;
+	sh:property kkg:naam;
+.
+kkg:AssociationClass rdf:type sh:Shape;
+	rdfs:label "Association Class";
+	sh:scopeClass owl:Class;
+	sh:property kkg:compositionKind;
+	sh:property kkg:direction;
+	sh:property kkg:isActive;
+.
+kkg:View rdf:type sh:Shape;
+	rdfs:label "View";
+	sh:scopeClass owl:Class;
+	sh:property kkg:definitie;
+	sh:property kkg:herkomst;
+	sh:property kkg:locatie;
+	sh:property kkg:naam;
+.
+### Properties
+kkg:attribuut rdf:type sh:PropertyConstraint;
+.
+kkg:authentiek rdf:type sh:PropertyConstraint;
+	sh:predicate ldqd:Trustworthiness;
+.	
+kkg:code rdf:type sh:PropertyConstraint;
+.
+kkg:compositionKind rdf:type sh:PropertyConstraint;
+.
+kkg:constraint rdf:type sh:PropertyConstraint;
+	skos:scopeNote "De specificatie van de constraint in tekst. De specificatie van de constraint in een formele specifieke taal (OCL).";
+.
+kkg:datumOpname rdf:type sh:PropertyConstraint;
+	sh:datatype xsd:dateTime;
+	sh:mincount 1;
+	sh:maxcount 1;
+.
+kkg:definitie rdf:type sh:PropertyConstraint;
+	sh:predicate skos:definition;
+	sh:datatype xsd:string;
+	sh:mincount 1;
+	sh:maxcount 1;
+.
+kkg:direction rdf:type sh:PropertyConstraint;
+.
+kkg:element rdf:type sh:PropertyConstraint;
+.
+kkg:formeelPatroon rdf:type sh:PropertyConstraint;
+.
+kkg:gegevensgroep rdf:type sh:PropertyConstraint;
+.
+kkg:gerelateerdGegevensgroeptype rdf:type sh:PropertyConstraint;
+.
+kkg:gerelateerdObjecttype rdf:type sh:PropertyConstraint;
+.
+kkg:herkomst rdf:type sh:PropertyConstraint;
+	sh:predicate prov:wasDerivedfrom;
+.
+kkg:herkomstDefinitie rdf:type sh:PropertyConstraint;
+.
+kkg:identificatie rdf:type sh:PropertyConstraint;
+.
+kkg:identificerend rdf:type sh:PropertyConstraint;
+.
+kkg:indicatieAbstractObject rdf:type sh:PropertyConstraint;
+.
+kkg:indicatieAfleidbaar rdf:type sh:PropertyConstraint;
+.
+kkg:indicatieFormeleHistorie rdf:type sh:PropertyConstraint;
+	sh:predicate prov:Entity;
+	sh:mincount 1;
+	sh:maxcount 1;
+.
+kkg:indicatieMaterieleHistorie rdf:type sh:PropertyConstraint;
+.
+kkg:isActive rdf:type sh:PropertyConstraint;
+.
+kkg:isSubstitutable rdf:type sh:PropertyConstraint;
+.
+kkg:kardinaliteit rdf:type sh:PropertyConstraint;
+.
+kkg:kwaliteit rdf:type sh:PropertyConstraint;
+.
+kkg:lengte rdf:type sh:PropertyConstraint;
+.
+kkg:locatie rdf:type sh:PropertyConstraint;
+	sh:predicate dct:location;
+	sh:mincount;
+	sh:maxcount;
+.
+kkg:mogelijkGeenWaarde rdf:type sh:PropertyConstraint;
+.
+kkg:naam rdf:type sh:PropertyConstraint;
+	sh:predicate skos:prefLabel;
+	sh:mincount 1;
+	sh:maxcount 1;
+.
+kkg:objecttype rdf:type sh:PropertyConstraint;
+	skos:scopeNote "Indicatie dat er geen instanties (objecten) voor het betreffende objecttype mogen voorkomen. Regel of constraint die van toepassing is op het objecttype (deze kan gelden over meerdere modelelementen heen, maar is hier ondergebracht). De naam van het objecttype. Voor objecttypen die deel uitmaken van een (basis)registratie betreft dit de beschrijving van de exemplaren van het gedefinieerde objecttype die in de desbetreffende (basis)registratie voorhanden zijn. Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de wijze waarop daarin voorkomende objecten (van dit type) uniek in de registratie worden aangeduid. Afgeleid gegeven op basis van combinatie van attribuutsoorten en relatiesoorten met is ID = True De registratie in wiens catalogus het objecttype is gespecificeerd (oftewel de registratie waar het objecttype deel van uitmaakt). Deze specificatie is toegevoegd omdat het wel duidelijk moet zijn in welke (basis)registratie of informatiemodel het objecttype voorkomt (indien van toepassing). De beschrijving van de betekenis van het objecttype zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie of informatiemodel. Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de daarin opgenomen toelichting. De datum waarop het objecttype is opgenomen in het informatiemodel. Voor objecttypen die deel uitmaken van een registratie is de definitie hieruit overgenomen. De door de desbetreffende registratiehouder aan het objecttype toegekende uniek code. Deze wordt hier niet vermeld aangezien deze gespecificeerd is in de desbetreffende catalogus. Voor objecttypen die deel uitmaken van een registratie betreft dit de waarborgen voor de juistheid van de in de registratie opgenomen objecten van het desbetreffende type";
+.
+kkg:patroon rdf:type sh:PropertyConstraint;
+.
+kkg:populatie rdf:type sh:PropertyConstraint;
+.
+kkg:specificatieFormeel rdf:type sh:PropertyConstraint;
+.
+kkg:specificatieTekst rdf:type sh:PropertyConstraint;
+.
+kkg:supertype rdf:type sh:PropertyConstraint;
+.
+kkg:toelichting rdf:type sh:PropertyConstraint;
+	sh:predicate skos:scopeNote;
+	sh:mincount 1;
+	sh:maxcount 1;
+.
+kkg:type rdf:type sh:PropertyConstraint;
+.
+kkg:typeAggregatie rdf:type sh:PropertyConstraint;
+.
+kkg:uRI rdf:type sh:PropertyConstraint;
+.
+kkg:uni-directioneel rdf:type sh:PropertyConstraint;
+.
+kkg:uniekeAanduiding rdf:type sh:propertyConstraint;
+.
+kkg:waarde rdf:type sh:PropertyConstraint;
+.
