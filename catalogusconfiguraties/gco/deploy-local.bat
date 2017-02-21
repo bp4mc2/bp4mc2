@@ -11,10 +11,10 @@ for %%y in (*.ttl) do (
 )
 cd ..
 echo Creating concatenated file O...
-powershell -Command "(gc 'Stage GCO local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Stage GCO O.ttl'"
+powershell -Command "(gc 'Stage GCO local.ttl') -replace 'service <http://localhost:8080/url>', 'service <http://ldt:8080/url>' -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Stage GCO O.ttl'"
 echo Creating concatenated file T...
-powershell -Command "(gc 'Stage GCO local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Stage GCO T.ttl'"
+powershell -Command "(gc 'Stage GCO local.ttl') -replace 'service <http://localhost:8080/url>', 'service <http://ldt:8080/url>' -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Stage GCO T.ttl'"
 echo Creating concatenated file A...
-powershell -Command "(gc 'Stage GCO local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Stage GCO A.ttl'"
+powershell -Command "(gc 'Stage GCO local.ttl') -replace 'service <http://localhost:8080/url>', 'service <http://ldt:8080/url>' -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Stage GCO A.ttl'"
 echo Whoohoo! All done!
 pause

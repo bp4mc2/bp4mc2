@@ -1,0 +1,363 @@
+#
+#
+#
+# BOOMWEERGAVE
+#
+#
+#
+
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/dso/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://localhost:8080/catalogus/dso/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Boomweergave domeinen, collecties en concepten
+stage:DSOTree a elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+    elmo:index "01";
+	elmo:query stage:DSOTreeQuery;
+.
+
+# Query voor de boomweergave
+#
+#	In de basis bestaat de query uit twee delen:
+#		1) Ophalen van alle subjects en objects die in de boom moeten komen
+#		2) Koppelen van de collecties aan die subjects en objects
+#
+#	Het eerste deel (ophalen alle subjects en objects) valt weer uiteen in twee delen:
+#		- eentje voor als er géén TYPE is meegegeven
+#		- eentje voor als dat wel gebeurd is
+#	Die twee delen zijn in feite gelijk aan elkaar, met als enige verschil dat:
+#		- er in het eerste geval getest wordt op rdf:type skos:Concept.
+#		- er in het tweede geval getest wordt op rdf:type skoslex:@TYPE@
+#	Het daadwerkelijk ophalen van de subjects en objects bestaat ook weer uit drie delen:
+#		a) Het ophalen van de triples met als predicates thes:broaderGeneric en thes:broaderPartitive
+#		b) Het ophalen van de triples met als predicates thes:narrowerGeneric en thes:narrowerPartitive
+#			N.B. deze laatste triples worden 'omgedraaid' in de weergave, omdat thes:narrowerGeneric de inverse is van thes:broaderGeneric
+#
+#	Het tweede deel (koppelen van de collecties) staat binnen een OPTIONAL. Dit is vanwege de werking van de TreeAppearance:
+#	we willen alleen dat de collectie van de toplevel concepten opgehaald worden, omdat anders de niet-toplevel-elementen zowel op hun
+#	'reguliere' plek in de boom worden geplaatst, als rechtstreeks onder de collectie. Wij willen bijvoorbeeld dit zien:
+#
+#	+ Collectie
+#		+ Toplevel_concept
+#			+ Niet_toplevel_concept
+#
+#	En dus niet dit:
+#	
+#	+ Collectie
+#		+ Toplevel_concept
+#			+ Niet_toplevel_concept
+#		+ Niet_toplevel_concept
+#
+#	De OPTIONAL hebben we nodig omdat we dus niet van alle concepten de collectie ophalen; zonder de OPTIONAL zouden die elementen zelf ook niet in de boom verschijnen.
+# 	Het daadwerkelijk koppelen is vrij eenvoudig en gaat via het skos:member predicate.
+#	Hieraan vast zit een FILTER NOT EXISTS die alle subjects die geen toplevel element zijn eruit filtert.
+
+stage:DSOTreeQuery a elmo:Query;
+	elmo:query '''
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		
+		CONSTRUCT {
+			?s rdfs:label ?sLabel.
+			?o rdfs:label ?oLabel.
+			?s thes:broaderGeneric ?o.
+			?s skos:member ?sCollection.
+			#?sCollection skos:inScheme ?scheme.
+			?sCollection rdfs:label ?sCollectionLabel.
+		}
+		WHERE {
+			{
+				{
+					SELECT ?s, ?sLabel, ?o, ?oLabel
+					WHERE {
+						{
+							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
+							WHERE {
+								GRAPH ?broaderSubjectGraph {
+									{
+										?broaderSubject rdf:type skos:Concept.
+										?broaderSubject rdfs:label ?broaderSubjectLabel.
+										?broaderSubject thes:broaderGeneric ?broaderObject.
+									}
+									UNION
+									{
+										?broaderSubject rdf:type skos:Concept.
+										?broaderSubject rdfs:label ?broaderSubjectLabel.
+										?broaderSubject thes:broaderPartitive ?broaderObject.									
+									}
+									FILTER NOT EXISTS {
+										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
+									}
+								}
+								GRAPH ?broaderObjectGraph {
+									?broaderObject rdf:type skos:Concept.
+									?broaderObject rdfs:label ?broaderObjectLabel.
+									FILTER NOT EXISTS {
+										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
+									}
+								}
+								GRAPH doc:mastergraph {
+									?broaderSubject rdfs:isDefinedBy ?broaderSubjectGraph.
+									?broaderObject rdfs:isDefinedBy ?broaderObjectGraph.
+								}
+							}
+						}
+						UNION
+						{
+							SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
+							WHERE {
+								GRAPH ?narrowerSubjectGraph {
+									{
+										?narrowerSubject rdf:type skos:Concept.
+										?narrowerSubject rdfs:label ?narrowerSubjectLabel.
+										?narrowerSubject thes:narrowerGeneric ?narrowerObject.
+									}
+									UNION
+									{
+										?narrowerSubject rdf:type skos:Concept.
+										?narrowerSubject rdfs:label ?narrowerSubjectLabel.
+										?narrowerSubject thes:narrowerPartitive ?narrowerObject.
+									}
+									FILTER NOT EXISTS {
+										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
+									}
+								}
+								GRAPH ?narrowerObjectGraph {
+									?narrowerObject rdf:type skos:Concept.
+									?narrowerObject rdfs:label ?narrowerObjectLabel.
+									FILTER NOT EXISTS {
+										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
+									}
+								}
+								GRAPH doc:mastergraph {
+									?narrowerSubject rdfs:isDefinedBy ?narrowerSubjectGraph.
+									?narrowerObject rdfs:isDefinedBy ?narrowerObjectGraph.
+								}
+							}
+						}
+						UNION
+						{
+							SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
+							WHERE {
+								GRAPH ?subjectGraph {
+									?subject rdf:type skos:Concept.
+									?subject rdfs:label ?subjectLabel.
+									OPTIONAL { ?subject ?predicate ?object }
+									FILTER(
+										?predicate != thes:broaderGeneric &&
+										?predicate != thes:broaderPartitive
+									)
+									FILTER NOT EXISTS {
+										?subject prov:invalidatedAtTime ?subjectTime.
+									}
+								}
+								GRAPH doc:mastergraph {
+									?subject rdfs:isDefinedBy ?subjectGraph.
+								}
+								OPTIONAL {
+									GRAPH ?objectGraph {
+										?object rdf:type skos:Concept.
+										?object rdfs:label ?objectLabel.
+										FILTER NOT EXISTS {
+											?object prov:invalidatedAtTime ?objectTime.
+										}
+									}
+									GRAPH doc:mastergraph {
+										?object rdfs:isDefinedBy ?objectGraph.
+									}
+								}
+							}
+						}
+					}
+				}
+				FILTER( substr( "@TYPE@",2 ) = "TYPE@" )
+			}
+			UNION
+			{
+				{
+					SELECT ?s, ?sLabel, ?o, ?oLabel
+					WHERE {
+						{
+							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
+							WHERE {
+								GRAPH ?broaderSubjectGraph {
+									?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?broaderSubject rdfs:label ?broaderSubjectLabel.
+									?broaderSubject ?broaderPredicate ?broaderObject.
+									FILTER(
+										?broaderPredicate = thes:broaderGeneric
+										|| ?broaderPredicate = thes:broaderPartitive
+									)
+									FILTER NOT EXISTS {
+										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
+									}
+								}
+								GRAPH ?broaderObjectGraph {
+									?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?broaderObject rdfs:label ?broaderObjectLabel.
+									FILTER NOT EXISTS {
+										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
+									}
+								}
+								GRAPH doc:mastergraph {
+									?broaderSubject rdfs:isDefinedBy ?broaderSubjectGraph.
+									?broaderObject rdfs:isDefinedBy ?broaderObjectGraph.
+								}
+							}
+						}
+						UNION
+						{
+							SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
+							WHERE {
+								GRAPH ?narrowerSubjectGraph {
+									?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
+									?narrowerSubject ?narrowerPredicate ?narrowerObject.
+									FILTER(
+										?narrowerPredicate = thes:narrowerGeneric
+										|| ?narrowerPredicate = thes:narrowerPartitive
+									)
+									FILTER NOT EXISTS {
+										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
+									}
+								}
+								GRAPH ?narrowerObjectGraph {
+									?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?narrowerObject rdfs:label ?narrowerObjectLabel.
+									FILTER NOT EXISTS {
+										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
+									}
+								}
+								GRAPH doc:mastergraph {
+									?narrowerSubject rdfs:isDefinedBy ?narrowerSubjectGraph.
+									?narrowerObject rdfs:isDefinedBy ?narrowerObjectGraph.
+								}
+							}
+						}
+						UNION
+						{
+							SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
+							WHERE {
+								GRAPH ?subjectGraph {
+									?subject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?subject rdfs:label ?subjectLabel.
+									OPTIONAL { ?subject ?predicate ?object }
+									FILTER(
+										?predicate != thes:broaderGeneric &&
+										?predicate != thes:broaderPartitive
+									)
+									FILTER NOT EXISTS {
+										?subject prov:invalidatedAtTime ?subjectTime.
+									}
+								}
+								GRAPH doc:mastergraph {
+									?subject rdfs:isDefinedBy ?subjectGraph.
+								}
+								OPTIONAL {
+									GRAPH ?objectGraph {
+										?object rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+										?object rdfs:label ?objectLabel.
+										FILTER NOT EXISTS {
+											?object prov:invalidatedAtTime ?objectTime.
+										}
+									}
+									GRAPH doc:mastergraph {
+										?object rdfs:isDefinedBy ?objectGraph.
+									}
+								}
+							}
+						}
+					}
+				}
+				FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
+			}
+			OPTIONAL {
+				GRAPH ?sCollectionGraph {
+					?sCollection skos:member ?s.
+					?sCollection rdfs:label ?sCollectionLabel.
+					OPTIONAL {
+						?sCollection skos:inScheme ?scheme.
+					}
+					FILTER NOT EXISTS {
+						?sCollection prov:invalidatedAtTime ?sCollectionTime.
+					}
+					FILTER NOT EXISTS {
+						{
+							GRAPH ?sParentGraph {
+								?s ?sParentPredicate ?sParent.
+								FILTER(
+									?sParentPredicate = thes:broaderGeneric ||
+									?sParentPredicate = thes:broaderPartitive
+								)
+								FILTER NOT EXISTS {
+									?s prov:invalidatedAtTime ?sParentTime.
+								}
+							}
+							GRAPH ?sCollectionGraph {
+								?sCollection skos:member ?sParent.
+							}
+							GRAPH doc:mastergraph {
+								?s rdfs:isDefinedBy ?sParentGraph.
+							}
+						}
+						UNION
+						{
+							GRAPH ?sChildGraph {
+								?sChild ?sChildPredicate ?s.
+								FILTER(
+									?sChildPredicate = thes:narrowerGeneric ||
+									?sChildPredicate = thes:narrowerPartitive
+								)
+								FILTER NOT EXISTS {
+									?sChild prov:invalidatedAtTime ?sChildTime.
+								}
+							}
+							GRAPH ?sCollectionGraph {
+								?sCollection skos:member ?sChild.
+							}
+							GRAPH doc:mastergraph {
+								?sChild rdfs:isDefinedBy ?sChildGraph.
+							}
+						}
+					}
+				}		
+				GRAPH doc:mastergraph {
+					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
+				}
+			}
+		}
+		ORDER BY lcase(?scheme), lcase(?sCollectionLabel), lcase(?oCollectionLabel), lcase(?sLabel), lcase(?oLabel)
+	'''
+.
