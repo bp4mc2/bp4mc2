@@ -54,6 +54,7 @@ container:catalogusupload a elmo:Container;
 # - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
 # - Vul mastergraph aan met nieuwe versie
 # - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
+# - Voeg een prov:Entity-triple toe aan de subjecten die dat moeten krijgen (Catalog)
 # - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
 # - Voeg voor de verwijderde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
 # - Verwijder de signature van de verwijderde concepten uit de mastergraph
@@ -139,6 +140,15 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			catalogus:tomcatUser foaf:mbox "tomcat@user.org".
 			catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
 		}
+		
+		INSERT INTO container:catalogusupload {
+			?s rdf:type prov:Entity.
+		}
+		WHERE {
+			GRAPH container:catalogusupload {
+				?s rdf:type dcat:Catalog.
+			}
+		}
 
 		INSERT INTO container:catalogusupload {
             ?s bp4mc2:signature ?sig.
@@ -150,11 +160,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 					SELECT ?s ?p ?o
 					WHERE {
 						?s ?p ?o.
-						?s rdf:type ?type.
-						FILTER (
-							?type = dcat:Catalog
-							|| ?type = dcat:CatalogRecord
-						)
+						?s rdf:type dcat:Catalog.
 					}
 					ORDER BY ?s ?p ?o
 				}
@@ -169,19 +175,11 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		WHERE {
 			GRAPH doc:mastergraph {
 				?s rdfs:isDefinedBy ?g.
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Catalog
-					|| ?type = dcat:CatalogRecord
-				)
+				?s rdf:type dcat:Catalog.
 			}
 			FILTER NOT EXISTS {
 				GRAPH container:catalogusupload {
-					?s rdf:type ?type.
-					FILTER (
-						?type = dcat:Catalog
-						|| ?type = dcat:CatalogRecord
-					)
+					?s rdf:type dcat:Catalog.
 				}
 			}
 			FILTER NOT EXISTS {
@@ -197,20 +195,12 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		WHERE {
 			GRAPH doc:mastergraph {
 				?s bp4mc2:signature ?sig.
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Catalog
-					|| ?type = dcat:CatalogRecord
-				)
+				?s rdf:type dcat:Catalog.
 
 			}
 			FILTER NOT EXISTS {
 				GRAPH container:catalogusupload {
-					?s rdf:type ?type.
-					FILTER (
-						?type = dcat:Catalog
-						|| ?type = dcat:CatalogRecord
-					)
+					?s rdf:type dcat:Catalog.
 				}
 			}
 		}
@@ -220,13 +210,9 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:catalogusupload {
-				?s rdf:type ?type.
+				?s rdf:type dcat:Catalog.
 			    ?s ?p ?o.
 			    ?s bp4mc2:signature ?sig
-				FILTER (
-					?type = dcat:Catalog
-					|| ?type = dcat:CatalogRecord
-				)
 			}
 			FILTER NOT EXISTS {
 				GRAPH doc:mastergraph {
@@ -245,11 +231,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 				?s rdfs:isDefinedBy ?g
 			}
 			GRAPH versiongraph:version {
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Catalog
-					|| ?type = dcat:CatalogRecord
-				)
+				?s rdf:type dcat:Catalog.
 			}
 			FILTER NOT EXISTS {
 				GRAPH ?g {
@@ -266,11 +248,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 				?s ?p ?o
 			}
 			GRAPH versiongraph:version {
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Catalog
-					|| ?type = dcat:CatalogRecord
-				)
+				?s rdf:type dcat:Catalog.
 			}
 		}
 
@@ -281,12 +259,8 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH versiongraph:version {
-			    ?s rdf:type ?type.
+			    ?s rdf:type dcat:Catalog.
 			    ?s bp4mc2:signature ?sig.
-				FILTER (
-					?type = dcat:Catalog
-					|| ?type = dcat:CatalogRecord
-				)
             }
 		}
 		

@@ -115,13 +115,14 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		} WHERE {
 			GRAPH container:generiek {
 				{
-					?s skos:prefLabel ?spreflabel.
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
 					FILTER NOT EXISTS {
 						?s rdfs:label ?slabel.
 					}
 				}
 				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
 				}
 			}
 		}
