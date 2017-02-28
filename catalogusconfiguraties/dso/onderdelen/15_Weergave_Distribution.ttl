@@ -30,144 +30,23 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
-
-#
-# PAGINA'S (REPRESENTATIONS)
-#
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
 
 # Standaard weergavepagina
-stage:WeergavePaginaCatalog a elmo:Representation;
+stage:WeergavePaginaDistribution a elmo:Representation;
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
-	elmo:contains stage:WeergaveVersiesCatalog;
-	elmo:contains stage:WeergaveTabelCatalog;
+	elmo:contains stage:WeergaveVersiesDistribution;
+	elmo:contains stage:WeergaveTabelDistribution;
 	elmo:applies-to [
-		rdf:type dcat:Catalog;
+		rdf:type dcat:Distribution;
 	];
-.
-
-
-#
-# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
-#
-
-# Algemene tabelweergave
-stage:WeergaveTabelCatalog a elmo:Part;
-	elmo:index "01";
-	elmo:fragment [
-		elmo:applies-to rdfs:label;
-		elmo:appearance elmo:HiddenAppearance
-	];
-	elmo:fragment [
-		rdfs:label "Startdatum versie"@nl;
-		elmo:applies-to prov:generatedAtTime;
-		elmo:indx "13";
-	];
-	elmo:fragment [
-		rdfs:label "Einddatum versie"@nl;
-		elmo:applies-to prov:invalidatedAtTime;
-		elmo:indx "14";
-	];
-	elmo:fragment [
-		rdfs:label "Laatste activiteit"@nl;
-		elmo:applies-to prov:wasGeneratedBy;
-		elmo:indx "15";
-	];
-	elmo:fragment [
-		rdfs:label "Startdatum"@nl;
-		elmo:applies-to prov:startedAtTime;
-		elmo:index "27";
-	];
-	elmo:fragment [
-		rdfs:label "Einddatum"@nl;
-		elmo:applies-to prov:endedAtTime;
-		elmo:index "28";
-	];
-	elmo:fragment [
-		rdfs:label "Uitgevoerd door"@nl;
-		elmo:applies-to prov:wasAssociatedWith;
-		elmo:index "29";
-	];
-	elmo:fragment [
-		rdfs:label "Namens organisatie"@nl;
-		elmo:applies-to prov:actedOnBehalfOf;
-		elmo:index "32";
-	];
-	elmo:fragment [
-		rdfs:label "Titel"@nl;
-		elmo:applies-to dct:title;
-		elmo:index "33";
-	];
-	elmo:fragment [
-		rdfs:label "Beschrijving"@nl;
-		elmo:applies-to dct:description;
-		elmo:index "34";
-	];
-	elmo:fragment [
-		rdfs:label "Gepubliceerd"@nl;
-		elmo:applies-to dct:issued;
-		elmo:index "35";
-	];
-	elmo:fragment [
-		rdfs:label "Laatste wijziging"@nl;
-		elmo:applies-to dct:modified;
-		elmo:index "36";
-	];
-	elmo:fragment [
-		rdfs:label "Taal"@nl;
-		elmo:applies-to dct:language;
-		elmo:index "37";
-	];
-	elmo:fragment [
-		rdfs:label "Licentie"@nl;
-		elmo:applies-to dct:license;
-		elmo:index "38";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:fragment [
-		rdfs:label "Rechten"@nl;
-		elmo:applies-to dct:rights;
-		elmo:index "39";
-	];
-	elmo:fragment [
-		rdfs:label "Homepage"@nl;
-		elmo:applies-to foaf:homepage;
-		elmo:index "40";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:fragment [
-		rdfs:label "Werkingsgebied"@nl;
-		elmo:applies-to dct:spatial;
-		elmo:index "42";
-	];
-	elmo:fragment [
-		rdfs:label "Datasets"@nl;
-		elmo:applies-to dcat:dataset;
-		elmo:index "45";
-	];
-	elmo:fragment [
-		rdfs:label "Distributie"@nl;
-		elmo:applies-to dcat:distribution;
-		elmo:index "48";
-	];
-	elmo:fragment [
-		rdfs:label "URL"@nl;
-		elmo:applies-to dcat:accessURL;
-		elmo:index "49";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:fragment [
-		rdfs:label "Website"@nl;
-		elmo:applies-to dcat:landingPage;
-		elmo:index "50";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:query stage:WeergaveTabelCatalogQuery;
 .
 
 # Tabel met vorige versies
-stage:WeergaveVersies a elmo:Part;
+stage:WeergaveVersiesDistribution a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
@@ -193,15 +72,104 @@ stage:WeergaveVersies a elmo:Part;
 		rdfs:label "Datum versie"@nl;
 	];
 	
-	elmo:query stage:WeergaveVersiesQuery;
+	elmo:query stage:WeergaveVersiesDistributionQuery;
 .
 
-#
-# QUERY'S VOOR PAGINA'S/PARTS
-#
+
+# Algemene tabelweergave
+stage:WeergaveTabelDistribution a elmo:Part;
+	elmo:index "01";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum versie"@nl;
+		elmo:applies-to prov:generatedAtTime;
+		elmo:indx "13";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum versie"@nl;
+		elmo:applies-to prov:invalidatedAtTime;
+		elmo:indx "14";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste activiteit"@nl;
+		elmo:applies-to prov:wasGeneratedBy;
+		elmo:indx "15";
+	];
+	elmo:fragment [
+		rdfs:label "Periode geldigheid"@nl;
+		elmo:applies-to dct:valid;
+		elmo:indx "17";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum"@nl;
+		elmo:applies-to prov:startedAtTime;
+		elmo:index "27";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum"@nl;
+		elmo:applies-to prov:endedAtTime;
+		elmo:index "28";
+	];
+	elmo:fragment [
+		rdfs:label "Uitgevoerd door"@nl;
+		elmo:applies-to prov:wasAssociatedWith;
+		elmo:index "29";
+	];
+	elmo:fragment [
+		rdfs:label "Titel"@nl;
+		elmo:applies-to dct:title;
+		elmo:index "33";
+	];
+	elmo:fragment [
+		rdfs:label "Beschrijving"@nl;
+		elmo:applies-to dct:description;
+		elmo:index "34";
+	];
+	elmo:fragment [
+		rdfs:label "Gepubliceerd"@nl;
+		elmo:applies-to dct:issued;
+		elmo:index "35";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste wijziging"@nl;
+		elmo:applies-to dct:modified;
+		elmo:index "36";
+	];
+	elmo:fragment [
+		rdfs:label "Licentie"@nl;
+		elmo:applies-to dct:license;
+		elmo:index "37";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "Rechten"@nl;
+		elmo:applies-to dct:rights;
+		elmo:index "38";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "URL"@nl;
+		elmo:applies-to dcat:accessURL;
+		elmo:index "39";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	
+	elmo:fragment [
+		rdfs:label "Download"@nl;
+		elmo:applies-to dcat:downloadURL;
+		elmo:index "40";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	
+	elmo:query stage:WeergaveTabelDistributionQuery;
+.
+
 
 # Query voor WeergaveTabel
-stage:WeergaveTabelCatalogQuery a elmo:Query;
+stage:WeergaveTabelDistributionQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix dct: <http://purl.org/dc/terms/>
@@ -220,18 +188,16 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 		construct {
 			<@SUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
-			?o rdfs:label ?oelabel.
 			<@SUBJECT@> prov:wasGeneratedBy ?a.
 			<@SUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
-			?c rdfs:label ?clabel.
 		}
 		WHERE {
 			{
 				{
 					GRAPH ?g {
 						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Catalog.
+						<@SUBJECT@> rdf:type dcat:Distribution.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -253,7 +219,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 				{
 					GRAPH <@GRAPH@> {
 						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Catalog.
+						<@SUBJECT@> rdf:type dcat:Distribution.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -274,16 +240,14 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 				OPTIONAL {
 					?a rdfs:label ?alabel.
 				}
-				OPTIONAL {
-					?c dct:title ?clabel.
-				}	
 			}
 		}
 	'''
 .
 
+
 # Query voor weergave versies
-stage:WeergaveVersiesCatalogQuery a elmo:Query;
+stage:WeergaveVersiesDistributionQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
@@ -297,7 +261,7 @@ stage:WeergaveVersiesCatalogQuery a elmo:Query;
 		WHERE {
 			{
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Catalog.
+					<@SUBJECT@> rdf:type dcat:Distribution.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
 						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
@@ -312,7 +276,7 @@ stage:WeergaveVersiesCatalogQuery a elmo:Query;
 			}
 			UNION {
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Catalog.
+					<@SUBJECT@> rdf:type dcat:Distribution.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
 						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.

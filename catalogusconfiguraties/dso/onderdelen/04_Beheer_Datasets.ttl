@@ -45,7 +45,6 @@ container:datasetupload a elmo:Container;
 	elmo:query stage:DSODatasetUploadScene;
 .
 
-
 #
 # SCENES
 #
@@ -112,6 +111,12 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				}
 				UNION {
 					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
+				}
+				UNION {
+					?s dct:title ?slabel.
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
+					}
 				}
 			}
 		}
