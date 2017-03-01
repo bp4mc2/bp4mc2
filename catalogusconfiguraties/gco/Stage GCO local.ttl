@@ -154,14 +154,28 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 	];
 .
 
-stage:Welkom elmo:appearance elmo:HtmlAppearance;
-	elmo:data [
-		rdfs:label "Welkom";
-		elmo:html '''
-			<div>
-				<p>Welkom op GCO metamodel site</p>
- 			</div>''';
-	]
+stage:Welkom a elmo:Part;
+	elmo:appearance elmo:ImageAppearance;
+#	elmo:data [
+#		rdfs:label "Welkom";
+#		elmo:html '''
+#			<div>
+#				<img src="https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png"/>
+# 			</div>''';
+#	]
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png".
+			<urn:image> html:width "1518".
+			<urn:image> html:height "1791".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
 . 
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
