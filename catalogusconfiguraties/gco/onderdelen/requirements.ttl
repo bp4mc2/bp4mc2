@@ -43,7 +43,7 @@ elmo:query '''
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		select ?class ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
 		where {
-			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+			graph ?g {
 				?req a <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#Requirement>.
 				?req rdfs:label ?req_label.
 				?req shacl:targetClass ?class.
@@ -57,6 +57,9 @@ elmo:query '''
 					OPTIONAL {?pc shacl:class ?toclass}
 				}
 			}
+			FILTER (?g = <http://bp4mc2.org/id/dataset/bp4mc2>
+				or	?g = <http://bp4mc2.org/id/dataset/requirements>
+			)
 		}
 		order by ?req
 	'''
@@ -77,7 +80,7 @@ stage:Requirements_Controle2 a elmo:Part;
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
 		where {
-			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+			graph ?g {
 				?shape rdf:type shacl:Shape.
 				OPTIONAL {?shape rdfs:label ?shape_label}
 				?shape shacl:scopeClass ?class.
@@ -89,6 +92,9 @@ stage:Requirements_Controle2 a elmo:Part;
 					?req shacl:predicate ?pred
 				}
 			}
+			FILTER (?g = <http://bp4mc2.org/id/dataset/bp4mc2>
+				or	?g = <http://bp4mc2.org/id/dataset/requirements>
+			)
 		}
 	''';
 .
