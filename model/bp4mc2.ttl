@@ -11,19 +11,20 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix model:  <http://localhost:8080/tr/def/model/>.
-@prefix n2: <http://localhost:8080/tr/def/model#>.
-@prefix n3: <http://dso/def/dso#>.
+@prefix model:  <http://data.ontwikkeling.pdok.nl/gco/def/model/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
 
-### Juridische Tekst
-model:JuridischeTekst rdf:type sh:Shape;
-	rdfs:label "Shape voor juridische tekst";
+
+### Brondocument
+model:Brondocumet rdf:type sh:Shape;
+	rdfs:label "dctype:Text";
 	sh:scopeClass dctype:Text;
 .
 ### Norm
 model:Norm rdf:type sh:Shape;
-	rdfs:label "Shape voor Norm";
+	rdfs:label "skoslex:Norm";
 	sh:scopeClass skoslex:Norm;
 	sh:property model:Norm_affects;
 	sh:property model:Norm_refersTo;
@@ -38,7 +39,7 @@ model:Norm_refersTo rdf:type sh:PropertyConstraint;
 .
 ### Activiteit
 model:Activiteit rdf:type sh:Shape;
-	rdfs:label "Shape voor Activiteit";
+	rdfs:label "skoslex:Act";
 	sh:scopeClass skoslex:Act;
 	sh:property model:Activiteit_actor;
 	sh:property model:Activiteit_object;
@@ -53,26 +54,25 @@ model:Activiteit_object rdf:type sh:PropertyConstraint;
 .
 ### Actor
 model:Actor rdf:type sh:Shape;
-	rdfs:label "Shape voor Actor";
+	rdfs:label "skoslex:Actor";
 	sh:scopeClass skoslex:Actor;
 .
 ### Agent
 model:Agent rdf:type sh:Shape;
-	rdfs:label "Shape voor Agent";
+	rdfs:label "skoslex:Agent";
 	sh:scopeClass skoslex:Agent;
 .
 ### Object
 model:Object rdf:type sh:Shape;
-	rdfs:label "Shape voor Object";
+	rdfs:label "skoslex:Object";
 	sh:scopeClass skoslex:Object;
 .
-
 ### Begrip
 model:Begrip rdf:type sh:Shape;
-	rdfs:label "Shape voor Begrip";
+	rdfs:label "skos:Concept";
 	sh:scopeClass skos:Concept;
 	sh:property model:Begrip_label;
-	sh:property model:Begrip_prefLabel;
+	sh:property model:Begrip_naam;
 	sh:property model:Begrip_inScheme;
 	sh:property model:Begrip_definition;
 	sh:property model:Begrip_comment;
@@ -90,13 +90,14 @@ model:Begrip rdf:type sh:Shape;
 	sh:property model:Begrip_broadMatch;
 	sh:property model:Begrip_narrowMatch;
 	sh:property model:Begrip_GeneratedBy;
+	sh:property model:Begrip_topConceptOf;
 .
 model:Begrip_label a sh:PropertyConstraint;
 	sh:predicate rdfs:label;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 .
-model:Begrip_prefLabel rdf:type sh:PropertyConstraint;
+model:Begrip_naam rdf:type sh:PropertyConstraint;
 	sh:predicate skos:prefLabel;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -183,14 +184,21 @@ model:Begrip_GeneratedBy rdf:type sh:PropertyConstraint;
 	sh:predicate prov:wasGeneratedBy;
 	sh:class prov:Entity;
 .
+model:Begrip_topConceptOf rdf:type sh:PropertyConstraint;
+	sh:predicate skos:topConceptOf;
+	sh:class skos:ConceptScheme;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
 ### Concept Scheme
 model:ConceptScheme rdf:type sh:Shape;
-	rdfs:label "Shape voor Concept Scheme";
+	rdfs:label "skos:ConceptScheme";
 	sh:scopeClass skos:ConceptScheme;
-	sh:property model:ConceptScheme_prefLabel;
+	sh:property model:ConceptScheme_name;
 	sh:property model:ConceptScheme_Entity;
+	sh:property model:ConceptScheme_source;
 .
-model:ConceptScheme_prefLabel rdf:type sh:PropertyConstraint;
+model:ConceptScheme_name rdf:type sh:PropertyConstraint;
 	sh:predicate skos:prefLabel;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -200,12 +208,45 @@ model:ConceptScheme_Entity rdf:type sh:PropertyConstraint;
 	sh:predicate prov:wasGeneratedBy;
 	sh:class prov:Entity;
 .
+model:ConceptScheme_source rdf:type sh:PropertyConstraint;
+	sh:predicate dct:source;
+	sh:class dctype:Text;
+.
+### Collection
+model:Collection rdf:type sh:Shape;
+	rdfs:label "skos:Collection";
+	sh:scopeClass skos:Collection;
+	sh:property model:Collection_name;
+	sh:property model:Collection_member;
+.
+model:Collection_name rdf:type sh:PropertyConstraint;
+	sh:predicate skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:Collection_member rdf:type sh:PropertyConstraint;
+	sh:predicate skos:member;
+	sh:class skos:Concept;
+.
+### Informatie Model
+model:InformationModel rdf:type sh:Shape;
+	rdfs:label "kkg:InformationModel";
+	sh:scopeClass kkg:InformationModel;
+	sh:property model:InformationModel_subject;
+.
+model:InformationModel_subject rdf:type sh:PropertyConstraint;
+	sh:predicate dct:subject;
+	sh:class skos:ConceptScheme;
+	sh:class dcat:Dataset;
+	sh:class dcat:Distribution;
+.
 ### Catalog
 model:Catalogus rdf:type sh:Shape;
-	rdfs:label "Shape voor catalogus";
+	rdfs:label "dcat:Catalog";
 	sh:scopeClass dcat:Catalog;
 	sh:property model:Catalogus_Naam;
-	sh:property model:Catalogus_Beschrijving;
+	sh:property model:Catalogus_Omschrijving;
 	sh:property model:Catalogus_DatumVanUitgifte;
 	sh:property model:Catalogus_DatumVanWijziging;
 	sh:property model:Catalogus_Taal;
@@ -222,9 +263,8 @@ model:Catalogus_Naam rdf:type sh:PropertyConstraint;
 	sh:predicate dct:title;
 	sh:datatype xsd:string;
 	sh:minCount 1;
-	sh:maxCount 1;
 .
-model:Catalogus_Beschrijving rdf:type sh:PropertyConstraint;
+model:Catalogus_Omschrijving rdf:type sh:PropertyConstraint;
 	sh:predicate dct:description;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -268,7 +308,7 @@ model:Catalogus_GebiedGeldigheid rdf:type sh:PropertyConstraint;
 .
 model:Catalogus_Uitgever rdf:type sh:PropertyConstraint;
 	sh:predicate dct:publisher;
-	sh:class foaf:Agent;
+	sh:class prov:Agent;
 .
 model:Catalogus_Record rdf:type sh:PropertyConstraint;
 	sh:predicate dcat:record;
@@ -284,7 +324,7 @@ model:Catalogus_Taxonomy rdf:type sh:PropertyConstraint;
 .
 ### CatalogRecord
 model:CatalogRecord rdf:type sh:Shape;
-	rdfs:label "Shape voor een Catalog Record";
+	rdfs:label "dcat:CatalogRecord";
 	sh:scopeClass dcat:CatalogRecord;
 	sh:property model:CatalogRecord_Naam;
 	sh:property model:CatalogRecord_Beschrijving;
@@ -318,12 +358,12 @@ model:CatalogRecord_HoofdOnderwerp rdf:type sh:PropertyConstraint;
 .
 ### Dataset (DCType)
 model:DCTypeDataset a sh:Shape;
-	rdfs:label "Shape voor DCType dataset";
+	rdfs:label "dct:Dataset";
 	sh:scopeClass dctype:Dataset;
 .
 ### Dataset
 model:Dataset rdf:type sh:Shape;
-	rdfs:label "Shape voor een Dataset";
+	rdfs:label "dcat:Dataset";
 	sh:scopeClass dcat:Dataset;
 	sh:property model:Dataset_Naam;
 	sh:property model:Dataset_Beschrijving;
@@ -335,6 +375,7 @@ model:Dataset rdf:type sh:Shape;
 	sh:property model:Dataset_GebiedGeldigheid;
 	sh:property model:Dataset_Distributie;
 	sh:property model:Dataset_GeneratedBy;
+	sh:property model:Dataset_Thema
 .
 model:Dataset_Naam rdf:type sh:PropertyConstraint;
 	sh:predicate dct:title;
@@ -360,7 +401,7 @@ model:Dataset_Taal rdf:type sh:PropertyConstraint;
 .
 model:Dataset_Informatiemodel rdf:type sh:PropertyConstraint;
 	sh:predicate dct:subject;
-	sh:class rdf:resource;
+	sh:class adms:Asset;
 .
 model:Dataset_dataset rdf:type sh:PropertyConstraint;
 	sh:predicate dctype:dataset;
@@ -384,14 +425,23 @@ model:Dataset_GeneratedBy rdf:type sh:PropertyConstraint;
 	sh:predicate prov:wasGeneratedBy;
 	sh:class prov:Entity;
 .
-### Agent
-model:FoafAgent rdf:type sh:Shape;
-	rdfs:label "Shape voor Agent";
-	sh:scopeClass foaf:Agent;
+model:Dataset_Thema rdf:type sh:PropertyConstraint;
+	sh:predicate dcat:theme;
+	sh:class skos:Concept;
 .
+### Agent
+model:provAgent rdf:type sh:Shape;
+	rdfs:label "prov:Agent";
+	sh:scopeClass prov:Agent;
+	sh:property model:provAgent_range;
+.
+model:provAgent_range rdf:type sh:PropertyConstraint;
+	sh:predicate rdfs:range;
+	sh:class prov:Organization;
+.	
 ### Distributie
 model:Distribution rdf:type sh:Shape;
-	rdfs:label "Shape voor een Distribution";
+	rdfs:label "dcat:Distribution";
 	sh:scopeClass dcat:Distribution;
 	sh:property model:Distribution_Naam;
 	sh:property model:Distribution_Beschrijving;
@@ -401,6 +451,7 @@ model:Distribution rdf:type sh:Shape;
 	sh:property model:Distribution_Rechten;
 	sh:property model:Distribution_accessURL;
 	sh:property model:Distribution_GeneratedBy;
+	sh:property model:Distribution_downloadURL;
 .
 model:Distribution_Naam rdf:type sh:PropertyConstraint;
 	sh:predicate dct:title;
@@ -440,17 +491,23 @@ model:Distribution_accessURL rdf:type sh:PropertyConstraint;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
+model:Distribution_downloadURL rdf:type sh:PropertyConstraint;
+	sh:predicate dcat:downloadURL;
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+.
 model:Distribution_GeneratedBy rdf:type sh:PropertyConstraint;
 	sh:predicate prov:wasGeneratedBy;
 	sh:class prov:Entity;
 .
 ### Provenance Entity
 model:Entity rdf:type sh:Shape;
-	rdfs:label "Shape voor een provenance Entity";
+	rdfs:label "prov:Entity";
 	sh:scopeClass prov:Entity;
 	sh:property model:Entity_Naam;
 	sh:property model:Entity_GemaaktDoor;
 	sh:property model:Entity_GemaaktOp;
+	sh:property model:Entity_AfgeleidVan;
 .
 model:Entity_Naam rdf:type sh:PropertyConstraint;
 	sh:predicate skos:prefLabel;
@@ -466,9 +523,13 @@ model:Entity_GemaaktOp rdf:type sh:PropertyConstraint;
 	sh:predicate prov:generatedAtTime;
 	sh:datatype xsd:current-dateTime;
 .
+model:Entity_AfgeleidVan rdf:type sh:PropertyConstraint;
+	sh:predicate prov:wasDerivedFrom;
+	sh:class prov:Entity;
+.
 ### Provenance Activiteit
 model:Activity rdf:type sh:Shape;
-	rdfs:label "Shape voor een provenance Activity";
+	rdfs:label "prov:Activity";
 	sh:scopeClass prov:Activity;
 	sh:property model:Activity_Label;
 	sh:property model:Activity_Door;
@@ -490,10 +551,11 @@ model:Activity_Tijdstip rdf:type sh:PropertyConstraint;
 .
 ### Provenance Agent
 model:ProvAgent rdf:type sh:Shape;
-	rdfs:label "Shape voor een provenance Agent";
+	rdfs:label "prov:Agent";
 	sh:scopeClass prov:Agent;
 	sh:property model:ProvAgent_Naam;
 	sh:property model:ProvAgent_Namens;
+	sh:property model:ProvAgent_Range;
 .
 model:ProvAgent_Naam rdf:type sh:PropertyConstraint;
 	sh:predicate skos:prefLabel;
@@ -505,24 +567,120 @@ model:ProvAgent_Namens rdf:type sh:PropertyConstraint;
 	sh:predicate prov:actedOnBehalfOf;
 	sh:class prov:Organization;
 .
-### Provenance Organisatie
-model:Organization rdf:Type sh:Shape;
-	rdfs:label "Shape voor een provenance Organization";
-	sh:scopeClass prov:Organization;
-	sh:property model:Organisatie_Naam;
+model:ProvAgent_Range rdf:type sh:PropertyConstraint;
+	sh:predicate rdfs:range;
+	sh:class prov:Organization;
 .
-model:Organisatie_Naam rdf:type sh:PropertyConstraint;
-	sh:predicate skos:prefLabel;
+### Organisatie
+model:Organization rdf:Type sh:Shape;
+	rdfs:label "prov:Agent";
+	sh:scopeClass prov:Agent;
+	sh:property model:ActsonBehalfOf;
+.
+model:ActsonBehalfOf rdf:type sh:PropertyConstraint;
+	sh:predicate prov:actedOnBehalfOf;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+	sh:class prov:Agent;
+.
+### Locatie
+model:Location rdf:type sh:Shape;
+	rdfs:label "dct:Location";
+	sh:scopeClass dct:Location;
+	sh:property model:Location_Aanduiding;
+.
+model:Location_Aanduiding rdf:type sh:PropertyConstraint;
+	sh:predicate rdfs:range;
+	sh:class model:BestuurlijkGebied;
+.
+### BestuurlijkGebied
+model:BestuurlijkGebied rdf:type sh:Shape;
+	rdfs:label "dkk:BestuurlijkGebied";
+	sh:scopeClass dkk:BestuurlijkGebied;
+.
+### Informatiemodel 
+model:Informationmodel rdf:type sh:Shape;
+	rdfs:label "adms:Asset";
+	sh:scopeClass adms:Asset;
+	sh:property model:Informationmodel_name;
+	sh:property model:Informationmodel_description;
+	sh:property model:Informationmodel_version;
+	sh:property model:Informationmodel_issuedDate;
+	sh:property model:Informationmodel_releaseNotes;
+	sh:property model:Informationmodel_about;
+.
+model:Informationmodel_name rdf:type sh:PropertyConstraint;
+	sh:predicate dct:title;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
+model:Informationmodel_description rdf:type sh:PropertyConstraint;
+	sh:predicate dct:description;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:Informationmodel_version rdf:type sh:PropertyConstraint;
+	sh:predicate adms:version;
+	sh:datatype xsd:double;
+.
+model:Informationmodel_issuedDate rdf:type sh:PropertyConstraint;
+	sh:predicate dct:issued;
+	sh:datatype xsd:dateTime;
+.
+model:Informationmodel_releaseNotes rdf:type sh:PropertyConstraint;
+	sh:predicate adms:versionNotes;
+	sh:datatype xsd:string;
+.
+model:Informationmodel_about rdf:type sh:PropertyConstraint;
+	sh:predicate foaf:primaryTopic;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+### Entiteit
+model:Entiteit rdf:type sh:Shape;
+	rdfs:label "prov:Entity";
+	sh:scopeClass prov:Entity;
+	sh:property model:Entiteit_startmoment;
+	sh:property model:Entiteit_eindmoment;
+	sh:property model:Entiteit_versie;
+	sh:property model:Entiteit_handeling;
+	sh:property model:Entiteit_releaseNotes;
+.
+model:Entiteit_startmoment rdf:type sh:PropertyConstraint;
+	sh:predicate prov:generatedAtTime;
+	sh:datatype xsd:dateTime;
+.
+model:Entiteit_eindmoment rdf:type sh:PropertyConstraint;
+	sh:predicate prov:invalidatedAtTime;
+	sh:datatype xsd:dateTime;
+.
+model:Entiteit_versie rdf:type sh:PropertyConstraint;
+	sh:predicate adms:version;
+	sh:datatype xsd:double;
+.
+model:Entiteit_handeling rdf:type sh:PropertyConstraint;
+	sh:predicate prov:wasGeneratedBy;
+	sh:class prov:Activity;
+.
+model:Entiteit_releaseNotes rdf:type sh:PropertyConstraint;
+	sh::predicate adms:versionNotes;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+### Kwaliteitskenmerk
+model:Kwaliteitskenmerk rdf:type sh:Shape;
+	rdfs:label "dqv:Dimension";
+	sh:scopeClass dqv:Dimension;
+	sh:property model:Kwaliteitskenmerk_categorie;
+.
+model:Kwaliteitskenmerk_categorie rdf:type sh:PropertyConstraint;
+	sh:predicate dqv:inCategory;
+.
 
-
-
-
-
-
-
-
-
+	
+	
