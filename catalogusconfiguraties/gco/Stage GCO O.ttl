@@ -142,6 +142,7 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			rdfs:label "Requirements";
 			elmo:data [ elmo:index "1"; rdfs:label "Validatie"; html:link "query/requirements"];
 			elmo:data [ elmo:index "2"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
+			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
 		];
 		elmo:data [
 			elmo:index "3";
@@ -406,27 +407,31 @@ stage:Requirements_Controle1 a elmo:Part;
 	];
 elmo:query '''
 		prefix shacl: <http://www.w3.org/ns/shacl#>
-		select ?class ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
+		select ?class ?class_label ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
 		where {
-			graph ?g {
-				?req a <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#Requirement>.
+			graph <http://bp4mc2.org/id/dataset/requirements> {
+				?req a shacl:PropertyConstraint.
 				?req rdfs:label ?req_label.
-				?req shacl:targetClass ?class.
-				?req shacl:predicate ?pred.
+				?req rdfs:comment ?req_comment.
+				OPTIONAL {
+					?shape shacl:property ?req.
+					?shape rdfs:label ?class_label.
+					?shape shacl:scopeClass ?class.
+				}
+				OPTIONAL {?req shacl:predicate ?pred}
 				OPTIONAL {?req shacl:class ?refclass}
 				OPTIONAL {?req rdf:value ?toep}
-				OPTIONAL {
+			}
+			OPTIONAL {
+				graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 					?shpe shacl:scopeClass ?class.
 					?shpe shacl:property ?pc.
 					?pc shacl:predicate ?pred.
 					OPTIONAL {?pc shacl:class ?toclass}
 				}
 			}
-			FILTER (?g = <http://bp4mc2.org/id/dataset/bp4mc2>
-				or	?g = <http://bp4mc2.org/id/dataset/requirements>
-			)
 		}
-		order by ?req
+		order by ?class ?req
 	'''
 .
 
@@ -462,6 +467,32 @@ stage:Requirements_Controle2 a elmo:Part;
 			)
 		}
 	''';
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.ontwikkeling.pdok.nl/catalogus/gco/stage#>.
+
+stage:ReqVisualisatie	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqvisualisatie$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:ImageAppearance;
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/requirements.png".
+			<urn:image> html:width "1047".
+			<urn:image> html:height "990".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
 . 
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.

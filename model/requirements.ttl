@@ -9,6 +9,64 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
 @prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+
+#---------------------
+# Concept
+#---------------------
+req:Concept a sh:Shape;
+	rdfs:label "Concept";
+	sh:scopeClass skos:Concept;
+	sh:property req:Concept_onderdeelVan;
+	sh:property req:Concept_grondslag;
+.
+req:Concept_onderdeelVan a sh:PropertyConstraint;
+	rdfs:label "onderdeel van";
+	sh:predicate skos:inScheme;
+	sh:class skos:ConceptScheme;
+.
+req:Concept_grondslag a sh:PropertyConstraint;
+	rdfs:label "grondslag";
+	sh:predicate dcterms:source;
+	sh:class dctype:Text;
+.
+
+#---------------------
+# Collectie
+#---------------------
+req:Collectie a sh:Shape;
+	rdfs:label "Collectie";
+	sh:scopeClass skos:Collection;
+	sh:property req:Collectie_heeftLid;
+.
+req:Collectie_heeftLid a sh:PropertyConstraint;
+	rdfs:label "heeft lid";
+	sh:predicate skos:member;
+	sh:class skos:Concept;
+.
+
+#---------------------
+# Begrippenkader
+#---------------------
+req:Begrippenkader a sh:Shape;
+	rdfs:label "Begrippenkader";
+	sh:property req:Begrippenkader_grondslag;
+	sh:scopeClass skos:ConceptScheme;
+.
+req:Begrippenkader_grondslag a sh:PropertyConstraint;
+	rdfs:label "grondslag";
+	sh:predicate req:Begrippenkader_grondslag;
+	sh:class dctype:Text;
+.
+
+#---------------------
+# Brondocument
+#---------------------
+req:Brondocument a sh:Shape;
+	rdfs:label "Brondocument";
+	sh:scopeClass dctype:Text;
+.
 
 #---------------------
 # Overheidsorganisatie
@@ -16,22 +74,6 @@
 req:Overheidsorganisatie rdf:type sh:Shape;
     rdfs:label "Overheidsorganisatie";
     sh:scopeClass foaf:Agent
-.
-
-#---------------------
-# Organisatie
-#---------------------
-req:Agent a sh:Shape;
-	rdfs:label "Organisatie";
-	sh:scopeClass prov:Agent;
-	sh:property req:Agent_handeltNamens;
-.
-req:Agent_handeltNamens rdf:type sh:PropertyConstraint;
-	rdfs:label "handelt namens";
-    rdfs:comment "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
-    sh:class prov:Agent;
-    rdf:value "overheid:Rijswaterstaat";
-    sh:predicate prov:actedOnBehalfOf;
 .
 
 #---------------------
@@ -44,6 +86,7 @@ req:Dataset rdf:type sh:Shape;
     sh:property req:Dataset_publicatiedatum;
     sh:property req:Dataset_taal;
     sh:property req:Dataset_beschrijving;
+	sh:property req:Dataset_distributie;
     sh:scopeClass dcat:Dataset;
 .
 req:Dataset_beschrijving rdf:type sh:PropertyContraint;
@@ -76,6 +119,11 @@ req:Dataset_taal rdf:type sh:PropertyContraint;
     rdf:value "@nl";
     sh:predicate dcterms:language
 .
+req:Dataset_distributie a sh:PropertyConstraint;
+	rdfs:label "distributie";
+	sh:predicate dcat:distribution;
+	sh:class dcat:Distribution;
+.
 
 #---------------------
 # Informatiemodel
@@ -88,6 +136,7 @@ req:Informatiemodel rdf:type sh:Shape;
     sh:property req:Informatiemodel_versie;
     sh:property req:Informatiemodel_publicatiedatum;
     sh:property req:Informatiemodel_releaseNotes;
+	sh:property req:Informatiemodel_betreft;
 .
 req:Informatiemodel_naam rdf:type sh:PropertyConstraint;
     rdfs:label "naam";
@@ -119,20 +168,31 @@ req:Informatiemodel_releaseNotes rdf:type sh:PropertyConstraint;
     rdf:value "<release notes>";
     sh:predicate adms:versionNotes;
 .
+req:Informatiemodel_betreft a sh:PropertyConstraint;
+	rdfs:label "betreft";
+	sh:predicate foaf:primaryTopic;
+	sh:class skos:ConceptScheme;
+.
 
 #---------------------
-# CatalogRecord
+# Datasetbeschrijving
 #---------------------
-req:CatalogRecord a sh:Shape;
-	rdfs:label "Catalog record";
+req:Datasetbeschrijving a sh:Shape;
+	rdfs:label "Datasetbeschrijving";
 	sh:scopeClass dcat:CatalogRecord;
-	sh:property req:Catalogrecord_publicatiedatum;
+	sh:property req:Datasetbeschrijving_publicatiedatum;
+	sh:property req:Datasetbeschrijving_onderwerp;
 .
-req:CatalogRecord_publicatiedatum rdf:type sh:PropertyConstraint;
+req:Datasetbeschrijving_publicatiedatum rdf:type sh:PropertyConstraint;
 	rdfs:label "publicatiedatum";
     rdfs:comment "Het catalog  record geeft aan wanneer de betreffende dataset is gepubliceerd in de catalogus";
     rdf:value "1/10/2016";
     sh:predicate dcterms:issued;
+.
+req:Datasetbeschrijving_onderwerp a sh:PropertyConstraint;
+	rdfs:label "onderwerp";
+	sh:predicate foaf:primaryTopic;
+	sh:class dcat:Dataset;
 .
 
 #---------------------
@@ -150,6 +210,7 @@ req:Catalogus rdf:type sh:Shape;
     sh:property req:Catalogus_taal;
     sh:property req:Catalogus_uitgever;
     sh:property req:Catalogus_werkingsgebied;
+    sh:property req:Catalogus_omvat;
     sh:scopeClass dcat:Catalog
 .
 req:Catalogus_naam rdf:type sh:PropertyContraint;
@@ -213,6 +274,11 @@ req:Catalogus_werkingsgebied rdf:type sh:PropertyContraint;
     sh:class dcterms:Location;
     rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
     sh:predicate dcterms:spatial
+.
+req:Catalogus_omvat a sh:PropertyConstraint;
+	rdfs:label "omvat";
+	sh:predicate dcat:record;
+	sh:class dcat:CatalogRecord;
 .
 
 #---------------------
@@ -281,10 +347,26 @@ req:Distributie_downloadURL rdf:type sh:PropertyContraint;
 .
 
 #---------------------
+# Organisatie
+#---------------------
+req:Agent a sh:Shape;
+	rdfs:label "Organisatie (herkomst)";
+	sh:scopeClass prov:Agent;
+	sh:property req:Agent_handeltNamens;
+.
+req:Agent_handeltNamens rdf:type sh:PropertyConstraint;
+	rdfs:label "handelt namens";
+    rdfs:comment "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
+    sh:class prov:Agent;
+    rdf:value "overheid:Rijswaterstaat";
+    sh:predicate prov:actedOnBehalfOf;
+.
+
+#---------------------
 # Activiteit
 #---------------------
 req:Activiteit a sh:Shape;
-	rdfs:label "Activeit";
+	rdfs:label "Activiteit (herkomst)";
 	sh:scopeClass prov:Activity;
 	sh:property req:Activiteit_tijdstip;
 	sh:property req:Activiteit_uitvoerder;
