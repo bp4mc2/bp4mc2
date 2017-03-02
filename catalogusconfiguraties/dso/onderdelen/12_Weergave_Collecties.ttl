@@ -36,7 +36,7 @@
 #
 
 # Standaard collectiepagina
-stage:DSOCollecties a elmo:Representation;
+stage:WeergavePaginaCollecties a elmo:Representation;
 	elmo:contains stage:WeergaveTabelCollecties;
 	elmo:contains stage:DSOCollectieConceptenWithParamTerm;
 	elmo:contains stage:DSOCollectieConceptenWithoutParam;
@@ -232,6 +232,129 @@ stage:DSOCollectiestabel a elmo:Part;
 #
 # QUERY'S
 #
+
+# Query voor WeergaveTabel
+stage:WeergaveTabelCollectiesQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel.
+			?o rdfs:label ?oelabel.
+			<@SUBJECT@> prov:wasGeneratedBy ?a.
+			<@SUBJECT@> prov:generatedAtTime ?t.
+			?a rdfs:label ?alabel.
+		}
+		WHERE {
+			{
+				GRAPH ?g {
+					<@SUBJECT@> rdf:type skos:Collection.
+					<@SUBJECT@> ?p ?o.
+					?g prov:wasGeneratedBy ?a.
+					?g prov:generatedAtTime ?t.
+				}
+				GRAPH doc:mastergraph {
+					<@SUBJECT@> rdfs:isDefinedBy ?g
+				}
+				FILTER (
+					?p != rdf:type
+					&& ?p != skos:prefLabel
+					&& ?p != skos:notation
+					&& ?p != bp4mc2:signature
+					&& ?p != dct:type
+					&& ?p != skos:member
+					&& ?p != dct:title
+				)
+				FILTER( substr("@GRAPH@",2) = "GRAPH@")
+			}
+			UNION
+			{
+				GRAPH <@GRAPH@> {
+					<@SUBJECT@> rdf:type skos:Collection.
+					<@SUBJECT@> ?p ?o.
+					?g prov:wasGeneratedBy ?a.
+					?g prov:generatedAtTime ?t.
+				}
+				FILTER (
+					?p != rdf:type
+					&& ?p != skos:prefLabel
+					&& ?p != skos:notation
+					&& ?p != bp4mc2:signature
+					&& ?p != dct:type
+					&& ?p != skos:member
+					&& ?p != dct:title
+				)
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+			OPTIONAL {
+				?o rdfs:label ?olabel.
+			}
+			OPTIONAL {
+				?a rdfs:label ?alabel.
+			}
+		}
+	'''
+.
+
+
+# Query voor weergave versies
+stage:WeergaveVersiesCollectiesQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+
+		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		WHERE {
+			{
+				GRAPH ?graph {
+					<@SUBJECT@> rdf:type skos:Collection.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != ?actualGraph )
+				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH ?graph {
+					<@SUBJECT@> rdf:type skos:Collection.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != <@GRAPH@> )
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+		}
+		ORDER BY DESC(lcase(?concept_label))
+	'''
+.
 
 stage:DSOCollectieConceptenQueryWithParamTerm a elmo:Query;
 	elmo:query '''

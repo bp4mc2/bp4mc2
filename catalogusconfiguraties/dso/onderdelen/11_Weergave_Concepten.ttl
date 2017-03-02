@@ -28,15 +28,15 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaGrafisch a elmo:Representation;
+stage:WeergavePaginaConcepten a elmo:Representation;
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOTree;
 	elmo:contains stage:WeergaveTabelConcepten;
 	elmo:contains stage:DSORegelsConceptenTabel;
-	elmo:contains stage:WeergaveVersies;
-	elmo:contains stage:WeergaveGrafisch;
+	elmo:contains stage:WeergaveVersiesConcepten;
+	elmo:contains stage:WeergaveGrafischConcepten;
 	elmo:applies-to [
 		rdf:type skos:Concept
 	];
@@ -205,7 +205,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 .
 
 # Grafische weergave
-stage:WeergaveGrafisch a elmo:Part;
+stage:WeergaveGrafischConcepten a elmo:Part;
 	elmo:index "10";
 	elmo:appearance elmo:GraphAppearance;
 	elmo:fragment [
@@ -254,7 +254,7 @@ stage:WeergaveGrafisch a elmo:Part;
 		elmo:index "2";
 	];
 	
-	elmo:query stage:WeergaveGrafischQuery;
+	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
 # Tabel met vorige versies
@@ -292,7 +292,7 @@ stage:WeergaveVersiesConcepten a elmo:Part;
 #
 
 # Query voor grafische weergave concepten e.d.
-stage:WeergaveGrafischQuery a elmo:Query;
+stage:WeergaveGrafischConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
@@ -494,14 +494,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		WHERE {
 			{
 				{
-					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?g
-					}
 					GRAPH ?g {
 						<@SUBJECT@> ?p ?o.
 						<@SUBJECT@> rdf:type skos:Concept.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
+					}
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?g
 					}
 					FILTER (
 						?p != rdf:type

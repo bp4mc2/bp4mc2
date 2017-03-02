@@ -1,241 +1,443 @@
-@prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix reqo: <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix shacl: <http://www.w3.org/ns/shacl#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
 @prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
 
-@prefix kkg: <http://UNKNOWN/kkg#>.
-@prefix adms: <http://UNKNOWN/adms#>.
+#---------------------
+# Concept
+#---------------------
+req:Concept a sh:Shape;
+	rdfs:label "Concept";
+	sh:scopeClass skos:Concept;
+	sh:property req:Concept_onderdeelVan;
+	sh:property req:Concept_grondslag;
+.
+req:Concept_onderdeelVan a sh:PropertyConstraint;
+	rdfs:label "onderdeel van";
+	sh:predicate skos:inScheme;
+	sh:class skos:ConceptScheme;
+.
+req:Concept_grondslag a sh:PropertyConstraint;
+	rdfs:label "grondslag";
+	sh:predicate dcterms:source;
+	sh:class dctype:Text;
+.
 
-req:Catalogus01 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "De catalogus heeft een naam";
-	rdf:value "Catalogus Omgevingswet";
-	shacl:predicate dct:title;
+#---------------------
+# Collectie
+#---------------------
+req:Collectie a sh:Shape;
+	rdfs:label "Collectie";
+	sh:scopeClass skos:Collection;
+	sh:property req:Collectie_heeftLid;
 .
-req:Catalogus02 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "De catalogus heeft een duidelijke omschrijving";
-	rdf:value "<welkomsttekst>";
-	shacl:predicate dct:description;
+req:Collectie_heeftLid a sh:PropertyConstraint;
+	rdfs:label "heeft lid";
+	sh:predicate skos:member;
+	sh:class skos:Concept;
 .
-req:Catalogus03 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "De catalogus is op enig moment life life gegaan";
-	rdf:value "1/10/2016";
-	shacl:predicate dct:issued;
+
+#---------------------
+# Begrippenkader
+#---------------------
+req:Begrippenkader a sh:Shape;
+	rdfs:label "Begrippenkader";
+	sh:property req:Begrippenkader_grondslag;
+	sh:scopeClass skos:ConceptScheme;
 .
-req:Catalogus04 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "Er wordt bijgehouden wanneer iets in de catalogus zelf is gewijzigd (een van de attributen in dit lijstje of een dataset die is toegevoegd)";
-	rdf:value "1/10/2016";
-	shacl:predicate dct:modified;
+req:Begrippenkader_grondslag a sh:PropertyConstraint;
+	rdfs:label "grondslag";
+	sh:predicate req:Begrippenkader_grondslag;
+	sh:class dctype:Text;
 .
-req:Catalogus05 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "De taal van de catalogus";
-	rdf:value "@nl";
-	shacl:predicate dct:language;
+
+#---------------------
+# Brondocument
+#---------------------
+req:Brondocument a sh:Shape;
+	rdfs:label "Brondocument";
+	sh:scopeClass dctype:Text;
 .
-req:Catalogus06 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "De licentie op de catalogus zelf (dus niet die op de datasets of distributies)";
-	rdf:value "uri-beerware";
-	shacl:predicate dct:license;
+
+#---------------------
+# Overheidsorganisatie
+#---------------------
+req:Overheidsorganisatie rdf:type sh:Shape;
+    rdfs:label "Overheidsorganisatie";
+    sh:scopeClass foaf:Agent
 .
-req:Catalogus07 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "Een beschrijving van de rechten die gelden voor het de catalogus zelf (dus niet voor de datasets of distributies)";
-	rdf:value "<tekst over de catalogus en de oorsprong van de verschillende datasets>";
-	shacl:predicate dct:rights;
+
+#---------------------
+# Dataset
+#---------------------
+req:Dataset rdf:type sh:Shape;
+    rdfs:label "Dataset";
+    sh:property req:Dataset_informatiemodel;
+    sh:property req:Dataset_naam;
+    sh:property req:Dataset_publicatiedatum;
+    sh:property req:Dataset_taal;
+    sh:property req:Dataset_beschrijving;
+	sh:property req:Dataset_distributie;
+    sh:scopeClass dcat:Dataset;
 .
-req:Catalogus08 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "De url van de homepage is gelijk aan de uri van de catalogus omdat die dereferenceble is";
-	rdf:value "https://www.digitaalstelselomgevingswet.nl/catalogus";
-	shacl:predicate foaf:homepage;
+req:Dataset_beschrijving rdf:type sh:PropertyContraint;
+    rdfs:label "beschrijving";
+    rdfs:comment "De dataset heeft een duidelijke beschrijving";
+    rdf:value "<beschrijving>";
+    sh:predicate dcterms:description
 .
-req:Catalogus09 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "Het gebied waarvoor de catalogus geldig is";
-	rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
-	shacl:predicate dct:spatial;
-	shacl:class dct:Location;
+req:Dataset_informatiemodel rdf:type sh:PropertyContraint;
+    rdfs:comment "Bij een dataset hoort een informatiemodel.";
+    sh:class <http://www.w3.org/ns/adms#Asset>;
+    rdf:value "kadaster.nl/schemas/imkad";
+    sh:predicate dcterms:subject
 .
-req:Catalogus10 a reqo:Requirement;
-	shacl:targetClass dcat:Catalog;
-	rdfs:label "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de dataset";
-	rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
-	shacl:predicate dct:publisher;
-	shacl:class foaf:Agent;
+req:Dataset_naam rdf:type sh:PropertyContraint;
+    rdfs:label "naam";
+    rdfs:comment "De dataset heeft een naam";
+    rdf:value "'Omgevingswet','BAL','BRK', etc";
+    sh:predicate dcterms:title
 .
-req:Dataset01 a reqo:Requirement;
-	shacl:targetClass dcat:Dataset;
-	rdfs:label "De dataset heeft een naam";
-	rdf:value "'Omgevingswet','BAL','BRK', etc";
-	shacl:predicate dct:title;
+req:Dataset_publicatiedatum rdf:type sh:PropertyContraint;
+    rdfs:label "publicatiedatum";
+    rdfs:comment "De dataset is op enig moment gepubliceerd";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:issued
 .
-req:Dataset02 a reqo:Requirement;
-	shacl:targetClass dcat:Dataset;
-	rdfs:label "De dataset heeft een duidelijke beschrijving";
-	rdf:value "<beschrijving>";
-	shacl:predicate dct:description;
+req:Dataset_taal rdf:type sh:PropertyContraint;
+    rdfs:label "taal";
+    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
+    rdf:value "@nl";
+    sh:predicate dcterms:language
 .
-req:Dataset03 a reqo:Requirement;
-	shacl:targetClass dcat:Dataset;
-	rdfs:label "De dataset  is op enig moment gepubliceerd";
-	rdf:value "1/10/2016";
-	shacl:predicate dct:issued;
+req:Dataset_distributie a sh:PropertyConstraint;
+	rdfs:label "distributie";
+	sh:predicate dcat:distribution;
+	sh:class dcat:Distribution;
 .
-req:Dataset04 a reqo:Requirement;
-	shacl:targetClass dcat:Dataset;
-	rdfs:label "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
-	rdf:value "@nl";
-	shacl:predicate dct:language;
+
+#---------------------
+# Informatiemodel
+#---------------------
+req:Informatiemodel rdf:type sh:Shape;
+    rdfs:label "Informatiemodel";
+    sh:scopeClass adms:Asset;
+    sh:property req:Informatiemodel_naam;
+    sh:property req:Informatiemodel_beschrijving;
+    sh:property req:Informatiemodel_versie;
+    sh:property req:Informatiemodel_publicatiedatum;
+    sh:property req:Informatiemodel_releaseNotes;
+	sh:property req:Informatiemodel_betreft;
 .
-req:Dataset05 a reqo:Requirement;
-	shacl:targetClass dcat:Dataset;
-	rdfs:label "Bij een dataset hoort een informatiemodel.";
-	rdf:value "kadaster.nl/schemas/imkad";
-	shacl:predicate dct:subject;
-	shacl:class rdf:Resource;
+req:Informatiemodel_naam rdf:type sh:PropertyConstraint;
+    rdfs:label "naam";
+    rdfs:comment "Het informatiemodel heeft een naam";
+    rdf:value "'IMKAD'";
+    sh:predicate dcterms:title
 .
-req:Informatiemodel01 a reqo:Requirement;
-	shacl:targetClass kkg:InformationModel;
-	rdfs:label "Het informatiemodel heeft een naam";
-	rdf:value "'IMKAD'";
-	shacl:predicate dct:title;
+req:Informatiemodel_beschrijving rdf:type sh:PropertyConstraint;
+	rdfs:label "beschrijving";
+    rdfs:comment "Het informatiemodel heeft een duidelijke beschrijving";
+    rdf:value "<beschrijving>";
+    sh:predicate dcterms:description;
 .
-req:Informatiemodel02 a reqo:Requirement;
-	shacl:targetClass kkg:InformationModel;
-	rdfs:label "Het informatiemodel heeft een duidelijke beschrijving";
-	rdf:value "<beschrijving>";
-	shacl:predicate dct:description;
+req:Informatiemodel_versie rdf:type sh:PropertyConstraint;
+	rdfs:label "versie";
+    rdfs:comment "Het informatiemodel heeft een versie";
+    rdf:value "2.1";
+    sh:predicate adms:version;
 .
-req:Informatiemodel03 a reqo:Requirement;
-	shacl:targetClass kkg:InformationModel;
-	rdfs:label "Het informatiemodel is op enig moment gepubliceerd";
-	rdf:value "8/5/2012";
-	shacl:predicate dct:issued;
+req:Informatiemodel_publicatiedatum rdf:type sh:PropertyConstraint;
+	rdfs:label "publicatiedatum";
+    rdfs:comment "Het informatiemodel is op enig moment gepubliceerd";
+    rdf:value "8/5/2012";
+    sh:predicate dcterms:issued;
 .
-req:Informatiemodel04 a reqo:Requirement;
-	shacl:targetClass kkg:InformationModel;
-	rdfs:label "Het informatiemodel heeft een versie";
-	rdf:value "2.1";
-	shacl:predicate adms:version;
+req:Informatiemodel_releaseNotes rdf:type sh:PropertyConstraint;
+	rdfs:label "release notes";
+    rdfs:comment "Een versie bevat release notes";
+    rdf:value "<release notes>";
+    sh:predicate adms:versionNotes;
 .
-req:Informatiemodel05 a reqo:Requirement;
-	shacl:targetClass kkg:InformationModel;
-	rdfs:label "Een versie bevat release notes";
-	rdf:value "<release notes>";
-	shacl:predicate adms:versionNotes;
+req:Informatiemodel_betreft a sh:PropertyConstraint;
+	rdfs:label "betreft";
+	sh:predicate foaf:primaryTopic;
+	sh:class skos:ConceptScheme;
 .
-req:CatalogRecord01 a reqo:Requirement;
-	shacl:targetClass dcat:CatalogRecord;
-	rdfs:label "Het catalog  record geeft aan wanneer de betreffende dataset is gepubliceerd in de catalogus";
-	rdf:value "1/10/2016";
-	shacl:predicate dct:issued;
+
+#---------------------
+# Datasetbeschrijving
+#---------------------
+req:Datasetbeschrijving a sh:Shape;
+	rdfs:label "Datasetbeschrijving";
+	sh:scopeClass dcat:CatalogRecord;
+	sh:property req:Datasetbeschrijving_publicatiedatum;
+	sh:property req:Datasetbeschrijving_onderwerp;
 .
-req:Distributie01 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "De distributie heeft een naam";
-	rdf:value "'Linked Data omgevingswet'";
-	shacl:predicate dct:title;
+req:Datasetbeschrijving_publicatiedatum rdf:type sh:PropertyConstraint;
+	rdfs:label "publicatiedatum";
+    rdfs:comment "Het catalog  record geeft aan wanneer de betreffende dataset is gepubliceerd in de catalogus";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:issued;
 .
-req:Distributie02 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "De distributie heeft een duidelijke beschrijving";
-	rdf:value "<beschrijving>";
-	shacl:predicate dct:description;
+req:Datasetbeschrijving_onderwerp a sh:PropertyConstraint;
+	rdfs:label "onderwerp";
+	sh:predicate foaf:primaryTopic;
+	sh:class dcat:Dataset;
 .
-req:Distributie03 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "De publicatiedatum van de distributie (dit is niet perse de datum van opname van de distributie in de catalogus)";
-	rdf:value "1/10/2016";
-	shacl:predicate dct:issued;
+
+#---------------------
+# Catalogus
+#---------------------
+req:Catalogus rdf:type sh:Shape;
+    rdfs:label "Catalogus";
+    sh:property req:Catalogus_datumWijziging;
+    sh:property req:Catalogus_homepage;
+    sh:property req:Catalogus_licentie;
+    sh:property req:Catalogus_productiedatum;
+    sh:property req:Catalogus_naam;
+    sh:property req:Catalogus_omschrijving;
+    sh:property req:Catalogus_rechten;
+    sh:property req:Catalogus_taal;
+    sh:property req:Catalogus_uitgever;
+    sh:property req:Catalogus_werkingsgebied;
+    sh:property req:Catalogus_omvat;
+    sh:scopeClass dcat:Catalog
 .
-req:Distributie04 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "De licentie op de distributie";
-	rdf:value "uri-beerware";
-	shacl:predicate dct:license;
+req:Catalogus_naam rdf:type sh:PropertyContraint;
+    rdfs:label "naam";
+    rdfs:comment "De catalogus heeft een naam";
+    rdf:value "Catalogus Omgevingswet";
+    sh:predicate dcterms:title
 .
-req:Distributie05 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "Een beschrijving van de rechten die gelden voor de distributie. Zie ook: svbg:gebruiksvoorwaarden en iso:confidentiality";
-	rdf:value "<tekst over de distributie>";
-	shacl:predicate dct:rights;
+req:Catalogus_omschrijving rdf:type sh:PropertyContraint;
+    rdfs:label "omschrijving";
+    rdfs:comment "De catalogus heeft een duidelijke omschrijving";
+    rdf:value "<welkomsttekst>";
+    sh:predicate dcterms:description
 .
-req:Distributie06 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "De url van een API of een webservice";
-	rdf:value "..";
-	shacl:predicate dcat:accessURL;
+req:Catalogus_productiedatum rdf:type sh:PropertyContraint;
+    rdfs:label "productiedatum";
+    rdfs:comment "De catalogus is op enig moment life life gegaan";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:issued
 .
-req:Distributie07 a reqo:Requirement;
-	shacl:targetClass dcat:Distribution;
-	rdfs:label "De url van de downloadpagina";
-	rdf:value "..";
-	shacl:predicate dcat:downloadURL;
+req:Catalogus_datumWijziging rdf:type sh:PropertyContraint;
+    rdfs:label "datum wijziging";
+    rdfs:comment "Er wordt bijgehouden wanneer iets in de catalogus zelf is gewijzigd (een van de attributen in dit lijstje of een dataset die is toegevoegd)";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:modified
 .
-req:Entiteit01 a reqo:Requirement;
-	shacl:targetClass prov:Entity;
-	rdfs:label "Het begin van de formele historie (de publicatiedatum) wordt vastgelegd";
-	rdf:value "1/7/2017";
-	shacl:predicate prov:generatedAtTime;
+req:Catalogus_homepage rdf:type sh:PropertyContraint;
+    rdfs:label "homepage";
+    rdfs:comment "De url van de homepage is gelijk aan de uri van de catalogus omdat die dereferenceble is";
+    rdf:value "https://www.digitaalstelselomgevingswet.nl/catalogus";
+    sh:predicate foaf:homepage
 .
-req:Entiteit02 a reqo:Requirement;
-	shacl:targetClass prov:Entity;
-	rdfs:label "Het einde van de formele historie (het moment van de publicatie van een nieuwe versie) wordt vastgelegd";
-	rdf:value "''";
-	shacl:predicate prov:invalidatedAtTime;
+req:Catalogus_licentie rdf:type sh:PropertyContraint;
+    rdfs:label "licentie";
+    rdfs:comment "De licentie op de catalogus zelf (dus niet die op de datasets of distributies)";
+    rdf:value "uri-beerware";
+    sh:predicate dcterms:license
 .
-req:Entiteit03 a reqo:Requirement;
-	shacl:targetClass prov:Entity;
-	rdfs:label "Optioneel: het vastleggen van een versie";
-	rdf:value "..";
-	shacl:predicate adms:version;
+req:Catalogus_rechten rdf:type sh:PropertyContraint;
+    rdfs:label "rechten";
+    rdfs:comment "Een beschrijving van de rechten die gelden voor het de catalogus zelf (dus niet voor de datasets of distributies)";
+    rdf:value "<tekst over de catalogus en de oorsprong van de verschillende datasets>";
+    sh:predicate dcterms:rights
 .
-req:Entiteit04 a reqo:Requirement;
-	shacl:targetClass prov:Entity;
-	rdfs:label "Optioneel: het vastleggen van release notes";
-	rdf:value "..";
-	shacl:predicate adms:versionNotes;
+req:Catalogus_taal rdf:type sh:PropertyContraint;
+    rdfs:label "taal";
+    rdfs:comment "De taal van de catalogus";
+    rdf:value "@nl";
+    sh:predicate dcterms:language
 .
-req:Entiteit05 a reqo:Requirement;
-	shacl:targetClass prov:Entity;
-	rdfs:label "Verwijzing naar de activiteit van het vastleggen/publiceren";
-	rdf:value "<de betreffende handeling>";
-	shacl:predicate prov:wasGeneratedBy;
-	shacl:class prov:Activity;
+req:Catalogus_uitgever rdf:type sh:PropertyContraint;
+    rdfs:label "uitgever";
+    rdfs:comment "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de dataset";
+    sh:class foaf:Agent;
+    rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
+    sh:predicate dcterms:publisher
 .
-req:Activiteit01 a reqo:Requirement;
-	shacl:targetClass prov:Activity;
-	rdfs:label "Het moment van het vastleggen zelf (de audit trail) wordt vastgelegd";
-	rdf:value "1/10/2016";
-	shacl:predicate prov:startedAtTime;
+req:Catalogus_werkingsgebied rdf:type sh:PropertyContraint;
+    rdfs:label "werkingsgebied";
+    rdfs:comment "Het gebied waarvoor de catalogus geldig is";
+    sh:class dcterms:Location;
+    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+    sh:predicate dcterms:spatial
 .
-req:Activiteit02 a reqo:Requirement;
-	shacl:targetClass prov:Activity;
-	rdfs:label "Verwijzing naar de organisatie die de activiteit heeft uitgevoerd (de audit trail)";
-	rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
-	shacl:predicate prov:wasAssociatedWith;
+req:Catalogus_omvat a sh:PropertyConstraint;
+	rdfs:label "omvat";
+	sh:predicate dcat:record;
+	sh:class dcat:CatalogRecord;
 .
-req:Agent01 a reqo:Requirement;
-	shacl:targetClass prov:Agent;
-	rdfs:label "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
-	rdf:value "overheid:Rijswaterstaat";
-	shacl:predicate prov:actedOnBehalfOf;
-	shacl:class prov:Agent;
+
+#---------------------
+# Werkingsgebied
+#---------------------
+req:Werkingsgebied a sh:Shape;
+	rdfs:label "Werkingsgebied";
+	sh:scopeClass dcterms:Location;
 .
-req:Dimension01 a reqo:Requirement;
-	shacl:targetClass dqv:Dimension;
-	rdfs:label "??";
-	rdf:value "iso:Completeness";
-	shacl:predicate dqv:inCategory;
+
+#---------------------
+# Distributie
+#---------------------
+req:Distributie a sh:Shape;
+	rdfs:label "Distributie";
+	sh:scopeClass dcat:Distribution;
+	sh:property req:Distributie_naam;
+	sh:property req:Distributie_beschrijving;
+	sh:property req:Distributie_publicatiedatum;
+	sh:property req:Distributie_licentie;
+	sh:property req:Distributie_rechten;
+	sh:property req:Distributie_toegangsURL;
+	sh:property req:Distributie_downloadURL;
+.
+req:Distributie_naam rdf:type sh:PropertyContraint;
+	rdfs:label "naam";
+    rdfs:comment "De distributie heeft een naam";
+    rdf:value "'Linked Data omgevingswet'";
+    sh:predicate dcterms:title;
+.
+req:Distributie_beschrijving rdf:type sh:PropertyContraint;
+	rdfs:label "beschrijving";
+    rdfs:comment "De distributie heeft een duidelijke beschrijving";
+    rdf:value "<beschrijving>";
+    sh:predicate dcterms:description;
+.
+req:Distributie_publicatiedatum rdf:type sh:PropertyContraint;
+	rdfs:label "publicatiedatum";
+    rdfs:comment "De publicatiedatum van de distributie (dit is niet perse de datum van opname van de distributie in de catalogus)";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:issued;
+.
+req:Distributie_licentie rdf:type sh:PropertyContraint;
+	rdfs:label "licentie";
+    rdfs:comment "De licentie op de distributie";
+    rdf:value "uri-beerware";
+    sh:predicate dcterms:license;
+.
+req:Distributie_rechten rdf:type sh:PropertyContraint;
+	rdfs:label "rechten";
+    rdfs:comment "Een beschrijving van de rechten die gelden voor de distributie. Zie ook: svbg:gebruiksvoorwaarden en iso:confidentiality";
+    rdf:value "<tekst over de distributie>";
+    sh:predicate dcterms:rights;
+.
+req:Distributie_toegangsURL rdf:type sh:PropertyContraint;
+	rdfs:label "API/servicelocatie";
+    rdfs:comment "De url van een API of een webservice";
+    rdf:value "..";
+    sh:predicate dcat:accessURL;
+.
+req:Distributie_downloadURL rdf:type sh:PropertyContraint;
+	rdfs:label "downloadlocatie";
+    rdfs:comment "De url van de downloadpagina";
+    rdf:value "..";
+    sh:predicate dcat:downloadURL;
+.
+
+#---------------------
+# Organisatie
+#---------------------
+req:Agent a sh:Shape;
+	rdfs:label "Organisatie (herkomst)";
+	sh:scopeClass prov:Agent;
+	sh:property req:Agent_handeltNamens;
+.
+req:Agent_handeltNamens rdf:type sh:PropertyConstraint;
+	rdfs:label "handelt namens";
+    rdfs:comment "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
+    sh:class prov:Agent;
+    rdf:value "overheid:Rijswaterstaat";
+    sh:predicate prov:actedOnBehalfOf;
+.
+
+#---------------------
+# Activiteit
+#---------------------
+req:Activiteit a sh:Shape;
+	rdfs:label "Activiteit (herkomst)";
+	sh:scopeClass prov:Activity;
+	sh:property req:Activiteit_tijdstip;
+	sh:property req:Activiteit_uitvoerder;
+.
+req:Activiteit_tijdstip rdf:type sh:PropertyContraint;
+	rdfs:label "tijdstip";
+    rdfs:comment "Het moment van het vastleggen zelf (de audit trail) wordt vastgelegd";
+    rdf:value "1/10/2016";
+    sh:predicate prov:startedAtTime;
+.
+req:Activiteit_uitvoerder rdf:type sh:PropertyContraint;
+	rdfs:label "uitvoerder";
+    rdfs:comment "Verwijzing naar de organisatie die de activiteit heeft uitgevoerd (de audit trail)";
+    rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
+    sh:predicate prov:wasAssociatedWith;
+    sh:class prov:Agent;
+.
+
+#---------------------
+# Entiteit
+#---------------------
+req:Entiteit a sh:Shape;
+	rdfs:label "Entiteit";
+	sh:scopeClass prov:Entity;
+	sh:property req:Entiteit_startmoment;
+	sh:property req:Entiteit_eindmoment;
+	sh:property req:Entiteit_versie;
+	sh:property req:Entiteit_handeling;
+	sh:property req:Entiteit_releaseNotes;
+.
+req:Entiteit_startmoment rdf:type sh:PropertyContraint;
+	rdfs:label "startmoment";
+    rdfs:comment "Het begin van de formele historie (de publicatiedatum) wordt vastgelegd";
+    rdf:value "1/7/2017";
+    sh:predicate prov:generatedAtTime;
+.
+req:Entiteit_eindmoment rdf:type sh:PropertyContraint;
+	rdfs:label "eindmoment";
+    rdfs:moment "Het einde van de formele historie (het moment van de publicatie van een nieuwe versie) wordt vastgelegd";
+    rdf:value "''";
+    sh:predicate prov:invalidatedAtTime;
+.
+req:Entiteit_versie rdf:type sh:PropertyContraint;
+	rdfs:label "versie";
+    rdfs:comment "Optioneel: het vastleggen van een versie";
+    rdf:value "..";
+    sh:predicate adms:version;
+.
+req:Entiteit_handeling rdf:type sh:PropertyContraint;
+	rdfs:label "handeling";
+    rdfs:comment "Verwijzing naar de activiteit van het vastleggen/publiceren";
+    sh:class prov:Activity;
+    rdf:value "<de betreffende handeling>";
+    sh:predicate prov:wasGeneratedBy;
+.
+req:Entiteit_releaseNotes rdf:type sh:PropertyContraint;
+	rdfs:label "release notes";
+    rdfs:comment "Optioneel: het vastleggen van release notes";
+    rdf:value "..";
+    sh:predicate adms:versionNotes;
+.
+
+#---------------------
+# Kwaliteitskenmerk
+#---------------------
+req:Kwaliteitskenmerk a sh:Shape;
+	rdfs:label "Kwaliteitskenmerk";
+    sh:scopeClass dqv:Dimension
+.
+req:Kwaliteitskenmerk_categorie rdf:type sh:PropertyContraint;
+    rdfs:label "categorie";
+    rdf:value "iso:Completeness";
+    sh:predicate dqv:inCategory;
 .

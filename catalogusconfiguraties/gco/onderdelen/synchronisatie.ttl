@@ -5,21 +5,26 @@
 
 @prefix updatestage: <http://localhost:8080/catalogus/gco/update/>.
 
-#Production for root installations
+#Alles synchroniseren
 updatestage:sync a elmo:Production;
 	elmo:contains	stage:Menu;
-	elmo:contains	stage:sync_clear;
+	elmo:contains	stage:sync_clear_models;
+	elmo:contains	stage:sync_clear_reqs;
+	elmo:contains	stage:sync_clear_imports;
 	elmo:contains	stage:sync_scene1;
 	elmo:contains	stage:sync_scene2;
 	elmo:contains	stage:sync_scene3;
 	elmo:contains	stage:sync_scene4;
-	elmo:contains	stage:sync_requirements;
 .
+
+#Alleen requirements
 updatestage:sync-requirements a elmo:Production;
 	elmo:contains	stage:Menu;
+	elmo:contains	stage:sync_clear_reqs;
 	elmo:contains	stage:sync_requirements;
 .
 
+#Alleen imports
 updatestage:syncimports a elmo:Production;
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:sync_import_rdf;
@@ -34,11 +39,50 @@ updatestage:syncimports a elmo:Production;
 	elmo:contains	stage:sync_import_skos;
 .
 
-stage:sync_clear a elmo:Scene;
-	elmo:index "1";
+#----------------------------
+# Clearing
+#----------------------------
+stage:sync_clear_models a elmo:Scene;
+	elmo:index "001";
 	rdfs:label "Opschonen oude modellen";
 	elmo:query "clear graph <http://bp4mc2.org/id/dataset/bp4mc2>";
 .
+stage:sync_clear_reqs a elmo:Scene;
+	elmo:index "002";
+	rdfs:label "Opschonen requirements";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/requirements>";
+.
+stage:sync_clear_imports a elmo:Scene;
+	elmo:index "003";
+	rdfs:label "Opschonen imports";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/imports>";
+.
+
+#----------------------------
+# Requirements
+#----------------------------
+stage:sync_requirements a elmo:Scene;
+	elmo:index "101";
+	rdfs:label "bp4mc2.org requirements ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/requirements> {
+			?s?p?o
+		}
+		where {
+			service <http://localhost:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+
+#----------------------------
+# Model
+#----------------------------
+
+
 stage:sync_scene2 a elmo:Scene;
 	elmo:index "2";
 	rdfs:label "bp4mc2.org core metamodel ophalen";
@@ -81,22 +125,6 @@ stage:sync_scene4 a elmo:Scene;
 		where {
 			service <http://localhost:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/skoslex.ttl> {
-					?s?p?o
-				}
-			}
-		}
-	''';
-.
-stage:sync_requirements a elmo:Scene;
-	elmo:index "5";
-	rdfs:label "bp4mc2.org requirements ophalen";
-	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
-			?s?p?o
-		}
-		where {
-			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
 					?s?p?o
 				}
 			}

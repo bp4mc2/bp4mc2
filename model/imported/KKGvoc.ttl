@@ -1,0 +1,48 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix kkg: <http://localhost:8080/def/kkg/>.
+
+kkg:KKGMetaclass rdf:type owl:Class;
+	rdfs:label "KKGMetaclass"@nl;
+.
+kkg:Objecttype rdf:type owl:Class;
+	rdfs:label "Objecttype"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Gegevensgroeptype rdf:type owl:Class;
+	rdfs:label  "Gegevensgroeptype"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Attribuutsoort rdf:type owl:Class;
+	rdfs:label "Attribuutsoort"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Relatiesoort rdf:type owl:Class;
+	rdfs:label "Relatiesoort"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Generalisatie rdf:type owl:Class;
+	rdfs:label "Generalisatie"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Relatieklasse rdf:type owl:Class;
+	rdfs:label "Relatieklasse"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Gegevensgroepcompositie rdf:type owl:Class;
+	rdfs:label "Gegevensgroepcompositie"@nl;
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:Externekoppeling rdf:type owl:Class;
+	rdfs:label "Externekoppeling";
+	rdfs:subClassOf kkg:KKGMetaclass;
+.
+kkg:bezit rdf:type owl:ObjectProperty;
+	rdfs:domain kkg:Objecttype, kkg:Relatieklasse;
+	rdfs:range kkg:Relatiesoort, kkg:Attribuutsoort, kkg:Externekoppeling, Gegevensgroepcompositie;
+.
+
+	

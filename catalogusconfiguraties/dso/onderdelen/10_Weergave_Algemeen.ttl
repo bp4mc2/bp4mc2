@@ -1,7 +1,3 @@
-@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
-@prefix updatestage: <http://localhost:8080/catalogus/dso/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 #
 #
 #
@@ -10,6 +6,10 @@
 #
 #
 
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/dso/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix container: <http://localhost:8080/catalogus/dso/container/>.
@@ -31,31 +31,8 @@
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 
-# Standaard weergavepagina
-stage:WeergavePagina a elmo:Representation;
-	elmo:contains stage:DSOMenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:contains stage:WeergaveVersies;
-	elmo:contains stage:WeergaveTabelCatalog;
-	elmo:applies-to [
-		rdf:type dcat:Dataset;
-		rdf:type dcat:Distribution;
-	];
-.
 
-# Weergavepagina inclusief boomweergave
-stage:WeergavePaginaBoom a elmo:Representation;
-	elmo:contains stage:DSOMenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:contains stage:DSOTree;
-	elmo:contains stage:WeergaveTabel;
-	elmo:applies-to [
-		rdf:type prov:Activity;
-		rdf:type prov:Agent;
-	];
-.
+# Onderstaande parts en query's zijn een template - deze kunnen gekopieerd worden, maar worden niet gebruikt in de configuratie.
 
 # Tabel met vorige versies
 stage:WeergaveVersies a elmo:Part;
@@ -383,13 +360,13 @@ stage:WeergaveTabelQuery a elmo:Query;
 		WHERE {
 			{
 				{
-					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?g
-					}
 					GRAPH ?g {
 						<@SUBJECT@> ?p ?o.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
+					}
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?g
 					}
 					FILTER (
 						?p != rdf:type

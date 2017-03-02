@@ -121,7 +121,7 @@ stage:ModelControle1 a elmo:Representation;
 @prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
 
 stage:Home	a	elmo:Representation;
-	elmo:url-pattern	"/gco(|/)$";
+	elmo:url-pattern	"/gco(|/|\\..+)$";
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:Welkom;
 .
@@ -137,25 +137,46 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "2"; rdfs:label "Model"; html:link "query/modelview"];
 			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/modelyed.yed"];
 		];
-		elmo:data [elmo:index "2"; rdfs:label "Requirements"; html:link "query/requirements"];
+		elmo:data [
+			elmo:index "2";
+			rdfs:label "Requirements";
+			elmo:data [ elmo:index "1"; rdfs:label "Validatie"; html:link "query/requirements"];
+			elmo:data [ elmo:index "2"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
+			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
+		];
 		elmo:data [
 			elmo:index "3";
 			rdfs:label "Sync";
-			elmo:data [ elmo:index "1"; rdfs:label "Volledige model"; html:link "update/sync"];
-			elmo:data [ elmo:index "2"; rdfs:label "Alle imports"; html:link "update/syncimports"];
-			elmo:data [ elmo:index "3"; rdfs:label "Requirements"; html:link "update/sync-requirements"];
+			elmo:data [ elmo:index "1"; rdfs:label "Alles (initial start)"; html:link "update/sync"];
+			elmo:data [ elmo:index "2"; rdfs:label "Requirements"; html:link "update/sync-requirements"];
+			elmo:data [ elmo:index "3"; rdfs:label "Alle imports"; html:link "update/sync-imports"];
+			elmo:data [ elmo:index "4"; rdfs:label "Model"; html:link "update/sync-model"];
 		]
 	];
 .
 
-stage:Welkom elmo:appearance elmo:HtmlAppearance;
-	elmo:data [
-		rdfs:label "Welkom";
-		elmo:html '''
-			<div>
-				<p>Welkom op GCO metamodel site</p>
- 			</div>''';
-	]
+stage:Welkom a elmo:Part;
+	elmo:appearance elmo:ImageAppearance;
+#	elmo:data [
+#		rdfs:label "Welkom";
+#		elmo:html '''
+#			<div>
+#				<img src="https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png"/>
+# 			</div>''';
+#	]
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png".
+			<urn:image> html:width "1518".
+			<urn:image> html:height "1791".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
 . 
 @prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
@@ -275,6 +296,74 @@ stage:ModelYed a elmo:Representation;
 .
 
  
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+@prefix yed: <http://bp4mc2.org/yed#>.
+
+stage:ReqModelYed a elmo:Representation;
+	elmo:url-pattern	"/query/reqmodel.yed$"; #Moet eigenlijk twee backslashes zijn voor de ., maar dat gaat nog mis in de turtle export!
+	elmo:layer elmo:TopLayer;
+	elmo:fragment [
+		elmo:applies-to rdfs:subClassOf;
+		rdfs:label "";
+		yed:sourceArrow "none";
+		yed:targetArrow "white_delta";
+	];
+	elmo:query stage:ReqModelYedQuery;
+.
+stage:ReqModelYedQuery a elmo:Query;
+	rdfs:label "Requirementsmodel";
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?element rdfs:label ?slabel.
+			?element rdfs:comment ?attribs.
+			?element rdfs:subClassOf ?super.
+			?element ?pc ?class.
+			?element rdf:type rdfs:Class.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape shacl:scopeClass ?element.
+				OPTIONAL {?shape rdfs:label ?slabel}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+					where {
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						?pc shacl:class ?class.
+						OPTIONAL {?pc rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {?pc shacl:in ?col}
+					}
+				}
+				OPTIONAL {
+					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
+					where {
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						OPTIONAL {?pc rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:datatype ?datatype}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {
+							?pc shacl:class ?class.
+						}
+					}
+					group by ?shape
+				}
+			}
+		}
+	''';
+.
+
+ 
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -318,16 +407,23 @@ stage:Requirements_Controle1 a elmo:Part;
 	];
 elmo:query '''
 		prefix shacl: <http://www.w3.org/ns/shacl#>
-		select ?class ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
+		select ?class ?class_label ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
 		where {
-			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?req a <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#Requirement>.
+			graph <http://bp4mc2.org/id/dataset/requirements> {
+				?req a shacl:PropertyConstraint.
 				?req rdfs:label ?req_label.
-				?req shacl:targetClass ?class.
-				?req shacl:predicate ?pred.
+				?req rdfs:comment ?req_comment.
+				OPTIONAL {
+					?shape shacl:property ?req.
+					?shape rdfs:label ?class_label.
+					?shape shacl:scopeClass ?class.
+				}
+				OPTIONAL {?req shacl:predicate ?pred}
 				OPTIONAL {?req shacl:class ?refclass}
 				OPTIONAL {?req rdf:value ?toep}
-				OPTIONAL {
+			}
+			OPTIONAL {
+				graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 					?shpe shacl:scopeClass ?class.
 					?shpe shacl:property ?pc.
 					?pc shacl:predicate ?pred.
@@ -335,7 +431,7 @@ elmo:query '''
 				}
 			}
 		}
-		order by ?req
+		order by ?class ?req
 	'''
 .
 
@@ -354,7 +450,7 @@ stage:Requirements_Controle2 a elmo:Part;
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
 		where {
-			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+			graph ?g {
 				?shape rdf:type shacl:Shape.
 				OPTIONAL {?shape rdfs:label ?shape_label}
 				?shape shacl:scopeClass ?class.
@@ -366,8 +462,37 @@ stage:Requirements_Controle2 a elmo:Part;
 					?req shacl:predicate ?pred
 				}
 			}
+			FILTER (?g = <http://bp4mc2.org/id/dataset/bp4mc2>
+				or	?g = <http://bp4mc2.org/id/dataset/requirements>
+			)
 		}
 	''';
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+
+stage:ReqVisualisatie	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqvisualisatie$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:ImageAppearance;
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/requirements.png".
+			<urn:image> html:width "1047".
+			<urn:image> html:height "990".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
 . 
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
@@ -505,21 +630,26 @@ stage:Shape_model a elmo:Representation;
 
 @prefix updatestage: <http://data.test.pdok.nl/catalogus/gco/update/>.
 
-#Production for root installations
+#Alles synchroniseren
 updatestage:sync a elmo:Production;
 	elmo:contains	stage:Menu;
-	elmo:contains	stage:sync_clear;
+	elmo:contains	stage:sync_clear_models;
+	elmo:contains	stage:sync_clear_reqs;
+	elmo:contains	stage:sync_clear_imports;
 	elmo:contains	stage:sync_scene1;
 	elmo:contains	stage:sync_scene2;
 	elmo:contains	stage:sync_scene3;
 	elmo:contains	stage:sync_scene4;
-	elmo:contains	stage:sync_requirements;
 .
+
+#Alleen requirements
 updatestage:sync-requirements a elmo:Production;
 	elmo:contains	stage:Menu;
+	elmo:contains	stage:sync_clear_reqs;
 	elmo:contains	stage:sync_requirements;
 .
 
+#Alleen imports
 updatestage:syncimports a elmo:Production;
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:sync_import_rdf;
@@ -534,11 +664,50 @@ updatestage:syncimports a elmo:Production;
 	elmo:contains	stage:sync_import_skos;
 .
 
-stage:sync_clear a elmo:Scene;
-	elmo:index "1";
+#----------------------------
+# Clearing
+#----------------------------
+stage:sync_clear_models a elmo:Scene;
+	elmo:index "001";
 	rdfs:label "Opschonen oude modellen";
 	elmo:query "clear graph <http://bp4mc2.org/id/dataset/bp4mc2>";
 .
+stage:sync_clear_reqs a elmo:Scene;
+	elmo:index "002";
+	rdfs:label "Opschonen requirements";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/requirements>";
+.
+stage:sync_clear_imports a elmo:Scene;
+	elmo:index "003";
+	rdfs:label "Opschonen imports";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/imports>";
+.
+
+#----------------------------
+# Requirements
+#----------------------------
+stage:sync_requirements a elmo:Scene;
+	elmo:index "101";
+	rdfs:label "bp4mc2.org requirements ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/requirements> {
+			?s?p?o
+		}
+		where {
+			service <http://ldt:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+
+#----------------------------
+# Model
+#----------------------------
+
+
 stage:sync_scene2 a elmo:Scene;
 	elmo:index "2";
 	rdfs:label "bp4mc2.org core metamodel ophalen";
@@ -581,22 +750,6 @@ stage:sync_scene4 a elmo:Scene;
 		where {
 			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/skoslex.ttl> {
-					?s?p?o
-				}
-			}
-		}
-	''';
-.
-stage:sync_requirements a elmo:Scene;
-	elmo:index "5";
-	rdfs:label "bp4mc2.org requirements ophalen";
-	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
-			?s?p?o
-		}
-		where {
-			service <http://ldt:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
 					?s?p?o
 				}
 			}
