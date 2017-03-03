@@ -2,6 +2,7 @@
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix shacl: <http://www.w3.org/ns/shacl#>.
 
 @prefix yed: <http://bp4mc2.org/yed#>.
 
@@ -14,6 +15,13 @@ stage:ReqModelYed a elmo:Representation;
 		yed:sourceArrow "none";
 		yed:targetArrow "white_delta";
 	];
+	elmo:fragment [
+		elmo:applies-to shacl:blub;
+		rdfs:label "";
+		yed:line "dashed";
+		yed:sourceArrow "none";
+		yed:targetArrow "white_delta";
+	];
 	elmo:query stage:ReqModelYedQuery;
 .
 stage:ReqModelYedQuery a elmo:Query;
@@ -21,31 +29,53 @@ stage:ReqModelYedQuery a elmo:Query;
 	elmo:query '''
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		CONSTRUCT {
-			?element rdfs:label ?slabel.
-			?element rdfs:comment ?attribs.
-			?element rdfs:subClassOf ?super.
-			?element ?pc ?class.
-			?element rdf:type rdfs:Class.
+			?shape rdfs:label ?slabel.
+			?shape rdfs:comment ?attribs.
+			?shape rdfs:subClassOf ?super.
+			?shape ?pc ?cshape.
+			?shape rdf:type rdfs:Class.
+			?shape shacl:blub ?rshape.
 			?pc rdfs:label ?plabel.
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape shacl:scopeClass ?element.
-				OPTIONAL {?shape rdfs:label ?slabel}
-				OPTIONAL {?element rdfs:subClassOf ?super}
-				OPTIONAL {
-					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+				{
+					?shape shacl:scopeClass ?element.
+					OPTIONAL {?shape rdfs:label ?slabel}
+					OPTIONAL {?element rdfs:subClassOf ?super}
+					OPTIONAL {
+						?shape shacl:property ?pctype.
+						?pctype shacl:predicate rdf:type.
+						?pctype shacl:hasValue ?role.
+						?rshape shacl:scopeClass ?role.
+					}
+				}
+				UNION {
+					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
 						?pc shacl:predicate ?pred.
-						?pc shacl:class ?class.
+						?pc shacl:valueShape ?cshape.
 						OPTIONAL {?pc rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:minCount ?minc}
 						OPTIONAL {?pc shacl:maxCount ?maxc}
 						FILTER NOT EXISTS {?pc shacl:in ?col}
 					}
 				}
-				OPTIONAL {
+				UNION {
+					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+					where {
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						?pc shacl:class ?class.
+						?cshape shacl:scopeClass ?class.
+						OPTIONAL {?pc rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {?pc shacl:in ?col}
+					}
+				}
+				UNION {
 					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
 					where {
 						?shape shacl:property ?pc.
@@ -56,6 +86,9 @@ stage:ReqModelYedQuery a elmo:Query;
 						OPTIONAL {?pc shacl:maxCount ?maxc}
 						FILTER NOT EXISTS {
 							?pc shacl:class ?class.
+						}
+						FILTER NOT EXISTS {
+							?pc shacl:predicate rdf:type.
 						}
 					}
 					group by ?shape

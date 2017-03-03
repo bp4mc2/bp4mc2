@@ -140,9 +140,10 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 		elmo:data [
 			elmo:index "2";
 			rdfs:label "Requirements";
-			elmo:data [ elmo:index "1"; rdfs:label "Validatie"; html:link "query/requirements"];
-			elmo:data [ elmo:index "2"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
-			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
+			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/requirements"];
+			elmo:data [ elmo:index "2"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
+			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
+			elmo:data [ elmo:index "4"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
 		];
 		elmo:data [
 			elmo:index "3";
@@ -300,6 +301,7 @@ stage:ModelYed a elmo:Representation;
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix shacl: <http://www.w3.org/ns/shacl#>.
 
 @prefix yed: <http://bp4mc2.org/yed#>.
 
@@ -312,6 +314,13 @@ stage:ReqModelYed a elmo:Representation;
 		yed:sourceArrow "none";
 		yed:targetArrow "white_delta";
 	];
+	elmo:fragment [
+		elmo:applies-to shacl:blub;
+		rdfs:label "";
+		yed:line "dashed";
+		yed:sourceArrow "none";
+		yed:targetArrow "white_delta";
+	];
 	elmo:query stage:ReqModelYedQuery;
 .
 stage:ReqModelYedQuery a elmo:Query;
@@ -319,31 +328,53 @@ stage:ReqModelYedQuery a elmo:Query;
 	elmo:query '''
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		CONSTRUCT {
-			?element rdfs:label ?slabel.
-			?element rdfs:comment ?attribs.
-			?element rdfs:subClassOf ?super.
-			?element ?pc ?class.
-			?element rdf:type rdfs:Class.
+			?shape rdfs:label ?slabel.
+			?shape rdfs:comment ?attribs.
+			?shape rdfs:subClassOf ?super.
+			?shape ?pc ?cshape.
+			?shape rdf:type rdfs:Class.
+			?shape shacl:blub ?rshape.
 			?pc rdfs:label ?plabel.
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape shacl:scopeClass ?element.
-				OPTIONAL {?shape rdfs:label ?slabel}
-				OPTIONAL {?element rdfs:subClassOf ?super}
-				OPTIONAL {
-					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+				{
+					?shape shacl:scopeClass ?element.
+					OPTIONAL {?shape rdfs:label ?slabel}
+					OPTIONAL {?element rdfs:subClassOf ?super}
+					OPTIONAL {
+						?shape shacl:property ?pctype.
+						?pctype shacl:predicate rdf:type.
+						?pctype shacl:hasValue ?role.
+						?rshape shacl:scopeClass ?role.
+					}
+				}
+				UNION {
+					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
 						?pc shacl:predicate ?pred.
-						?pc shacl:class ?class.
+						?pc shacl:valueShape ?cshape.
 						OPTIONAL {?pc rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:minCount ?minc}
 						OPTIONAL {?pc shacl:maxCount ?maxc}
 						FILTER NOT EXISTS {?pc shacl:in ?col}
 					}
 				}
-				OPTIONAL {
+				UNION {
+					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+					where {
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						?pc shacl:class ?class.
+						?cshape shacl:scopeClass ?class.
+						OPTIONAL {?pc rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {?pc shacl:in ?col}
+					}
+				}
+				UNION {
 					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
 					where {
 						?shape shacl:property ?pc.
@@ -354,6 +385,9 @@ stage:ReqModelYedQuery a elmo:Query;
 						OPTIONAL {?pc shacl:maxCount ?maxc}
 						FILTER NOT EXISTS {
 							?pc shacl:class ?class.
+						}
+						FILTER NOT EXISTS {
+							?pc shacl:predicate rdf:type.
 						}
 					}
 					group by ?shape
@@ -374,6 +408,67 @@ stage:ReqModelYedQuery a elmo:Query;
 
 stage:Requirements	a	elmo:Representation;
 	elmo:url-pattern	"/query/requirements$";
+	elmo:contains	stage:Menu;
+	elmo:fragment [
+		elmo:applies-to "class";
+		rdfs:label "Onderwerp";
+	];
+	elmo:fragment [
+		elmo:applies-to "req";
+		rdfs:label "Onderdeel";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Requirement";
+	];
+	elmo:fragment [
+		elmo:applies-to "toep";
+		rdfs:label "Voorbeeld";
+	];
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		select ?shape ?shape_label ?req ?req_label ?comment ?toep (if(?typed='typed','','!') as ?req_count)
+		where {
+			select ?shape ?shape_label ?req ?req_label ?comment ?toep (max(?typed) as ?typed)
+			where {
+				graph <http://bp4mc2.org/id/dataset/requirements> {
+					{
+						BIND ("typed" as ?typed)
+						?req a shacl:PropertyConstraint.
+						OPTIONAL {?req rdfs:label ?req_label}
+						OPTIONAL {?req rdfs:comment ?comment}
+						OPTIONAL {
+							?shape shacl:property ?req.
+							?shape rdfs:label ?shape_label.
+						}
+						OPTIONAL {?req rdf:value ?toep}
+					}
+					UNION
+					{
+						?shape shacl:property ?req
+						OPTIONAL {?req rdfs:label ?req_label}
+						OPTIONAL {?req rdfs:comment ?comment}
+						OPTIONAL {?shape rdfs:label ?shape_label}
+						OPTIONAL {?req rdf:value ?toep}
+					}
+				}
+			}
+			group by ?shape ?shape_label ?req ?req_label ?comment ?toep
+		}
+		order by ?shape ?req
+	''';
+.
+ 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:ReqValidatie	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqvalidatie$";
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:Requirements_Controle1;
 	elmo:contains	stage:Requirements_Controle2;
@@ -412,7 +507,6 @@ elmo:query '''
 			graph <http://bp4mc2.org/id/dataset/requirements> {
 				?req a shacl:PropertyConstraint.
 				?req rdfs:label ?req_label.
-				?req rdfs:comment ?req_comment.
 				OPTIONAL {
 					?shape shacl:property ?req.
 					?shape rdfs:label ?class_label.
