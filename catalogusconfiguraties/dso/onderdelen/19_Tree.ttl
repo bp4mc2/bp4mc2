@@ -411,6 +411,17 @@ stage:DSOTreeQuery a elmo:Query;
 					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
 				}
 			}
+			FILTER NOT EXISTS {
+				GRAPH ?toeleidingsGraph {
+					dataset:Toeleidingsbegrippen skos:member ?s.
+					FILTER NOT EXISTS {
+						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+					}
+				}
+				GRAPH doc:mastergraph {
+					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+				}
+			}
 		}
 		ORDER BY lcase(?scheme), lcase(?sCollectionLabel), lcase(?oCollectionLabel), lcase(?sLabel), lcase(?oLabel)
 	'''

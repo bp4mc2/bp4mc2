@@ -129,6 +129,17 @@ stage:DSOConceptenQuery a elmo:Query;
 				}
 				FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
 			}
+			FILTER NOT EXISTS {
+				GRAPH ?toeleidingsGraph {
+					dataset:Toeleidingsbegrippen skos:member ?concept.
+					FILTER NOT EXISTS {
+						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+					}
+				}
+				GRAPH doc:mastergraph {
+					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+				}
+			}
 		}
 		ORDER BY lcase(?concept_label)
 	'''
