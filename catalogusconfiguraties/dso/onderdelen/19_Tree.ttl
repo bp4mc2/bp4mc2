@@ -120,12 +120,30 @@ stage:DSOTreeQuery a elmo:Query;
 									FILTER NOT EXISTS {
 										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
 									}
+									FILTER NOT EXISTS {
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+									}
 								}
 								GRAPH ?broaderObjectGraph {
 									?broaderObject rdf:type skos:Concept.
 									?broaderObject rdfs:label ?broaderObjectLabel.
 									FILTER NOT EXISTS {
 										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
+									}
+									FILTER NOT EXISTS {
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -153,12 +171,30 @@ stage:DSOTreeQuery a elmo:Query;
 									FILTER NOT EXISTS {
 										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
 									}
+									FILTER NOT EXISTS {
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+									}
 								}
 								GRAPH ?narrowerObjectGraph {
 									?narrowerObject rdf:type skos:Concept.
 									?narrowerObject rdfs:label ?narrowerObjectLabel.
 									FILTER NOT EXISTS {
 										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
+									}
+									FILTER NOT EXISTS {
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -182,6 +218,15 @@ stage:DSOTreeQuery a elmo:Query;
 									FILTER NOT EXISTS {
 										?subject prov:invalidatedAtTime ?subjectTime.
 									}
+									FILTER NOT EXISTS {
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+									}
 								}
 								GRAPH doc:mastergraph {
 									?subject rdfs:isDefinedBy ?subjectGraph.
@@ -192,6 +237,15 @@ stage:DSOTreeQuery a elmo:Query;
 										?object rdfs:label ?objectLabel.
 										FILTER NOT EXISTS {
 											?object prov:invalidatedAtTime ?objectTime.
+										}
+										FILTER NOT EXISTS {
+											?object rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										}
+										FILTER NOT EXISTS {
+											?object rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										}
+										FILTER NOT EXISTS {
+											?object rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
 										}
 									}
 									GRAPH doc:mastergraph {

@@ -21,7 +21,7 @@
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix dctype: <http://purl.org/dc/dcmitype/>.
 @prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sh: <http://www.w3.org/ns/dso#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
@@ -35,7 +35,7 @@
 # CONTAINERS
 #
 
-# Uploadcontainer UML-model
+# Uploadcontainer UML-model XMI
 container:umlmodelupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	elmo:contains stage:DSOHeader;
@@ -43,31 +43,82 @@ container:umlmodelupload a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:translator elmo:XMI21Translator;
 	rdfs:label "Upload UML-model via XMI2.1";
-	elmo:query stage:DSOUMLUploadScene;
+.
+
+# Uploadcontainer UML-model Turtle
+container:ttlmodelupload a elmo:Container;
+elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	rdfs:label "Upload UML-model via Turtle";
+.
+
+#
+# PRODUCTIONS
+#
+
+updatestage:syncumlupload a elmo:Production;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:contains stage:DSOUMLUploadScene;
+.
+
+updatestage:syncumlinclupload a elmo:Production;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:contains stage:DSOUMLInclUploadScene;
+.
+
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:contains stage:DSOTTLUploadScene;
 .
 
 #
 # SCENES
 #
 
-# Uploadquery UML-model
+# Uploadquery UML-model exclusief stereotype
 stage:DSOUMLUploadScene a elmo:Scene;
 	rdfs:label "Postquery UML-upload";
 	elmo:index "1";
 	elmo:query '''
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
-		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix sh: <http://www.w3.org/ns/dso#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		CLEAR GRAPH <http://localhost:8080/catalogus/dso/umlmodel>
-		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
-			<http://localhost:8080/catalogus/dso/def/model> rdf:type owl:Ontology.
-			<http://localhost:8080/catalogus/dso/def/model> rdfs:label "Model".
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
 			?shape rdf:type sh:Shape.
@@ -76,8 +127,198 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?label))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
+				?label
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?label.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+				}
+			}
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?property rdf:type owl:DatatypeProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(concat(?clabel,'.',?alabel) AS ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					FILTER NOT EXISTS {
+						?a uml:association ?assoc
+					}
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?property rdf:type owl:ObjectProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+			?pc sh:class ?refclass.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(concat(?clabel,'.',?alabel) as ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?a uml:association ?assoc.
+					?assoc uml:memberEnd ?a.
+					?a uml:type ?rc.
+					?rc rdfs:label ?rclabel.
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		INSERT INTO <@MODEL@> {
+			?class rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?clabel.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		INSERT INTO <@MODEL@> {
+			?property rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c uml:ownedAttribute ?a.
+					?c rdfs:label ?alabel.
+					?a ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?subclass rdfs:subClassOf ?class
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?sub uml:generalization ?gen.
+					?gen rdf:type uml:Generalization.
+					?gen uml:general ?c.
+					?sub rdfs:label ?sublabel.
+					?c rdfs:label ?clabel.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:umlmodelupload	
+	''';
+.
+
+# Uploadquery UML-model inclusief stereotype
+stage:DSOUMLInclUploadScene a elmo:Scene;
+	rdfs:label "Postquery UML-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/dso#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
+		}
+		
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
+			?class rdf:type owl:Class.
+			?class rdfs:label ?label.
+			?shape rdf:type sh:Shape.
+			?shape rdfs:label ?label.
+			?shape sh:scopeClass ?class.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -91,7 +332,7 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -101,10 +342,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:LCamelCase(?alabel))) AS ?property)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -124,7 +365,7 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -135,11 +376,11 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:LCamelCase(?alabel))) as ?property)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel))) as ?shape)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -159,12 +400,12 @@ stage:DSOUMLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?class rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -180,12 +421,12 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -203,13 +444,13 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?subclass rdfs:subClassOf ?class
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
 				GRAPH container:umlmodelupload {
 					?sub uml:generalization ?gen.
@@ -222,5 +463,29 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		
 		CLEAR GRAPH container:umlmodelupload	
+	''';
+.
+
+# Uploadquery TTL-model
+stage:DSOTTLUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o.
+		}
+		WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o.
+				FILTER NOT EXISTS {
+					?s rdf:type owl:Ontology.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:ttlmodelupload
 	''';
 .

@@ -28,26 +28,56 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConcepten a elmo:Representation;
+stage:WeergavePaginaNormen a elmo:Representation;
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOTree;
-	elmo:contains stage:WeergaveTabelConcepten;
-	elmo:contains stage:WeergaveVersiesConcepten;
+	elmo:contains stage:WeergaveTabelNormen;
+	elmo:contains stage:WeergaveVersiesNormen;
 	elmo:contains stage:WeergaveGrafischConcepten;
 	elmo:applies-to [
-		rdf:type skos:Concept
+		rdf:type skoslex:Norm
 	];
-	elmo:uri-pattern "/id/begrip/";
 .
 
 #
 # HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
 #
 
+# Tabel met vorige versies
+stage:WeergaveVersiesNormen a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "90";
+	elmo:fragment [
+		elmo:applies-to "graph";
+		elmo:name "graph";
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Andere versies";
+		xhtml:link "/catalogus/dso/query/versie"
+	];
+	elmo:fragment [
+		elmo:applies-to "actueeltot";
+		rdfs:label "Actueel tot";
+	];
+	elmo:fragment [
+		elmo:applies-to "slabel";
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		elmo:applies-to "graphlabel";
+		rdfs:label "Datum versie"@nl;
+	];
+	
+	elmo:query stage:WeergaveVersiesNormenQuery;
+.
+
+
 # Algemene tabelweergave
-stage:WeergaveTabelConcepten a elmo:Part;
+stage:WeergaveTabelNormen a elmo:Part;
 	elmo:index "01";
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
@@ -130,7 +160,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:member;
 		elmo:indx "16";
 	];
-		elmo:fragment [
+	elmo:fragment [
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
 		elmo:indx "17";
@@ -200,268 +230,17 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to prov:actedOnBehalfOf;
 		elmo:index "32";
 	];
-	elmo:query stage:WeergaveTabelConceptenQuery;
+	elmo:fragment [
+		rdfs:label "Laatste wijziging"@nl;
+		elmo:applies-to dct:modified;
+		elmo:index "36";
+	];
+	elmo:query stage:WeergaveTabelNormenQuery;
 .
-
-# Grafische weergave
-stage:WeergaveGrafischConcepten a elmo:Part;
-	elmo:index "10";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:fragment [
-		elmo:applies-to "Concept";
-		xhtml:stylesheet '''
-			fill: red;
-			fill-opacity: .3;
-			stroke: #666;
-		''';
-		elmo:index "3";
-	];
-	elmo:fragment [
-		elmo:applies-to "Collectie";
-		xhtml:stylesheet '''
-			fill: orange;
-			fill-opacity: .3;
-			stroke #666;
-		''';
-		elmo:index "4";
-	];
-	elmo:fragment [
-		elmo:applies-to "Regeling";
-		xhtml:stylesheet '''
-			fill: gray;
-			fill-opacity: .3;
-			stroke #666;
-		''';
-		elmo:index "1";
-	];
-    elmo:fragment [
-        elmo:applies-to "Gegevensklasse";
-        xhtml:stylesheet '''
-			fill: blue;
-			fill-opacity: .3;
-			stroke: #666;
-		''';
-		elmo:index "6";
-    ];
-	elmo:fragment [
-		elmo:applies-to "Norm";
-		xhtml:stylesheet '''
-			fill: purple;
-			fill-opacity: .3;
-			stroke #666;
-		''';
-		elmo:index "2";
-	];
-	
-	elmo:query stage:WeergaveGrafischConceptenQuery;
-.
-
-# Tabel met vorige versies
-stage:WeergaveVersiesConcepten a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:index "90";
-	elmo:fragment [
-		elmo:applies-to "graph";
-		elmo:name "graph";
-		elmo:appearance elmo:HiddenAppearance;
-	];
-	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Andere versies";
-		xhtml:link "/catalogus/dso/query/versie"
-	];
-	elmo:fragment [
-		elmo:applies-to "actueeltot";
-		rdfs:label "Actueel tot";
-	];
-	elmo:fragment [
-		elmo:applies-to "slabel";
-		elmo:appearance elmo:HiddenAppearance
-	];
-	elmo:fragment [
-		elmo:applies-to "graphlabel";
-		rdfs:label "Datum versie"@nl;
-	];
-	
-	elmo:query stage:WeergaveVersiesConceptenQuery;
-.
-
-#
-# QUERY'S GRAFISCHE WEERGAVEN
-#
-
-# Query voor grafische weergave concepten e.d.
-stage:WeergaveGrafischConceptenQuery a elmo:Query;
-	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix dctype: <http://purl.org/dc/dcmitype/>
-        prefix elmo: <http://bp4mc2.org/elmo/def#>
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
-		prefix geosparql: <http://www.opengis.net/ont/geosparql#>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix container: <http://localhost:8080/catalogus/dso/container/>
-		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-	
-		construct {
-			<@SUBJECT@> ?p ?o.
-			<@SUBJECT@> rdfs:label ?concept_label.
-			<@SUBJECT@> elmo:style ?type.
-			?o rdfs:label ?olabel.
-			?o elmo:style ?otype.
-			?s ?sp <@SUBJECT@>.
-			?s rdfs:label ?slabel.
-			?s elmo:style ?stype.
-			skos:Concept elmo:name "Concept".
-			skos:member rdfs:label "Lid van".
-			skos:inScheme rdfs:label "Domein".
-			skos:semanticRelation rdfs:label "Heeft betrekking op".
-			thes:broaderGeneric rdfs:label "Is specialisatie van".
-			thes:narrowerGeneric rdfs:label "Is generalisatie van".
-			thes:broaderPartitive rdfs:label "Is onderdeel van".
-			thes:narrowerPartitive rdfs:label "Bestaat uit".
-			dc:source rdfs:label "Heeft als bron".
-			skoslex:Actor rdfs:label "Heeft als actor".
-			skoslex:Object rdfs:label "Heeft als object".
-			owl:Class elmo:name "Gegevensklasse".
-			owl:Class rdfs:label "Heeft als klasse".
-			skoslex:Norm elmo:name "Norm".
-			dctype:Text elmo:name "Regeling".
-			skoslex:affects rdfs:label "Heeft invloed op".
-			skoslex:refersTo rdfs:label "Verwijst naar".
-			skoslex:classification rdfs:label "Classificatie".
-			skos:Collection elmo:name "Collectie".
-		}
-		WHERE {
-			{
-				{
-					GRAPH ?subjectGraph {
-						<@SUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@SUBJECT@> rdfs:label ?concept_label.
-							<@SUBJECT@> ?p ?o.
-						}
-					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-					}
-					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?subjectGraph.
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
-				}
-				UNION
-				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@SUBJECT@>.
-						?s rdf:type ?stype.
-						OPTIONAL {
-							?s rdfs:label ?slabel.
-						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
-						}
-					}
-					OPTIONAL {
-						GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
-							?s rdfs:label ?slabel.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
-					}
-					OPTIONAL {
-						<@SUBJECT@> rdfs:label ?concept_label.
-						<@SUBJECT@> rdf:type ?type.
-					}
-				}
-				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
-			}
-			UNION
-			{
-				{
-					GRAPH <@GRAPH@> {
-						<@SUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@SUBJECT@> rdfs:label ?concept_label.
-							<@SUBJECT@> ?p ?o.
-						}
-					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-					}
-					GRAPH doc:mastergraph {
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
-				}
-				UNION
-				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@SUBJECT@>.
-						?s rdf:type ?stype.
-						OPTIONAL {
-							?s rdfs:label ?slabel.
-						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
-					}
-					OPTIONAL {
-						<@SUBJECT@> rdfs:label ?concept_label.
-						<@SUBJECT@> rdf:type ?type.
-					}
-				}
-				
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-			}
-			UNION {
-				SERVICE <http://almere.pilod.nl/sparql> {
-					SERVICE <http://data.pdok.nl/sparql> {
-						GRAPH brt:top10nl-metadata {
-							{
-								<@SUBJECT@> rdf:type ?type.
-								OPTIONAL {
-									<@SUBJECT@> rdfs:label ?concept_label.
-									<@SUBJECT@> ?p ?o.
-									?o rdfs:label ?olabel.
-									?o rdf:type ?otype.
-								}
-							}
-							UNION {
-								?s ?sp <@SUBJECT@>.
-								?s rdf:type ?stype.
-								OPTIONAL {
-									?s rdfs:label ?slabel.
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	''';
-.
-
-
-#
-# QUERY'S VOOR PAGINA'S/PARTS
-#
 
 
 # Query voor WeergaveTabel
-stage:WeergaveTabelConceptenQuery a elmo:Query;
+stage:WeergaveTabelNormenQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix dct: <http://purl.org/dc/terms/>
@@ -480,7 +259,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		construct {
 			<@SUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
-			?o rdfs:label ?oelabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
 			<@SUBJECT@> prov:wasGeneratedBy ?a.
@@ -495,7 +273,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				{
 					GRAPH ?g {
 						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type skos:Concept.
+						<@SUBJECT@> rdf:type skoslex:Norm.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -516,7 +294,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				{
 					GRAPH <@GRAPH@> {
 						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type skos:Concept.
+						<@SUBJECT@> rdf:type skoslex:Norm.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -592,8 +370,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 	'''
 .
 
+
 # Query voor weergave versies
-stage:WeergaveVersiesConceptenQuery a elmo:Query;
+stage:WeergaveVersiesNormenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
@@ -601,13 +380,13 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
 
 		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type skos:Concept.
+					<@SUBJECT@> rdf:type skoslex:Norm.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
 						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
@@ -622,7 +401,7 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 			}
 			UNION {
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type skos:Concept.
+					<@SUBJECT@> rdf:type skoslex:Norm.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
 						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.

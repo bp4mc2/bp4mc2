@@ -21,7 +21,7 @@
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix dctype: <http://purl.org/dc/dcmitype/>.
 @prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sh: <http://www.w3.org/ns/dso#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
@@ -31,147 +31,88 @@
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 
+#
 # PAGINA'S (REPRESENTATIONS)
-
-# Modelpagina
-stage:DSOModel	a	elmo:Representation;
-	elmo:applies-to [rdf:type sh:Shape];
-	elmo:contains stage:DSOMenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:contains stage:DSOModelGrafisch;
-.
+#
 
 # Vocabulairepagina
 stage:VocabulairePagina	a	elmo:Representation;
-	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:url-pattern "/catalogus/dso/query/vocabulary";
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOMenu;
+	elmo:contains stage:search_models;
 	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:DSOSelectModel;
 	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:DSOSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+	elmo:index "2";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
 .
 
 # PARTS
 
-# Grafische weergave modellen
-stage:DSOModelGrafisch a elmo:Part;
-	elmo:index "10";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:query stage:DSOModelGrafischQuery;
+# Zoeken van modellen
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://localhost:8080/catalogus/dso/(?!stage)")
+            }
+            LIMIT 100
+        }
+    ''';
 .
 
 # QUERY'S
-
-# Query grafische weergave modellen
-stage:DSOModelGrafischQuery a elmo:Query;
-	elmo:query '''
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		construct {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?sattribute "".
-			<@SUBJECT@> ?pred ?cshape.
-			?cshape rdfs:label ?clabel.
-			?cshape rdfs:uitleg ?ccomment.
-			?cshape ?cattribute "".
-			?rshape ?rpred <@SUBJECT@>.
-			?rshape rdfs:label ?rlabel.
-			?rshape rdfs:uitleg ?rcomment.
-			?rshape ?rattribute "".
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			?supershape rdfs:uitleg ?superclasscomment.
-			?subshape rdfs:subClassOf <@SUBJECT@>.
-			?subshape rdfs:label ?subshapelabel.
-			?subshape rdfs:uitleg ?subclasscomment.
-			rdfs:subClassOf rdfs:label "is een".
-		}
-		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> rdfs:label ?slabel.
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape rdfs:label ?supershapelabel.
-				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
-				}
-				
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
-				OPTIONAL {
-					?class rdfs:comment ?ccomment
-				}
-				OPTIONAL {
-					?cshape sh:property/sh:predicate ?cattribute.
-					?cattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-			UNION
-			{ # Inkomende specialisaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?subclass rdfs:subClassOf ?sclass.
-				?subshape sh:scopeClass ?subclass.
-				?subshape rdfs:label ?subshapelabel.
-				OPTIONAL {
-					?subclass rdfs:comment ?subclasscomment
-				}
-			}
-			UNION
-			{ # Inkomende relaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?rpc sh:class ?sclass.
-				?rpc sh:predicate ?rpred.
-				?rshape sh:property ?rpc.
-				?rshape rdfs:label ?rlabel
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:comment ?rcomment
-				}
-				OPTIONAL {
-					?rshape sh:property/sh:predicate ?rattribute.
-					?rattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-		}
-	''';
-.
-
 
 # Query voor Vocabulairepagina
 stage:VocabulaireQuery a elmo:Query;
 	elmo:query '''
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix shacl: <http://www.w3.org/ns/shacl#>
+		prefix dso: <http://www.w3.org/ns/dso#>
 		CONSTRUCT {
 			?element rdf:type ?type.
 			?element rdfs:label ?label.
 			?element rdfs:comment ?def.
 			?element rdfs:subClassOf ?super.
-			?shape shacl:scopeClass ?element.
-			?shape shacl:property ?pc.
-			?pc shacl:predicate ?pred.
-			?pc shacl:class ?class.
-			?pc shacl:datatype ?datatype.
-			?pc shacl:in ?collection.
+			?shape dso:scopeClass ?element.
+			?shape dso:property ?pc.
+			?pc dso:predicate ?pred.
+			?pc dso:class ?class.
+			?pc dso:datatype ?datatype.
+			?pc dso:in ?collection.
 		}
 		WHERE {
-			GRAPH <http://localhost:8080/catalogus/dso/umlmodel> {
+			GRAPH <@MODEL@> {
 				?element rdf:type ?type.
 				OPTIONAL {?element rdfs:label ?label}
 				OPTIONAL {?element rdfs:comment ?def}
@@ -181,12 +122,12 @@ stage:VocabulaireQuery a elmo:Query;
 				}
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
-					?shape shacl:scopeClass ?element.
-					?shape shacl:property ?pc.
-					?pc shacl:predicate ?pred.
-					OPTIONAL {?pc shacl:class ?class}
-					OPTIONAL {?pc shacl:datatype ?datatype}
-					OPTIONAL {?pc shacl:in ?collection}
+					?shape dso:scopeClass ?element.
+					?shape dso:property ?pc.
+					?pc dso:predicate ?pred.
+					OPTIONAL {?pc dso:class ?class}
+					OPTIONAL {?pc dso:datatype ?datatype}
+					OPTIONAL {?pc dso:in ?collection}
 				}
 				FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
 			}

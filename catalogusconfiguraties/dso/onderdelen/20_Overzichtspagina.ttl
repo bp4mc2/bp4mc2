@@ -98,6 +98,15 @@ stage:DSOConceptenQuery a elmo:Query;
 					FILTER NOT EXISTS {
 						?concept prov:invalidatedAtTime ?time.
 					}
+					FILTER NOT EXISTS {
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+					}
+					FILTER NOT EXISTS {
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+					}
+					FILTER NOT EXISTS {
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+					}
 				}
 				GRAPH doc:mastergraph {
 					?concept rdfs:isDefinedBy ?g

@@ -46,6 +46,56 @@ stage:DSOWelkomstpagina rdf:type elmo:Representation;
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Welkom op de Catalogus Omgevingswet";
+		elmo:html '''
+			<div style='width: 67%; float: left;'>
+				<div style='width: 100%; display: table'>
+					<div class='welkom' style='float: left'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/overzichtspagina?term='>
+							<img src='images/begrippenicon.png'/>
+							<br/>Alle concepten
+						</a>
+					</div>
+					<div class='welkom' style='float: right'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/overzichtspagina?type=Act'>
+							<img src='images/activiteitenicon.png'/>
+							<br/>Alle activiteiten
+						</a>
+					</div>
+				</div>
+				<div style='width: 100%; display: table'>
+					<div class='welkom' style='float: left'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/producten'>
+							<img src='images/productenicon.png'/>
+							<br/>Producten/diensten
+						</a>
+					</div>
+					<div class='welkom' style='float: right'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/registraties'>
+							<img src='images/overicon.png'/>
+							<br/>Registraties
+						</a>
+					</div>
+				</div>
+			</div>
+			<div style='width: 33%; float: right'>
+				<center>
+				<img src='images/KaartNederland.png'/><br/>
+				<select name='regio'>
+					<option value='Aa en Maas'>Aa en Maas</option>
+					<option value='Amersfoort'>Amersfoort</option>
+					<option value='Apeldoorn'>Apeldoorn</option>
+				</select>
+				</center>
+			</div>
+		''';
+	];
 .
 
 # Helppagina
@@ -156,7 +206,7 @@ stage:DSOBeheerpagina rdf:type elmo:Representation;
 # Header
 stage:DSOHeader a elmo:Part;
 	elmo:appearance elmo:HeaderAppearance;
-	elmo:data [elmo:html "<a href='http://localhost:8080/catalogus/dso'><img src='http://localhost:8080/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
+	# elmo:data [elmo:html "<a href='http://localhost:8080/catalogus/dso'><img src='http://localhost:8080/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
 .
 
 # Menubalk hoofdmenu
@@ -172,63 +222,102 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1"
 			];
 			elmo:data [
-				rdfs:label "Activiteiten";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act";
+				rdfs:label "Omgevingswet";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=Omgevingswet";
 				elmo:index "2"
 			];
 			elmo:data [
-				rdfs:label "Normen";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Norm";
+				rdfs:label "BRK";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=BRK";
 				elmo:index "3"
 			];
 			elmo:data [
-				rdfs:label "Objecten";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Object";
+				rdfs:label "BRT";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=BRT";
 				elmo:index "4"
+			];
+			elmo:data [
+				rdfs:label "BAG";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=BAG";
+				elmo:index "5"
 			];
 		];
 		elmo:data [
-			rdfs:label "Collecties";
-			xhtml:link "/catalogus/dso/query/collecties?term=";
-			elmo:index "2"
+			rdfs:label "Activiteiten";
+			elmo:index "2";
+			elmo:data [
+				rdfs:label "Alle activiteiten";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act";
+				elmo:index "1"
+			];
+			elmo:data [
+				rdfs:label "Omgevingswet";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=Omgevingswet";
+				elmo:index "2"
+			];
+			elmo:data [
+				rdfs:label "BAL";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BAL";
+				elmo:index "3"
+			];
+			elmo:data [
+				rdfs:label "BBL";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BBL";
+				elmo:index "4"
+			];
+			elmo:data [
+				rdfs:label "BKL";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BKL";
+				elmo:index "5"
+			];
 		];
 		elmo:data [
-			rdfs:label "Modellen";
+			rdfs:label "Registraties";
+			elmo:index "3";
 			elmo:data [
+				rdfs:label "BRK";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/BRK";
+				elmo:index "1"
+			];
+			elmo:data [
+				rdfs:label "BRT";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/BRT";
+				elmo:index "2"
+			];
+			elmo:data [
+				rdfs:label "BAG";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/BAG";
+				elmo:index "3"
+			];
+		];
+		elmo:data [
+			rdfs:label "Producten/diensten";
+			xhtml:link "/catalogus/dso/query/producten";
+			elmo:index "4"
+		];
+		elmo:data [
+			rdfs:label "Over";
+			elmo:data [ 
+				rdfs:label "Home";
 				elmo:index "1";
+				xhtml:link "/catalogus/dso";
+			];
+			elmo:data [
+				elmo:index "2";
 				rdfs:label "KKG model";
 				xhtml:link "catalogus/dso/query/KKG";
 				];
 			elmo:data [	
-				elmo:index "2";
-				rdfs:label "Besluit";
-				xhtml:link "/catalogus/dso/def/model/Besluit";
+				elmo:index "3";
+				rdfs:label "Vocabulaire";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/IMOD";
 			];
-			elmo:index "3";
-		];
-		elmo:data [
-			rdfs:label "Vocabulaires";
-			elmo:index "4";
 			elmo:data [
-				elmo:index "1";
-				rdfs:label "Besluit";
-				xhtml:link "/catalogus/dso/def/model";
+				rdfs:label "Help";
+				xhtml:link "/catalogus/dso/query/help";
+				elmo:index "4"
 			];
-		];
-		elmo:data [
-			rdfs:label "Catalogus";
 			elmo:index "5";
-			xhtml:link "/catalogus/dso/id/DigitaalStelselOmgevingswet";
-		];
-		elmo:data [
-			rdfs:label "Beheer";
-			xhtml:link "/catalogus/dso/admin";
-			elmo:index "6"
-		];
-		elmo:data [
-			rdfs:label "Help";
-			xhtml:link "/catalogus/dso/query/help";
-			elmo:index "7"
 		];
 	]
 .
@@ -249,7 +338,7 @@ stage:DSOBeheermenu a elmo:Part;
 			xhtml:link "/catalogus/dso";
 		];
 		elmo:data [
-			rdfs:label "Upload";
+			rdfs:label "Upload concepten";
 			elmo:index "2";
 			elmo:data [
 				rdfs:label "Upload concepten (Excel)";
@@ -261,25 +350,53 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
+		];
+		elmo:data[
+			rdfs:label "Upload modellen";
+			elmo:index "3";
 			elmo:data [
-				rdfs:label "Upload UML-model";
-				elmo:index "3";
-				xhtml:link "/catalogus/dso/container/umlmodelupload";
+				rdfs:label "Upload UML-model (XMI)";
+				elmo:index "1";
+				xhtml:link "container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
+				rdfs:label "Sync geupload XMI-model (incl ST)";
+				elmo:index "2";
+				xhtml:link "update/syncumlinclupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload XMI-model (excl ST)";
+				elmo:index "3";
+				xhtml:link "update/syncumlupload";
+			];
+			elmo:data [
+				rdfs:label "Upload UML-model (Turtle)";
 				elmo:index "4";
+				xhtml:link "container/ttlmodelupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload TTL-model";
+				elmo:index "5";
+				xhtml:link "update/syncttlupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "Upload metadata";
+			elmo:index "4";
+			elmo:data [
+				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
+				elmo:index "1";
 				xhtml:link "/catalogus/dso/container/catalogusupload";
 			];
 			elmo:data [
 				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-				elmo:index "5";
+				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data [
 			rdfs:label "Acties";
-			elmo:index "3";
+			elmo:index "4";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -289,6 +406,11 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Laad gegevens vanuit VocBench";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/update/importvbdata";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuw model toe";
+				elmo:index "3";
+				xhtml:link "update/addnewmodel";
 			];
 		];
 		elmo:data [
@@ -300,36 +422,49 @@ stage:DSOBeheermenu a elmo:Part;
 .
 
 # Footer
+
 stage:DSOFooter a elmo:Part;
 	elmo:appearance elmo:FooterAppearance;
 	elmo:data [
 		elmo:html '''
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<h4>Links</h4>
 					<ul class="list-unstyled">
 						<li>
-							<a href="http://aandeslagmetdeomgevingswet.nl">Aan de slag met de omgevingswet</a>
+							<a href="http://tax.kadaster.nl">Kadasterwoordenboek</a>
 						</li>
 						<li>
-							<a href="http://www.stelselcatalogus.nl">Stelselcatalogus</a>
+							<a href="http://www.stelselcatalogus.nl">Stelselcatalogus basisregistraties</a>
 						</li>
 						<li>
-							<a href="http://brt.basisregistraties.overheid.nl">BRT</a>
+							<a href="http://nationaalgeoregister.nl">Nationaal geo-register</a>
 						</li>
 						<li>
-							<a href="http://brk.basisregistraties.overheid.nl">BRK</a>
+							<a href="http://data.overheid.nl">Open data overheid</a>
 						</li>
 					</ul>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<h4>Contact</h4>
 					<p><a href="mailto:arjen.santema@kadaster.nl">Arjen Santema</a></p>
 				</div>
-				<div class="col-sm-4">
-					<h4>Disclaimer</h4>
-					<p>Dit betreft een eerste versie van de Catalogus. De Catalogus is nog in ontwikkeling.</p>
-					<p>Aan de informatie op deze pagina's kunnen geen rechten worden ontleend.</p>
+				<div class="col-sm-3">
+					<h4>Proclaimer</h4>
+					<p>De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud.</p>
+				</div>
+				<div class="col-sm-3">
+					<h4>Licentie</h4>
+					<p>
+					'THE BEER-WARE LICENSE' (Local application for the GCO Catalog version 1.0):  
+					This file was written by the people belows.  
+					As long as you retain this notice you can do whatever you want to do with this stuff. If we meet some day, and you think this stuff is worth it, you can buy us a beer in return.  
+					Arjen Santema  
+					Marco Brattinga  
+					Wessel Schollmeijer  
+					Lars Wortel  
+					Joost Aafjes
+					</p>
 				</div>
 			</div>
 		'''^^rdf:html
@@ -1293,7 +1428,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix dctype: <http://purl.org/dc/dcmitype/>.
 @prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sh: <http://www.w3.org/ns/dso#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
@@ -1307,7 +1442,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 # CONTAINERS
 #
 
-# Uploadcontainer UML-model
+# Uploadcontainer UML-model XMI
 container:umlmodelupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	elmo:contains stage:DSOHeader;
@@ -1315,31 +1450,82 @@ container:umlmodelupload a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:translator elmo:XMI21Translator;
 	rdfs:label "Upload UML-model via XMI2.1";
-	elmo:query stage:DSOUMLUploadScene;
+.
+
+# Uploadcontainer UML-model Turtle
+container:ttlmodelupload a elmo:Container;
+elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	rdfs:label "Upload UML-model via Turtle";
+.
+
+#
+# PRODUCTIONS
+#
+
+updatestage:syncumlupload a elmo:Production;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:contains stage:DSOUMLUploadScene;
+.
+
+updatestage:syncumlinclupload a elmo:Production;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:contains stage:DSOUMLInclUploadScene;
+.
+
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:contains stage:DSOTTLUploadScene;
 .
 
 #
 # SCENES
 #
 
-# Uploadquery UML-model
+# Uploadquery UML-model exclusief stereotype
 stage:DSOUMLUploadScene a elmo:Scene;
 	rdfs:label "Postquery UML-upload";
 	elmo:index "1";
 	elmo:query '''
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
-		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix sh: <http://www.w3.org/ns/dso#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		CLEAR GRAPH <http://localhost:8080/catalogus/dso/umlmodel>
-		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
-			<http://localhost:8080/catalogus/dso/def/model> rdf:type owl:Ontology.
-			<http://localhost:8080/catalogus/dso/def/model> rdfs:label "Model".
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
 			?shape rdf:type sh:Shape.
@@ -1348,8 +1534,198 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?label))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
+				?label
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?label.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+				}
+			}
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?property rdf:type owl:DatatypeProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(concat(?clabel,'.',?alabel) AS ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					FILTER NOT EXISTS {
+						?a uml:association ?assoc
+					}
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?property rdf:type owl:ObjectProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+			?pc sh:class ?refclass.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(concat(?clabel,'.',?alabel) as ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?a uml:association ?assoc.
+					?assoc uml:memberEnd ?a.
+					?a uml:type ?rc.
+					?rc rdfs:label ?rclabel.
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		INSERT INTO <@MODEL@> {
+			?class rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?clabel.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		INSERT INTO <@MODEL@> {
+			?property rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					# ?c ea:stereotype ?stereotype.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c uml:ownedAttribute ?a.
+					?c rdfs:label ?alabel.
+					?a ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		
+		INSERT INTO <@MODEL@> {
+			?subclass rdfs:subClassOf ?class
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?sub uml:generalization ?gen.
+					?gen rdf:type uml:Generalization.
+					?gen uml:general ?c.
+					?sub rdfs:label ?sublabel.
+					?c rdfs:label ?clabel.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:umlmodelupload	
+	''';
+.
+
+# Uploadquery UML-model inclusief stereotype
+stage:DSOUMLInclUploadScene a elmo:Scene;
+	rdfs:label "Postquery UML-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/dso#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		INSERT INTO <temp> {
+			?model rdf:type owl:Ontology.
+			?model rdfs:label ?label.
+		} WHERE {
+			GRAPH <@MODEL@> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
+		}
+		
+		CLEAR GRAPH <@MODEL@>
+		
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o
+		} WHERE {
+			GRAPH <temp> {
+				?s ?p ?o
+			}
+		}
+		
+		CLEAR GRAPH <temp>
+		
+		INSERT INTO <@MODEL@> {
+			?class rdf:type owl:Class.
+			?class rdfs:label ?label.
+			?shape rdf:type sh:Shape.
+			?shape rdfs:label ?label.
+			?shape sh:scopeClass ?class.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('@MODEL@#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -1363,7 +1739,7 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -1373,10 +1749,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:LCamelCase(?alabel))) AS ?property)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -1396,7 +1772,7 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
 			?pc rdf:type sh:PropertyConstraint.
@@ -1407,11 +1783,11 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:LCamelCase(?alabel))) as ?property)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel))) as ?shape)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('@MODEL@/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
@@ -1431,12 +1807,12 @@ stage:DSOUMLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?class rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -1452,12 +1828,12 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?property rdfs:comment ?comment
 		}
 		WHERE {
 			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
 				GRAPH container:umlmodelupload {
@@ -1475,13 +1851,13 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/dso/umlmodel> {
+		INSERT INTO <@MODEL@> {
 			?subclass rdfs:subClassOf ?class
 		}
 		WHERE {
 			SELECT
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/dso/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
 				GRAPH container:umlmodelupload {
 					?sub uml:generalization ?gen.
@@ -1496,7 +1872,30 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		CLEAR GRAPH container:umlmodelupload	
 	''';
 .
- 
+
+# Uploadquery TTL-model
+stage:DSOTTLUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+
+		INSERT INTO <@MODEL@> {
+			?s ?p ?o.
+		}
+		WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o.
+				FILTER NOT EXISTS {
+					?s rdf:type owl:Ontology.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:ttlmodelupload
+	''';
+. 
 #
 #
 #
@@ -1639,6 +2038,95 @@ stage:DSOLoadVBDataScene a elmo:Scene;
 			SERVICE <http://localhost:7200/repositories/catalogus> {
 				?s?p?o
 			}
+		}
+	'''
+.
+ 
+#
+#
+#
+# CLEAR ALL DATA
+#
+#
+#
+
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/dso/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://localhost:8080/catalogus/dso/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/dso#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om nieuw model toe te voegen
+updatestage:addnewmodel a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSONameForm;
+	elmo:contains stage:AddNewModelScene;
+.
+
+#
+# FORMS
+#
+
+stage:DSONameForm a elmo:Form;
+	rdfs:label "Voeg model toe";
+    elmo:fragment [
+        elmo:applies-to "name";
+        rdfs:label "Naam model"@nl;
+        rdfs:label "Model name"@en;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "1";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Voeg toe"@nl;
+        elmo:index "2";
+    ]
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:AddNewModelScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Naam toevoegen";
+	elmo:query '''
+		INSERT {
+			GRAPH ?graph {
+				?graph rdf:type owl:Ontology.
+				?graph rdfs:label ?label.
+			}
+		}
+		WHERE {
+			BIND( REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) AS ?label )
+			BIND( IRI( CONCAT( "http://localhost:8080/catalogus/dso/def/", REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) ) ) AS ?graph )
 		}
 	'''
 .
@@ -2208,7 +2696,6 @@ stage:WeergavePaginaConcepten a elmo:Representation;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOTree;
 	elmo:contains stage:WeergaveTabelConcepten;
-	elmo:contains stage:DSORegelsConceptenTabel;
 	elmo:contains stage:WeergaveVersiesConcepten;
 	elmo:contains stage:WeergaveGrafischConcepten;
 	elmo:applies-to [
@@ -3388,6 +3875,7 @@ stage:WeergavePaginaCatalog a elmo:Representation;
 
 # Algemene tabelweergave
 stage:WeergaveTabelCatalog a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
 	elmo:index "01";
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
@@ -4664,6 +5152,843 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 		ORDER BY DESC(lcase(?concept_label))
 	'''
 . 
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/dso/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://localhost:8080/catalogus/dso/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:WeergavePaginaShapes a elmo:Representation;
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:WeergaveTabelShapes;
+	elmo:contains stage:WeergaveVersiesShapes;
+	elmo:contains stage:WeergaveGrafischConcepten;
+	elmo:applies-to [
+		rdf:type sh:Shape
+	];
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Tabel met vorige versies
+stage:WeergaveVersiesShapes a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "90";
+	elmo:fragment [
+		elmo:applies-to "graph";
+		elmo:name "graph";
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Andere versies";
+		xhtml:link "/catalogus/dso/query/versie"
+	];
+	elmo:fragment [
+		elmo:applies-to "actueeltot";
+		rdfs:label "Actueel tot";
+	];
+	elmo:fragment [
+		elmo:applies-to "slabel";
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		elmo:applies-to "graphlabel";
+		rdfs:label "Datum versie"@nl;
+	];
+	
+	elmo:query stage:WeergaveVersiesShapesQuery;
+.
+
+
+# Algemene tabelweergave
+stage:WeergaveTabelShapes a elmo:Part;
+	elmo:index "01";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Uitleg"@nl;
+		elmo:applies-to skos:comment;
+		elmo:index "2";
+	];
+	elmo:fragment [
+		rdfs:label "Definitie"@nl;
+		elmo:applies-to skos:definition;
+		elmo:index "3";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "Toelichting"@nl;
+		elmo:applies-to skos:scopeNote;
+		elmo:index "4";
+	];
+	elmo:fragment [ 
+		rdfs:label "Bron"@nl;
+		elmo:applies-to dct:source;
+		elmo:appearance elmo:GlobalLink;
+		elmo:index "5";
+	];
+	elmo:fragment [
+		rdfs:label "Domein"@nl;
+		elmo:applies-to skos:inScheme;
+		elmo:index "6";
+	];
+	elmo:fragment [ 
+		rdfs:label "Is specialisatie van"@nl;
+		elmo:applies-to thes:broaderGeneric;
+		elmo:index "7";
+	];
+	elmo:fragment [
+		rdfs:label "Is generalisatie van"@nl;
+		elmo:applies-to thes:narrowerGeneric;
+		elmo:index "8";
+	];
+	elmo:fragment [ 
+		rdfs:label "Is onderdeel van"@nl;
+		elmo:applies-to thes:broaderPartitive;
+		elmo:index "9";
+	];
+	elmo:fragment [
+		rdfs:label "Bestaat uit"@nl;
+		elmo:applies-to thes:narrowerPartitive;
+		elmo:index "10";
+	];
+	elmo:fragment [
+		rdfs:label "Heeft betrekking op"@nl;
+		elmo:applies-to skos:semanticRelation;
+		elmo:indx "11";
+	];
+	elmo:fragment [
+		rdfs:label "Synoniemen"@nl;
+		elmo:applies-to skos:altLabel;
+		elmo:indx "12";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum versie"@nl;
+		elmo:applies-to prov:generatedAtTime;
+		elmo:indx "13";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum versie"@nl;
+		elmo:applies-to prov:invalidatedAtTime;
+		elmo:indx "14";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste activiteit"@nl;
+		elmo:applies-to prov:wasGeneratedBy;
+		elmo:indx "15";
+	];
+	elmo:fragment [
+		rdfs:label "Lid van"@nl;
+		elmo:applies-to skos:member;
+		elmo:indx "16";
+	];
+	elmo:fragment [
+		rdfs:label "Periode geldigheid"@nl;
+		elmo:applies-to dct:valid;
+		elmo:indx "17";
+	];
+	elmo:fragment [
+		rdfs:label "Is gerealiseerd in"@nl;
+		elmo:applies-to foaf:focus;
+		elmo:index "18";
+	];
+	elmo:fragment [
+		rdfs:label "Heeft als actor"@nl;
+		elmo:applies-to skoslex:Actor;
+		elmo:index "19";
+	];
+	elmo:fragment [
+		rdfs:label "Heeft als object"@nl;
+		elmo:applies-to skoslex:Object;
+		elmo:index "20";
+	];
+	elmo:fragment [
+		rdfs:label "Is ongeveer hetzelfde als"@nl;
+		elmo:applies-to skos:closeMatch;
+		elmo:index "21";
+	];
+	elmo:fragment [
+		rdfs:label "Is hetzelfde als"@nl;
+		elmo:applies-to skos:exactMatch;
+		elmo:index "22";
+	];		
+	elmo:fragment [
+		rdfs:label "zie ook (in ander schema)"@nl;
+		elmo:applies-to skos:relatedMatch;
+		elmo:index "23";
+	];
+	elmo:fragment [
+		rdfs:label "Is breder dan (in ander schema)"@nl;
+		elmo:applies-to skos:broadMatch;
+		elmo:index "24";
+	];
+	elmo:fragment [
+		rdfs:label "Is enger dan (in ander schema)"@nl;
+		elmo:applies-to skos:narrowMatch;
+		elmo:index "25";
+	];
+	elmo:fragment [
+		rdfs:label "Regels die verwijzen naar dit concept"@nl;
+		elmo:applies-to skoslex:refersTo;
+		elmo:index "26";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum"@nl;
+		elmo:applies-to prov:startedAtTime;
+		elmo:index "27";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum"@nl;
+		elmo:applies-to prov:endedAtTime;
+		elmo:index "28";
+	];
+	elmo:fragment [
+		rdfs:label "Uitgevoerd door"@nl;
+		elmo:applies-to prov:wasAssociatedWith;
+		elmo:index "29";
+	];
+	elmo:fragment [
+		rdfs:label "Namens organisatie"@nl;
+		elmo:applies-to prov:actedOnBehalfOf;
+		elmo:index "32";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste wijziging"@nl;
+		elmo:applies-to dct:modified;
+		elmo:index "36";
+	];
+	elmo:query stage:WeergaveTabelShapesQuery;
+.
+
+
+# Query voor WeergaveTabel
+stage:WeergaveTabelShapesQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel.
+			<@SUBJECT@> skos:member ?col.
+			?col rdfs:label ?col_label.
+			<@SUBJECT@> prov:wasGeneratedBy ?a.
+			<@SUBJECT@> prov:generatedAtTime ?t.
+			?a rdfs:label ?alabel.
+			?c rdfs:label ?clabel.
+			<@SUBJECT@> skoslex:refersTo ?s.
+			?s rdfs:label ?slabel.
+		}
+		WHERE {
+			{
+				{
+					GRAPH ?g {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type sh:Shape.
+						?g prov:wasGeneratedBy ?a.
+						?g prov:generatedAtTime ?t.
+					}
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?g
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+					)
+					FILTER( substr("@GRAPH@",2) = "GRAPH@")
+				}
+				UNION
+				{
+					GRAPH <@GRAPH@> {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type sh:Shape.
+						?g prov:wasGeneratedBy ?a.
+						?g prov:generatedAtTime ?t.
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+						&& ?p != dct:title
+					)
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				OPTIONAL {
+					?o rdfs:label ?olabel.
+				}
+				OPTIONAL {
+					?a rdfs:label ?alabel.
+				}
+				OPTIONAL {
+					GRAPH doc:mastergraph {
+						?col rdfs:isDefinedBy ?cg.
+					}
+					GRAPH ?cg {
+						?col skos:member <@SUBJECT@>.
+						?col rdfs:label ?col_label.
+						FILTER NOT EXISTS {
+							?col prov:invalidatedAtTime ?time.
+						}
+					}
+				}
+			}
+			UNION {
+				GRAPH doc:mastergraph {
+					?s rdfs:isDefinedBy ?altSubjectGraph.
+				}
+				GRAPH ?altSubjectGraph {
+					{ ?s skoslex:affects <@SUBJECT@> }
+					UNION { ?s skoslex:classification <@SUBJECT@> }
+					UNION { ?s skoslex:refersTo <@SUBJECT@> }
+					FILTER NOT EXISTS {
+						?s prov:invalidatedAtTime ?time.
+					}
+				}
+				OPTIONAL {
+					GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
+						?s rdfs:label ?slabel.
+					}
+				}
+			}
+			UNION {
+				SERVICE <http://almere.pilod.nl/sparql> {
+					SERVICE <http://localhost:8080/catalogus/tr/sparql> {
+						<@SUBJECT@> ?p ?o.
+						FILTER (
+							?p != rdf:type
+							&& ?p != skos:prefLabel
+							&& ?p != skos:notation
+							&& ?p != bp4mc2:signature
+							&& ?p != dct:type
+							&& ?p != skos:member
+						)				
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+						}
+					}
+				}
+			}
+		}
+	'''
+.
+
+
+# Query voor weergave versies
+stage:WeergaveVersiesShapesQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+
+		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		WHERE {
+			{
+				GRAPH ?graph {
+					<@SUBJECT@> rdf:type sh:Shape.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != ?actualGraph )
+				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH ?graph {
+					<@SUBJECT@> rdf:type sh:Shape.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != <@GRAPH@> )
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+		}
+		ORDER BY DESC(lcase(?concept_label))
+	'''
+. 
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+@prefix updatestage: <http://localhost:8080/catalogus/dso/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://localhost:8080/catalogus/dso/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:WeergavePaginaNormen a elmo:Representation;
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOTree;
+	elmo:contains stage:WeergaveTabelNormen;
+	elmo:contains stage:WeergaveVersiesNormen;
+	elmo:contains stage:WeergaveGrafischConcepten;
+	elmo:applies-to [
+		rdf:type skoslex:Norm
+	];
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Tabel met vorige versies
+stage:WeergaveVersiesNormen a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "90";
+	elmo:fragment [
+		elmo:applies-to "graph";
+		elmo:name "graph";
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Andere versies";
+		xhtml:link "/catalogus/dso/query/versie"
+	];
+	elmo:fragment [
+		elmo:applies-to "actueeltot";
+		rdfs:label "Actueel tot";
+	];
+	elmo:fragment [
+		elmo:applies-to "slabel";
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		elmo:applies-to "graphlabel";
+		rdfs:label "Datum versie"@nl;
+	];
+	
+	elmo:query stage:WeergaveVersiesNormenQuery;
+.
+
+
+# Algemene tabelweergave
+stage:WeergaveTabelNormen a elmo:Part;
+	elmo:index "01";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Uitleg"@nl;
+		elmo:applies-to skos:comment;
+		elmo:index "2";
+	];
+	elmo:fragment [
+		rdfs:label "Definitie"@nl;
+		elmo:applies-to skos:definition;
+		elmo:index "3";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "Toelichting"@nl;
+		elmo:applies-to skos:scopeNote;
+		elmo:index "4";
+	];
+	elmo:fragment [ 
+		rdfs:label "Bron"@nl;
+		elmo:applies-to dct:source;
+		elmo:appearance elmo:GlobalLink;
+		elmo:index "5";
+	];
+	elmo:fragment [
+		rdfs:label "Domein"@nl;
+		elmo:applies-to skos:inScheme;
+		elmo:index "6";
+	];
+	elmo:fragment [ 
+		rdfs:label "Is specialisatie van"@nl;
+		elmo:applies-to thes:broaderGeneric;
+		elmo:index "7";
+	];
+	elmo:fragment [
+		rdfs:label "Is generalisatie van"@nl;
+		elmo:applies-to thes:narrowerGeneric;
+		elmo:index "8";
+	];
+	elmo:fragment [ 
+		rdfs:label "Is onderdeel van"@nl;
+		elmo:applies-to thes:broaderPartitive;
+		elmo:index "9";
+	];
+	elmo:fragment [
+		rdfs:label "Bestaat uit"@nl;
+		elmo:applies-to thes:narrowerPartitive;
+		elmo:index "10";
+	];
+	elmo:fragment [
+		rdfs:label "Heeft betrekking op"@nl;
+		elmo:applies-to skos:semanticRelation;
+		elmo:indx "11";
+	];
+	elmo:fragment [
+		rdfs:label "Synoniemen"@nl;
+		elmo:applies-to skos:altLabel;
+		elmo:indx "12";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum versie"@nl;
+		elmo:applies-to prov:generatedAtTime;
+		elmo:indx "13";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum versie"@nl;
+		elmo:applies-to prov:invalidatedAtTime;
+		elmo:indx "14";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste activiteit"@nl;
+		elmo:applies-to prov:wasGeneratedBy;
+		elmo:indx "15";
+	];
+	elmo:fragment [
+		rdfs:label "Lid van"@nl;
+		elmo:applies-to skos:member;
+		elmo:indx "16";
+	];
+	elmo:fragment [
+		rdfs:label "Periode geldigheid"@nl;
+		elmo:applies-to dct:valid;
+		elmo:indx "17";
+	];
+	elmo:fragment [
+		rdfs:label "Is gerealiseerd in"@nl;
+		elmo:applies-to foaf:focus;
+		elmo:index "18";
+	];
+	elmo:fragment [
+		rdfs:label "Heeft als actor"@nl;
+		elmo:applies-to skoslex:Actor;
+		elmo:index "19";
+	];
+	elmo:fragment [
+		rdfs:label "Heeft als object"@nl;
+		elmo:applies-to skoslex:Object;
+		elmo:index "20";
+	];
+	elmo:fragment [
+		rdfs:label "Is ongeveer hetzelfde als"@nl;
+		elmo:applies-to skos:closeMatch;
+		elmo:index "21";
+	];
+	elmo:fragment [
+		rdfs:label "Is hetzelfde als"@nl;
+		elmo:applies-to skos:exactMatch;
+		elmo:index "22";
+	];		
+	elmo:fragment [
+		rdfs:label "zie ook (in ander schema)"@nl;
+		elmo:applies-to skos:relatedMatch;
+		elmo:index "23";
+	];
+	elmo:fragment [
+		rdfs:label "Is breder dan (in ander schema)"@nl;
+		elmo:applies-to skos:broadMatch;
+		elmo:index "24";
+	];
+	elmo:fragment [
+		rdfs:label "Is enger dan (in ander schema)"@nl;
+		elmo:applies-to skos:narrowMatch;
+		elmo:index "25";
+	];
+	elmo:fragment [
+		rdfs:label "Regels die verwijzen naar dit concept"@nl;
+		elmo:applies-to skoslex:refersTo;
+		elmo:index "26";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum"@nl;
+		elmo:applies-to prov:startedAtTime;
+		elmo:index "27";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum"@nl;
+		elmo:applies-to prov:endedAtTime;
+		elmo:index "28";
+	];
+	elmo:fragment [
+		rdfs:label "Uitgevoerd door"@nl;
+		elmo:applies-to prov:wasAssociatedWith;
+		elmo:index "29";
+	];
+	elmo:fragment [
+		rdfs:label "Namens organisatie"@nl;
+		elmo:applies-to prov:actedOnBehalfOf;
+		elmo:index "32";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste wijziging"@nl;
+		elmo:applies-to dct:modified;
+		elmo:index "36";
+	];
+	elmo:query stage:WeergaveTabelNormenQuery;
+.
+
+
+# Query voor WeergaveTabel
+stage:WeergaveTabelNormenQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel.
+			<@SUBJECT@> skos:member ?col.
+			?col rdfs:label ?col_label.
+			<@SUBJECT@> prov:wasGeneratedBy ?a.
+			<@SUBJECT@> prov:generatedAtTime ?t.
+			?a rdfs:label ?alabel.
+			?c rdfs:label ?clabel.
+			<@SUBJECT@> skoslex:refersTo ?s.
+			?s rdfs:label ?slabel.
+		}
+		WHERE {
+			{
+				{
+					GRAPH ?g {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type skoslex:Norm.
+						?g prov:wasGeneratedBy ?a.
+						?g prov:generatedAtTime ?t.
+					}
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?g
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+					)
+					FILTER( substr("@GRAPH@",2) = "GRAPH@")
+				}
+				UNION
+				{
+					GRAPH <@GRAPH@> {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type skoslex:Norm.
+						?g prov:wasGeneratedBy ?a.
+						?g prov:generatedAtTime ?t.
+					}
+					FILTER (
+						?p != rdf:type
+						&& ?p != skos:prefLabel
+						&& ?p != skos:notation
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+						&& ?p != dct:title
+					)
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				OPTIONAL {
+					?o rdfs:label ?olabel.
+				}
+				OPTIONAL {
+					?a rdfs:label ?alabel.
+				}
+				OPTIONAL {
+					GRAPH doc:mastergraph {
+						?col rdfs:isDefinedBy ?cg.
+					}
+					GRAPH ?cg {
+						?col skos:member <@SUBJECT@>.
+						?col rdfs:label ?col_label.
+						FILTER NOT EXISTS {
+							?col prov:invalidatedAtTime ?time.
+						}
+					}
+				}
+			}
+			UNION {
+				GRAPH doc:mastergraph {
+					?s rdfs:isDefinedBy ?altSubjectGraph.
+				}
+				GRAPH ?altSubjectGraph {
+					{ ?s skoslex:affects <@SUBJECT@> }
+					UNION { ?s skoslex:classification <@SUBJECT@> }
+					UNION { ?s skoslex:refersTo <@SUBJECT@> }
+					FILTER NOT EXISTS {
+						?s prov:invalidatedAtTime ?time.
+					}
+				}
+				OPTIONAL {
+					GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
+						?s rdfs:label ?slabel.
+					}
+				}
+			}
+			UNION {
+				SERVICE <http://almere.pilod.nl/sparql> {
+					SERVICE <http://data.pdok.nl/sparql> {
+						GRAPH brt:top10nl-metadata {
+							<@SUBJECT@> ?p ?o.
+						}
+						FILTER (
+							?p != rdf:type
+							&& ?p != skos:prefLabel
+							&& ?p != skos:notation
+							&& ?p != bp4mc2:signature
+							&& ?p != dct:type
+							&& ?p != skos:member
+						)				
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+						}
+					}
+				}
+			}
+		}
+	'''
+.
+
+
+# Query voor weergave versies
+stage:WeergaveVersiesNormenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+
+		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		WHERE {
+			{
+				GRAPH ?graph {
+					<@SUBJECT@> rdf:type skoslex:Norm.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != ?actualGraph )
+				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH ?graph {
+					<@SUBJECT@> rdf:type skoslex:Norm.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != <@GRAPH@> )
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+		}
+		ORDER BY DESC(lcase(?concept_label))
+	'''
+. 
 #
 #
 #
@@ -4841,12 +6166,30 @@ stage:DSOTreeQuery a elmo:Query;
 									FILTER NOT EXISTS {
 										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
 									}
+									FILTER NOT EXISTS {
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+									}
 								}
 								GRAPH ?broaderObjectGraph {
 									?broaderObject rdf:type skos:Concept.
 									?broaderObject rdfs:label ?broaderObjectLabel.
 									FILTER NOT EXISTS {
 										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
+									}
+									FILTER NOT EXISTS {
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -4874,12 +6217,30 @@ stage:DSOTreeQuery a elmo:Query;
 									FILTER NOT EXISTS {
 										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
 									}
+									FILTER NOT EXISTS {
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+									}
 								}
 								GRAPH ?narrowerObjectGraph {
 									?narrowerObject rdf:type skos:Concept.
 									?narrowerObject rdfs:label ?narrowerObjectLabel.
 									FILTER NOT EXISTS {
 										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
+									}
+									FILTER NOT EXISTS {
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -4903,6 +6264,15 @@ stage:DSOTreeQuery a elmo:Query;
 									FILTER NOT EXISTS {
 										?subject prov:invalidatedAtTime ?subjectTime.
 									}
+									FILTER NOT EXISTS {
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+									}
+									FILTER NOT EXISTS {
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+									}
+									FILTER NOT EXISTS {
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+									}
 								}
 								GRAPH doc:mastergraph {
 									?subject rdfs:isDefinedBy ?subjectGraph.
@@ -4913,6 +6283,15 @@ stage:DSOTreeQuery a elmo:Query;
 										?object rdfs:label ?objectLabel.
 										FILTER NOT EXISTS {
 											?object prov:invalidatedAtTime ?objectTime.
+										}
+										FILTER NOT EXISTS {
+											?object rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										}
+										FILTER NOT EXISTS {
+											?object rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										}
+										FILTER NOT EXISTS {
+											?object rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
 										}
 									}
 									GRAPH doc:mastergraph {
@@ -5183,6 +6562,15 @@ stage:DSOConceptenQuery a elmo:Query;
 					FILTER NOT EXISTS {
 						?concept prov:invalidatedAtTime ?time.
 					}
+					FILTER NOT EXISTS {
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+					}
+					FILTER NOT EXISTS {
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+					}
+					FILTER NOT EXISTS {
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+					}
 				}
 				GRAPH doc:mastergraph {
 					?concept rdfs:isDefinedBy ?g
@@ -5233,7 +6621,7 @@ stage:DSOConceptenQuery a elmo:Query;
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix dctype: <http://purl.org/dc/dcmitype/>.
 @prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sh: <http://www.w3.org/ns/dso#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
@@ -5243,147 +6631,88 @@ stage:DSOConceptenQuery a elmo:Query;
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 
+#
 # PAGINA'S (REPRESENTATIONS)
-
-# Modelpagina
-stage:DSOModel	a	elmo:Representation;
-	elmo:applies-to [rdf:type sh:Shape];
-	elmo:contains stage:DSOMenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:contains stage:DSOModelGrafisch;
-.
+#
 
 # Vocabulairepagina
 stage:VocabulairePagina	a	elmo:Representation;
-	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:url-pattern "/catalogus/dso/query/vocabulary";
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOMenu;
+	elmo:contains stage:search_models;
 	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:DSOSelectModel;
 	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:DSOSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+	elmo:index "2";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
 .
 
 # PARTS
 
-# Grafische weergave modellen
-stage:DSOModelGrafisch a elmo:Part;
-	elmo:index "10";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:query stage:DSOModelGrafischQuery;
+# Zoeken van modellen
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://localhost:8080/catalogus/dso/(?!stage)")
+            }
+            LIMIT 100
+        }
+    ''';
 .
 
 # QUERY'S
-
-# Query grafische weergave modellen
-stage:DSOModelGrafischQuery a elmo:Query;
-	elmo:query '''
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		construct {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?sattribute "".
-			<@SUBJECT@> ?pred ?cshape.
-			?cshape rdfs:label ?clabel.
-			?cshape rdfs:uitleg ?ccomment.
-			?cshape ?cattribute "".
-			?rshape ?rpred <@SUBJECT@>.
-			?rshape rdfs:label ?rlabel.
-			?rshape rdfs:uitleg ?rcomment.
-			?rshape ?rattribute "".
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			?supershape rdfs:uitleg ?superclasscomment.
-			?subshape rdfs:subClassOf <@SUBJECT@>.
-			?subshape rdfs:label ?subshapelabel.
-			?subshape rdfs:uitleg ?subclasscomment.
-			rdfs:subClassOf rdfs:label "is een".
-		}
-		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> rdfs:label ?slabel.
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape rdfs:label ?supershapelabel.
-				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
-				}
-				
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
-				OPTIONAL {
-					?class rdfs:comment ?ccomment
-				}
-				OPTIONAL {
-					?cshape sh:property/sh:predicate ?cattribute.
-					?cattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-			UNION
-			{ # Inkomende specialisaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?subclass rdfs:subClassOf ?sclass.
-				?subshape sh:scopeClass ?subclass.
-				?subshape rdfs:label ?subshapelabel.
-				OPTIONAL {
-					?subclass rdfs:comment ?subclasscomment
-				}
-			}
-			UNION
-			{ # Inkomende relaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?rpc sh:class ?sclass.
-				?rpc sh:predicate ?rpred.
-				?rshape sh:property ?rpc.
-				?rshape rdfs:label ?rlabel
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:comment ?rcomment
-				}
-				OPTIONAL {
-					?rshape sh:property/sh:predicate ?rattribute.
-					?rattribute rdf:type owl:DatatypeProperty.
-				}
-			}
-		}
-	''';
-.
-
 
 # Query voor Vocabulairepagina
 stage:VocabulaireQuery a elmo:Query;
 	elmo:query '''
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix shacl: <http://www.w3.org/ns/shacl#>
+		prefix dso: <http://www.w3.org/ns/dso#>
 		CONSTRUCT {
 			?element rdf:type ?type.
 			?element rdfs:label ?label.
 			?element rdfs:comment ?def.
 			?element rdfs:subClassOf ?super.
-			?shape shacl:scopeClass ?element.
-			?shape shacl:property ?pc.
-			?pc shacl:predicate ?pred.
-			?pc shacl:class ?class.
-			?pc shacl:datatype ?datatype.
-			?pc shacl:in ?collection.
+			?shape dso:scopeClass ?element.
+			?shape dso:property ?pc.
+			?pc dso:predicate ?pred.
+			?pc dso:class ?class.
+			?pc dso:datatype ?datatype.
+			?pc dso:in ?collection.
 		}
 		WHERE {
-			GRAPH <http://localhost:8080/catalogus/dso/umlmodel> {
+			GRAPH <@MODEL@> {
 				?element rdf:type ?type.
 				OPTIONAL {?element rdfs:label ?label}
 				OPTIONAL {?element rdfs:comment ?def}
@@ -5393,12 +6722,12 @@ stage:VocabulaireQuery a elmo:Query;
 				}
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
-					?shape shacl:scopeClass ?element.
-					?shape shacl:property ?pc.
-					?pc shacl:predicate ?pred.
-					OPTIONAL {?pc shacl:class ?class}
-					OPTIONAL {?pc shacl:datatype ?datatype}
-					OPTIONAL {?pc shacl:in ?collection}
+					?shape dso:scopeClass ?element.
+					?shape dso:property ?pc.
+					?pc dso:predicate ?pred.
+					OPTIONAL {?pc dso:class ?class}
+					OPTIONAL {?pc dso:datatype ?datatype}
+					OPTIONAL {?pc dso:in ?collection}
 				}
 				FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
 			}

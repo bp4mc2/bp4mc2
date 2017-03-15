@@ -46,6 +46,56 @@ stage:DSOWelkomstpagina rdf:type elmo:Representation;
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Welkom op de Catalogus Omgevingswet";
+		elmo:html '''
+			<div style='width: 67%; float: left;'>
+				<div style='width: 100%; display: table'>
+					<div class='welkom' style='float: left'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/overzichtspagina?term='>
+							<img src='images/begrippenicon.png'/>
+							<br/>Alle concepten
+						</a>
+					</div>
+					<div class='welkom' style='float: right'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/overzichtspagina?type=Act'>
+							<img src='images/activiteitenicon.png'/>
+							<br/>Alle activiteiten
+						</a>
+					</div>
+				</div>
+				<div style='width: 100%; display: table'>
+					<div class='welkom' style='float: left'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/producten'>
+							<img src='images/productenicon.png'/>
+							<br/>Producten/diensten
+						</a>
+					</div>
+					<div class='welkom' style='float: right'>
+						<br/><br/>
+						<a href='/catalogus/dso/query/registraties'>
+							<img src='images/overicon.png'/>
+							<br/>Registraties
+						</a>
+					</div>
+				</div>
+			</div>
+			<div style='width: 33%; float: right'>
+				<center>
+				<img src='images/KaartNederland.png'/><br/>
+				<select name='regio'>
+					<option value='Aa en Maas'>Aa en Maas</option>
+					<option value='Amersfoort'>Amersfoort</option>
+					<option value='Apeldoorn'>Apeldoorn</option>
+				</select>
+				</center>
+			</div>
+		''';
+	];
 .
 
 # Helppagina
@@ -156,7 +206,7 @@ stage:DSOBeheerpagina rdf:type elmo:Representation;
 # Header
 stage:DSOHeader a elmo:Part;
 	elmo:appearance elmo:HeaderAppearance;
-	elmo:data [elmo:html "<a href='http://localhost:8080/catalogus/dso'><img src='http://localhost:8080/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
+	# elmo:data [elmo:html "<a href='http://localhost:8080/catalogus/dso'><img src='http://localhost:8080/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
 .
 
 # Menubalk hoofdmenu
@@ -172,63 +222,102 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1"
 			];
 			elmo:data [
-				rdfs:label "Activiteiten";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act";
+				rdfs:label "Omgevingswet";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=Omgevingswet";
 				elmo:index "2"
 			];
 			elmo:data [
-				rdfs:label "Normen";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Norm";
+				rdfs:label "BRK";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=BRK";
 				elmo:index "3"
 			];
 			elmo:data [
-				rdfs:label "Objecten";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Object";
+				rdfs:label "BRT";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=BRT";
 				elmo:index "4"
+			];
+			elmo:data [
+				rdfs:label "BAG";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&dataset=BAG";
+				elmo:index "5"
 			];
 		];
 		elmo:data [
-			rdfs:label "Collecties";
-			xhtml:link "/catalogus/dso/query/collecties?term=";
-			elmo:index "2"
+			rdfs:label "Activiteiten";
+			elmo:index "2";
+			elmo:data [
+				rdfs:label "Alle activiteiten";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act";
+				elmo:index "1"
+			];
+			elmo:data [
+				rdfs:label "Omgevingswet";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=Omgevingswet";
+				elmo:index "2"
+			];
+			elmo:data [
+				rdfs:label "BAL";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BAL";
+				elmo:index "3"
+			];
+			elmo:data [
+				rdfs:label "BBL";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BBL";
+				elmo:index "4"
+			];
+			elmo:data [
+				rdfs:label "BKL";
+				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BKL";
+				elmo:index "5"
+			];
 		];
 		elmo:data [
-			rdfs:label "Modellen";
+			rdfs:label "Registraties";
+			elmo:index "3";
 			elmo:data [
+				rdfs:label "BRK";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/BRK";
+				elmo:index "1"
+			];
+			elmo:data [
+				rdfs:label "BRT";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/BRT";
+				elmo:index "2"
+			];
+			elmo:data [
+				rdfs:label "BAG";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/BAG";
+				elmo:index "3"
+			];
+		];
+		elmo:data [
+			rdfs:label "Producten/diensten";
+			xhtml:link "/catalogus/dso/query/producten";
+			elmo:index "4"
+		];
+		elmo:data [
+			rdfs:label "Over";
+			elmo:data [ 
+				rdfs:label "Home";
 				elmo:index "1";
+				xhtml:link "/catalogus/dso";
+			];
+			elmo:data [
+				elmo:index "2";
 				rdfs:label "KKG model";
 				xhtml:link "catalogus/dso/query/KKG";
 				];
 			elmo:data [	
-				elmo:index "2";
-				rdfs:label "Besluit";
-				xhtml:link "/catalogus/dso/def/model/Besluit";
+				elmo:index "3";
+				rdfs:label "Vocabulaire";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/IMOD";
 			];
-			elmo:index "3";
-		];
-		elmo:data [
-			rdfs:label "Vocabulaires";
-			elmo:index "4";
 			elmo:data [
-				elmo:index "1";
-				rdfs:label "Besluit";
-				xhtml:link "/catalogus/dso/def/model";
+				rdfs:label "Help";
+				xhtml:link "/catalogus/dso/query/help";
+				elmo:index "4"
 			];
-		];
-		elmo:data [
-			rdfs:label "Catalogus";
 			elmo:index "5";
-			xhtml:link "/catalogus/dso/id/DigitaalStelselOmgevingswet";
-		];
-		elmo:data [
-			rdfs:label "Beheer";
-			xhtml:link "/catalogus/dso/admin";
-			elmo:index "6"
-		];
-		elmo:data [
-			rdfs:label "Help";
-			xhtml:link "/catalogus/dso/query/help";
-			elmo:index "7"
 		];
 	]
 .
@@ -249,7 +338,7 @@ stage:DSOBeheermenu a elmo:Part;
 			xhtml:link "/catalogus/dso";
 		];
 		elmo:data [
-			rdfs:label "Upload";
+			rdfs:label "Upload concepten";
 			elmo:index "2";
 			elmo:data [
 				rdfs:label "Upload concepten (Excel)";
@@ -261,25 +350,53 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
+		];
+		elmo:data[
+			rdfs:label "Upload modellen";
+			elmo:index "3";
 			elmo:data [
-				rdfs:label "Upload UML-model";
-				elmo:index "3";
-				xhtml:link "/catalogus/dso/container/umlmodelupload";
+				rdfs:label "Upload UML-model (XMI)";
+				elmo:index "1";
+				xhtml:link "container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
+				rdfs:label "Sync geupload XMI-model (incl ST)";
+				elmo:index "2";
+				xhtml:link "update/syncumlinclupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload XMI-model (excl ST)";
+				elmo:index "3";
+				xhtml:link "update/syncumlupload";
+			];
+			elmo:data [
+				rdfs:label "Upload UML-model (Turtle)";
 				elmo:index "4";
+				xhtml:link "container/ttlmodelupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload TTL-model";
+				elmo:index "5";
+				xhtml:link "update/syncttlupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "Upload metadata";
+			elmo:index "4";
+			elmo:data [
+				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
+				elmo:index "1";
 				xhtml:link "/catalogus/dso/container/catalogusupload";
 			];
 			elmo:data [
 				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-				elmo:index "5";
+				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data [
 			rdfs:label "Acties";
-			elmo:index "3";
+			elmo:index "4";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -289,6 +406,11 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Laad gegevens vanuit VocBench";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/update/importvbdata";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuw model toe";
+				elmo:index "3";
+				xhtml:link "update/addnewmodel";
 			];
 		];
 		elmo:data [
@@ -300,36 +422,49 @@ stage:DSOBeheermenu a elmo:Part;
 .
 
 # Footer
+
 stage:DSOFooter a elmo:Part;
 	elmo:appearance elmo:FooterAppearance;
 	elmo:data [
 		elmo:html '''
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<h4>Links</h4>
 					<ul class="list-unstyled">
 						<li>
-							<a href="http://aandeslagmetdeomgevingswet.nl">Aan de slag met de omgevingswet</a>
+							<a href="http://tax.kadaster.nl">Kadasterwoordenboek</a>
 						</li>
 						<li>
-							<a href="http://www.stelselcatalogus.nl">Stelselcatalogus</a>
+							<a href="http://www.stelselcatalogus.nl">Stelselcatalogus basisregistraties</a>
 						</li>
 						<li>
-							<a href="http://brt.basisregistraties.overheid.nl">BRT</a>
+							<a href="http://nationaalgeoregister.nl">Nationaal geo-register</a>
 						</li>
 						<li>
-							<a href="http://brk.basisregistraties.overheid.nl">BRK</a>
+							<a href="http://data.overheid.nl">Open data overheid</a>
 						</li>
 					</ul>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<h4>Contact</h4>
 					<p><a href="mailto:arjen.santema@kadaster.nl">Arjen Santema</a></p>
 				</div>
-				<div class="col-sm-4">
-					<h4>Disclaimer</h4>
-					<p>Dit betreft een eerste versie van de Catalogus. De Catalogus is nog in ontwikkeling.</p>
-					<p>Aan de informatie op deze pagina's kunnen geen rechten worden ontleend.</p>
+				<div class="col-sm-3">
+					<h4>Proclaimer</h4>
+					<p>De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud.</p>
+				</div>
+				<div class="col-sm-3">
+					<h4>Licentie</h4>
+					<p>
+					'THE BEER-WARE LICENSE' (Local application for the GCO Catalog version 1.0):  
+					This file was written by the people belows.  
+					As long as you retain this notice you can do whatever you want to do with this stuff. If we meet some day, and you think this stuff is worth it, you can buy us a beer in return.  
+					Arjen Santema  
+					Marco Brattinga  
+					Wessel Schollmeijer  
+					Lars Wortel  
+					Joost Aafjes
+					</p>
 				</div>
 			</div>
 		'''^^rdf:html
