@@ -9,86 +9,52 @@
 stage:Requirements	a	elmo:Representation;
 	elmo:url-pattern	"/query/requirements$";
 	elmo:contains	stage:Menu;
-	elmo:contains	stage:Requirements_Controle1;
-	elmo:contains	stage:Requirements_Controle2;
-.
-
-stage:Requirements_Controle1 a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to "class";
-		rdfs:label "Onderdeel";
+		rdfs:label "Onderwerp";
 	];
 	elmo:fragment [
 		elmo:applies-to "req";
+		rdfs:label "Onderdeel";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
 		rdfs:label "Requirement";
 	];
 	elmo:fragment [
-		elmo:applies-to "pred";
-		rdfs:label "Eigenschap";
-	];
-	elmo:fragment [
-		elmo:applies-to "refclass";
-		rdfs:label "Verwijzing naar";
-	];
-	elmo:fragment [
 		elmo:applies-to "toep";
-		rdfs:label "Toepassing";
-	];
-	elmo:fragment [
-		elmo:applies-to "shape";
-		rdfs:label "Validatie";
-		html:link "resource"
-	];
-elmo:query '''
-		prefix shacl: <http://www.w3.org/ns/shacl#>
-		select ?class ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
-		where {
-			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?req a <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#Requirement>.
-				?req rdfs:label ?req_label.
-				?req shacl:targetClass ?class.
-				?req shacl:predicate ?pred.
-				OPTIONAL {?req shacl:class ?refclass}
-				OPTIONAL {?req rdf:value ?toep}
-				OPTIONAL {
-					?shpe shacl:scopeClass ?class.
-					?shpe shacl:property ?pc.
-					?pc shacl:predicate ?pred.
-					OPTIONAL {?pc shacl:class ?toclass}
-				}
-			}
-		}
-		order by ?req
-	'''
-.
-
-stage:Requirements_Controle2 a elmo:Part;
-	elmo:fragment [
-		elmo:applies-to "shape";
-		rdfs:label "Modelelement";
-		html:link "resource";
-	];
-	elmo:fragment [
-		elmo:applies-to "pred";
-		rdfs:label "Eigenschap";
-		elmo:appearance elmo:GlobalLink;
+		rdfs:label "Voorbeeld";
 	];
 	elmo:query '''
 		prefix shacl: <http://www.w3.org/ns/shacl#>
-		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
+		select ?shape ?shape_label ?req ?req_label ?comment ?toep (if(?typed='typed','','!') as ?req_count)
 		where {
-			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape rdf:type shacl:Shape.
-				OPTIONAL {?shape rdfs:label ?shape_label}
-				?shape shacl:scopeClass ?class.
-				?shape shacl:property ?pc.
-				?pc shacl:predicate ?pred.
-				FILTER NOT EXISTS {
-					?req a <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#Requirement>.
-					?req shacl:targetClass ?class.
-					?req shacl:predicate ?pred
+			select ?shape ?shape_label ?req ?req_label ?comment ?toep (max(?typed) as ?typed)
+			where {
+				graph <http://bp4mc2.org/id/dataset/requirements> {
+					{
+						BIND ("typed" as ?typed)
+						?req a shacl:PropertyConstraint.
+						OPTIONAL {?req rdfs:label ?req_label}
+						OPTIONAL {?req rdfs:comment ?comment}
+						OPTIONAL {
+							?shape shacl:property ?req.
+							?shape rdfs:label ?shape_label.
+						}
+						OPTIONAL {?req rdf:value ?toep}
+					}
+					UNION
+					{
+						?shape shacl:property ?req
+						OPTIONAL {?req rdfs:label ?req_label}
+						OPTIONAL {?req rdfs:comment ?comment}
+						OPTIONAL {?shape rdfs:label ?shape_label}
+						OPTIONAL {?req rdf:value ?toep}
+					}
 				}
 			}
+			group by ?shape ?shape_label ?req ?req_label ?comment ?toep
 		}
+		order by ?shape ?req
 	''';
 .

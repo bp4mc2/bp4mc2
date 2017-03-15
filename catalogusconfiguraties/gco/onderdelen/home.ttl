@@ -7,7 +7,7 @@
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
 
 stage:Home	a	elmo:Representation;
-	elmo:url-pattern	"/gco(|/)$";
+	elmo:url-pattern	"/gco(|/|\\..+)$";
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:Welkom;
 .
@@ -23,23 +23,45 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "2"; rdfs:label "Model"; html:link "query/modelview"];
 			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/modelyed.yed"];
 		];
-		elmo:data [elmo:index "2"; rdfs:label "Requirements"; html:link "query/requirements"];
+		elmo:data [
+			elmo:index "2";
+			rdfs:label "Requirements";
+			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/requirements"];
+			elmo:data [ elmo:index "2"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
+			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
+			elmo:data [ elmo:index "4"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
+		];
 		elmo:data [
 			elmo:index "3";
 			rdfs:label "Sync";
-			elmo:data [ elmo:index "1"; rdfs:label "Volledige model"; html:link "update/sync"];
-			elmo:data [ elmo:index "2"; rdfs:label "Alle imports"; html:link "update/syncimports"];
-			elmo:data [ elmo:index "3"; rdfs:label "Requirements"; html:link "update/sync-requirements"];
+			elmo:data [ elmo:index "1"; rdfs:label "Alles (initial start)"; html:link "update/sync"];
+			elmo:data [ elmo:index "2"; rdfs:label "Requirements"; html:link "update/sync-requirements"];
+			elmo:data [ elmo:index "3"; rdfs:label "Alle imports"; html:link "update/sync-imports"];
+			elmo:data [ elmo:index "4"; rdfs:label "Model"; html:link "update/sync-model"];
 		]
 	];
 .
 
-stage:Welkom elmo:appearance elmo:HtmlAppearance;
-	elmo:data [
-		rdfs:label "Welkom";
-		elmo:html '''
-			<div>
-				<p>Welkom op GCO metamodel site</p>
- 			</div>''';
-	]
+stage:Welkom a elmo:Part;
+	elmo:appearance elmo:ImageAppearance;
+#	elmo:data [
+#		rdfs:label "Welkom";
+#		elmo:html '''
+#			<div>
+#				<img src="https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png"/>
+# 			</div>''';
+#	]
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png".
+			<urn:image> html:width "1518".
+			<urn:image> html:height "1791".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
 .
