@@ -31,7 +31,7 @@ stage:ReqModelYedQuery a elmo:Query;
 		CONSTRUCT {
 			?shape rdfs:label ?slabel.
 			?shape rdfs:comment ?attribs.
-			?shape rdfs:subClassOf ?super.
+			?shape rdfs:subClassOf ?sshape.
 			?shape ?pc ?cshape.
 			?shape rdf:type rdfs:Class.
 			?shape shacl:blub ?rshape.
@@ -40,9 +40,15 @@ stage:ReqModelYedQuery a elmo:Query;
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape shacl:scopeClass ?element.
+					?shape rdf:type shacl:Shape.
+					OPTIONAL {
+						?shape shacl:scopeClass ?element
+					}
 					OPTIONAL {?shape rdfs:label ?slabel}
-					OPTIONAL {?element rdfs:subClassOf ?super}
+					OPTIONAL {
+						?shape shacl:scopeClass/rdfs:subClassOf ?super.
+						?sshape shacl:scopeClass ?super
+					}
 					OPTIONAL {
 						?shape shacl:property ?pctype.
 						?pctype shacl:predicate rdf:type.
