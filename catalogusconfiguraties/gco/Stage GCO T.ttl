@@ -1,4 +1,56 @@
-﻿@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+﻿@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+
+stage:Begrippen	a	elmo:Representation;
+	elmo:url-pattern	"/query/begrippen$";
+	elmo:contains	stage:Menu;
+	elmo:contains stage:Begrippen_tree;
+	elmo:contains stage:Begrippen_list;
+.
+
+stage:Begrippen_tree a elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+	elmo:query '''
+		construct {
+			?b rdfs:label ?blabel.
+			?b skos:broader ?bb.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/concepts> {
+				?b rdf:type skos:Concept.
+				?b rdfs:label ?blabel.
+				OPTIONAL {?b skos:broader ?bb}
+			}
+		}
+	''';
+.
+
+stage:Begrippen_list a elmo:Part;
+	elmo:fragment [
+		elmo:applies-to "begrip";
+		rdfs:label "Begrip";
+	];
+	elmo:fragment [
+		elmo:applies-to "begrip_def";
+		rdfs:label "Definitie";
+	];
+	elmo:query '''
+		select ?begrip ?begrip_label ?begrip_def
+		where {
+			graph <http://bp4mc2.org/id/dataset/concepts> {
+				?begrip rdf:type skos:Concept.
+				?begrip rdfs:label ?begrip_label.
+				?begrip skos:definition ?begrip_def
+			}
+		}
+	''';
+. 
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -132,13 +184,18 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 		html:link "/";
 		elmo:data [
 			elmo:index "1";
+			rdfs:label "Begrippen";
+			html:link "query/begrippen";
+		];
+		elmo:data [
+			elmo:index "2";
 			rdfs:label "Model"; 
 			elmo:data [ elmo:index "1"; rdfs:label "Vocabulary"; html:link "query/model"];
 			elmo:data [ elmo:index "2"; rdfs:label "Model"; html:link "query/modelview"];
 			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/modelyed.yed"];
 		];
 		elmo:data [
-			elmo:index "2";
+			elmo:index "3";
 			rdfs:label "Requirements";
 			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/requirements"];
 			elmo:data [ elmo:index "2"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
@@ -146,12 +203,13 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "4"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
 		];
 		elmo:data [
-			elmo:index "3";
+			elmo:index "4";
 			rdfs:label "Sync";
 			elmo:data [ elmo:index "1"; rdfs:label "Alles (initial start)"; html:link "update/sync"];
 			elmo:data [ elmo:index "2"; rdfs:label "Requirements"; html:link "update/sync-requirements"];
 			elmo:data [ elmo:index "3"; rdfs:label "Alle imports"; html:link "update/sync-imports"];
 			elmo:data [ elmo:index "4"; rdfs:label "Model"; html:link "update/sync-model"];
+			elmo:data [ elmo:index "5"; rdfs:label "Begrippen"; html:link "update/sync-begrippen"];
 		]
 	];
 .
@@ -758,6 +816,13 @@ updatestage:syncimports a elmo:Production;
 	elmo:contains	stage:sync_import_skos;
 .
 
+#Begrippen
+updatestage:sync-concepts a elmo:Production;
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:sync_clear_concepts;
+	elmo:contains	stage:sync_import_concepts;
+.
+	
 #----------------------------
 # Clearing
 #----------------------------
@@ -775,6 +840,11 @@ stage:sync_clear_imports a elmo:Scene;
 	elmo:index "003";
 	rdfs:label "Opschonen imports";
 	elmo:query "clear graph <http://bp4mc2.org/id/dataset/imports>";
+.
+stage:sync_clear_concepts a elmo:Scene;
+	elmo:index "004";
+	rdfs:label "Opschonen begrippen";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/concepts>";
 .
 
 #----------------------------
@@ -796,6 +866,27 @@ stage:sync_requirements a elmo:Scene;
 		}
 	''';
 .
+
+#----------------------------
+# Concepts
+#----------------------------
+stage:sync_concepts a elmo:Scene;
+	elmo:index "101";
+	rdfs:label "bp4mc2.org begrippen ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/concepts> {
+			?s?p?o
+		}
+		where {
+			service <http://ldt:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-concepts.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+
 
 #----------------------------
 # Model

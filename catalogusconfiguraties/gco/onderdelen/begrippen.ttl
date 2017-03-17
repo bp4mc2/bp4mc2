@@ -1,0 +1,52 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:Begrippen	a	elmo:Representation;
+	elmo:url-pattern	"/query/begrippen$";
+	elmo:contains	stage:Menu;
+	elmo:contains stage:Begrippen_tree;
+	elmo:contains stage:Begrippen_list;
+.
+
+stage:Begrippen_tree a elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+	elmo:query '''
+		construct {
+			?b rdfs:label ?blabel.
+			?b skos:broader ?bb.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/concepts> {
+				?b rdf:type skos:Concept.
+				?b rdfs:label ?blabel.
+				OPTIONAL {?b skos:broader ?bb}
+			}
+		}
+	''';
+.
+
+stage:Begrippen_list a elmo:Part;
+	elmo:fragment [
+		elmo:applies-to "begrip";
+		rdfs:label "Begrip";
+	];
+	elmo:fragment [
+		elmo:applies-to "begrip_def";
+		rdfs:label "Definitie";
+	];
+	elmo:query '''
+		select ?begrip ?begrip_label ?begrip_def
+		where {
+			graph <http://bp4mc2.org/id/dataset/concepts> {
+				?begrip rdf:type skos:Concept.
+				?begrip rdfs:label ?begrip_label.
+				?begrip skos:definition ?begrip_def
+			}
+		}
+	''';
+.
