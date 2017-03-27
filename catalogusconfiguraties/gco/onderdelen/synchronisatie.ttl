@@ -39,6 +39,13 @@ updatestage:syncimports a elmo:Production;
 	elmo:contains	stage:sync_import_skos;
 .
 
+#Begrippen
+updatestage:sync-concepts a elmo:Production;
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:sync_clear_concepts;
+	elmo:contains	stage:sync_concepts;
+.
+	
 #----------------------------
 # Clearing
 #----------------------------
@@ -56,6 +63,11 @@ stage:sync_clear_imports a elmo:Scene;
 	elmo:index "003";
 	rdfs:label "Opschonen imports";
 	elmo:query "clear graph <http://bp4mc2.org/id/dataset/imports>";
+.
+stage:sync_clear_concepts a elmo:Scene;
+	elmo:index "004";
+	rdfs:label "Opschonen begrippen";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/concepts>";
 .
 
 #----------------------------
@@ -77,6 +89,27 @@ stage:sync_requirements a elmo:Scene;
 		}
 	''';
 .
+
+#----------------------------
+# Concepts
+#----------------------------
+stage:sync_concepts a elmo:Scene;
+	elmo:index "101";
+	rdfs:label "bp4mc2.org begrippen ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/concepts> {
+			?s?p?o
+		}
+		where {
+			service <http://localhost:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-concepts.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+
 
 #----------------------------
 # Model

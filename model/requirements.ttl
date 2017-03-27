@@ -32,6 +32,25 @@ req:Concept_grondslag a sh:PropertyConstraint;
 	sh:predicate dcterms:source;
 	sh:class dctype:Text;
 .
+#---------------------
+# Conceptbeschrijving
+#---------------------
+req:Conceptbeschrijving a sh:Shape;
+	rdfs:label "Conceptbeschrijving";
+	sh:property req:Conceptbeschrijving_onderwerp;
+	sh:property req:Conceptbeschrijving_type;
+.
+req:Conceptbeschrijving_onderwerp a sh:PropertyConstraint;
+	rdfs:label "onderwerp";
+	sh:predicate foaf:primaryTopic;
+	sh:class skos:Concept;
+.
+req:Conceptbeschrijving_type a sh:PropertyConstraint;
+	rdfs:label "rol van entiteit";
+	rdfs:comment "Een conceptbeschrijving vervult de rol van entiteit";
+	sh:predicate rdf:type;
+	sh:hasValue prov:Entity;
+.
 
 #---------------------
 # Collectie
@@ -48,17 +67,44 @@ req:Collectie_heeftLid a sh:PropertyConstraint;
 .
 
 #---------------------
+# Collectiebeschrijving
+#---------------------
+req:Collectiebeschrijving a sh:Shape;
+	rdfs:label "Collectiebeschrijving";
+	sh:property req:Collectiebeschrijving_onderwerp;
+	sh:property req:Collectiebeschrijving_type;
+.
+req:Collectiebeschrijving_onderwerp a sh:PropertyConstraint;
+	rdfs:label "onderwerp";
+	sh:predicate foaf:primaryTopic;
+	sh:class skos:Collection;
+.
+req:Collectiebeschrijving_type a sh:PropertyConstraint;
+	rdfs:label "rol van entiteit";
+	rdfs:comment "Een collectiebeschrijving vervult de rol van entiteit";
+	sh:predicate rdf:type;
+	sh:hasValue prov:Entity;
+.
+
+#---------------------
 # Begrippenkader
 #---------------------
 req:Begrippenkader a sh:Shape;
 	rdfs:label "Begrippenkader";
 	sh:property req:Begrippenkader_grondslag;
+	sh:property req:Begrippenkader_type;
 	sh:scopeClass skos:ConceptScheme;
 .
 req:Begrippenkader_grondslag a sh:PropertyConstraint;
 	rdfs:label "grondslag";
 	sh:predicate req:Begrippenkader_grondslag;
 	sh:class dctype:Text;
+.
+req:Begrippenkader_type a sh:PropertyConstraint;
+	rdfs:label "rol van dataset";
+	rdfs:comment "Een begrippenkader vervult de rol van dataset";
+	sh:predicate rdf:type;
+	sh:hasValue dcat:Dataset;
 .
 
 #---------------------
@@ -67,6 +113,13 @@ req:Begrippenkader_grondslag a sh:PropertyConstraint;
 req:Brondocument a sh:Shape;
 	rdfs:label "Brondocument";
 	sh:scopeClass dctype:Text;
+	sh:property req:Brondocument_versieVan;
+.
+req:Brondocument_versieVan a sh:PropertyConstraint;
+	rdfs:label "versie van";
+	sh:predicate dcterms:isVersionOf;
+	sh:valueShape req:Datasetversie;
+	sh:maxCount 1;
 .
 
 #---------------------
@@ -125,6 +178,7 @@ req:Datasetversie rdf:type sh:Shape;
     sh:property req:Datasetversie_beschrijving;
 	sh:property req:Datasetversie_distributie;
 	sh:property req:Datasetversie_versieVan;
+	sh:property req:Datasetversie_werkingsgebied;
     sh:scopeClass dcat:Dataset;
 .
 req:Datasetversie_beschrijving rdf:type sh:PropertyConstraint;
@@ -167,6 +221,22 @@ req:Datasetversie_versieVan a sh:PropertyConstraint;
 	rdfs:label "versie van";
 	sh:predicate dcterms:isVersionOf;
 	sh:valueShape req:Dataset;
+	sh:maxCount 1;
+.
+req:Datasetversie_werkingsgebied rdf:type sh:PropertyConstraint;
+    rdfs:label "werkingsgebied";
+    rdfs:comment "Het gebied waar de dataset over gaat";
+    sh:class dcterms:Location;
+    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+    sh:predicate dcterms:spatial
+.
+
+#---------------------
+# Informatieproduct
+#---------------------
+req:Informatieproduct a sh:Shape;
+	rdfs:label "Informatieproduct";
+	sh:scopeClass [rdfs:subClassOf dcat:Dataset];
 .
 
 #---------------------
@@ -181,6 +251,7 @@ req:Informatiemodel rdf:type sh:Shape;
     sh:property req:Informatiemodel_publicatiedatum;
     sh:property req:Informatiemodel_releaseNotes;
 	sh:property req:Informatiemodel_betreft;
+	sh:property req:Informatiemodel_type;
 .
 req:Informatiemodel_naam rdf:type sh:PropertyConstraint;
     rdfs:label "naam";
@@ -216,6 +287,12 @@ req:Informatiemodel_betreft a sh:PropertyConstraint;
 	rdfs:label "betreft";
 	sh:predicate foaf:primaryTopic;
 	sh:class skos:ConceptScheme;
+.
+req:Informatiemodel_type a sh:PropertyConstraint;
+	rdfs:label "rol van entiteit";
+	rdfs:comment "Een informatiemodel vervult de rol van entiteit";
+	sh:predicate rdf:type;
+	sh:hasValue prov:Entity;
 .
 
 #---------------------

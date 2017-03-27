@@ -1,0 +1,38 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix foaf: <http://xmlns.com.foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix model:  <http://localhost:8080/tr/def/model/>.
+@prefix n2: <http://localhost:8080/tr/def/model#>.
+@prefix n3: <http://dso/def/dso#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+@prefix bp4mc2: <http://bp4mc2.org/id/concept/>.
+
+bp4mc2:Concept a skos:Concept;
+	rdfs:label "Concept"@nl;
+	skos:definition "Een eenheid van kennis, aangeduid met een term."@nl;
+	dc:source "ISO/IEC 11179 en ISO 1087-1:2000, sectie 3.2.1";
+	skos:editorialNote "Omdat het gebruik van «begrip» verwarring kan opleveren in relatie tot de juridische begrippen zoals geformuleerd in Artikel 1 van wet- of regelgeving, is gekozen om voor het generieke begrip de term «concept» te gebruiken."@nl;
+.
+bp4mc2:InstitutionalConcept a skos:Concept;
+	rdfs:label "Institutioneel begrip"@nl;
+	skos:definition "Een concept dat zijn betekenis krijgt vanuit wet- en/of regelgeving, dan wel doordat een instituut (bevoegd gezag) het concept heeft gedefinieerd.";
+	skos:broader bp4mc2:Concept;
+.
+bp4mc2:SocialConcept a skos:Concept;
+	rdfs:label "Maatschappelijk begrip"@nl;
+	skos:definition "Een concept dat zijn betekenis krijgt door het gebruik in de maatschappij.";
+	skos:scopeNote "Per definitie zijn dit geen concepten die hun oorsprong kennen in wet- en regelgeving of een ander instituut. Een maatschappelijk begrip wordt slechts geregistreerd als hiervoor een noodzaak bestaat. Een voorbeeld hiervan is de werkzaamheid «schuur bouwen».";
+	skos:broader bp4mc2:Concept;
+.
