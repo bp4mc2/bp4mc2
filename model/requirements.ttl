@@ -12,36 +12,171 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix dctype: <http://purl.org/dc/dcmitype/>.
 @prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 
 #---------------------
 # Concept
 #---------------------
 req:Concept a sh:Shape;
 	rdfs:label "Concept";
+	sh:name "skos:Concept";
 	sh:scopeClass skos:Concept;
-	sh:property req:Concept_onderdeelVan;
+	sh:property req:Concept_in;
 	sh:property req:Concept_grondslag;
+	sh:property req:Concept_label;
+	sh:property req:Concept_naam;
+	sh:property req:Concept_alternatieveAanduiding;
+	sh:property req:Concept_definitie;
+	sh:property req:Concept_toelichting;
+	sh:property req:Concept_rationale;
+	sh:property req:Concept_uitleg;
+	sh:property req:Concept_lijktOpBreder;
+	sh:property req:Concept_lijktOpSmaller;
+	sh:property req:Concept_afgeleidVan;
+	sh:property req:Concept_vergelijkbaarMet;
+	sh:property req:Concept_exactGelijkAan;
+	sh:property req:Concept_specialisatieVan;
+	sh:property req:Concept_generalisatieVan;
+	sh:property req:Concept_onderdeelVan;
+	sh:property req:Concept_bestaatUit;
+	sh:property req:Concept_gerelateerdAan;
 .
-req:Concept_onderdeelVan a sh:PropertyConstraint;
-	rdfs:label "onderdeel van";
+req:Concept_in a sh:PropertyConstraint;
+	rdfs:label "in";
+	sh:name "skos:inScheme";
 	sh:predicate skos:inScheme;
 	sh:class skos:ConceptScheme;
 .
 req:Concept_grondslag a sh:PropertyConstraint;
 	rdfs:label "grondslag";
+	sh:name "dcterm:source";
 	sh:predicate dcterms:source;
 	sh:class dctype:Text;
 .
+req:Concept_label a sh:PropertyConstraint;
+	rdfs:label "label";
+	sh:name "rdfs:label";
+	rdfs:comment "Een concept heeft een voor mensen leesbaar label";
+	sh:predicate rdfs:label;
+.
+req:Concept_naam a sh:PropertyConstraint;
+	rdfs:label "naam";
+	sh:name "skos:prefLabel";
+	rdfs:comment "Een concept heeft een naam, dit is de voorkeursterm waarmee naar dit concept wordt verwezen";
+	sh:predicate skos:prefLabel;
+.
+req:Concept_alternatieveAanduiding a sh:PropertyConstraint;
+	rdfs:label "alternatieve aanduiding";
+	sh:name "skos:altLabel";
+	rdfs:comment "Een concept kan een alternatieve aanduiding hebben, dit is een alternatieve term waarmee naar dit concept wordt verwezen";
+	sh:predicate skos:altLabel;
+.
+req:Concept_definitie a sh:PropertyConstraint;
+	rdfs:label "definitie";
+	sh:name "skos:definition";
+	rdfs:comment "Een concept kent een (formele) definitie";
+	sh:predicate skos:definition;
+.
+req:Concept_uitleg a sh:PropertyConstraint;
+	rdfs:label "uitleg";
+	sh:name "rdfs:comment";
+	rdfs:comment "Een concept kent een uitleg in klare taal";
+	sh:predicate rdfs:comment;
+.
+req:Concept_toelichting a sh:PropertyConstraint;
+	rdfs:label "toelichting";
+	sh:name "skos:scopeNote";
+	rdfs:comment "Een concept kent eventueel een toelichting op de definitie";
+	sh:predicate skos:scopeNote;
+.
+req:Concept_rationale a sh:PropertyConstraint;
+	rdfs:label "rationale";
+	sh:name "skos:editorialNote";
+	rdfs:comment "Een concept kent rationale van de definitie";
+	sh:predicate skos:editorialNote;
+.
+req:Concept_lijktOpBreder a sh:PropertyConstraint;
+	rdfs:label "lijkt op breder";
+	sh:name "skos:broadMatch";
+	sh:predicate skos:broadMatch;
+	sh:valueShape req:ExternConcept;
+.
+req:Concept_lijktOpSmaller a sh:PropertyConstraint;
+	rdfs:label "lijkt op smaller";
+	sh:name "skos:narrowMatch";
+	sh:predicate skos:narrowMatch;
+	sh:valueShape req:ExternConcept;
+.
+req:Concept_afgeleidVan a sh:PropertyConstraint;
+	rdfs:label "afgeleid van";
+	sh:name "skos:relatedMatch";
+	sh:predicate skos:relatedMatch;
+	sh:valueShape req:ExternConcept;
+.
+req:Concept_vergelijkbaarMet a sh:PropertyConstraint;
+	rdfs:label "vergelijkbaar met";
+	sh:name "skos:closeMatch";
+	sh:predicate skos:closeMatch;
+	sh:valueShape req:ExternConcept;
+.
+req:Concept_exactGelijkAan a sh:PropertyConstraint;
+	rdfs:label "exact gelijk aan";
+	sh:name "skos:exactMatch";
+	sh:predicate skos:exactMatch;
+	sh:valueShape req:ExternConcept;
+.
+req:Concept_specialisatieVan a sh:PropertyConstraint;
+	rdfs:label "specialisatie van";
+	sh:name "skosthes:broaderGeneric";
+	sh:predicate skosthes:broaderGeneric;
+	sh:class skos:Concept;
+.
+req:Concept_generalisatieVan a sh:PropertyConstraint;
+	rdfs:label "generalisatie van";
+	sh:name "skosthes:narrowerGeneric";
+	sh:predicate skosthes:narrowerGeneric;
+	sh:class skos:Concept;
+.
+req:Concept_onderdeelVan a sh:PropertyConstraint;
+	rdfs:label "onderdeel van";
+	sh:name "skosthes:broaderPartitive";
+	sh:predicate skosthes:broaderPartitive;
+	sh:class skos:Concept;
+.
+req:Concept_bestaatUit a sh:PropertyConstraint;
+	rdfs:label "bestaat uit";
+	sh:name "skosthes:narrowerPartitive";
+	sh:predicate skosthes:narrowerPartitive;
+	sh:class skos:Concept;
+.
+req:Concept_gerelateerdAan a sh:PropertyConstraint;
+	rdfs:label "gerelateerd aan";
+	sh:name "skos:semanticRelation";
+	sh:predicate skos:semanticRelation;
+	sh:class skos:Concept;
+.
+
+#---------------------
+# Extern concept
+#---------------------
+req:ExternConcept a sh:Shape;
+#	sh:scopeClass skos:Concept; (Niet meegenomen aangezien deze feitelijk buiten het model zit)
+	rdfs:label "Extern concept";
+.
+
 #---------------------
 # Conceptbeschrijving
 #---------------------
 req:Conceptbeschrijving a sh:Shape;
 	rdfs:label "Conceptbeschrijving";
-	sh:property req:Conceptbeschrijving_onderwerp;
+	sh:property req:Conceptbeschrijving_betreft;
 	sh:property req:Conceptbeschrijving_type;
 .
-req:Conceptbeschrijving_onderwerp a sh:PropertyConstraint;
-	rdfs:label "onderwerp";
+req:Conceptbeschrijving_betreft a sh:PropertyConstraint;
+	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
 	sh:predicate foaf:primaryTopic;
 	sh:class skos:Concept;
 .
@@ -53,11 +188,37 @@ req:Conceptbeschrijving_type a sh:PropertyConstraint;
 .
 
 #---------------------
+# Handeling
+#---------------------
+req:Handeling a sh:Shape;
+	rdfs:label "Handeling";
+	sh:scopeClass skoslex:Act;
+	sh:name "skoslex:Act";
+	sh:property req:Handeling_actor;
+	sh:property req:Handeling_object;
+.
+req:Handeling_actor a sh:PropertyConstraint;
+	rdfs:label "actor";
+	sh:name "skoslex:actor";
+	rdfs:comment "Een handeling wordt uitgevoerd door een actor";
+	sh:predicate skoslex:actor;
+	sh:class skoslex:Actor;
+.
+req:Handeling_object a sh:PropertyConstraint;
+	rdfs:label "object";
+	sh:name "skoslex:object";
+	rdfs:comment "Een handeling wordt uitgevoerd in relatie tot een object";
+	sh:predicate skoslex:object;
+	sh:class skoslex:Object;
+.
+
+#---------------------
 # Collectie
 #---------------------
 req:Collectie a sh:Shape;
 	rdfs:label "Collectie";
 	sh:scopeClass skos:Collection;
+	sh:name "skos:Collection";
 	sh:property req:Collectie_heeftLid;
 .
 req:Collectie_heeftLid a sh:PropertyConstraint;
@@ -71,11 +232,12 @@ req:Collectie_heeftLid a sh:PropertyConstraint;
 #---------------------
 req:Collectiebeschrijving a sh:Shape;
 	rdfs:label "Collectiebeschrijving";
-	sh:property req:Collectiebeschrijving_onderwerp;
+	sh:property req:Collectiebeschrijving_betreft;
 	sh:property req:Collectiebeschrijving_type;
 .
-req:Collectiebeschrijving_onderwerp a sh:PropertyConstraint;
-	rdfs:label "onderwerp";
+req:Collectiebeschrijving_betreft a sh:PropertyConstraint;
+	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
 	sh:predicate foaf:primaryTopic;
 	sh:class skos:Collection;
 .
@@ -91,6 +253,7 @@ req:Collectiebeschrijving_type a sh:PropertyConstraint;
 #---------------------
 req:Begrippenkader a sh:Shape;
 	rdfs:label "Begrippenkader";
+	sh:name "skos:ConceptScheme";
 	sh:property req:Begrippenkader_grondslag;
 	sh:property req:Begrippenkader_type;
 	sh:scopeClass skos:ConceptScheme;
@@ -135,32 +298,37 @@ req:Overheidsorganisatie rdf:type sh:Shape;
 #---------------------
 req:Dataset rdf:type sh:Shape;
     rdfs:label "Dataset";
+	sh:name "dcat:Dataset";
+    sh:scopeClass dcat:Dataset;
     sh:property req:Dataset_naam;
     sh:property req:Dataset_publicatiedatum;
     sh:property req:Dataset_taal;
     sh:property req:Dataset_beschrijving;
-    sh:scopeClass dcat:Dataset;
 .
 req:Dataset_naam rdf:type sh:PropertyConstraint;
     rdfs:label "naam";
+	sh:name "dcterms:title";
     rdfs:comment "De dataset heeft een naam";
     rdf:value "'Omgevingswet','BAL','BRK', etc";
     sh:predicate dcterms:title
 .
 req:Dataset_publicatiedatum rdf:type sh:PropertyConstraint;
     rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
     rdfs:comment "De dataset is op enig moment gepubliceerd";
     rdf:value "1/10/2016";
     sh:predicate dcterms:issued
 .
 req:Dataset_taal rdf:type sh:PropertyConstraint;
     rdfs:label "taal";
+	sh:name "dcterms:language";
     rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
     rdf:value "@nl";
     sh:predicate dcterms:language
 .
 req:Dataset_beschrijving rdf:type sh:PropertyConstraint;
     rdfs:label "beschrijving";
+	sh:name "dcterms:description";
     rdfs:comment "De dataset heeft een duidelijke beschrijving";
     rdf:value "<beschrijving>";
     sh:predicate dcterms:description
@@ -183,6 +351,7 @@ req:Datasetversie rdf:type sh:Shape;
 .
 req:Datasetversie_beschrijving rdf:type sh:PropertyConstraint;
     rdfs:label "beschrijving";
+	sh:name "dcterms:description";
     rdfs:comment "De dataset heeft een duidelijke beschrijving";
     rdf:value "<beschrijving>";
     sh:predicate dcterms:description
@@ -196,18 +365,21 @@ req:Datasetversie_informatiemodel rdf:type sh:PropertyConstraint;
 .
 req:Datasetversie_naam rdf:type sh:PropertyConstraint;
     rdfs:label "naam";
+	sh:name "dcterms:title";
     rdfs:comment "De dataset heeft een naam";
     rdf:value "'Omgevingswet','BAL','BRK', etc";
     sh:predicate dcterms:title
 .
 req:Datasetversie_publicatiedatum rdf:type sh:PropertyConstraint;
     rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
     rdfs:comment "De dataset is op enig moment gepubliceerd";
     rdf:value "1/10/2016";
     sh:predicate dcterms:issued
 .
 req:Datasetversie_taal rdf:type sh:PropertyConstraint;
     rdfs:label "taal";
+	sh:name "dcterms:language";
     rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
     rdf:value "@nl";
     sh:predicate dcterms:language
@@ -244,6 +416,7 @@ req:Informatieproduct a sh:Shape;
 #---------------------
 req:Informatiemodel rdf:type sh:Shape;
     rdfs:label "Informatiemodel";
+	sh:name "adms:Asset";
     sh:scopeClass adms:Asset;
     sh:property req:Informatiemodel_naam;
     sh:property req:Informatiemodel_beschrijving;
@@ -255,36 +428,43 @@ req:Informatiemodel rdf:type sh:Shape;
 .
 req:Informatiemodel_naam rdf:type sh:PropertyConstraint;
     rdfs:label "naam";
+	sh:name "dcterms:title";
     rdfs:comment "Het informatiemodel heeft een naam";
     rdf:value "'IMKAD'";
     sh:predicate dcterms:title
 .
 req:Informatiemodel_beschrijving rdf:type sh:PropertyConstraint;
 	rdfs:label "beschrijving";
+	sh:name "dcterms:description";
     rdfs:comment "Het informatiemodel heeft een duidelijke beschrijving";
     rdf:value "<beschrijving>";
     sh:predicate dcterms:description;
 .
 req:Informatiemodel_versie rdf:type sh:PropertyConstraint;
 	rdfs:label "versie";
+	sh:name "adms:version";
     rdfs:comment "Het informatiemodel heeft een versie";
     rdf:value "2.1";
     sh:predicate adms:version;
 .
 req:Informatiemodel_publicatiedatum rdf:type sh:PropertyConstraint;
 	rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
     rdfs:comment "Het informatiemodel is op enig moment gepubliceerd";
     rdf:value "8/5/2012";
     sh:predicate dcterms:issued;
 .
 req:Informatiemodel_releaseNotes rdf:type sh:PropertyConstraint;
 	rdfs:label "release notes";
-    rdfs:comment "Een versie bevat release notes";
+	sh:name "adms:versionNotes";
+    rdfs:comment "Een versie van een informatiemodel kent release notes";
     rdf:value "<release notes>";
     sh:predicate adms:versionNotes;
 .
 req:Informatiemodel_betreft a sh:PropertyConstraint;
 	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
+	rdfs:comment "Een informatiemodel beschrijft welke informatie wordt vastgelegd over begrippen uit een begrippenkader";
 	sh:predicate foaf:primaryTopic;
 	sh:class skos:ConceptScheme;
 .
@@ -301,11 +481,16 @@ req:Informatiemodel_type a sh:PropertyConstraint;
 req:Datasetbeschrijving a sh:Shape;
 	rdfs:label "Datasetbeschrijving";
 	sh:scopeClass dcat:CatalogRecord;
-	sh:property req:Datasetbeschrijving_onderwerp;
+	sh:property req:Datasetbeschrijving_betreft;
 	sh:property req:Datasetbeschrijving_type;
+	sh:property req:Datasetbeschrijving_naam;
+	sh:property req:Datasetbeschrijving_beschrijving;
+	sh:property req:Datasetbeschrijving_publicatiedatum;
+	sh:property req:Datasetbeschrijving_datumWijziging;
 .
-req:Datasetbeschrijving_onderwerp a sh:PropertyConstraint;
-	rdfs:label "onderwerp";
+req:Datasetbeschrijving_betreft a sh:PropertyConstraint;
+	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
 	sh:predicate foaf:primaryTopic;
 	sh:class dcat:Dataset;
 .
@@ -314,6 +499,32 @@ req:Datasetbeschrijving_type a sh:PropertyConstraint;
 	rdfs:comment "Een datasetbeschrijving vervult de rol van entiteit";
 	sh:predicate rdf:type;
 	sh:hasValue prov:Entity;
+.
+req:Datasetbeschrijving_naam rdf:type sh:PropertyConstraint;
+    rdfs:label "naam";
+	sh:name "dcterms:title";
+    rdfs:comment "Een datasetbeschrijving heeft een naam";
+    rdf:value "Catalogus Omgevingswet";
+    sh:predicate dcterms:title
+.
+req:Datasetbeschrijving_beschrijving rdf:type sh:PropertyConstraint;
+    rdfs:label "beschrijving";
+	sh:name "dcterms:description";
+    rdfs:comment "Een datasetbeschrijving heeft een duidelijke beschrijving";
+    rdf:value "<welkomsttekst>";
+    sh:predicate dcterms:description
+.
+req:Datasetbeschrijving_publicatiedatum rdf:type sh:PropertyConstraint;
+    rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
+    rdfs:comment "De datasetbeschrijving kent een publicatiedatum";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:issued
+.
+req:Datasetbeschrijving_datumWijziging rdf:type sh:PropertyConstraint;
+    rdfs:label "datum wijziging";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:modified
 .
 
 #---------------------
@@ -324,9 +535,9 @@ req:Catalogus rdf:type sh:Shape;
     sh:property req:Catalogus_datumWijziging;
     sh:property req:Catalogus_homepage;
     sh:property req:Catalogus_licentie;
-    sh:property req:Catalogus_productiedatum;
+    sh:property req:Catalogus_publicatiedatum;
     sh:property req:Catalogus_naam;
-    sh:property req:Catalogus_omschrijving;
+    sh:property req:Catalogus_beschrijving;
     sh:property req:Catalogus_rechten;
     sh:property req:Catalogus_taal;
     sh:property req:Catalogus_uitgever;
@@ -336,18 +547,21 @@ req:Catalogus rdf:type sh:Shape;
 .
 req:Catalogus_naam rdf:type sh:PropertyConstraint;
     rdfs:label "naam";
+	sh:name "dcterms:title";
     rdfs:comment "De catalogus heeft een naam";
     rdf:value "Catalogus Omgevingswet";
     sh:predicate dcterms:title
 .
-req:Catalogus_omschrijving rdf:type sh:PropertyConstraint;
-    rdfs:label "omschrijving";
-    rdfs:comment "De catalogus heeft een duidelijke omschrijving";
+req:Catalogus_beschrijving rdf:type sh:PropertyConstraint;
+    rdfs:label "beschrijving";
+	sh:name "dcterms:description";
+    rdfs:comment "De catalogus heeft een duidelijke beschrijving";
     rdf:value "<welkomsttekst>";
     sh:predicate dcterms:description
 .
-req:Catalogus_productiedatum rdf:type sh:PropertyConstraint;
-    rdfs:label "productiedatum";
+req:Catalogus_publicatiedatum rdf:type sh:PropertyConstraint;
+    rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
     rdfs:comment "De catalogus is op enig moment life life gegaan";
     rdf:value "1/10/2016";
     sh:predicate dcterms:issued
@@ -378,6 +592,7 @@ req:Catalogus_rechten rdf:type sh:PropertyConstraint;
 .
 req:Catalogus_taal rdf:type sh:PropertyConstraint;
     rdfs:label "taal";
+	sh:name "dcterms:language";
     rdfs:comment "De taal van de catalogus";
     rdf:value "@nl";
     sh:predicate dcterms:language
@@ -419,6 +634,7 @@ req:Distributie a sh:Shape;
 	sh:property req:Distributie_naam;
 	sh:property req:Distributie_beschrijving;
 	sh:property req:Distributie_publicatiedatum;
+	sh:property req:Distributie_datumWijziging;
 	sh:property req:Distributie_licentie;
 	sh:property req:Distributie_rechten;
 	sh:property req:Distributie_toegangsURL;
@@ -426,21 +642,30 @@ req:Distributie a sh:Shape;
 .
 req:Distributie_naam rdf:type sh:PropertyConstraint;
 	rdfs:label "naam";
+	sh:name "dcterms:title";
     rdfs:comment "De distributie heeft een naam";
     rdf:value "'Linked Data omgevingswet'";
     sh:predicate dcterms:title;
 .
 req:Distributie_beschrijving rdf:type sh:PropertyConstraint;
 	rdfs:label "beschrijving";
+	sh:name "dcterms:description";
     rdfs:comment "De distributie heeft een duidelijke beschrijving";
     rdf:value "<beschrijving>";
     sh:predicate dcterms:description;
 .
 req:Distributie_publicatiedatum rdf:type sh:PropertyConstraint;
 	rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
     rdfs:comment "De publicatiedatum van de distributie (dit is niet perse de datum van opname van de distributie in de catalogus)";
     rdf:value "1/10/2016";
     sh:predicate dcterms:issued;
+.
+req:Distributie_datumWijziging rdf:type sh:PropertyConstraint;
+    rdfs:label "datum wijziging";
+    rdfs:comment "De datum dat de distributie is gewijzigd";
+    rdf:value "1/10/2016";
+    sh:predicate dcterms:modified
 .
 req:Distributie_licentie rdf:type sh:PropertyConstraint;
 	rdfs:label "licentie";
@@ -532,6 +757,7 @@ req:Entiteit_eindmoment rdf:type sh:PropertyConstraint;
 .
 req:Entiteit_versie rdf:type sh:PropertyConstraint;
 	rdfs:label "versie";
+	sh:name "adms:version";
     rdfs:comment "Optioneel: het vastleggen van een versie";
     rdf:value "..";
     sh:predicate adms:version;
@@ -544,8 +770,9 @@ req:Entiteit_handeling rdf:type sh:PropertyConstraint;
     sh:predicate prov:wasGeneratedBy;
 .
 req:Entiteit_releaseNotes rdf:type sh:PropertyConstraint;
+	sh:name "adms:versionNotes";
 	rdfs:label "release notes";
-    rdfs:comment "Optioneel: het vastleggen van release notes";
+    rdfs:comment "Optioneel: het vastleggen van release notes bij een versie van een entiteit";
     rdf:value "..";
     sh:predicate adms:versionNotes;
 .
@@ -561,4 +788,98 @@ req:Kwaliteitskenmerk_categorie rdf:type sh:PropertyContraint;
     rdfs:label "categorie";
     rdf:value "iso:Completeness";
     sh:predicate dqv:inCategory;
+.
+
+#---------------------
+# Gegevensstructuur
+#---------------------
+req:Gegevensstructuur a sh:Shape;
+	rdfs:label "Gegevensstructuur";
+	sh:scopeClass sh:Shape;
+	sh:name "shacl:Shape";
+	sh:property req:Gegevensstructuur_klasse;
+	sh:property req:Gegevensstructuur_regel;
+.
+req:Gegevensstructuur_klasse a sh:PropertyConstraint;
+	rdfs:label "klasse";
+	sh:name "shacl:targetClass";
+	sh:predicate sh:targetClass;
+	sh:class owl:Class;
+.
+req:Gegevensstructuur_regel a sh:PropertyConstraint;
+	rdfs:label "regel";
+	sh:name "shacl:property";
+	sh:predicate sh:property;
+	sh:class sh:PropertyConstraint;
+.
+
+#---------------------
+# Gegevensconstraint
+#---------------------
+req:Gegevensconstraint a sh:Shape;
+	rdfs:label "Gegevensconstraint";
+	sh:scopeClass sh:PropertyConstraint;
+	sh:name "shacl:PropertyConstraint";
+	sh:property req:Gegevensconstraint_eigenschap;
+	sh:property req:Gegevensconstraint_klasse;
+	sh:property req:Gegevensconstraint_datatype;
+.
+req:Gegevensconstraint_eigenschap a sh:PropertyConstraint;
+	rdfs:label "eigenschap";
+	sh:name "shacl:predicate";
+	sh:predicate sh:predicate;
+	sh:class rdf:Property;
+.
+req:Gegevensconstraint_klasse a sh:PropertyConstraint;
+	rdfs:label "gerelateerde klasse";
+	sh:name "shacl:class";
+	sh:predicate sh:class;
+	sh:class owl:Class;
+.
+req:Gegevensconstraint_datatype a sh:PropertyConstraint;
+	rdfs:label "datatype";
+	sh:name "shacl:datatype";
+	sh:predicate sh:datatype;
+.
+
+#---------------------
+# Gegevensklasse
+#---------------------
+req:Klasse a sh:Shape;
+	rdfs:label "Gegevensklasse";
+	sh:scopeClass owl:Class;
+	sh:name "owl:Class";
+	sh:property req:Klasse_label;
+	sh:property req:Klasse_onderwerp;
+.
+req:Klasse_label a sh:PropertyConstraint;
+	rdfs:label "label";
+	sh:name "rdfs:label";
+	sh:predicate rdfs:label;
+.
+req:Klasse_onderwerp a sh:PropertyConstraint;
+	rdfs:label "onderwerp";
+	sh:name "dcterms:subject";
+	sh:predicate dcterms:subject;
+.
+
+#---------------------
+# Eigenschap
+#---------------------
+req:Eigenschap a sh:Shape;
+	rdfs:label "Eigenschap";
+	sh:scopeClass rdf:Property;
+	sh:name "rdf:Property";
+	sh:property req:Eigenschap_onderwerp;
+	sh:property req:Eigenschap_label;
+.
+req:Eigenschap_label a sh:PropertyConstraint;
+	rdfs:label "label";
+	sh:name "rdfs:label";
+	sh:predicate rdfs:label;
+.
+req:Eigenschap_onderwerp a sh:PropertyConstraint;
+	rdfs:label "onderwerp";
+	sh:name "dcterms:subject";
+	sh:predicate dcterms:subject;
 .
