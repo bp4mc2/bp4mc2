@@ -29,6 +29,7 @@
 
 # Weergavepagina inclusief versies en grafische weergave
 stage:WeergavePaginaMetadataConcepten a elmo:Representation;
+	elmo:layer elmo:TopLayer;
 	elmo:contains stage:TaxMenu;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxIndexConcepten;
@@ -47,6 +48,16 @@ stage:WeergaveTabelMetadata a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
 		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Gedefinieerd in"@nl;
+		elmo:applies-to rdfs:isDefinedBy;
+		elmo:indx "01";
+	];
+	elmo:fragment [
+		rdfs:label "Domein"@nl;
+		elmo:applies-to skos:inScheme;
+		elmo:indx "02";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
@@ -108,7 +119,7 @@ stage:WeergaveTabelMetadata a elmo:Part;
 
 # Tabel met vorige versies
 stage:WeergaveVersiesConcepten a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -190,6 +201,8 @@ stage:WeergaveTabelMetadataQuery a elmo:Query;
 					|| ?p = prov:wasAssociatedWith
 					|| ?p = prov:actedOnBehalfOf
 					|| ?p = rdfs:label
+					|| ?p = skos:inScheme
+					|| ?p = rdfs:isDefinedBy
 				)
 				FILTER( substr("@GRAPH@",2) = "GRAPH@")
 			}
@@ -214,6 +227,8 @@ stage:WeergaveTabelMetadataQuery a elmo:Query;
 					|| ?p = prov:wasAssociatedWith
 					|| ?p = prov:actedOnBehalfOf
 					|| ?p = rdfs:label
+					|| ?p = skos:inScheme
+					|| ?p = rdfs:isDefinedBy
 				)
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}

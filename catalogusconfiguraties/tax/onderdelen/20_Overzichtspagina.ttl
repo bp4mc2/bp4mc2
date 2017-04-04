@@ -64,7 +64,7 @@ stage:TaxIndexConcepten a elmo:Part;
 
 # Conceptentabel voor op de alfabetische weergave concepten
 stage:TaxConceptentabel a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:with-parameter "term";
 	elmo:index "03";
 	elmo:fragment [
@@ -132,11 +132,12 @@ stage:TaxConceptenQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g
 			}
 		}
-		ORDER BY lcase(?concept_label)
+		ORDER BY str(lcase(?concept_label))
 	'''
 .
