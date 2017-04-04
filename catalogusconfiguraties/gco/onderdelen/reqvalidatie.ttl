@@ -83,21 +83,20 @@ stage:Requirements_Controle2 a elmo:Part;
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
 		where {
-			graph ?g {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				?shape rdf:type shacl:Shape.
 				OPTIONAL {?shape rdfs:label ?shape_label}
 				?shape shacl:scopeClass ?class.
 				?shape shacl:property ?pc.
 				?pc shacl:predicate ?pred.
-				FILTER NOT EXISTS {
-					?req a <http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#Requirement>.
-					?req shacl:targetClass ?class.
-					?req shacl:predicate ?pred
+			}
+			FILTER NOT EXISTS {
+				graph <http://bp4mc2.org/id/dataset/requirements> {
+					?req shacl:scopeClass ?class.
+					?req shacl:property ?pcr.
+					?pcr shacl:predicate ?pred
 				}
 			}
-			FILTER (?g = <http://bp4mc2.org/id/dataset/bp4mc2>
-				or	?g = <http://bp4mc2.org/id/dataset/requirements>
-			)
 		}
 	''';
 .

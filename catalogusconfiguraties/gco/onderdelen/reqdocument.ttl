@@ -1,0 +1,75 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:Reqdocument	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqdocument$";
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:Reqdocument_doc;
+.
+stage:Reqdocument_doc a elmo:Part;
+	elmo:fragment [
+		elmo:applies-to rdf:type;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		construct {
+			?shape rdfs:label ?shapelabel.
+			?shape ?pc ?requirement.
+			?shape ?pc ?noreq.
+			?shape ?pc ?class.
+			?pc rdfs:label ?reqlabel.
+			?class rdfs:label ?classlabel
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/requirements> {
+				{
+					?shape rdf:type shacl:Shape.
+					OPTIONAL {?shape rdfs:label ?label}
+					OPTIONAL {?shape shacl:name ?name}
+					BIND (concat(?label," [",?name,"]") as ?shapelabel)
+				}
+				UNION
+				{
+					?shape shacl:property ?pc.
+					?pc shacl:predicate ?property.
+					OPTIONAL {?pc rdfs:label ?plabel}
+					OPTIONAL {?pc shacl:name ?pname}
+					OPTIONAL {
+						?pc shacl:class ?class.
+						OPTIONAL {
+							?refs shacl:scopeClass ?class.
+							?refs shacl:name ?classlabel
+						}
+					}
+					FILTER NOT EXISTS {?pc rdfs:comment ?requirement}
+					BIND ("--" as ?noreq)
+					BIND (concat(?plabel," [",?pname,"]") as ?reqlabel)
+				}
+				UNION
+				{
+					?shape shacl:property ?pc.
+					?pc shacl:predicate ?property.
+					?pc rdfs:comment ?requirement.
+					OPTIONAL {?pc rdfs:label ?plabel}
+					OPTIONAL {?pc shacl:name ?pname}
+					OPTIONAL {
+						?pc shacl:class ?class.
+						?refs shacl:scopeClass ?class.
+						?refs shacl:name ?refclass
+					}
+					BIND (concat(?plabel," [",?pname,"]") as ?reqlabel)
+				}
+			}
+		}
+	''';
+.
