@@ -7,7 +7,7 @@
 @prefix container: <http://localhost:8080/catalogus/tax/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -103,11 +103,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:semanticRelation;
 		elmo:index "11";
 	];
-	elmo:fragment [
-		rdfs:label "Synoniemen"@nl;
-		elmo:applies-to skos:altLabel;
-		elmo:index "12";
-	];
+
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
 		elmo:applies-to skos:member;
@@ -137,6 +133,26 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Enger dan"@nl;
 		elmo:applies-to skos:narrowMatch;
 		elmo:index "25";
+	];
+	elmo:fragment [
+		rdfs:label "Actor"@nl;
+		elmo:applies-to skoslex:actor;
+		elmo:index "26";
+	];
+	elmo:fragment [
+		rdfs:label "Agent"@nl;
+		elmo:applies-to skoslex:agent;
+		elmo:index "27";
+	];
+	elmo:fragment [
+		rdfs:label "Object"@nl;
+		elmo:applies-to skoslex:object;
+		elmo:index "28";
+	];
+	elmo:fragment [
+		rdfs:label "Synoniemen"@nl;
+		elmo:applies-to skos:altLabel;
+		elmo:index "29";
 	];
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
@@ -198,6 +214,21 @@ stage:WeergaveTabelGerelateerdeConcepten a elmo:Part;
 		elmo:applies-to skos:narrowMatch;
 		elmo:index "25";
 	];
+	elmo:fragment [
+		rdfs:label "Actor"@nl;
+		elmo:applies-to skoslex:actor;
+		elmo:index "26";
+	];
+	elmo:fragment [
+		rdfs:label "Agent"@nl;
+		elmo:applies-to skoslex:agent;
+		elmo:index "27";
+	];
+	elmo:fragment [
+		rdfs:label "Object"@nl;
+		elmo:applies-to skoslex:object;
+		elmo:index "28";
+	];
 	elmo:query stage:WeergaveTabelGerelateerdeConceptenQuery;
 .
 
@@ -213,7 +244,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/tax/container/>
 		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix dataset: <http://localhost:8080/catalogus/tax/id/dataset/>
@@ -353,7 +384,7 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/tax/container/>
 		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix dataset: <http://localhost:8080/catalogus/tax/id/dataset/>
@@ -392,7 +423,7 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/tax/container/>
 		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix dataset: <http://localhost:8080/catalogus/tax/id/dataset/>
@@ -406,42 +437,46 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 			?concept elmo:name ?concept_label
 		}
 		WHERE {
-			SELECT * WHERE {
+			SELECT * WHERE
 			{
-				GRAPH ?g {
-					?concept rdf:type skos:Concept.
-					?concept skos:prefLabel ?concept_label.
-					?concept skos:inScheme ?scheme.
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
+				{
+					GRAPH ?g {
+						?concept rdf:type skos:Concept.
+						?concept skos:prefLabel ?concept_label.
+						?concept skos:inScheme ?scheme.
+						FILTER NOT EXISTS {
+							?concept prov:invalidatedAtTime ?time.
+						}
+						FILTER( ?concept != <@SUBJECT@> )
 					}
-					FILTER( ?concept != <@SUBJECT@> )
+					GRAPH ?sg {
+						<@SUBJECT@> skos:inScheme ?scheme.
+						<@SUBJECT@> ?p ?concept.
+					}
+					GRAPH doc:mastergraph {
+						?concept rdfs:isDefinedBy ?g.
+						<@SUBJECT@> rdfs:isDefinedBy ?sg.
+					}
+					FILTER( substr("@GRAPH@",2) = "GRAPH@" )
 				}
-				GRAPH ?sg {
-					<@SUBJECT@> skos:inScheme ?scheme.
+				UNION {
+					GRAPH <@GRAPH@> {
+						?concept rdf:type skos:Concept.
+						?concept skos:prefLabel ?concept_label.
+						?concept skos:inScheme ?scheme.
+						FILTER( ?concept != <@SUBJECT@> )
+					}
+					GRAPH ?sg {
+						<@SUBJECT@> skos:inScheme ?scheme.
+						<@SUBJECT@> ?p ?concept.
+					}
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?sg.
+					}
+					FILTER( substr("@GRAPH@",2) != "GRAPH@" )
 				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g.
-					<@SUBJECT@> rdfs:isDefinedBy ?sg.
-				}
-				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
-			}
-			UNION {
-				GRAPH <@GRAPH@> {
-					?concept rdf:type skos:Concept.
-					?concept skos:prefLabel ?concept_label.
-					?concept skos:inScheme ?scheme.
-					FILTER( ?concept != <@SUBJECT@> )
-				}
-				GRAPH ?sg {
-					<@SUBJECT@> skos:inScheme ?scheme.
-				}
-				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?sg.
-				}
-				FILTER( substr("@GRAPH@",2) != "GRAPH@" )
-			}
-			} LIMIT 458
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
+			} 
 		}
 	''';
 .

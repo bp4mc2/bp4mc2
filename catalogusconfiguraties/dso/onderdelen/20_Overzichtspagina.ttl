@@ -15,7 +15,7 @@
 @prefix container: <http://localhost:8080/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -81,7 +81,7 @@ stage:DSOConceptentabel a elmo:Part;
 stage:DSOConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
@@ -99,13 +99,13 @@ stage:DSOConceptenQuery a elmo:Query;
 						?concept prov:invalidatedAtTime ?time.
 					}
 					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 					}
 					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 					}
 					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -116,7 +116,7 @@ stage:DSOConceptenQuery a elmo:Query;
 			UNION
 			{
 				GRAPH ?g {
-					?concept rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+					?concept rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 					?concept rdfs:label ?concept_label.
 					OPTIONAL {?concept skos:definition ?uitleg}
 					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
