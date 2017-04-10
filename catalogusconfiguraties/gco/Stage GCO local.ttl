@@ -171,6 +171,69 @@ stage:ModelControle1 a elmo:Representation;
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:dcat-nl-visualisatie	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-nl-visualisatie$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:ImageAppearance;
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/dcat-nl-profiel.png".
+			<urn:image> html:width "1340".
+			<urn:image> html:height "761".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:dcat-nl-vocab	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-nl-vocab(\\.(xml|ttl|json))?$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance2;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		construct {
+			?s?p?o.
+			?class rdf:type owl:Class.
+			?class rdf:value "class".
+			?prop rdf:type rdf:Property.
+			?prop rdf:value "prop".
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?s?p?o
+				OPTIONAL {
+					?shape rdf:type sh:NodeShape.
+					?shape sh:targetClass ?class.
+					OPTIONAL {
+						?shape sh:property ?ps.
+						?ps sh:path ?prop.
+					}
+				}
+			}
+		}
+	''';
+.
+ 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
 sh:Violation rdfs:label "Man"; rdf:value 1 .
@@ -333,12 +396,12 @@ stage:dcat-nl_datatype a elmo:Part;
 	elmo:appearance elmo:ShortTableAppearance;
 	elmo:fragment [
 		elmo:applies-to "shape";
-		rdfs:label "Classnaam in DCAT-EU";
+		rdfs:label "Klassenaam";
 	];
 	elmo:fragment [
 		elmo:applies-to "uri";
 		elmo:appearance elmo:GlobalLink;
-		rdfs:label "URI in DCAT-EU";
+		rdfs:label "URI";
 	];
 	elmo:fragment [
 		elmo:applies-to "comment";
@@ -371,6 +434,7 @@ stage:dcat-nl_datatype a elmo:Part;
 
 stage:dcat-nl_properties a elmo:Part;
 	elmo:index "6";
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:fragment [
 		elmo:applies-to "class";
 		rdfs:label "Klasse";
@@ -398,7 +462,7 @@ stage:dcat-nl_properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to "range";
-		rdfs:label "Range";
+		rdfs:label "Datatype";
 	];
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
@@ -476,6 +540,8 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:index "4";
 			rdfs:label "DCAT-NL";
 			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/dcat-nl"];
+			elmo:data [ elmo:index "2"; rdfs:label "Vocabulaire"; html:link "query/dcat-nl-vocab"];
+			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/dcat-nl-visualisatie"];
 		];
 		elmo:data [
 			elmo:index "9";

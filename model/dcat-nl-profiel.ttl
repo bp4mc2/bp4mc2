@@ -22,7 +22,7 @@
 
 #Niet duidelijk of onderstaande verwijzingen klopt
 @prefix donl: <http://data.overheid.nl/def#>.
-@prefix overheidds: <http://standaarden.overheid.nl/owms/term>.
+@prefix overheidds: <http://standaarden.overheid.nl/owms/terms/>.
 
 # ====
 # Taxonomie van klassen & datatype
@@ -294,7 +294,7 @@ dcat-nl:Distributie a sh:NodeShape;
 		sh:name "dcat:accessURL";
 		sh:path dcat:accessURL;
 		sh:minCount 1;
-		sh:class rdfs:Resource;
+		sh:datatype xsd:anyURI;
 		sh:severity sh:Violation;
 	];
 	sh:property [
@@ -302,7 +302,7 @@ dcat-nl:Distributie a sh:NodeShape;
 		rdfs:comment "Directe link naar het downloadbare bestand in het gegeven formaat.";
 		sh:name "dcat:downloadURL";
 		sh:path dcat:downloadURL;
-		sh:class rdfs:Resource;
+		sh:datatype xsd:anyURI;
 		sh:severity sh:Warning;
 	];
 	sh:property [
@@ -393,7 +393,7 @@ dcat-nl:Catalogusrecord a sh:NodeShape;
 		sh:path dcat:identifier;
 		sh:minCount 1;
 		sh:maxCount 1;
-		sh:class foaf:Document; #klopt dit?? Ik zou eerder adms:Identifier verwachten, maar dat is in de datatype tabel een URI en geen URL
+		sh:datatype xsd:anyURI; #In tabel staat foaf:Document klopt dit?? Ik zou eerder adms:Identifier verwachten, maar dat is in de datatype tabel een URI en geen URL. In het plaatje is het een simpel attribuut, dus dan zou het eerder xsd:anyURI zijn.
 		sh:severity sh:Violation;
 	];
 	sh:property [
@@ -525,7 +525,7 @@ dcat-nl:Catalogus a sh:NodeShape;
 		sh:name "foaf:homepage";
 		sh:path foaf:homepage;
 		sh:maxCount 1;
-		sh:class rdfs:Resource;
+		sh:datatype xsd:anyURI;
 		sh:severity sh:Warning;
 	];
 	sh:property [
@@ -633,6 +633,7 @@ dcat-nl:Concept a sh:NodeShape;
 		sh:path skos:inScheme;
 		sh:minCount 1;
 		sh:maxCount 1;
+		sh:class skos:ConceptScheme;
 		sh:severity sh:Violation;
 	];
 .
@@ -775,7 +776,7 @@ dcat-nl:Stars a sh:NodeShape;
 dcat:nl:URL-URI a sh:NodeShape;
 	dct:type dcat-nl:Datatype;
 	rdfs:label "URL"@nl;
-	sh:targetClass rdfs:Resource;
+	sh:targetClass xsd:anyURI;
 .
 dcat-nl:URI a sh:NodeShape;
 	dct:type dcat-nl:Datatype;
@@ -783,7 +784,7 @@ dcat-nl:URI a sh:NodeShape;
 	rdfs:label "Resource"@en;
 	rdfs:comment "Alles wat met RDF beschreven wordt. In DCAT-EU alleen gebruikt voor (de link naar) de Distributie. In DCAT-NL wordt dit de URI van de distributie.";
 	sh:name "rdfs:Resource";
-	sh:targetClass "rdfs:Resource"; #Hack: ik vermoed dat URI en URL door elkaar worden gebruikt, vandaar in de datatype lijst URI, maar in de propery-lijst URL
+	sh:targetClass rdfs:Resource; #Hack: ik vermoed dat URI en URL door elkaar worden gebruikt, vandaar in de datatype lijst URI, maar in de propery-lijst URL
 .
 dcat-nl:Bestandsformaat a sh:NodeShape;
 	dct:type dcat-nl:Datatype;
