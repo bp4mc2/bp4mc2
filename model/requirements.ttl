@@ -28,6 +28,7 @@ req:Concept a sh:Shape;
 	sh:property req:Concept_label;
 	sh:property req:Concept_naam;
 	sh:property req:Concept_alternatieveAanduiding;
+	sh:property req:Concept_alternatieveSchrijfwijze;
 	sh:property req:Concept_definitie;
 	sh:property req:Concept_toelichting;
 	sh:property req:Concept_rationale;
@@ -72,6 +73,12 @@ req:Concept_alternatieveAanduiding a sh:PropertyConstraint;
 	sh:name "skos:altLabel";
 	rdfs:comment "Een concept kan een alternatieve aanduiding hebben, dit is een alternatieve term waarmee naar dit concept wordt verwezen";
 	sh:predicate skos:altLabel;
+.
+req:Concept_alternatieveSchrijfwijze a sh:PropertyConstraint;
+	rdfs:label "alternatieve schrijfwijze";
+	sh:name "skos:hiddenLabel";
+	rdfs:comment "De term van een concept kan een alternatieve schrijfwijze hebben, die ook gevonden moet worden bij zoekvragen of indexeren van teksten. Voorbeelden zijn vaak voorkomen foutieve schrijfwijzen of meervoud.";
+	sh:predicate skos:hiddenLabel;
 .
 req:Concept_definitie a sh:PropertyConstraint;
 	rdfs:label "definitie";
