@@ -172,6 +172,339 @@ stage:ModelControle1 a elmo:Representation;
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
 
+stage:dcat-nl-visualisatie	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-nl-visualisatie$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:ImageAppearance;
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/dcat-nl-profiel.png".
+			<urn:image> html:width "1340".
+			<urn:image> html:height "761".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+
+stage:dcat-nl-vocab	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-nl-vocab(\\.(xml|ttl|json))?$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		construct {
+			?s?p?o.
+			?class rdf:type owl:Class.
+			?class rdf:value "class".
+			?prop rdf:type rdf:Property.
+			?prop rdf:value "prop".
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?s?p?o
+				OPTIONAL {
+					?shape rdf:type sh:NodeShape.
+					?shape sh:targetClass ?class.
+					OPTIONAL {
+						?shape sh:property ?ps.
+						?ps sh:path ?prop.
+					}
+				}
+			}
+		}
+	''';
+.
+ 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+sh:Violation rdfs:label "Man"; rdf:value 1 .
+sh:Warning rdfs:label "Rec"; rdf:value 2 .
+sh:Info rdfs:label "Opt"; rdf:value 3 .
+
+stage:dcat-nl	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-nl$";
+	elmo:contains stage:Menu;
+	elmo:contains stage:dcat-nl_kernklassen;
+	elmo:contains stage:dcat-nl_dataoverheid;
+	elmo:contains stage:dcat-nl_owms;
+	elmo:contains stage:dcat-nl_overig;
+	elmo:contains stage:dcat-nl_datatype;
+	elmo:contains stage:dcat-nl_properties;
+.
+
+stage:dcat-nl_kernklassen a elmo:Part;
+	elmo:index "1";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "severity";
+		rdfs:label "Req";
+	];
+	elmo:fragment [
+		elmo:applies-to "shape";
+		rdfs:label "Kernklasse";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Toelichting";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?severity ?severity_label ?shape ?shape_label ?uri ?uri_label ?comment
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape a sh:NodeShape.
+				?shape dcterms:type dcat-nl:Kernklasse.
+				?shape sh:targetClass ?uri.
+				?shape sh:name ?uri_label.
+				?shape rdfs:label ?shape_label.
+				?shape rdfs:comment ?comment.
+				?shape sh:severity ?severity.
+			}
+			graph <@STAGE@> {
+				?severity rdfs:label ?severity_label.
+			}
+		}
+	''';
+.
+stage:dcat-nl_dataoverheid a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "shape";
+		rdfs:label "Referentieklasse data.overheid.nl";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Toelichting";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?shape ?shape_label ?uri ?uri_label ?comment
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape a sh:NodeShape.
+				?shape dcterms:type dcat-nl:RefDataOverheid.
+				?shape sh:targetClass ?uri.
+				?shape sh:name ?uri_label.
+				?shape rdfs:label ?shape_label.
+				?shape rdfs:comment ?comment.
+			}
+		}
+	''';
+.
+stage:dcat-nl_owms a elmo:Part;
+	elmo:index "3";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "shape";
+		rdfs:label "Referentieklasse OWMS";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Toelichting";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?shape ?shape_label ?uri ?uri_label ?comment
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape a sh:NodeShape.
+				?shape dcterms:type dcat-nl:RefOWMS.
+				?shape sh:targetClass ?uri.
+				?shape sh:name ?uri_label.
+				?shape rdfs:label ?shape_label.
+				?shape rdfs:comment ?comment.
+			}
+		}
+	''';
+.
+stage:dcat-nl_overig a elmo:Part;
+	elmo:index "4";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "shape";
+		rdfs:label "Overige referentieklasse";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Toelichting";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?shape ?shape_label ?uri ?uri_label ?comment
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape a sh:NodeShape.
+				?shape dcterms:type dcat-nl:Referentieklasse.
+				?shape sh:targetClass ?uri.
+				?shape sh:name ?uri_label.
+				?shape rdfs:label ?shape_label.
+				OPTIONAL {?shape rdfs:comment ?comment}
+			}
+		}
+	''';
+.
+stage:dcat-nl_datatype a elmo:Part;
+	elmo:index "5";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "shape";
+		rdfs:label "Klassenaam";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Toelichting";
+	];
+	elmo:fragment [
+		elmo:applies-to "datatype";
+		rdfs:label "Datatype in DCAT-NL"
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?shape ?shape_label ?uri ?uri_label ?comment ?datatype
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape a sh:NodeShape.
+				?shape dcterms:type dcat-nl:Datatype.
+				?shape sh:targetClass ?uri.
+				?shape sh:name ?uri_label.
+				?shape rdfs:comment ?comment.
+				?shape rdfs:label ?shape_label.
+				FILTER (lang(?shape_label)="en")
+				?shape rdfs:label ?datatype.
+				FILTER (lang(?datatype)="nl")
+			}
+		}
+	''';
+.
+
+stage:dcat-nl_properties a elmo:Part;
+	elmo:index "6";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "class";
+		rdfs:label "Klasse";
+	];
+	elmo:fragment [
+		elmo:applies-to "severity";
+		rdfs:label "Req";
+	];
+	elmo:fragment [
+		elmo:applies-to "property";
+		rdfs:label "Property";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Toelichting";
+	];
+	elmo:fragment [
+		elmo:applies-to "card";
+		rdfs:label "Card";
+	];
+	elmo:fragment [
+		elmo:applies-to "range";
+		rdfs:label "Datatype";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?class ?class_label ?severity ?severity_label ?property ?uri ?uri_label ?comment ?card ?range ?range_label
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape sh:targetClass ?class.
+				?shape sh:name ?class_label.
+				?shape dcterms:type dcat-nl:Kernklasse.
+				?shape sh:property ?prop.
+				?prop sh:severity ?severity.
+				?prop sh:path ?uri.
+				?prop sh:name ?uri_label.
+				?prop rdfs:label ?property.
+				?prop rdfs:comment ?comment.
+				OPTIONAL {?prop sh:minCount ?minc}
+				OPTIONAL {?prop sh:maxCount ?maxc}
+				BIND (concat(if(bound(?minc),?minc,"0"),"..",if(bound(?maxc),?maxc,"n")) as ?card)
+				OPTIONAL {?prop sh:datatype ?datatype. ?datatype ^sh:targetClass/rdfs:label ?datatype_label FILTER (lang(?datatype_label)="nl")}
+				OPTIONAL {?prop sh:class ?refclass. ?refclass ^sh:targetClass/rdfs:label ?refclass_label FILTER (lang(?refclass_label)="nl")}
+				OPTIONAL {?prop sh:node ?refshape. ?refshape sh:name ?refshape_label}
+				BIND (if(bound(?datatype),?datatype,if(bound(?refshape),?refshape,?refclass)) as ?range)
+				BIND (if(bound(?datatype_label),?datatype_label,if(bound(?refshape_label),?refshape_label,?refclass_label)) as ?range_label)
+			}
+			graph <@STAGE@> {
+				?severity rdfs:label ?severity_label.
+				?severity rdf:value ?severity_level.
+			}
+		}
+		order by ?class_label ?severity_level ?property
+	''';
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+
 stage:Home	a	elmo:Representation;
 	elmo:url-pattern	"/gco(|/|\\..+)$";
 	elmo:contains	stage:Menu;
@@ -205,6 +538,13 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 		];
 		elmo:data [
 			elmo:index "4";
+			rdfs:label "DCAT-NL";
+			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/dcat-nl"];
+			elmo:data [ elmo:index "2"; rdfs:label "Vocabulaire"; html:link "query/dcat-nl-vocab"];
+			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/dcat-nl-visualisatie"];
+		];
+		elmo:data [
+			elmo:index "9";
 			rdfs:label "Sync";
 			elmo:data [ elmo:index "1"; rdfs:label "Alles (initial start)"; html:link "update/sync"];
 			elmo:data [ elmo:index "2"; rdfs:label "Requirements"; html:link "update/sync-requirements"];

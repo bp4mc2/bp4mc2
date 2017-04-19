@@ -1,0 +1,800 @@
+# ====
+# !
+# ! NB: Dit profiel gebruikt de meest recente shacl specificatie en is op dit moment niet in lijn met de overige shacl specs op deze site
+# !
+# ====
+@prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>.
+
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix overheid: <http://standaarden.overheid.nl/owms/terms/>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix schema: <http://schema.org/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix v: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xml: <http://www.w3.org/XML/1998/namespace>.
+@prefix org: <http://www.w3.org/ns/org#>.
+
+#Niet duidelijk of onderstaande verwijzingen klopt
+@prefix donl: <http://data.overheid.nl/def#>.
+@prefix overheidds: <http://standaarden.overheid.nl/owms/terms/>.
+
+# ====
+# Taxonomie van klassen & datatype
+# ====
+dcat-nl:Kernklasse a skos:Concept;
+	rdfs:label "Kernklasse";
+.
+dcat-nl:Referentieklasse a skos:Concept;
+	rdfs:label "Referentieklasse";
+.
+dcat-nl:RefDataOverheid a skos:Concept;
+	rdfs:label "Referentieklasse Data.overheid.nl";
+	skos:broader dcat-nl:Referentieklasse;
+.
+dcat-nl:RefOWMS a skos:Concept;
+	rdfs:label "Referentieklasse OWMS";
+	skos:broader dcat-nl:Referentieklasse;
+.
+dcat-nl:Datatype a skos:Concept;
+	rdfs:label "Datatype";
+.
+
+# ====
+# Kernklassen van DCAT-NL
+# ====
+dcat-nl:Dataset a sh:NodeShape;
+	dct:type dcat-nl:Kernklasse;
+	rdfs:label "Dataset"@nl;
+	rdfs:comment "Beschrijving van een verzameling gestructureerde gegevens, gepubliceerd door één partij en toegankelijk in één of meer formaten.";
+	sh:name "dcat:Dataset";
+	sh:targetClass dcat:Dataset;
+	sh:severity sh:Violation;
+	sh:property [
+		rdfs:label "Verwijzing"@nl;
+		rdfs:comment "Uniforme identificatie van de dataset. Range is niet URI maar vrije tekst omdat het hier om de letters van string gaat (de literal) en niet om de link. Zie de sectie over Identificatie elders in dit document.";
+		sh:name "dct:identifier";
+		sh:path dct:identifier;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Titel"@nl;
+		rdfs:comment "Naam waaronder de dataset bekend staat. Herhaalbaar voor versies in verschillende talen.";
+		sh:name "dct:title";
+		sh:path dct:title;
+		sh:minCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Omschrijving"@nl;
+		rdfs:comment "Beschrijving van de dataset op basis waarvan een gebruiker kan bepalen of de dataset bruikbaar is en die de dataset onderscheidt van andere datasets. Herhaalbaar voor versies in verschillende talen";
+		sh:name "dct:description";
+		sh:path dct:description;
+		sh:minCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Wijzigingsdatum"@nl;
+		rdfs:comment "Laatste datum waarop de dataset zelf is gewijzigd. Deze datum zegt niets over de wijzigingsdatum van de metadata van de dataset.";
+		sh:name "dct:modified";
+		sh:path dct:modified;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Taal"@nl;
+		rdfs:comment "Taal van de inhoud van de dataset. Herhaalbaar indien meerdere talen voorkomen.";
+		sh:name "dct:language";
+		sh:path dct:language;
+		sh:minCount 1;
+		sh:datatype xml:lang;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Registratiehouder"@nl;
+		rdfs:comment "De organisatie die eindverantwoordelijk is voor het tot stand komen van de dataset. De registratiehouder is ook verantwoordelijk voor de relatie met de verstrekker.";
+		sh:name "overheid:authority";
+		sh:path overheid:authority;
+		sh:maxCount 1;
+		sh:class foaf:Agent;
+		sh:node [
+			sh:property [
+				sh:path [sh:inversePath skos:member];
+				sh:targetNode donl:Agent;
+			]
+		];
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Verstrekker"@nl;
+		rdfs:comment "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de dataset.";
+		sh:name "dct:publisher";
+		sh:path dct:publisher;
+		sh:maxCount 1;
+		sh:class foaf:Agent;
+		sh:node [
+			sh:property [
+				sh:path [sh:inversePath skos:member];
+				sh:targetNode donl:Agent;
+			]
+		];
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Trefwoord"@nl;
+		rdfs:comment "Trefwoord dat de dataset karakteriseert.";
+		sh:name "dcat:keyword";
+		sh:path dcat:keyword;
+		sh:datatype xsd:string;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Thema"@nl;
+		rdfs:comment "Thema waar de Dataset onder valt.";
+		sh:name "dcat:theme";
+		sh:path dcat:theme;
+		sh:class skos:Concept;
+		sh:node dcat-nl:TaxonomieBeleidsagenda;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Landingspagina"@nl;
+		rdfs:comment "Webpagina, meestal bij de verstrekker, die toelichting geeft bij de dataset, de distributies en metadata die de verstrekker geeft.";
+		sh:name "dcat:landingsPage";
+		sh:path dcat:landingsPage;
+		sh:maxCount 1;
+		sh:class foaf:Document;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Locatie"@nl;
+		rdfs:comment "Geografisch gebied waarop de dataset betrekking heeft.";
+		sh:name "dct:spatial";
+		sh:path dct:spatial;
+		sh:class dct:Location;
+		# Even niet duidelijk hoe ik om moet gaan met overheid:Spatial als domein
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Dekking in tijd"@nl;
+		rdfs:comment "Periode in de tijd waarop de dataset betrekking heeft.";
+		sh:name "dct:temporal";
+		sh:path dct:temporal;
+		sh:class dct:PeriodOfTime; #Dit zou wel eens niet kunnen kloppen, maar wordt niet duidelijk uit de documentatie
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Licentie"@nl;
+		rdfs:comment "Licentie waaronder de distributie beschikbaar wordt gesteld.";
+		sh:name "dct:license";
+		sh:path dct:license;
+		sh:maxCount 1;
+		sh:datatype xsd:string; # Als domein staat: vrije tekst of waardelijst. Voorlopig uitgedrukt als vrije tekst
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Rechten"@nl;
+		rdfs:comment "De rechten die rusten op een distributie";
+		sh:name "dct:rights";
+		sh:path dct:rights;
+		sh:maxCount 1;
+		sh:datatype xsd:string; # Als domein staat: vrije tekst of URL. Voorlopig uitgedrukt als vrije tekst
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Wijzigingsfrequentie"@nl;
+		rdfs:comment "Frequentie waarmee de dataset wordt gewijzigd.";
+		sh:name "dct:accrualPeriodicity";
+		sh:path dct:accrualPeriodicity;
+		sh:maxCount 1;
+		sh:class dct:Frequency;
+		# Even niet duidelijk hoe ik om moet gaan met overheid:Frequency als domein
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Uitgiftedatum"@nl;
+		rdfs:comment "Datum waarop de dataset formeel is uitgegeven.";
+		sh:name "dct:issued";
+		sh:path dct:issued;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Conform"@nl;
+		rdfs:comment "Standaard waar de dataset aan moet voldoen";
+		sh:name "dct:conformsTo";
+		sh:path dct:conformsTo;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Versie"@nl;
+		rdfs:comment "Versieaanduiding";
+		sh:name "adms:version";
+		sh:path adms:version;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Versietoelichting"@nl;
+		rdfs:comment "Toelichting bij de versieaanduiding.";
+		sh:name "adms:versionNotes";
+		sh:path adms:versionNotes;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Grondslag"@nl;
+		rdfs:comment "Wettelijke grondslag op basis waarvan de dataset is vastgesteld.";
+		sh:name "overheid:grondslag";
+		sh:path overheid:grondslag;
+		sh:class overheid:Regeling;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "LODStars"@nl;
+		rdfs:comment "Aantal LOD-sterren(1-5), leeg is 0 sterren betekent onbekend.";
+		sh:name "overheidds:LODStars";
+		sh:path overheidds:LODStars;
+		sh:datatype overheidds:Stars;
+		# Er staat als domein overheiddsStars, maar in de toelichting staat 1-5 als nummer. Er is echter ook een vocabulaire die je zou kunnen gebruiken.
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Doel"@nl;
+		rdfs:comment "Doel waarmee de dataset is samengesteld. Waarschuwingen voor bepaalde interpretaties of andere vormen van gebruik. Indien concrete wetsartikelen van toepassing zijn dienen die hier ook te worden vermeld.";
+		sh:name "overheidds:doel";
+		sh:path overheidds:doel;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Kwaliteit"@nl;
+		rdfs:comment "Compleetheid van de dataset en eventuele evidente fouten.";
+		sh:name "overheidds:kwaliteit";
+		sh:path overheidds:kwaliteit;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		#Deze property ontbreekt in de tabel, maar staat wel in het figuur
+		rdfs:label "Distributie"@nl;
+		rdfs:comment "De distributie(s) van een dataset";
+		sh:name "dcat:distribution";
+		sh:path dcat:distribution;
+		sh:class dcat:Distribution;
+		sh:severity sh:Warning;
+	];
+.
+dcat-nl:Distributie a sh:NodeShape;
+	dct:type dcat-nl:Kernklasse;
+	rdfs:label "Distributie"@nl;
+	rdfs:comment "Fysieke implementatie van een Dataset in een bepaald formaat.";
+	sh:name "dcat:Distribution";
+	sh:targetClass dcat:Distribution;
+	sh:severity sh:Warning;
+	sh:property [
+		rdfs:label "Toegangs-URL"@nl;
+		rdfs:comment "Webpagina, meestal bij de verstrekker, die toegang geeft tot een distributie. De pagina kan – naast links naar de distributie – ook nadere informatie over de distributie bevatten.";
+		sh:name "dcat:accessURL";
+		sh:path dcat:accessURL;
+		sh:minCount 1;
+		sh:datatype xsd:anyURI;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Download-URL"@nl;
+		rdfs:comment "Directe link naar het downloadbare bestand in het gegeven formaat.";
+		sh:name "dcat:downloadURL";
+		sh:path dcat:downloadURL;
+		sh:datatype xsd:anyURI;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Omschrijving"@nl;
+		rdfs:comment "Beschrijving van de distributie op basis waarvan een gebruiker kan bepalen of de distributie bruikbaar is en die de distributie onderscheidt van andere distributies. Herhaalbaar voor versies in verschillende talen ";
+		sh:name "dct:description";
+		sh:path dct:description;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Formaat"@nl;
+		rdfs:comment "Fileformaat van de distributie";
+		sh:name "dct:format";
+		sh:path dct:format;
+		sh:maxCount 1;
+		sh:class dct:MediaTypeOrExtent;
+		sh:node dcat-nl:Bestandsformaat;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Wijzigingsdatum"@nl;
+		rdfs:comment "Laatste datum waarop de distributie zelf is gewijzigd. Deze datum zegt niets over de wijzigingsdatum van de metadata van de distributie. ";
+		sh:name "dct:modified";
+		sh:path dct:modified;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Titel"@nl;
+		rdfs:comment "Naam waaronder de distributie bekend staat. Herhaalbaar voor versies in verschillende talen.";
+		sh:name "dct:title";
+		sh:path dct:title;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Status"@nl;
+		rdfs:comment "Levensfase van de distributie (Bijgewerkt, Niet langer ondersteund, In ontwikkeling, Ingetrokken)";
+		sh:name "adms:status";
+		sh:path adms:status;
+		sh:maxCount 1;
+		sh:class skos:Concept;
+		sh:node dcat-nl:Status;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Uitgiftedatum"@nl;
+		rdfs:comment "Datum waarop de distributie formeel beschikbaar is gesteld.";
+		sh:name "dct:issued";
+		sh:path dct:issued;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Grootte"@nl;
+		rdfs:comment "Omvang van de distributie in bytes.";
+		sh:name "dcat:byteSize";
+		sh:maxCount 1;
+		sh:datatype xsd:string; #Vreemd dat dit een string is. Omvang is toch een getal?
+		sh:severity sh:Info;
+	];
+.
+dcat-nl:Catalogusrecord a sh:NodeShape;
+	dct:type dcat-nl:Kernklasse;
+	rdfs:label "Catalogusrecord"@nl;
+	rdfs:comment "Metadata bij een beschrijving van een Dataset in een catalogus.";
+	sh:name "dcat:CatalogRecord";
+	sh:targetClass dcat:CatalogRecord;
+	sh:severity sh:Info;
+	sh:property [
+		rdfs:label "Catalogus"@nl;
+		rdfs:comment "Catalogus waartoe het record behoort";
+		sh:name "dcat:Catalog"; #Zou dit niet dcat:catalog moeten zijn? Overigens staat in het plaatje dct:partOf??
+		sh:path dcat:Catalog;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:class dcat:Catalog; #In de tabel staat donl:Catalogus: hoe gaan we hier mee om?
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Verwijzing"@nl;
+		rdfs:comment "Identificatie van het catalogusrecord.";
+		sh:name "dcat:identifier";
+		sh:path dcat:identifier;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:anyURI; #In tabel staat foaf:Document klopt dit?? Ik zou eerder adms:Identifier verwachten, maar dat is in de datatype tabel een URI en geen URL. In het plaatje is het een simpel attribuut, dus dan zou het eerder xsd:anyURI zijn.
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Wijzigingsdatum"@nl;
+		rdfs:comment "Datum waarop het catalogusrecord voor het laatst is gewijzigd.";
+		sh:name "dct:modified";
+		sh:path dct:modified;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Onderwerp"@nl;
+		rdfs:comment "Identifier van de dataset waar dit catalogusrecord betrekking op heeft.";
+		sh:name "foaf:primaryTopic";
+		sh:path foaf:primaryTopic;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:class dcat:Dataset;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Soort wijziging"@nl;
+		rdfs:comment "Indicatie van de soort van de laatste wijziging: :created, :updated of :deleted";
+		sh:name "adms:status";
+		sh:path adms:status;
+		sh:maxCount 1;
+		sh:class skos:Concept;
+		sh:node dcat-nl:RecordStatus;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Uitgiftedatum"@nl;
+		rdfs:comment "Datum waarop de beschrijving van de dataset voor het eerst in de catalogus is opgenomen.";
+		sh:name "dct:issued";
+		sh:path dct:issued;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Titel"@nl;
+		rdfs:comment "Naam voor het catalogusrecord. Herhaalbaar voor versies in verschillende talen.";
+		sh:name "dct:title";
+		sh:path dct:title;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Omschrijving"@nl;
+		rdfs:comment "Omschrijving van het catalogusrecord. Herhaalbaar voor versies in verschillende talen.";
+		sh:name "dct:description";
+		sh:path dct:description;
+		sh:datatype xsd:string;
+		sh:severity sh:Info;
+	];
+.
+
+# ====
+# Gerefereerde klassen uit data.overheid.nl.
+# ====
+dcat-nl:Catalogus a sh:NodeShape;
+	dct:type dcat-nl:RefDataOverheid;
+	rdfs:label "Catalogus"@nl;
+	rdfs:comment "Een verzameling beschrijvingen van Datasets. Data.overheid.nl houdt een registratie bij van Catalogi en geeft URIs uit waarmee Catalogi geïdentificeerd worden.";
+	sh:name "dcat:Catalog";
+	sh:targetClass dcat:Catalog;
+	sh:property [
+		rdfs:label "Verwijzing"@nl;
+		sh:name "dct:identifier";
+		sh:path dct:identifier;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Titel"@nl;
+		sh:name "dct:title";
+		sh:path dct:title;
+		sh:minCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Omschrijving"@nl;
+		sh:name "dct:description";
+		sh:path dct:description;
+		sh:minCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Taal"@nl;
+		sh:name "dct:language";
+		sh:path dct:language;
+		sh:minCount 1;
+		sh:datatype xml:lang;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Wijzigingsdatum"@nl;
+		sh:name "dct:modified";
+		sh:path dct:modified;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Dataset"@nl;
+		sh:name "dcat:dataset";
+		sh:path dcat:dataset;
+		sh:class dcat:Dataset;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Verstrekker"@nl;
+		rdfs:comment "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de catalogus.";
+		sh:name "dct:publisher";
+		sh:path dct:publisher;
+		sh:maxCount 1;
+		sh:class foaf:Agent;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Home pagina"@nl;
+		sh:name "foaf:homepage";
+		sh:path foaf:homepage;
+		sh:maxCount 1;
+		sh:datatype xsd:anyURI;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Uitgiftedatum"@nl;
+		sh:name "dct:issued";
+		sh:path dct:issued;
+		sh:maxCount 1;
+		sh:datatype xsd:date;
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Licentie"@nl;
+		sh:name "dct:license";
+		sh:path dct:license;
+		sh:maxCount 1;
+		sh:datatype xsd:string; # Als domein staat: vrije tekst of waardelijst. Voorlopig uitgedrukt als vrije tekst
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Rechten"@nl;
+		sh:name "dct:rights";
+		sh:path dct:rights;
+		sh:maxCount 1;
+		sh:datatype xsd:string; # Als domein staat: vrije tekst of URL. Voorlopig uitgedrukt als vrije tekst
+		sh:severity sh:Info;
+	];
+	sh:property [
+		rdfs:label "Thema taxonomie"@nl;
+		sh:name "dcat:themeTaxonomy";
+		sh:path dcat:themeTaxonomy;
+		sh:maxCount 1;
+		sh:class skos:ConceptScheme;
+		sh:severity sh:Info;
+	];
+.
+dcat-nl:Verstrekker a sh:NodeShape;
+	dct:type dcat-nl:RefDataOverheid;
+	rdfs:label "Verstrekker"@nl; # Klopt verstrekker wel? Want in het plaatje wordt het ook gebruikt voor registratiehouder!
+	rdfs:comment "Persoon of organisatie die een Dataset technisch beheert en publiceert. (Een Catalogus is ook op te vatten als een Dataset). Data.overheid.nl houdt een registratie bij van Verstrekkers van Datasets en geeft URIs uit waarmee Verstrekkers geïdentificeerd kunnen worden.";
+	sh:name "foaf:Agent";
+	sh:targetClass foaf:Agent; #In het plaatje staat foaf:Agent, maar in de tabel staat dcat:Agent
+	sh:property [
+		rdfs:label "Verwijzing"@nl;
+		sh:name "dct:identifier";
+		sh:path dct:identifier;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Naam"@nl;
+		sh:name "foaf:name";
+		sh:path foaf:name;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Email"@nl;
+		sh:name "foaf:mbox";
+		sh:path foaf:mbox;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Lid van"@nl;
+		sh:name "org:memberOf";
+		sh:path org:memberOf;
+		sh:class org:Organization;
+		sh:severity sh:Warning;
+	];
+	sh:property [
+		rdfs:label "Type"@nl;
+		sh:name "dct:type";
+		sh:path dct:type;
+		sh:class skos:Concept;
+		sh:severity sh:Warning;
+	];
+.
+
+# ====
+# Gerefereerde klassen uit OWMS
+# ====
+
+dcat-nl:Concept a sh:NodeShape;
+	dct:type dcat-nl:RefOWMS;
+	rdfs:label "Concept"@nl;
+	rdfs:comment "Categorie: Een onderwerp van een Dataset. Een waarde uit een Rubricering; Type verstrekker: Type organisatie dat optreedt als verstrekker; Status: Een indicatie van de levensfase van een Dataset.";
+	sh:name "skos:Concept";
+	sh:targetClass skos:Concept;
+	sh:property [
+		rdfs:label "Voorkeursterm"@nl;
+		sh:name "skos:prefLabel";
+		sh:path skos:prefLabel;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "In schema"@nl;
+		sh:name "skos:inScheme";
+		sh:path skos:inScheme;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:class skos:ConceptScheme;
+		sh:severity sh:Violation;
+	];
+.
+dcat-nl:Rubricering a sh:NodeShape;
+	dct:type dcat-nl:RefOWMS;
+	rdfs:label "Rubricering"@nl;
+	rdfs:comment "Een verzameling definities van Categorieën. Een waardelijst met onderwerpen.";
+	sh:name "skos:ConceptScheme";
+	sh:targetClass skos:ConceptScheme;
+	sh:property [
+		rdfs:label "Voorkeursterm"@nl;
+		sh:name "skos:prefLabel";
+		sh:path skos:prefLabel;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:severity sh:Violation;
+	];
+.
+dcat-nl:Frequentie a sh:NodeShape;
+	dct:type dcat-nl:RefOWMS;
+	rdfs:label "Frequentie"@nl;
+	rdfs:comment "Het aantal maal per tijdseenheid dat een gebeurtenis optreedt.";
+	sh:name "dct:Frequency";
+	sh:targetClass dct:Frequency;
+.
+dcat-nl:Locatie a sh:NodeShape;
+	dct:type dcat-nl:RefOWMS;
+	rdfs:label "Locatie"@nl;
+	rdfs:comment "Een plaats op aarde. Deze kan direct worden aangeduid met coördinaten of indirect met een identifier (naam of code). Codering vindt plaats op basis van NEN3610.";
+	sh:name "dct:Location";
+	sh:targetClass dct:Location;
+.
+dcat-nl:Formaat a sh:NodeShape;
+	dct:type dcat-nl:RefOWMS;
+	rdfs:label "Formaat"@nl;
+	rdfs:comment "Bestandformaat van een dataset.";
+	sh:name "dct:MediaTypeOrExtent";
+	sh:targetClass dct:MediaTypeOrExtent;
+.
+
+# ====
+# Overig (ontbreekt als tabel, maar wel opgenomen in het diagram)
+# ====
+dcat-nl:Organisatie a sh:NodeShape;
+	dct:type dcat-nl:Referentieklasse;
+	rdfs:label "Organisatie"@nl;
+	sh:name "org:Organization";
+	sh:targetClass org:Organization;
+	sh:property [
+		rdfs:label "Verwijzing"@nl;
+		sh:name "dct:identifier";
+		sh:path dct:identifier;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+		sh:severity sh:Violation;
+	];
+	sh:property [
+		rdfs:label "Voorkeursterm"@nl;
+		sh:name "skos:prefLabel";
+		sh:path skos:prefLabel;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:severity sh:Violation;
+	];
+.
+
+# ====
+# Datatypen
+# ====
+dcat-nl:VrijeTekst a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "Vrije tekst"@nl;
+	rdfs:label "Literal"@en;
+	rdfs:comment "Een tekenreeks, mogelijk getypeerd, zoals een datum. Een literal met voor de mens leesbare tekst kan een taalcode hebben. In DCAT-EU alleen gebruikt voor Key Words. In DCAT-NL wordt dit vrije tekst.";
+	sh:name "rdfs:Literal";
+	#sh:targetClass rdfs:Literal; #Ik doe iets met xsd:string, mogelijk is dat fout??
+	sh:targetClass xsd:string;
+.
+dcat-nl:URL a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "URL"@nl;
+	rdfs:label "Document"@en;
+	rdfs:comment "Informatie voor menselijke consumptie. In DCAT-EU gebruikt voor home page en landingspagina van respectievelijk een Catalogus of en Dataset. In DCAT-NL is dit een URL.";
+	sh:name "foaf:Document";
+	sh:targetClass foaf:Document;
+.
+dcat-nl:Datum a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "xs:date"@nl;
+	sh:name "xsd:date";
+	sh:targetClass xsd:date;
+.
+dcat-nl:RecordStatus a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	sh:name "overheid:RecordStatus";
+	sh:property [
+		sh:path skos:inScheme;
+		sh:targetNode overheid:RecordStatus;
+	]
+.
+dcat-nl:Taal a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "xml:lang"@nl;
+	rdfs:label "Taal"@en;
+	rdfs:comment "Een systeem van tekens, symbolen, geluiden, gebaren of regels, gebruikt voor communicatie, bijvoorbeeld een taal. In DCAT-EU academisch correct  en uitgebreid geïmplementeerd, in DCAT-NL pragmatisch de XML taalcode.";
+	sh:name "xml:lang";
+	sh:targetClass xml:lang;
+.
+dcat-nl:Periode a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "overheid:Period"@nl;
+	rdfs:label "Periode"@en;
+	rdfs:comment "Een tijdsinterval. DCAT-EU ondersteunt benoemde tijdsintervallen en tijdsintervallen aangeduid met start- en einddatum. DCAT-NL alleen de laatste.";
+	sh:name "dcterms:PeriodOfTime";
+	sh:targetClass dct:PeriodOfTime;
+.
+dcat-nl:TaxonomieBeleidsagenda a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	sh:name "overheid:TaxonomieBeleidsagenda";
+	sh:property [
+		path skos:inScheme;
+		sh:targetNode overheid:TaxonomieBeleidsagenda;
+	];
+.
+dcat-nl:Regeling a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "Juriconnect-link"@nl;
+	rdfs:label "Regeling"@en;
+	rdfs:comment "Link naar wet- of regelgeving.";
+	sh:name "overheid:Regeling";
+	sh:targetClass overheid:Regeling;
+.
+dcat-nl:Stars a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "overheidds:Stars"@nl;
+	sh:name "overheidds:Stars";
+	sh:targetClass overheidds:Stars;
+.
+dcat:nl:URL-URI a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "URL"@nl;
+	sh:targetClass xsd:anyURI;
+.
+dcat-nl:URI a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	rdfs:label "URI"@nl;
+	rdfs:label "Resource"@en;
+	rdfs:comment "Alles wat met RDF beschreven wordt. In DCAT-EU alleen gebruikt voor (de link naar) de Distributie. In DCAT-NL wordt dit de URI van de distributie.";
+	sh:name "rdfs:Resource";
+	sh:targetClass rdfs:Resource; #Hack: ik vermoed dat URI en URL door elkaar worden gebruikt, vandaar in de datatype lijst URI, maar in de propery-lijst URL
+.
+dcat-nl:Bestandsformaat a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	sh:name "overheid:FileFormat";
+	sh:property [
+		path skos:inScheme;
+		sh:targetNode overheid:FileFormat;
+	];
+.
+dcat-nl:Status a sh:NodeShape;
+	dct:type dcat-nl:Datatype;
+	sh:name "overheid:Status";
+.

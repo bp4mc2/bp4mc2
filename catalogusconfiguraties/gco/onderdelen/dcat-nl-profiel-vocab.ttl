@@ -1,0 +1,36 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:dcat-nl-vocab	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-nl-vocab(\\.(xml|ttl|json))?$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		construct {
+			?s?p?o.
+			?class rdf:type owl:Class.
+			?class rdf:value "class".
+			?prop rdf:type rdf:Property.
+			?prop rdf:value "prop".
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?s?p?o
+				OPTIONAL {
+					?shape rdf:type sh:NodeShape.
+					?shape sh:targetClass ?class.
+					OPTIONAL {
+						?shape sh:property ?ps.
+						?ps sh:path ?prop.
+					}
+				}
+			}
+		}
+	''';
+.
