@@ -15,7 +15,7 @@
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -350,6 +350,16 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
+			elmo:data [
+				rdfs:label "Upload een enkel Concept (Excel)";
+				elmo:index "3";
+				xhtml:link "/catalogus/dso/container/excelupdate";
+			];
+			elmo:data [
+				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
+				elmo:index "4";
+				xhtml:link "/catalogus/dso/container/ttlupdate";
+			];
 		];
 		elmo:data[
 			rdfs:label "Upload modellen";
@@ -488,7 +498,7 @@ stage:DSOFooter a elmo:Part;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -550,7 +560,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
@@ -758,7 +768,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -800,6 +810,27 @@ container:ttlupload a elmo:Container;
 	elmo:replaces container:generiek;
 	elmo:query stage:DSOGeneriekeUploadScene;
 .
+# Updatecontainer Excel
+container:excelupdate a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    elmo:translator elmo:TableExcelTranslator;
+    rdfs:label "Upload een enkel Concept via Excel (.xls)";
+    elmo:replaces container:generiek;
+    elmo:query stage:DSOSpecifiekeUploadScene;
+.
+#Updatecontainer Turtle
+container:ttlupdate a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+    elmo:replaces container:generiek;
+    elmo:query stage:DSOSpecifiekeUploadScene;
+.
 
 #
 # SCENES
@@ -833,7 +864,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
@@ -1103,7 +1134,228 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		CLEAR GRAPH container:ttlupload
 	''';
 .
- 
+#
+# SCENES
+#
+
+# Standaardquery voor updatecontainers
+# Algoritme:
+#
+# - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
+# - Vul mastergraph aan met nieuwe versie
+# - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
+# - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
+# - Update de aanpasdatum van de Catalogus, CatalogRecord en Dataset
+# - Voeg in de nieuwe GRAPH de concepten toe die een andere hash dan de hash in de mastergraph hebben (d.w.z., die gewijzigd zijn)
+# - Voeg voor de gewijzigde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
+# - Verwijder de concepten uit de mastergraph die voorkomen in de nieuwe GRAPH (d.w.z. gewijzigd zijn)
+# - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
+# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
+
+stage:DSOSpecifiekeUploadScene a elmo:Scene;
+	rdfs:label "Postquery inladen gegevens";
+	elmo:index "2";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix loc: <http://data.acceptatie.pdok.nl/catalogus/dso/id/>
+		prefix versiongraph: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
+		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>
+		prefix activity: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/@CURRENTMOMENT@>
+			
+	
+		DELETE FROM versiongraph:version {
+            ?s?p?o
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
+		
+		INSERT INTO container:generiek {
+			?s rdfs:label ?spreflabel.
+		} WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
+					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				}
+			}
+		}
+		
+		INSERT INTO doc:mastergraph {
+            doc:mastergraph rdf:type void:Dataset.
+            doc:mastergraph rdfs:label "Concepten".
+            versiongraph:version dct:isVersionOf doc:mastergraph.
+            dataset:concepten rdf:type skos:ConceptScheme.
+            dataset:concepten rdfs:label "Conceptschema".
+		}
+		
+		INSERT INTO versiongraph:version {
+            dataset:concepten rdfs:isDefinedBy versiongraph:version.
+            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+            versiongraph:version prov:wasGeneratedBy activity:Upload.
+			versiongraph:version rdf:type prov:Entity.
+			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+			activity:Upload rdf:type prov:Activity.
+			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			concept:tomcatUser rdf:type prov:Agent.
+			concept:tomcatUser rdfs:label "Tomcat User".
+			concept:tomcatUser foaf:givenName "Tomcat User".
+			concept:tomcatUser foaf:mbox "tomcat@user.org".
+			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		}
+
+		INSERT INTO container:generiek {
+            ?s bp4mc2:signature ?sig.
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:generiek {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = skos:Concept
+							|| ?type = skos:Collection
+							|| ?type = skoslex:Act
+							|| ?type = skoslex:Norm
+							|| ?type = skoslex:Object
+							|| ?type = skoslex:Actor
+							|| ?type = owl:Class
+							|| ?type = dctype:Text
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
+		INSERT INTO versiongraph:version {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type ?type.
+			    ?s ?p ?o.
+			    ?s bp4mc2:signature ?sig
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s bp4mc2:signature ?sig
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE FROM doc:mastergraph {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+		}
+
+		INSERT INTO doc:mastergraph {
+			?s rdf:type ?type.
+			?s rdfs:isDefinedBy versiongraph:version.
+			?s bp4mc2:signature ?sig
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+			    ?s rdf:type ?type.
+			    ?s bp4mc2:signature ?sig.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+            }
+		}
+		
+		CLEAR GRAPH container:generiek		
+		CLEAR GRAPH container:excelupdate		
+		CLEAR GRAPH container:ttlupdate
+	''';
+. 
 #
 #
 #
@@ -1121,7 +1373,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -1182,7 +1434,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
@@ -1422,7 +1674,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -1913,7 +2165,7 @@ stage:DSOTTLUploadScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -1987,7 +2239,7 @@ stage:ClearAllDataScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2059,7 +2311,7 @@ stage:DSOLoadVBDataScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2148,7 +2400,7 @@ stage:AddNewModelScene a elmo:Scene;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2468,7 +2720,7 @@ stage:WeergaveTabelQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -2669,7 +2921,7 @@ stage:WeergaveVersiesQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2961,7 +3213,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
         prefix elmo: <http://bp4mc2.org/elmo/def#>
 		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix geosparql: <http://www.opengis.net/ont/geosparql#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -3130,7 +3382,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -3317,7 +3569,7 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -3543,7 +3795,7 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -3778,7 +4030,7 @@ stage:DSOCollectiesQuery a elmo:Query;
 		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		
 		SELECT ?collectie (COUNT(DISTINCT ?concept) AS ?collectie_count) ?collectie_label 
@@ -3836,7 +4088,7 @@ stage:DSOCollectiesQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -4030,7 +4282,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -4168,7 +4420,7 @@ stage:WeergaveVersiesCatalogQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -4343,7 +4595,7 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -4489,7 +4741,7 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -4650,7 +4902,7 @@ stage:WeergaveTabelDistributionQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -4783,7 +5035,7 @@ stage:WeergaveVersiesDistributionQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -4985,7 +5237,7 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -5027,7 +5279,7 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -5161,7 +5413,7 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -5400,7 +5652,7 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -5532,7 +5784,7 @@ stage:WeergaveVersiesShapesQuery a elmo:Query;
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
 		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix sh: <http://www.w3.org/ns/shacl#>
 
 		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
@@ -5579,7 +5831,7 @@ stage:WeergaveVersiesShapesQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -5819,7 +6071,7 @@ stage:WeergaveTabelNormenQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -5952,7 +6204,7 @@ stage:WeergaveVersiesNormenQuery a elmo:Query;
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
 		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 
 		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
@@ -6006,7 +6258,7 @@ stage:WeergaveVersiesNormenQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -6061,7 +6313,7 @@ stage:DSOKKGhtml elmo:appearance elmo:HtmlAppearance;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -6129,7 +6381,7 @@ stage:DSOTreeQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -6167,13 +6419,13 @@ stage:DSOTreeQuery a elmo:Query;
 										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
 									}
 									FILTER NOT EXISTS {
-										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 									}
 									FILTER NOT EXISTS {
-										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 									}
 									FILTER NOT EXISTS {
-										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 									}
 								}
 								GRAPH ?broaderObjectGraph {
@@ -6183,13 +6435,13 @@ stage:DSOTreeQuery a elmo:Query;
 										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
 									}
 									FILTER NOT EXISTS {
-										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 									}
 									FILTER NOT EXISTS {
-										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 									}
 									FILTER NOT EXISTS {
-										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -6218,13 +6470,13 @@ stage:DSOTreeQuery a elmo:Query;
 										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
 									}
 									FILTER NOT EXISTS {
-										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 									}
 									FILTER NOT EXISTS {
-										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 									}
 									FILTER NOT EXISTS {
-										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 									}
 								}
 								GRAPH ?narrowerObjectGraph {
@@ -6234,13 +6486,13 @@ stage:DSOTreeQuery a elmo:Query;
 										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
 									}
 									FILTER NOT EXISTS {
-										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 									}
 									FILTER NOT EXISTS {
-										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 									}
 									FILTER NOT EXISTS {
-										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -6265,13 +6517,13 @@ stage:DSOTreeQuery a elmo:Query;
 										?subject prov:invalidatedAtTime ?subjectTime.
 									}
 									FILTER NOT EXISTS {
-										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 									}
 									FILTER NOT EXISTS {
-										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 									}
 									FILTER NOT EXISTS {
-										?subject rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+										?subject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 									}
 								}
 								GRAPH doc:mastergraph {
@@ -6285,13 +6537,13 @@ stage:DSOTreeQuery a elmo:Query;
 											?object prov:invalidatedAtTime ?objectTime.
 										}
 										FILTER NOT EXISTS {
-											?object rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+											?object rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 										}
 										FILTER NOT EXISTS {
-											?object rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+											?object rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 										}
 										FILTER NOT EXISTS {
-											?object rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+											?object rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 										}
 									}
 									GRAPH doc:mastergraph {
@@ -6313,7 +6565,7 @@ stage:DSOTreeQuery a elmo:Query;
 							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
 							WHERE {
 								GRAPH ?broaderSubjectGraph {
-									?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 									?broaderSubject rdfs:label ?broaderSubjectLabel.
 									?broaderSubject ?broaderPredicate ?broaderObject.
 									FILTER(
@@ -6325,7 +6577,7 @@ stage:DSOTreeQuery a elmo:Query;
 									}
 								}
 								GRAPH ?broaderObjectGraph {
-									?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 									?broaderObject rdfs:label ?broaderObjectLabel.
 									FILTER NOT EXISTS {
 										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
@@ -6342,7 +6594,7 @@ stage:DSOTreeQuery a elmo:Query;
 							SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
 							WHERE {
 								GRAPH ?narrowerSubjectGraph {
-									?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
 									?narrowerSubject ?narrowerPredicate ?narrowerObject.
 									FILTER(
@@ -6354,7 +6606,7 @@ stage:DSOTreeQuery a elmo:Query;
 									}
 								}
 								GRAPH ?narrowerObjectGraph {
-									?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 									?narrowerObject rdfs:label ?narrowerObjectLabel.
 									FILTER NOT EXISTS {
 										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
@@ -6371,7 +6623,7 @@ stage:DSOTreeQuery a elmo:Query;
 							SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
 							WHERE {
 								GRAPH ?subjectGraph {
-									?subject rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+									?subject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 									?subject rdfs:label ?subjectLabel.
 									OPTIONAL { ?subject ?predicate ?object }
 									FILTER(
@@ -6387,7 +6639,7 @@ stage:DSOTreeQuery a elmo:Query;
 								}
 								OPTIONAL {
 									GRAPH ?objectGraph {
-										?object rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+										?object rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 										?object rdfs:label ?objectLabel.
 										FILTER NOT EXISTS {
 											?object prov:invalidatedAtTime ?objectTime.
@@ -6490,7 +6742,7 @@ stage:DSOTreeQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -6556,7 +6808,7 @@ stage:DSOConceptentabel a elmo:Part;
 stage:DSOConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
@@ -6574,13 +6826,13 @@ stage:DSOConceptenQuery a elmo:Query;
 						?concept prov:invalidatedAtTime ?time.
 					}
 					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
 					}
 					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
 					}
 					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -6591,7 +6843,7 @@ stage:DSOConceptenQuery a elmo:Query;
 			UNION
 			{
 				GRAPH ?g {
-					?concept rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+					?concept rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
 					?concept rdfs:label ?concept_label.
 					OPTIONAL {?concept skos:definition ?uitleg}
 					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
@@ -6637,7 +6889,7 @@ stage:DSOConceptenQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -6711,6 +6963,7 @@ stage:search_models a elmo:Part;
             }
             LIMIT 100
         }
+		ORDER BY ?label DESC
     ''';
 .
 
@@ -6774,7 +7027,7 @@ stage:VocabulaireQuery a elmo:Query;
 @prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -6887,6 +7140,7 @@ stage:DSOSearchQuery a elmo:Query;
 				GRAPH doc:mastergraph {
 					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 					?toeleiding rdfs:isDefinedBy ?g.
+					?concept rdfs:isDefinedBy ?conceptgraph.
 				}				
 			}
 		}
