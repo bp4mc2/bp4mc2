@@ -15,7 +15,7 @@
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -106,12 +106,17 @@ stage:TaxBeheermenu a elmo:Part;
 			];
 		];
 		elmo:data [
-			rdfs:label "Acties";
+			rdfs:label "Hulpmiddelen";
 			elmo:index "3";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
 				xhtml:link "/update/clearalldata";
+			];
+			elmo:data [
+				rdfs:label "Relatiecontrole";
+				elmo:index "2";
+				xhtml:link "/query/relatiecontrole";
 			];
 		];
 	]
@@ -144,7 +149,7 @@ stage:TaxFooter a elmo:Part;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -218,7 +223,7 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
@@ -506,7 +511,7 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -566,7 +571,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
@@ -792,6 +797,115 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 #
 #
 #
+# BEHEER CONCEPTEN
+#
+#
+#
+
+@prefix stage: <http://pdok-ld-gck.so.kadaster.nl/stage#>.
+@prefix updatestage: <http://pdok-ld-gck.so.kadaster.nl/update/>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: <http://bp4mc2.org/skosax#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
+stage:TaxRelatiecontrole a elmo:Representation;
+	elmo:url-pattern "/query/relatiecontrole$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxRelatieControleTabel;
+.
+
+# Weergave van gerelateerde (inkomende) concepten
+stage:TaxRelatieControleTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:query stage:TaxRelatiecontroleQuery
+.
+
+
+stage:TaxRelatiecontroleQuery a elmo:query;
+	elmo:query '''
+				prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
+		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
+		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
+		prefix concept: <http://pdok-ld-gck.so.kadaster.nl/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		
+		SELECT DISTINCT ?Subject ?Subject_label ?Relatie ?Object ?Object_label
+		WHERE {
+  			{
+                SELECT ?Subject ?Subject_label ?Object ?Object_label ?AltObject
+                WHERE {
+                    GRAPH ?sg {
+                        ?Subject rdf:type skos:Concept.
+                        ?Subject skos:semanticRelation ?Object.
+                        OPTIONAL {
+                            ?Subject rdfs:label ?Subject_label.
+                            FILTER( LANG( ?Subject_label ) = "" || LANGMATCHES( LANG( ?Subject_label ), "nl" ) )
+                        }
+                        FILTER NOT EXISTS {
+                            ?Subject prov:invalidatedAtTime ?time.
+                        }
+                    }
+                    GRAPH ?og {
+                        ?Object rdf:type skos:Concept.
+                        OPTIONAL {
+                            ?Object skos:semanticRelation ?AltObject.
+                        }
+                        OPTIONAL {
+                            ?Object rdfs:label ?Object_label.
+                            FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
+                        }
+                        FILTER NOT EXISTS {
+                            ?Object prov:invalidatedAtTime ?otime.
+                        }
+                    }
+                    GRAPH doc:mastergraph {
+                        ?Subject rdfs:isDefinedBy ?sg.
+                        ?Object rdfs:isDefinedBy ?og.
+                    }
+                }
+  			}
+  			FILTER NOT EXISTS {
+				?Subject skos:semanticRelation ?Object.
+    			?Object skos:semanticRelation ?Subject.
+			}
+  			BIND( "Gerelateerd aan" AS ?Relatie )
+		}
+		ORDER BY ?Subject_label
+	'''
+. 
+#
+#
+#
 # CLEAR ALL DATA
 #
 #
@@ -806,7 +920,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -879,7 +993,7 @@ stage:ClearAllDataScene a elmo:Scene;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -1199,7 +1313,7 @@ stage:WeergaveTabelQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -1400,7 +1514,7 @@ stage:WeergaveVersiesQuery a elmo:Query;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -1471,37 +1585,52 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:comment;
 		elmo:index "06";
 	];
+	elmo:fragment [
+		rdfs:label "Actor"@nl;
+		elmo:applies-to skoslex:actor;
+		elmo:index "07";
+	];
+	elmo:fragment [
+		rdfs:label "Agent"@nl;
+		elmo:applies-to skoslex:agent;
+		elmo:index "08";
+	];
+	elmo:fragment [
+		rdfs:label "Object"@nl;
+		elmo:applies-to skoslex:object;
+		elmo:index "09";
+	];
+	elmo:fragment [
+		rdfs:label "Lid van"@nl;
+		elmo:applies-to skos:member;
+		elmo:index "10";
+	];
 	elmo:fragment [ 
 		rdfs:label "Specialisatie van"@nl;
 		elmo:applies-to thes:broaderGeneric;
-		elmo:index "07";
+		elmo:index "11";
 	];
 	elmo:fragment [
 		rdfs:label "Generalisatie van"@nl;
 		elmo:applies-to thes:narrowerGeneric;
-		elmo:index "08";
+		elmo:index "12";
 	];
 	elmo:fragment [ 
 		rdfs:label "Onderdeel van"@nl;
 		elmo:applies-to thes:broaderPartitive;
-		elmo:index "09";
+		elmo:index "13";
 	];
 	elmo:fragment [
 		rdfs:label "Bestaat uit"@nl;
 		elmo:applies-to thes:narrowerPartitive;
-		elmo:index "10";
+		elmo:index "14";
 	];
 	elmo:fragment [
 		rdfs:label "Gerelateerd aan"@nl;
 		elmo:applies-to skos:semanticRelation;
-		elmo:index "11";
+		elmo:index "15";
 	];
-
-	elmo:fragment [
-		rdfs:label "Lid van"@nl;
-		elmo:applies-to skos:member;
-		elmo:index "16";
-	];
+	
 	elmo:fragment [
 		rdfs:label "Ongeveer hetzelfde als"@nl;
 		elmo:applies-to skos:closeMatch;
@@ -1528,21 +1657,6 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:index "25";
 	];
 	elmo:fragment [
-		rdfs:label "Actor"@nl;
-		elmo:applies-to skoslex:actor;
-		elmo:index "26";
-	];
-	elmo:fragment [
-		rdfs:label "Agent"@nl;
-		elmo:applies-to skoslex:agent;
-		elmo:index "27";
-	];
-	elmo:fragment [
-		rdfs:label "Object"@nl;
-		elmo:applies-to skoslex:object;
-		elmo:index "28";
-	];
-	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
 		elmo:applies-to skos:altLabel;
 		elmo:index "29";
@@ -1558,37 +1672,37 @@ stage:WeergaveTabelGerelateerdeConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [ 
-		rdfs:label "Specialisatie"@nl;
+		rdfs:label "Heeft als specialisatie"@nl;
 		elmo:applies-to thes:broaderGeneric;
 		elmo:index "07";
 	];
 	elmo:fragment [
-		rdfs:label "Generalisatie"@nl;
+		rdfs:label "Heeft als generalisatie"@nl;
 		elmo:applies-to thes:narrowerGeneric;
 		elmo:index "08";
 	];
 	elmo:fragment [ 
-		rdfs:label "Onderdeel"@nl;
+		rdfs:label "Heeft als onderdeel"@nl;
 		elmo:applies-to thes:broaderPartitive;
 		elmo:index "09";
 	];
 	elmo:fragment [
-		rdfs:label "Onderdeel van"@nl;
+		rdfs:label "Is onderdeel van"@nl;
 		elmo:applies-to thes:narrowerPartitive;
 		elmo:index "10";
 	];
 	elmo:fragment [
-		rdfs:label "Gerelateerd aan"@nl;
+		rdfs:label "Is gerelateerd aan"@nl;
 		elmo:applies-to skos:semanticRelation;
 		elmo:index "11";
 	];
 	elmo:fragment [
-		rdfs:label "Ongeveer hetzelfde als"@nl;
+		rdfs:label "Is ongeveer hetzelfde als"@nl;
 		elmo:applies-to skos:closeMatch;
 		elmo:index "21";
 	];
 	elmo:fragment [
-		rdfs:label "Hetzelfde als"@nl;
+		rdfs:label "Is hetzelfde als"@nl;
 		elmo:applies-to skos:exactMatch;
 		elmo:index "22";
 	];		
@@ -1598,27 +1712,27 @@ stage:WeergaveTabelGerelateerdeConcepten a elmo:Part;
 		elmo:index "23";
 	];
 	elmo:fragment [
-		rdfs:label "Breder"@nl;
+		rdfs:label "Is breder dan"@nl;
 		elmo:applies-to skos:broadMatch;
 		elmo:index "24";
 	];
 	elmo:fragment [
-		rdfs:label "Enger"@nl;
+		rdfs:label "Is enger dan"@nl;
 		elmo:applies-to skos:narrowMatch;
 		elmo:index "25";
 	];
 	elmo:fragment [
-		rdfs:label "Actor"@nl;
+		rdfs:label "Is actor van"@nl;
 		elmo:applies-to skoslex:actor;
 		elmo:index "26";
 	];
 	elmo:fragment [
-		rdfs:label "Agent"@nl;
+		rdfs:label "Is agent van"@nl;
 		elmo:applies-to skoslex:agent;
 		elmo:index "27";
 	];
 	elmo:fragment [
-		rdfs:label "Object"@nl;
+		rdfs:label "Is object van"@nl;
 		elmo:applies-to skoslex:object;
 		elmo:index "28";
 	];
@@ -1637,7 +1751,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -1645,6 +1759,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
 		
 		construct {
 			<@SUBJECT@> ?p ?o.
@@ -1691,6 +1806,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						&& ?p != skos:editorialNote
 						&& ?p != rdfs:isDefinedBy
 						&& ?p != skos:inScheme
+						&& ?p != owl:sameAs
 					)
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
@@ -1726,6 +1842,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						&& ?p != skos:editorialNote
 						&& ?p != rdfs:isDefinedBy
 						&& ?p != skos:inScheme
+						&& ?p != owl:sameAs
 					)
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
@@ -1777,7 +1894,7 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -1796,6 +1913,7 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 				?s ?p <@SUBJECT@>.
 				OPTIONAL {
 					?s rdfs:label ?s_label.
+					FILTER( LANG( ?s_label ) = "" || LANGMATCHES( LANG( ?s_label ), "nl" ) )
 				}
 				FILTER NOT EXISTS {
 					?s prov:invalidatedAtTime ?time.
@@ -1816,7 +1934,7 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -1882,7 +2000,7 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2034,7 +2152,7 @@ stage:WeergaveTabelMetadataQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -2180,7 +2298,7 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2381,7 +2499,7 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -2423,7 +2541,7 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -2565,7 +2683,7 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
@@ -2652,7 +2770,7 @@ stage:TaxWelkom a elmo:Part;
 stage:TaxConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
@@ -2709,7 +2827,7 @@ stage:TaxConceptenQuery a elmo:Query;
 @prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix thes: <http://purl.org/iso25964/skos-thes#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
