@@ -1243,7 +1243,16 @@ updatestage:sync-concepts a elmo:Production;
 	elmo:contains	stage:sync_clear_concepts;
 	elmo:contains	stage:sync_concepts;
 .
-	
+
+#Alleen model
+updatestage:sync-model a elmo:Production;
+	elmo:contains stage:Menu;
+	elmo:contains stage:sync_clear_models;
+	elmo:contains stage:sync_clear_imports;
+	elmo:contains stage:sync_scene2;
+	elmo:contains stage:sync_scene3;
+	elmo:contains stage:sync_scene4;
+.
 #----------------------------
 # Clearing
 #----------------------------
@@ -1323,7 +1332,7 @@ stage:sync_scene2 a elmo:Scene;
 		}
 		where {
 			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2.ttl> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2v2.ttl> {
 					?s?p?o
 				}
 			}
