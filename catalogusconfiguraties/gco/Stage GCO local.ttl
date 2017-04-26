@@ -106,7 +106,7 @@ stage:Class_model a elmo:Representation;
 			?class rdf:type rdfs:Class.
 			?class rdfs:subClassOf ?super.
 			?shape shacl:targetClass ?class.
-			?shape rdf:type shacl:ShapeNode.
+			?shape rdf:type shacl:NodeShape.
 			?shape shacl:property ?pc.
 			?pc ?ppc ?opc.
 			?pclass rdf:type rdfs:Class.
@@ -154,7 +154,7 @@ stage:ModelControle1 a elmo:Representation;
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				?item rdf:type ?type.
-				FILTER (?type = shacl:ShapeNode || ?type = shacl:PropertyNode)
+				FILTER (?type = shacl:NodeShape || ?type = shacl:PropertyNode)
 				?item ?p ?o.
 				FILTER (IsIRI(?o) and ?p!=rdf:type)
 				FILTER NOT EXISTS {
@@ -616,7 +616,7 @@ stage:ModelQuery a elmo:Query;
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape a shacl:ShapeNode.
+				?shape a shacl:NodeShape.
 				?shape ?sp ?so.
 				OPTIONAL {
 					?shape shacl:targetClass ?class.
@@ -731,7 +731,7 @@ stage:Reqdocument_doc a elmo:Part;
 		where {
 			graph <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape rdf:type shacl:ShapeNode.
+					?shape rdf:type shacl:NodeShape.
 					OPTIONAL {?shape rdfs:label ?label}
 					OPTIONAL {?shape shacl:name ?name}
 					BIND (concat(?label," [",?name,"]") as ?shapelabel)
@@ -813,7 +813,7 @@ stage:ReqModelYedQuery a elmo:Query;
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape rdf:type shacl:ShapeNode.
+					?shape rdf:type shacl:NodeShape.
 					OPTIONAL {
 						?shape shacl:targetClass ?element
 					}
@@ -1025,7 +1025,7 @@ stage:Requirements_Controle2 a elmo:Part;
 		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape rdf:type shacl:ShapeNode.
+				?shape rdf:type shacl:NodeShape.
 				OPTIONAL {?shape rdfs:label ?shape_label}
 				?shape shacl:targetClass ?class.
 				?shape shacl:property ?pc.
@@ -1077,7 +1077,7 @@ stage:ReqVisualisatie	a	elmo:Representation;
 @prefix shacl: <http://www.w3.org/ns/shacl#>.
 
 stage:Shape	a	elmo:Representation;
-	elmo:applies-to [rdf:type shacl:ShapeNode];
+	elmo:applies-to [rdf:type shacl:NodeShape];
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:Shape_content;
 	elmo:contains	stage:Shape_properties;
@@ -1167,7 +1167,7 @@ stage:Shape_model a elmo:Representation;
 			?class rdf:type rdfs:Class.
 			?class rdfs:subClassOf ?super.
 			?shape shacl:targetClass ?class.
-			?shape rdf:type shacl:ShapeNode.
+			?shape rdf:type shacl:NodeShape.
 			?shape shacl:property ?pc.
 			?pc ?ppc ?opc.
 			?pclass rdf:type rdfs:Class.
