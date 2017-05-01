@@ -1,0 +1,81 @@
+# Boomweergave domeinen, collecties en concepten (gebruikt in DMN gedeelte)
+stage:TRTree a elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+    elmo:index "01";
+	elmo:query stage:TRTreeQuery;
+.
+
+# Boomweergave Activiteiten concepten (Functionele Structuur)
+stage:TRActTree rdf:type elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+	elmo:query stage:TRActTreeQuery;
+	elmo:index "01"
+.
+
+# Query voor de boomweergave DMN
+
+stage:TRTreeQuery a elmo:Query;
+	elmo:query '''
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		
+		CONSTRUCT {
+			?s rdfs:label ?slabel.
+			?o rdfs:label ?olabel.
+			?o ?p ?s.
+		}
+		WHERE {
+			GRAPH container:dmn {
+				?s rdf:type sh:Shape.
+				?s sh:scopeClass/rdfs:label ?slabel.
+				OPTIONAL {
+					?s ?p ?o.
+					?o rdf:type sh:Shape.
+					?o sh:scopeClass/rdfs:label ?olabel.
+				}
+			}
+		}
+	'''
+.
+
+
+# Query om de boomweergave (TRActTree) Activiteiten concepten te vullen (Functionele Structuur)
+
+stage:TRActTreeQuery rdf:type elmo:Query;
+	elmo:query '''
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix doc: <http://localhost:8080/toepasbareregels/concepten/doc/>
+	
+	CONSTRUCT {
+		?s rdfs:label ?sLabel.
+		?s skos:member ?sCollection.
+		?sCollection rdfs:label ?sCollectionLabel.
+		?o rdfs:label ?oLabel.
+		?s thes:broaderGeneric ?o.
+	}
+	WHERE {
+		GRAPH container:generiek {
+			?s rdf:type skos:Concept.
+			?sCollection rdf:type skos:Collection.
+			?sCollection skos:member ?s.
+			OPTIONAL {
+				?s rdfs:label ?sLabel.
+				?sCollection rdfs:label ?sCollectionLabel.
+			}
+			OPTIONAL {
+				?o rdfs:label ?oLabel.
+				?s thes:broaderGeneric ?o.
+			}
+		}
+	}
+	'''
+.

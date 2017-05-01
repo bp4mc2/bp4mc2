@@ -1,0 +1,496 @@
+#
+# REPRESENTATIONS
+#
+
+# Tabel pagina met concepten (Functionele Structuur)
+
+stage:TRActiviteiten rdf:type elmo:Representation;
+	elmo:url-pattern "/toepasbareregels/query/activiteiten(|/|\\..+)$";
+	elmo:contains stage:TRActConceptentabel;
+	elmo:contains stage:TRIndexActiviteiten;
+	elmo:contains stage:TRActTree;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+.
+
+# Weergavepagina met concepten (Functionele Structuur)
+stage:WeergavePaginaConcepten rdf:type elmo:Representation; 
+    elmo:uri-pattern "/id/concept/";
+#    elmo:applies-to [
+#        rdf:type skos:Concept;
+#    ];
+    elmo:contains stage:TRActTree;
+    elmo:contains stage:TRMenu;
+    elmo:contains stage:TRHeader;
+    elmo:contains stage:TRFooter;
+    elmo:contains stage:WeergaveGrafischConcepten;
+    elmo:contains stage:WeergaveTabelConcepten;
+.
+
+# Weergavepagina voor Collecties (Functionele Structuur)
+stage:WeergavePaginaDatasets rdf:type elmo:Representation;
+    elmo:uri-pattern "/id/collection/";
+#    elmo:applies-to [
+#        rdf:type skos:Concept;
+#    ];
+    elmo:contains stage:TRActTree;
+    elmo:contains stage:TRMenu;
+    elmo:contains stage:TRHeader;
+    elmo:contains stage:TRFooter;
+    elmo:contains stage:WeergaveGrafischConcepten;
+    elmo:contains stage:WeergaveTabelConcepten;
+.
+
+#
+# PARTS
+#
+
+# Weergave voor pagina onderdeel tabel voor bij conceptweergave (Functionele Structuur)
+
+stage:WeergaveTabelConcepten rdf:type elmo:Part;
+    elmo:query stage:WeergaveTabelConceptenQuery2;
+    elmo:fragment [
+        rdfs:label "Namens organisatie"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#actedOnBehalfOf>;
+        elmo:index "32"
+    ];
+    elmo:fragment [
+        rdfs:label "Bestaat uit"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#narrowerPartitive>;
+        elmo:index "10"
+    ];
+    elmo:fragment [
+        rdfs:label "Heeft betrekking op"@nl;
+        elmo:indx "11";
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#semanticRelation>
+    ];
+    elmo:fragment [
+        rdfs:label "Synoniemen"@nl;
+        elmo:indx "12";
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#altLabel>
+    ];
+    elmo:fragment [
+        rdfs:label "Startdatum versie"@nl;
+        elmo:indx "13";
+        elmo:applies-to <http://www.w3.org/ns/prov#generatedAtTime>
+    ];
+    elmo:fragment [
+        rdfs:label "Domein"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#inScheme>;
+        elmo:index "6"
+    ];
+    elmo:fragment [
+        rdfs:label "Is specialisatie van"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#broaderGeneric>;
+        elmo:index "7"
+    ];
+    elmo:fragment [
+        rdfs:label "Is generalisatie van"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#narrowerGeneric>;
+        elmo:index "8"
+    ];
+    elmo:fragment [
+        rdfs:label "Is onderdeel van"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#broaderPartitive>;
+        elmo:index "9"
+    ];
+    elmo:fragment [
+        rdfs:label "Uitleg"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#comment>;
+        elmo:index "2"
+    ];
+    elmo:fragment [
+        rdfs:label "Definitie"@nl;
+        elmo:appearance elmo:MarkdownAppearance;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#definition>;
+        elmo:index "3"
+    ];
+    elmo:fragment [
+        rdfs:label "Toelichting"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#scopeNote>;
+        elmo:index "4"
+    ];
+    elmo:fragment [
+        rdfs:label "Bron"@nl;
+        elmo:appearance elmo:GlobalLink;
+        elmo:applies-to <http://purl.org/dc/terms/source>;
+        elmo:index "5"
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:HiddenAppearance;
+        elmo:applies-to rdfs:label
+    ];
+    elmo:fragment [
+        rdfs:label "Regels die verwijzen naar dit concept"@nl;
+        elmo:applies-to <http://bp4mc2.org/def/skos-lex#refersTo>;
+        elmo:index "26"
+    ];
+    elmo:fragment [
+        rdfs:label "Startdatum"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#startedAtTime>;
+        elmo:index "27"
+    ];
+    elmo:fragment [
+        rdfs:label "Einddatum"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#endedAtTime>;
+        elmo:index "28"
+    ];
+    elmo:fragment [
+        rdfs:label "Uitgevoerd door"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#wasAssociatedWith>;
+        elmo:index "29"
+    ];
+    elmo:fragment [
+        rdfs:label "Is hetzelfde als"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#exactMatch>;
+        elmo:index "22"
+    ];
+    elmo:fragment [
+        rdfs:label "zie ook (in ander schema)"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#relatedMatch>;
+        elmo:index "23"
+    ];
+    elmo:fragment [
+        rdfs:label "Is breder dan (in ander schema)"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#broadMatch>;
+        elmo:index "24"
+    ];
+    elmo:fragment [
+        rdfs:label "Is enger dan (in ander schema)"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#narrowMatch>;
+        elmo:index "25"
+    ];
+    elmo:fragment [
+        rdfs:label "Is gerealiseerd in"@nl;
+        elmo:applies-to <http://xmlns.com/foaf/0.1/focus>;
+        elmo:index "18"
+    ];
+    elmo:fragment [
+        rdfs:label "Heeft als actor"@nl;
+        elmo:applies-to <http://bp4mc2.org/def/skos-lex#Actor>;
+        elmo:index "19"
+    ];
+    elmo:fragment [
+        rdfs:label "Heeft als object"@nl;
+        elmo:applies-to <http://bp4mc2.org/def/skos-lex#Object>;
+        elmo:index "20"
+    ];
+    elmo:fragment [
+        rdfs:label "Is ongeveer hetzelfde als"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#closeMatch>;
+        elmo:index "21"
+    ];
+    elmo:fragment [
+        rdfs:label "Einddatum versie"@nl;
+        elmo:indx "14";
+        elmo:applies-to <http://www.w3.org/ns/prov#invalidatedAtTime>
+    ];
+    elmo:fragment [
+        rdfs:label "Laatste activiteit"@nl;
+        elmo:indx "15";
+        elmo:applies-to <http://www.w3.org/ns/prov#wasGeneratedBy>
+    ];
+    elmo:fragment [
+        rdfs:label "Lid van"@nl;
+        elmo:indx "16";
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#member>
+    ];
+    elmo:fragment [
+        rdfs:label "Periode geldigheid"@nl;
+        elmo:indx "17";
+        elmo:applies-to <http://purl.org/dc/terms/valid>
+    ];
+    elmo:index "01"
+.
+
+# Index voor op de alfabetische weergave concepten (Functionele Structuur)
+stage:TRIndexActiviteiten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/toepasbareregels/query/activiteiten";
+		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "02";
+.
+
+# Conceptentabel voor op de alfabetische weergave concepten Activiteiten (Functionele Structuur)
+stage:TRActConceptentabel rdf:type elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:query stage:TRActConceptenQuery;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:index "03";
+.
+
+# Grafische weergave voor Concepten (Functionele Structuur)
+stage:WeergaveGrafischConcepten rdf:type elmo:Part;
+    elmo:appearance elmo:GraphAppearance;
+    elmo:query stage:WeergaveGrafischConceptenQuery2;
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: gray;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+        elmo:applies-to "Regeling";
+        elmo:index "1"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: purple;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+        elmo:applies-to "Norm";
+        elmo:index "2"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: red;
+			fill-opacity: .3;
+			stroke: #666;
+		''';
+        elmo:applies-to "Concept";
+        elmo:index "3"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: orange;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+        elmo:applies-to "Collectie";
+        elmo:index "4"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: blue;
+			fill-opacity: .3;
+			stroke: #666;
+		''';
+        elmo:applies-to "Gegevensklasse";
+        elmo:index "6"
+    ];
+    elmo:index "10"
+.
+
+# Query voor grafische weergave Concepten (Functionele Structuur)
+
+stage:WeergaveGrafischConceptenQuery2 rdf:type elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+
+
+	CONSTRUCT {
+
+		<@SUBJECT@> ?p ?o.
+		<@SUBJECT@> rdfs:label ?concept_label.
+		<@SUBJECT@> elmo:style ?type.
+		?o rdfs:label ?object_label.
+		?o elmo:style ?otype.
+		?s ?sp <@SUBJECT@>.
+		?s rdfs:label ?subject_label.
+		?s elmo:style ?stype.
+
+	# identificeren concepttypen
+		skos:Concept elmo:name "Concept".
+		skos:Collection elmo:name "Collectie".
+		skoslex:Norm elmo:name "Norm".
+		owl:Class elmo:name "Gegevensklasse".
+		dctype:Text elmo:name "Regeling".
+	# identificeren van relatietypen
+		skos:member rdfs:label "Lid van".
+		thes:broaderGeneric rdfs:label "is specialisatie van".
+
+		}
+		WHERE 
+		{
+			{
+				{
+				GRAPH ?subjectGraph 
+					{
+					<@SUBJECT@> rdf:type ?type.
+					OPTIONAL {
+						<@SUBJECT@> rdfs:label ?concept_label.
+						<@SUBJECT@> ?p ?o.
+						}
+					}
+				GRAPH ?objectGraph
+					{
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+				}
+				UNION
+				{
+					GRAPH ?altSubjectGraph
+					{
+						?s ?sp <@SUBJECT@>.
+						?s rdf:type ?stype.
+						OPTIONAL
+						{
+							?s rdfs:label ?subject_label.
+						}
+					}
+				}
+			}
+			UNION
+			{
+				{
+					GRAPH <@GRAPH@> {
+						?s rdf:type ?type.
+						OPTIONAL {
+							<@SUBJECT@> rdfs:label ?concept_label.
+							<@SUBJECT@> ?p ?o.
+						}
+					}
+					GRAPH ?objectGraph {
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+				}
+				UNION
+				{
+					GRAPH ?altSubjectGraph {
+						?s ?sp <@SUBJECT@>.
+						?s rdf:type ?stype.
+						OPTIONAL
+						{
+							?s rdfs:label ?subject_label.
+						}
+					}
+					OPTIONAL
+					{
+						<@SUBJECT@> rdfs:label ?subject_label.
+						<@SUBJECT@> rdf:type ?type.
+					}
+				}
+			}
+		}
+	'''
+.
+
+# Query voor vullen WeergaveTabelConcepten (Algemene tabelweergave concepten)
+
+stage:WeergaveTabelConceptenQuery3 rdf:type elmo:Query;
+	elmo:query '''
+	prefix elmo: <http://bp4mc2.org/elmo/def#>
+	prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		CONSTRUCT {
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?concept_label.
+			<@SUBJECT@> elmo:style ?type.
+
+		}
+		WHERE 
+		{
+			
+			{
+				GRAPH ?subjectGraph
+					{
+					<@SUBJECT@> rdf:type ?type.
+					OPTIONAL {
+						<@SUBJECT@> rdfs:label ?concept_label.
+						<@SUBJECT@> ?p ?o.
+						}
+					}
+				GRAPH ?objectGraph
+					{
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+			}
+			UNION
+				{
+					GRAPH <@GRAPH@> {
+						?s rdf:type ?type.
+						OPTIONAL {
+							<@SUBJECT@> rdfs:label ?concept_label.
+							<@SUBJECT@> ?p ?o.
+						}
+					}
+					GRAPH ?objectGraph {
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+				}
+
+		}
+	'''
+.
+
+stage:WeergaveTabelConceptenQuery2 rdf:type elmo:Query;
+	elmo:query '''
+	prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?subject_label.
+			}
+
+		WHERE {
+			GRAPH ?g
+				{
+					<@SUBJECT@> ?p ?o.
+					<@SUBJECT@> rdfs:label ?subject_label. 
+				}
+				FILTER (?p != skos:prefLabel)
+
+		}
+	'''
+.
+
+# Query om de conceptentable Activiteiten TRActConceptentabel te vullen
+stage:TRActConceptenQuery rdf:type elmo:Query;
+    elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix doc: <http://localhost:8080/toepasbareregels/concepten/doc/>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		
+		SELECT ?concept ?concept_label ?uitleg 
+		WHERE {
+			GRAPH container:generiek {
+				{
+					?concept rdf:type skos:Concept.
+					?concept rdfs:label ?concept_label.
+					OPTIONAL {?concept skos:definition ?uitleg}
+					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+					#FILTER NOT EXISTS {
+					#	?concept rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+					#}
+					#FILTER NOT EXISTS {
+					#	?concept rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+					#}
+					#FILTER NOT EXISTS {
+					#	?concept rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+					#}
+					FILTER( substr( "@TYPE@",2 ) = "TYPE@" )
+				}
+				UNION
+				{
+					?concept rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+					?concept rdfs:label ?concept_label.
+					OPTIONAL {?concept skos:definition ?uitleg}
+					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+					FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
+				}
+			}
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.

@@ -1,0 +1,265 @@
+#
+# REPRESENTATIONS
+#
+
+# Weergavepagina inclusief grafische weergave (DMN)
+stage:WeergavePaginaGrafisch a elmo:Representation;
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRTree;
+	elmo:contains stage:WeergaveTabel;
+	elmo:contains stage:WeergaveGrafisch;
+	elmo:uri-pattern "/id/begrip/";
+	elmo:applies-to [
+		rdf:type owl:Class;
+		rdf:type owl:DatatypeProperty;
+		rdf:type sh:Shape;
+		rdf:type sh:PropertyConstraint;
+	];
+.
+
+# Alfabetische weergave collecties (DMN)
+stage:TRCollectiesatotz a elmo:Representation;	
+	elmo:url-pattern "/toepasbareregels/query/collecties(|/|\\..+)$";
+	elmo:contains stage:TRCollectiestabel;
+	elmo:contains stage:TRIndexCollecties;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+.
+
+#
+# PARTS
+#
+
+# Algemene tabelweergave (Gebruikt in het DMN gedeelte)
+stage:WeergaveTabel a elmo:Part;
+	elmo:index "01";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+
+	elmo:query stage:WeergaveTabelQuery;
+.
+
+# Index voor op de alfabetische weergave concepten (DMN gedeelte)
+stage:TRIndexConcepten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/registratie/conclusies/query/overzichtspagina";
+		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "02";
+.
+
+
+# Index voor op de alfabetische weergave collecties (DMN gedeelte)
+stage:TRIndexCollecties a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "";
+		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term"
+	];
+	elmo:index "02";
+.
+
+# Grafische weergave DMN modellen
+stage:WeergaveGrafisch a elmo:Part;
+	elmo:index "10";
+	elmo:appearance elmo:GraphAppearance;
+	elmo:fragment [
+		elmo:applies-to "Decision";
+		xhtml:stylesheet '''
+			fill: red;
+			fill-opacity: .3;
+			stroke: #666;
+		''';
+		elmo:index "3";
+	];
+	elmo:fragment [
+		elmo:applies-to "Input";
+		xhtml:stylesheet '''
+			fill: orange;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "4";
+	];
+	
+	elmo:query stage:WeergaveGrafischQuery;
+.
+
+# Query voor grafische weergave decisions e.d. (DMN)
+stage:WeergaveGrafischQuery a elmo:Query;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		
+		construct {
+			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> rdfs:uitleg ?scomment.
+			<@SUBJECT@> ?sattribute "".
+			<@SUBJECT@> ?pred ?cshape.
+			<@SUBJECT@> elmo:style ?stype.
+			?cshape rdfs:label ?clabel.
+			?cshape rdfs:uitleg ?ccomment.
+			?cshape ?cattribute "".
+			?cshape elmo:style ?ctype.
+			?rshape ?rpred <@SUBJECT@>.
+			?rshape rdfs:label ?rlabel.
+			?rshape rdfs:uitleg ?rcomment.
+			?rshape ?rattribute "".
+			?rshape elmo:style ?rtype.
+			<@SUBJECT@> rdfs:subClassOf ?supershape.
+			?supershape rdfs:label ?supershapelabel.
+			?supershape rdfs:uitleg ?superclasscomment.
+			?supershape elmo:style ?supershapetype.
+			?subshape rdfs:subClassOf <@SUBJECT@>.
+			?subshape rdfs:label ?subshapelabel.
+			?subshape rdfs:uitleg ?subclasscomment.
+			?subshape elmo:style ?subshapetype.
+			rdfs:subClassOf rdfs:label "is een".
+			dmn:Decision elmo:name "Decision".
+			dmn:Input elmo:name "Input".
+		}
+		WHERE {
+			{ # Subject gedeelte
+				<@SUBJECT@> sh:scopeClass/rdfs:label ?slabel.
+				
+				OPTIONAL {
+					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
+				}
+				OPTIONAL {
+					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
+					?sattribute rdf:type owl:DatatypeProperty.
+				}
+				OPTIONAL {
+					<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?stype.
+				}
+			}
+			UNION
+			{ # Uitgaande specialisaties
+				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
+				?supershape sh:scopeClass ?superclass.
+				?supershape sh:scopeClass/rdfs:label ?supershapelabel.
+				OPTIONAL {
+					?superclass rdfs:comment ?superclasscomment
+				}
+				OPTIONAL {
+					?supershape sh:scopeClass/rdfs:subClassOf ?supershapetype.
+				}
+			}
+			UNION
+			{ # Uitgaande relaties
+				<@SUBJECT@> sh:property ?pc.
+				?pc sh:predicate ?pred.
+				?pc sh:class ?class.
+				?class rdfs:label ?clabel.
+				?cshape sh:scopeClass ?class.
+				OPTIONAL {
+					?class rdfs:comment ?ccomment
+				}
+				OPTIONAL {
+					?cshape sh:property/sh:predicate ?cattribute.
+					?cattribute rdf:type owl:DatatypeProperty.
+				}
+				OPTIONAL {
+					?cshape sh:scopeClass/rdfs:subClassOf ?ctype.
+				}
+			}
+			UNION
+			{ # Inkomende specialisaties
+				<@SUBJECT@> sh:scopeClass ?sclass.
+				?subclass rdfs:subClassOf ?sclass.
+				?subshape sh:scopeClass ?subclass.
+				?subshape sh:scopeClass/rdfs:label ?subshapelabel.
+				OPTIONAL {
+					?subclass rdfs:comment ?subclasscomment
+				}
+				OPTIONAL {
+					?subshape sh:scopeClass/rdfs:subClassOf ?subshapetype.
+				}
+			}
+			UNION
+			{ # Inkomende relaties
+				<@SUBJECT@> sh:scopeClass ?sclass.
+				?rpc sh:class ?sclass.
+				?rpc sh:predicate ?rpred.
+				?rshape sh:property ?rpc.
+				?rshape sh:scopeClass/rdfs:label ?rlabel
+				OPTIONAL {
+					?rshape sh:scopeClass/rdfs:comment ?rcomment
+				}
+				OPTIONAL {
+					?rshape sh:property/sh:predicate ?rattribute.
+					?rattribute rdf:type owl:DatatypeProperty.
+				}
+				OPTIONAL {
+					?rshape sh:scopeClass/rdfs:subClassOf ?rtype.
+				}
+			}
+		}
+	''';
+.
+
+
+# Query voor WeergaveTabel DMN
+stage:WeergaveTabelQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		
+		construct {
+			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> rdfs:uitleg ?scomment.
+			<@SUBJECT@> ?pred ?cshape.
+			<@SUBJECT@> rdfs:subClassOf ?stype.
+			?cshape rdfs:label ?clabel.
+			<@SUBJECT@> rdfs:subClassOf ?supershape.
+			?supershape rdfs:label ?supershapelabel.
+			dmn:Decision rdfs:label "Decision".
+			dmn:Input rdfs:label "Input".
+		}
+		WHERE {
+			{ # Subject gedeelte
+				<@SUBJECT@> sh:scopeClass/rdfs:label ?slabel.
+				OPTIONAL {
+					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
+				}
+				OPTIONAL {
+					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
+					?sattribute rdf:type owl:DatatypeProperty.
+				}
+				OPTIONAL {
+					<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?stype.
+				}
+			}
+			UNION
+			{ # Uitgaande specialisaties
+				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
+				?supershape sh:scopeClass ?superclass.
+				?supershape sh:scopeClass/rdfs:label ?supershapelabel.
+				OPTIONAL {
+					?superclass rdfs:comment ?superclasscomment
+				}
+			}
+			UNION
+			{ # Uitgaande relaties
+				<@SUBJECT@> sh:property ?pc.
+				?pc sh:predicate ?pred.
+				?pc sh:class ?class.
+				?class rdfs:label ?clabel.
+				?cshape sh:scopeClass ?class.
+			}
+		}
+	'''
+.
