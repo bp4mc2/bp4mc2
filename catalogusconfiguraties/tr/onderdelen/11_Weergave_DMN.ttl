@@ -10,12 +10,29 @@ stage:WeergavePaginaGrafisch a elmo:Representation;
 	elmo:contains stage:TRTree;
 	elmo:contains stage:WeergaveTabel;
 	elmo:contains stage:WeergaveGrafisch;
-	elmo:uri-pattern "/id/begrip/";
 	elmo:applies-to [
-		rdf:type owl:Class;
-		rdf:type owl:DatatypeProperty;
-		rdf:type sh:Shape;
-		rdf:type sh:PropertyConstraint;
+		rdf:type dmn:AuthorityRequirement;
+		rdf:type dmn:Binding;
+		rdf:type dmn:BusinessContextElement;
+		rdf:type dmn:BusinessKnowledgeModel;
+		rdf:type dmn:Context;
+		rdf:type dmn:ContextEntry;
+		rdf:type dmn:Decision;
+		rdf:type dmn:DecisionRule;
+		rdf:type dmn:DecisionTable;
+		rdf:type dmn:Definitions;
+		rdf:type dmn:FunctionDefinition;
+		rdf:type dmn:InformationItem;
+		rdf:type dmn:InformationRequirement;
+		rdf:type dmn:InputClause;
+		rdf:type dmn:InputData;
+		rdf:type dmn:Invocation;
+		rdf:type dmn:ItemDefinition;
+		rdf:type dmn:KnowledgeRequirement;
+		rdf:type dmn:KnowledgeSource;
+		rdf:type dmn:LiteralExpression;
+		rdf:type dmn:OutputClause;
+		rdf:type dmn:UnaryTests;
 	];
 .
 
@@ -80,185 +97,169 @@ stage:WeergaveGrafisch a elmo:Part;
 			fill-opacity: .3;
 			stroke: #666;
 		''';
-		elmo:index "3";
+		elmo:index "1";
 	];
 	elmo:fragment [
-		elmo:applies-to "Input";
+		elmo:applies-to "InputData";
 		xhtml:stylesheet '''
 			fill: orange;
 			fill-opacity: .3;
 			stroke #666;
 		''';
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "InputClause";
+		xhtml:stylesheet '''
+			fill: yellow;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "OutputClause";
+		xhtml:stylesheet '''
+			fill: gray;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "DecisionTable";
+		xhtml:stylesheet '''
+			fill: green;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "3";
+	];
+	elmo:fragment [
+		elmo:applies-to "DecisionRule";
+		xhtml:stylesheet '''
+			fill: pink;
+			fill-opacity: .3;
+			stroke #666;
+		''';
 		elmo:index "4";
 	];
-	
+	elmo:fragment [
+		elmo:applies-to "KnowledgeSource";
+		xhtml:stylesheet '''
+			fill: brown;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "5";
+	];
+	elmo:fragment [
+		elmo:applies-to "InformationItem";
+		xhtml:stylesheet '''
+			fill: blue;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "6";
+	];
+	elmo:fragment [
+		elmo:applies-to "LiteralExpression";
+		xhtml:stylesheet '''
+			fill: cyan;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "7";
+	];
+	elmo:fragment [
+		elmo:applies-to "UnaryTests";
+		xhtml:stylesheet '''
+			fill: purple;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "8";
+	];
 	elmo:query stage:WeergaveGrafischQuery;
 .
-
-# Query voor grafische weergave decisions e.d. (DMN)
-stage:WeergaveGrafischQuery a elmo:Query;
-	elmo:query '''
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix elmo: <http://bp4mc2.org/elmo/def#>
-		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
-		
-		construct {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?sattribute "".
-			<@SUBJECT@> ?pred ?cshape.
-			<@SUBJECT@> elmo:style ?stype.
-			?cshape rdfs:label ?clabel.
-			?cshape rdfs:uitleg ?ccomment.
-			?cshape ?cattribute "".
-			?cshape elmo:style ?ctype.
-			?rshape ?rpred <@SUBJECT@>.
-			?rshape rdfs:label ?rlabel.
-			?rshape rdfs:uitleg ?rcomment.
-			?rshape ?rattribute "".
-			?rshape elmo:style ?rtype.
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			?supershape rdfs:uitleg ?superclasscomment.
-			?supershape elmo:style ?supershapetype.
-			?subshape rdfs:subClassOf <@SUBJECT@>.
-			?subshape rdfs:label ?subshapelabel.
-			?subshape rdfs:uitleg ?subclasscomment.
-			?subshape elmo:style ?subshapetype.
-			rdfs:subClassOf rdfs:label "is een".
-			dmn:Decision elmo:name "Decision".
-			dmn:Input elmo:name "Input".
-		}
-		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> sh:scopeClass/rdfs:label ?slabel.
-				
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?stype.
-				}
-			}
-			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape sh:scopeClass/rdfs:label ?supershapelabel.
-				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
-				}
-				OPTIONAL {
-					?supershape sh:scopeClass/rdfs:subClassOf ?supershapetype.
-				}
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
-				OPTIONAL {
-					?class rdfs:comment ?ccomment
-				}
-				OPTIONAL {
-					?cshape sh:property/sh:predicate ?cattribute.
-					?cattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					?cshape sh:scopeClass/rdfs:subClassOf ?ctype.
-				}
-			}
-			UNION
-			{ # Inkomende specialisaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?subclass rdfs:subClassOf ?sclass.
-				?subshape sh:scopeClass ?subclass.
-				?subshape sh:scopeClass/rdfs:label ?subshapelabel.
-				OPTIONAL {
-					?subclass rdfs:comment ?subclasscomment
-				}
-				OPTIONAL {
-					?subshape sh:scopeClass/rdfs:subClassOf ?subshapetype.
-				}
-			}
-			UNION
-			{ # Inkomende relaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?rpc sh:class ?sclass.
-				?rpc sh:predicate ?rpred.
-				?rshape sh:property ?rpc.
-				?rshape sh:scopeClass/rdfs:label ?rlabel
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:comment ?rcomment
-				}
-				OPTIONAL {
-					?rshape sh:property/sh:predicate ?rattribute.
-					?rattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:subClassOf ?rtype.
-				}
-			}
-		}
-	''';
-.
-
 
 # Query voor WeergaveTabel DMN
 stage:WeergaveTabelQuery a elmo:Query;
 	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix container: <http://localhost:8080/toepasbareregels/container/>
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		
-		construct {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?pred ?cshape.
-			<@SUBJECT@> rdfs:subClassOf ?stype.
-			?cshape rdfs:label ?clabel.
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			dmn:Decision rdfs:label "Decision".
-			dmn:Input rdfs:label "Input".
+		CONSTRUCT {
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?subject_label.
 		}
 		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> sh:scopeClass/rdfs:label ?slabel.
+			GRAPH container:dmn
+			{
+				<@SUBJECT@> ?p ?o.
 				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
+					<@SUBJECT@> rdfs:label ?subject_label. 
+				}
+			}
+		}
+	'''
+.
+
+# Query voor grafische weergave decisions e.d. (DMN)
+stage:WeergaveGrafischQuery rdf:type elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+
+		CONSTRUCT {
+
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?concept_label.
+			<@SUBJECT@> elmo:style ?type.
+			?o rdfs:label ?object_label.
+			?o elmo:style ?otype.
+			?s ?sp <@SUBJECT@>.
+			?s rdfs:label ?subject_label.
+			?s elmo:style ?stype.
+
+			# Identificeren DMN-typen
+			dmn:Decision elmo:name "Decision".
+			dmn:DecisionRule elmo:name "DecisionRule".
+			dmn:DecisionTable elmo:name "DecisionTable".
+			dmn:InformationItem elmo:name "InformationItem".
+			dmn:InputData elmo:name "InputData".
+			dmn:InputClause elmo:name "InputClause".
+			dmn:KnowledgeSource elmo:name "KnowledgeSource".
+			dmn:OutputClause elmo:name "OutputClause".
+			dmn:LiteralExpression elmo:name "LiteralExpression".
+			dmn:UnaryTests elmo:name "UnaryTests".
+		}
+		WHERE 
+		{
+			{
+				<@SUBJECT@> ?p ?o.
+				<@SUBJECT@> rdf:type ?type.
+				?o rdf:type ?otype.
+				OPTIONAL {
+					<@SUBJECT@> rdfs:label ?concept_label.
 				}
 				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?stype.
+					?o rdfs:label ?object_label.
 				}
 			}
 			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape sh:scopeClass/rdfs:label ?supershapelabel.
+			{
+				?s ?sp <@SUBJECT@>.
+				?s rdf:type ?stype.
 				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
+					?s rdfs:label ?subject_label.
 				}
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
 			}
 		}
 	'''

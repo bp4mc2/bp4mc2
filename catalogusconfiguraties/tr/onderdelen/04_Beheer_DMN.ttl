@@ -9,8 +9,57 @@ container:dmnupload a elmo:Container;
 	elmo:query stage:TRDMNUploadScene;
 .
 
-# Uploadquery voor DMN
+# Postquery
+# Doet nu even niets meer dan data naar de juiste graph kopiëren
 stage:TRDMNUploadScene a elmo:Scene;
+	elmo:query '''
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		
+		CLEAR GRAPH container:dmn
+		
+		INSERT INTO container:dmn {
+			?s ?p ?o.
+		} WHERE {
+			SELECT  iri(concat("http://localhost:8080/toepasbareregels/id/concept/",str(?subject))) as ?s
+					?p
+					iri(concat("http://localhost:8080/toepasbareregels/id/concept/",str(?object))) as ?o
+			WHERE {
+				GRAPH container:dmnupload {
+					?subject ?p ?object
+				}
+				FILTER(
+					isIRI(?object)
+					&& ?p != rdf:type
+					&& ?p != dmn:typeRef
+				)
+			}
+		}
+		
+		INSERT INTO container:dmn {
+			?s ?p ?o.
+		} WHERE {
+			SELECT  iri(concat("http://localhost:8080/toepasbareregels/id/concept/",str(?subject))) as ?s
+					?p
+					?o
+			WHERE {
+				GRAPH container:dmnupload {
+					?subject ?p ?o
+				}
+				FILTER(
+					!isIRI(?o)
+					|| ?p = rdf:type
+					|| ?p = dmn:typeRef
+				)
+			}
+		}
+	''';
+.
+
+# CLEAR GRAPH container:dmnupload
+
+# Oude uploadquery voor DMN
+stage:TRDMNUploadSceneOud a elmo:Scene;
 	elmo:query '''
 		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		prefix shacl: <http://www.w3.org/ns/shacl#>

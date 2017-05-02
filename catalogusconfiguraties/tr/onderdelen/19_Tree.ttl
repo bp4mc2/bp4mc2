@@ -23,20 +23,34 @@ stage:TRTreeQuery a elmo:Query;
 		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		
 		CONSTRUCT {
 			?s rdfs:label ?slabel.
 			?o rdfs:label ?olabel.
-			?o ?p ?s.
+			?o dmn:informationRequirement ?s.
 		}
 		WHERE {
 			GRAPH container:dmn {
-				?s rdf:type sh:Shape.
-				?s sh:scopeClass/rdfs:label ?slabel.
+				?s rdf:type dmn:Decision.
 				OPTIONAL {
-					?s ?p ?o.
-					?o rdf:type sh:Shape.
-					?o sh:scopeClass/rdfs:label ?olabel.
+					?s rdfs:label ?slabel.
+				}
+				OPTIONAL {
+					{
+						?s dmn:informationRequirement/dmn:requiredDecision ?o.
+						?o rdf:type dmn:Decision.
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+						}
+					}
+					UNION {
+						?s dmn:informationRequirement/dmn:requiredInput ?o.
+						?o rdf:type dmn:InputData.
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+						}
+					}
 				}
 			}
 		}
