@@ -1863,13 +1863,16 @@ stage:TRConceptenQuery a elmo:Query;
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
 		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		
-		SELECT ?shape ?shape_label
+		SELECT ?decision ?decision_label
 		WHERE {
 			GRAPH container:dmn {
-				?shape rdf:type sh:Shape.
-				?shape sh:scopeClass/rdfs:label ?shape_label.
-				FILTER regex(?shape_label, '^[^a-z0-9]*@TERM@', 'i').
+				?decision rdf:type dmn:Decision.
+				OPTIONAL {
+					?decision rdfs:label ?decision_label
+				}
+				FILTER regex(?decision_label, '^[^a-z0-9]*@TERM@', 'i').
 			}
 		}
 	'''
