@@ -1,0 +1,293 @@
+# Uploadcontainer Concepten RDF (.XML) of Turle (.TTL)
+container:ttlupload rdf:type elmo:Container;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRBeheermenu;
+	elmo:contains stage:TRFooter;
+    rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
+    elmo:replaces container:generiek;
+    elmo:representation elmo:UploadRepresentation;
+#    elmo:query stage:DSOGeneriekeUploadScene;
+.
+
+# Generieke upload scene
+stage:DSOGeneriekeUploadScene rdf:type elmo:Scene;
+    rdfs:label "Postquery inladen gegevens";
+    elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix doc: <http://localhost:8080/toepasbareregels/concepten/doc/>
+		prefix loc: <http://localhost:8080/toepasbareregels/id/>
+		prefix versiongraph: <http://localhost:8080/toepasbareregels/concepten/doc/@CURRENTMOMENT@>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		prefix activity: <http://localhost:8080/toepasbareregels/id/concept/@CURRENTMOMENT@>
+			
+		
+		DELETE FROM versiongraph:version {
+            ?s?p?o
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
+		
+		INSERT INTO container:generiek {
+			?s rdfs:label ?spreflabel.
+		} WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
+					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				}
+			}
+		}
+		
+		INSERT INTO doc:mastergraph {
+            doc:mastergraph rdf:type void:Dataset.
+            doc:mastergraph rdfs:label "Concepten".
+            versiongraph:version dct:isVersionOf doc:mastergraph.
+            collection:concepten rdf:type skos:ConceptScheme.
+            collection:concepten rdfs:label "Conceptschema".
+		}
+		
+		INSERT INTO versiongraph:version {
+            collection:concepten rdfs:isDefinedBy versiongraph:version.
+            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+            versiongraph:version prov:wasGeneratedBy activity:Upload.
+			versiongraph:version rdf:type prov:Entity.
+			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+			activity:Upload rdf:type prov:Activity.
+			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			concept:tomcatUser rdf:type prov:Agent.
+			concept:tomcatUser rdfs:label "Tomcat User".
+			concept:tomcatUser foaf:givenName "Tomcat User".
+			concept:tomcatUser foaf:mbox "tomcat@user.org".
+			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		}
+
+		INSERT INTO container:generiek {
+            ?s bp4mc2:signature ?sig.
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:generiek {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = skos:Concept
+							|| ?type = skos:Collection
+							|| ?type = skoslex:Act
+							|| ?type = skoslex:Norm
+							|| ?type = skoslex:Object
+							|| ?type = skoslex:Actor
+							|| ?type = owl:Class
+							|| ?type = dctype:Text
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g.
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH container:generiek {
+					?s rdf:type ?type.
+					FILTER (
+						?type = skos:Concept
+						|| ?type = skos:Collection
+						|| ?type = skoslex:Act
+						|| ?type = skoslex:Norm
+						|| ?type = skoslex:Object
+						|| ?type = skoslex:Actor
+						|| ?type = owl:Class
+						|| ?type = dctype:Text
+					)
+				}
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE FROM doc:mastergraph {
+			?s bp4mc2:signature ?sig.
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH container:generiek {
+					?s rdf:type ?type.
+					FILTER (
+						?type = skos:Concept
+						|| ?type = skos:Collection
+						|| ?type = skoslex:Act
+						|| ?type = skoslex:Norm
+						|| ?type = skoslex:Object
+						|| ?type = skoslex:Actor
+						|| ?type = owl:Class
+						|| ?type = dctype:Text
+					)
+				}
+			}
+		}
+			
+		INSERT INTO versiongraph:version {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type ?type.
+			    ?s ?p ?o.
+			    ?s bp4mc2:signature ?sig
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s bp4mc2:signature ?sig
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE FROM doc:mastergraph {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+		}
+
+		INSERT INTO doc:mastergraph {
+			?s rdf:type ?type.
+			?s rdfs:isDefinedBy versiongraph:version.
+			?s bp4mc2:signature ?sig
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+			    ?s rdf:type ?type.
+			    ?s bp4mc2:signature ?sig.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+            }
+		}
+		
+		CLEAR GRAPH container:generiek		
+		CLEAR GRAPH container:excelupload		
+		CLEAR GRAPH container:ttlupload
+	''';
+    elmo:index "2"
+.

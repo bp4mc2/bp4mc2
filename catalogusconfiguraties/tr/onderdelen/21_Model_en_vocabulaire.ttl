@@ -1,0 +1,127 @@
+# Vocabulairepagina (DMN)
+stage:TRvocabulaire	a	elmo:Representation;
+	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:TRVocabulaireQuery;
+.
+
+# Pagina met vocabulaire van het informatiemodel
+stage:WeergavePaginaVocabulaireFS rdf:type elmo:Representation;
+	elmo:uri-pattern "/def/informatiemodel";
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRFooter;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:TRVocabulaireQueryInformatiemodel;
+.
+
+
+#
+#
+#
+# QUERY'S VOOR PAGINA'S/PARTS
+#
+#
+#
+
+# Query voor Vocabulairepagina DMN
+stage:TRVocabulaireQuery a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			?shape shacl:scopeClass ?element.
+			?shape shacl:property ?pc.
+			?pc shacl:predicate ?pred.
+			?pc shacl:class ?class.
+			?pc shacl:datatype ?datatype.
+			?pc shacl:in ?collection.
+		}
+		WHERE {
+			GRAPH <http://localhost:8080/toepasbareregels/umlmodel> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
+				OPTIONAL {
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
+				}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					?shape shacl:scopeClass ?element.
+					?shape shacl:property ?pc.
+					?pc shacl:predicate ?pred.
+					OPTIONAL {?pc shacl:class ?class}
+					OPTIONAL {?pc shacl:datatype ?datatype}
+					OPTIONAL {?pc shacl:in ?collection}
+				}
+				FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
+			}
+		}
+	'''
+.
+
+
+# Query voor vocabulairepagina Informatiemodel
+stage:TRVocabulaireQueryInformatiemodel2 a elmo:Query;
+	elmo:query '''
+	CONSTRUCT {
+		?element rdf:type ?type.
+		?element rdfs:label ?label.
+		?element rdfs:comment ?def.
+		?element rdfs:subClassOf ?super.
+	}
+	WHERE {
+		GRAPH <http://localhost:8080/toepasbareregels/container/ttlupload> {
+			?element rdf:type ?type.
+			OPTIONAL {?element rdfs:label ?label}
+			OPTIONAL {?element rdfs:comment ?def}
+		}
+	}
+	'''
+.
+
+# Query voor  vocabulairepagina Informatiemodel
+stage:TRVocabulaireQueryInformatiemodel a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dso: <http://www.w3.org/ns/dso#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			#?pc dso:predicate ?pred.
+			#?pc dso:class ?class.
+			#?pc dso:datatype ?datatype.
+			#?pc dso:in ?collection.
+		}
+		WHERE {
+			GRAPH <http://localhost:8080/toepasbareregels/container/generiek> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
+				OPTIONAL {
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
+				}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				#OPTIONAL {
+				#	?pc dso:predicate ?pred.
+				#	OPTIONAL {?pc dso:class ?class}
+				#	OPTIONAL {?pc dso:datatype ?datatype}
+				#	OPTIONAL {?pc dso:in ?collection}
+				#}
+				#FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
+			}
+		}
+	'''
+.

@@ -1,0 +1,182 @@
+#
+# CONTAINERS
+#
+
+# Uploadcontainer UML-model
+container:umlmodelupload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRBeheermenu;
+	elmo:translator elmo:XMI21Translator;
+	rdfs:label "XMI 2.1 vertaler (DMN)";
+	elmo:query stage:TRUMLUploadScene;
+.
+
+# Uploadquery UML-model
+stage:TRUMLUploadScene a elmo:Scene;
+	elmo:query '''
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		CLEAR GRAPH <http://localhost:8080/toepasbareregels/umlmodel>
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			<http://localhost:8080/toepasbareregels/def/model> rdf:type owl:Ontology.
+			<http://localhost:8080/toepasbareregels/def/model> rdfs:label "Model".
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?class rdf:type owl:Class.
+			?class rdfs:label ?label.
+			?shape rdf:type sh:Shape.
+			?shape rdfs:label ?label.
+			?shape sh:scopeClass ?class.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				?label
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?label.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+				}
+			}
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?property rdf:type owl:DatatypeProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(concat(?clabel,'.',?alabel) AS ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					FILTER NOT EXISTS {
+						?a uml:association ?assoc
+					}
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?property rdf:type owl:ObjectProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+			?pc sh:class ?refclass.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(concat(?clabel,'.',?alabel) as ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?a uml:association ?assoc.
+					?assoc uml:memberEnd ?a.
+					?a uml:type ?rc.
+					?rc rdfs:label ?rclabel.
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?class rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?clabel.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?property rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c uml:ownedAttribute ?a.
+					?c rdfs:label ?alabel.
+					?a ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?subclass rdfs:subClassOf ?class
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?sub uml:generalization ?gen.
+					?gen rdf:type uml:Generalization.
+					?gen uml:general ?c.
+					?sub rdfs:label ?sublabel.
+					?c rdfs:label ?clabel.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:umlmodelupload	
+	''';
+.

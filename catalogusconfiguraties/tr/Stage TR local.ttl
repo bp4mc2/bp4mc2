@@ -1,10 +1,10 @@
-@prefix stage: <http://localhost:8080/catalogus/tr/stage#>.
-@prefix updatestage: <http://localhost:8080/catalogus/tr/update/>.
+@prefix stage: <http://localhost:8080/toepasbareregels/stage#>.
+@prefix updatestage: <http://localhost:8080/toepasbareregels/update/>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://localhost:8080/catalogus/tr/container/>.
+@prefix container: <http://localhost:8080/toepasbareregels/container/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: <http://bp4mc2.org/skosax#>.
 @prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
@@ -23,7 +23,7 @@
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 @prefix yed: <http://bp4mc2.org/yed#>.
-
+@prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>. 
 #
 #
 #
@@ -32,127 +32,22 @@
 #
 #
 
-
-stage:UploadedVocabularyAppearanceYed a elmo:Representation;
-	elmo:url-pattern	"/query/uploaded-vocabulary\\.yed$";
-	elmo:layer elmo:TopLayer;
-	elmo:fragment [
-		elmo:applies-to rdfs:subClassOf;
-		rdfs:label "";
-		yed:sourceArrow "none";
-		yed:targetArrow "white_delta";
-	];
-	elmo:query '''
-		prefix shacl: <http://www.w3.org/ns/shacl#>
-		# prefix owl: <http://www.w3.org/2002/07/owl#>
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
-		
-		CONSTRUCT {
-			?element rdfs:label ?label.
-			?element rdfs:comment ?attribs.
-			?element rdfs:subClassOf ?super.
-			?element ?pc ?class.
-			?element rdf:type owl:Class.
-			?pc rdfs:label ?plabel.
-		}
-		WHERE {
-			GRAPH container:dmn {
-				?element rdf:type owl:Class.
-				?element rdfs:label ?label
-				OPTIONAL {?element rdfs:subClassOf ?super}
-				OPTIONAL {
-					select ?element ?pc ?class (concat(if(bound(?plabel),?plabel,strafter(str(?pred),"#"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
-					where {
-						?shape shacl:scopeClass ?element.
-						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
-						?pc shacl:class ?class.
-						?class rdf:type owl:Class.
-						OPTIONAL {?pred rdfs:label ?plabel}
-						OPTIONAL {?pc shacl:minCount ?minc}
-						OPTIONAL {?pc shacl:maxCount ?maxc}
-						FILTER NOT EXISTS {?pc shacl:in ?col}
-					}
-				}
-				OPTIONAL {
-					select ?element (group_concat(concat(if(bound(?plabel),?plabel,strafter(str(?pred),"#"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",?maxc,"]");separator="\\n") as ?attribs)
-					where {
-						?shape shacl:scopeClass ?element.
-						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
-						OPTIONAL {?pred rdfs:label ?plabel}
-						OPTIONAL {?pc shacl:datatype ?datatype}
-						OPTIONAL {?pc shacl:minCount ?minc}
-						OPTIONAL {?pc shacl:maxCount ?maxc}
-						FILTER NOT EXISTS {
-							?pc shacl:class ?class.
-							?class rdf:type owl:Class.
-						}
-					}
-					group by ?element
-				}
-			}
-		}
-	''';
-.
-
-
-# Vocabulairepagina
-stage:TRvocabulaire	a	elmo:Representation;
-	elmo:applies-to [rdf:type owl:Ontology];
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:contains stage:TRMenu;
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:query stage:TRVocabulaireQuery;
-.
-
-
-# Weergavepagina inclusief grafische weergave
-stage:WeergavePaginaGrafisch a elmo:Representation;
-	elmo:contains stage:TRMenu;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:contains stage:TRTree;
-	elmo:contains stage:WeergaveTabel;
-	elmo:contains stage:WeergaveGrafisch;
-	elmo:uri-pattern "/id/begrip/";
-	elmo:applies-to [
-		rdf:type owl:Class;
-		rdf:type owl:DatatypeProperty;
-		rdf:type sh:Shape;
-		rdf:type sh:PropertyConstraint;
-	];
-.
-
-
-# Standaard zoekpagina
-stage:TRSearch a elmo:Representation;
-	elmo:url-pattern "query/search";
-	elmo:contains stage:TRMenu;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:query stage:TRSearchQuery;
-.
-
-
 # Welkomstpagina
 stage:TRWelkomstpagina rdf:type elmo:Representation;
-	elmo:url-pattern "/catalogus/tr(|/)$";
+	elmo:url-pattern "/toepasbareregels(|/)$";
 	elmo:contains stage:TRMenu;
 	elmo:contains stage:TRHeader;
 	elmo:contains stage:TRFooter;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
-		rdfs:label "TR";
-		elmo:html "<div><p>Welkom bij de Catalogus voor het TR-programma. Vanaf hier kunt u via de conceptenboom of via de alfabetische conceptenlijst navigeren door de verschillende concepten die in de Catalogus zijn vastgelegd.</p><p>Op de Help-pagina staat uitleg over wat de verschillende termen die gebruikt worden in de Catalogus betekenen. Tevens staat daar een instructie over hoe concepten aan de Catalogus kunnen worden toegevoegd, bewerkt of verwijderd.</p></div>"
+		rdfs:label "Registratie Toepasbare Regels";
+		elmo:html "<div><p>Welkom bij de Registratie Toepasbare Regels voor het DSO-programma. Vanaf hier kunt u via de conceptenboom of via de alfabetische conceptenlijst navigeren door de verschillende concepten die in de Registratie zijn vastgelegd.</p><p>Op de Help-pagina staat uitleg over wat de verschillende termen die gebruikt worden in de Registratie betekenen. Tevens staat daar een instructie over hoe concepten aan de Registratie kunnen worden toegevoegd, bewerkt of verwijderd.</p></div>"
 	]
 .
 
-
 # Helppagina
 stage:TRHelp rdf:type elmo:Representation;
-	elmo:url-pattern "/catalogus/tr/query/help(|/)$";
+	elmo:url-pattern "/toepasbareregels/query/help(|/)$";
 	elmo:contains stage:TRMenu;
 	elmo:contains stage:TRHeader;
 	elmo:contains stage:TRFooter;
@@ -203,10 +98,9 @@ stage:TRHelp rdf:type elmo:Representation;
 	];
 .
 
-
 # Helppagina beheer
 stage:TRBeheerHelp rdf:type elmo:Representation;
-	elmo:url-pattern "/catalogus/tr/query/beheerhelp(|/)$";
+	elmo:url-pattern "/toepasbareregels/query/beheerhelp(|/)$";
 	elmo:contains stage:TRBeheermenu;
 	elmo:contains stage:TRHeader;
 	elmo:contains stage:TRFooter;
@@ -219,10 +113,9 @@ stage:TRBeheerHelp rdf:type elmo:Representation;
 	]
 .
 
-
 # Hoofdpagina beheer
 stage:TRBeheerpagina rdf:type elmo:Representation;
-	elmo:url-pattern "/catalogus/tr/admin(|/)$";
+	elmo:url-pattern "/toepasbareregels/admin(|/)$";
 	elmo:contains stage:TRBeheermenu;
 	elmo:contains stage:TRHeader;
 	elmo:contains stage:TRFooter;
@@ -231,82 +124,6 @@ stage:TRBeheerpagina rdf:type elmo:Representation;
 		rdfs:label "TR";
 		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>"
 	]
-.
-
-
-# Zoekpagina concepten
-stage:TRZoekpagina rdf:type elmo:Representation;
-	elmo:url-pattern "/catalogus/tr/query/zoekpagina(|/|\\..+)$";
-	elmo:contains stage:TRConceptentabel;
-	elmo:contains stage:TRIndexConcepten;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:contains stage:TRMenu;
-	elmo:contains stage:TRTree;
-.
-
-
-# Alfabetische weergave collecties
-stage:TRCollectiesatotz a elmo:Representation;
-	
-	elmo:url-pattern "/catalogus/tr/query/collecties(|/|\\..+)$";
-	elmo:contains stage:TRCollectiestabel;
-	elmo:contains stage:TRIndexCollecties;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:contains stage:TRMenu;
-.
-
-
-
-#
-#
-#
-# PRODUCTIONS
-#
-#
-#
-
-# Speciale pagina om alle gegevens te wissen
-# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
-updatestage:clearalldata a elmo:Production;
-	elmo:contains stage:TRBeheermenu;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:queryForm stage:TRDummyForm;
-	elmo:contains stage:ClearAllDataScene;
-.
-
-stage:TRDummyForm a elmo:Form.
-
-#
-#
-#
-# CONTAINERS
-#
-#
-#
-
-# Uploadcontainer UML-model
-container:umlmodelupload a elmo:Container;
-	elmo:representation elmo:UploadRepresentation;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:contains stage:TRBeheermenu;
-	elmo:translator elmo:XMI21Translator;
-	rdfs:label "XMI 2.1 vertaler";
-	elmo:query stage:TRUMLUploadScene;
-.
-
-# Uploadcontainer DMN
-container:dmnupload a elmo:Container;
-	elmo:contains stage:TRBeheermenu;
-	elmo:contains stage:TRHeader;
-	elmo:contains stage:TRFooter;
-	elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload DMN";
-	elmo:translator elmo:DMNTranslator;
-	elmo:query stage:TRDMNUploadScene;
 .
 
 #
@@ -324,7 +141,6 @@ container:dmnupload a elmo:Container;
 # Header
 stage:TRHeader a elmo:Part;
 	elmo:appearance elmo:HeaderAppearance;
-	elmo:data [elmo:html "<a href='http://localhost:8080/catalogus/tr'><img src='http://localhost:8080/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
 .
 
 # Menubalk hoofdmenu
@@ -332,33 +148,52 @@ stage:TRMenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
 	elmo:data [
 		elmo:data [
-			rdfs:label "TR";
-			xhtml:link "/catalogus/tr";
+			rdfs:label "Registratie Toepasbare regels";
+			xhtml:link "/toepasbareregels";
 			elmo:index "0"
 		];
 		elmo:data [
 			rdfs:label "Decision model";
 			elmo:index "1";
-			xhtml:link "/catalogus/tr/query/zoekpagina?term=";
+			xhtml:link "/toepasbareregels/query/overzichtspagina?term=";
 		];
 		elmo:data [
 			elmo:index "2";
 			rdfs:label "DMN";
-			xhtml:link "/catalogus/tr/def/model";
+			xhtml:link "/toepasbareregels/def/model";
+		];
+		elmo:data [
+			elmo:index "3";
+			rdfs:label "Functionele structuur";
+			xhtml:link "/toepasbareregels/query/activiteiten?term=";
+		];
+		elmo:data [
+			rdfs:label "Vocabulaire TR";
+			xhtml:link "/toepasbareregels/def/informatiemodel";
+			elmo:index "4"
 		];
 		elmo:data [
 			rdfs:label "Beheer";
-			xhtml:link "/catalogus/tr/admin";
+			xhtml:link "/toepasbareregels/admin";
 			elmo:index "6"
 		];
 		elmo:data [
 			rdfs:label "Help";
-			xhtml:link "/catalogus/tr/query/help";
+			xhtml:link "/toepasbareregels/query/help";
 			elmo:index "7"
+		];
+		elmo:data [
+			rdfs:label "Geo example";
+			xhtml:link "/toepasbareregels/query/voorbeeldgeo";
+			elmo:index "8"
+		];
+		elmo:data [
+			rdfs:label "Backstage";
+			xhtml:link "/toepasbareregels/backstage";
+			elmo:index "9"
 		];
 	]
 .
-
 
 # Beheermenu
 stage:TRBeheermenu a elmo:Part;
@@ -366,27 +201,32 @@ stage:TRBeheermenu a elmo:Part;
 	elmo:data [
 		elmo:data [
 			rdfs:label "BEHEER";
-			xhtml:link "/catalogus/tr/admin";
+			xhtml:link "/toepasbareregels/admin";
 			elmo:index: "0";
 		];
 		elmo:data [ 
 			rdfs:label "Hoofdpagina";
 			elmo:index "1";
-			xhtml:link "/catalogus/tr";
+			xhtml:link "/toepasbareregels";
 		];
 		elmo:data [
 			rdfs:label "Upload";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "UML - model";
+				rdfs:label "UML - model (Conclusies)";
 				elmo:index "3";
-				xhtml:link "/catalogus/tr/container/umlmodelupload";
+				xhtml:link "/toepasbareregels/container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "DMN";
+				rdfs:label "DMN (Conclusies)";
 				elmo:index "5";
-				xhtml:link "/catalogus/tr/container/dmnupload";
+				xhtml:link "/toepasbareregels/container/dmnupload";
 			];
+			elmo:data [
+                rdfs:label "Upload concepten (RDF of Turtle) (Activiteiten)";
+                xhtml:link "/toepasbareregels/container/ttlupload";
+                elmo:index "6"
+            ];
 		];
 		elmo:data [
 			rdfs:label "Speciaal";
@@ -394,17 +234,17 @@ stage:TRBeheermenu a elmo:Part;
 			elmo:data [
 				elmo:index "1";
 				rdfs:label "Toon geupload DMN-model (yEd)";
-				xhtml:link "/catalogus/tr/query/uploaded-vocabulary.yed"
+				xhtml:link "/toepasbareregels/query/uploaded-vocabulary.yed"
 			];
 			elmo:data [
 				elmo:index "2";
 				rdfs:label "Verwijder alle data";
-				xhtml:link "/catalogus/tr/update/clearalldata";
+				xhtml:link "/toepasbareregels/update/clearalldata";
 			];
 		];
 		elmo:data [
 			rdfs:label "Help";
-			xhtml:link "/catalogus/tr/query/beheerhelp";
+			xhtml:link "/toepasbareregels/query/beheerhelp";
 			elmo:index "6"
 		];
 	]
@@ -439,319 +279,375 @@ stage:TRFooter a elmo:Part;
 				</div>
 				<div class="col-sm-4">
 					<h4>Disclaimer</h4>
-					<p>Dit betreft een eerste versie van de Catalogus. De Catalogus is nog in ontwikkeling.</p>
+					<p>Dit betreft een eerste versie van de Registratie Toepasbare Regels. De Registratie is nog in ontwikkeling.</p>
 					<p>Aan de informatie op deze pagina's kunnen geen rechten worden ontleend.</p>
 				</div>
 			</div>
 		'''^^rdf:html
 	];
+. 
+# Uploadcontainer Concepten RDF (.XML) of Turle (.TTL)
+container:ttlupload rdf:type elmo:Container;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRBeheermenu;
+	elmo:contains stage:TRFooter;
+    rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
+    elmo:replaces container:generiek;
+    elmo:representation elmo:UploadRepresentation;
+#    elmo:query stage:DSOGeneriekeUploadScene;
 .
 
-#
-# Index 1: dit moet bovenaan de pagina
-#
+# Generieke upload scene
+stage:DSOGeneriekeUploadScene rdf:type elmo:Scene;
+    rdfs:label "Postquery inladen gegevens";
+    elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix doc: <http://localhost:8080/toepasbareregels/concepten/doc/>
+		prefix loc: <http://localhost:8080/toepasbareregels/id/>
+		prefix versiongraph: <http://localhost:8080/toepasbareregels/concepten/doc/@CURRENTMOMENT@>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		prefix activity: <http://localhost:8080/toepasbareregels/id/concept/@CURRENTMOMENT@>
+			
+		
+		DELETE FROM versiongraph:version {
+            ?s?p?o
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
+		
+		INSERT INTO container:generiek {
+			?s rdfs:label ?spreflabel.
+		} WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
+					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				}
+			}
+		}
+		
+		INSERT INTO doc:mastergraph {
+            doc:mastergraph rdf:type void:Dataset.
+            doc:mastergraph rdfs:label "Concepten".
+            versiongraph:version dct:isVersionOf doc:mastergraph.
+            collection:concepten rdf:type skos:ConceptScheme.
+            collection:concepten rdfs:label "Conceptschema".
+		}
+		
+		INSERT INTO versiongraph:version {
+            collection:concepten rdfs:isDefinedBy versiongraph:version.
+            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+            versiongraph:version prov:wasGeneratedBy activity:Upload.
+			versiongraph:version rdf:type prov:Entity.
+			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+			activity:Upload rdf:type prov:Activity.
+			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			concept:tomcatUser rdf:type prov:Agent.
+			concept:tomcatUser rdfs:label "Tomcat User".
+			concept:tomcatUser foaf:givenName "Tomcat User".
+			concept:tomcatUser foaf:mbox "tomcat@user.org".
+			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		}
 
-# Boomweergave domeinen, collecties en concepten
-stage:TRTree a elmo:Part;
-	elmo:appearance elmo:TreeAppearance;
-    elmo:index "01";
-	elmo:query stage:TRTreeQuery;
-.
-
-
-# Algemene tabelweergave
-stage:WeergaveTabel a elmo:Part;
-	elmo:index "01";
-	elmo:fragment [
-		elmo:applies-to rdfs:label;
-		elmo:appearance elmo:HiddenAppearance
-	];
-
-	elmo:query stage:WeergaveTabelQuery;
-.
-
-
-#
-# Index 2: IndexAppearances
-#
-
-# Index voor op de alfabetische weergave concepten
-stage:TRIndexConcepten a elmo:Part;
-	elmo:appearance elmo:IndexAppearance;
-	elmo:data [
-		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
-		xhtml:link "/catalogus/tr/query/zoekpagina";
-		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
-		elmo:name "term";
-	];
-	elmo:index "02";
-.
-
-
-# Index voor op de alfabetische weergave collecties
-stage:TRIndexCollecties a elmo:Part;
-	elmo:appearance elmo:IndexAppearance;
-	elmo:data [
-		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
-		xhtml:link "";
-		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
-		elmo:name "term"
-	];
-	elmo:index "02";
-.
-
-#
-# Index 3: tabellen horende bij de IndexAppearances
-#
-
-# Conceptentabel voor op de alfabetische weergave concepten
-stage:TRConceptentabel a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:index "03";
-	elmo:fragment [
-		elmo:applies-to "uitleg";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:query stage:TRConceptenQuery;
-.
-
-
-#
-# Index 10: maakt niet veel uit waar op de pagina
-#
-
-# Grafische weergave
-stage:WeergaveGrafisch a elmo:Part;
-	elmo:index "10";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:fragment [
-		elmo:applies-to "Decision";
-		xhtml:stylesheet '''
-			fill: red;
-			fill-opacity: .3;
-			stroke: #666;
-		''';
-		elmo:index "3";
-	];
-	elmo:fragment [
-		elmo:applies-to "Input";
-		xhtml:stylesheet '''
-			fill: orange;
-			fill-opacity: .3;
-			stroke #666;
-		''';
-		elmo:index "4";
-	];
-	
-	elmo:query stage:WeergaveGrafischQuery;
-.
-
-
-#
-#
-#
-# SCENES
-#
-#
-#
-
-# Scene gebruikt voor het verwijderen van alle data
-stage:ClearAllDataScene a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Verwijder alle data";
-	elmo:query '''
-		DELETE {
+		INSERT INTO container:generiek {
+            ?s bp4mc2:signature ?sig.
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:generiek {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = skos:Concept
+							|| ?type = skos:Collection
+							|| ?type = skoslex:Act
+							|| ?type = skoslex:Norm
+							|| ?type = skoslex:Object
+							|| ?type = skoslex:Actor
+							|| ?type = owl:Class
+							|| ?type = dctype:Text
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
+		INSERT {
 			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g.
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH container:generiek {
+					?s rdf:type ?type.
+					FILTER (
+						?type = skos:Concept
+						|| ?type = skos:Collection
+						|| ?type = skoslex:Act
+						|| ?type = skoslex:Norm
+						|| ?type = skoslex:Object
+						|| ?type = skoslex:Actor
+						|| ?type = owl:Class
+						|| ?type = dctype:Text
+					)
+				}
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE FROM doc:mastergraph {
+			?s bp4mc2:signature ?sig.
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH container:generiek {
+					?s rdf:type ?type.
+					FILTER (
+						?type = skos:Concept
+						|| ?type = skos:Collection
+						|| ?type = skoslex:Act
+						|| ?type = skoslex:Norm
+						|| ?type = skoslex:Object
+						|| ?type = skoslex:Actor
+						|| ?type = owl:Class
+						|| ?type = dctype:Text
+					)
+				}
+			}
+		}
+			
+		INSERT INTO versiongraph:version {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type ?type.
+			    ?s ?p ?o.
+			    ?s bp4mc2:signature ?sig
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s bp4mc2:signature ?sig
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE FROM doc:mastergraph {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
 				?s ?p ?o
 			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+		}
+
+		INSERT INTO doc:mastergraph {
+			?s rdf:type ?type.
+			?s rdfs:isDefinedBy versiongraph:version.
+			?s bp4mc2:signature ?sig
 		}
 		WHERE {
-			GRAPH ?g {
-				?s ?p ?o
-			}
-			FILTER regex(?g, "^http://localhost:8080/catalogus/tr/(?!stage)")
+			GRAPH versiongraph:version {
+			    ?s rdf:type ?type.
+			    ?s bp4mc2:signature ?sig.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+            }
 		}
-	'''
+		
+		CLEAR GRAPH container:generiek		
+		CLEAR GRAPH container:excelupload		
+		CLEAR GRAPH container:ttlupload
+	''';
+    elmo:index "2"
+. 
+# Uploadcontainer DMN
+container:dmnupload a elmo:Container;
+	elmo:contains stage:TRBeheermenu;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:representation elmo:UploadRepresentation;
+	rdfs:label "Upload DMN";
+	elmo:translator elmo:DMNTranslator;
+	elmo:query stage:TRDMNUploadScene;
 .
 
-# Uploadquery UML-model
-stage:TRUMLUploadScene a elmo:Scene;
+# Postquery
+# Doet nu even niets meer dan data naar de juiste graph kopiëren
+stage:TRDMNUploadScene a elmo:Scene;
 	elmo:query '''
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
-		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		
-		CLEAR GRAPH <http://localhost:8080/catalogus/tr/umlmodel>
+		CLEAR GRAPH container:dmn
 		
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			<http://localhost:8080/catalogus/tr/def/model> rdf:type owl:Ontology.
-			<http://localhost:8080/catalogus/tr/def/model> rdfs:label "Model".
-		}
-		
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			?class rdf:type owl:Class.
-			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
-			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
-		}
-		WHERE {
-			SELECT
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?label))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model/',sql:UCamelCase(?label))) AS ?shape)
-				?label
+		INSERT INTO container:dmn {
+			?s ?p ?o.
+		} WHERE {
+			SELECT  iri(concat("http://localhost:8080/toepasbareregels/id/concept/",str(?subject))) as ?s
+					?p
+					iri(concat("http://localhost:8080/toepasbareregels/id/concept/",str(?object))) as ?o
 			WHERE {
-				GRAPH container:umlmodelupload {
-					?c rdf:type uml:Class.
-					?c rdfs:label ?label.
-					FILTER NOT EXISTS {
-						?c ea:stereotype 'CodeList'.
-					}
+				GRAPH container:dmnupload {
+					?subject ?p ?object
 				}
+				FILTER(
+					isIRI(?object)
+					&& ?p != rdf:type
+					&& ?p != dmn:typeRef
+				)
 			}
 		}
 		
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			?property rdf:type owl:DatatypeProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
-		}
-		WHERE {
-			SELECT
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?clabel))) AS ?class)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:LCamelCase(?alabel))) AS ?property)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
-				(concat(?clabel,'.',?alabel) AS ?plabel)
-				?clabel ?alabel
+		INSERT INTO container:dmn {
+			?s ?p ?o.
+		} WHERE {
+			SELECT  iri(concat("http://localhost:8080/toepasbareregels/id/concept/",str(?subject))) as ?s
+					?p
+					?o
 			WHERE {
-				GRAPH container:umlmodelupload {
-					?c rdf:type uml:Class.
-					?c uml:ownedAttribute ?a.
-					FILTER NOT EXISTS {
-						?c ea:stereotype 'CodeList'.
-					}
-					FILTER NOT EXISTS {
-						?a uml:association ?assoc
-					}
-					?c rdfs:label ?clabel.
-					?a rdfs:label ?alabel.
+				GRAPH container:dmnupload {
+					?subject ?p ?o
 				}
+				FILTER(
+					!isIRI(?o)
+					|| ?p = rdf:type
+					|| ?p = dmn:typeRef
+				)
 			}
 		}
-		
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			?property rdf:type owl:ObjectProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
-			?pc sh:class ?refclass.
-		}
-		WHERE {
-			SELECT
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:LCamelCase(?alabel))) as ?property)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model/',sql:UCamelCase(?clabel))) as ?shape)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
-				(concat(?clabel,'.',?alabel) as ?plabel)
-				?clabel ?alabel
-			WHERE {
-				GRAPH container:umlmodelupload {
-					?c rdf:type uml:Class.
-					?c uml:ownedAttribute ?a.
-					FILTER NOT EXISTS {
-						?c ea:stereotype 'CodeList'.
-					}
-					?a uml:association ?assoc.
-					?assoc uml:memberEnd ?a.
-					?a uml:type ?rc.
-					?rc rdfs:label ?rclabel.
-					?c rdfs:label ?clabel.
-					?a rdfs:label ?alabel.
-				}
-			}
-		}
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			?class rdfs:comment ?comment
-		}
-		WHERE {
-			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(replace(?def,'-- .* --','') as ?comment)
-			WHERE {
-				GRAPH container:umlmodelupload {
-					?c rdf:type uml:Class.
-					?c rdfs:label ?clabel.
-					FILTER NOT EXISTS {
-						?c ea:stereotype 'CodeList'.
-					}
-					?c ea:documentation ?def.
-					
-				}
-			}}
-			FILTER (?comment!='')
-		}
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			?property rdfs:comment ?comment
-		}
-		WHERE {
-			{SELECT
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:LCamelCase(?alabel))) as ?property)
-				(replace(?def,'-- .* --','') as ?comment)
-			WHERE {
-				GRAPH container:umlmodelupload {
-					?c rdf:type uml:Class.
-					FILTER NOT EXISTS {
-						?c ea:stereotype 'CodeList'.
-					}
-					?c uml:ownedAttribute ?a.
-					?c rdfs:label ?alabel.
-					?a ea:documentation ?def.
-					
-				}
-			}}
-			FILTER (?comment!='')
-		}
-		
-		INSERT INTO <http://localhost:8080/catalogus/tr/umlmodel> {
-			?subclass rdfs:subClassOf ?class
-		}
-		WHERE {
-			SELECT
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?clabel))) as ?class)
-				(iri(concat('http://localhost:8080/catalogus/tr/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
-			WHERE {
-				GRAPH container:umlmodelupload {
-					?sub uml:generalization ?gen.
-					?gen rdf:type uml:Generalization.
-					?gen uml:general ?c.
-					?sub rdfs:label ?sublabel.
-					?c rdfs:label ?clabel.
-				}
-			}
-		}
-		
-		CLEAR GRAPH container:umlmodelupload	
 	''';
 .
 
+# CLEAR GRAPH container:dmnupload
 
-# Uploadquery voor DMN
-stage:TRDMNUploadScene a elmo:Scene;
+# Oude uploadquery voor DMN
+stage:TRDMNUploadSceneOud a elmo:Scene;
 	elmo:query '''
 		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		prefix shacl: <http://www.w3.org/ns/shacl#>
 		prefix xs: <http://www.w3.org/2001/XMLSchema#>
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		
-		CLEAR GRAPH container:dmn
+		
 		
 		INSERT INTO container:dmn {
 			dmn:Decision rdf:type owl:Class.
@@ -854,130 +750,1151 @@ stage:TRDMNUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH container:dmnupload		
 	''';
+. 
+#
+# CONTAINERS
+#
+
+# Uploadcontainer UML-model
+container:umlmodelupload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRBeheermenu;
+	elmo:translator elmo:XMI21Translator;
+	rdfs:label "XMI 2.1 vertaler (DMN)";
+	elmo:query stage:TRUMLUploadScene;
+.
+
+# Uploadquery UML-model
+stage:TRUMLUploadScene a elmo:Scene;
+	elmo:query '''
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
+		
+		CLEAR GRAPH <http://localhost:8080/toepasbareregels/umlmodel>
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			<http://localhost:8080/toepasbareregels/def/model> rdf:type owl:Ontology.
+			<http://localhost:8080/toepasbareregels/def/model> rdfs:label "Model".
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?class rdf:type owl:Class.
+			?class rdfs:label ?label.
+			?shape rdf:type sh:Shape.
+			?shape rdfs:label ?label.
+			?shape sh:scopeClass ?class.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?label))) AS ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?label))) AS ?shape)
+				?label
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?label.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+				}
+			}
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?property rdf:type owl:DatatypeProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) AS ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:LCamelCase(?alabel))) AS ?property)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel))) AS ?shape)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) AS ?pc)
+				(concat(?clabel,'.',?alabel) AS ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					FILTER NOT EXISTS {
+						?a uml:association ?assoc
+					}
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?property rdf:type owl:ObjectProperty.
+			?property rdfs:label ?alabel.
+			?pc rdf:type sh:PropertyConstraint.
+			?shape sh:property ?pc.
+			?pc sh:predicate ?property.
+			?pc rdfs:label ?plabel.
+			?pc sh:class ?refclass.
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?rclabel))) as ?refclass)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel))) as ?shape)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model/',sql:UCamelCase(?clabel),'/',sql:LCamelCase(?alabel))) as ?pc)
+				(concat(?clabel,'.',?alabel) as ?plabel)
+				?clabel ?alabel
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c uml:ownedAttribute ?a.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?a uml:association ?assoc.
+					?assoc uml:memberEnd ?a.
+					?a uml:type ?rc.
+					?rc rdfs:label ?rclabel.
+					?c rdfs:label ?clabel.
+					?a rdfs:label ?alabel.
+				}
+			}
+		}
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?class rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					?c rdfs:label ?clabel.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?property rdfs:comment ?comment
+		}
+		WHERE {
+			{SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:LCamelCase(?alabel))) as ?property)
+				(replace(?def,'-- .* --','') as ?comment)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?c rdf:type uml:Class.
+					FILTER NOT EXISTS {
+						?c ea:stereotype 'CodeList'.
+					}
+					?c uml:ownedAttribute ?a.
+					?c rdfs:label ?alabel.
+					?a ea:documentation ?def.
+					
+				}
+			}}
+			FILTER (?comment!='')
+		}
+		
+		INSERT INTO <http://localhost:8080/toepasbareregels/umlmodel> {
+			?subclass rdfs:subClassOf ?class
+		}
+		WHERE {
+			SELECT
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?clabel))) as ?class)
+				(iri(concat('http://localhost:8080/toepasbareregels/def/model#',sql:UCamelCase(?sublabel))) as ?subclass)
+			WHERE {
+				GRAPH container:umlmodelupload {
+					?sub uml:generalization ?gen.
+					?gen rdf:type uml:Generalization.
+					?gen uml:general ?c.
+					?sub rdfs:label ?sublabel.
+					?c rdfs:label ?clabel.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:umlmodelupload	
+	''';
+. 
+#
+#
+#
+# PRODUCTIONS
+#
+#
+#
+
+# Speciale pagina om alle gegevens te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalldata a elmo:Production;
+	elmo:contains stage:TRBeheermenu;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:queryForm stage:TRDummyForm;
+	elmo:contains stage:ClearAllDataScene;
+.
+
+stage:TRDummyForm a elmo:Form.
+
+#
+#
+#
+# SCENES
+#
+#
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearAllDataScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder alle data";
+	elmo:query '''
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+			FILTER regex(?g, "^http://localhost:8080/toepasbareregels/(?!stage)")
+		}
+	'''
+. 
+#
+# REPRESENTATIONS
+#
+
+# Weergavepagina inclusief grafische weergave (DMN)
+stage:WeergavePaginaGrafisch a elmo:Representation;
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRTree;
+	elmo:contains stage:WeergaveTabel;
+	elmo:contains stage:WeergaveGrafisch;
+	elmo:applies-to [
+		rdf:type dmn:AuthorityRequirement;
+		rdf:type dmn:Binding;
+		rdf:type dmn:BusinessContextElement;
+		rdf:type dmn:BusinessKnowledgeModel;
+		rdf:type dmn:Context;
+		rdf:type dmn:ContextEntry;
+		rdf:type dmn:Decision;
+		rdf:type dmn:DecisionRule;
+		rdf:type dmn:DecisionTable;
+		rdf:type dmn:Definitions;
+		rdf:type dmn:FunctionDefinition;
+		rdf:type dmn:InformationItem;
+		rdf:type dmn:InformationRequirement;
+		rdf:type dmn:InputClause;
+		rdf:type dmn:InputData;
+		rdf:type dmn:Invocation;
+		rdf:type dmn:ItemDefinition;
+		rdf:type dmn:KnowledgeRequirement;
+		rdf:type dmn:KnowledgeSource;
+		rdf:type dmn:LiteralExpression;
+		rdf:type dmn:OutputClause;
+		rdf:type dmn:UnaryTests;
+	];
+.
+
+# Alfabetische weergave collecties (DMN)
+stage:TRCollectiesatotz a elmo:Representation;	
+	elmo:url-pattern "/toepasbareregels/query/collecties(|/|\\..+)$";
+	elmo:contains stage:TRCollectiestabel;
+	elmo:contains stage:TRIndexCollecties;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+.
+
+#
+# PARTS
+#
+
+# Algemene tabelweergave (Gebruikt in het DMN gedeelte)
+stage:WeergaveTabel a elmo:Part;
+	elmo:index "01";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+
+	elmo:query stage:WeergaveTabelQuery;
+.
+
+# Index voor op de alfabetische weergave concepten (DMN gedeelte)
+stage:TRIndexConcepten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/registratie/conclusies/query/overzichtspagina";
+		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "02";
 .
 
 
-#
-#
-#
-# QUERY'S GRAFISCHE WEERGAVEN
-#
-#
-#
+# Index voor op de alfabetische weergave collecties (DMN gedeelte)
+stage:TRIndexCollecties a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "";
+		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term"
+	];
+	elmo:index "02";
+.
 
+# Grafische weergave DMN modellen
+stage:WeergaveGrafisch a elmo:Part;
+	elmo:index "10";
+	elmo:appearance elmo:GraphAppearance;
+	elmo:fragment [
+		elmo:applies-to "Decision";
+		xhtml:stylesheet '''
+			fill: red;
+			fill-opacity: .3;
+			stroke: #666;
+		''';
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:applies-to "InputData";
+		xhtml:stylesheet '''
+			fill: orange;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "InputClause";
+		xhtml:stylesheet '''
+			fill: yellow;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "OutputClause";
+		xhtml:stylesheet '''
+			fill: gray;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "DecisionTable";
+		xhtml:stylesheet '''
+			fill: green;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "3";
+	];
+	elmo:fragment [
+		elmo:applies-to "DecisionRule";
+		xhtml:stylesheet '''
+			fill: pink;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "4";
+	];
+	elmo:fragment [
+		elmo:applies-to "KnowledgeSource";
+		xhtml:stylesheet '''
+			fill: brown;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "5";
+	];
+	elmo:fragment [
+		elmo:applies-to "InformationItem";
+		xhtml:stylesheet '''
+			fill: blue;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "6";
+	];
+	elmo:fragment [
+		elmo:applies-to "LiteralExpression";
+		xhtml:stylesheet '''
+			fill: cyan;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "7";
+	];
+	elmo:fragment [
+		elmo:applies-to "UnaryTests";
+		xhtml:stylesheet '''
+			fill: purple;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "8";
+	];
+	elmo:query stage:WeergaveGrafischQuery;
+.
 
-# Query voor grafische weergave decisions e.d.
-stage:WeergaveGrafischQuery a elmo:Query;
+# Query voor WeergaveTabel DMN
+stage:WeergaveTabelQuery a elmo:Query;
 	elmo:query '''
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix elmo: <http://bp4mc2.org/elmo/def#>
-		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		
-		construct {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?sattribute "".
-			<@SUBJECT@> ?pred ?cshape.
-			<@SUBJECT@> elmo:style ?stype.
-			?cshape rdfs:label ?clabel.
-			?cshape rdfs:uitleg ?ccomment.
-			?cshape ?cattribute "".
-			?cshape elmo:style ?ctype.
-			?rshape ?rpred <@SUBJECT@>.
-			?rshape rdfs:label ?rlabel.
-			?rshape rdfs:uitleg ?rcomment.
-			?rshape ?rattribute "".
-			?rshape elmo:style ?rtype.
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			?supershape rdfs:uitleg ?superclasscomment.
-			?supershape elmo:style ?supershapetype.
-			?subshape rdfs:subClassOf <@SUBJECT@>.
-			?subshape rdfs:label ?subshapelabel.
-			?subshape rdfs:uitleg ?subclasscomment.
-			?subshape elmo:style ?subshapetype.
-			rdfs:subClassOf rdfs:label "is een".
-			dmn:Decision elmo:name "Decision".
-			dmn:Input elmo:name "Input".
+		CONSTRUCT {
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?subject_label.
 		}
 		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> sh:scopeClass/rdfs:label ?slabel.
-				
+			GRAPH container:dmn
+			{
+				<@SUBJECT@> ?p ?o.
 				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?stype.
-				}
-			}
-			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape sh:scopeClass/rdfs:label ?supershapelabel.
-				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
-				}
-				OPTIONAL {
-					?supershape sh:scopeClass/rdfs:subClassOf ?supershapetype.
-				}
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
-				OPTIONAL {
-					?class rdfs:comment ?ccomment
-				}
-				OPTIONAL {
-					?cshape sh:property/sh:predicate ?cattribute.
-					?cattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					?cshape sh:scopeClass/rdfs:subClassOf ?ctype.
-				}
-			}
-			UNION
-			{ # Inkomende specialisaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?subclass rdfs:subClassOf ?sclass.
-				?subshape sh:scopeClass ?subclass.
-				?subshape sh:scopeClass/rdfs:label ?subshapelabel.
-				OPTIONAL {
-					?subclass rdfs:comment ?subclasscomment
-				}
-				OPTIONAL {
-					?subshape sh:scopeClass/rdfs:subClassOf ?subshapetype.
-				}
-			}
-			UNION
-			{ # Inkomende relaties
-				<@SUBJECT@> sh:scopeClass ?sclass.
-				?rpc sh:class ?sclass.
-				?rpc sh:predicate ?rpred.
-				?rshape sh:property ?rpc.
-				?rshape sh:scopeClass/rdfs:label ?rlabel
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:comment ?rcomment
-				}
-				OPTIONAL {
-					?rshape sh:property/sh:predicate ?rattribute.
-					?rattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					?rshape sh:scopeClass/rdfs:subClassOf ?rtype.
+					<@SUBJECT@> rdfs:label ?subject_label. 
 				}
 			}
 		}
-	''';
+	'''
+.
+
+# Query voor grafische weergave decisions e.d. (DMN)
+stage:WeergaveGrafischQuery rdf:type elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+
+		CONSTRUCT {
+
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?concept_label.
+			<@SUBJECT@> elmo:style ?type.
+			?o rdfs:label ?object_label.
+			?o elmo:style ?otype.
+			?s ?sp <@SUBJECT@>.
+			?s rdfs:label ?subject_label.
+			?s elmo:style ?stype.
+
+			# Identificeren DMN-typen
+			dmn:Decision elmo:name "Decision".
+			dmn:DecisionRule elmo:name "DecisionRule".
+			dmn:DecisionTable elmo:name "DecisionTable".
+			dmn:InformationItem elmo:name "InformationItem".
+			dmn:InputData elmo:name "InputData".
+			dmn:InputClause elmo:name "InputClause".
+			dmn:KnowledgeSource elmo:name "KnowledgeSource".
+			dmn:OutputClause elmo:name "OutputClause".
+			dmn:LiteralExpression elmo:name "LiteralExpression".
+			dmn:UnaryTests elmo:name "UnaryTests".
+		}
+		WHERE 
+		{
+			{
+				<@SUBJECT@> ?p ?o.
+				<@SUBJECT@> rdf:type ?type.
+				?o rdf:type ?otype.
+				OPTIONAL {
+					<@SUBJECT@> rdfs:label ?concept_label.
+				}
+				OPTIONAL {
+					?o rdfs:label ?object_label.
+				}
+			}
+			UNION
+			{
+				?s ?sp <@SUBJECT@>.
+				?s rdf:type ?stype.
+				OPTIONAL {
+					?s rdfs:label ?subject_label.
+				}
+			}
+		}
+	'''
+. 
+#
+# REPRESENTATIONS
+#
+
+# Tabel pagina met concepten (Functionele Structuur)
+
+stage:TRActiviteiten rdf:type elmo:Representation;
+	elmo:url-pattern "/toepasbareregels/query/activiteiten(|/|\\..+)$";
+	elmo:contains stage:TRActConceptentabel;
+	elmo:contains stage:TRIndexActiviteiten;
+	elmo:contains stage:TRActTree;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+.
+
+# Weergavepagina met concepten (Functionele Structuur)
+stage:WeergavePaginaConcepten rdf:type elmo:Representation; 
+    elmo:applies-to [
+        rdf:type skos:Concept;
+    ];
+    elmo:contains stage:TRActTree;
+    elmo:contains stage:TRMenu;
+    elmo:contains stage:TRHeader;
+    elmo:contains stage:TRFooter;
+    elmo:contains stage:WeergaveGrafischConcepten;
+    elmo:contains stage:WeergaveTabelConcepten;
+.
+
+# Weergavepagina voor Collecties (Functionele Structuur)
+stage:WeergavePaginaDatasets rdf:type elmo:Representation;
+    elmo:applies-to [
+        rdf:type skos:Collection;
+    ];
+    elmo:contains stage:TRActTree;
+    elmo:contains stage:TRMenu;
+    elmo:contains stage:TRHeader;
+    elmo:contains stage:TRFooter;
+    elmo:contains stage:WeergaveGrafischConcepten;
+    elmo:contains stage:WeergaveTabelConcepten;
+.
+
+#
+# PARTS
+#
+
+# Weergave voor pagina onderdeel tabel voor bij conceptweergave (Functionele Structuur)
+
+stage:WeergaveTabelConcepten rdf:type elmo:Part;
+    elmo:query stage:WeergaveTabelConceptenQuery2;
+    elmo:fragment [
+        rdfs:label "Namens organisatie"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#actedOnBehalfOf>;
+        elmo:index "32"
+    ];
+    elmo:fragment [
+        rdfs:label "Bestaat uit"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#narrowerPartitive>;
+        elmo:index "10"
+    ];
+    elmo:fragment [
+        rdfs:label "Heeft betrekking op"@nl;
+        elmo:indx "11";
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#semanticRelation>
+    ];
+    elmo:fragment [
+        rdfs:label "Synoniemen"@nl;
+        elmo:indx "12";
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#altLabel>
+    ];
+    elmo:fragment [
+        rdfs:label "Startdatum versie"@nl;
+        elmo:indx "13";
+        elmo:applies-to <http://www.w3.org/ns/prov#generatedAtTime>
+    ];
+    elmo:fragment [
+        rdfs:label "Domein"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#inScheme>;
+        elmo:index "6"
+    ];
+    elmo:fragment [
+        rdfs:label "Is specialisatie van"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#broaderGeneric>;
+        elmo:index "7"
+    ];
+    elmo:fragment [
+        rdfs:label "Is generalisatie van"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#narrowerGeneric>;
+        elmo:index "8"
+    ];
+    elmo:fragment [
+        rdfs:label "Is onderdeel van"@nl;
+        elmo:applies-to <http://purl.org/iso25964/skos-thes#broaderPartitive>;
+        elmo:index "9"
+    ];
+    elmo:fragment [
+        rdfs:label "Uitleg"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#comment>;
+        elmo:index "2"
+    ];
+    elmo:fragment [
+        rdfs:label "Definitie"@nl;
+        elmo:appearance elmo:MarkdownAppearance;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#definition>;
+        elmo:index "3"
+    ];
+    elmo:fragment [
+        rdfs:label "Toelichting"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#scopeNote>;
+        elmo:index "4"
+    ];
+    elmo:fragment [
+        rdfs:label "Bron"@nl;
+        elmo:appearance elmo:GlobalLink;
+        elmo:applies-to <http://purl.org/dc/terms/source>;
+        elmo:index "5"
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:HiddenAppearance;
+        elmo:applies-to rdfs:label
+    ];
+    elmo:fragment [
+        rdfs:label "Regels die verwijzen naar dit concept"@nl;
+        elmo:applies-to <http://bp4mc2.org/def/skos-lex#refersTo>;
+        elmo:index "26"
+    ];
+    elmo:fragment [
+        rdfs:label "Startdatum"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#startedAtTime>;
+        elmo:index "27"
+    ];
+    elmo:fragment [
+        rdfs:label "Einddatum"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#endedAtTime>;
+        elmo:index "28"
+    ];
+    elmo:fragment [
+        rdfs:label "Uitgevoerd door"@nl;
+        elmo:applies-to <http://www.w3.org/ns/prov#wasAssociatedWith>;
+        elmo:index "29"
+    ];
+    elmo:fragment [
+        rdfs:label "Is hetzelfde als"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#exactMatch>;
+        elmo:index "22"
+    ];
+    elmo:fragment [
+        rdfs:label "zie ook (in ander schema)"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#relatedMatch>;
+        elmo:index "23"
+    ];
+    elmo:fragment [
+        rdfs:label "Is breder dan (in ander schema)"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#broadMatch>;
+        elmo:index "24"
+    ];
+    elmo:fragment [
+        rdfs:label "Is enger dan (in ander schema)"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#narrowMatch>;
+        elmo:index "25"
+    ];
+    elmo:fragment [
+        rdfs:label "Is gerealiseerd in"@nl;
+        elmo:applies-to <http://xmlns.com/foaf/0.1/focus>;
+        elmo:index "18"
+    ];
+    elmo:fragment [
+        rdfs:label "Heeft als actor"@nl;
+        elmo:applies-to <http://bp4mc2.org/def/skos-lex#Actor>;
+        elmo:index "19"
+    ];
+    elmo:fragment [
+        rdfs:label "Heeft als object"@nl;
+        elmo:applies-to <http://bp4mc2.org/def/skos-lex#Object>;
+        elmo:index "20"
+    ];
+    elmo:fragment [
+        rdfs:label "Is ongeveer hetzelfde als"@nl;
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#closeMatch>;
+        elmo:index "21"
+    ];
+    elmo:fragment [
+        rdfs:label "Einddatum versie"@nl;
+        elmo:indx "14";
+        elmo:applies-to <http://www.w3.org/ns/prov#invalidatedAtTime>
+    ];
+    elmo:fragment [
+        rdfs:label "Laatste activiteit"@nl;
+        elmo:indx "15";
+        elmo:applies-to <http://www.w3.org/ns/prov#wasGeneratedBy>
+    ];
+    elmo:fragment [
+        rdfs:label "Lid van"@nl;
+        elmo:indx "16";
+        elmo:applies-to <http://www.w3.org/2004/02/skos/core#member>
+    ];
+    elmo:fragment [
+        rdfs:label "Periode geldigheid"@nl;
+        elmo:indx "17";
+        elmo:applies-to <http://purl.org/dc/terms/valid>
+    ];
+    elmo:index "01"
+.
+
+# Index voor op de alfabetische weergave concepten (Functionele Structuur)
+stage:TRIndexActiviteiten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/toepasbareregels/query/activiteiten";
+		rdf:value "[0-9]|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "02";
+.
+
+# Conceptentabel voor op de alfabetische weergave concepten Activiteiten (Functionele Structuur)
+stage:TRActConceptentabel rdf:type elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:query stage:TRActConceptenQuery;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:index "03";
+.
+
+# Grafische weergave voor Concepten (Functionele Structuur)
+stage:WeergaveGrafischConcepten rdf:type elmo:Part;
+    elmo:appearance elmo:GraphAppearance;
+    elmo:query stage:WeergaveGrafischConceptenQuery2;
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: gray;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+        elmo:applies-to "Regeling";
+        elmo:index "1"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: purple;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+        elmo:applies-to "Norm";
+        elmo:index "2"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: red;
+			fill-opacity: .3;
+			stroke: #666;
+		''';
+        elmo:applies-to "Concept";
+        elmo:index "3"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: orange;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+        elmo:applies-to "Collectie";
+        elmo:index "4"
+    ];
+    elmo:fragment [
+        xhtml:stylesheet '''
+			fill: blue;
+			fill-opacity: .3;
+			stroke: #666;
+		''';
+        elmo:applies-to "Gegevensklasse";
+        elmo:index "6"
+    ];
+    elmo:index "10"
+.
+
+# Query voor grafische weergave Concepten (Functionele Structuur)
+
+stage:WeergaveGrafischConceptenQuery2 rdf:type elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+
+
+	CONSTRUCT {
+
+		<@SUBJECT@> ?p ?o.
+		<@SUBJECT@> rdfs:label ?concept_label.
+		<@SUBJECT@> elmo:style ?type.
+		?o rdfs:label ?object_label.
+		?o elmo:style ?otype.
+		?s ?sp <@SUBJECT@>.
+		?s rdfs:label ?subject_label.
+		?s elmo:style ?stype.
+
+	# identificeren concepttypen
+		skos:Concept elmo:name "Concept".
+		skos:Collection elmo:name "Collectie".
+		skoslex:Norm elmo:name "Norm".
+		owl:Class elmo:name "Gegevensklasse".
+		dctype:Text elmo:name "Regeling".
+	# identificeren van relatietypen
+		skos:member rdfs:label "Lid van".
+		thes:broaderGeneric rdfs:label "is specialisatie van".
+
+		}
+		WHERE 
+		{
+			{
+				{
+				GRAPH ?subjectGraph 
+					{
+					<@SUBJECT@> rdf:type ?type.
+					OPTIONAL {
+						<@SUBJECT@> rdfs:label ?concept_label.
+						<@SUBJECT@> ?p ?o.
+						}
+					}
+				GRAPH ?objectGraph
+					{
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+				}
+				UNION
+				{
+					GRAPH ?altSubjectGraph
+					{
+						?s ?sp <@SUBJECT@>.
+						?s rdf:type ?stype.
+						OPTIONAL
+						{
+							?s rdfs:label ?subject_label.
+						}
+					}
+				}
+			}
+			UNION
+			{
+				{
+					GRAPH <@GRAPH@> {
+						?s rdf:type ?type.
+						OPTIONAL {
+							<@SUBJECT@> rdfs:label ?concept_label.
+							<@SUBJECT@> ?p ?o.
+						}
+					}
+					GRAPH ?objectGraph {
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+				}
+				UNION
+				{
+					GRAPH ?altSubjectGraph {
+						?s ?sp <@SUBJECT@>.
+						?s rdf:type ?stype.
+						OPTIONAL
+						{
+							?s rdfs:label ?subject_label.
+						}
+					}
+					OPTIONAL
+					{
+						<@SUBJECT@> rdfs:label ?subject_label.
+						<@SUBJECT@> rdf:type ?type.
+					}
+				}
+			}
+		}
+	'''
+.
+
+# Query voor vullen WeergaveTabelConcepten (Algemene tabelweergave concepten)
+
+stage:WeergaveTabelConceptenQuery3 rdf:type elmo:Query;
+	elmo:query '''
+	prefix elmo: <http://bp4mc2.org/elmo/def#>
+	prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		CONSTRUCT {
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?concept_label.
+			<@SUBJECT@> elmo:style ?type.
+
+		}
+		WHERE 
+		{
+			
+			{
+				GRAPH ?subjectGraph
+					{
+					<@SUBJECT@> rdf:type ?type.
+					OPTIONAL {
+						<@SUBJECT@> rdfs:label ?concept_label.
+						<@SUBJECT@> ?p ?o.
+						}
+					}
+				GRAPH ?objectGraph
+					{
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+			}
+			UNION
+				{
+					GRAPH <@GRAPH@> {
+						?s rdf:type ?type.
+						OPTIONAL {
+							<@SUBJECT@> rdfs:label ?concept_label.
+							<@SUBJECT@> ?p ?o.
+						}
+					}
+					GRAPH ?objectGraph {
+						?o rdfs:label ?object_label.
+						?o rdf:type ?otype.
+					}
+				}
+
+		}
+	'''
+.
+
+stage:WeergaveTabelConceptenQuery2 rdf:type elmo:Query;
+	elmo:query '''
+	prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+
+			<@SUBJECT@> ?p ?o.
+			<@SUBJECT@> rdfs:label ?subject_label.
+			}
+
+		WHERE {
+			GRAPH ?g
+				{
+					<@SUBJECT@> ?p ?o.
+					<@SUBJECT@> rdfs:label ?subject_label. 
+				}
+				FILTER (?p != skos:prefLabel)
+
+		}
+	'''
+.
+
+# Query om de conceptentable Activiteiten TRActConceptentabel te vullen
+stage:TRActConceptenQuery rdf:type elmo:Query;
+    elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix doc: <http://localhost:8080/toepasbareregels/concepten/doc/>
+		prefix collection: <http://localhost:8080/toepasbareregels/id/collection/>
+		prefix concept: <http://localhost:8080/toepasbareregels/id/concept/>
+		
+		SELECT ?concept ?concept_label ?uitleg 
+		WHERE {
+			GRAPH container:generiek {
+				{
+					?concept rdf:type skos:Concept.
+					?concept rdfs:label ?concept_label.
+					OPTIONAL {?concept skos:definition ?uitleg}
+					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+					#FILTER NOT EXISTS {
+					#	?concept rdf:type <http://bp4mc2.org/def/skos-lex#Act>.
+					#}
+					#FILTER NOT EXISTS {
+					#	?concept rdf:type <http://bp4mc2.org/def/skos-lex#Norm>.
+					#}
+					#FILTER NOT EXISTS {
+					#	?concept rdf:type <http://bp4mc2.org/def/skos-lex#Object>.
+					#}
+					FILTER( substr( "@TYPE@",2 ) = "TYPE@" )
+				}
+				UNION
+				{
+					?concept rdf:type <http://bp4mc2.org/def/skos-lex#@TYPE@>.
+					?concept rdfs:label ?concept_label.
+					OPTIONAL {?concept skos:definition ?uitleg}
+					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+					FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
+				}
+			}
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+. 
+# Boomweergave domeinen, collecties en concepten (gebruikt in DMN gedeelte)
+stage:TRTree a elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+    elmo:index "01";
+	elmo:query stage:TRTreeQuery;
+.
+
+# Boomweergave Activiteiten concepten (Functionele Structuur)
+stage:TRActTree rdf:type elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+	elmo:query stage:TRActTreeQuery;
+	elmo:index "01"
+.
+
+# Query voor de boomweergave DMN
+
+stage:TRTreeQuery a elmo:Query;
+	elmo:query '''
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		
+		CONSTRUCT {
+			?s rdfs:label ?slabel.
+			?o rdfs:label ?olabel.
+			?o dmn:informationRequirement ?s.
+		}
+		WHERE {
+			GRAPH container:dmn {
+				?s rdf:type dmn:Decision.
+				OPTIONAL {
+					?s rdfs:label ?slabel.
+				}
+				OPTIONAL {
+					{
+						?s dmn:informationRequirement/dmn:requiredDecision ?o.
+						?o rdf:type dmn:Decision.
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+						}
+					}
+					UNION {
+						?s dmn:informationRequirement/dmn:requiredInput ?o.
+						?o rdf:type dmn:InputData.
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+						}
+					}
+				}
+			}
+		}
+	'''
+.
+
+
+# Query om de boomweergave (TRActTree) Activiteiten concepten te vullen (Functionele Structuur)
+
+stage:TRActTreeQuery rdf:type elmo:Query;
+	elmo:query '''
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix doc: <http://localhost:8080/toepasbareregels/concepten/doc/>
+	
+	CONSTRUCT {
+		?s rdfs:label ?sLabel.
+		?s skos:member ?sCollection.
+		?sCollection rdfs:label ?sCollectionLabel.
+		?o rdfs:label ?oLabel.
+		?s thes:broaderGeneric ?o.
+	}
+	WHERE {
+		GRAPH container:generiek {
+			?s rdf:type skos:Concept.
+			?sCollection rdf:type skos:Collection.
+			?sCollection skos:member ?s.
+			OPTIONAL {
+				?s rdfs:label ?sLabel.
+				?sCollection rdfs:label ?sCollectionLabel.
+			}
+			OPTIONAL {
+				?o rdfs:label ?oLabel.
+				?s thes:broaderGeneric ?o.
+			}
+		}
+	}
+	'''
+. 
+# Overzichtspagina concepten  (Werkt nu alleen op DMN)
+stage:TROverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/toepasbareregels/query/overzichtspagina(|/|\\..+)$";
+	elmo:contains stage:TRConceptentabel;
+	elmo:contains stage:TRIndexConcepten;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRTree;
+.
+
+# Conceptentabel voor op de alfabetische weergave concepten (DMN)
+stage:TRConceptentabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "03";
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:TRConceptenQuery;
+.
+
+# Query voor tonen alle concepten (DMN)
+stage:TRConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
+		
+		SELECT ?decision ?decision_label
+		WHERE {
+			GRAPH container:dmn {
+				?decision rdf:type dmn:Decision.
+				OPTIONAL {
+					?decision rdfs:label ?decision_label
+				}
+				FILTER regex(?decision_label, '^[^a-z0-9]*@TERM@', 'i').
+			}
+		}
+	'''
+. 
+# Vocabulairepagina (DMN)
+stage:TRvocabulaire	a	elmo:Representation;
+	elmo:applies-to [rdf:type owl:Ontology];
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:TRVocabulaireQuery;
+.
+
+# Pagina met vocabulaire van het informatiemodel
+stage:WeergavePaginaVocabulaireFS rdf:type elmo:Representation;
+	elmo:uri-pattern "/def/informatiemodel";
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRFooter;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:TRVocabulaireQueryInformatiemodel;
 .
 
 
@@ -989,7 +1906,7 @@ stage:WeergaveGrafischQuery a elmo:Query;
 #
 #
 
-# Query voor Vocabulairepagina
+# Query voor Vocabulairepagina DMN
 stage:TRVocabulaireQuery a elmo:Query;
 	elmo:query '''
 		prefix dct: <http://purl.org/dc/terms/>
@@ -1007,7 +1924,7 @@ stage:TRVocabulaireQuery a elmo:Query;
 			?pc shacl:in ?collection.
 		}
 		WHERE {
-			GRAPH <http://localhost:8080/catalogus/tr/umlmodel> {
+			GRAPH <http://localhost:8080/toepasbareregels/umlmodel> {
 				?element rdf:type ?type.
 				OPTIONAL {?element rdfs:label ?label}
 				OPTIONAL {?element rdfs:comment ?def}
@@ -1030,86 +1947,77 @@ stage:TRVocabulaireQuery a elmo:Query;
 	'''
 .
 
-# Query voor WeergaveTabel
-stage:WeergaveTabelQuery a elmo:Query;
+
+# Query voor vocabulairepagina Informatiemodel
+stage:TRVocabulaireQueryInformatiemodel2 a elmo:Query;
 	elmo:query '''
+	CONSTRUCT {
+		?element rdf:type ?type.
+		?element rdfs:label ?label.
+		?element rdfs:comment ?def.
+		?element rdfs:subClassOf ?super.
+	}
+	WHERE {
+		GRAPH <http://localhost:8080/toepasbareregels/container/ttlupload> {
+			?element rdf:type ?type.
+			OPTIONAL {?element rdfs:label ?label}
+			OPTIONAL {?element rdfs:comment ?def}
+		}
+	}
+	'''
+.
+
+# Query voor  vocabulairepagina Informatiemodel
+stage:TRVocabulaireQueryInformatiemodel a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dso: <http://www.w3.org/ns/dso#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
-		
-		construct {
-			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> rdfs:uitleg ?scomment.
-			<@SUBJECT@> ?pred ?cshape.
-			<@SUBJECT@> rdfs:subClassOf ?stype.
-			?cshape rdfs:label ?clabel.
-			<@SUBJECT@> rdfs:subClassOf ?supershape.
-			?supershape rdfs:label ?supershapelabel.
-			dmn:Decision rdfs:label "Decision".
-			dmn:Input rdfs:label "Input".
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			#?pc dso:predicate ?pred.
+			#?pc dso:class ?class.
+			#?pc dso:datatype ?datatype.
+			#?pc dso:in ?collection.
 		}
 		WHERE {
-			{ # Subject gedeelte
-				<@SUBJECT@> sh:scopeClass/rdfs:label ?slabel.
+			GRAPH <http://localhost:8080/toepasbareregels/container/generiek> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
 				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:comment ?scomment
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
 				}
-				OPTIONAL {
-					<@SUBJECT@> sh:property/sh:predicate ?sattribute.
-					?sattribute rdf:type owl:DatatypeProperty.
-				}
-				OPTIONAL {
-					<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?stype.
-				}
-			}
-			UNION
-			{ # Uitgaande specialisaties
-				<@SUBJECT@> sh:scopeClass/rdfs:subClassOf ?superclass.
-				?supershape sh:scopeClass ?superclass.
-				?supershape sh:scopeClass/rdfs:label ?supershapelabel.
-				OPTIONAL {
-					?superclass rdfs:comment ?superclasscomment
-				}
-			}
-			UNION
-			{ # Uitgaande relaties
-				<@SUBJECT@> sh:property ?pc.
-				?pc sh:predicate ?pred.
-				?pc sh:class ?class.
-				?class rdfs:label ?clabel.
-				?cshape sh:scopeClass ?class.
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				#OPTIONAL {
+				#	?pc dso:predicate ?pred.
+				#	OPTIONAL {?pc dso:class ?class}
+				#	OPTIONAL {?pc dso:datatype ?datatype}
+				#	OPTIONAL {?pc dso:in ?collection}
+				#}
+				#FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
 			}
 		}
 	'''
+. 
+# Standaard zoekpagina
+stage:TRSearch a elmo:Representation;
+	elmo:url-pattern "query/search";
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:query stage:TRSearchQuery;
 .
-
-
-# Query voor tonen alle concepten
-stage:TRConceptenQuery a elmo:Query;
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		
-		SELECT ?shape ?shape_label
-		WHERE {
-			GRAPH container:dmn {
-				?shape rdf:type sh:Shape.
-				?shape sh:scopeClass/rdfs:label ?shape_label.
-				FILTER regex(?shape_label, '^[^a-z0-9]*@TERM@', 'i').
-			}
-		}
-	'''
-.
-
 
 # Zoekquery
 stage:TRSearchQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		
 		SELECT ?shape ?shape_label
@@ -1124,34 +2032,115 @@ stage:TRSearchQuery a elmo:Query;
 	''';
 .
 
-
-# Query voor de boomweergave
-
-stage:TRTreeQuery a elmo:Query;
+# Zoekquery (oude van Kadaster)
+stage:TRSearchQuery a elmo:Query;
 	elmo:query '''
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
-		prefix container: <http://localhost:8080/catalogus/tr/container/>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		prefix sh: <http://www.w3.org/ns/shacl#>
-		prefix owl: <http://www.w3.org/2002/07/owl#>
+		
+		SELECT ?shape ?shape_label
+		WHERE {
+			GRAPH container:dmn {
+				?shape rdf:type sh:Shape.
+				?shape sh:scopeClass/rdfs:label ?shape_label.
+				FILTER regex(?shape_label,'@TERM@','i').
+			}
+		}
+		LIMIT 100
+	''';
+. 
+stage:UploadedVocabularyAppearanceYed a elmo:Representation;
+	elmo:url-pattern	"/query/uploaded-vocabulary\\.yed$";
+	elmo:layer elmo:TopLayer;
+	elmo:fragment [
+		elmo:applies-to rdfs:subClassOf;
+		rdfs:label "";
+		yed:sourceArrow "none";
+		yed:targetArrow "white_delta";
+	];
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		# prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://localhost:8080/toepasbareregels/container/>
 		
 		CONSTRUCT {
-			?s rdfs:label ?slabel.
-			?o rdfs:label ?olabel.
-			?o ?p ?s.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?attribs.
+			?element rdfs:subClassOf ?super.
+			?element ?pc ?class.
+			?element rdf:type owl:Class.
+			?pc rdfs:label ?plabel.
 		}
 		WHERE {
 			GRAPH container:dmn {
-				?s rdf:type sh:Shape.
-				?s sh:scopeClass/rdfs:label ?slabel.
+				?element rdf:type owl:Class.
+				?element rdfs:label ?label
+				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
-					?s ?p ?o.
-					?o rdf:type sh:Shape.
-					?o sh:scopeClass/rdfs:label ?olabel.
+					select ?element ?pc ?class (concat(if(bound(?plabel),?plabel,strafter(str(?pred),"#"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+					where {
+						?shape shacl:scopeClass ?element.
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						?pc shacl:class ?class.
+						?class rdf:type owl:Class.
+						OPTIONAL {?pred rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {?pc shacl:in ?col}
+					}
+				}
+				OPTIONAL {
+					select ?element (group_concat(concat(if(bound(?plabel),?plabel,strafter(str(?pred),"#"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",?maxc,"]");separator="\\n") as ?attribs)
+					where {
+						?shape shacl:scopeClass ?element.
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						OPTIONAL {?pred rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:datatype ?datatype}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {
+							?pc shacl:class ?class.
+							?class rdf:type owl:Class.
+						}
+					}
+					group by ?element
 				}
 			}
 		}
-	'''
+	''';
+. 
+# Voorbeeldpagina Geo
+stage:TRGeoexample a elmo:Representation;
+	elmo:url-pattern "/toepasbareregels/query/voorbeeldgeo$";
+	elmo:contains stage:TRHeader;
+	elmo:contains stage:TRFooter;
+	elmo:contains stage:TRMenu;
+	elmo:contains stage:TRGeo;
+
 .
+
+stage:TRGeo a elmo:Representation;
+	elmo:appearance elmo:GeoAppearance;
+	elmo:endpoint <https://data.pdok.nl/sparql>;
+	elmo:query '''
+		prefix geosparql: <http://www.opengis.net/ont/geosparql#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		CONSTRUCT {
+			?city geo:geometry ?wkt.
+			?city rdfs:label ?cityname.
+		}
+		WHERE {
+			SELECT *
+			WHERE {
+				?city rdfs:label ?cityname.
+				?city geosparql:hasGeometry ?geo.
+				?geo geosparql:asWKT ?wkt.
+				FILTER (?city = <http://bag.basisregistraties.overheid.nl/bag/id/woonplaats/1072>)
+			}
+			LIMIT 1
+		}
+	'''
+. 

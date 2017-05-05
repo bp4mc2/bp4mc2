@@ -61,7 +61,7 @@ stage:DSOTreeQuery a elmo:Query;
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		
 		CONSTRUCT {
@@ -381,20 +381,28 @@ stage:DSOTreeQuery a elmo:Query;
 							}
 						}
 					}
-				}		
+				}
 				GRAPH doc:mastergraph {
 					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
+				}
+				FILTER NOT EXISTS {
+					GRAPH ?waardelijstenGraph {
+						collection:Waardelijsten skos:member ?sCollection.
+					}
+					GRAPH doc:mastergraph {
+						collection:Waardelijsten rdfs:isDefinedBy ?waardelijstenGraph.
+					}
 				}
 			}
 			FILTER NOT EXISTS {
 				GRAPH ?toeleidingsGraph {
-					dataset:Toeleidingsbegrippen skos:member ?s.
+					collection:Toeleidingsbegrippen skos:member ?s.
 					FILTER NOT EXISTS {
-						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
-					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 				}
 			}
 		}

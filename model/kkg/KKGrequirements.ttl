@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @prefix xsd: 		<http://www.w3.org/2001/XMLSchema#>.
 @prefix req: 		<http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 @prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -690,4 +691,698 @@ req:Relatierol12 a reqo:Requirement;
 	sh:datatype xsd:string;
 	sh:minCount 0;
 	sh:maxCount 1;
+=======
+@prefix xsd: 		<http://www.w3.org/2001/XMLSchema#>.
+@prefix req: 		<http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix reqo: 		<http://data.ontwikkeling.pdok.nl/catalogus/gco/reqo#>.
+@prefix dcat: 		<http://www.w3.org/ns/dcat#>.
+@prefix dct: 		<http://purl.org/dc/terms/>.
+@prefix sh: 		<http://www.w3.org/ns/shacl#>.
+@prefix rdfs: 		<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix foaf: 		<http://xmlns.com/foaf/0.1/>.
+@prefix prov: 		<http://www.w3.org/ns/prov#>.
+@prefix dqv: 		<http://www.w3.org/ns/dqv#>.
+@prefix overheid: 	<http://standaarden.overheid.nl/owms/4.0/doc/waardelijsten#>
+@prefix adms: 		<http://www.w3.org/ns/adms#>
+@prefix wdrs: 		<http://www.w3.org/2007/05/powder-s#>
+@prefix bgrz: 		<https://www.pdok.nl/nl/producten/pdok-downloads/basis-registratie-kadaster#>
+@prefix model:		<http://data.acceptatie.pdok.nl/KKG/def/model/>.
+@prefix xsi: 		<http://www.w3.org/2001/XMLSchema-instance>.
+
+@prefix kkg: <http://UNKNOWN/kkg#>.
+
+### Requirements KKG model behorend bij KKG model versie 0.95
+### Requirements Objecttype
+req:Objecttype01 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Het KKG model kent de klasse Objecttype";
+	rdf:value "Objecttype";
+	sh:path rdfs:Class;
+	sh:datatype xsd:string;
+.
+req:Objecttype02 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een objecttype bezit 0..* Relatiessoorten";
+	rdf:value "Bezit Relatiesoort";
+	sh:path model:bezit;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+.
+req:Objecttype03 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Constraints kunnen gelden voor een Objecttype";
+	rdf:value "Waarvoor geldt";
+	sh:path model:waarvoorGeldt;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+.
+req:Objecttype04 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype kan onderdeel uitmaken van een Generalisatie";
+	rdf:value "Maakt als specifiek object onderdeel uit van";
+	sh:path model:generalisatie;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+.
+req:Objecttype05 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype heeft een naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.	
+req:Objecttype06 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype heeft een herkomst";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.	
+req:Objecttype07 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype heeft een code";
+	sh:path model:code;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Objecttype08 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype heeft een definitie";
+	sh:path skos:definition;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Objecttype09 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:value "Voor Objecttype die deel uitmaken van een registratie wordt bijgehouden wat de herkomst van de definitie is en wordt de definitie overgenomen uit de betreffende registratie";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Objecttype10 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype heeft een datum van opname. De datum waaop het Objecttype is opgenomen in het informatiemodel";
+	sh:path prov:generatedAtTime;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Objecttype11 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype kan een unieke aanduiding hebben";
+	skos:scopeNote "Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de wijze waarop daarin voorkomende objecten (van dit type) uniek in de registratie worden aangeduid.";
+	sh:path skos:notation;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Objecttype12 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype kan deel uitmaken van een populatie";
+	skos:scopeNote "Voor objecttypen die deel uitmaken van een (basis)registratie betreft dit de beschrijving van het gedefinieerde objecttype die in de desbetreffende (basis)registratie voorhanden zijn".
+	sh:path ldqd:completeness;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.	
+req:Objecttype13 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype kan een kwaliteitskenmerk bezitten";
+	skos:scopeNote "Voor objecttype die deel uitmaken van een registratie betreft dit de waarborgen voor de juistheid van de in de registratie opgenomen objecten van het desbetreffende type.";
+	sh:path ldqd:semanticAccuracy;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Objecttype14 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype kan een toelichting bezitten";
+	skos:scopeNote "Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de daarin opgenomen toelichting";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Objecttype15 a reqo:Requirement;
+	sh:targetClass model:Objecttype;
+	rdfs:label "Een Objecttype kan een indicatie bevatten die aanduidt dat het om een abstract object gaat";
+	skos:scopeNote "Conceptueel model: Indicatie dat het objecttype een generalisatie is, waarvan een object als specialisatie altijd voorkomt in de hoedanigheid van een (en slechts één) van de specialisaties van het betreffende objecttype. Logisch model: Indicatie dat er geen instanties (objecten) voor het betreffende objecttype mogen voorkomen";
+	sh:path model:indicatieAbstractObject;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+### Requirements Generalisatie
+req:Generalisatie01 a reqo:Requirement;
+	sh:targetClass model:Generalisatie;
+	rdfs:label "Het KKG model kent generalisaties";
+	rdf:value "Generalisatie";
+	sh:path rdfs:subClassOf;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+.
+req:Generalisatie02 a reqo:Requirement;
+	sh:targetClass model:Generalisatie;
+	rdfs:label "Een Generalisatie heeft een naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	skos:minCount 1;
+	skos:maxCount 1;
+.
+req:Generalisatie03 a reqo:Requirement;
+	sh:targetClass model:Generalisatie;
+	rdfs:label "Een Generalisatie bevat objecttype(n)";
+	sh:path model:verwijstNaarGenerieke;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+### Requirements Gegevensgroep 
+req:Gegevensgroep01 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Het KKG model kent een gegevensgroep";
+	sh:path rdfs:Class;
+.
+req:Gegevensgroep02 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een of meerdere constraints kunnen van toepassing zijn op een Gegevensgroep";
+	sh:path model:waarvoorGeldt;
+	sh:datatype xsd:string;
+	sh:class model:Constraint;
+	sh:minCount 0;
+.
+req:Gegevensgroep03 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep kan attribuutsoorten of een Gegevensgroeptype bezitten";
+	sh:path model:bezit;
+	sh:datatype xsd:string;
+	sh:class model:Attribuutsoort;
+	sh:class model:Gevensgroeptype;
+	sh:minCount 0;
+.
+req:Gegevensgroep04 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep heeft een naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep05 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep heeft een definitie";
+	sh:path skos:definition;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep06 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep kan een toelichting bevatten";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Gegevensgroep07 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep heeft een herkomst";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep08 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Wanneer de definitie van een Gegevensgroep zijn herkomst heeft in een andere registratie wordt deze bij herkomst definitie vermeld";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep09 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep kent een datum van opname in een informatiemodel";
+	sh:path prov:generatedAtTime;
+	sh:datatype xsd:datetime;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep10 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een Gegevensgroep bevat een indicatie van materiele historie";
+	sh:path rdf:Property;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep11 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Een gegevengroeptype bevat een indicatie van formele historie";
+	sh:path dct:modified;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep12 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "De kardinaliteit van is een element dat van een Gegevensgroep wordt geregistreerd";
+	sh:path owl:cardinality;
+	sh:datatype xsd:integer;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroep13 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroep;
+	rdfs:label "Aanduiding dat het gegevengroeptype een authentiek gegeven aanduidt";
+	sh:path ldqd:trustworthiness;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+### Requirements Gegevensgroeptype
+req:Gegevensgroeptype01 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroeptype;
+	rdfs:label "Het KKG model kent een gegevensgroeptype";
+	sh:path rdfs:Class;
+.
+req:Gegevensgroeptype02 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroeptype;
+	rdfs:label "Een gegevensgroeptype verwijst naar een attribuutsoort of een gegevensgroep";
+	sh:path model:bezit;
+	sh:datatype xsd:string;
+	sh:class model:Attribuutsoort;
+	sh:class model:Gegevensgroep;
+.
+req:Gegevensgroeptype03 a reqo:Requirement;
+	sh:targetClass model:Gevensgroeptype;
+	rdfs:label "Een gegevensgroeptype heeft een naam";
+	sh:path skos:definition;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Gegevensgroeptype04 a reqo:Requirement;
+	sh:targetClass model:Gegevensgroeptype;
+	rdfs:label "Een gegevensgroeptype kent een datum opname";
+	sh:path prov:generatedAtTime;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+### Requirements Attribuutsoort
+req:Attribuutsoort01 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Het KKG model kent attribuutsoorten";
+	rdf:value "Attribuutsoort";
+	sh:path owl:ObjectProperty;
+	sh:datatype xsd:string;
+.
+req:Attribuutsoort02 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort heeft een datatype als type";
+	rdf:value "datatype";
+	sh:path model:heeftAlsType;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Attribuutsoort03 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort heeft een naam";
+	skos:scopeNote "De naam van de attribuutsoort";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort04 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort heeft een herkomst";
+	skos:scopeNote "De registratie of het informatiemodel waaraan de attribuutsoort ontleend is danwel de eigen organisatie, indien het door de eigen organisatie toegevoegd is";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort05 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort heeft een definitie";
+	skos:scopeNote "De beschrijving van de betekenis van de attribuutsoort";
+	sh:path skos:definition;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort06 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Van een attribuutsoort wordt vastegelegd wat de herkomst van de gebruikte definitie is";
+	skos:scopeNote "De registratie of het informatiemodel waaruit de definitie is overgenomen danwel een aanduiding die aangeeft uit welke bronnen de definitie is samengesteld";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort07 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Van een attribuutsoort wordt vastgeld op welke datum deze is opgenomen in het informatiemodel";
+	skos:scopeNote "De datum waarop de attribuutsoort is opgenomen in het informatiemodel";
+	sh:path prov:generatedAtTime;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort08 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Domein type van de attribuutsoort";
+	skos:scopeNote "Het type waarmee de waarden van deze attribuutsoort worden vastgelegd. Dit is altijd conform een datatype uit het KKG metamodel (of een extensie daarvan)";
+	sh:path rdfs:range;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort09 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Van een attribuutsoort wordt aangeduid wat de lengte van het gegeven is";
+	skos:scopeNote "De aanduiding van de lengte van een gegeven. Getallen kunnen altijd positief of negatief zijn.";
+	sh:path model:domeinLengte;
+	sh:datatype xsd:integer;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Attribuutsoort10 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kan een patroon bevatten waarin mogelijk waarden die de attribuutsoort kan hebben worden aangegeven";
+	skos:scopeNote "De verzameling van waarden die gegevens van deze attribuutsoort kunnen hebben, dat wil zeggen het waardenbereik, uitgedrukt in een specifieke structuur";
+	sh:path model:domeinPatroon;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Attribuutsoort11 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kan ook een formeel patroon bevatten";
+	skos:scopeNote "e verzameling van waarden die gegevens van deze attribuutsoort kunnen hebben, dat wil zeggen het waardenbereik, uitgedrukt in een specifieke structuur, formeel vastegelegd(met een reguliere expressie), uitgedrukt in een formele taal die door de computer herkend wordt";
+	sh:path model:domeinFormeelPatroon;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Attribuutsoort12 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;	
+	rdfs:label "Een attribuutsoort kent een indicatie materiële historie";
+	skos:scopeNote "Indicatie of de materiele historie van de attribuutsoort te bevragen is. Materiele historie geeft aan wanneer een verandering is opgetreden in de werkelijkheid die heeft geleid tot verandering van de attribuutwaarde.";
+	sh:path rdf:Property;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort13 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort ken een indicatie van formele historie";
+	skos:scopeNote "Indicatie of de formele historie van de attribuutsoort te bevragen is. Formele historie geeft aan wanneer in de administratie een verandering is verwerkt van de attribuutwaarde(wanneer was de verandering bekend en wanneer is deze verwerkt).";
+	sh:path dct:modified;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort14 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kan benaderd worden op een zekere locatie";
+	skos:scopeNote "De verwijzing(URL) naar de locatie van de bijbehorende schema's met waardelijsten";
+	sh:path dcat:accessURL;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Attribuutsoort15 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kent een zekere kardinaliteit";
+	skos:scopeNote "Deze indicatie geeft aan hoeveel keer waarden van deze attribuutsoort kunnen voorkomen bij een object van het betreffende objecttype, of bij het betreffende Gegevensgroep";
+	sh:path owl:cardinality;
+	sh:datatype xsd:integer;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort16 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Van een attribuutsoort wordt geregistreerd of het een authentiek gegeven betreft";
+	skos:scopeNote "Aanduiding of het een authentiek gegeven (attribuutsoort) betreft";
+	sh:path ldqd:trustworthiness;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort17 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kan een toelichting hebben";
+	skos:scopeNote "Een inhoudelijke toelichting op de attribuutsoort";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Attribuutsoort18 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort zou kunnen worden afgeleid uit andere attribuutsoorten";
+	skos:scopeNote "Aanduiding dat gegeven afleidbaar is uit andere attribuut -en/of relatiesoorten";
+	sh:path prov:wasDerivedFrom;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort19 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kan mogelijk geen waarde bevatten";
+	skos:scopeNote "Aanduiding dat de attribuutsoort geen waarde kan bevatten (de waarde zou er kunnen zijn, maar kan ook onbekend zijn, of bewust weggelaten).";
+	sh:path xsi:nil;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Attribuutsoort20 a reqo:Requirement;
+	sh:targetClass model:Attribuutsoort;
+	rdfs:label "Een attribuutsoort kan onderdeel zijn van een unieke aanduiding voor een object";
+	skos:scopeNote "Aanduiding dat attribuutsoort onderdeel uitmaakt van de unieke aanduiding van een object";
+	sh:path model:indentificerend;
+	sh:minCount 0;
+	sh:maxCount ;
+.
+### Requirements voor Relatiesoort
+req:Relatiesoort01 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Het KKG metamodel kent een relatiesoort";
+	sh:path owl:ObjectProperty;
+.
+req:Relatiesoort02 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort heeft een naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort03 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort beschrijft de relatie tussen twee Objecttypen";
+	sh:path model:sourceTarget;
+	sh:class model:Objecttype;
+.
+req:Relatiesoort04 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Het objecttype waarvan de relatie een eigenschap is";
+	sh:path model:Objecttype;
+	sh:datatype xsd:string;
+.
+req:Relatiesoort05 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een logisch verband aangeven tussen twee objecttypen";
+	sh:path model:Objecttype;
+	sh:datatype xsd:string;
+.
+req:Relatiesoort06 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een type aggregatie hebben";
+.
+req:Relatiesoort07 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kent een kardinaliteit";
+	sh:path owl:cardinality;
+.
+req:Relatiesoort08 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort heeft een naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort09 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort heeft een definitie";
+	sh:path skos:definition;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort10 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een definitie van een relatiesoort kan een bepaalde herkomst hebben";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Relatiesoort11 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een datum van opnamen hebben";
+	sh:path prov:generatedAtTime;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount	1;
+.
+req:Relatiesoort12 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een indicatie materiele historie hebben";
+	sh:path dct:issued;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort13 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een indicatie van formele historie bevatten";
+	sh:path dct:modified;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort14 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een authentiek gegeven zijn"
+	sh:path ldqd:trustworthiness;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort15 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een afleidbaar gegeven zijn";
+	sh:path prov:wasDerivedFrom;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatiesoort16 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan een toelichting bevatten";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Relatiesoort17 a reqo:Requirement;
+	sh:targetClass model:Relatiesoort;
+	rdfs:label "Een relatiesoort kan mogelijk geen waarde bevatten";
+	sh:path xsi:nil;
+	sh:datatype xsd:String;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+### Requirements voor een Relatierol
+req:Relatierol01 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Het KKG model kent een relatierol";
+	sh:path owl:ObjectProperty;
+	sh:datatype xsd:string;
+.
+req:Relatierol02 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol kent een naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+req:Relatierol03 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol heeft een herkomst";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol04 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol heeft een definitie";
+	sh:path skos:definition;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol05 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol heeft een definitie en die definitie heeft een herkomst";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol06 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol heeft een datum van opname";
+	sh:path prov:generatedAtTime;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol07 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol kent een kardinaliteit";
+	sh:path owl:cardinality;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol08 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label	"Een relatierol kent een indicatie van materiele historie";
+	sh:path dct:issued;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1:
+.	
+req:Relatierol09 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol kent een indicatie van formele historie";
+	sh:path dct:modified;
+	sh:datatype xsd:date;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol10 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol kent de aanduiding of het een authentiek gegeven betreft";
+	sh:path ldqd:trustworthiness;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol11 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label "Een relatierol heeft mogelijk geen waarde";
+	sh:path xsi:nil;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+req:Relatierol12 a reqo:Requirement;
+	sh:targetClass model:Relatierol;
+	rdfs:label	"Een relatierol kan een toelichting hebben";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+>>>>>>> 35c3a24555718fe6009441881b4461dbb21614f1
 .

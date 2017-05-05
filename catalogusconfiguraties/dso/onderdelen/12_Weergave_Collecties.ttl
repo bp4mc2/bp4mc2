@@ -26,9 +26,9 @@ stage:WeergavePaginaCollecties a elmo:Representation;
 	];
 .
 
-# Alfabetische weergave collecties
-stage:DSOCollectiesatotz a elmo:Representation;
-	elmo:url-pattern "/catalogus/dso/query/collecties(|/|\\..+)$";
+# Alfabetische weergave waardelijsten
+stage:DSOWaardelijsten a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/waardelijsten(|/|\\..+)$";
 	elmo:contains stage:DSOCollectiestabel;
 	elmo:contains stage:DSOIndexCollecties;
 	elmo:contains stage:DSOHeader;
@@ -219,9 +219,9 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/collection/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
@@ -292,7 +292,7 @@ stage:WeergaveVersiesCollectiesQuery a elmo:Query;
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 
 		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
@@ -336,7 +336,7 @@ stage:DSOCollectieConceptenQueryWithParamTerm a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		
 		SELECT ?concept ?concept_label ?uitleg
@@ -392,7 +392,7 @@ stage:DSOCollectieConceptenQueryWithoutParam a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		
 		SELECT ?concept ?concept_label ?uitleg
@@ -447,7 +447,7 @@ stage:DSOCollectiesQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
@@ -482,6 +482,9 @@ stage:DSOCollectiesQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?ctime.
 				}
+			}
+			GRAPH ?wg {
+				collection:Waardelijsten skos:member ?collectie.
 			}
 			GRAPH doc:mastergraph {
 				?collectie rdfs:isDefinedBy ?g.
