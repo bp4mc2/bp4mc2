@@ -154,7 +154,7 @@ stage:ModelControle1 a elmo:Representation;
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				?item rdf:type ?type.
-				FILTER (?type = shacl:NodeShape || ?type = shacl:PropertyNode)
+				FILTER (?type = shacl:NodeShape || ?type = shacl:PropertyShape)
 				?item ?p ?o.
 				FILTER (IsIRI(?o) and ?p!=rdf:type)
 				FILTER NOT EXISTS {
@@ -1223,7 +1223,7 @@ updatestage:sync-requirements a elmo:Production;
 .
 
 #Alleen imports
-updatestage:syncimports a elmo:Production;
+updatestage:sync-imports a elmo:Production;
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:sync_import_rdf;
 	elmo:contains	stage:sync_import_dcat;
