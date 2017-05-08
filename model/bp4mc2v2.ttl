@@ -2,9 +2,7 @@
 @prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
 @prefix owl:		<http://www.w3.org/2002/07/owl#>.
-
 @prefix sh:			<http://www.w3.org/ns/shacl#>.
-	
 @prefix dcat:		<http://www.w3.org/ns/dcat#>.
 @prefix dct:		<http://purl.org/dc/terms/>.
 @prefix dctype:		<http://purl.org/dc/dcmitype/>.
@@ -15,7 +13,8 @@
 @prefix prov:		<http://www.w3.org/ns/prov#>.
 @prefix adms: 		<http://www.w3.org/ns/adms#>.
 @prefix dqv: 		<http://www.w3.org/ns/dqv#>.
-
+@prefix wdrs:		<http://www.w3.org/2007/05/powder-s#>.
+@prefix overheid:	<http://data.ontwikkeling.pdok.nl/gco/def/UNKNOWN#>.
 @prefix model:  	<http://localhost:8080/gco/def/model/>.
 
 ### Concept
@@ -190,17 +189,17 @@ model:Norm rdf:type sh:NodeShape;
 	sh:property model:normVerwijstNaar;
 .
 model:normNaam rdf:type sh:PropertyShape;
-	sh:predicate skos:prefLabel;
+	sh:path skos:prefLabel;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:normHeeftInvloedOp rdf:type sh:PropertyShape;
-	sh:predicate skoslex:affects;
+	sh:path skoslex:affects;
 	sh:class skoslex:Act;
 .
 model:normVerwijstNaar rdf:type sh:PropertyShape;
-	sh:predicate skoslex:refersTo;
+	sh:path skoslex:refersTo;
 	sh:class skoslex:Act;
 .
 ### Collection
@@ -227,6 +226,7 @@ model:collectieLid rdf:Type sh:PropertyShape;
 	sh:path skos:member;
 	sh:datatype xsd:string;
 	sh:minCount 1;
+	sh:class skos:Concept;
 .
 ### ConceptSchema
 model:ConceptSchema rdf:type sh:NodeShape;

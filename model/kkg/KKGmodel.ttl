@@ -1,0 +1,464 @@
+@prefix rdf:		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
+@prefix owl:		<http://www.w3.org/2002/07/owl#>.
+@prefix sh:			<http://www.w3.org/ns/shacl#>.
+@prefix dcat:		<http://www.w3.org/ns/dcat#>.
+@prefix dct:		<http://purl.org/dc/terms/>.
+@prefix dctype:		<http://purl.org/dc/dcmitype/>.
+@prefix foaf:		<http://xmlns.com/foaf/0.1/>.
+@prefix skos:		<http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>.
+@prefix prov:		<http://www.w3.org/ns/prov#>.
+@prefix dqv: 		<http://www.w3.org/ns/dqv#>.
+@prefix adms: 		<http://www.w3.org/ns/adms#>
+@prefix wdrs: 		<http://www.w3.org/2007/05/powder-s#>.
+@prefix xsi: 		<http://www.w3.org/2001/XMLSchema-instance>.
+@prefix ldqd:    	<http://www.w3.org/2016/05/ldqd#> 
+
+@prefix model:		<http://data.acceptatie.pdok.nl/KKG/def/model/>.
+
+### KKG model versie 0.95
+###NodeShapes KKG Kern
+model:Objecttype rdf:type sh:NodeShape;
+	rdfs:label "Objecttype";
+	sh:targetClass rdfs:Class;
+	sh:property model:bezit;
+	sh:property model:waarvoorGeldt;
+	sh:property model:generalisatie;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:code;
+	sh:property model:definitie;
+	sh:property model:herkomstDefinitie;
+	sh:property model:datumOpname;
+	sh:property model:uniekeAanduiding;
+	sh:property model:populatie;
+	sh:property model:kwaliteit;
+	sh:property model:toelichting;
+	sh:property model:indicatieAbstractObject;
+.
+model:Generalisatie rdf:type sh:NodeShape;
+	rdfs:label "Generalisatie";
+	sh:targetClass rdfs:subClassOf;
+	sh:property model:verwijstNaarGenerieke;
+	sh:property model:naam;
+.
+model:Gegevensgroep rdf:type sh:NodeShape;
+	rdfs:label "Gegevensgroep";
+	sh:targetClass owl:ObjectProperty;
+	sh:property model:bezit;
+	sh:property model:heeft;
+	sh:property model:naam;
+	sh:property model:objecttype;
+	sh:property model:gerelateerdGegevensGroeptype;
+	sh:property model:uniDirectioneel;
+	sh:property model:kardinaliteit;
+	sh:property model:definitie;
+	sh:property model:typeAggregatie;
+.
+model:Gegevensgroeptype rdf:type sh:NodeShape;
+	rdfs:label "Gegevensgroeptype";
+	sh:targetClass rdfs:Class;
+	sh:property model:bezit;
+	sh:property model:waarvoorGeldt;	
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:code;
+	sh:property model:definitie;
+	sh:property model:herkomstDefinitie;
+	sh:property model:datumOpname;
+	sh:property model:indicatieMaterieleHistorie;
+	sh:property model:indicatieFormeleHistorie;
+	sh:property model:kardinaliteit;
+	sh:property model:authentiek;
+	sh:property model:toelichting;
+	sh:property model:mogelijkGeenWaarde;
+.
+model:Relatiesoort rdf:type sh:NodeShape;
+	rdfs:label "Relatiesoort";
+	sh:targetClass owl:ObjectProperty;
+	sh:property model:verwijstNaar;
+	sh:property model:naam;
+	sh:property model:uniDirectioneel;
+	sh:property model:objecttype;
+	sh:property model:gerelateerdObjecttype;
+	sh:property model:typeAggregatie;
+	sh:property model:kardinaliteit;
+	sh:property model:herkomst;
+	sh:property model:code;
+	sh:property model:definitie;
+	sh:property model:herkomstDefinitie;
+	sh:property model:datumOpname;
+	sh:property model:indicatieMaterieleHistorie;
+	sh:property model:indicatieFormeleHistorie;
+	sh:property model:authentiek;
+	sh:property model:indicatieAfleidbaar;
+	sh:property model:toelichting;
+	sh:property model:mogelijkGeenWaarde;
+.
+model:Relatierol rdf:type sh:NodeShape;
+	rdfs:label "Relatierol";
+	sh:targetClass owl:ObjectProperty;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:herkomstDefinitie;
+	sh:property model:datumOpname;
+	sh:property model:kardinaliteit;
+	sh:property model:indicatieMaterieleHistorie;
+	sh:property model:indicatieFormeleHistorie;
+	sh:property model:authentiek;
+	sh:property model:mogelijkGeenWaarde;
+	sh:property model:toelichting;
+.
+model:Relatieklasse rdf:type sh:NodeShape;
+	rdfs:label "Realtieklasse";
+	sh:targetClass rdfs:Class;
+	sh:property model:waarvoorGeldt;
+.
+model:Attribuutsoort rdf:type sh:NodeShape;
+	rdfs:label "Attribuutsoort";
+	sh:targetClass owl:ObjectProperty;
+	sh:property model:heeftAlsType;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:code;
+	sh:property model:definitie;
+	sh:property model:herkomstDefinitie;
+	sh:property model:datumOpname;
+	sh:property model:domeinType;
+	sh:property model:domeinLengte;
+	sh:property model:domeinPatroon;
+	sh:property model:domeinFormeelPatroon;
+	sh:property model:indicatieMaterieleHistorie;
+	sh:property model:indicatieFormeleHistorie;
+	sh:property model:locatie;
+	sh:property model:kardinaliteit;
+	sh:property model:authentiek;
+	sh:property model:toelichting;
+	sh:property model:indicatieAfleidbaar;
+	sh:property model:mogelijkGeenWaarde;
+	sh:property model:indentificerend;
+.
+### NodeShapes KKG Datatypen
+model:Datatype rdf:type sh:NodeShape;
+	rdfs:label "Datatype";
+	sh:targetClass xsi:type;
+.
+model:ComplexDatatype rdf:type sh:NodeShape;
+	rdfs:label "Complex Datatype";
+	sh:targetClass xsi:complextype;
+	sh:property model:specialisatie;
+	sh:property model:bezit;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:patroon;
+	sh:property model:formeelPatroon;
+	sh:property model:datumOpname;
+.
+model:Enumeratie rdf:type sh:NodeShape;
+	rdfs:label "Enumeratie";
+	sh:property model:specialisatie;
+	sh:property model:bezit;
+.
+model:Referentielijst rdf:type sh:NodeShape;
+	rdfs:label "Referentielijst";
+	sh:targetClass owl:Class;
+	sh:property model:specialisatie;	
+	sh:property model:bezit;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:datumOpname;
+	sh:property model:toelichting;
+	sh:property model:locatie;
+.
+model:Union rdf:type sh:NodeShape;
+	rdfs:label "Union";
+	sh:targetClass rdfs:Datatype;
+	sh:property model:specialisatie;
+	sh:property model:bezit;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:datumOpname;
+.
+model:Codelijst rdf:type sh:NodeShape;
+	rdfs:label "Codelijst";
+	sh:targetClass rdf:Datatype;
+	sh:property model:specialisatie;
+.
+model:PrimitiefDatatype rdf:type sh:NodeShape;
+	rdfs:label "Primitief Datatype";
+	sh:targetClass xsi:simpletype;
+	sh:property model:specialisatie;
+.
+model:DataElement rdf:type sh:NodeShape;
+	rdfs:label "Data element";
+	sh:targetClass rdf:Property;
+	sh:property model:aggregatie;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:domeinType;
+	sh:property model:domeinLengte;
+	sh:property model:domeinPatroon;
+	sh:property model:domeinFormeelPatroon;
+	sh:property model:kardinaliteit;
+.
+model:Enumeratiewaarde rdf:type sh:NodeShape;
+	rdfs:label "Enumeratiewaarde";
+	sh:property model:aggregatie;
+.
+model:ReferentieElement rdf:type sh:NodeShape;
+	rdfs:label "Referentie element";
+	sh:targetClass rdf:Property;
+	sh:property model:aggregatie;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:datumOpname;
+	sh:property model:domeinType;
+	sh:property model:domeinLengte;
+	sh:property model:domeinPatroon;
+	sh:property model:domeinFormeelPatroon;
+	sh:property model:kardinaliteit;
+	sh:property model:identificatie;
+	sh:property model:toelichting;
+.
+model:UnionElement rdf:type sh:NodeShape;
+	rdfs:label "Union element";
+	sh:targetClass rdf:Property;
+	sh:property model:aggregatie;
+	sh:property model:naam;
+	sh:property model:herkomst;
+	sh:property model:definitie;
+	sh:property model:domeinType;
+	sh:property model:domeinLengte;
+	sh:property model:domeinPatroon;
+	sh:property model:domeinFormeelPatroon;
+	sh:property model:kardinaliteit;
+.
+### NodeShapes Overige KKG elementen
+model:Constraint rdf:type sh:NodeShape;
+	rdfs:label "Constraint";
+	sh:targetClass owl:DatatypeProperty;
+.
+### PropertyShapes KKG Metamodel
+model:verwijstNaar rdf:type sh:PropertyShape;
+	rdfs:label "verwijst naar";
+	sh:class model:Objecttype;
+.
+model:waarvoorGeldt rdf:type sh:PropertyShape;
+	rdfs:label "waarvoor geldt";
+	sh:minCount 0;
+	sh:maxCount n;
+	sh:class model:Constraint;
+.
+model:generalisatie rdf:type sh:PropertyShape;
+	rdfs:label "generalisatie";
+	sh:minCount 1;
+	sh:class model:Generalisatie;
+.
+model:verwijstNaarGenerieke rdf:type sh:PropertyShape;
+	rdfs:label "verwijst naar generieke";
+	sh:minCount 0;
+	sh:maxCount 1;
+	sh:class model:Objecttype;
+.
+model:specialisatie rdf:type sh:PropertyShape;
+	sh:path rdfs:subClassOf;
+	sh:class model:Relatiesoort;
+	sh:class model:Datatype;
+.
+model:aggregatie rdf:type sh:PropertyShape;
+	sh:path rdfs:range;
+	sh:class model:Datatype;
+.
+model:bezit rdf:type sh:PropertyShape;
+	rdfs:label "bezit";
+	sh:minCount 0;
+	sh:maxCount n;
+	sh:class model:Gegevensgroep;
+	sh:class model:Attribuutsoort;
+	sh:class model:Relatiesoort;
+	sh:class model:DataElement;
+	sh:class model:Enumeratiewaarde;
+	sh:class model:ReferentieElement;
+	sh:class model:UnionElement;
+.	
+model:heeftAlsType rdf:type sh:PropertyShape;
+	rdfs:label "heeft als type";
+	sh:path rdfs:range;
+	sh:class model:Datatype;
+.
+model:code rdf:type sh:PropertyShape;
+	rdfs:label "(code)";
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:naam rdf:type sh:PropertyShape;
+	rdfs:label "naam";
+	sh:path skos:prefLabel;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:herkomst rdf:type sh:PropertyShape;
+	rdfs:label "herkomst";
+	sh:path dct:source;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:definitie rdf:type sh:PropertyShape;
+	rdfs:label "Definitie";
+	sh:path skos:definition;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:herkomstDefinitie rdf:type sh:PropertyShape;
+	rdfs:label "Herkomst definitie";
+	sh:path dct:source;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:datumOpname rdf:type sh:PropertyShape;
+	rdfs:label "Datum opname";
+	sh:path prov:generatedAtTime;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:uniekeAanduiding rdf:type sh:PropertyShape;
+	rdfs:label "Unieke aanduiding";
+	sh:path skos:notation;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:populatie rdf:type sh:PropertyShape;
+	rdfs:label "Populatie";
+	sh:path ldqd:completeness;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:EAtaggedValue rdf:type sh:PropertyShape;
+	rdfs:label "EA tagged value";
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:kwaliteit rdf:type sh:PropertyShape;
+	rdfs:label "Kwaliteit";
+	sh:path ldqd:semanticAccuracy;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:toelichting rdf:Type sh:PropertyShape;
+	rdfs:label "Toelichting";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:indicatieAbstractObject rdf:type sh:PropertyShape;
+	rdfs:label "Indicatie abstract object";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:domeinType rdf:type sh:PropertyShape;
+	rdfs:label "Domein type";
+	sh:path rdfs:range;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:domeinLengte rdf:type sh:PropertyShape;
+	rdfs:label "Domein lengte";
+	sh:datatype xsd:integer;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:domeinPatroon rdf:type sh:PropertyShape;
+	rdfs:label "Domein patroon";
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:domeinFormeelPatroon rdf:type sh:PropertyShape;
+	rdfs:label "Domein formeel patroon";	
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:indicatieMaterieleHistorie rdf:type sh:PropertyShape;
+	rdfs:label "Indicatie materiele history";
+	sh:path rdf:Property;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:indicatieFormeleHistorie rdf:type sh:PropertyShape;
+	rdfs:label "Indicatie formele historie";
+	sh:path rdf:Property;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:locatie rdf:type sh:PropertyShape;
+	rdfs:label "Locatie";
+	sh:path dcat:accessURL;
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:kardinaliteit rdf:type sh:PropertyShape;
+	rdfs:label "Kardinaliteit";
+	sh:path owl:cardinality;
+	sh:property model:minimaleWaarde;
+	sh:property model:maximaleWaarde;
+.
+model:minimaleWaarde rdf:type sh:PropertyShape;
+	rdfs:label "Minimale waarde";
+	sh:path sh:minCount;
+.
+model:maximaleWaarde rdf:type sh:PropertyShape;
+	rdfs:label "Maximale waarde";
+	sh:path sh:maxCount;
+.
+model:authentiek rdf:type sh:PropertyShape;
+	rdfs:label "Authentiek";
+	sh:path ldqd:trustworthiness;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:indicatieAfleidbaar rdf:type sh:PropertyShape;
+	rdfs:label "Indicatie Afleidbaar";
+	sh:path prov:wasDerivedFrom;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:mogelijkGeenWaarde rdf:type sh:PropertyShape;
+	rdfs:label "Mogelijk geen waarde";
+	sh:path xsi:nil;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:indentificerend rdf:type sh:PropertyShape;
+	rdfs:label "Identificerend";
+	sh:minCount 0;
+	sh:maxCount 1;
+.
+model:uniDirectioneel rdf:type sh:PropertyShape;
+	rdfs:label "uniDirectioneel";
+	sh:path rdf:object;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:objecttype rdf:type sh:PropertyShape;
+	rdfs:label "objecttype";
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:gerelateerdObjecttype rdf:type sh:PropertyShape;
+	rdfs:label "Gerelateerd objecttype";
+	sh:path rdfs:subClassOf;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
