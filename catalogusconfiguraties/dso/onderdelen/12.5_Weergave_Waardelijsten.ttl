@@ -21,10 +21,18 @@ stage:WeergavePaginaWaardelijsten a elmo:Representation;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOTree;
-	elmo:contains stage:DSOIndexCollecties;
-	elmo:applies-to [
-		rdf:type skos:Collection
-	];
+	elmo:contains stage:DSOIndexWaardelijsten;
+	elmo:url-pattern "/catalogus/dso/query/lijst";
+.
+
+# Alfabetische weergave waardelijsten
+stage:DSOWaardelijsten a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/waardelijsten(|/|\\..+)$";
+	elmo:contains stage:DSOWaardelijstentabel;
+	elmo:contains stage:DSOIndexWaardelijsten;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOMenu;
 .
 
 #
@@ -118,6 +126,19 @@ stage:WeergaveTabelWaardelijsten a elmo:Part;
 	elmo:query stage:WeergaveTabelWaardelijstenQuery;
 .
 
+# Index voor op de alfabetische weergave collecties
+stage:DSOIndexWaardelijsten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "";
+		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term"
+	];
+	elmo:index "02";
+.
+
+
 # Conceptentabel voor op de collectiepagina
 stage:DSOWaardelijstConceptenWithParamTerm a elmo:Part;
 	elmo:with-parameter "term";
@@ -149,6 +170,11 @@ stage:DSOWaardelijstentabel a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to "collectie_label";
 		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to "collectie";
+		rdfs:label "Waardelijsten";
+		xhtml:link "query/lijst";
 	];
 	elmo:query stage:DSOWaardelijstenQuery;
 .
@@ -250,14 +276,16 @@ stage:DSOWaardelijstConceptenQueryWithParamTerm a elmo:Query;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix dct: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?notitie ?geldigheid
 		WHERE {
 			{
 				GRAPH ?g {
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
-					OPTIONAL {?concept skos:definition ?uitleg}
+					OPTIONAL {?concept skos:notation ?notitie}
+					OPTIONAL {?concept dct:valid ?geldigheid}
 					
 					FILTER NOT EXISTS {
 						?concept prov:invalidatedAtTime ?time.
@@ -314,14 +342,16 @@ stage:DSOWaardelijstConceptenQueryWithoutParam a elmo:Query;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix dct: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?notitie ?geldigheid
 		WHERE {
 			{
 				GRAPH ?g {
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
-					OPTIONAL {?concept skos:definition ?uitleg}
+					OPTIONAL {?concept skos:notation ?notitie}
+					OPTIONAL {?concept dct:valid ?geldigheid}
 					
 					FILTER NOT EXISTS {
 						?concept prov:invalidatedAtTime ?time.

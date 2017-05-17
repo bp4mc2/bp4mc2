@@ -26,16 +26,6 @@ stage:WeergavePaginaCollecties a elmo:Representation;
 	];
 .
 
-# Alfabetische weergave waardelijsten
-stage:DSOWaardelijsten a elmo:Representation;
-	elmo:url-pattern "/catalogus/dso/query/waardelijsten(|/|\\..+)$";
-	elmo:contains stage:DSOCollectiestabel;
-	elmo:contains stage:DSOIndexCollecties;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:contains stage:DSOMenu;
-.
-
 #
 # HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
 #
@@ -157,18 +147,6 @@ stage:WeergaveVersiesCollecties a elmo:Part;
 	elmo:query stage:WeergaveVersiesCollectiesQuery;
 .
 
-# Index voor op de alfabetische weergave collecties
-stage:DSOIndexCollecties a elmo:Part;
-	elmo:appearance elmo:IndexAppearance;
-	elmo:data [
-		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
-		xhtml:link "";
-		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
-		elmo:name "term"
-	];
-	elmo:index "02";
-.
-
 # Conceptentabel voor op de collectiepagina
 stage:DSOCollectieConceptenWithParamTerm a elmo:Part;
 	elmo:with-parameter "term";
@@ -190,18 +168,6 @@ stage:DSOCollectieConceptenWithoutParam a elmo:Part;
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:query stage:DSOCollectieConceptenQueryWithoutParam;
-.
-
-
-# Collectietabel voor op de alfabetische weergave collecties
-stage:DSOCollectiestabel a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:index "03";
-	elmo:fragment [
-		elmo:applies-to "collectie_label";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:query stage:DSOCollectiesQuery;
 .
 
 #
@@ -482,9 +448,6 @@ stage:DSOCollectiesQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?ctime.
 				}
-			}
-			GRAPH ?wg {
-				collection:Waardelijsten skos:member ?collectie.
 			}
 			GRAPH doc:mastergraph {
 				?collectie rdfs:isDefinedBy ?g.
