@@ -6,32 +6,33 @@
 #
 #
 
-@prefix stage: <http://data.ontwikkeling.pdok.nl/catalogus/dso/stage#>.
-@prefix updatestage: <http://data.ontwikkeling.pdok.nl/catalogus/dso/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
-@prefix adms: <http://www.w3.org/ns/adms#>.
-@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>. 
+@prefix stage: 			<http://data.ontwikkeling.pdok.nl/catalogus/dso/stage#>.
+@prefix updatestage: 	<http://data.ontwikkeling.pdok.nl/catalogus/dso/update/>.
+@prefix elmo: 			<http://bp4mc2.org/elmo/def#>.
+@prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: 			<http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: 		<http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>.
+@prefix skos: 			<http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: 		<http://bp4mc2.org/skosax#>.
+@prefix skoslex: 		<http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: 			<http://purl.org/iso25964/skos-thes#>.
+@prefix dc: 			<http://purl.org/dc/elements/1.1/>.
+@prefix dct: 			<http://purl.org/dc/terms/>.
+@prefix dctype: 		<http://purl.org/dc/dcmitype/>.
+@prefix geosparql: 		<http://www.opengis.net/ont/geosparql#>.
+@prefix sh: 			<http://www.w3.org/ns/shacl#>.
+@prefix owl: 			<http://www.w3.org/2002/07/owl#>.
+@prefix foaf: 			<http://xmlns.com/foaf/0.1/>.
+@prefix prov: 			<http://www.w3.org/ns/prov#>.
+@prefix brt: 			<http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: 			<http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: 			<http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: 			<http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: 			<http://www.w3.org/ns/dcat#>.
+@prefix adms: 			<http://www.w3.org/ns/adms#>.
+@prefix wdrs: 			<http://www.w3.org/2007/05/powder-s#>.
+@prefix yed: 			<http://bp4mc2.org/yed#>. 
 #
 #
 #
@@ -316,15 +317,20 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1";
 				xhtml:link "/catalogus/dso";
 			];
-			elmo:data [
-				elmo:index "2";
-				rdfs:label "KKG model";
-				xhtml:link "catalogus/dso/query/KKG";
-				];
 			elmo:data [	
-				elmo:index "3";
+				elmo:index "2";
 				rdfs:label "Vocabulaire";
-				xhtml:link "/catalogus/dso/query/vocabulary?model=http://data.ontwikkeling.pdok.nl/catalogus/dso/def/IMOD";
+				xhtml:link "/catalogus/dso/query/model";
+			];
+			elmo:data [
+				elmo:index "3";
+				rdfs:label "Informatie model";
+				xhtml:link "/catalogus/dso/query/modelview";
+			];
+			elmo:data [
+				elmo:index "4";
+				rdfs:label "Informatie model (export)";
+				xhtml:link "/catalogus/dso/query/modelyed.yed";
 			];
 			elmo:data [
 				rdfs:label "Help";
@@ -435,6 +441,30 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Voeg nieuw model toe";
 				elmo:index "3";
 				xhtml:link "update/addnewmodel";
+			];
+		];
+		elmo:data [
+			rdfs:label "Sync";
+			elmo:index "5";
+			elmo:data [
+				rdfs:label "Sync Model";
+				elmo:index "1";
+				xhtml:link "/catalogus/dso/update/syncModel";
+			];
+			elmo:data [
+				rdfs:label "Sync Requirements";
+				elmo:index "2";
+				xhtml:link "/catalogus/dso/update/syncRequirments";
+			];
+			elmo:data [
+				rdfs:label "Sync Alle imports (gebruikte vocabulaires)";
+				elmo:index "3";
+				xhtml:link "/catalogus/dso/update/syncImports";
+			];
+			elmo:data [
+				rdfs:label "Sync Begrippen (model)";
+				elmo:index "4";
+				xhtml:link "/catalogus/dso/update/syncBegrippen";
 			];
 		];
 		elmo:data [
@@ -6531,6 +6561,538 @@ stage:VocabulaireQuery a elmo:Query;
 	'''
 .
  
+#
+#
+#
+# Gegevens Catalogus Model
+#
+#
+#
+
+#
+#
+#
+#Pagina's (Representation's)
+#
+#
+#
+
+#GCO Vocabulaire Pagina
+stage:DSOGCOVocabulairepagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/model$";
+	elmo:contains stage:DSOMenu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:DSOModelQuery;
+.
+
+#GCO Model Pagina
+stage:DSOGCOModel rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/modelview";
+	elmo:index "1";
+	elmo:contains stage:DSOMenu;
+	elmo:appearance elmo:ModelAppearance;
+	elmo:query stage:DSOModelQuery;
+.
+
+#
+# Query's model
+#
+
+# Query voor de opbouw van de vocabulaire gebaseerd op het model alsmede query voor de opbouw van het model
+stage:DSOModelQuery a elmo:Query;
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		construct {
+			?shape ?sp ?so.
+			?class rdf:type rdfs:Class.
+			?class rdfs:comment "".
+			?subclass rdfs:subClassOf ?superclass.
+			?superclass rdf:type rdfs:Class.
+			?pc ?pcp ?pco.
+			?property rdf:type rdf:Property.
+			?property rdfs:comment "".
+			?subproperty rdfs:subPropertyOf ?superproperty.
+			?superproperty rdf:type rdf:Property.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				?shape a shacl:Shape.
+				?shape ?sp ?so.
+				OPTIONAL {
+					?shape shacl:scopeClass ?class.
+					OPTIONAL {
+						?class rdfs:subClassOf* ?subclass.
+						?subclass rdfs:subClassOf ?superclass
+					}
+				}
+				OPTIONAL {
+					?shape shacl:property ?pc.
+					?pc ?pcp ?pco.
+					OPTIONAL {
+						?pc shacl:predicate ?property.
+						OPTIONAL {
+							?property rdfs:subPropertyOf* ?subproperty.
+							?subproperty rdfs:subPropertyOf ?superproperty
+						}
+					}
+				}
+			}
+		}
+	''';
+.
+
+# Query voor het yed model van de Gegevens Catalogus
+stage:ModelYed a elmo:Representation;
+	elmo:url-pattern	"/catalogus/dso/query/modelyed.yed$"; #Moet eigenlijk twee backslashes zijn voor de ., maar dat gaat nog mis in de turtle export!
+	elmo:layer elmo:TopLayer;
+	elmo:fragment [
+		elmo:applies-to rdfs:subClassOf;
+		rdfs:label "";
+		yed:sourceArrow "none";
+		yed:targetArrow "white_delta";
+	];
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?element rdfs:comment ?attribs.
+			?element rdfs:subClassOf ?super.
+			?element ?pc ?class.
+			?element rdf:type rdfs:Class.
+			?pc rdfs:label ?plabel.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
+				?shape shacl:scopeClass ?element.
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
+					where {
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+						?pc shacl:class ?class.
+#						OPTIONAL {?pred rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {?pc shacl:in ?col}
+					}
+				}
+				OPTIONAL {
+					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
+					where {
+						?shape shacl:property ?pc.
+						?pc shacl:predicate ?pred.
+#						OPTIONAL {?pred rdfs:label ?plabel}
+						OPTIONAL {?pc shacl:datatype ?datatype}
+						OPTIONAL {?pc shacl:minCount ?minc}
+						OPTIONAL {?pc shacl:maxCount ?maxc}
+						FILTER NOT EXISTS {
+							?pc shacl:class ?class.
+						}
+					}
+					group by ?shape
+				}
+			}
+		}
+	''';
+.
+#
+# Productions
+#
+
+#Synchroniseren van het model
+updatestage:syncModel a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:sync_clear_models;
+	elmo:contains stage:sync_model_1;
+	elmo:contains stage:sync_model_2;
+.
+# Synchroniseren van de requirements
+updatestage:syncRequirements a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:sync_clear_reqs;
+	elmo:contains stage:sync_reqs;
+.
+# Synchroniseren van alle gebruikte vocabulaires
+updatestage:syncImports a elmo:Production;
+	elmo:contains stage:sync_clear_imports;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:sync_import_rdf;
+	elmo:contains stage:sync_import_adms;
+	elmo:contains stage:sync_import_dcat;
+	elmo:contains stage:sync_import_dcterms;
+	elmo:contains stage:sync_import_dctype;
+	elmo:contains stage:sync_import_dqv;
+	elmo:contains stage:sync_import_foaf;
+	elmo:contains stage:sync_import_ldqd;
+	elmo:contains stage:sync_import_owl;
+	elmo:contains stage:sync_import_powder;
+	elmo:contains stage:sync_import_prov;
+	elmo:contains stage:sync_import_rdf-schema;
+	elmo:contains stage:sync_import_skos-thes;
+	elmo:contains stage:sync_import_skos;
+	elmo:contains stage:sync_import_xsd;
+	elmo:contains stage:sync_import_skoslex;
+.	
+updatestage:syncBegrippen a elmo:Production;
+	elmo:contains	stage:DSOBeheermenu;
+	elmo:contains	stage:sync_clear_concepts;
+	elmo:contains	stage:sync_concepts;
+.
+#----------------------------
+# Clearing
+#----------------------------
+stage:sync_clear_models a elmo:Scene;
+	elmo:index "001";
+	rdfs:label "Opschonen oude modellen";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/bp4mc2>";
+.
+stage:sync_clear_reqs a elmo:Scene;
+	elmo:index "002";
+	rdfs:label "Opschonen requirements";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/requirements>";
+.
+stage:sync_clear_imports a elmo:Scene;
+	elmo:index "003";
+	rdfs:label "Opschonen imports";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/imports>";
+.
+stage:sync_clear_concepts a elmo:Scene;
+	elmo:index "004";
+	rdfs:label "Opschonen begrippen";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/concepts>";
+.
+#----------------------------------
+# Import van vocabulaires 
+#---------------------------------
+stage:sync_import_rdf a elmo:Scene;
+	elmo:index "01";
+	rdfs:label "rdf vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/22-rdf-syntax-ns.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_adms a elmo:Scene;
+	elmo:index "02";
+	rdfs:label "adms vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/adms.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_dcat a elmo:Scene;
+	elmo:index "03";
+	rdfs:label "dcat vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dcat.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_dcterms a elmo:Scene;
+	elmo:index "04";
+	rdfs:label "dcterms vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dcterms.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_dctype a elmo:Scene;
+	elmo:index "05";
+	rdfs:label "dctype vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dctype.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_dqv a elmo:Scene;
+	elmo:index "06";
+	rdfs:label "dqv vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dqv.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_foaf a elmo:Scene;
+	elmo:index "07";
+	rdfs:label "foaf vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/foaf.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_ldqd a elmo:Scene;
+	elmo:index "08";
+	rdfs:label "ldqd vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/ldqd.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_owl a elmo:Scene;
+	elmo:index "09";
+	rdfs:label "owl vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/owl.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_powder a elmo:Scene;
+	elmo:index "10";
+	rdfs:label "powder-s vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/powder-s.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_prov a elmo:Scene;
+	elmo:index "11";
+	rdfs:label "prov vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/prov.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_rdf-schema a elmo:Scene;
+	elmo:index "12";
+	rdfs:label "rdf-schema vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/rdf-schema.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_skos-thes a elmo:Scene;
+	elmo:index "13";
+	rdfs:label "skos-thes vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos-thes.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_rdf a elmo:Scene;
+	elmo:index "14";
+	rdfs:label "skos vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_xsd a elmo:Scene;
+	elmo:index "15";
+	rdfs:label "xsd vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_skoslex a elmo:Scene;
+	elmo:index "4";
+	rdfs:label "bp4mc2.org skoslex vocabulaire ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/skoslex.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+#----------------------------------
+# Import van requirements
+#----------------------------------
+stage:sync_reqs a elmo:Scene;
+	elmo:index "101";
+	rdfs:label "bp4mc2.org requirements ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/requirements> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+#----------------------------
+# Import van Model Concepts
+#----------------------------
+stage:sync_concepts a elmo:Scene;
+	elmo:index "101";
+	rdfs:label "bp4mc2.org begrippen ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/concepts> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-concepts.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+#----------------------------
+# Import van Model
+#----------------------------
+stage:sync_model_1 a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "bp4mc2.org core metamodel ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2v2.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_model_2 a elmo:Scene;
+	elmo:index "2";
+	rdfs:label "bp4mc2.org informatie metamodel ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
+			?s?p?o
+		}
+		where {
+			service <http://data.ontwikkeling.pdok.nl/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodelv2.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+. 
 #
 #
 #
