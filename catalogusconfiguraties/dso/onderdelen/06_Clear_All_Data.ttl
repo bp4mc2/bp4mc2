@@ -33,6 +33,7 @@ stage:ClearAllDataScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijder alle data";
 	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		DELETE {
 			GRAPH ?g {
 				?s ?p ?o
@@ -43,6 +44,7 @@ stage:ClearAllDataScene a elmo:Scene;
 				?s ?p ?o
 			}
 			FILTER regex(?g, "^http://localhost:8080/catalogus/dso/(?!stage)")
+			FILTER( ?g != container:smw )
 		}
 	'''
 .

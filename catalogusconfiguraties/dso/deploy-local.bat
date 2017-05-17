@@ -1,4 +1,6 @@
 @echo off
+echo Clearing graph...
+curl.exe -X PUT -T empty.ttl http://localhost:8890/sparql-graph-crud?graph-uri=http://localhost:8080/dso/stage
 type NUL > "Stage DSO local.ttl"
 cd onderdelen
 for %%y in (*.ttl) do (

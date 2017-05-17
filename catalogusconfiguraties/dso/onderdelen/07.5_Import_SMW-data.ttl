@@ -1,0 +1,54 @@
+#
+#
+#
+# IMPORTEREN DATA SEMANTIC MEDIAWIKI
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Pagina om alle data vanuit VocBench in te laden
+updatestage:importsmwdata a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSODummyForm;
+	elmo:contains stage:DSOLoadSMWDataScene;
+	elmo:contains stage:DSOGeneriekeUploadScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:DSODummyForm a elmo:Form.
+
+#
+# SCENES
+#
+
+# Query om VocBench-gegevens in te laden vanuit GraphDB
+stage:DSOLoadSMWDataScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Laden gegevens vanuit Semantic MediaWiki";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		
+		INSERT INTO container:generiek {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH container:smw {
+				{
+					?s rdf:type skos:Concept.
+					?s ?p ?o.
+				}
+				UNION
+				{
+					?s rdf:type skos:Collection.
+					?s ?p ?o.
+				}
+			}
+		}
+	'''
+.
