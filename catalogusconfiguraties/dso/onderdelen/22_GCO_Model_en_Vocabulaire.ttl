@@ -53,10 +53,10 @@ stage:DSOModelQuery a elmo:Query;
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape a shacl:Shape.
+				?shape a shacl:NodeShape.
 				?shape ?sp ?so.
 				OPTIONAL {
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
 						?subclass rdfs:subClassOf ?superclass
@@ -66,7 +66,7 @@ stage:DSOModelQuery a elmo:Query;
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
 					OPTIONAL {
-						?pc shacl:predicate ?property.
+						?pc shacl:path ?property.
 						OPTIONAL {
 							?property rdfs:subPropertyOf* ?subproperty.
 							?subproperty rdfs:subPropertyOf ?superproperty
@@ -99,7 +99,7 @@ stage:ModelYed a elmo:Representation;
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape shacl:scopeClass ?element.
+				?shape shacl:targetClass ?element.
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
 					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
@@ -226,7 +226,7 @@ stage:sync_import_adms a elmo:Scene;
 		}
 		where {
 			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/adms.rdf> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/adms.ttl> {
 					?s?p?o
 				}
 			}
@@ -409,7 +409,7 @@ stage:sync_import_skos-thes a elmo:Scene;
 		}
 	''';
 .
-stage:sync_import_rdf a elmo:Scene;
+stage:sync_import_skos a elmo:Scene;
 	elmo:index "14";
 	rdfs:label "skos vocabulary import";
 	elmo:query '''
@@ -507,7 +507,7 @@ stage:sync_model_1 a elmo:Scene;
 		}
 		where {
 			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2v2.ttl> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2.ttl> {
 					?s?p?o
 				}
 			}
@@ -523,7 +523,7 @@ stage:sync_model_2 a elmo:Scene;
 		}
 		where {
 			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodelv2.ttl> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodel.ttl> {
 					?s?p?o
 				}
 			}

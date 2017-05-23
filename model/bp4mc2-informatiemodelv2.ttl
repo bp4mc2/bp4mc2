@@ -15,10 +15,9 @@
 @prefix dqv: 		<http://www.w3.org/ns/dqv#>.
 @prefix model:  	<http://data.ontwikkeling.pdok.nl/gco/def/model/>.
 
-
-###OWL Class
 model:Class a sh:NodeShape;
 	rdfs:label "Shape voor owl:Class";
+	rdfs:comment "owl:Class";
 	sh:targetClass owl:Class;
 	sh:property model:Class_label;
 	sh:property model:Class_subject;
@@ -33,8 +32,6 @@ model:Class_subject a sh:PropertyShape;
 	sh:path dct:subject;
 	sh:class skos:Concept;
 .
-
-###Property
 model:Property a sh:NodeShape;
 	rdfs:label "Shape voor eigenschap";
 	sh:targetClass rdf:Property;
@@ -51,21 +48,15 @@ model:Property_subject a sh:PropertyShape;
 	sh:path dct:subject;
 	sh:class skos:Concept;
 .
-
-###OWL Datatype property
-model:DatatypeProperty a sh:ShapeNode;
+model:DatatypeProperty a sh:NodeShape;
 	rdfs:label "Shape voor attribuut-eigenschap";
 	sh:targetClass owl:DatatypeProperty;
 .
-
-###OWL Object property
-model:ObjectProperty a sh:ShapeNode;
+model:ObjectProperty a sh:NodeShape;
 	rdfs:label "Shape voor relatie-eigenschap";
 	sh:targetClass owl:ObjectProperty;
 .
-
-###Shape
-model:Shape a sh:ShapeNode;
+model:Shape a sh:NodeShape;
 	rdfs:label "Shape voor gegevensstructuur";
 	sh:targetClass sh:Shape;
 	sh:property model:Shape_targetClass;
@@ -81,8 +72,7 @@ model:Shape_property a sh:PropertyShape;
 	sh:path sh:property;
 	sh:class sh:PropertyConstraint;
 .
-###Property constraint
-model:PropertyConstraint a sh:ShapeNode;
+model:PropertyConstraint a sh:NodeShape;
 	rdfs:label "Shape voor gegevensconstraint";
 	sh:targetClass sh:PropertyShape;
 	sh:property model:PropertyConstraint_predicate;
@@ -103,8 +93,7 @@ model:PropertyConstraint_datatype a sh:PropertyShape;
 	sh:path sh:datatype;
 	sh:class rdfs:Datatype;
 .
-###Datatype
-model:Datatype a sh:ShapeNode;
+model:Datatype a sh:NodeShape;
 	rdfs:label "Shape voor datatype";
 	sh:targetClass rdfs:Datatype;
 .
