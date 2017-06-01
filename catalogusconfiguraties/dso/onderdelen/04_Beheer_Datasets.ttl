@@ -65,17 +65,12 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:datasetupload {
-			?s rdfs:label ?slabel.
+		INSERT {
+			GRAPH container:datasetupload {
+				?s rdfs:label ?slabel.
+			}
 		} WHERE {
 			GRAPH container:datasetupload {
 				{
@@ -96,33 +91,39 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Datasets en distributies - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
-			catalogus:tomcatUser rdf:type prov:Agent.
-			catalogus:tomcatUser rdfs:label "Tomcat User".
-			catalogus:tomcatUser foaf:givenName "Tomcat User".
-			catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-			catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Datasets en distributies - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+				catalogus:tomcatUser rdf:type prov:Agent.
+				catalogus:tomcatUser rdfs:label "Tomcat User".
+				catalogus:tomcatUser foaf:givenName "Tomcat User".
+				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
+				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:datasetupload {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:datasetupload {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -172,8 +173,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -195,8 +198,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:datasetupload {
@@ -238,8 +243,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -254,10 +261,12 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
