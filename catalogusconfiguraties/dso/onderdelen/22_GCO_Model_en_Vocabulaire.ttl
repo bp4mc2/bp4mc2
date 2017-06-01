@@ -53,10 +53,10 @@ stage:DSOModelQuery a elmo:Query;
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape a shacl:Shape.
+				?shape a shacl:NodeShape.
 				?shape ?sp ?so.
 				OPTIONAL {
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
 						?subclass rdfs:subClassOf ?superclass
@@ -66,7 +66,7 @@ stage:DSOModelQuery a elmo:Query;
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
 					OPTIONAL {
-						?pc shacl:predicate ?property.
+						?pc shacl:path ?property.
 						OPTIONAL {
 							?property rdfs:subPropertyOf* ?subproperty.
 							?subproperty rdfs:subPropertyOf ?superproperty
@@ -99,7 +99,7 @@ stage:ModelYed a elmo:Representation;
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape shacl:scopeClass ?element.
+				?shape shacl:targetClass ?element.
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
 					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
@@ -209,7 +209,7 @@ stage:sync_import_rdf a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/22-rdf-syntax-ns.rdf> {
 					?s?p?o
 				}
@@ -225,8 +225,8 @@ stage:sync_import_adms a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/adms.rdf> {
+			service <http://ldt:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/adms.ttl> {
 					?s?p?o
 				}
 			}
@@ -241,7 +241,7 @@ stage:sync_import_dcat a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dcat.rdf> {
 					?s?p?o
 				}
@@ -257,7 +257,7 @@ stage:sync_import_dcterms a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dcterms.rdf> {
 					?s?p?o
 				}
@@ -273,7 +273,7 @@ stage:sync_import_dctype a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dctype.rdf> {
 					?s?p?o
 				}
@@ -289,7 +289,7 @@ stage:sync_import_dqv a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dqv.rdf> {
 					?s?p?o
 				}
@@ -305,7 +305,7 @@ stage:sync_import_foaf a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/foaf.rdf> {
 					?s?p?o
 				}
@@ -321,7 +321,7 @@ stage:sync_import_ldqd a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/ldqd.ttl> {
 					?s?p?o
 				}
@@ -337,7 +337,7 @@ stage:sync_import_owl a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/owl.ttl> {
 					?s?p?o
 				}
@@ -353,7 +353,7 @@ stage:sync_import_powder a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/powder-s.rdf> {
 					?s?p?o
 				}
@@ -369,7 +369,7 @@ stage:sync_import_prov a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/prov.rdf> {
 					?s?p?o
 				}
@@ -385,7 +385,7 @@ stage:sync_import_rdf-schema a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/rdf-schema.rdf> {
 					?s?p?o
 				}
@@ -401,7 +401,7 @@ stage:sync_import_skos-thes a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos-thes.rdf> {
 					?s?p?o
 				}
@@ -409,7 +409,7 @@ stage:sync_import_skos-thes a elmo:Scene;
 		}
 	''';
 .
-stage:sync_import_rdf a elmo:Scene;
+stage:sync_import_skos a elmo:Scene;
 	elmo:index "14";
 	rdfs:label "skos vocabulary import";
 	elmo:query '''
@@ -417,7 +417,7 @@ stage:sync_import_rdf a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos.rdf> {
 					?s?p?o
 				}
@@ -433,7 +433,7 @@ stage:sync_import_xsd a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos.rdf> {
 					?s?p?o
 				}
@@ -449,7 +449,7 @@ stage:sync_import_skoslex a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/skoslex.ttl> {
 					?s?p?o
 				}
@@ -468,7 +468,7 @@ stage:sync_reqs a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
 					?s?p?o
 				}
@@ -487,7 +487,7 @@ stage:sync_concepts a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
+			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-concepts.ttl> {
 					?s?p?o
 				}
@@ -506,8 +506,8 @@ stage:sync_model_1 a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2v2.ttl> {
+			service <http://ldt:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2.ttl> {
 					?s?p?o
 				}
 			}
@@ -522,8 +522,8 @@ stage:sync_model_2 a elmo:Scene;
 			?s?p?o
 		}
 		where {
-			service <http://localhost:8080/catalogus/url> {
-				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodelv2.ttl> {
+			service <http://ldt:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodel.ttl> {
 					?s?p?o
 				}
 			}

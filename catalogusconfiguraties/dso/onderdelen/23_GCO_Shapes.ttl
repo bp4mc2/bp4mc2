@@ -1,0 +1,213 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+
+stage:DSOClass	a	elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/resource";
+	elmo:contains	stage:DSOMenu;
+	elmo:contains	stage:DSOClass_content;
+	elmo:contains	stage:DSOClass_model;
+	elmo:layer elmo:BottomLayer;
+.
+stage:DSOClass_content elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to rdf:type;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to skos:definition;
+		rdfs:label "definitie";
+	];
+	elmo:fragment [
+		elmo:applies-to dcterms:subject;
+		rdfs:label "betreft begrip";
+	];
+	elmo:query '''
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> ?p ?o
+				FILTER (lang(?o)="" or lang(?o)="en")
+				OPTIONAL {?o rdfs:label ?olabel}
+			}
+		}
+	''';
+.
+
+stage:DSOClass_model a elmo:Representation;
+	elmo:appearance elmo:ModelAppearance;
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		construct {
+			?class rdfs:label ?clabel.
+			?class rdf:type rdfs:Class.
+			?class rdfs:subClassOf ?super.
+			?shape shacl:targetClass ?class.
+			?shape rdf:type shacl:NodeShape.
+			?shape shacl:property ?pc.
+			?pc ?ppc ?opc.
+			?pclass rdf:type rdfs:Class.
+			?super rdf:type rdfs:Class.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> rdfs:subClassOf* ?class.
+				OPTIONAL {
+					?class rdfs:label ?clabel
+					FILTER (lang(?clabel)="" or lang(?clabel)="en")
+				}
+				OPTIONAL {
+					?class rdfs:subClassOf ?super.
+				}
+				OPTIONAL {
+					?shape shacl:targetClass ?class.
+					?shape shacl:property ?pc.
+					?pc ?ppc ?opc.
+					OPTIONAL {
+						?pc shacl:class ?pclass
+					}
+				}
+			}
+		}
+	'''
+. 
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix stage: <http://localhost:8080/catalogus/dso/stage#>.
+@prefix shacl: <http://www.w3.org/ns/shacl#>.
+
+stage:DSOShape	a	elmo:Representation;
+	elmo:applies-to [rdf:type shacl:NodeShape];
+	elmo:contains	stage:DSOMenu;
+	elmo:contains	stage:DSOShape_content;
+	elmo:contains	stage:DSOShape_properties;
+	elmo:contains	stage:DSOShape_model;
+.
+stage:DSOShape_content elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to rdf:type;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to skos:definition;
+		rdfs:label "definitie";
+	];
+	elmo:fragment [
+		elmo:applies-to dcterms:subject;
+		rdfs:label "betreft begrip";
+	];
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		construct {
+			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> shacl:targetClass ?class.
+			<@SUBJECT@> rdfs:comment ?comment.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> rdfs:label ?slabel.
+				<@SUBJECT@> shacl:targetClass ?class.
+				OPTIONAL {
+					{
+						{?class rdfs:comment ?comment}
+						UNION
+						{?class dcterms:description ?comment}
+						UNION
+						{?class dc:description ?comment}
+					}
+					FILTER (lang(?comment)="" or lang(?comment)="en")
+				}
+			}
+		}
+	''';
+.
+
+stage:DSOShape_properties a elmo:Represention;
+	elmo:index "2";
+	elmo:fragment [
+		elmo:applies-to "pred";
+		elmo:appearance elmo:GlobalLink;
+	];
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?pred str(?pred) as ?pred_label ?refclass ?comment
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> shacl:property ?pc.
+				?pc shacl:path ?pred.
+				OPTIONAL {?pc shacl:class ?refclass}
+				OPTIONAL {
+					{
+						{?pred rdfs:comment ?comment}
+						UNION
+						{?pred dcterms:description ?comment}
+						UNION
+						{?pred dc:description ?comment}
+					}
+					FILTER (lang(?comment)="" or lang(?comment)="en")
+				}
+			}
+		}
+	''';
+.
+
+stage:DSOShape_model a elmo:Representation;
+	elmo:index "3";
+	elmo:appearance elmo:ModelAppearance;
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		construct {
+			?class rdfs:label ?clabel.
+			?class rdf:type rdfs:Class.
+			?class rdfs:subClassOf ?super.
+			?shape shacl:targetClass ?class.
+			?shape rdf:type shacl:NodeShape.
+			?shape shacl:property ?pc.
+			?pc ?ppc ?opc.
+			?pclass rdf:type rdfs:Class.
+			?super rdf:type rdfs:Class.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
+				<@SUBJECT@> shacl:targetClass ?subject.
+				?subject rdfs:subClassOf* ?class.
+				OPTIONAL {
+					?class rdfs:label ?clabel
+					FILTER (lang(?clabel)="" or lang(?clabel)="en")
+				}
+				OPTIONAL {
+					?class rdfs:subClassOf ?super.
+				}
+				OPTIONAL {
+					?shape shacl:targetClass ?class.
+					?shape shacl:property ?pc.
+					?pc ?ppc ?opc.
+					OPTIONAL {
+						?pc shacl:class ?pclass
+					}
+				}
+			}
+		}
+	'''
+. 
