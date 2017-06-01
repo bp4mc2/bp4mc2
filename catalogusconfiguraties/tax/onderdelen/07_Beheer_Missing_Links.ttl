@@ -1,0 +1,132 @@
+#
+#
+#
+# BEHEER MISSING LINKS
+#
+#
+#
+
+
+
+stage:TaxMissingLinks a elmo:Representation;
+	elmo:url-pattern "/query/missinglinks$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxMissingLinksUitleg;
+	elmo:contains stage:TaxMissingLinksTabel;
+.
+
+stage:TaxMissingLinksUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Missing Links";
+	]
+.
+
+# Weergave van missing links
+stage:TaxMissingLinksTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:fragment [
+		rdfs:label "Type";
+		elmo:applies-to "klasse";
+	];
+	elmo:fragment [
+		rdfs:label "Status";
+		elmo:applies-to "status";
+	];
+	elmo:fragment [
+		rdfs:label "Foutieve frame";
+		elmo:applies-to "Frame";
+	];
+	elmo:fragment [
+		rdfs:label "Referentie";
+		elmo:applies-to "link";
+	];
+	elmo:fragment [
+		rdfs:label "Ontbrekende referentie";
+		elmo:applies-to "FrameRef";
+	];
+	elmo:query stage:TaxMissingLinksQuery
+.
+
+
+stage:TaxMissingLinksQuery a elmo:query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/tax/container/>
+		
+		SELECT 	#?graph ?graph_label
+				?klasse
+				?status ?status_label
+				?Frame ?Frame_label
+				?link ?link_label
+				?FrameRef
+		WHERE {
+			{
+				GRAPH ?mg		{
+					?Frame rdf:type ?klasse.
+					?Frame ?link ?FrameRef.
+					?Frame kddef:status ?status.
+					FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
+					OPTIONAL {
+						?Frame rdfs:label ?Frame_label.
+						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
+					}
+				#	OPTIONAL {
+				#		?graph rdfs:label ?graph_label.
+				#		FILTER (lang(?graph_label)="" || lang(?graph_label)="@LANG@")
+				#	}
+					FILTER NOT EXISTS {
+                        ?Frame prov:invalidatedAtTime ?time.
+					}
+				}
+				FILTER NOT EXISTS {
+					GRAPH ?frameRefGraph {
+						?FrameRef rdf:type ?type .
+						FILTER NOT EXISTS {
+							?FrameRef prov:invalidatedAtTime ?frtime.
+						}
+					}
+					GRAPH doc:mastergraph {
+						?FrameRef rdfs:isDefinedBy ?frameRefGraph.
+					}
+				}
+				OPTIONAL {
+					GRAPH container:statusupload {
+						?status rdfs:label ?status_label.
+						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+					}
+				}
+				GRAPH doc:mastergraph {
+					?Frame rdfs:isDefinedBy ?mg.
+				}
+			}
+		}
+		ORDER BY str(lcase(?Frame_label))
+	'''
+.

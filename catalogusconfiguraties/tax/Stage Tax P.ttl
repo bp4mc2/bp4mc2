@@ -1,12 +1,4 @@
-﻿#
-#
-#
-# FRAMEWORK
-#
-#
-#
-
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
+﻿@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
 @prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -30,7 +22,21 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>.
+@prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>.
 
+
+
+
+
+ 
+#
+#
+#
+# FRAMEWORK
+#
+#
+#
 #
 #
 #
@@ -68,7 +74,17 @@ stage:TaxBeheerpagina rdf:type elmo:Representation;
 # Menubalk hoofdmenu
 stage:TaxMenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
-	elmo:data [
+	elmo:data [ 
+		elmo:data [	
+			rdfs:label "Hoofdpagina";
+			elmo:index "1";
+			xhtml:link "";
+		];
+		elmo:data [
+			rdfs:label "BEHEER";
+			xhtml:link "/admin";
+			elmo:index: "2";
+		];
 	];
 .
 
@@ -104,10 +120,29 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/container/datasetupload";
 			];
+			elmo:data [
+				rdfs:label "Upload status (RDF of Turtle)";
+				elmo:index "4";
+				xhtml:link "/container/statusupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "Update";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Upload een enkel Concept (Excel)";
+				elmo:index "3";
+				xhtml:link "/container/excelupdate";
+			];
+			elmo:data [
+				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
+				elmo:index "4";
+				xhtml:link "/container/ttlupdate";
+			];
 		];
 		elmo:data [
 			rdfs:label "Hulpmiddelen";
-			elmo:index "3";
+			elmo:index "4";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -117,6 +152,26 @@ stage:TaxBeheermenu a elmo:Part;
 				rdfs:label "Relatiecontrole";
 				elmo:index "2";
 				xhtml:link "/query/relatiecontrole";
+			];
+			elmo:data [
+				rdfs:label "Missing Links";
+				elmo:index "3";
+				xhtml:link "/query/missinglinks";
+			];
+			elmo:data [
+				rdfs:label "Homoniemen";
+				elmo:index "4";
+				xhtml:link "/query/homoniemen";
+			];
+			elmo:data [
+				rdfs:label "Homoniemen2";
+				elmo:index "5";
+				xhtml:link "/query/homoniemen2";
+			];
+			elmo:data [
+				rdfs:label "Statuscontrole";
+				elmo:index "6";
+				xhtml:link "/query/statuscontrole";
 			];
 		];
 	]
@@ -139,32 +194,6 @@ stage:TaxFooter a elmo:Part;
 #
 #
 #
-
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
-
 #
 # CONTAINERS
 #
@@ -183,12 +212,34 @@ container:excelupload a elmo:Container;
 # Uploadcontainer ttl
 container:ttlupload a elmo:Container;
 	elmo:contains stage:TaxBeheermenu;
-	
 	elmo:contains stage:TaxFooter;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
 	elmo:replaces container:generiek;
 	elmo:query stage:TaxGeneriekeUploadScene;
+.
+
+# Updatecontainer Excel
+container:excelupdate a elmo:Container;
+    elmo:contains stage:TaxBeheermenu;
+    elmo:contains stage:TaxHeader;
+    elmo:contains stage:TaxFooter;
+    elmo:representation elmo:UploadRepresentation;
+    elmo:translator elmo:TableExcelTranslator;
+    rdfs:label "Upload een enkel Concept via Excel (.xls)";
+    elmo:replaces container:generiek;
+    elmo:query stage:TaxSpecifiekeUploadScene;
+.
+
+# Updatecontainer Turtle
+container:ttlupdate a elmo:Container;
+    elmo:contains stage:TaxBeheermenu;
+    elmo:contains stage:TaxHeader;
+    elmo:contains stage:TaxFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+    elmo:replaces container:generiek;
+    elmo:query stage:TaxSpecifiekeUploadScene;
 .
 
 #
@@ -493,7 +544,211 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		CLEAR GRAPH container:ttlupload
 	''';
 .
- 
+
+stage:TaxSpecifiekeUploadScene a elmo:Scene;
+	rdfs:label "Postquery inladen gegevens";
+	elmo:index "2";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		prefix loc: <http://pdok-ld-gck.cs.kadaster.nl/id/>
+		prefix versiongraph: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/@CURRENTMOMENT@>
+		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
+		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
+		prefix activity: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/@CURRENTMOMENT@>
+			
+	
+		DELETE FROM versiongraph:version {
+            ?s?p?o
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
+		
+		INSERT INTO container:generiek {
+			?s rdfs:label ?spreflabel.
+		} WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
+					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				}
+			}
+		}
+		
+		INSERT INTO doc:mastergraph {
+            doc:mastergraph rdf:type void:Dataset.
+            doc:mastergraph rdfs:label "Concepten".
+            versiongraph:version dct:isVersionOf doc:mastergraph.
+            dataset:concepten rdf:type skos:ConceptScheme.
+            dataset:concepten rdfs:label "Conceptschema".
+		}
+		
+		INSERT INTO versiongraph:version {
+            dataset:concepten rdfs:isDefinedBy versiongraph:version.
+            versiongraph:version rdfs:label "Concepten - tax-programma (publicatiedatum @CURRENTMOMENT@)".
+            versiongraph:version prov:wasGeneratedBy activity:Upload.
+			versiongraph:version rdf:type prov:Entity.
+			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+			activity:Upload rdf:type prov:Activity.
+			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			concept:tomcatUser rdf:type prov:Agent.
+			concept:tomcatUser rdfs:label "Tomcat User".
+			concept:tomcatUser foaf:givenName "Tomcat User".
+			concept:tomcatUser foaf:mbox "tomcat@user.org".
+			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		}
+
+		INSERT INTO container:generiek {
+            ?s bp4mc2:signature ?sig.
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:generiek {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = skos:Concept
+							|| ?type = skos:Collection
+							|| ?type = skoslex:Act
+							|| ?type = skoslex:Norm
+							|| ?type = skoslex:Object
+							|| ?type = skoslex:Actor
+							|| ?type = owl:Class
+							|| ?type = dctype:Text
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
+		INSERT INTO versiongraph:version {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type ?type.
+			    ?s ?p ?o.
+			    ?s bp4mc2:signature ?sig
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s bp4mc2:signature ?sig
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE FROM doc:mastergraph {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+		}
+
+		INSERT INTO doc:mastergraph {
+			?s rdf:type ?type.
+			?s rdfs:isDefinedBy versiongraph:version.
+			?s bp4mc2:signature ?sig
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+			    ?s rdf:type ?type.
+			    ?s bp4mc2:signature ?sig.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+            }
+		}
+		
+		CLEAR GRAPH container:generiek		
+		CLEAR GRAPH container:excelupdate		
+		CLEAR GRAPH container:ttlupdate
+	''';
+. 
 #
 #
 #
@@ -502,30 +757,7 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 #
 # CONTAINERS
@@ -797,35 +1029,12 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 #
 #
 #
-# BEHEER CONCEPTEN
+# BEHEER RELATIECONTROLE
 #
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 stage:TaxRelatiecontrole a elmo:Representation;
 	elmo:url-pattern "/query/relatiecontrole$";
@@ -833,10 +1042,21 @@ stage:TaxRelatiecontrole a elmo:Representation;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxRelatieControleTabel;
+	elmo:contains stage:TaxRelatiecontroleUitleg;
+.
+
+stage:TaxRelatiecontroleUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Relatie controle";
+	]
 .
 
 # Weergave van gerelateerde (inkomende) concepten
 stage:TaxRelatieControleTabel a elmo:Part;
+	elmo:index "2";
 	elmo:appearance elmo:TableAppearance;
 	elmo:query stage:TaxRelatiecontroleQuery
 .
@@ -844,7 +1064,7 @@ stage:TaxRelatieControleTabel a elmo:Part;
 
 stage:TaxRelatiecontroleQuery a elmo:query;
 	elmo:query '''
-				prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
@@ -911,30 +1131,7 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 #
 # PRODUCTIONS
@@ -979,35 +1176,252 @@ stage:ClearAllDataScene a elmo:Scene;
 #
 #
 #
+# BEHEER MISSING LINKS
+#
+#
+#
+
+
+
+stage:TaxMissingLinks a elmo:Representation;
+	elmo:url-pattern "/query/missinglinks$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxMissingLinksUitleg;
+	elmo:contains stage:TaxMissingLinksTabel;
+.
+
+stage:TaxMissingLinksUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Missing Links";
+	]
+.
+
+# Weergave van missing links
+stage:TaxMissingLinksTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:fragment [
+		rdfs:label "Type";
+		elmo:applies-to "klasse";
+	];
+	elmo:fragment [
+		rdfs:label "Status";
+		elmo:applies-to "status";
+	];
+	elmo:fragment [
+		rdfs:label "Foutieve frame";
+		elmo:applies-to "Frame";
+	];
+	elmo:fragment [
+		rdfs:label "Referentie";
+		elmo:applies-to "link";
+	];
+	elmo:fragment [
+		rdfs:label "Ontbrekende referentie";
+		elmo:applies-to "FrameRef";
+	];
+	elmo:query stage:TaxMissingLinksQuery
+.
+
+
+stage:TaxMissingLinksQuery a elmo:query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		
+		SELECT 	#?graph ?graph_label
+				?klasse
+				?status ?status_label
+				?Frame ?Frame_label
+				?link ?link_label
+				?FrameRef
+		WHERE {
+			{
+				GRAPH ?mg		{
+					?Frame rdf:type ?klasse.
+					?Frame ?link ?FrameRef.
+					?Frame kddef:status ?status.
+					FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
+					OPTIONAL {
+						?Frame rdfs:label ?Frame_label.
+						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
+					}
+				#	OPTIONAL {
+				#		?graph rdfs:label ?graph_label.
+				#		FILTER (lang(?graph_label)="" || lang(?graph_label)="@LANG@")
+				#	}
+					FILTER NOT EXISTS {
+                        ?Frame prov:invalidatedAtTime ?time.
+					}
+				}
+				FILTER NOT EXISTS {
+					GRAPH ?frameRefGraph {
+						?FrameRef rdf:type ?type .
+						FILTER NOT EXISTS {
+							?FrameRef prov:invalidatedAtTime ?frtime.
+						}
+					}
+					GRAPH doc:mastergraph {
+						?FrameRef rdfs:isDefinedBy ?frameRefGraph.
+					}
+				}
+				OPTIONAL {
+					GRAPH container:statusupload {
+						?status rdfs:label ?status_label.
+						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+					}
+				}
+				GRAPH doc:mastergraph {
+					?Frame rdfs:isDefinedBy ?mg.
+				}
+			}
+		}
+		ORDER BY str(lcase(?Frame_label))
+	'''
+. 
+#
+#
+#
+# BEHEER STATUSCONTROLE
+#
+#
+#
+
+
+
+stage:TaxStatusControle a elmo:Representation;
+	elmo:url-pattern "/query/statuscontrole$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxStatusControleTabel;
+	elmo:contains stage:TaxStatusControleUitleg
+.
+
+stage:TaxStatusControleUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Status controle";
+	]
+.
+
+# Weergave van statuscontrole
+stage:TaxStatusControleTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:fragment [
+		rdfs:label "Concept";
+		elmo:applies-to "concept";
+	];
+	elmo:fragment [
+		rdfs:label "Status";
+		elmo:applies-to "status";
+	];
+	elmo:query stage:TaxStatusControleQuery
+.
+
+stage:TaxStatusControleQuery a elmo:query;
+	elmo:query '''
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
+		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
+		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
+		
+		SELECT ?concept ?concept_label ?status ?status_label
+		WHERE {
+			GRAPH ?g {
+				{
+					?concept rdf:type skos:Concept.
+					?concept rdfs:label ?concept_label.
+					?concept kddef:status ?status.
+				#	?status rdfs:label ?status_label.
+				}
+				UNION
+				{
+					?concept rdf:type skos:Concept.
+					?concept skos:altLabel ?concept_label.
+					?concept kddef:status ?status.
+				#	?status rdfs:label ?status_label.
+				}
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
+				}
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
+			
+			}
+			OPTIONAL {
+				GRAPH container:statusupload {
+					?status rdfs:label ?status_label.
+					FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+				}
+			}
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY ?status, ?concept_label
+	'''
+. 
+#
+#
+#
+# BEHEER STATUS
+#
+#
+#
+# CONTAINER
+#
+
+#Upload container status
+container:statusupload a elmo:Container;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:representation elmo:UploadRepresentation;
+	rdfs:label "Upload status via RDF (.xml) of Turtle (.ttl)";
+.
+
+ 
+#
+#
+#
 # WEERGAVEPAGINA'S
 #
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 
 # Onderstaande parts en query's zijn een template - deze kunnen gekopieerd worden, maar worden niet gebruikt in de configuratie.
@@ -1100,37 +1514,37 @@ stage:WeergaveTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Heeft betrekking op"@nl;
 		elmo:applies-to skos:semanticRelation;
-		elmo:indx "11";
+		elmo:index "11";
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
 		elmo:applies-to skos:altLabel;
-		elmo:indx "12";
+		elmo:index "12";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
-		elmo:indx "13";
+		elmo:index "13";
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
-		elmo:indx "14";
+		elmo:index "14";
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
-		elmo:indx "15";
+		elmo:index "15";
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
 		elmo:applies-to skos:member;
-		elmo:indx "16";
+		elmo:index "16";
 	];
 		elmo:fragment [
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
-		elmo:indx "17";
+		elmo:index "17";
 	];
 	elmo:fragment [
 		rdfs:label "Is gerealiseerd in"@nl;
@@ -1505,30 +1919,6 @@ stage:WeergaveVersiesQuery a elmo:Query;
 		ORDER BY DESC(lcase(?concept_label))
 	'''
 . 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
 
 #
 # PAGINA'S (REPRESENTATIONS)
@@ -1760,6 +2150,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		construct {
 			<@SUBJECT@> ?p ?o.
@@ -1820,7 +2212,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 						}
 					}
-					FILTER (
+				FILTER (
 						?p != rdf:type
 						&& ?p != rdfs:label
 						&& ?p != skos:prefLabel
@@ -1862,11 +2254,25 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						}
 					}
 				}
+				FILTER NOT EXISTS {
+					{
+						?o kddef:status kdstat:Afgekeurd.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Niet_beoordeeld.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Ter_afkeuring.
+					}
+				}
 			}
 			UNION {
 				
 				GRAPH ?altSubjectGraph {
-					{ ?s skoslex:affects <@SUBJECT@> }
+					{ ?s skoslex:affects <@SUBJECT@> 
+					}
 					UNION { ?s skoslex:classification <@SUBJECT@> }
 					UNION { ?s skoslex:refersTo <@SUBJECT@> }
 					FILTER NOT EXISTS {
@@ -1902,6 +2308,8 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		CONSTRUCT {
 			<@SUBJECT@> ?p ?s.
@@ -1911,6 +2319,7 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		WHERE {
 			GRAPH ?g {
 				?s ?p <@SUBJECT@>.
+				?s kddef:status ?status.
 				OPTIONAL {
 					?s rdfs:label ?s_label.
 					FILTER( LANG( ?s_label ) = "" || LANGMATCHES( LANG( ?s_label ), "nl" ) )
@@ -1918,6 +2327,10 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?s prov:invalidatedAtTime ?time.
 				}
+				FILTER (
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
+				)
 			}
 			GRAPH doc:mastergraph {
 				?s rdfs:isDefinedBy ?g.
@@ -1943,14 +2356,14 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix elmo: <http://bp4mc2.org/elmo/def#>
-		
+				
 		CONSTRUCT {
 			?concept elmo:name ?concept_label
 		}
 		WHERE {
-			SELECT * WHERE
-			{
-				{
+			SELECT * 
+				WHERE {
+					{
 					GRAPH ?g {
 						?concept rdf:type skos:Concept.
 						?concept skos:prefLabel ?concept_label.
@@ -1991,30 +2404,7 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 		}
 	''';
 . 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 #
 # PAGINA'S (REPRESENTATIONS)
@@ -2045,32 +2435,32 @@ stage:WeergaveTabelMetadata a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Gedefinieerd in"@nl;
 		elmo:applies-to rdfs:isDefinedBy;
-		elmo:indx "01";
+		elmo:index "01";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:indx "02";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
-		elmo:indx "13";
+		elmo:index "13";
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
-		elmo:indx "14";
+		elmo:index "14";
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
-		elmo:indx "15";
+		elmo:index "15";
 	];
 	elmo:fragment [
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
-		elmo:indx "17";
+		elmo:index "17";
 	];
 	elmo:fragment [
 		rdfs:label "Is gerealiseerd in"@nl;
@@ -2284,35 +2674,127 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 #
 #
 #
+# BEHEER HOMONIEMEN
+#
+#
+#
+
+
+
+stage:TaxHomoniemen a elmo:Representation;
+	elmo:url-pattern "/query/homoniemen$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxHomoniemenTabel;
+	elmo:contains stage:TaxHomoniemenUitleg;
+.
+
+stage:TaxHomoniemenUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Homoniemen";
+	]
+.
+
+# Weergave van homoniemen
+stage:TaxHomoniemenTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:query stage:TaxHomoniemenQuery
+.
+
+stage:TaxHomoniemenQuery a elmo:query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		
+		SELECT ?graph ?graph_label
+			?begrip ?begrip_label
+			?graph2 ?graph2_label
+		WHERE {
+			GRAPH ?graph {
+			?begrip rdf:type ?klasse.
+				OPTIONAL {
+					?begrip rdfs:label ?begrip_label.
+					FILTER (lang(?begrip_label)="" or lang(?begrip_label)="@LANGUAGE@")
+				}
+				OPTIONAL {
+					?graph rdfs:label ?graph_label
+					FILTER (lang(?graph_label)="" or lang(?graph_label)="@LANGUAGE@")
+				}
+			#	FILTER (?klasse=frames:Begrip or ?klasse=frames:Gebeurtenis)
+				FILTER NOT EXISTS {
+					?graph prov:invalidatedAtTime ?time.
+                }
+			}
+			GRAPH ?graph2 {
+				?begrip rdf:type ?klasse.
+				OPTIONAL {
+					?graph2 rdfs:label ?graph2_label
+					FILTER (lang(?graph2_label)="" or lang(?graph2_label)="@LANGUAGE@")
+				}
+				FILTER NOT EXISTS {
+					?graph2 prov:invalidatedAtTime ?time.
+                }
+			}
+			GRAPH doc:mastergraph {
+				?graph rdfs:isDefinedBy ?graph.
+                ?graph2 rdfs:isDefinedBy ?graph2.
+            }
+		}
+	'''
+. 
+#
+#
+#
+# BEHEER HOMONIEMEN 2
+#
+#
+#
+
+
+
+stage:TaxHomoniemen2 a elmo:Representation;
+	elmo:url-pattern "/query/homoniemen2$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxHomoniemen2Tabel;
+	elmo:contains stage:TaxHomoniemen2Uitleg;
+.
+
+stage:TaxHomoniemen2Uitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Homoniemen2";
+	]
+.
+
+# Weergave van homoniemen2
+stage:TaxHomoniemen2Tabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:query stage:TaxHomoniemen2Query
+.
+
+stage:TaxHomoniemen2Query a elmo:query;
+	elmo:query '''
+	'''
+. 
+#
+#
+#
 # WEERGAVEPAGINA'S
 #
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 # Weergavepagina inclusief boomweergave
 stage:WeergavePaginaActivity a elmo:Representation;
@@ -2674,30 +3156,7 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 #
 # PAGINA'S (REPRESENTATIONS)
@@ -2732,7 +3191,7 @@ stage:TaxIndexConcepten a elmo:Part;
 
 # Conceptentabel voor op de alfabetische weergave concepten
 stage:TaxConceptentabel a elmo:Part;
-	elmo:appearance elmo:ShortTableAppearance;
+	elmo:appearance elmo:TableAppearance;
 	elmo:with-parameter "term";
 	elmo:index "03";
 	elmo:fragment [
@@ -2769,12 +3228,14 @@ stage:TaxWelkom a elmo:Part;
 # Query voor tonen alle concepten
 stage:TaxConceptenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
-		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
-		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
-		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
+		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
+		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
@@ -2782,17 +3243,21 @@ stage:TaxConceptenQuery a elmo:Query;
 				{
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
+					?concept kddef:status ?status.
 					OPTIONAL {
-						?concept skos:definition ?uitleg
+				#		?concept skos:definition ?uitleg
+						?concept rdfs:comment ?uitleg
 					}
 				}
 				UNION
 				{
 					?concept rdf:type skos:Concept.
 					?concept skos:altLabel ?concept_label.
+					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-						?concept skos:definition ?definition.
+				#		?concept skos:definition ?definition.
+						?concept rdfs:comment ?definition.
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
 					}
 				}
@@ -2800,6 +3265,10 @@ stage:TaxConceptenQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
+				FILTER (
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
+				)
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
@@ -2818,30 +3287,7 @@ stage:TaxConceptenQuery a elmo:Query;
 #
 #
 
-@prefix stage: <http://pdok-ld-gck.cs.kadaster.nl/stage#>.
-@prefix updatestage: <http://pdok-ld-gck.cs.kadaster.nl/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 #
 # PAGINA'S (REPRESENTATIONS)
@@ -2864,31 +3310,54 @@ stage:TaxSearch a elmo:Representation;
 # Zoekquery
 stage:TaxSearchQuery a elmo:Query;
 	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
-		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
-		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
-		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
+		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
+		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
 			GRAPH ?g {
-				?concept rdf:type ?type.
-				?concept rdfs:label ?concept_label.
-				OPTIONAL {
-					?concept skos:definition ?uitleg.
+				{
+					?concept rdf:type skos:Concept.
+					?concept rdfs:label ?concept_label.
+					?concept kddef:status ?status.
+					OPTIONAL {
+				#		?concept skos:definition ?uitleg
+						?concept rdfs:comment ?uitleg
+					}
 				}
-				FILTER regex(?concept_label,'@TERM@','i').
+				UNION
+				{
+					?concept rdf:type skos:Concept.
+					?concept skos:altLabel ?concept_label.
+					?concept kddef:status ?status.
+					OPTIONAL {
+						?concept rdfs:label ?clabel.
+				#		?concept skos:definition ?definition.
+						?concept rdfs:comment ?definition.
+						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
+					}
+				}
+				FILTER regex(?concept_label, '@TERM@', 'i').
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
+				}
 				FILTER (
-					?type = skos:Concept
-					|| ?type = skos:Collection
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
 				)
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g.
+				?concept rdfs:isDefinedBy ?g
 			}
 		}
-		ORDER BY lcase(?concept_label)
+		ORDER BY str(lcase(?concept_label))
 		LIMIT 100
 	''';
 .

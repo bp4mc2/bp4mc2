@@ -6,30 +6,7 @@
 #
 #
 
-@prefix stage: <http://localhost:8080/catalogus/tax/stage#>.
-@prefix updatestage: <http://localhost:8080/catalogus/tax/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://localhost:8080/catalogus/tax/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
+
 
 #
 # PAGINA'S (REPRESENTATIONS)
@@ -64,7 +41,7 @@ stage:TaxIndexConcepten a elmo:Part;
 
 # Conceptentabel voor op de alfabetische weergave concepten
 stage:TaxConceptentabel a elmo:Part;
-	elmo:appearance elmo:ShortTableAppearance;
+	elmo:appearance elmo:TableAppearance;
 	elmo:with-parameter "term";
 	elmo:index "03";
 	elmo:fragment [
@@ -101,12 +78,14 @@ stage:TaxWelkom a elmo:Part;
 # Query voor tonen alle concepten
 stage:TaxConceptenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/tax/container/>
-		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/tax/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/tax/id/concept/>
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix container: 	<http://localhost:8080/catalogus/tax/container/>
+		prefix doc: 		<http://localhost:8080/catalogus/tax/concepten/doc/>
+		prefix dataset: 	<http://localhost:8080/catalogus/tax/id/dataset/>
+		prefix concept: 	<http://localhost:8080/catalogus/tax/id/concept/>
+		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
@@ -114,17 +93,21 @@ stage:TaxConceptenQuery a elmo:Query;
 				{
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
+					?concept kddef:status ?status.
 					OPTIONAL {
-						?concept skos:definition ?uitleg
+				#		?concept skos:definition ?uitleg
+						?concept rdfs:comment ?uitleg
 					}
 				}
 				UNION
 				{
 					?concept rdf:type skos:Concept.
 					?concept skos:altLabel ?concept_label.
+					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-						?concept skos:definition ?definition.
+				#		?concept skos:definition ?definition.
+						?concept rdfs:comment ?definition.
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
 					}
 				}
@@ -132,6 +115,10 @@ stage:TaxConceptenQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
+				FILTER (
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
+				)
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
