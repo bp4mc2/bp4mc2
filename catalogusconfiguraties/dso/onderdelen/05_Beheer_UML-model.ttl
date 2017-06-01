@@ -71,9 +71,11 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		prefix sh: <http://www.w3.org/ns/dso#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		INSERT INTO <temp> {
-			?model rdf:type owl:Ontology.
-			?model rdfs:label ?label.
+		INSERT {
+			GRAPH <temp> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		} WHERE {
 			GRAPH <@MODEL@> {
 				?model rdf:type owl:Ontology.
@@ -83,8 +85,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <@MODEL@>
 		
-		INSERT INTO <@MODEL@> {
-			?s ?p ?o
+		INSERT {
+			GRAPH <@MODEL@> {
+				?s ?p ?o
+			}
 		} WHERE {
 			GRAPH <temp> {
 				?s ?p ?o
@@ -93,12 +97,14 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <temp>
 		
-		INSERT INTO <@MODEL@> {
-			?class rdf:type owl:Class.
-			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
-			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdf:type owl:Class.
+				?class rdfs:label ?label.
+				?shape rdf:type sh:Shape.
+				?shape rdfs:label ?label.
+				?shape sh:scopeClass ?class.
+			}
 		}
 		WHERE {
 			SELECT
@@ -117,13 +123,15 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:DatatypeProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:DatatypeProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+			}
 		}
 		WHERE {
 			SELECT
@@ -150,14 +158,16 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:ObjectProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
-			?pc sh:class ?refclass.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:ObjectProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+				?pc sh:class ?refclass.
+			}
 		}
 		WHERE {
 			SELECT
@@ -185,8 +195,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <@MODEL@> {
-			?class rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -206,8 +218,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <@MODEL@> {
-			?property rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -229,8 +243,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?subclass rdfs:subClassOf ?class
+		INSERT {
+			GRAPH <@MODEL@> {
+				?subclass rdfs:subClassOf ?class
+			}
 		}
 		WHERE {
 			SELECT
@@ -261,9 +277,11 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 		prefix sh: <http://www.w3.org/ns/dso#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		INSERT INTO <temp> {
-			?model rdf:type owl:Ontology.
-			?model rdfs:label ?label.
+		INSERT {
+			GRAPH <temp> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		} WHERE {
 			GRAPH <@MODEL@> {
 				?model rdf:type owl:Ontology.
@@ -273,8 +291,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <@MODEL@>
 		
-		INSERT INTO <@MODEL@> {
-			?s ?p ?o
+		INSERT {
+			GRAPH <@MODEL@> {
+				?s ?p ?o
+			}
 		} WHERE {
 			GRAPH <temp> {
 				?s ?p ?o
@@ -283,12 +303,14 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <temp>
 		
-		INSERT INTO <@MODEL@> {
-			?class rdf:type owl:Class.
-			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
-			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdf:type owl:Class.
+				?class rdfs:label ?label.
+				?shape rdf:type sh:Shape.
+				?shape rdfs:label ?label.
+				?shape sh:scopeClass ?class.
+			}
 		}
 		WHERE {
 			SELECT
@@ -307,13 +329,15 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:DatatypeProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:DatatypeProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+			}
 		}
 		WHERE {
 			SELECT
@@ -340,14 +364,16 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:ObjectProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
-			?pc sh:class ?refclass.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:ObjectProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+				?pc sh:class ?refclass.
+			}
 		}
 		WHERE {
 			SELECT
@@ -375,8 +401,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <@MODEL@> {
-			?class rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -396,8 +424,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <@MODEL@> {
-			?property rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -419,8 +449,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?subclass rdfs:subClassOf ?class
+		INSERT {
+			GRAPH <@MODEL@> {
+				?subclass rdfs:subClassOf ?class
+			}
 		}
 		WHERE {
 			SELECT
@@ -449,8 +481,10 @@ stage:DSOTTLUploadScene a elmo:Scene;
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 
-		INSERT INTO <@MODEL@> {
-			?s ?p ?o.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?s ?p ?o.
+			}
 		}
 		WHERE {
 			GRAPH container:ttlmodelupload {

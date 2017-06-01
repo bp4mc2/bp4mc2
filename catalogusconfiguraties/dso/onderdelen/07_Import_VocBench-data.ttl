@@ -34,8 +34,10 @@ stage:DSOLoadVBDataScene a elmo:Scene;
 	elmo:query '''
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		
-		INSERT INTO container:generiek {
-			?s?p?o
+		INSERT {
+			GRAPH container:generiek {
+				?s?p?o
+			}
 		}
 		WHERE {
 			SERVICE <http://localhost:7200/repositories/catalogus> {
