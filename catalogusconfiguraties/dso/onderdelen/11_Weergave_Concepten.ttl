@@ -469,6 +469,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?c rdfs:label ?clabel.
 			<@SUBJECT@> skoslex:refersTo ?s.
 			?s rdfs:label ?slabel.
+			<@SUBJECT@> skoslex:object ?act.
+			?act rdfs:label ?actlabel.
 		}
 		WHERE {
 			{
@@ -565,6 +567,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						OPTIONAL {
 							?o rdfs:label ?olabel.
 						}
+					}
+				}
+			}
+			UNION {
+				SERVICE <http://localhost:8080/toepasbareregels/url> {
+					?act skoslex:object <@SUBJECT@>.
+					OPTIONAL {
+						?act rdfs:label ?actlabel.
 					}
 				}
 			}
