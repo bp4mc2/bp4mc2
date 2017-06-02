@@ -173,6 +173,11 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "6";
 				xhtml:link "/query/statuscontrole";
 			];
+			elmo:data [
+				rdfs:label "Looping";
+				elmo:index "7";
+				xhtml:link "/query/loopingcontrole";
+			];
 		];
 	]
 .
@@ -285,59 +290,69 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		prefix activity: <http://pdok-ld-gck.fto.kadaster.nl/id/concept/@CURRENTMOMENT@>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
-		
-		INSERT INTO container:generiek {
-			?s rdfs:label ?spreflabel.
-		} WHERE {
-			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+		DELETE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
+			WHERE {
+				GRAPH versiongraph:version {
+					?s?p?o
 				}
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			} WHERE {
+				GRAPH container:generiek {
+					{
+						{ ?s skos:prefLabel ?spreflabel. }
+						UNION { ?s dct:title ?spreflabel. }
+						FILTER NOT EXISTS {
+							?s rdfs:label ?slabel.
+						}
+					}
+					UNION {
+						?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+					}
+				}
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Concepten - Tax-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
-			concept:tomcatUser rdf:type prov:Agent.
-			concept:tomcatUser rdfs:label "Tomcat User".
-			concept:tomcatUser foaf:givenName "Tomcat User".
-			concept:tomcatUser foaf:mbox "tomcat@user.org".
-			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - Tax-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:generiek {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -405,8 +420,10 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -440,8 +457,10 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:generiek {
@@ -495,8 +514,10 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -517,10 +538,12 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -567,8 +590,10 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		prefix activity: <http://pdok-ld-gck.fto.kadaster.nl/id/concept/@CURRENTMOMENT@>
 			
 	
-		DELETE FROM versiongraph:version {
-            ?s?p?o
+		DELETE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
 		}
 		WHERE {
             GRAPH versiongraph:version {
@@ -576,9 +601,12 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
             }
 		}
 		
-		INSERT INTO container:generiek {
-			?s rdfs:label ?spreflabel.
-		} WHERE {
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			}
+		}
+		WHERE {
 			GRAPH container:generiek {
 				{
 					{ ?s skos:prefLabel ?spreflabel. }
@@ -593,33 +621,39 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Concepten - tax-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
-			concept:tomcatUser rdf:type prov:Agent.
-			concept:tomcatUser rdfs:label "Tomcat User".
-			concept:tomcatUser foaf:givenName "Tomcat User".
-			concept:tomcatUser foaf:mbox "tomcat@user.org".
-			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - tax-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:generiek {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -645,8 +679,10 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
             }
 		}
 		
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:generiek {
@@ -700,8 +736,10 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -722,10 +760,12 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -817,8 +857,10 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
+		DELETE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
 		}
 		WHERE {
             GRAPH versiongraph:version {
@@ -826,9 +868,12 @@ stage:TaxDatasetUploadScene a elmo:Scene;
             }
 		}
 		
-		INSERT INTO container:datasetupload {
-			?s rdfs:label ?slabel.
-		} WHERE {
+		INSERT {
+			GRAPH container:datasetupload {
+				?s rdfs:label ?slabel.
+			} 
+		}
+		WHERE {
 			GRAPH container:datasetupload {
 				{
 					?s skos:prefLabel ?slabel.
@@ -848,33 +893,39 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Datasets en distributies - Tax-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
-			catalogus:tomcatUser rdf:type prov:Agent.
-			catalogus:tomcatUser rdfs:label "Tomcat User".
-			catalogus:tomcatUser foaf:givenName "Tomcat User".
-			catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-			catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Datasets en distributies - Tax-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+				catalogus:tomcatUser rdf:type prov:Agent.
+				catalogus:tomcatUser rdfs:label "Tomcat User".
+				catalogus:tomcatUser foaf:givenName "Tomcat User".
+				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
+				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
-
-		INSERT INTO container:datasetupload {
-            ?s bp4mc2:signature ?sig.
+		
+		INSERT {
+			GRAPH container:datasetupload {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -924,8 +975,10 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -947,8 +1000,10 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:datasetupload {
@@ -990,8 +1045,10 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -1006,10 +1063,12 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -2784,6 +2843,103 @@ stage:TaxHomoniemen2Tabel a elmo:Part;
 
 stage:TaxHomoniemen2Query a elmo:query;
 	elmo:query '''
+	'''
+. 
+#
+#
+#
+# BEHEER Looping - LOOPING
+#
+#
+#
+
+
+
+stage:TaxLoopingcontrole a elmo:Representation;
+	elmo:url-pattern "/query/loopingcontrole$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxLoopingTabel;
+	elmo:contains stage:TaxLoopingUitleg;
+.
+
+stage:TaxLoopingUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Looping";
+	]
+.
+
+# Weergave van gerelateerde (inkomende) concepten
+stage:TaxLoopingTabel a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:TableAppearance;
+	elmo:query stage:TaxLoopingQuery
+.
+
+
+stage:TaxLoopingQuery a elmo:query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://pdok-ld-gck.fto.kadaster.nl/container/>
+		prefix doc: <http://pdok-ld-gck.fto.kadaster.nl/concepten/doc/>
+		prefix dataset: <http://pdok-ld-gck.fto.kadaster.nl/id/dataset/>
+		prefix concept: <http://pdok-ld-gck.fto.kadaster.nl/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		
+		SELECT DISTINCT ?Subject ?Subject_label ?Relatie ?Object ?Object_label
+		WHERE {
+  			{
+                SELECT ?Subject ?Subject_label ?Object ?Object_label ?AltObject
+                WHERE {
+                    GRAPH ?sg {
+                        ?Subject rdf:type skos:Concept.
+                        ?Subject skos:semanticRelation ?Object.
+                        OPTIONAL {
+                            ?Subject rdfs:label ?Subject_label.
+                            FILTER( LANG( ?Subject_label ) = "" || LANGMATCHES( LANG( ?Subject_label ), "nl" ) )
+                        }
+                        FILTER NOT EXISTS {
+                            ?Subject prov:invalidatedAtTime ?time.
+                        }
+                    }
+                    GRAPH ?og {
+                        ?Object rdf:type skos:Concept.
+                        OPTIONAL {
+                            ?Object skos:semanticRelation ?AltObject.
+                        }
+                        OPTIONAL {
+                            ?Object rdfs:label ?Object_label.
+                            FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
+                        }
+                        FILTER NOT EXISTS {
+                            ?Object prov:invalidatedAtTime ?otime.
+                        }
+                    }
+                    GRAPH doc:mastergraph {
+                        ?Subject rdfs:isDefinedBy ?sg.
+                        ?Object rdfs:isDefinedBy ?og.
+                    }
+                }
+  			}
+  		#	FILTER (
+		#		?Subject skos:semanticRelation ?Object 
+		#		|| ?Object skos:semanticRelation ?Subject
+		#	)
+  			BIND( "Gerelateerd aan" AS ?Relatie )
+		}
+		ORDER BY ?Subject_label
 	'''
 . 
 #
