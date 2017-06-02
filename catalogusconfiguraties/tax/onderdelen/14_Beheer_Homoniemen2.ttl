@@ -1,0 +1,39 @@
+#
+#
+#
+# BEHEER HOMONIEMEN 2
+#
+#
+#
+
+
+
+stage:TaxHomoniemen2 a elmo:Representation;
+	elmo:url-pattern "/query/homoniemen2$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxHomoniemen2Tabel;
+	elmo:contains stage:TaxHomoniemen2Uitleg;
+.
+
+stage:TaxHomoniemen2Uitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Homoniemen2";
+	]
+.
+
+# Weergave van homoniemen2
+stage:TaxHomoniemen2Tabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:query stage:TaxHomoniemen2Query
+.
+
+stage:TaxHomoniemen2Query a elmo:query;
+	elmo:query '''
+	'''
+.

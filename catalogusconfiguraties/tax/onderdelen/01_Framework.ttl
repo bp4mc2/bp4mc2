@@ -5,32 +5,6 @@
 #
 #
 #
-
-@prefix stage: <http://localhost:8080/catalogus/tax/stage#>.
-@prefix updatestage: <http://localhost:8080/catalogus/tax/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://localhost:8080/catalogus/tax/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
-
 #
 #
 #
@@ -68,7 +42,17 @@ stage:TaxBeheerpagina rdf:type elmo:Representation;
 # Menubalk hoofdmenu
 stage:TaxMenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
-	elmo:data [
+	elmo:data [ 
+		elmo:data [	
+			rdfs:label "Hoofdpagina";
+			elmo:index "1";
+			xhtml:link "/catalogus/tax";
+		];
+		elmo:data [
+			rdfs:label "BEHEER";
+			xhtml:link "/catalogus/tax/admin";
+			elmo:index: "2";
+		];
 	];
 .
 
@@ -104,10 +88,29 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/catalogus/tax/container/datasetupload";
 			];
+			elmo:data [
+				rdfs:label "Upload status (RDF of Turtle)";
+				elmo:index "4";
+				xhtml:link "/catalogus/tax/container/statusupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "Update";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Upload een enkel Concept (Excel)";
+				elmo:index "3";
+				xhtml:link "/catalogus/tax/container/excelupdate";
+			];
+			elmo:data [
+				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
+				elmo:index "4";
+				xhtml:link "/catalogus/tax/container/ttlupdate";
+			];
 		];
 		elmo:data [
 			rdfs:label "Hulpmiddelen";
-			elmo:index "3";
+			elmo:index "4";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -117,6 +120,31 @@ stage:TaxBeheermenu a elmo:Part;
 				rdfs:label "Relatiecontrole";
 				elmo:index "2";
 				xhtml:link "/catalogus/tax/query/relatiecontrole";
+			];
+			elmo:data [
+				rdfs:label "Missing Links";
+				elmo:index "3";
+				xhtml:link "/catalogus/tax/query/missinglinks";
+			];
+			elmo:data [
+				rdfs:label "Homoniemen";
+				elmo:index "4";
+				xhtml:link "/catalogus/tax/query/homoniemen";
+			];
+			elmo:data [
+				rdfs:label "Homoniemen2";
+				elmo:index "5";
+				xhtml:link "/catalogus/tax/query/homoniemen2";
+			];
+			elmo:data [
+				rdfs:label "Statuscontrole";
+				elmo:index "6";
+				xhtml:link "/catalogus/tax/query/statuscontrole";
+			];
+			elmo:data [
+				rdfs:label "Looping";
+				elmo:index "7";
+				xhtml:link "/catalogus/tax/query/loopingcontrole";
 			];
 		];
 	]
