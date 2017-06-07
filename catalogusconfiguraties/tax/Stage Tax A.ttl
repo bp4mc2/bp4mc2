@@ -294,28 +294,29 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			GRAPH versiongraph:version {
 				?s?p?o
 			}
-			WHERE {
-				GRAPH versiongraph:version {
-					?s?p?o
-				}
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+				?s?p?o
 			}
 		}
 		
 		INSERT {
 			GRAPH container:generiek {
 				?s rdfs:label ?spreflabel.
-			} WHERE {
-				GRAPH container:generiek {
-					{
-						{ ?s skos:prefLabel ?spreflabel. }
-						UNION { ?s dct:title ?spreflabel. }
-						FILTER NOT EXISTS {
-							?s rdfs:label ?slabel.
-						}
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
 					}
-					UNION {
-						?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
-					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
 				}
 			}
 		}
@@ -1269,7 +1270,7 @@ stage:TaxMissingLinksTabel a elmo:Part;
 		elmo:applies-to "klasse";
 	];
 	elmo:fragment [
-		rdfs:label "Status";
+		rdfs:label "Status Frame";
 		elmo:applies-to "status";
 	];
 	elmo:fragment [
@@ -1283,6 +1284,14 @@ stage:TaxMissingLinksTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Ontbrekende referentie";
 		elmo:applies-to "FrameRef";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum Referentie";
+		elmo:applies-to "einddatum";
+	];
+	elmo:fragment [
+		rdfs:label "Status Referentie";
+		elmo:applies-to "ostatus";
 	];
 	elmo:query stage:TaxMissingLinksQuery
 .
@@ -1305,7 +1314,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 				?status ?status_label
 				?Frame ?Frame_label
 				?link ?link_label
-				?FrameRef
+				?FrameRef ?FrameRef_label
+				?einddatum
+				?ostatus ?ostatus_label
 		WHERE {
 			{
 				GRAPH ?mg		{
@@ -1327,6 +1338,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
 					)
+					OPTIONAL {
+						?FrameRef prov:invalidatedAtTime ?einddatum.
+					}
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
 						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
@@ -1353,7 +1367,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 				OPTIONAL {
 					GRAPH container:statusupload {
 						?status rdfs:label ?status_label.
+					#	?ostatus rdfs:label ?ostatus_label
 						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+					#	FILTER (lang(?ostatus_label)="" || lang(?ostatus_label)="nl")
 					}
 				}
 				GRAPH doc:mastergraph {

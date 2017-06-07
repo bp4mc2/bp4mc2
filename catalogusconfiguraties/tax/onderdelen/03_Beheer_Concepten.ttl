@@ -100,28 +100,29 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			GRAPH versiongraph:version {
 				?s?p?o
 			}
-			WHERE {
-				GRAPH versiongraph:version {
-					?s?p?o
-				}
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+				?s?p?o
 			}
 		}
 		
 		INSERT {
 			GRAPH container:generiek {
 				?s rdfs:label ?spreflabel.
-			} WHERE {
-				GRAPH container:generiek {
-					{
-						{ ?s skos:prefLabel ?spreflabel. }
-						UNION { ?s dct:title ?spreflabel. }
-						FILTER NOT EXISTS {
-							?s rdfs:label ?slabel.
-						}
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
 					}
-					UNION {
-						?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
-					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
 				}
 			}
 		}
