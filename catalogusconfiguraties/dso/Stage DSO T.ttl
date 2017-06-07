@@ -1228,7 +1228,7 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
@@ -3144,7 +3144,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Heeft als object"@nl;
-		elmo:applies-to skoslex:Object;
+		elmo:applies-to skoslex:object;
 		elmo:index "20";
 	];
 	elmo:fragment [
@@ -3249,7 +3249,15 @@ stage:WeergaveGrafischConcepten a elmo:Part;
 		''';
 		elmo:index "2";
 	];
-	
+	elmo:fragment [
+		elmo:applies-to "Act";
+		xhtml:stylesheet '''
+			fill: yellow;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
 	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
@@ -3314,6 +3322,9 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			?s ?sp <@SUBJECT@>.
 			?s rdfs:label ?slabel.
 			?s elmo:style ?stype.
+			?act skoslex:object <@SUBJECT@>.
+			?act rdfs:label ?actlabel.
+			?act elmo:style ?act_type.
 			skos:Concept elmo:name "Concept".
 			skos:member rdfs:label "Lid van".
 			skos:inScheme rdfs:label "Domein".
@@ -3323,11 +3334,12 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			thes:broaderPartitive rdfs:label "Is onderdeel van".
 			thes:narrowerPartitive rdfs:label "Bestaat uit".
 			dc:source rdfs:label "Heeft als bron".
-			skoslex:Actor rdfs:label "Heeft als actor".
-			skoslex:Object rdfs:label "Heeft als object".
+			skoslex:actor rdfs:label "Heeft als actor".
+			skoslex:object rdfs:label "Heeft als object".
 			owl:Class elmo:name "Gegevensklasse".
 			owl:Class rdfs:label "Heeft als klasse".
 			skoslex:Norm elmo:name "Norm".
+			skoslex:Act elmo:name "Act".
 			dctype:Text elmo:name "Regeling".
 			skoslex:affects rdfs:label "Heeft invloed op".
 			skoslex:refersTo rdfs:label "Verwijst naar".
@@ -3447,6 +3459,17 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 					}
 				}
 			}
+			UNION {
+				SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
+					GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
+						?act skoslex:object <@SUBJECT@>.
+						?act rdf:type ?act_type.
+						OPTIONAL {
+							?act rdfs:label ?actlabel.
+						}
+					}
+				}
+			}
 		}
 	''';
 .
@@ -3486,7 +3509,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?c rdfs:label ?clabel.
 			<@SUBJECT@> skoslex:refersTo ?s.
 			?s rdfs:label ?slabel.
-			<@SUBJECT@> skoslex:object ?act.
+			<@SUBJECT@> skoslex:refersTo ?act.
 			?act rdfs:label ?actlabel.
 		}
 		WHERE {
@@ -3588,12 +3611,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				}
 			}
 			UNION {
-				#SERVICE <http://data.test.pdok.nl/toepasbareregels/url> {
-					?act skoslex:object <@SUBJECT@>.
-					OPTIONAL {
-						?act rdfs:label ?actlabel.
+				SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
+					GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
+						?act skoslex:object <@SUBJECT@>.
+						OPTIONAL {
+							?act rdfs:label ?actlabel.
+						}
 					}
-				#}
+				}
 			}
 		}
 	'''
