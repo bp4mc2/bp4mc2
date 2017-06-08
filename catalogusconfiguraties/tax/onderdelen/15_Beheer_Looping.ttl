@@ -23,6 +23,9 @@ stage:TaxLoopingUitleg a elmo:Part;
 	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Looping";
+		elmo:html '''
+			<p>De lijst bevat alle subjecten die gerelateerd zijn aan een object, waar het object de omgekeerde relatie ook heeft naar het subject.</p>
+		''';
 	]
 .
 
@@ -69,9 +72,9 @@ stage:TaxLoopingQuery a elmo:query;
                     }
                     GRAPH ?og {
                         ?Object rdf:type skos:Concept.
-                        OPTIONAL {
+                    #    OPTIONAL {
                             ?Object skos:semanticRelation ?AltObject.
-                        }
+                     #   }
                         OPTIONAL {
                             ?Object rdfs:label ?Object_label.
                             FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
@@ -86,10 +89,9 @@ stage:TaxLoopingQuery a elmo:query;
                     }
                 }
   			}
-  		#	FILTER (
-		#		?Subject skos:semanticRelation ?Object 
-		#		|| ?Object skos:semanticRelation ?Subject
-		#	)
+  			FILTER (
+				?Subject = ?AltObject
+			)
   			BIND( "Gerelateerd aan" AS ?Relatie )
 		}
 		ORDER BY ?Subject_label

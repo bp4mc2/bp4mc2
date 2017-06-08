@@ -1,0 +1,42 @@
+#
+#
+#
+# BEHEER WHERE USED
+#
+#
+#
+
+
+
+stage:TaxWhereUsed a elmo:Representation;
+	elmo:url-pattern "/query/whereused$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxWhereUsedUitleg;
+	elmo:contains stage:TaxWhereUsedTabel;
+.
+
+stage:TaxWhereUsedUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Where Used";
+		elmo:html '''
+			<p>Rapportage where used</p>
+		''';
+	]
+.
+
+# Weergave van where used begrippen
+stage:TaxWhereUsedTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+.
+
+
+stage:TaxWhereUsedQuery a elmo:query;
+	elmo:query '''
+	'''
+.
