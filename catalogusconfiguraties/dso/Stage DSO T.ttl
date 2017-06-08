@@ -71,7 +71,7 @@ stage:DSOWelkomstpagina rdf:type elmo:Representation;
 					</div>
 					<div class='welkom' style='float: right'>
 						<br/><br/>
-						<a href='/catalogus/dso/query/overzichtspagina?type=Act'>
+						<a href='/catalogus/dso/query/overzichtspagina?type=Act&amp;term=a'>
 							<img src='images/activiteitenicon.png'/>
 							<br/>Alle activiteiten
 						</a>
@@ -389,27 +389,27 @@ stage:DSOBeheermenu a elmo:Part;
 			rdfs:label "Upload concepten";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Upload concepten (Excel)";
+				rdfs:label "Upload of update volledige dataset (Excel)";
 				elmo:index "1";
 				xhtml:link "/catalogus/dso/container/excelupload";
 			];
 			elmo:data [
-				rdfs:label "Upload concepten (RDF of Turtle)";
+				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
-				rdfs:label "Upload een enkel Concept (Excel)";
+				rdfs:label "Upload of update enkel concept (Excel)";
 				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
+				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload een Omgevingsdocument (XML)";
+				rdfs:label "Upload of update omgevingsdocument (XML)";
 				elmo:index "5";
 				xhtml:link "/catalogus/dso/container/odupdate";
 			];
@@ -423,14 +423,9 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Sync geupload XMI-model (incl ST)";
+				rdfs:label "Sync geupload XMI-model";
 				elmo:index "2";
 				xhtml:link "update/syncumlinclupload";
-			];
-			elmo:data [
-				rdfs:label "Sync geupload XMI-model (excl ST)";
-				elmo:index "3";
-				xhtml:link "update/syncumlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload UML-model (Turtle)";
@@ -441,20 +436,6 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Sync geupload TTL-model";
 				elmo:index "5";
 				xhtml:link "update/syncttlupload";
-			];
-		];
-		elmo:data [
-			rdfs:label "Upload metadata";
-			elmo:index "4";
-			elmo:data [
-				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
-				elmo:index "1";
-				xhtml:link "/catalogus/dso/container/catalogusupload";
-			];
-			elmo:data [
-				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-				elmo:index "2";
-				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data [
@@ -469,11 +450,6 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Laad gegevens vanuit Semantic MediaWiki";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/update/importsmwdata";
-			];
-			elmo:data [
-				rdfs:label "Laad gegevens vanuit VocBench";
-				elmo:index "3";
-				xhtml:link "/catalogus/dso/update/importvbdata";
 			];
 			elmo:data [
 				rdfs:label "Voeg nieuw model toe";
@@ -1228,7 +1204,7 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
@@ -3144,7 +3120,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Heeft als object"@nl;
-		elmo:applies-to skoslex:Object;
+		elmo:applies-to skoslex:object;
 		elmo:index "20";
 	];
 	elmo:fragment [
@@ -3249,7 +3225,15 @@ stage:WeergaveGrafischConcepten a elmo:Part;
 		''';
 		elmo:index "2";
 	];
-	
+	elmo:fragment [
+		elmo:applies-to "Act";
+		xhtml:stylesheet '''
+			fill: yellow;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
 	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
@@ -3314,6 +3298,9 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			?s ?sp <@SUBJECT@>.
 			?s rdfs:label ?slabel.
 			?s elmo:style ?stype.
+			?act skoslex:object <@SUBJECT@>.
+			?act rdfs:label ?actlabel.
+			?act elmo:style ?act_type.
 			skos:Concept elmo:name "Concept".
 			skos:member rdfs:label "Lid van".
 			skos:inScheme rdfs:label "Domein".
@@ -3323,11 +3310,12 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			thes:broaderPartitive rdfs:label "Is onderdeel van".
 			thes:narrowerPartitive rdfs:label "Bestaat uit".
 			dc:source rdfs:label "Heeft als bron".
-			skoslex:Actor rdfs:label "Heeft als actor".
-			skoslex:Object rdfs:label "Heeft als object".
+			skoslex:actor rdfs:label "Heeft als actor".
+			skoslex:object rdfs:label "Heeft als object".
 			owl:Class elmo:name "Gegevensklasse".
 			owl:Class rdfs:label "Heeft als klasse".
 			skoslex:Norm elmo:name "Norm".
+			skoslex:Act elmo:name "Act".
 			dctype:Text elmo:name "Regeling".
 			skoslex:affects rdfs:label "Heeft invloed op".
 			skoslex:refersTo rdfs:label "Verwijst naar".
@@ -3447,6 +3435,17 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 					}
 				}
 			}
+			UNION {
+				SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
+					GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
+						?act skoslex:object <@SUBJECT@>.
+						?act rdf:type ?act_type.
+						OPTIONAL {
+							?act rdfs:label ?actlabel.
+						}
+					}
+				}
+			}
 		}
 	''';
 .
@@ -3486,7 +3485,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?c rdfs:label ?clabel.
 			<@SUBJECT@> skoslex:refersTo ?s.
 			?s rdfs:label ?slabel.
-			<@SUBJECT@> skoslex:object ?act.
+			<@SUBJECT@> skoslex:refersTo ?act.
 			?act rdfs:label ?actlabel.
 		}
 		WHERE {
@@ -3588,12 +3587,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				}
 			}
 			UNION {
-				#SERVICE <http://data.test.pdok.nl/toepasbareregels/url> {
-					?act skoslex:object <@SUBJECT@>.
-					OPTIONAL {
-						?act rdfs:label ?actlabel.
+				SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
+					GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
+						?act skoslex:object <@SUBJECT@>.
+						OPTIONAL {
+							?act rdfs:label ?actlabel.
+						}
 					}
-				#}
+				}
 			}
 		}
 	'''
@@ -8499,7 +8500,7 @@ stage:DSOSearchQuery a elmo:Query;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://data.test.pdok.nl/catalogus/dso/id/dataset/>
+		prefix collection: <http://data.test.pdok.nl/catalogus/dso/id/collection/>
 		prefix concept: <http://data.test.pdok.nl/catalogus/dso/id/concept/>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		
@@ -8523,13 +8524,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 					FILTER NOT EXISTS {
 						GRAPH ?toeleidingsGraph {
-							dataset:Toeleidingsbegrippen skos:member ?concept.
+							collection:Toeleidingsbegrippen skos:member ?concept.
 							FILTER NOT EXISTS {
-								dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 							}
 						}
 						GRAPH doc:mastergraph {
-							dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 						}
 					}
 				}
@@ -8564,13 +8565,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 				}
 				GRAPH ?toeleidingsGraph {
-					dataset:Toeleidingsbegrippen skos:member ?toeleiding.
+					collection:Toeleidingsbegrippen skos:member ?toeleiding.
 					FILTER NOT EXISTS {
-						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
-					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 					?toeleiding rdfs:isDefinedBy ?g.
 					?concept rdfs:isDefinedBy ?conceptgraph.
 				}				

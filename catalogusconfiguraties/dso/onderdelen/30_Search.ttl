@@ -30,7 +30,7 @@ stage:DSOSearchQuery a elmo:Query;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		
@@ -54,13 +54,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 					FILTER NOT EXISTS {
 						GRAPH ?toeleidingsGraph {
-							dataset:Toeleidingsbegrippen skos:member ?concept.
+							collection:Toeleidingsbegrippen skos:member ?concept.
 							FILTER NOT EXISTS {
-								dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 							}
 						}
 						GRAPH doc:mastergraph {
-							dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 						}
 					}
 				}
@@ -95,13 +95,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 				}
 				GRAPH ?toeleidingsGraph {
-					dataset:Toeleidingsbegrippen skos:member ?toeleiding.
+					collection:Toeleidingsbegrippen skos:member ?toeleiding.
 					FILTER NOT EXISTS {
-						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
-					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 					?toeleiding rdfs:isDefinedBy ?g.
 					?concept rdfs:isDefinedBy ?conceptgraph.
 				}				
