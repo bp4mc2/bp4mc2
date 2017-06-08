@@ -71,7 +71,7 @@ stage:DSOWelkomstpagina rdf:type elmo:Representation;
 					</div>
 					<div class='welkom' style='float: right'>
 						<br/><br/>
-						<a href='/catalogus/dso/query/overzichtspagina?type=Act'>
+						<a href='/catalogus/dso/query/overzichtspagina?type=Act&amp;term=a'>
 							<img src='images/activiteitenicon.png'/>
 							<br/>Alle activiteiten
 						</a>
@@ -389,27 +389,27 @@ stage:DSOBeheermenu a elmo:Part;
 			rdfs:label "Upload concepten";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Upload concepten (Excel)";
+				rdfs:label "Upload of update volledige dataset (Excel)";
 				elmo:index "1";
 				xhtml:link "/catalogus/dso/container/excelupload";
 			];
 			elmo:data [
-				rdfs:label "Upload concepten (RDF of Turtle)";
+				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
-				rdfs:label "Upload een enkel Concept (Excel)";
+				rdfs:label "Upload of update enkel concept (Excel)";
 				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
+				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload een Omgevingsdocument (XML)";
+				rdfs:label "Upload of update omgevingsdocument (XML)";
 				elmo:index "5";
 				xhtml:link "/catalogus/dso/container/odupdate";
 			];
@@ -423,14 +423,9 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Sync geupload XMI-model (incl ST)";
+				rdfs:label "Sync geupload XMI-model";
 				elmo:index "2";
 				xhtml:link "update/syncumlinclupload";
-			];
-			elmo:data [
-				rdfs:label "Sync geupload XMI-model (excl ST)";
-				elmo:index "3";
-				xhtml:link "update/syncumlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload UML-model (Turtle)";
@@ -441,20 +436,6 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Sync geupload TTL-model";
 				elmo:index "5";
 				xhtml:link "update/syncttlupload";
-			];
-		];
-		elmo:data [
-			rdfs:label "Upload metadata";
-			elmo:index "4";
-			elmo:data [
-				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
-				elmo:index "1";
-				xhtml:link "/catalogus/dso/container/catalogusupload";
-			];
-			elmo:data [
-				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-				elmo:index "2";
-				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data [
@@ -469,11 +450,6 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Laad gegevens vanuit Semantic MediaWiki";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/update/importsmwdata";
-			];
-			elmo:data [
-				rdfs:label "Laad gegevens vanuit VocBench";
-				elmo:index "3";
-				xhtml:link "/catalogus/dso/update/importvbdata";
 			];
 			elmo:data [
 				rdfs:label "Voeg nieuw model toe";
@@ -8524,7 +8500,7 @@ stage:DSOSearchQuery a elmo:Query;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		
@@ -8548,13 +8524,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 					FILTER NOT EXISTS {
 						GRAPH ?toeleidingsGraph {
-							dataset:Toeleidingsbegrippen skos:member ?concept.
+							collection:Toeleidingsbegrippen skos:member ?concept.
 							FILTER NOT EXISTS {
-								dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 							}
 						}
 						GRAPH doc:mastergraph {
-							dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 						}
 					}
 				}
@@ -8589,13 +8565,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 				}
 				GRAPH ?toeleidingsGraph {
-					dataset:Toeleidingsbegrippen skos:member ?toeleiding.
+					collection:Toeleidingsbegrippen skos:member ?toeleiding.
 					FILTER NOT EXISTS {
-						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
-					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 					?toeleiding rdfs:isDefinedBy ?g.
 					?concept rdfs:isDefinedBy ?conceptgraph.
 				}				
