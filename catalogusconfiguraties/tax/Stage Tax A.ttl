@@ -54,8 +54,9 @@ stage:TaxBeheerpagina rdf:type elmo:Representation;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
 		rdfs:label "Tax";
-		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>"
-	]
+		elmo:index "1";
+		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>";
+	];
 .
 
 
@@ -105,11 +106,11 @@ stage:TaxBeheermenu a elmo:Part;
 		elmo:data [
 			rdfs:label "Upload";
 			elmo:index "2";
-			elmo:data [
-				rdfs:label "Upload concepten (Excel)";
-				elmo:index "1";
-				xhtml:link "/container/excelupload";
-			];
+		#	elmo:data [
+		#		rdfs:label "Upload concepten (Excel)";
+		#		elmo:index "1";
+		#		xhtml:link "/container/excelupload";
+		#	];
 			elmo:data [
 				rdfs:label "Upload concepten (RDF of Turtle)";
 				elmo:index "2";
@@ -129,11 +130,11 @@ stage:TaxBeheermenu a elmo:Part;
 		elmo:data [
 			rdfs:label "Update";
 			elmo:index "3";
-			elmo:data [
-				rdfs:label "Upload een enkel Concept (Excel)";
-				elmo:index "3";
-				xhtml:link "/container/excelupdate";
-			];
+		#	elmo:data [
+		#		rdfs:label "Upload een enkel Concept (Excel)";
+		#		elmo:index "3";
+		#		xhtml:link "/container/excelupdate";
+		#	];
 			elmo:data [
 				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
 				elmo:index "4";
@@ -177,6 +178,11 @@ stage:TaxBeheermenu a elmo:Part;
 				rdfs:label "Looping";
 				elmo:index "7";
 				xhtml:link "/query/loopingcontrole";
+			];
+			elmo:data [
+				rdfs:label "Where used";
+				elmo:index "8";
+				xhtml:link "/query/whereused";
 			];
 		];
 	]
@@ -1111,6 +1117,9 @@ stage:TaxRelatiecontroleUitleg a elmo:Part;
 	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Relatie controle";
+		elmo:html '''
+			<p>De lijst bevat alle subjecten die gerelateerd zijn aan een object, waar de omgekeerde relatie ontbreekt in de weergavetabel. De relatie kan wel voorkomen in de gerelateerde concepten.</p>
+		''';
 	]
 .
 
@@ -1258,6 +1267,9 @@ stage:TaxMissingLinksUitleg a elmo:Part;
 	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Missing Links";
+		elmo:html '''
+			<p>De lijst bestaat uit alle objecten waarvoor geldt dat een frame (meestal een begrip) een ontbrekende referentie bevat.</p>
+		''';
 	]
 .
 
@@ -1286,12 +1298,8 @@ stage:TaxMissingLinksTabel a elmo:Part;
 		elmo:applies-to "FrameRef";
 	];
 	elmo:fragment [
-		rdfs:label "Einddatum Referentie";
-		elmo:applies-to "einddatum";
-	];
-	elmo:fragment [
-		rdfs:label "Status Referentie";
-		elmo:applies-to "ostatus";
+		rdfs:label "Referentie actueel tot";
+		elmo:applies-to "ActueelTot";
 	];
 	elmo:query stage:TaxMissingLinksQuery
 .
@@ -1315,14 +1323,16 @@ stage:TaxMissingLinksQuery a elmo:query;
 				?Frame ?Frame_label
 				?link ?link_label
 				?FrameRef ?FrameRef_label
-				?einddatum
-				?ostatus ?ostatus_label
+				?ActueelTot
 		WHERE {
 			{
 				GRAPH ?mg		{
 					?Frame rdf:type ?klasse.
 					?Frame ?link ?FrameRef.
 					?Frame kddef:status ?status.
+					OPTIONAL {
+						?FrameRef prov:invalidatedAtTime ?ActueelTot.
+					}
 					FILTER(
 						?link =  thes:broaderGeneric
 						|| ?link = thes:narrowerGeneric
@@ -1338,9 +1348,6 @@ stage:TaxMissingLinksQuery a elmo:query;
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
 					)
-					OPTIONAL {
-						?FrameRef prov:invalidatedAtTime ?einddatum.
-					}
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
 						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
@@ -1367,9 +1374,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 				OPTIONAL {
 					GRAPH container:statusupload {
 						?status rdfs:label ?status_label.
-					#	?ostatus rdfs:label ?ostatus_label
 						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
-					#	FILTER (lang(?ostatus_label)="" || lang(?ostatus_label)="nl")
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -1405,6 +1410,9 @@ stage:TaxStatusControleUitleg a elmo:Part;
 	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Status controle";
+		elmo:html '''
+			<p>De lijst bevat alle concepten en hun huidige status.</p>
+		''';
 	]
 .
 
@@ -2886,6 +2894,9 @@ stage:TaxLoopingUitleg a elmo:Part;
 	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Looping";
+		elmo:html '''
+			<p>De lijst bevat alle subjecten die gerelateerd zijn aan een object, waar het object de omgekeerde relatie ook heeft naar het subject.</p>
+		''';
 	]
 .
 
@@ -2932,9 +2943,9 @@ stage:TaxLoopingQuery a elmo:query;
                     }
                     GRAPH ?og {
                         ?Object rdf:type skos:Concept.
-                        OPTIONAL {
+                    #    OPTIONAL {
                             ?Object skos:semanticRelation ?AltObject.
-                        }
+                     #   }
                         OPTIONAL {
                             ?Object rdfs:label ?Object_label.
                             FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
@@ -2949,10 +2960,9 @@ stage:TaxLoopingQuery a elmo:query;
                     }
                 }
   			}
-  		#	FILTER (
-		#		?Subject skos:semanticRelation ?Object 
-		#		|| ?Object skos:semanticRelation ?Subject
-		#	)
+  			FILTER (
+				?Subject = ?AltObject
+			)
   			BIND( "Gerelateerd aan" AS ?Relatie )
 		}
 		ORDER BY ?Subject_label
@@ -3318,6 +3328,48 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 			}
 		}
 		ORDER BY DESC(lcase(?concept_label))
+	'''
+. 
+#
+#
+#
+# BEHEER WHERE USED
+#
+#
+#
+
+
+
+stage:TaxWhereUsed a elmo:Representation;
+	elmo:url-pattern "/query/whereused$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxWhereUsedUitleg;
+	elmo:contains stage:TaxWhereUsedTabel;
+.
+
+stage:TaxWhereUsedUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Where Used";
+		elmo:html '''
+			<p>Rapportage where used</p>
+		''';
+	]
+.
+
+# Weergave van where used begrippen
+stage:TaxWhereUsedTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+.
+
+
+stage:TaxWhereUsedQuery a elmo:query;
+	elmo:query '''
 	'''
 . 
 #

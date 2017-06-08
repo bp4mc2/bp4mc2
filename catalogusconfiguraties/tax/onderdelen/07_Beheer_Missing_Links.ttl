@@ -23,6 +23,9 @@ stage:TaxMissingLinksUitleg a elmo:Part;
 	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Missing Links";
+		elmo:html '''
+			<p>De lijst bestaat uit alle objecten waarvoor geldt dat een frame (meestal een begrip) een ontbrekende referentie bevat.</p>
+		''';
 	]
 .
 
@@ -35,7 +38,7 @@ stage:TaxMissingLinksTabel a elmo:Part;
 		elmo:applies-to "klasse";
 	];
 	elmo:fragment [
-		rdfs:label "Status";
+		rdfs:label "Status Frame";
 		elmo:applies-to "status";
 	];
 	elmo:fragment [
@@ -49,6 +52,10 @@ stage:TaxMissingLinksTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Ontbrekende referentie";
 		elmo:applies-to "FrameRef";
+	];
+	elmo:fragment [
+		rdfs:label "Referentie actueel tot";
+		elmo:applies-to "ActueelTot";
 	];
 	elmo:query stage:TaxMissingLinksQuery
 .
@@ -71,13 +78,17 @@ stage:TaxMissingLinksQuery a elmo:query;
 				?status ?status_label
 				?Frame ?Frame_label
 				?link ?link_label
-				?FrameRef
+				?FrameRef ?FrameRef_label
+				?ActueelTot
 		WHERE {
 			{
 				GRAPH ?mg		{
 					?Frame rdf:type ?klasse.
 					?Frame ?link ?FrameRef.
 					?Frame kddef:status ?status.
+					OPTIONAL {
+						?FrameRef prov:invalidatedAtTime ?ActueelTot.
+					}
 					FILTER(
 						?link =  thes:broaderGeneric
 						|| ?link = thes:narrowerGeneric
