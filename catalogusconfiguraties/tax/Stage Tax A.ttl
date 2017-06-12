@@ -81,11 +81,11 @@ stage:TaxMenu a elmo:Part;
 			elmo:index "1";
 			xhtml:link "";
 		];
-		elmo:data [
-			rdfs:label "BEHEER";
-			xhtml:link "/admin";
-			elmo:index: "2";
-		];
+	#	elmo:data [
+	#		rdfs:label "BEHEER";
+	#		xhtml:link "/admin";
+	#		elmo:index: "2";
+	#	];
 	];
 .
 
@@ -177,7 +177,12 @@ stage:TaxBeheermenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Where used";
 				elmo:index "8";
-				xhtml:link "/query/whereused";
+				xhtml:link "/query/whereused?term=";
+			];
+			elmo:data [
+				rdfs:label "Niet Gevalideerde Links";
+				elmo:index "9";
+				xhtml:link "/query/nietgevalideerdelinks";
 			];
 		];
 		elmo:data [
@@ -3354,11 +3359,20 @@ stage:TaxWhereUsedPagina rdf:type elmo:Representation;
 	elmo:contains stage:TaxWhereUsedIndex;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxWhereUsedUitleg;
 .
 
-#
-# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
-#
+stage:TaxWhereUsedUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+#	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Where Used";
+		elmo:html '''
+			<p>De lijst bevat alle concepten en de relaties die andere subjecten met dit concept hebben.</p>
+		''';
+	]
+.
 
 # Index voor op de alfabetische weergave concepten
 stage:TaxWhereUsedIndex a elmo:Part;
@@ -3369,18 +3383,14 @@ stage:TaxWhereUsedIndex a elmo:Part;
 		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
 		elmo:name "term";
 	];
-	elmo:index "00";
+	elmo:index "2";
 .
 
 # Conceptentabel voor op de alfabetische weergave concepten
 stage:TaxWhereUsedTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:with-parameter "term";
-	elmo:index "03";
-	elmo:fragment [
-		elmo:applies-to "uitleg";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
+	elmo:index "3";
 	elmo:query stage:TaxWhereUsedQuery;
 .
 
@@ -3392,25 +3402,24 @@ stage:TaxWhereUsedTabel a elmo:Part;
 stage:TaxWhereUsedQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
-#		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-#		prefix container: 	<http://pdok-ld-gck.fto.kadaster.nl/container/>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
 		prefix doc: 		<http://pdok-ld-gck.fto.kadaster.nl/concepten/doc/>
-#		prefix dataset: 	<http://pdok-ld-gck.fto.kadaster.nl/id/dataset/>
-#		prefix concept: 	<http://pdok-ld-gck.fto.kadaster.nl/id/concept/>
+		prefix concept: 	<http://pdok-ld-gck.fto.kadaster.nl/id/concept/>
 		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
 		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix thes: 		<http://purl.org/iso25964/skos-thes#>
+		prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
+		prefix container: 	<http://pdok-ld-gck.fto.kadaster.nl/container/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?link ?subject ?subject_label
 		WHERE {
 			GRAPH ?g {
 				{
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
-					OPTIONAL {
-				#		?concept skos:definition ?uitleg
-						?concept rdfs:comment ?uitleg
-					}
+					?subject ?link ?concept.
+					?subject rdfs:label ?subject_label.
 				}
 				UNION
 				{
@@ -3419,12 +3428,26 @@ stage:TaxWhereUsedQuery a elmo:Query;
 					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-				#		?concept skos:definition ?definition.
-						?concept rdfs:comment ?definition.
-						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
+						?subject ?link ?concept.
+						?subject rdfs:label ?subject_label.
 					}
 				}
 				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+				FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -3433,6 +3456,7 @@ stage:TaxWhereUsedQuery a elmo:Query;
 					?status = kdstat:Geverifieerd
 				)
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
+				FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g
@@ -3440,8 +3464,155 @@ stage:TaxWhereUsedQuery a elmo:Query;
 		}
 		ORDER BY str(lcase(?concept_label))
 	'''
+. 
+#
+#
+#
+# BEHEER NIET-GEVALIDEERDE LINKS
+#
+#
+#
+
+
+
+stage:TaxNietGevalideerdeLinks a elmo:Representation;
+	elmo:url-pattern "/query/nietgevalideerdelinks$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxNietGevalideerdeLinksUitleg;
+	elmo:contains stage:TaxNietGevalideerdeLinksTabel;
 .
- 
+
+stage:TaxNietGevalideerdeLinksUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "NietGevalideerde Links";
+		elmo:html '''
+			<p>De lijst bestaat uit alle objecten waarvoor geldt dat een frame (meestal een begrip) een niet-gevalideerde referentie bevat.</p>
+		''';
+	]
+.
+
+# Weergave van NietGevalideerde links
+stage:TaxNietGevalideerdeLinksTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:fragment [
+		rdfs:label "Type";
+		elmo:applies-to "klasse";
+	];
+	elmo:fragment [
+		rdfs:label "Status Frame";
+		elmo:applies-to "status";
+	];
+	elmo:fragment [
+		rdfs:label "Foutieve frame";
+		elmo:applies-to "Frame";
+	];
+	elmo:fragment [
+		rdfs:label "Referentie";
+		elmo:applies-to "link";
+	];
+	elmo:fragment [
+		rdfs:label "Niet-gevalideerde referentie";
+		elmo:applies-to "FrameRef";
+	];
+	elmo:fragment [
+		rdfs:label "Statur referentie";
+		elmo:applies-to "ref_status";
+	];
+	elmo:query stage:TaxNietGevalideerdeLinksQuery
+.
+
+
+stage:TaxNietGevalideerdeLinksQuery a elmo:query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://pdok-ld-gck.fto.kadaster.nl/concepten/doc/>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://pdok-ld-gck.fto.kadaster.nl/container/>
+		
+		SELECT 	#?graph ?graph_label
+				?klasse
+				?status ?status_label
+				?Frame ?Frame_label
+				?link ?link_label
+				?FrameRef ?FrameRef_label
+				?FR_status ?FR_status_label
+		WHERE {
+			{
+				GRAPH ?mg		{
+					?Frame rdf:type ?klasse.
+					?Frame ?link ?FrameRef.
+					?Frame kddef:status ?status.
+					?FrameRef kddef:status ?FR_status.
+				#	OPTIONAL {
+				#		?FrameRef prov:invalidatedAtTime ?ActueelTot.
+				#	}
+					FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
+					OPTIONAL {
+						?Frame rdfs:label ?Frame_label.
+						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
+					}
+				#	OPTIONAL {
+				#		?graph rdfs:label ?graph_label.
+				#		FILTER (lang(?graph_label)="" || lang(?graph_label)="@LANG@")
+				#	}
+					FILTER NOT EXISTS {
+                        ?Frame prov:invalidatedAtTime ?time.
+					}
+					OPTIONAL {
+						?FrameRef rdfs:label ?FrameRef_label.
+						FILTER (lang(?FrameRef_label)="" || lang(?FrameRef_label)="nl")
+					}
+				}
+					FILTER (
+						?FR_status = kdstat:Afgekeurd 
+						|| ?FR_status = kdstat:Niet_beoordeeld
+						|| ?FR_status = kdstat:Ter_afkeuring
+						|| ?FR_status = kdstat:Ter_validatie
+					)
+					GRAPH doc:mastergraph {
+						?FrameRef rdfs:isDefinedBy ?frameRefGraph.
+					}
+				}
+				OPTIONAL {
+					GRAPH container:statusupload {
+						?status rdfs:label ?status_label.
+						?FR_status rdfs:label ?FR_status_label.
+						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+						FILTER (lang(?FR_status_label)="" || lang(?FR_status_label)="nl")
+					}
+				}
+				GRAPH doc:mastergraph {
+					?Frame rdfs:isDefinedBy ?mg.
+				}
+			}
+		ORDER BY str(lcase(?Frame_label))
+	'''
+. 
 #
 #
 #
