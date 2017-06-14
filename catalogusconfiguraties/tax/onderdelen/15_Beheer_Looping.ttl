@@ -1,13 +1,13 @@
 #
 #
 #
-# BEHEER Looping - LOOPING
+# BEHEER LOOPING
 #
 #
 #
 
 
-
+#Hoofdpagina Looping Rapportage
 stage:TaxLoopingcontrole a elmo:Representation;
 	elmo:url-pattern "/query/loopingcontrole$";
 	elmo:contains stage:TaxHeader;
@@ -29,14 +29,14 @@ stage:TaxLoopingUitleg a elmo:Part;
 	]
 .
 
-# Weergave van gerelateerde (inkomende) concepten
+# Weergave van gerelateerde concepten (looping)
 stage:TaxLoopingTabel a elmo:Part;
 	elmo:index "2";
 	elmo:appearance elmo:TableAppearance;
 	elmo:query stage:TaxLoopingQuery
 .
 
-
+#query toont alle triples <A skos:semanticRelation B>, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
 stage:TaxLoopingQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -89,7 +89,7 @@ stage:TaxLoopingQuery a elmo:query;
                     }
                 }
   			}
-  			FILTER (
+  			FILTER (												
 				?Subject = ?AltObject
 			)
   			BIND( "Gerelateerd aan" AS ?Relatie )

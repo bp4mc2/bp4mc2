@@ -7,7 +7,7 @@
 #
 
 
-
+#Hoofdpagina Statuscontrole Rapportage
 stage:TaxStatusControle a elmo:Representation;
 	elmo:url-pattern "/query/statuscontrole$";
 	elmo:contains stage:TaxHeader;
@@ -44,6 +44,7 @@ stage:TaxStatusControleTabel a elmo:Part;
 	elmo:query stage:TaxStatusControleQuery
 .
 
+#query voor het ophalen van alle geldige subjecten en de bijbehorende actuele status 
 stage:TaxStatusControleQuery a elmo:query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
@@ -87,6 +88,6 @@ stage:TaxStatusControleQuery a elmo:query;
 				?concept rdfs:isDefinedBy ?g
 			}
 		}
-		ORDER BY ?status, ?concept_label
+		ORDER BY ?status_label
 	'''
 .

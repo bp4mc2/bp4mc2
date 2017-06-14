@@ -1,18 +1,14 @@
 #
 #
 #
-# OVERZICHTSPAGINA
+# BEHEER WHERE USED 
 #
 #
 #
 
 
 
-#
-# PAGINA'S (REPRESENTATIONS)
-#
-
-# Overzichtspagina concepten
+# Hoofdpagina Where Used Rapportage
 stage:TaxWhereUsedPagina rdf:type elmo:Representation;
 	elmo:url-pattern "/catalogus/tax/query/whereused(|/|\\..+)$";
 	elmo:contains stage:TaxWhereUsedTabel;
@@ -25,7 +21,6 @@ stage:TaxWhereUsedPagina rdf:type elmo:Representation;
 stage:TaxWhereUsedUitleg a elmo:Part;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:index "1";
-#	elmo:without-parameter "term";
 	elmo:data [
 		rdfs:label "Where Used";
 		elmo:html '''
@@ -34,7 +29,7 @@ stage:TaxWhereUsedUitleg a elmo:Part;
 	]
 .
 
-# Index voor op de alfabetische weergave concepten
+# Index voor op de alfabetische weergave 
 stage:TaxWhereUsedIndex a elmo:Part;
 	elmo:appearance elmo:IndexAppearance;
 	elmo:data [
@@ -46,7 +41,7 @@ stage:TaxWhereUsedIndex a elmo:Part;
 	elmo:index "2";
 .
 
-# Conceptentabel voor op de alfabetische weergave concepten
+# Where Used-tabel voor op de alfabetische weergave 
 stage:TaxWhereUsedTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:with-parameter "term";
@@ -58,7 +53,7 @@ stage:TaxWhereUsedTabel a elmo:Part;
 # QUERY'S
 #
 
-# Query voor tonen alle concepten
+# Query voor tonen alle triples <subject - predicate - object> van alle objecten
 stage:TaxWhereUsedQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>

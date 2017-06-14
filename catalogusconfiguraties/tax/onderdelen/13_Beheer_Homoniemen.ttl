@@ -1,15 +1,15 @@
 #
 #
 #
-# BEHEER HOMONIEMEN
+# BEHEER HOMONIEMEN -1
 #
 #
 #
 
 
-
+#Hoofdpagina Homoniemen -1 Rapportage
 stage:TaxHomoniemen a elmo:Representation;
-	elmo:url-pattern "/query/homoniemen$";
+	elmo:url-pattern "/query/homoniemen1$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -30,9 +30,22 @@ stage:TaxHomoniemenUitleg a elmo:Part;
 stage:TaxHomoniemenTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
-	elmo:query stage:TaxHomoniemenQuery
+	elmo:query stage:TaxHomoniemenQuery;
+	elmo:fragment [
+		rdfs:label "Populatie";		
+		elmo:applies-to "graph";
+	];
+		elmo:fragment [
+		rdfs:label "Begrip";		
+		elmo:applies-to "begrip";
+	];
+		elmo:fragment [
+		rdfs:label "Komt ook voor in";		
+		elmo:applies-to "graph2";
+	];
 .
 
+#query geeft aan of een begrip in kader 1 ook voorkomt als exact hetzelfde begrip in kader 2
 stage:TaxHomoniemenQuery a elmo:query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
