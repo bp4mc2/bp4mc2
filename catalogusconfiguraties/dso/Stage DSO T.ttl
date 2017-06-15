@@ -3188,7 +3188,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Heeft als actor"@nl;
-		elmo:applies-to skoslex:Actor;
+		elmo:applies-to skoslex:actor;
 		elmo:index "19";
 	];
 	elmo:fragment [
@@ -3398,116 +3398,160 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		WHERE {
 			{
 				{
-					GRAPH ?subjectGraph {
-						<@IDSUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@IDSUBJECT@> rdfs:label ?concept_label.
-							<@IDSUBJECT@> ?p ?o.
+					{
+						GRAPH ?subjectGraph {
+							<@IDSUBJECT@> rdf:type ?type.
+							OPTIONAL {
+								<@IDSUBJECT@> rdfs:label ?concept_label.
+								<@IDSUBJECT@> ?p ?o.
+							}
+						}
+						GRAPH ?objectGraph {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+						}
+						GRAPH doc:mastergraph {
+							<@IDSUBJECT@> rdfs:isDefinedBy ?subjectGraph.
+							?o rdfs:isDefinedBy ?objectGraph.
+							?objectGraph dc:isVersionOf doc:mastergraph
 						}
 					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
+					UNION
+					{
+						GRAPH ?altSubjectGraph {
+							?s ?sp <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							OPTIONAL {
+								?s rdfs:label ?slabel.
+							}
+							FILTER NOT EXISTS {
+								?s prov:invalidatedAtTime ?time.
+							}
+						}
+						OPTIONAL {
+							GRAPH <http://data.test.pdok.nl/catalogus/tr/container/dmn> {
+								?s rdfs:label ?slabel.
+							}
+						}
+						GRAPH doc:mastergraph {
+							?s rdfs:isDefinedBy ?altSubjectGraph.
+						}
+						OPTIONAL {
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+							<@IDSUBJECT@> rdf:type ?type.
+						}
 					}
-					GRAPH doc:mastergraph {
-						<@IDSUBJECT@> rdfs:isDefinedBy ?subjectGraph.
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
+					FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
 				}
 				UNION
 				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@IDSUBJECT@>.
-						?s rdf:type ?stype.
+					{
+						GRAPH <@GRAPH@> {
+							<@IDSUBJECT@> rdf:type ?type.
+							OPTIONAL {
+								<@IDSUBJECT@> rdfs:label ?concept_label.
+								<@IDSUBJECT@> ?p ?o.
+							}
+						}
+						GRAPH ?objectGraph {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+						}
+						GRAPH doc:mastergraph {
+							?o rdfs:isDefinedBy ?objectGraph.
+							?objectGraph dc:isVersionOf doc:mastergraph
+						}
+					}
+					UNION
+					{
+						GRAPH ?altSubjectGraph {
+							?s ?sp <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							OPTIONAL {
+								?s rdfs:label ?slabel.
+							}
+							FILTER NOT EXISTS {
+								?s prov:invalidatedAtTime ?time.
+							}
+						}
+						GRAPH doc:mastergraph {
+							?s rdfs:isDefinedBy ?altSubjectGraph.
+						}
 						OPTIONAL {
-							?s rdfs:label ?slabel.
-						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+							<@IDSUBJECT@> rdf:type ?type.
 						}
 					}
-					OPTIONAL {
-						GRAPH <http://data.test.pdok.nl/catalogus/tr/container/dmn> {
-							?s rdfs:label ?slabel.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
-					}
-					OPTIONAL {
-						<@IDSUBJECT@> rdfs:label ?concept_label.
-						<@IDSUBJECT@> rdf:type ?type.
-					}
+					
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
-				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
+				FILTER ( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
-			UNION
+			UNION 
 			{
-				{
-					GRAPH <@GRAPH@> {
-						<@IDSUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@IDSUBJECT@> rdfs:label ?concept_label.
-							<@IDSUBJECT@> ?p ?o.
-						}
-					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-					}
-					GRAPH doc:mastergraph {
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
-				}
-				UNION
-				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@IDSUBJECT@>.
-						?s rdf:type ?stype.
-						OPTIONAL {
-							?s rdfs:label ?slabel.
-						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
-					}
+				GRAPH ?g {
+					<@IDSUBJECT@> rdf:type ?type.
+					?g prov:generatedAtTime ?startTime.
 					OPTIONAL {
 						<@IDSUBJECT@> rdfs:label ?concept_label.
-						<@IDSUBJECT@> rdf:type ?type.
 					}
-				}
-				
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-			}
-			UNION {
-				SERVICE <http://almere.pilod.nl/sparql> {
-					SERVICE <http://data.pdok.nl/sparql> {
-						GRAPH brt:top10nl-metadata {
-							{
-								<@IDSUBJECT@> rdf:type ?type.
-								OPTIONAL {
-									<@IDSUBJECT@> rdfs:label ?concept_label.
-									<@IDSUBJECT@> ?p ?o.
-									?o rdfs:label ?olabel.
-									?o rdf:type ?otype.
-								}
-							}
-							UNION {
-								?s ?sp <@IDSUBJECT@>.
-								?s rdf:type ?stype.
-								OPTIONAL {
-									?s rdfs:label ?slabel.
-								}
-							}
-						}
+					OPTIONAL {
+						<@IDSUBJECT@> ?p ?o.
+						FILTER (
+							?p = skos:semanticRelation
+							|| ?p = thes:broaderGeneric
+							|| ?p = thes:narrowerGeneric
+							|| ?p = thes:broaderPartitive
+							|| ?p = thes:narrowerPartitive
+							|| ?p = skoslex:affects
+							|| ?p = skoslex:refersTo
+							|| ?p = skoslex:object
+							|| ?p = skoslex:actor
+							|| ?p = skos:closeMatch
+							|| ?p = skos:exactMatch
+							|| ?p = skos:relatedMatch
+							|| ?p = skos:broadMatch
+							|| ?p = skos:narrowMatch
+							|| ?p = dc:source
+						)
 					}
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+					}
+					FILTER (
+						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?endTime )
+							|| strdt( ?endTime, xsd:dateTime ) >= "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
 				}
 			}
+			
+			# UNION {
+			#	SERVICE <http://almere.pilod.nl/sparql> {
+			#		SERVICE <http://data.pdok.nl/sparql> {
+			#			GRAPH brt:top10nl-metadata {
+			#				{
+			#					<@IDSUBJECT@> rdf:type ?type.
+			#					OPTIONAL {
+			#						<@IDSUBJECT@> rdfs:label ?concept_label.
+			#						<@IDSUBJECT@> ?p ?o.
+			#						?o rdfs:label ?olabel.
+			#						?o rdf:type ?otype.
+			#					}
+			#				}
+			#				UNION {
+			#					?s ?sp <@IDSUBJECT@>.
+			#					?s rdf:type ?stype.
+			#					OPTIONAL {
+			#						?s rdfs:label ?slabel.
+			#					}
+			#				}
+			#			}
+			#		}
+			#	}
+			# }
 			# UNION {
 			#	SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
 			#		GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
@@ -3719,33 +3763,58 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
-				GRAPH ?graph {
-					<@IDSUBJECT@> rdf:type skos:Concept.
-					?graph prov:generatedAtTime ?concept_label.
-					OPTIONAL {
-						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+				{
+					GRAPH ?graph {
+						<@IDSUBJECT@> rdf:type skos:Concept.
+						?graph prov:generatedAtTime ?concept_label.
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						}
 					}
+					GRAPH doc:mastergraph {
+						<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
+						?graph dc:isVersionOf doc:mastergraph
+					}	
+					FILTER( ?graph != ?actualGraph )
+					FILTER( substr("@GRAPH@",2) = "GRAPH@" )
 				}
-				GRAPH doc:mastergraph {
-					<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
-					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != ?actualGraph )
-				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+				UNION {
+					GRAPH ?graph {
+						<@IDSUBJECT@> rdf:type skos:Concept.
+						?graph prov:generatedAtTime ?concept_label.
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						}
+					}
+					GRAPH doc:mastergraph {
+						?graph dc:isVersionOf doc:mastergraph
+					}	
+					FILTER( ?graph != <@GRAPH@> )
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				FILTER( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
-			UNION {
+			UNION
+			{
 				GRAPH ?graph {
 					<@IDSUBJECT@> rdf:type skos:Concept.
 					?graph prov:generatedAtTime ?concept_label.
+					?graph prov:generatedAtTime ?startTime.
 					OPTIONAL {
 						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
+					FILTER (
+						strdt( ?startTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+						|| (
+							bound( ?actueeltot )
+							&& strdt( ?actueeltot, xsd:dateTime ) < "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
 				}
 				GRAPH doc:mastergraph {
 					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != <@GRAPH@> )
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				FILTER( !contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
 		}
 		ORDER BY DESC(lcase(?concept_label))
