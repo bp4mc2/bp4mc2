@@ -2299,7 +2299,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						}
 					}
 					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?g
+						<@SUBJECT@> rdfs:isDefinedBy ?g.
 					}
 					FILTER (
 						?p = rdfs:comment
@@ -3015,14 +3015,14 @@ stage:TaxLoopingQuery a elmo:query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		
-		SELECT DISTINCT ?Subject ?Subject_label ?Relatie ?Object ?Object_label
+		SELECT DISTINCT ?Subject ?Subject_label ?link ?Object ?Object_label
 		WHERE {
   			{
-                SELECT ?Subject ?Subject_label ?Object ?Object_label ?AltObject
+                SELECT ?Subject ?Subject_label ?link ?Object ?Object_label ?AltObject
                 WHERE {
                     GRAPH ?sg {
                         ?Subject rdf:type skos:Concept.
-                        ?Subject skos:semanticRelation ?Object.
+                        ?Subject ?link ?Object.
                         OPTIONAL {
                             ?Subject rdfs:label ?Subject_label.
                             FILTER( LANG( ?Subject_label ) = "" || LANGMATCHES( LANG( ?Subject_label ), "nl" ) )
@@ -3030,12 +3030,27 @@ stage:TaxLoopingQuery a elmo:query;
                         FILTER NOT EXISTS {
                             ?Subject prov:invalidatedAtTime ?time.
                         }
+						FILTER(
+							?link =  thes:broaderGeneric
+							|| ?link = thes:narrowerGeneric
+							|| ?link = thes:broaderPartitive
+							|| ?link = thes:narrowerPartitive
+							|| ?link = skos:semanticRelation
+							|| ?link = skos:closeMatch
+							|| ?link = skos:exactMatch
+							|| ?link = skos:relatedMatch
+							|| ?link = skos:broadMatch
+							|| ?link = skos:narrowMatch
+							|| ?link = skoslex:actor
+							|| ?link = skoslex:agent
+							|| ?link = skoslex:object
+						)
                     }
                     GRAPH ?og {
                         ?Object rdf:type skos:Concept.
-                    #    OPTIONAL {
-                            ?Object skos:semanticRelation ?AltObject.
-                     #   }
+                        OPTIONAL {
+                            ?Object ?link ?AltObject.
+						}
                         OPTIONAL {
                             ?Object rdfs:label ?Object_label.
                             FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
@@ -3043,6 +3058,21 @@ stage:TaxLoopingQuery a elmo:query;
                         FILTER NOT EXISTS {
                             ?Object prov:invalidatedAtTime ?otime.
                         }
+						FILTER(
+							?link =  thes:broaderGeneric
+							|| ?link = thes:narrowerGeneric
+							|| ?link = thes:broaderPartitive
+							|| ?link = thes:narrowerPartitive
+							|| ?link = skos:semanticRelation
+							|| ?link = skos:closeMatch
+							|| ?link = skos:exactMatch
+							|| ?link = skos:relatedMatch
+							|| ?link = skos:broadMatch
+							|| ?link = skos:narrowMatch
+							|| ?link = skoslex:actor
+							|| ?link = skoslex:agent
+							|| ?link = skoslex:object
+						)
                     }
                     GRAPH doc:mastergraph {
                         ?Subject rdfs:isDefinedBy ?sg.
@@ -3053,7 +3083,7 @@ stage:TaxLoopingQuery a elmo:query;
   			FILTER (												
 				?Subject = ?AltObject
 			)
-  			BIND( "Gerelateerd aan" AS ?Relatie )
+  		#	BIND( "Gerelateerd aan" AS ?Relatie )
 		}
 		ORDER BY ?Subject_label
 	'''
