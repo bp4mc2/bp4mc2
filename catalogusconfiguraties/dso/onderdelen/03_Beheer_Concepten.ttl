@@ -10,6 +10,15 @@
 # CONTAINERS
 #
 
+# Twee soorten containers:
+# POST
+# 	- Voegt één of meerdere nieuwe begrippen toe
+# 	- Geeft een foutmelding als één of meerdere van de geuploade begrippen al bestaan
+# PUT
+# 	- Update bestaande begrippen
+#	- Geeft een foutmelding als één of meerdere van de geuploade begrippen nog niet bestaan
+# 
+
 # Uploadcontainer Excel
 container:excelupload a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
@@ -41,7 +50,7 @@ container:excelupdate a elmo:Container;
     elmo:translator elmo:TableExcelTranslator;
     rdfs:label "Upload een enkel Concept via Excel (.xls)";
     elmo:replaces container:generiek;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+    elmo:query stage:DSOUploadScenePUT;
 .
 # Updatecontainer Turtle
 container:ttlupdate a elmo:Container;
@@ -51,19 +60,73 @@ container:ttlupdate a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
     elmo:replaces container:generiek;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+    elmo:query stage:DSOUploadScenePUT;
 .
 
-# Updatecontainer Omgevingsdocumenten
-container:odupdate a elmo:Container;
+# Container PUT XML Concepten
+container:concepten-put-xml a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
     elmo:contains stage:DSOHeader;
     elmo:contains stage:DSOFooter;
     elmo:representation elmo:UploadRepresentation;
-    rdfs:label "Upload een Omgevingsdocument (.xml)";
+    rdfs:label "Update bestaande concepten (.xml)";
     elmo:replaces container:generiek;
 	elmo:translator elmo:ODTranslator;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+	elmo:assert-not [
+		elmo:assertion: '''
+			{
+				prefix container: <http://localhost:8080/catalogus/dso/container/>
+				prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+				prefix skos: <http://www.w3.org/2004/02/skos/core#>
+				
+				ASK {
+					GRAPH container:concepten-put-xml {
+						?s rdf:type skos:Concept.
+					}
+					FILTER NOT EXISTS {
+						GRAPH doc:mastergraph {
+							?s rdf:type skos:Concept.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST XML Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-xml a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.xml)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assert-not [
+		elmo:assertion: '''
+			{
+				prefix container: <http://localhost:8080/catalogus/dso/container/>
+				prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+				prefix skos: <http://www.w3.org/2004/02/skos/core#>
+				
+				ASK {
+					GRAPH container:concepten-post-xml {
+						?s rdf:type skos:Concept.
+					}
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
 .
 
 
@@ -396,7 +459,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 # - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
 # - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
 
-stage:DSOSpecifiekeUploadScene a elmo:Scene;
+stage:DSOUploadScenePUT a elmo:Scene;
 	rdfs:label "Postquery inladen gegevens";
 	elmo:index "2";
 	elmo:query '''
