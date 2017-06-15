@@ -23,34 +23,6 @@ stage:TaxOverzichtspagina rdf:type elmo:Representation;
 	elmo:contains stage:TaxWelkom;
 .
 
-#
-# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
-#
-
-# Index voor op de alfabetische weergave concepten
-stage:TaxIndexConcepten a elmo:Part;
-	elmo:appearance elmo:IndexAppearance;
-	elmo:data [
-		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
-		xhtml:link "/catalogus/tax/query/overzichtspagina";
-		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
-		elmo:name "term";
-	];
-	elmo:index "00";
-.
-
-# Conceptentabel voor op de alfabetische weergave concepten
-stage:TaxConceptentabel a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:with-parameter "term";
-	elmo:index "03";
-	elmo:fragment [
-		elmo:applies-to "uitleg";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:query stage:TaxConceptenQuery;
-.
-
 # Welkomsttekst
 stage:TaxWelkom a elmo:Part;
 	elmo:appearance elmo:HtmlAppearance;
@@ -69,6 +41,34 @@ stage:TaxWelkom a elmo:Part;
 			<p>Opmerkingen of vragen over de uitleg in dit woordenboek kunt u doorgeven met dit <a href="https://formulieren.kadaster.nl/contact_begrippenlijst" target="_blank">formulier</a>.</p>
 		'''^^rdf:html;
 	]
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Index voor de alfabetische weergave concepten
+stage:TaxIndexConcepten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/catalogus/tax/query/overzichtspagina";
+		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "00";
+.
+
+# Conceptentabel voor de alfabetische weergave concepten
+stage:TaxConceptentabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:with-parameter "term";
+	elmo:index "03";
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:TaxConceptenQuery;
 .
 
 #

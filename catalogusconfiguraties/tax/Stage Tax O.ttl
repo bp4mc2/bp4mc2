@@ -1,4 +1,16 @@
-﻿@prefix stage: <http://pdok-ld-gck.so.kadaster.nl/stage#>.
+﻿#
+#
+#
+#
+#	PREFIXES
+#
+#
+#
+#
+#	Alle gebruikte prefixes binnen de verschillende tax onderdelen.
+
+
+@prefix stage: <http://pdok-ld-gck.so.kadaster.nl/stage#>.
 @prefix updatestage: <http://pdok-ld-gck.so.kadaster.nl/update/>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -81,15 +93,15 @@ stage:TaxMenu a elmo:Part;
 			elmo:index "1";
 			xhtml:link "";
 		];
-		elmo:data [
-			rdfs:label "BEHEER";
-			xhtml:link "/admin";
-			elmo:index: "2";
-		];
+	#	elmo:data [
+	#		rdfs:label "BEHEER";
+	#		xhtml:link "/admin";
+	#		elmo:index: "2";
+	#	];
 	];
 .
 
-# Beheermenu
+# Menubalk Beheermenu
 stage:TaxBeheermenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
 	elmo:data [
@@ -104,7 +116,7 @@ stage:TaxBeheermenu a elmo:Part;
 			xhtml:link "";
 		];
 		elmo:data [
-			rdfs:label "Upload";
+			rdfs:label "Upload";											#Voor het vervangen van de gehele concepten-dataset. 
 			elmo:index "2";
 		#	elmo:data [
 		#		rdfs:label "Upload concepten (Excel)";
@@ -122,13 +134,13 @@ stage:TaxBeheermenu a elmo:Part;
 		#		xhtml:link "/container/datasetupload";
 		#	];
 			elmo:data [
-				rdfs:label "Upload status (RDF of Turtle)";
+				rdfs:label "Upload status (RDF of Turtle)";					#Voor het updaten van de status-graph, deze bevat geen concepten en kan dus niet via 'Upload concepten'.
 				elmo:index "4";
 				xhtml:link "/container/statusupload";
 			];
 		];
 		elmo:data [
-			rdfs:label "Update";
+			rdfs:label "Update";											#Voor het updaten van specifieke concepten. Al bestaande concepten die niet worden aangepast, blijven aanwezig.
 			elmo:index "3";
 		#	elmo:data [
 		#		rdfs:label "Upload een enkel Concept (Excel)";
@@ -142,46 +154,51 @@ stage:TaxBeheermenu a elmo:Part;
 			];
 		];
 		elmo:data [
-			rdfs:label "Rapportages";
+			rdfs:label "Rapportages";										#Koppeling naar alle rapportages
 			elmo:index "4";
 			elmo:data [
-				rdfs:label "Relatiecontrole";
+				rdfs:label "Relatiecontrole";								#triples waar <A skos:SemanticRelation B> wel bestaat, maar de omgekeerde relatie ontbreekt
 				elmo:index "2";
 				xhtml:link "/query/relatiecontrole";
 			];
 			elmo:data [
-				rdfs:label "Missing Links";
+				rdfs:label "Missing Links";									#triples waar <B rdf:type type> geen geldige triple is
 				elmo:index "3";
 				xhtml:link "/query/missinglinks";
 			];
 		#	elmo:data [
-		#		rdfs:label "Homoniemen";
+		#		rdfs:label "Homoniemen";									#begrippen die in meerdere begripskaders voorkomen
 		#		elmo:index "4";
-		#		xhtml:link "/query/homoniemen";
+		#		xhtml:link "/query/homoniemen1";
 		#	];
 		#	elmo:data [
-		#		rdfs:label "Homoniemen2";
+		#		rdfs:label "Homoniemen2";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
 		#		elmo:index "5";
 		#		xhtml:link "/query/homoniemen2";
 		#	];
 			elmo:data [
-				rdfs:label "Statuscontrole";
+				rdfs:label "Statuscontrole";								#alle begrippen en hun status. Hoofdpagina bevat alleen gevalideerde/geverifieerde begrippen
 				elmo:index "6";
 				xhtml:link "/query/statuscontrole";
 			];
 			elmo:data [
-				rdfs:label "Looping";
+				rdfs:label "Looping";										#triples waar zowel <A skos:SemanticRelation B> als <B skos:SemanticRelation A> bestaat, waardoor er een loop ontstaat
 				elmo:index "7";
 				xhtml:link "/query/loopingcontrole";
 			];
 			elmo:data [
-				rdfs:label "Where used";
+				rdfs:label "Where used";									#triples waar geldt <B ?relatie A>, dus alle subjecten gerelateerd aan een object
 				elmo:index "8";
-				xhtml:link "/query/whereused";
+				xhtml:link "/query/whereused?term=";
+			];
+			elmo:data [
+				rdfs:label "Niet Gevalideerde Links";						#triples waarbij een gevalideerd concept gelinkt is aan een niet-gevalideerd object
+				elmo:index "9";
+				xhtml:link "/query/nietgevalideerdelinks";
 			];
 		];
 		elmo:data [
-			rdfs:label "Hulpmiddelen";
+			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
 			elmo:index "5";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
@@ -261,7 +278,7 @@ container:ttlupdate a elmo:Container;
 # SCENES
 #
 
-# Standaardquery voor uploadcontainers
+# Standaardquery voor generieke uploadcontainers
 # Algoritme:
 #
 # - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
@@ -579,6 +596,21 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 	''';
 .
 
+# Standaardquery voor specifieke uploadcontainers
+# Algoritme:
+#
+# - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
+# - Vul mastergraph aan met nieuwe versie
+# - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
+# - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
+# - Update de aanpasdatum van de Catalogus, CatalogRecord en Dataset
+# - Voeg in de nieuwe GRAPH de concepten toe die een andere hash dan de hash in de mastergraph hebben (d.w.z., die gewijzigd zijn)
+# - Voeg voor de gewijzigde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
+# - Verwijder de concepten uit de mastergraph die voorkomen in de nieuwe GRAPH (d.w.z. gewijzigd zijn)
+# - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
+# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
+
+#Specifieke uploadquery
 stage:TaxSpecifiekeUploadScene a elmo:Scene;
 	rdfs:label "Postquery inladen gegevens";
 	elmo:index "2";
@@ -1105,7 +1137,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 #
 
 
-
+#Hoofdpagina Relatiecontrole Rapportage
 stage:TaxRelatiecontrole a elmo:Representation;
 	elmo:url-pattern "/query/relatiecontrole$";
 	elmo:contains stage:TaxHeader;
@@ -1134,7 +1166,7 @@ stage:TaxRelatieControleTabel a elmo:Part;
 	elmo:query stage:TaxRelatiecontroleQuery
 .
 
-
+#query toont alle triples <A skos:semanticRelation B>, waarvan de omgekeerde relatie niet bestaat
 stage:TaxRelatiecontroleQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -1255,7 +1287,7 @@ stage:ClearAllDataScene a elmo:Scene;
 #
 
 
-
+#Hoofdpagina Missing Links Rapportage
 stage:TaxMissingLinks a elmo:Representation;
 	elmo:url-pattern "/query/missinglinks$";
 	elmo:contains stage:TaxHeader;
@@ -1277,38 +1309,43 @@ stage:TaxMissingLinksUitleg a elmo:Part;
 	]
 .
 
-# Weergave van missing links
+# Weergave van Missing Links
 stage:TaxMissingLinksTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
 	elmo:fragment [
-		rdfs:label "Type";
+		rdfs:label "Populatie";					#Graph waarin het subject zit dat de fout veroorzaakt. Praktisch gezien is dit het begrippenkader van het begrip met de fout
+		elmo:applies-to "graph";
+	];
+	elmo:fragment [
+		rdfs:label "Type";						#het type van het subject â€“ vrijwel altijd zal dit 'begrip' zijn
 		elmo:applies-to "klasse";
 	];
 	elmo:fragment [
-		rdfs:label "Status Frame";
+		rdfs:label "Status Frame";				#de status van het subject met de fout
 		elmo:applies-to "status";
 	];
 	elmo:fragment [
-		rdfs:label "Foutieve frame";
+		rdfs:label "Foutieve frame";			#een link naar het foute subject â€“ vrijwel altijd dus een link naar het begrip met de fout 
 		elmo:applies-to "Frame";
 	];
 	elmo:fragment [
-		rdfs:label "Referentie";
+		rdfs:label "Referentie";				#de relatie naar het foute object â€“ dwz "predicate" in <subject â€“ predicate â€“object>
 		elmo:applies-to "link";
 	];
 	elmo:fragment [
-		rdfs:label "Ontbrekende referentie";
+		rdfs:label "Ontbrekende referentie";	#de referentie die ontbreekt, dwz "object" in <subject â€“ predicate â€“ object>
 		elmo:applies-to "FrameRef";
 	];
 	elmo:fragment [
-		rdfs:label "Referentie actueel tot";
+		rdfs:label "Referentie actueel tot";	#de einddatum van een ontbrekende referentie, alleen gevuld als een object een prov:invalidatedAtTime label heeft
 		elmo:applies-to "ActueelTot";
 	];
 	elmo:query stage:TaxMissingLinksQuery
 .
 
-
+#query om lijst op te halen met alle subjecten waarvoor geldt:
+#	alle triples waarbij het object NIET bestaat, dwz <object - rdf:type - type> is geen geldige triple 
 stage:TaxMissingLinksQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -1364,7 +1401,7 @@ stage:TaxMissingLinksQuery a elmo:query;
                         ?Frame prov:invalidatedAtTime ?time.
 					}
 				}
-				FILTER NOT EXISTS {
+				FILTER NOT EXISTS {																#filtert alle triples uit de selectie waar het object een rdf:type heeft 
 					GRAPH ?frameRefGraph {
 						?FrameRef rdf:type ?type .
 						FILTER NOT EXISTS {
@@ -1398,7 +1435,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 #
 
 
-
+#Hoofdpagina Statuscontrole Rapportage
 stage:TaxStatusControle a elmo:Representation;
 	elmo:url-pattern "/query/statuscontrole$";
 	elmo:contains stage:TaxHeader;
@@ -1435,6 +1472,7 @@ stage:TaxStatusControleTabel a elmo:Part;
 	elmo:query stage:TaxStatusControleQuery
 .
 
+#query voor het ophalen van alle geldige subjecten en de bijbehorende actuele status 
 stage:TaxStatusControleQuery a elmo:query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
@@ -1478,7 +1516,7 @@ stage:TaxStatusControleQuery a elmo:query;
 				?concept rdfs:isDefinedBy ?g
 			}
 		}
-		ORDER BY ?status, ?concept_label
+		ORDER BY ?status_label
 	'''
 . 
 #
@@ -1491,7 +1529,7 @@ stage:TaxStatusControleQuery a elmo:query;
 # CONTAINER
 #
 
-#Upload container status
+#Upload statuscontainer 
 container:statusupload a elmo:Container;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
@@ -2261,7 +2299,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						}
 					}
 					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?g
+						<@SUBJECT@> rdfs:isDefinedBy ?g.
 					}
 					FILTER (
 						?p = rdfs:comment
@@ -2378,7 +2416,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 	'''
 .
 
-# Query voor WeergaveTabel
+# Query voor Gerelateerde Concepten WeergaveTabel
 stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -2760,15 +2798,15 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 #
 #
 #
-# BEHEER HOMONIEMEN
+# BEHEER HOMONIEMEN -1
 #
 #
 #
 
 
-
+#Hoofdpagina Homoniemen -1 Rapportage
 stage:TaxHomoniemen a elmo:Representation;
-	elmo:url-pattern "/query/homoniemen$";
+	elmo:url-pattern "/query/homoniemen1$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -2789,9 +2827,22 @@ stage:TaxHomoniemenUitleg a elmo:Part;
 stage:TaxHomoniemenTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
-	elmo:query stage:TaxHomoniemenQuery
+	elmo:query stage:TaxHomoniemenQuery;
+	elmo:fragment [
+		rdfs:label "Populatie";		
+		elmo:applies-to "graph";
+	];
+		elmo:fragment [
+		rdfs:label "Begrip";		
+		elmo:applies-to "begrip";
+	];
+		elmo:fragment [
+		rdfs:label "Komt ook voor in";		
+		elmo:applies-to "graph2";
+	];
 .
 
+#query geeft aan of een begrip in kader 1 ook voorkomt als exact hetzelfde begrip in kader 2
 stage:TaxHomoniemenQuery a elmo:query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
@@ -2836,13 +2887,13 @@ stage:TaxHomoniemenQuery a elmo:query;
 #
 #
 #
-# BEHEER HOMONIEMEN 2
+# BEHEER HOMONIEMEN - 2
 #
 #
 #
 
 
-
+#Hoofdpagina Homoniemen - 2 Rapportage
 stage:TaxHomoniemen2 a elmo:Representation;
 	elmo:url-pattern "/query/homoniemen2$";
 	elmo:contains stage:TaxHeader;
@@ -2861,11 +2912,47 @@ stage:TaxHomoniemen2Uitleg a elmo:Part;
 	]
 .
 
-# Weergave van homoniemen2
+# Weergave van homoniemen - 2
 stage:TaxHomoniemen2Tabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
-	elmo:query stage:TaxHomoniemen2Query
+	elmo:query stage:TaxHomoniemen2Query;
+	elmo:fragment [
+		rdfs:label "Homoniem";						#de term die als homoniem voorkomt
+		elmo:applies-to "homoniem";
+	];
+	elmo:fragment [
+		rdfs:label "Populatie";						#het begrippenkader van het begrip
+		elmo:applies-to "graph";
+	];
+	elmo:fragment [
+		rdfs:label "Type";							#of het gaat om de begripsterm zelf, of een synoniem
+		elmo:applies-to "pt1";
+	];
+	elmo:fragment [
+		rdfs:label "Begrip";						#de URI van het begrip waar ook nog een homoniem van bestaat
+		elmo:applies-to "begrip";
+	];
+	elmo:fragment [
+		rdfs:label "Status";						#de status van dit begrip
+		elmo:applies-to "status1";
+	];
+	elmo:fragment [
+		rdfs:label "Komt ook voor in";				#het begrippenkader van het 'andere' begrip (homoniem)
+		elmo:applies-to "graph2";
+	];
+	elmo:fragment [
+		rdfs:label "Als";							#of het gaat om de term dan wel het synoniem van dat 'andere' begrip
+		elmo:applies-to "pt2";
+	];
+	elmo:fragment [
+		rdfs:label "Van begrip";					#de URI van het 'andere' begrip
+		elmo:applies-to "begrip2";
+	];
+	elmo:fragment [
+		rdfs:label "Met status";					#de status van het 'andere' begrip
+		elmo:applies-to "status2";
+	];
 .
 
 stage:TaxHomoniemen2Query a elmo:query;
@@ -2875,13 +2962,13 @@ stage:TaxHomoniemen2Query a elmo:query;
 #
 #
 #
-# BEHEER Looping - LOOPING
+# BEHEER LOOPING
 #
 #
 #
 
 
-
+#Hoofdpagina Looping Rapportage
 stage:TaxLoopingcontrole a elmo:Representation;
 	elmo:url-pattern "/query/loopingcontrole$";
 	elmo:contains stage:TaxHeader;
@@ -2903,14 +2990,14 @@ stage:TaxLoopingUitleg a elmo:Part;
 	]
 .
 
-# Weergave van gerelateerde (inkomende) concepten
+# Weergave van gerelateerde concepten (looping)
 stage:TaxLoopingTabel a elmo:Part;
 	elmo:index "2";
 	elmo:appearance elmo:TableAppearance;
 	elmo:query stage:TaxLoopingQuery
 .
 
-
+#query toont alle triples <A skos:semanticRelation B>, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
 stage:TaxLoopingQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -2928,14 +3015,14 @@ stage:TaxLoopingQuery a elmo:query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		
-		SELECT DISTINCT ?Subject ?Subject_label ?Relatie ?Object ?Object_label
+		SELECT DISTINCT ?Subject ?Subject_label ?link ?Object ?Object_label
 		WHERE {
   			{
-                SELECT ?Subject ?Subject_label ?Object ?Object_label ?AltObject
+                SELECT ?Subject ?Subject_label ?link ?Object ?Object_label ?AltObject
                 WHERE {
                     GRAPH ?sg {
                         ?Subject rdf:type skos:Concept.
-                        ?Subject skos:semanticRelation ?Object.
+                        ?Subject ?link ?Object.
                         OPTIONAL {
                             ?Subject rdfs:label ?Subject_label.
                             FILTER( LANG( ?Subject_label ) = "" || LANGMATCHES( LANG( ?Subject_label ), "nl" ) )
@@ -2943,12 +3030,27 @@ stage:TaxLoopingQuery a elmo:query;
                         FILTER NOT EXISTS {
                             ?Subject prov:invalidatedAtTime ?time.
                         }
+						FILTER(
+							?link =  thes:broaderGeneric
+							|| ?link = thes:narrowerGeneric
+							|| ?link = thes:broaderPartitive
+							|| ?link = thes:narrowerPartitive
+							|| ?link = skos:semanticRelation
+							|| ?link = skos:closeMatch
+							|| ?link = skos:exactMatch
+							|| ?link = skos:relatedMatch
+							|| ?link = skos:broadMatch
+							|| ?link = skos:narrowMatch
+							|| ?link = skoslex:actor
+							|| ?link = skoslex:agent
+							|| ?link = skoslex:object
+						)
                     }
                     GRAPH ?og {
                         ?Object rdf:type skos:Concept.
-                    #    OPTIONAL {
-                            ?Object skos:semanticRelation ?AltObject.
-                     #   }
+                        OPTIONAL {
+                            ?Object ?link ?AltObject.
+						}
                         OPTIONAL {
                             ?Object rdfs:label ?Object_label.
                             FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
@@ -2956,6 +3058,21 @@ stage:TaxLoopingQuery a elmo:query;
                         FILTER NOT EXISTS {
                             ?Object prov:invalidatedAtTime ?otime.
                         }
+						FILTER(
+							?link =  thes:broaderGeneric
+							|| ?link = thes:narrowerGeneric
+							|| ?link = thes:broaderPartitive
+							|| ?link = thes:narrowerPartitive
+							|| ?link = skos:semanticRelation
+							|| ?link = skos:closeMatch
+							|| ?link = skos:exactMatch
+							|| ?link = skos:relatedMatch
+							|| ?link = skos:broadMatch
+							|| ?link = skos:narrowMatch
+							|| ?link = skoslex:actor
+							|| ?link = skoslex:agent
+							|| ?link = skoslex:object
+						)
                     }
                     GRAPH doc:mastergraph {
                         ?Subject rdfs:isDefinedBy ?sg.
@@ -2963,10 +3080,10 @@ stage:TaxLoopingQuery a elmo:query;
                     }
                 }
   			}
-  			FILTER (
+  			FILTER (												
 				?Subject = ?AltObject
 			)
-  			BIND( "Gerelateerd aan" AS ?Relatie )
+  		#	BIND( "Gerelateerd aan" AS ?Relatie )
 		}
 		ORDER BY ?Subject_label
 	'''
@@ -3336,31 +3453,35 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 #
 #
 #
-# OVERZICHTSPAGINA
+# BEHEER WHERE USED 
 #
 #
 #
 
 
 
-#
-# PAGINA'S (REPRESENTATIONS)
-#
-
-# Overzichtspagina concepten
+# Hoofdpagina Where Used Rapportage
 stage:TaxWhereUsedPagina rdf:type elmo:Representation;
 	elmo:url-pattern "/query/whereused(|/|\\..+)$";
 	elmo:contains stage:TaxWhereUsedTabel;
 	elmo:contains stage:TaxWhereUsedIndex;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxWhereUsedUitleg;
 .
 
-#
-# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
-#
+stage:TaxWhereUsedUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:data [
+		rdfs:label "Where Used";
+		elmo:html '''
+			<p>De lijst bevat alle concepten en de relaties die andere subjecten met dit concept hebben.</p>
+		''';
+	]
+.
 
-# Index voor op de alfabetische weergave concepten
+# Index voor op de alfabetische weergave 
 stage:TaxWhereUsedIndex a elmo:Part;
 	elmo:appearance elmo:IndexAppearance;
 	elmo:data [
@@ -3369,18 +3490,14 @@ stage:TaxWhereUsedIndex a elmo:Part;
 		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
 		elmo:name "term";
 	];
-	elmo:index "00";
+	elmo:index "2";
 .
 
-# Conceptentabel voor op de alfabetische weergave concepten
+# Where Used-tabel voor op de alfabetische weergave 
 stage:TaxWhereUsedTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:with-parameter "term";
-	elmo:index "03";
-	elmo:fragment [
-		elmo:applies-to "uitleg";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
+	elmo:index "3";
 	elmo:query stage:TaxWhereUsedQuery;
 .
 
@@ -3388,29 +3505,28 @@ stage:TaxWhereUsedTabel a elmo:Part;
 # QUERY'S
 #
 
-# Query voor tonen alle concepten
+# Query voor tonen alle triples <subject - predicate - object> van alle objecten
 stage:TaxWhereUsedQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
-#		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-#		prefix container: 	<http://pdok-ld-gck.so.kadaster.nl/container/>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
 		prefix doc: 		<http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
-#		prefix dataset: 	<http://pdok-ld-gck.so.kadaster.nl/id/dataset/>
-#		prefix concept: 	<http://pdok-ld-gck.so.kadaster.nl/id/concept/>
+		prefix concept: 	<http://pdok-ld-gck.so.kadaster.nl/id/concept/>
 		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
 		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix thes: 		<http://purl.org/iso25964/skos-thes#>
+		prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
+		prefix container: 	<http://pdok-ld-gck.so.kadaster.nl/container/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?link ?subject ?subject_label
 		WHERE {
 			GRAPH ?g {
 				{
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
-					OPTIONAL {
-				#		?concept skos:definition ?uitleg
-						?concept rdfs:comment ?uitleg
-					}
+					?subject ?link ?concept.
+					?subject rdfs:label ?subject_label.
 				}
 				UNION
 				{
@@ -3419,12 +3535,26 @@ stage:TaxWhereUsedQuery a elmo:Query;
 					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-				#		?concept skos:definition ?definition.
-						?concept rdfs:comment ?definition.
-						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
+						?subject ?link ?concept.
+						?subject rdfs:label ?subject_label.
 					}
 				}
 				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+				FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -3433,6 +3563,7 @@ stage:TaxWhereUsedQuery a elmo:Query;
 					?status = kdstat:Geverifieerd
 				)
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
+				FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g
@@ -3440,8 +3571,153 @@ stage:TaxWhereUsedQuery a elmo:Query;
 		}
 		ORDER BY str(lcase(?concept_label))
 	'''
+. 
+#
+#
+#
+# BEHEER NIET-GEVALIDEERDE LINKS
+#
+#
+#
+
+
+# Hoofdpagina Niet-gevalideerde Rapportage
+stage:TaxNietGevalideerdeLinks a elmo:Representation;
+	elmo:url-pattern "/query/nietgevalideerdelinks$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxNietGevalideerdeLinksUitleg;
+	elmo:contains stage:TaxNietGevalideerdeLinksTabel;
 .
- 
+
+stage:TaxNietGevalideerdeLinksUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Niet-gevalideerde Links";
+		elmo:html '''
+			<p>De lijst bestaat uit alle objecten waarvoor geldt dat een frame (meestal een begrip) een niet-gevalideerde referentie bevat.</p>
+		''';
+	]
+.
+
+# Weergave van NietGevalideerde links
+stage:TaxNietGevalideerdeLinksTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:fragment [
+		rdfs:label "Type";									#het type van het object â€“ vrijwel altijd zal dit 'concept' zijn
+		elmo:applies-to "klasse";
+	];
+	elmo:fragment [
+		rdfs:label "Status Frame";							#de status van het object met de foute verwijzing
+		elmo:applies-to "status";
+	];
+	elmo:fragment [
+		rdfs:label "Foutieve frame";						#een link naar het object met de foute verwijzing 
+		elmo:applies-to "Frame";
+	];
+	elmo:fragment [
+		rdfs:label "Referentie";							#de relatie van het object naar de foute verwijzing â€“ dwz "predicate" in <subject â€“ predicate â€“ object>
+		elmo:applies-to "link";
+	];
+	elmo:fragment [
+		rdfs:label "Niet-gevalideerde referentie";			#de niet-gevalideerde referentie, dwz 'object' in <subject â€“ predicate â€“ object> zonder gevalideerde/geverifieerde status
+		elmo:applies-to "FrameRef";
+	];
+	elmo:fragment [
+		rdfs:label "Status referentie";						#de status van de referentie 
+		elmo:applies-to "ref_status";
+	];
+	elmo:query stage:TaxNietGevalideerdeLinksQuery
+.
+
+#query om lijst op te halen met alle subjecten waarvoor geldt:
+#	alle triples waarbij het object NIET gevalideerd is 
+stage:TaxNietGevalideerdeLinksQuery a elmo:query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
+		
+		SELECT 	#?graph ?graph_label
+				?klasse
+				?status ?status_label
+				?Frame ?Frame_label
+				?link ?link_label
+				?FrameRef ?FrameRef_label
+				?FR_status ?FR_status_label
+		WHERE {
+			{
+				GRAPH ?mg		{
+					?Frame rdf:type ?klasse.
+					?Frame ?link ?FrameRef.
+					?Frame kddef:status ?status.
+					?FrameRef kddef:status ?FR_status.
+					FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
+					OPTIONAL {
+						?Frame rdfs:label ?Frame_label.
+						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
+					}
+				#	OPTIONAL {
+				#		?graph rdfs:label ?graph_label.
+				#		FILTER (lang(?graph_label)="" || lang(?graph_label)="@LANG@")
+				#	}
+					FILTER NOT EXISTS {
+                        ?Frame prov:invalidatedAtTime ?time.
+					}
+					OPTIONAL {
+						?FrameRef rdfs:label ?FrameRef_label.
+						FILTER (lang(?FrameRef_label)="" || lang(?FrameRef_label)="nl")
+					}
+				}
+					FILTER (
+						?FR_status = kdstat:Afgekeurd 
+						|| ?FR_status = kdstat:Niet_beoordeeld
+						|| ?FR_status = kdstat:Ter_afkeuring
+						|| ?FR_status = kdstat:Ter_validatie
+					)
+					GRAPH doc:mastergraph {
+						?FrameRef rdfs:isDefinedBy ?frameRefGraph.
+					}
+				}
+				OPTIONAL {
+					GRAPH container:statusupload {
+						?status rdfs:label ?status_label.
+						?FR_status rdfs:label ?FR_status_label.
+						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+						FILTER (lang(?FR_status_label)="" || lang(?FR_status_label)="nl")
+					}
+				}
+				GRAPH doc:mastergraph {
+					?Frame rdfs:isDefinedBy ?mg.
+				}
+			}
+		ORDER BY str(lcase(?Frame_label))
+	'''
+. 
 #
 #
 #
@@ -3467,34 +3743,6 @@ stage:TaxOverzichtspagina rdf:type elmo:Representation;
 	elmo:contains stage:TaxWelkom;
 .
 
-#
-# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
-#
-
-# Index voor op de alfabetische weergave concepten
-stage:TaxIndexConcepten a elmo:Part;
-	elmo:appearance elmo:IndexAppearance;
-	elmo:data [
-		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
-		xhtml:link "/query/overzichtspagina";
-		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
-		elmo:name "term";
-	];
-	elmo:index "00";
-.
-
-# Conceptentabel voor op de alfabetische weergave concepten
-stage:TaxConceptentabel a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:with-parameter "term";
-	elmo:index "03";
-	elmo:fragment [
-		elmo:applies-to "uitleg";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:query stage:TaxConceptenQuery;
-.
-
 # Welkomsttekst
 stage:TaxWelkom a elmo:Part;
 	elmo:appearance elmo:HtmlAppearance;
@@ -3513,6 +3761,34 @@ stage:TaxWelkom a elmo:Part;
 			<p>Opmerkingen of vragen over de uitleg in dit woordenboek kunt u doorgeven met dit <a href="https://formulieren.kadaster.nl/contact_begrippenlijst" target="_blank">formulier</a>.</p>
 		'''^^rdf:html;
 	]
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Index voor de alfabetische weergave concepten
+stage:TaxIndexConcepten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/query/overzichtspagina";
+		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "00";
+.
+
+# Conceptentabel voor de alfabetische weergave concepten
+stage:TaxConceptentabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:with-parameter "term";
+	elmo:index "03";
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:TaxConceptenQuery;
 .
 
 #

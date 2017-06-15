@@ -49,15 +49,15 @@ stage:TaxMenu a elmo:Part;
 			elmo:index "1";
 			xhtml:link "/catalogus/tax";
 		];
-		elmo:data [
-			rdfs:label "BEHEER";
-			xhtml:link "/catalogus/tax/admin";
-			elmo:index: "2";
-		];
+	#	elmo:data [
+	#		rdfs:label "BEHEER";
+	#		xhtml:link "/catalogus/tax/admin";
+	#		elmo:index: "2";
+	#	];
 	];
 .
 
-# Beheermenu
+# Menubalk Beheermenu
 stage:TaxBeheermenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
 	elmo:data [
@@ -72,7 +72,7 @@ stage:TaxBeheermenu a elmo:Part;
 			xhtml:link "/catalogus/tax";
 		];
 		elmo:data [
-			rdfs:label "Upload";
+			rdfs:label "Upload";											#Voor het vervangen van de gehele concepten-dataset. 
 			elmo:index "2";
 		#	elmo:data [
 		#		rdfs:label "Upload concepten (Excel)";
@@ -90,13 +90,13 @@ stage:TaxBeheermenu a elmo:Part;
 		#		xhtml:link "/catalogus/tax/container/datasetupload";
 		#	];
 			elmo:data [
-				rdfs:label "Upload status (RDF of Turtle)";
+				rdfs:label "Upload status (RDF of Turtle)";					#Voor het updaten van de status-graph, deze bevat geen concepten en kan dus niet via 'Upload concepten'.
 				elmo:index "4";
 				xhtml:link "/catalogus/tax/container/statusupload";
 			];
 		];
 		elmo:data [
-			rdfs:label "Update";
+			rdfs:label "Update";											#Voor het updaten van specifieke concepten. Al bestaande concepten die niet worden aangepast, blijven aanwezig.
 			elmo:index "3";
 		#	elmo:data [
 		#		rdfs:label "Upload een enkel Concept (Excel)";
@@ -110,46 +110,51 @@ stage:TaxBeheermenu a elmo:Part;
 			];
 		];
 		elmo:data [
-			rdfs:label "Rapportages";
+			rdfs:label "Rapportages";										#Koppeling naar alle rapportages
 			elmo:index "4";
 			elmo:data [
-				rdfs:label "Relatiecontrole";
+				rdfs:label "Relatiecontrole";								#triples waar <A skos:SemanticRelation B> wel bestaat, maar de omgekeerde relatie ontbreekt
 				elmo:index "2";
 				xhtml:link "/catalogus/tax/query/relatiecontrole";
 			];
 			elmo:data [
-				rdfs:label "Missing Links";
+				rdfs:label "Missing Links";									#triples waar <B rdf:type type> geen geldige triple is
 				elmo:index "3";
 				xhtml:link "/catalogus/tax/query/missinglinks";
 			];
 		#	elmo:data [
-		#		rdfs:label "Homoniemen";
+		#		rdfs:label "Homoniemen";									#begrippen die in meerdere begripskaders voorkomen
 		#		elmo:index "4";
-		#		xhtml:link "/catalogus/tax/query/homoniemen";
+		#		xhtml:link "/catalogus/tax/query/homoniemen1";
 		#	];
 		#	elmo:data [
-		#		rdfs:label "Homoniemen2";
+		#		rdfs:label "Homoniemen2";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
 		#		elmo:index "5";
 		#		xhtml:link "/catalogus/tax/query/homoniemen2";
 		#	];
 			elmo:data [
-				rdfs:label "Statuscontrole";
+				rdfs:label "Statuscontrole";								#alle begrippen en hun status. Hoofdpagina bevat alleen gevalideerde/geverifieerde begrippen
 				elmo:index "6";
 				xhtml:link "/catalogus/tax/query/statuscontrole";
 			];
 			elmo:data [
-				rdfs:label "Looping";
+				rdfs:label "Looping";										#triples waar zowel <A skos:SemanticRelation B> als <B skos:SemanticRelation A> bestaat, waardoor er een loop ontstaat
 				elmo:index "7";
 				xhtml:link "/catalogus/tax/query/loopingcontrole";
 			];
 			elmo:data [
-				rdfs:label "Where used";
+				rdfs:label "Where used";									#triples waar geldt <B ?relatie A>, dus alle subjecten gerelateerd aan een object
 				elmo:index "8";
-				xhtml:link "/catalogus/tax/query/whereused";
+				xhtml:link "/catalogus/tax/query/whereused?term=";
+			];
+			elmo:data [
+				rdfs:label "Niet Gevalideerde Links";						#triples waarbij een gevalideerd concept gelinkt is aan een niet-gevalideerd object
+				elmo:index "9";
+				xhtml:link "/catalogus/tax/query/nietgevalideerdelinks";
 			];
 		];
 		elmo:data [
-			rdfs:label "Hulpmiddelen";
+			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
 			elmo:index "5";
 			elmo:data [
 				rdfs:label "Verwijder alle data";

@@ -57,7 +57,7 @@ container:ttlupdate a elmo:Container;
 # SCENES
 #
 
-# Standaardquery voor uploadcontainers
+# Standaardquery voor generieke uploadcontainers
 # Algoritme:
 #
 # - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
@@ -375,6 +375,21 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 	''';
 .
 
+# Standaardquery voor specifieke uploadcontainers
+# Algoritme:
+#
+# - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
+# - Vul mastergraph aan met nieuwe versie
+# - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
+# - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
+# - Update de aanpasdatum van de Catalogus, CatalogRecord en Dataset
+# - Voeg in de nieuwe GRAPH de concepten toe die een andere hash dan de hash in de mastergraph hebben (d.w.z., die gewijzigd zijn)
+# - Voeg voor de gewijzigde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
+# - Verwijder de concepten uit de mastergraph die voorkomen in de nieuwe GRAPH (d.w.z. gewijzigd zijn)
+# - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
+# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
+
+#Specifieke uploadquery
 stage:TaxSpecifiekeUploadScene a elmo:Scene;
 	rdfs:label "Postquery inladen gegevens";
 	elmo:index "2";
