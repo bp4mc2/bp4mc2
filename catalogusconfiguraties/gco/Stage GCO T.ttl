@@ -526,6 +526,7 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "1"; rdfs:label "Vocabulary"; html:link "query/model"];
 			elmo:data [ elmo:index "2"; rdfs:label "Model"; html:link "query/modelview"];
 			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/modelyed.yed"];
+			elmo:data [ elmo:index "4"; rdfs:label "SKOS-Lex onderdeel"; html:link "query/skos-lex"];
 		];
 		elmo:data [
 			elmo:index "3";
@@ -1196,6 +1197,30 @@ stage:Shape_model a elmo:Representation;
 		}
 	'''
 . 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+
+stage:skos-lex-vocab	a	elmo:Representation;
+	elmo:url-pattern	"/query/skos-lex(\\.(xml|ttl|json|yed))?$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query '''
+		construct {
+			?s?p?o.
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/skos-lex> {
+				?s?p?o
+			}
+		}
+	''';
+.
+ 
 @prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
@@ -1350,7 +1375,7 @@ stage:sync_scene4 a elmo:Scene;
 	elmo:index "4";
 	rdfs:label "bp4mc2.org skoslex vocabulaire ophalen";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
+		insert into <http://bp4mc2.org/id/dataset/skos-lex> {
 			?s?p?o
 		}
 		where {
