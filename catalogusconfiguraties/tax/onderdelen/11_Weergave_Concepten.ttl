@@ -261,21 +261,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						|| ?p = skos:scopeNote
 						|| ?p = dct:source
 						|| ?p = skos:comment
-						|| ?p = skoslex:actor
-						|| ?p = skoslex:agent
-						|| ?p = skoslex:object
 						|| ?p = skos:member
-						|| ?p = thes:broaderGeneric
-						|| ?p = thes:narrowerGeneric
-						|| ?p = thes:broaderPartitive
-						|| ?p = thes:narrowerPartitive
-						|| ?p = skos:semanticRelation
-						|| ?p = skos:closeMatch
-						|| ?p = skos:exactMatch
-						|| ?p = skos:relatedMatch
-						|| ?p = skos:broadMatch
-						|| ?p = skos:narrowMatch
-						|| ?p = skos:altLabel
 					)
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
@@ -295,23 +281,33 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:scopeNote
 					|| ?p = dct:source
 					|| ?p = skos:comment
-					|| ?p = skoslex:actor
-					|| ?p = skoslex:agent
-					|| ?p = skoslex:object
 					|| ?p = skos:member
-					|| ?p = thes:broaderGeneric
-					|| ?p = thes:narrowerGeneric
-					|| ?p = thes:broaderPartitive
-					|| ?p = thes:narrowerPartitive
-					|| ?p = skos:semanticRelation
-					|| ?p = skos:closeMatch
-					|| ?p = skos:exactMatch
-					|| ?p = skos:relatedMatch
-					|| ?p = skos:broadMatch
-					|| ?p = skos:narrowMatch
-					|| ?p = skos:altLabel
 				)
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				UNION 
+				{
+					GRAPH ?objectgraph {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type skos:Concept.
+						?o rdf:type ?type .
+					}
+					FILTER (
+						?p = skoslex:actor
+						|| ?p = skoslex:agent
+						|| ?p = skoslex:object
+						|| ?p = thes:broaderGeneric
+						|| ?p = thes:narrowerGeneric
+						|| ?p = thes:broaderPartitive
+						|| ?p = thes:narrowerPartitive
+						|| ?p = skos:semanticRelation
+						|| ?p = skos:closeMatch
+						|| ?p = skos:exactMatch
+						|| ?p = skos:relatedMatch
+						|| ?p = skos:broadMatch
+						|| ?p = skos:narrowMatch
+						|| ?p = skos:altLabel
+					)
 				}
 				OPTIONAL {
 					?o rdfs:label ?olabel.

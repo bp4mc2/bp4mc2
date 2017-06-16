@@ -1338,7 +1338,7 @@ stage:TaxMissingLinksTabel a elmo:Part;
 		elmo:applies-to "FrameRef";
 	];
 	elmo:fragment [
-		rdfs:label "Referentie actueel tot";	#de einddatum van een ontbrekende referentie, alleen gevuld als een object een prov:invalidatedAtTime label heeft
+		rdfs:label "Reden ontbreken";	#de einddatum van een ontbrekende referentie, alleen gevuld als een object een prov:invalidatedAtTime label heeft
 		elmo:applies-to "ActueelTot";
 	];
 	elmo:query stage:TaxMissingLinksQuery
@@ -1372,8 +1372,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 					?Frame ?link ?FrameRef.
 					?Frame kddef:status ?status.
 					OPTIONAL {
-						?FrameRef prov:invalidatedAtTime ?ActueelTot.
+						?FrameRef prov:invalidatedAtTime ?FrameRefInvalidated.
 					}
+					
 					FILTER(
 						?link =  thes:broaderGeneric
 						|| ?link = thes:narrowerGeneric
@@ -1422,6 +1423,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 					?Frame rdfs:isDefinedBy ?mg.
 				}
 			}
+			BIND( IF (bound( ?FrameRefInvalidated ), 'beëindigd', 'niet gedefinieerd') AS ?ActueelTot)			#als begrip beëindigd is, label kolom
 		}
 		ORDER BY str(lcase(?Frame_label))
 	'''
@@ -2307,21 +2309,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						|| ?p = skos:scopeNote
 						|| ?p = dct:source
 						|| ?p = skos:comment
-						|| ?p = skoslex:actor
-						|| ?p = skoslex:agent
-						|| ?p = skoslex:object
 						|| ?p = skos:member
-						|| ?p = thes:broaderGeneric
-						|| ?p = thes:narrowerGeneric
-						|| ?p = thes:broaderPartitive
-						|| ?p = thes:narrowerPartitive
-						|| ?p = skos:semanticRelation
-						|| ?p = skos:closeMatch
-						|| ?p = skos:exactMatch
-						|| ?p = skos:relatedMatch
-						|| ?p = skos:broadMatch
-						|| ?p = skos:narrowMatch
-						|| ?p = skos:altLabel
 					)
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
@@ -2341,23 +2329,33 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:scopeNote
 					|| ?p = dct:source
 					|| ?p = skos:comment
-					|| ?p = skoslex:actor
-					|| ?p = skoslex:agent
-					|| ?p = skoslex:object
 					|| ?p = skos:member
-					|| ?p = thes:broaderGeneric
-					|| ?p = thes:narrowerGeneric
-					|| ?p = thes:broaderPartitive
-					|| ?p = thes:narrowerPartitive
-					|| ?p = skos:semanticRelation
-					|| ?p = skos:closeMatch
-					|| ?p = skos:exactMatch
-					|| ?p = skos:relatedMatch
-					|| ?p = skos:broadMatch
-					|| ?p = skos:narrowMatch
-					|| ?p = skos:altLabel
 				)
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				UNION 
+				{
+					GRAPH ?objectgraph {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type skos:Concept.
+						?o rdf:type ?type .
+					}
+					FILTER (
+						?p = skoslex:actor
+						|| ?p = skoslex:agent
+						|| ?p = skoslex:object
+						|| ?p = thes:broaderGeneric
+						|| ?p = thes:narrowerGeneric
+						|| ?p = thes:broaderPartitive
+						|| ?p = thes:narrowerPartitive
+						|| ?p = skos:semanticRelation
+						|| ?p = skos:closeMatch
+						|| ?p = skos:exactMatch
+						|| ?p = skos:relatedMatch
+						|| ?p = skos:broadMatch
+						|| ?p = skos:narrowMatch
+						|| ?p = skos:altLabel
+					)
 				}
 				OPTIONAL {
 					?o rdfs:label ?olabel.

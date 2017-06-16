@@ -58,7 +58,7 @@ stage:TaxMissingLinksTabel a elmo:Part;
 		elmo:applies-to "FrameRef";
 	];
 	elmo:fragment [
-		rdfs:label "Referentie actueel tot";	#de einddatum van een ontbrekende referentie, alleen gevuld als een object een prov:invalidatedAtTime label heeft
+		rdfs:label "Reden ontbreken";	#de einddatum van een ontbrekende referentie, alleen gevuld als een object een prov:invalidatedAtTime label heeft
 		elmo:applies-to "ActueelTot";
 	];
 	elmo:query stage:TaxMissingLinksQuery
@@ -92,8 +92,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 					?Frame ?link ?FrameRef.
 					?Frame kddef:status ?status.
 					OPTIONAL {
-						?FrameRef prov:invalidatedAtTime ?ActueelTot.
+						?FrameRef prov:invalidatedAtTime ?FrameRefInvalidated.
 					}
+					
 					FILTER(
 						?link =  thes:broaderGeneric
 						|| ?link = thes:narrowerGeneric
@@ -142,6 +143,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 					?Frame rdfs:isDefinedBy ?mg.
 				}
 			}
+			BIND( IF (bound( ?FrameRefInvalidated ), 'beëindigd', 'niet gedefinieerd') AS ?ActueelTot)			#als begrip beëindigd is, label kolom
 		}
 		ORDER BY str(lcase(?Frame_label))
 	'''
