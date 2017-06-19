@@ -1,0 +1,119 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix concept:	<http://localhost:8080/catalogus/tax/id/begrip/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>.
+@prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>.
+@prefix collectie: <http://localhost:8080/catalogus/tax/id/collectie/>.
+
+concept:giraffe rdf:type skos:Concept .
+concept:walvis rdf:type skos:Concept .
+concept:vos rdf:type skos:Concept .
+concept:beer rdf:type skos:Concept .
+concept:hond rdf:type skos:Concept .
+concept:rendier rdf:type skos:Concept .
+concept:olifant rdf:type skos:Concept .
+concept:dier rdf:type skos:Concept . 
+concept:puppy rdf:type skos:Concept .
+concept:dierenrijk rdf:type skos:Concept .
+concept:poten rdf:type skos:Concept .
+concept:kop rdf:type skos:Concept .
+concept:lijf rdf:type skos:Concept .
+concept:staart rdf:type skos:Concept .
+concept:huisdier rdf:type skos:Concept .
+concept:hert rdf:type skos:Concept .
+concept:kerst rdf:type skos:Concept .
+concept:giraffe rdfs:label "girafgekeurd"@nl .
+concept:giraffe rdfs:label "giraffe"@en .
+concept:walvis rdfs:label "walvis - ter afkeuring"@nl .
+concept:walvis rdfs:label "whale"@en .
+concept:vos rdfs:label "vos - ter validatie"@nl .
+concept:vos rdfs:label "fox"@en .
+concept:beer rdfs:label "beer - niet beoordeeld"@nl .
+concept:beer rdfs:label "bear"@en .
+concept:hond rdfs:label "hond"@nl .
+concept:hond rdfs:label "dog"@en .
+concept:rendier rdfs:label "rendier" .
+concept:rendier rdfs:label "reindeer"@en .
+concept:olifant rdfs:label "olifant"@nl .
+concept:dier rdfs:label "dier"@nl .
+concept:puppy rdfs:label "puppy"@nl .
+concept:dierenrijk rdfs:label "dierenrijk" .
+concept:poten rdfs:label "poten"@nl .
+concept:kop rdfs:label "kop"@nl .
+concept:lijf rdfs:label "lijf"@nl .
+concept:staart rdfs:label "staart"@nl .
+concept:huisdier rdfs:label "huisdier" .
+concept:hert rdfs:label "hert"@nl .
+concept:kerst rdfs:label "kerst"@nl .
+concept:giraffe kddef:status kdstat:Afgekeurd .
+concept:walvis kddef:status kdstat:Ter_afkeuring .
+concept:vos kddef:status kdstat:Ter_validatie .
+concept:beer kddef:status kdstat:Niet_beoordeeld .
+concept:hond kddef:status kdstat:Gevalideerd .
+concept:rendier kddef:status kdstat:Geverifieerd .
+concept:olifant kddef:status kdstat:Gevalideerd .
+concept:dier kddef:status kdstat:Gevalideerd .
+concept:puppy kddef:status kdstat:Gevalideerd .
+concept:dierenrijk kddef:status kdstat:Gevalideerd .
+concept:poten kddef:status kdstat:Gevalideerd .
+concept:kop kddef:status kdstat:Geverifieerd .
+concept:lijf kddef:status kdstat:Gevalideerd .
+concept:staart kddef:status kdstat:Gevalideerd .
+concept:huisdier kddef:status kdstat:Gevalideerd .
+concept:hert kddef:status kdstat:Geverifieerd .
+concept:kerst kddef:status kdstat:Gevalideerd .
+concept:hond	kddef:validatie-annotatie	"20170608 dit is een validatie annotatie." .
+concept:hond skos:prefLabel "hond"@nl .
+concept:hond skos:prefLabel "dog"@en .
+concept:hond rdfs:comment "Dit is een uitleg voor het concept hond." .
+concept:rendier rdfs:comment "Dit is een uitleg voor het concept rendier." .
+concept:hond skos:definition "Dit is een formele definitie voor het concept hond." .
+concept:rendier skos:definition "Dit is een formele definitie voor het concept rendier." .
+concept:hond skos:scopeNote "Dit is een toelichting voor het concept hond." .
+concept:rendier skos:scopeNote "Dit is een toelichting voor het concept rendier." .
+concept:hond dct:source "Dit is een bron voor het concept hond." .
+concept:hond skos:comment "Dit is commentaar voor het concept hond." . 
+concept:hond skoslex:actor concept:rendier .
+concept:rendier skoslex:actor concept:olifant .
+concept:hond skoslex:agent concept:olifant .
+concept:rendier skoslex:agent concept:hond .
+concept:hond skoslex:object concept:mier .
+concept:hond skos:member collectie:beesten .
+concept:rendier skos:member collectie:beesten .
+concept:hond thes:broaderGeneric concept:dier .
+concept:rendier thes:broaderGeneric concept:dier .
+concept:hond thes:narrowerGeneric concept:puppy .
+concept:hond thes:broaderPartitive concept:dierenrijk .
+concept:rendier thes:broaderPartitive concept:dierenrijk .
+concept:hond thes:narrowerPartitive concept:poten .
+concept:hond thes:narrowerPartitive concept:kop .
+concept:hond thes:narrowerPartitive concept:lijf .
+concept:hond thes:narrowerPartitive concept:staart .
+concept:rendier thes:narrowerPartitive concept:poten .
+concept:rendier thes:narrowerPartitive concept:kop .
+concept:rendier thes:narrowerPartitive concept:lijf .
+concept:rendier thes:narrowerPartitive concept:staart .
+concept:hond skos:semanticRelation concept:rendier .
+concept:hond skos:semanticRelation concept:walvis .
+concept:hond skos:semanticRelation concept:beer .
+concept:hond skos:semanticRelation concept:olifant .
+concept:hond skos:semanticRelation concept:giraffe .
+concept:rendier skos:semanticRelation concept:hond .
+concept:rendier skos:semanticRelation concept:walvis .
+concept:rendier skos:semanticRelation concept:beer .
+concept:rendier skos:semanticRelation concept:kerst .
+concept:hond skos:closeMatch concept:vos .
+concept:hond skos:closeMatch concept:puppy .
+concept:puppy skos:closeMatch concept:hond .
+concept:rendier skos:closeMatch concept:hert .
+concept:hond skos:exactMatch concept:huisdier .
+concept:hond skos:relatedMatch concept:kat .
+concept:hond skos:broadMatch concept:puppy .
+concept:hond skos:narrowMatch concept:dier . 
+concept:rendier skos:narrowMatch concept:dier . 

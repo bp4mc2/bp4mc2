@@ -71,7 +71,7 @@ stage:DSOWelkomstpagina rdf:type elmo:Representation;
 					</div>
 					<div class='welkom' style='float: right'>
 						<br/><br/>
-						<a href='/catalogus/dso/query/overzichtspagina?type=Act'>
+						<a href='/catalogus/dso/query/overzichtspagina?type=Act&amp;term=a'>
 							<img src='images/activiteitenicon.png'/>
 							<br/>Alle activiteiten
 						</a>
@@ -360,10 +360,15 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1";
 				xhtml:link "/catalogus/dso";
 			];
+			elmo:data [ 
+				rdfs:label "IMOD";
+				elmo:index "2";
+				xhtml:link "/catalogus/dso/query/vocabulary?model=http://data.test.pdok.nl/catalogus/dso/def/IMOD";
+			];
 			elmo:data [
 				rdfs:label "Help";
 				xhtml:link "/catalogus/dso/query/help";
-				elmo:index "2"
+				elmo:index "3"
 			];
 			elmo:index "7";
 		];
@@ -389,29 +394,34 @@ stage:DSOBeheermenu a elmo:Part;
 			rdfs:label "Upload concepten";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Upload concepten (Excel)";
+				rdfs:label "Upload of update volledige dataset (Excel)";
 				elmo:index "1";
 				xhtml:link "/catalogus/dso/container/excelupload";
 			];
 			elmo:data [
-				rdfs:label "Upload concepten (RDF of Turtle)";
+				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
-				rdfs:label "Upload een enkel Concept (Excel)";
+				rdfs:label "Upload of update enkel concept (Excel)";
 				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
+				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload een Omgevingsdocument (XML)";
+				rdfs:label "Voeg nieuwe concepten toe (XML)";
 				elmo:index "5";
-				xhtml:link "/catalogus/dso/container/odupdate";
+				xhtml:link "/catalogus/dso/container/concepten-post-xml";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (XML)";
+				elmo:index "6";
+				xhtml:link "/catalogus/dso/container/concepten-put-xml";
 			];
 		];
 		elmo:data[
@@ -423,14 +433,9 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Sync geupload XMI-model (incl ST)";
+				rdfs:label "Sync geupload XMI-model";
 				elmo:index "2";
 				xhtml:link "update/syncumlinclupload";
-			];
-			elmo:data [
-				rdfs:label "Sync geupload XMI-model (excl ST)";
-				elmo:index "3";
-				xhtml:link "update/syncumlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload UML-model (Turtle)";
@@ -441,20 +446,6 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Sync geupload TTL-model";
 				elmo:index "5";
 				xhtml:link "update/syncttlupload";
-			];
-		];
-		elmo:data [
-			rdfs:label "Upload metadata";
-			elmo:index "4";
-			elmo:data [
-				rdfs:label "Upload catalogus-metadata (RDF of Turtle)";
-				elmo:index "1";
-				xhtml:link "/catalogus/dso/container/catalogusupload";
-			];
-			elmo:data [
-				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-				elmo:index "2";
-				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data [
@@ -469,11 +460,6 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Laad gegevens vanuit Semantic MediaWiki";
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/update/importsmwdata";
-			];
-			elmo:data [
-				rdfs:label "Laad gegevens vanuit VocBench";
-				elmo:index "3";
-				xhtml:link "/catalogus/dso/update/importvbdata";
 			];
 			elmo:data [
 				rdfs:label "Voeg nieuw model toe";
@@ -631,17 +617,12 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:catalogusupload {
-			?s rdfs:label ?slabel.
+		INSERT {
+			GRAPH container:catalogusupload {
+				?s rdfs:label ?slabel.
+			}
 		} WHERE {
 			GRAPH container:catalogusupload {
 				{
@@ -656,33 +637,39 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Catalogusinformatie - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
-			catalogus:tomcatUser rdf:type prov:Agent.
-			catalogus:tomcatUser rdfs:label "Tomcat User".
-			catalogus:tomcatUser foaf:givenName "Tomcat User".
-			catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-			catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Catalogusinformatie - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+				catalogus:tomcatUser rdf:type prov:Agent.
+				catalogus:tomcatUser rdfs:label "Tomcat User".
+				catalogus:tomcatUser foaf:givenName "Tomcat User".
+				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
+				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 		
-		INSERT INTO container:catalogusupload {
-			?s rdf:type prov:Entity.
+		INSERT {
+			GRAPH container:catalogusupload {
+				?s rdf:type prov:Entity.
+			}
 		}
 		WHERE {
 			GRAPH container:catalogusupload {
@@ -690,8 +677,10 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO container:catalogusupload {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:catalogusupload {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -729,8 +718,10 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -745,8 +736,10 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:catalogusupload {
@@ -780,8 +773,10 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -792,10 +787,12 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -819,6 +816,15 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 #
 # CONTAINERS
 #
+
+# Twee soorten containers:
+# POST
+# 	- Voegt Ã©Ã©n of meerdere nieuwe begrippen toe
+# 	- Geeft een foutmelding als Ã©Ã©n of meerdere van de geuploade begrippen al bestaan
+# PUT
+# 	- Update bestaande begrippen
+#	- Geeft een foutmelding als Ã©Ã©n of meerdere van de geuploade begrippen nog niet bestaan
+# 
 
 # Uploadcontainer Excel
 container:excelupload a elmo:Container;
@@ -851,7 +857,7 @@ container:excelupdate a elmo:Container;
     elmo:translator elmo:TableExcelTranslator;
     rdfs:label "Upload een enkel Concept via Excel (.xls)";
     elmo:replaces container:generiek;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+    elmo:query stage:DSOUploadScenePUT;
 .
 # Updatecontainer Turtle
 container:ttlupdate a elmo:Container;
@@ -861,19 +867,69 @@ container:ttlupdate a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
     elmo:replaces container:generiek;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+    elmo:query stage:DSOUploadScenePUT;
 .
 
-# Updatecontainer Omgevingsdocumenten
-container:odupdate a elmo:Container;
+# Container PUT XML Concepten
+container:concepten-put-xml a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
     elmo:contains stage:DSOHeader;
     elmo:contains stage:DSOFooter;
     elmo:representation elmo:UploadRepresentation;
-    rdfs:label "Upload een Omgevingsdocument (.xml)";
+    rdfs:label "Update bestaande concepten (.xml)";
     elmo:replaces container:generiek;
 	elmo:translator elmo:ODTranslator;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xml {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST XML Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-xml a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.xml)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xml {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
 .
 
 
@@ -920,17 +976,12 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix activity: <http://data.test.pdok.nl/catalogus/dso/id/concept/@CURRENTMOMENT@>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:generiek {
-			?s rdfs:label ?spreflabel.
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			}
 		} WHERE {
 			GRAPH container:generiek {
 				{
@@ -946,33 +997,39 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
-			concept:tomcatUser rdf:type prov:Agent.
-			concept:tomcatUser rdfs:label "Tomcat User".
-			concept:tomcatUser foaf:givenName "Tomcat User".
-			concept:tomcatUser foaf:mbox "tomcat@user.org".
-			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:generiek {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -1040,8 +1097,10 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -1075,8 +1134,10 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:generiek {
@@ -1130,8 +1191,10 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -1152,10 +1215,12 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -1197,7 +1262,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 # - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
 # - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
 
-stage:DSOSpecifiekeUploadScene a elmo:Scene;
+stage:DSOUploadScenePUT a elmo:Scene;
 	rdfs:label "Postquery inladen gegevens";
 	elmo:index "2";
 	elmo:query '''
@@ -1208,7 +1273,7 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
@@ -1219,17 +1284,12 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 		prefix activity: <http://data.test.pdok.nl/catalogus/dso/id/concept/@CURRENTMOMENT@>
 			
 	
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:generiek {
-			?s rdfs:label ?spreflabel.
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			}
 		} WHERE {
 			GRAPH container:generiek {
 				{
@@ -1245,33 +1305,39 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
-			concept:tomcatUser rdf:type prov:Agent.
-			concept:tomcatUser rdfs:label "Tomcat User".
-			concept:tomcatUser foaf:givenName "Tomcat User".
-			concept:tomcatUser foaf:mbox "tomcat@user.org".
-			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:generiek {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -1297,8 +1363,10 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
             }
 		}
 		
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:generiek {
@@ -1352,8 +1420,10 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -1374,10 +1444,12 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -1468,17 +1540,12 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:datasetupload {
-			?s rdfs:label ?slabel.
+		INSERT {
+			GRAPH container:datasetupload {
+				?s rdfs:label ?slabel.
+			}
 		} WHERE {
 			GRAPH container:datasetupload {
 				{
@@ -1499,33 +1566,39 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Datasets en distributies - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
-			catalogus:tomcatUser rdf:type prov:Agent.
-			catalogus:tomcatUser rdfs:label "Tomcat User".
-			catalogus:tomcatUser foaf:givenName "Tomcat User".
-			catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-			catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Datasets en distributies - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+				catalogus:tomcatUser rdf:type prov:Agent.
+				catalogus:tomcatUser rdfs:label "Tomcat User".
+				catalogus:tomcatUser foaf:givenName "Tomcat User".
+				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
+				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:datasetupload {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:datasetupload {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -1575,8 +1648,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -1598,8 +1673,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:datasetupload {
@@ -1641,8 +1718,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -1657,10 +1736,12 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -1750,9 +1831,11 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		prefix sh: <http://www.w3.org/ns/dso#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		INSERT INTO <temp> {
-			?model rdf:type owl:Ontology.
-			?model rdfs:label ?label.
+		INSERT {
+			GRAPH <temp> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		} WHERE {
 			GRAPH <@MODEL@> {
 				?model rdf:type owl:Ontology.
@@ -1762,8 +1845,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <@MODEL@>
 		
-		INSERT INTO <@MODEL@> {
-			?s ?p ?o
+		INSERT {
+			GRAPH <@MODEL@> {
+				?s ?p ?o
+			}
 		} WHERE {
 			GRAPH <temp> {
 				?s ?p ?o
@@ -1772,12 +1857,14 @@ stage:DSOUMLUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <temp>
 		
-		INSERT INTO <@MODEL@> {
-			?class rdf:type owl:Class.
-			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
-			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdf:type owl:Class.
+				?class rdfs:label ?label.
+				?shape rdf:type sh:Shape.
+				?shape rdfs:label ?label.
+				?shape sh:scopeClass ?class.
+			}
 		}
 		WHERE {
 			SELECT
@@ -1796,13 +1883,15 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:DatatypeProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:DatatypeProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+			}
 		}
 		WHERE {
 			SELECT
@@ -1829,14 +1918,16 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:ObjectProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
-			?pc sh:class ?refclass.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:ObjectProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+				?pc sh:class ?refclass.
+			}
 		}
 		WHERE {
 			SELECT
@@ -1864,8 +1955,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <@MODEL@> {
-			?class rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -1885,8 +1978,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <@MODEL@> {
-			?property rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -1908,8 +2003,10 @@ stage:DSOUMLUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?subclass rdfs:subClassOf ?class
+		INSERT {
+			GRAPH <@MODEL@> {
+				?subclass rdfs:subClassOf ?class
+			}
 		}
 		WHERE {
 			SELECT
@@ -1940,9 +2037,11 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 		prefix sh: <http://www.w3.org/ns/dso#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
-		INSERT INTO <temp> {
-			?model rdf:type owl:Ontology.
-			?model rdfs:label ?label.
+		INSERT {
+			GRAPH <temp> {
+				?model rdf:type owl:Ontology.
+				?model rdfs:label ?label.
+			}
 		} WHERE {
 			GRAPH <@MODEL@> {
 				?model rdf:type owl:Ontology.
@@ -1952,8 +2051,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <@MODEL@>
 		
-		INSERT INTO <@MODEL@> {
-			?s ?p ?o
+		INSERT {
+			GRAPH <@MODEL@> {
+				?s ?p ?o
+			}
 		} WHERE {
 			GRAPH <temp> {
 				?s ?p ?o
@@ -1962,12 +2063,14 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 		
 		CLEAR GRAPH <temp>
 		
-		INSERT INTO <@MODEL@> {
-			?class rdf:type owl:Class.
-			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
-			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdf:type owl:Class.
+				?class rdfs:label ?label.
+				?shape rdf:type sh:Shape.
+				?shape rdfs:label ?label.
+				?shape sh:scopeClass ?class.
+			}
 		}
 		WHERE {
 			SELECT
@@ -1986,13 +2089,15 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:DatatypeProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:DatatypeProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+			}
 		}
 		WHERE {
 			SELECT
@@ -2019,14 +2124,16 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?property rdf:type owl:ObjectProperty.
-			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
-			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
-			?pc rdfs:label ?plabel.
-			?pc sh:class ?refclass.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdf:type owl:ObjectProperty.
+				?property rdfs:label ?alabel.
+				?pc rdf:type sh:PropertyConstraint.
+				?shape sh:property ?pc.
+				?pc sh:predicate ?property.
+				?pc rdfs:label ?plabel.
+				?pc sh:class ?refclass.
+			}
 		}
 		WHERE {
 			SELECT
@@ -2054,8 +2161,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 				}
 			}
 		}
-		INSERT INTO <@MODEL@> {
-			?class rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?class rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -2075,8 +2184,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
-		INSERT INTO <@MODEL@> {
-			?property rdfs:comment ?comment
+		INSERT {
+			GRAPH <@MODEL@> {
+				?property rdfs:comment ?comment
+			}
 		}
 		WHERE {
 			{SELECT
@@ -2098,8 +2209,10 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			FILTER (?comment!='')
 		}
 		
-		INSERT INTO <@MODEL@> {
-			?subclass rdfs:subClassOf ?class
+		INSERT {
+			GRAPH <@MODEL@> {
+				?subclass rdfs:subClassOf ?class
+			}
 		}
 		WHERE {
 			SELECT
@@ -2128,8 +2241,10 @@ stage:DSOTTLUploadScene a elmo:Scene;
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 
-		INSERT INTO <@MODEL@> {
-			?s ?p ?o.
+		INSERT {
+			GRAPH <@MODEL@> {
+				?s ?p ?o.
+			}
 		}
 		WHERE {
 			GRAPH container:ttlmodelupload {
@@ -2230,8 +2345,10 @@ stage:DSOLoadSMWDataScene a elmo:Scene;
 	elmo:query '''
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		
-		INSERT INTO container:generiek {
-			?s ?p ?o
+		INSERT {
+			GRAPH container:generiek {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:smw {
@@ -2243,6 +2360,83 @@ stage:DSOLoadSMWDataScene a elmo:Scene;
 				{
 					?s rdf:type skos:Collection.
 					?s ?p ?o.
+				}
+				FILTER NOT EXISTS {
+					?s owl:sameAs ?s_uri.
+				}
+				FILTER NOT EXISTS {
+					?o owl:sameAs ?o_uri.
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s ?p ?o_uri
+			}
+		}
+		WHERE {
+			GRAPH container:smw {
+				{
+					?s rdf:type skos:Concept.
+					?s ?p ?o.
+					?o owl:sameAs ?o_uri.
+				}
+				UNION
+				{
+					?s rdf:type skos:Collection.
+					?s ?p ?o.
+					?o owl:sameAs ?o_uri.
+				}
+				FILTER NOT EXISTS {
+					?s owl:sameAs ?s_uri.
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s_uri ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH container:smw {
+				{
+					?s rdf:type skos:Concept.
+					?s owl:sameAs ?s_uri.
+					?s ?p ?o.
+				}
+				UNION
+				{
+					?s rdf:type skos:Collection.
+					?s owl:sameAs ?s_uri.
+					?s ?p ?o.
+				}
+			}
+			FILTER NOT EXISTS {
+				?o owl:sameAs ?o_uri.
+			}
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s_uri ?p ?o_uri.
+			}
+		}
+		WHERE {
+			GRAPH container:smw {
+				{
+					?s rdf:type skos:Concept.
+					?s owl:sameAs ?s_uri.
+					?s ?p ?o.
+					?o owl:sameAs ?o_uri.
+				}
+				UNION
+				{
+					?s rdf:type skos:Collection.
+					?s owl:sameAs ?s_uri.
+					?s ?p ?o.
+					?o owl:sameAs ?o_uri.
 				}
 			}
 		}
@@ -2285,8 +2479,10 @@ stage:DSOLoadVBDataScene a elmo:Scene;
 	elmo:query '''
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		
-		INSERT INTO container:generiek {
-			?s?p?o
+		INSERT {
+			GRAPH container:generiek {
+				?s?p?o
+			}
 		}
 		WHERE {
 			SERVICE <http://graphdb:7200/repositories/catalogus> {
@@ -2988,12 +3184,12 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Heeft als actor"@nl;
-		elmo:applies-to skoslex:Actor;
+		elmo:applies-to skoslex:actor;
 		elmo:index "19";
 	];
 	elmo:fragment [
 		rdfs:label "Heeft als object"@nl;
-		elmo:applies-to skoslex:Object;
+		elmo:applies-to skoslex:object;
 		elmo:index "20";
 	];
 	elmo:fragment [
@@ -3098,7 +3294,15 @@ stage:WeergaveGrafischConcepten a elmo:Part;
 		''';
 		elmo:index "2";
 	];
-	
+	elmo:fragment [
+		elmo:applies-to "Act";
+		xhtml:stylesheet '''
+			fill: yellow;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
 	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
@@ -3155,14 +3359,17 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 	
 		construct {
-			<@SUBJECT@> ?p ?o.
-			<@SUBJECT@> rdfs:label ?concept_label.
-			<@SUBJECT@> elmo:style ?type.
+			<@IDSUBJECT@> ?p ?o.
+			<@IDSUBJECT@> rdfs:label ?concept_label.
+			<@IDSUBJECT@> elmo:style ?type.
 			?o rdfs:label ?olabel.
 			?o elmo:style ?otype.
-			?s ?sp <@SUBJECT@>.
+			?s ?sp <@IDSUBJECT@>.
 			?s rdfs:label ?slabel.
 			?s elmo:style ?stype.
+			?act skoslex:object <@IDSUBJECT@>.
+			?act rdfs:label ?actlabel.
+			?act elmo:style ?act_type.
 			skos:Concept elmo:name "Concept".
 			skos:member rdfs:label "Lid van".
 			skos:inScheme rdfs:label "Domein".
@@ -3172,11 +3379,12 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			thes:broaderPartitive rdfs:label "Is onderdeel van".
 			thes:narrowerPartitive rdfs:label "Bestaat uit".
 			dc:source rdfs:label "Heeft als bron".
-			skoslex:Actor rdfs:label "Heeft als actor".
-			skoslex:Object rdfs:label "Heeft als object".
+			skoslex:actor rdfs:label "Heeft als actor".
+			skoslex:object rdfs:label "Heeft als object".
 			owl:Class elmo:name "Gegevensklasse".
 			owl:Class rdfs:label "Heeft als klasse".
 			skoslex:Norm elmo:name "Norm".
+			skoslex:Act elmo:name "Act".
 			dctype:Text elmo:name "Regeling".
 			skoslex:affects rdfs:label "Heeft invloed op".
 			skoslex:refersTo rdfs:label "Verwijst naar".
@@ -3186,116 +3394,172 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		WHERE {
 			{
 				{
-					GRAPH ?subjectGraph {
-						<@SUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@SUBJECT@> rdfs:label ?concept_label.
-							<@SUBJECT@> ?p ?o.
+					{
+						GRAPH ?subjectGraph {
+							<@IDSUBJECT@> rdf:type ?type.
+							OPTIONAL {
+								<@IDSUBJECT@> rdfs:label ?concept_label.
+								<@IDSUBJECT@> ?p ?o.
+							}
+						}
+						GRAPH ?objectGraph {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+						}
+						GRAPH doc:mastergraph {
+							<@IDSUBJECT@> rdfs:isDefinedBy ?subjectGraph.
+							?o rdfs:isDefinedBy ?objectGraph.
+							?objectGraph dc:isVersionOf doc:mastergraph
 						}
 					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
+					UNION
+					{
+						GRAPH ?altSubjectGraph {
+							?s ?sp <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							OPTIONAL {
+								?s rdfs:label ?slabel.
+							}
+							FILTER NOT EXISTS {
+								?s prov:invalidatedAtTime ?time.
+							}
+						}
+						OPTIONAL {
+							GRAPH <http://data.test.pdok.nl/catalogus/tr/container/dmn> {
+								?s rdfs:label ?slabel.
+							}
+						}
+						GRAPH doc:mastergraph {
+							?s rdfs:isDefinedBy ?altSubjectGraph.
+						}
+						OPTIONAL {
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+							<@IDSUBJECT@> rdf:type ?type.
+						}
 					}
-					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?subjectGraph.
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
+					FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
 				}
 				UNION
 				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@SUBJECT@>.
-						?s rdf:type ?stype.
+					{
+						GRAPH <@GRAPH@> {
+							<@IDSUBJECT@> rdf:type ?type.
+							OPTIONAL {
+								<@IDSUBJECT@> rdfs:label ?concept_label.
+								<@IDSUBJECT@> ?p ?o.
+							}
+						}
+						GRAPH ?objectGraph {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+						}
+						GRAPH doc:mastergraph {
+							?o rdfs:isDefinedBy ?objectGraph.
+							?objectGraph dc:isVersionOf doc:mastergraph
+						}
+					}
+					UNION
+					{
+						GRAPH ?altSubjectGraph {
+							?s ?sp <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							OPTIONAL {
+								?s rdfs:label ?slabel.
+							}
+							FILTER NOT EXISTS {
+								?s prov:invalidatedAtTime ?time.
+							}
+						}
+						GRAPH doc:mastergraph {
+							?s rdfs:isDefinedBy ?altSubjectGraph.
+						}
 						OPTIONAL {
-							?s rdfs:label ?slabel.
-						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+							<@IDSUBJECT@> rdf:type ?type.
 						}
 					}
-					OPTIONAL {
-						GRAPH <http://data.test.pdok.nl/catalogus/tr/container/dmn> {
-							?s rdfs:label ?slabel.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
-					}
-					OPTIONAL {
-						<@SUBJECT@> rdfs:label ?concept_label.
-						<@SUBJECT@> rdf:type ?type.
-					}
+					
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
-				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
+				FILTER ( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
-			UNION
+			UNION 
 			{
-				{
-					GRAPH <@GRAPH@> {
-						<@SUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@SUBJECT@> rdfs:label ?concept_label.
-							<@SUBJECT@> ?p ?o.
-						}
-					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-					}
-					GRAPH doc:mastergraph {
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
-				}
-				UNION
-				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@SUBJECT@>.
-						?s rdf:type ?stype.
-						OPTIONAL {
-							?s rdfs:label ?slabel.
-						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
+				GRAPH ?g {
+					<@IDSUBJECT@> rdf:type ?type.
+					?g prov:generatedAtTime ?startTime.
+					OPTIONAL {
+						<@IDSUBJECT@> rdfs:label ?concept_label.
 					}
 					OPTIONAL {
-						<@SUBJECT@> rdfs:label ?concept_label.
-						<@SUBJECT@> rdf:type ?type.
+						<@IDSUBJECT@> ?p ?o.
+						FILTER (
+							?p = skos:semanticRelation
+							|| ?p = thes:broaderGeneric
+							|| ?p = thes:narrowerGeneric
+							|| ?p = thes:broaderPartitive
+							|| ?p = thes:narrowerPartitive
+							|| ?p = skoslex:affects
+							|| ?p = skoslex:refersTo
+							|| ?p = skoslex:object
+							|| ?p = skoslex:actor
+							|| ?p = skos:closeMatch
+							|| ?p = skos:exactMatch
+							|| ?p = skos:relatedMatch
+							|| ?p = skos:broadMatch
+							|| ?p = skos:narrowMatch
+							|| ?p = dc:source
+						)
 					}
-				}
-				
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-			}
-			UNION {
-				SERVICE <http://almere.pilod.nl/sparql> {
-					SERVICE <http://data.pdok.nl/sparql> {
-						GRAPH brt:top10nl-metadata {
-							{
-								<@SUBJECT@> rdf:type ?type.
-								OPTIONAL {
-									<@SUBJECT@> rdfs:label ?concept_label.
-									<@SUBJECT@> ?p ?o.
-									?o rdfs:label ?olabel.
-									?o rdf:type ?otype.
-								}
-							}
-							UNION {
-								?s ?sp <@SUBJECT@>.
-								?s rdf:type ?stype.
-								OPTIONAL {
-									?s rdfs:label ?slabel.
-								}
-							}
-						}
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
 					}
+					FILTER (
+						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?endTime )
+							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
 				}
+				FILTER ( !contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
+			
+			# UNION {
+			#	SERVICE <http://almere.pilod.nl/sparql> {
+			#		SERVICE <http://data.pdok.nl/sparql> {
+			#			GRAPH brt:top10nl-metadata {
+			#				{
+			#					<@IDSUBJECT@> rdf:type ?type.
+			#					OPTIONAL {
+			#						<@IDSUBJECT@> rdfs:label ?concept_label.
+			#						<@IDSUBJECT@> ?p ?o.
+			#						?o rdfs:label ?olabel.
+			#						?o rdf:type ?otype.
+			#					}
+			#				}
+			#				UNION {
+			#					?s ?sp <@IDSUBJECT@>.
+			#					?s rdf:type ?stype.
+			#					OPTIONAL {
+			#						?s rdfs:label ?slabel.
+			#					}
+			#				}
+			#			}
+			#		}
+			#	}
+			# }
+			# UNION {
+			#	SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
+			#		GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
+			#			?act skoslex:object <@IDSUBJECT@>.
+			#			?act rdf:type ?act_type.
+			#			OPTIONAL {
+			#				?act rdfs:label ?actlabel.
+			#			}
+			#		}
+			#	}
+			# }
 		}
 	''';
 .
@@ -3324,47 +3588,131 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
-			<@SUBJECT@> ?p ?o.
+			<@IDSUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
 			?o rdfs:label ?oelabel.
-			<@SUBJECT@> skos:member ?col.
+			<@IDSUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
-			<@SUBJECT@> prov:wasGeneratedBy ?a.
-			<@SUBJECT@> prov:generatedAtTime ?t.
+			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
+			<@IDSUBJECT@> prov:generatedAtTime ?sStartTime.
 			?a rdfs:label ?alabel.
 			?c rdfs:label ?clabel.
-			<@SUBJECT@> skoslex:refersTo ?s.
+			<@IDSUBJECT@> skoslex:refersTo ?s.
 			?s rdfs:label ?slabel.
+			<@IDSUBJECT@> skoslex:refersTo ?act.
+			?act rdfs:label ?actlabel.
 		}
 		WHERE {
 			{
 				{
-					GRAPH ?g {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type skos:Concept.
-						?g prov:wasGeneratedBy ?a.
-						?g prov:generatedAtTime ?t.
+					{
+						GRAPH ?g {
+							<@IDSUBJECT@> ?p ?o.
+							<@IDSUBJECT@> rdf:type skos:Concept.
+							?g prov:wasGeneratedBy ?a.
+							?g prov:generatedAtTime ?sStartTime.
+							OPTIONAL {
+								<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
+							}
+							OPTIONAL {
+								?a rdfs:label ?alabel.
+							}
+							FILTER (
+								strdt( ?sStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?sEndTime )
+									|| strdt( ?sEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)
+							FILTER (
+								?p != rdf:type
+								&& ?p != skos:prefLabel
+								&& ?p != skos:notation
+								&& ?p != bp4mc2:signature
+								&& ?p != dct:type
+								&& ?p != skos:member
+							)
+						}
 					}
-					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?g
+					UNION
+					{
+						GRAPH ?g {
+							<@IDSUBJECT@> ?p ?o.
+							<@IDSUBJECT@> rdf:type skos:Concept.
+							?g prov:wasGeneratedBy ?a.
+							?g prov:generatedAtTime ?sStartTime.
+							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
+							OPTIONAL {
+								?a rdfs:label ?alabel.
+							}
+							FILTER (
+								?p != rdf:type
+								&& ?p != skos:prefLabel
+								&& ?p != skos:notation
+								&& ?p != bp4mc2:signature
+								&& ?p != dct:type
+								&& ?p != skos:member
+							)
+							FILTER ( strdt( ?sEndTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime )
+						}
+						GRAPH doc:mastergraph {
+							<@IDSUBJECT@> rdfs:isDefinedBy ?g.
+						}
+						FILTER NOT EXISTS {
+							GRAPH ?altG {
+								<@IDSUBJECT@> rdf:type skos:Concept.
+								?altG prov:generatedAtTime ?altStartTime.
+								FILTER( strdt( ?altStartTime, xsd:dateTime ) >= strdt( ?sEndTime, xsd:dateTime ) )
+							}
+						}
 					}
-					FILTER (
-						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
-						&& ?p != bp4mc2:signature
-						&& ?p != dct:type
-						&& ?p != skos:member
-					)
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdfs:label ?olabel.
+							?og prov:generatedAtTime ?oStartTime.
+							OPTIONAL {
+								?o prov:invalidatedAtTime ?oEndTime.
+							}
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)	
+						}
+					}
+					OPTIONAL {
+						GRAPH ?cg {
+							?col skos:member <@IDSUBJECT@>.
+							OPTIONAL {
+								?col rdfs:label ?col_label.
+							}
+							?cg prov:generatedAtTime ?cStartTime.
+							OPTIONAL {
+								?col prov:invalidatedAtTime ?cEndTime.
+							}
+							FILTER (
+								strdt( ?cStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?cEndTime )
+									|| strdt( ?cEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)	
+						}
+					}
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
 				UNION
 				{
 					GRAPH <@GRAPH@> {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type skos:Concept.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type skos:Concept.
 						?g prov:wasGeneratedBy ?a.
-						?g prov:generatedAtTime ?t.
+						?g prov:generatedAtTime ?sStartTime.
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
+						}
 					}
 					FILTER (
 						?p != rdf:type
@@ -3375,65 +3723,87 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						&& ?p != skos:member
 						&& ?p != dct:title
 					)
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdfs:label ?olabel.
+							?og prov:generatedAtTime ?oStartTime.
+							OPTIONAL {
+								?o prov:invalidatedAtTime ?oEndTime.
+							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								}
+							}
+							BIND( IF( BOUND( ?invTime ), ?invTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sEndTime )
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+								)
+							)	
+						}
+					}
+					OPTIONAL {
+						GRAPH ?cg {
+							?col skos:member <@IDSUBJECT@>.
+							OPTIONAL {
+								?col rdfs:label ?col_label.
+							}
+							?cg prov:generatedAtTime ?cStartTime.
+							OPTIONAL {
+								?col prov:invalidatedAtTime ?cEndTime.
+							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								}
+							}
+							BIND( IF( BOUND( ?invTime ), ?invTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sEndTime )
+							FILTER (
+								strdt( ?cStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								&& (
+									!bound( ?cEndTime )
+									|| strdt( ?cEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+								)
+							)	
+						}
+					}
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
-				OPTIONAL {
-					?o rdfs:label ?olabel.
-				}
-				OPTIONAL {
-					?a rdfs:label ?alabel.
-				}
-				OPTIONAL {
-					GRAPH doc:mastergraph {
-						?col rdfs:isDefinedBy ?cg.
-					}
-					GRAPH ?cg {
-						?col skos:member <@SUBJECT@>.
-						?col rdfs:label ?col_label.
-						FILTER NOT EXISTS {
-							?col prov:invalidatedAtTime ?time.
-						}
-					}
-				}
 			}
-			UNION {
-				GRAPH doc:mastergraph {
-					?s rdfs:isDefinedBy ?altSubjectGraph.
-				}
-				GRAPH ?altSubjectGraph {
-					{ ?s skoslex:affects <@SUBJECT@> }
-					UNION { ?s skoslex:classification <@SUBJECT@> }
-					UNION { ?s skoslex:refersTo <@SUBJECT@> }
-					FILTER NOT EXISTS {
-						?s prov:invalidatedAtTime ?time.
-					}
-				}
-				OPTIONAL {
-					GRAPH <http://data.test.pdok.nl/catalogus/tr/container/dmn> {
-						?s rdfs:label ?slabel.
-					}
-				}
-			}
-			UNION {
-				SERVICE <http://almere.pilod.nl/sparql> {
-					SERVICE <http://data.pdok.nl/sparql> {
-						GRAPH brt:top10nl-metadata {
-							<@SUBJECT@> ?p ?o.
-						}
-						FILTER (
-							?p != rdf:type
-							&& ?p != skos:prefLabel
-							&& ?p != skos:notation
-							&& ?p != bp4mc2:signature
-							&& ?p != dct:type
-							&& ?p != skos:member
-						)				
-						OPTIONAL {
-							?o rdfs:label ?olabel.
-						}
-					}
-				}
-			}
+			
+			# UNION {
+			#	SERVICE <http://almere.pilod.nl/sparql> {
+			#		SERVICE <http://data.pdok.nl/sparql> {
+			#			GRAPH brt:top10nl-metadata {
+			#				<@IDSUBJECT@> ?p ?o.
+			#			}
+			#			FILTER (
+			#				?p != rdf:type
+			#				&& ?p != skos:prefLabel
+			#				&& ?p != skos:notation
+			#				&& ?p != bp4mc2:signature
+			#				&& ?p != dct:type
+			#				&& ?p != skos:member
+			#			)				
+			#			OPTIONAL {
+			#				?o rdfs:label ?olabel.
+			#			}
+			#		}
+			#	}
+			# }
+			# UNION {
+			#	SERVICE <http://data.test.pdok.nl/toepasbareregels/sparql> {
+			#		GRAPH <http://data.test.pdok.nl/toepasbareregels/container/generiek> {
+			#			?act skoslex:object <@IDSUBJECT@>.
+			#			OPTIONAL {
+			#				?act rdfs:label ?actlabel.
+			#			}
+			#		}
+			#	}
+			# }
 		}
 	'''
 .
@@ -3449,36 +3819,61 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 		prefix concept: <http://data.test.pdok.nl/catalogus/dso/id/concept/>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 
-		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
-				GRAPH ?graph {
-					<@SUBJECT@> rdf:type skos:Concept.
-					?graph prov:generatedAtTime ?concept_label.
-					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+				{
+					GRAPH ?graph {
+						<@IDSUBJECT@> rdf:type skos:Concept.
+						?graph prov:generatedAtTime ?concept_label.
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						}
 					}
+					GRAPH doc:mastergraph {
+						<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
+						?graph dc:isVersionOf doc:mastergraph
+					}	
+					FILTER( ?graph != ?actualGraph )
+					FILTER( substr("@GRAPH@",2) = "GRAPH@" )
 				}
-				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
-					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != ?actualGraph )
-				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+				UNION {
+					GRAPH ?graph {
+						<@IDSUBJECT@> rdf:type skos:Concept.
+						?graph prov:generatedAtTime ?concept_label.
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						}
+					}
+					GRAPH doc:mastergraph {
+						?graph dc:isVersionOf doc:mastergraph
+					}	
+					FILTER( ?graph != <@GRAPH@> )
+					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				FILTER( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
-			UNION {
+			UNION
+			{
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type skos:Concept.
+					<@IDSUBJECT@> rdf:type skos:Concept.
 					?graph prov:generatedAtTime ?concept_label.
+					?graph prov:generatedAtTime ?startTime.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
+					FILTER (
+						strdt( ?startTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+						|| (
+							bound( ?actueeltot )
+							&& strdt( ?actueeltot, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
 				}
 				GRAPH doc:mastergraph {
 					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != <@GRAPH@> )
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				FILTER( !contains( "@SUBJECT@", "@IDSUBJECT@" ) )
 			}
 		}
 		ORDER BY DESC(lcase(?concept_label))
@@ -7299,11 +7694,13 @@ stage:sync_import_rdf a elmo:Scene;
 	elmo:index "01";
 	rdfs:label "rdf vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/22-rdf-syntax-ns.rdf> {
 					?s?p?o
 				}
@@ -7315,11 +7712,13 @@ stage:sync_import_adms a elmo:Scene;
 	elmo:index "02";
 	rdfs:label "adms vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/adms.ttl> {
 					?s?p?o
 				}
@@ -7331,11 +7730,13 @@ stage:sync_import_dcat a elmo:Scene;
 	elmo:index "03";
 	rdfs:label "dcat vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dcat.rdf> {
 					?s?p?o
 				}
@@ -7347,11 +7748,13 @@ stage:sync_import_dcterms a elmo:Scene;
 	elmo:index "04";
 	rdfs:label "dcterms vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dcterms.rdf> {
 					?s?p?o
 				}
@@ -7363,11 +7766,13 @@ stage:sync_import_dctype a elmo:Scene;
 	elmo:index "05";
 	rdfs:label "dctype vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dctype.rdf> {
 					?s?p?o
 				}
@@ -7379,11 +7784,13 @@ stage:sync_import_dqv a elmo:Scene;
 	elmo:index "06";
 	rdfs:label "dqv vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/dqv.rdf> {
 					?s?p?o
 				}
@@ -7395,11 +7802,13 @@ stage:sync_import_foaf a elmo:Scene;
 	elmo:index "07";
 	rdfs:label "foaf vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/foaf.rdf> {
 					?s?p?o
 				}
@@ -7411,11 +7820,13 @@ stage:sync_import_ldqd a elmo:Scene;
 	elmo:index "08";
 	rdfs:label "ldqd vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/ldqd.ttl> {
 					?s?p?o
 				}
@@ -7427,11 +7838,13 @@ stage:sync_import_owl a elmo:Scene;
 	elmo:index "09";
 	rdfs:label "owl vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/owl.ttl> {
 					?s?p?o
 				}
@@ -7443,11 +7856,13 @@ stage:sync_import_powder a elmo:Scene;
 	elmo:index "10";
 	rdfs:label "powder-s vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/powder-s.rdf> {
 					?s?p?o
 				}
@@ -7459,11 +7874,13 @@ stage:sync_import_prov a elmo:Scene;
 	elmo:index "11";
 	rdfs:label "prov vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/prov.rdf> {
 					?s?p?o
 				}
@@ -7475,11 +7892,13 @@ stage:sync_import_rdf-schema a elmo:Scene;
 	elmo:index "12";
 	rdfs:label "rdf-schema vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/rdf-schema.rdf> {
 					?s?p?o
 				}
@@ -7491,11 +7910,13 @@ stage:sync_import_skos-thes a elmo:Scene;
 	elmo:index "13";
 	rdfs:label "skos-thes vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos-thes.rdf> {
 					?s?p?o
 				}
@@ -7507,11 +7928,13 @@ stage:sync_import_skos a elmo:Scene;
 	elmo:index "14";
 	rdfs:label "skos vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos.rdf> {
 					?s?p?o
 				}
@@ -7523,11 +7946,13 @@ stage:sync_import_xsd a elmo:Scene;
 	elmo:index "15";
 	rdfs:label "xsd vocabulary import";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/imports> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/imports> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/skos.rdf> {
 					?s?p?o
 				}
@@ -7539,11 +7964,13 @@ stage:sync_import_skoslex a elmo:Scene;
 	elmo:index "4";
 	rdfs:label "bp4mc2.org skoslex vocabulaire ophalen";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/skoslex.ttl> {
 					?s?p?o
 				}
@@ -7558,11 +7985,13 @@ stage:sync_reqs a elmo:Scene;
 	elmo:index "101";
 	rdfs:label "bp4mc2.org requirements ophalen";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/requirements> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/requirements.ttl> {
 					?s?p?o
 				}
@@ -7577,11 +8006,13 @@ stage:sync_concepts a elmo:Scene;
 	elmo:index "101";
 	rdfs:label "bp4mc2.org begrippen ophalen";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/concepts> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/concepts> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-concepts.ttl> {
 					?s?p?o
 				}
@@ -7596,11 +8027,13 @@ stage:sync_model_1 a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "bp4mc2.org core metamodel ophalen";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2.ttl> {
 					?s?p?o
 				}
@@ -7612,11 +8045,13 @@ stage:sync_model_2 a elmo:Scene;
 	elmo:index "2";
 	rdfs:label "bp4mc2.org informatie metamodel ophalen";
 	elmo:query '''
-		insert into <http://bp4mc2.org/id/dataset/bp4mc2> {
-			?s?p?o
+		insert {
+			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
+				?s?p?o
+			}
 		}
 		where {
-			service <http://ldt:8080/catalogus/url> {
+			service <http://data.test.pdok.nl/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodel.ttl> {
 					?s?p?o
 				}
@@ -8298,7 +8733,7 @@ stage:DSOSearchQuery a elmo:Query;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
 		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://data.test.pdok.nl/catalogus/dso/id/dataset/>
+		prefix collection: <http://data.test.pdok.nl/catalogus/dso/id/collection/>
 		prefix concept: <http://data.test.pdok.nl/catalogus/dso/id/concept/>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		
@@ -8322,13 +8757,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 					FILTER NOT EXISTS {
 						GRAPH ?toeleidingsGraph {
-							dataset:Toeleidingsbegrippen skos:member ?concept.
+							collection:Toeleidingsbegrippen skos:member ?concept.
 							FILTER NOT EXISTS {
-								dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 							}
 						}
 						GRAPH doc:mastergraph {
-							dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 						}
 					}
 				}
@@ -8363,13 +8798,13 @@ stage:DSOSearchQuery a elmo:Query;
 					}
 				}
 				GRAPH ?toeleidingsGraph {
-					dataset:Toeleidingsbegrippen skos:member ?toeleiding.
+					collection:Toeleidingsbegrippen skos:member ?toeleiding.
 					FILTER NOT EXISTS {
-						dataset:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
-					dataset:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
 					?toeleiding rdfs:isDefinedBy ?g.
 					?concept rdfs:isDefinedBy ?conceptgraph.
 				}				

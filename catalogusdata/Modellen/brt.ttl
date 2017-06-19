@@ -1,0 +1,2526 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix shacl: <http://www.w3.org/ns/shacl#>.
+@prefix n1: <http://www.opengis.net/ont/geosparql#>.
+@prefix n2: <http://brt.basisregistraties.overheid.nl/id/structuur/>.
+@prefix n3: <http://brt.basisregistraties.overheid.nl/def/top10nl#>.
+@prefix n4: <http://brt.basisregistraties.overheid.nl/def/>.
+n3:FunctioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "FunctioneelGebied"^^xsd:string;
+    rdfs:comment "Begrensd en benoemd gebied dat door een functionele eenheid beschreven wordt"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:_Top10nlObject rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "_Top10nlObject"^^xsd:string;
+    rdfs:comment "De gemeenschappelijke eigenschappen van een TOP10NL object"^^xsd:string
+.
+n3:Inrichtingselement rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Inrichtingselement"^^xsd:string;
+    rdfs:comment "Ruimtelijk object, punt- of lijnvormig, al dan niet ter detaillering dan wel ter inrichting van de overige benoemde ruimtelijke objecten of andere inrichtingselementen"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:RegistratiefGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "RegistratiefGebied"^^xsd:string;
+    rdfs:comment "Op basis van wet- en regelgeving afgebakend gebied dat als eenheid geldt van politieke/bestuurlijke verantwoordelijkheid of voor bedrijfsvoering."^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Waterdeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Waterdeel"^^xsd:string;
+    rdfs:comment "grondoppervlak in principe bedekt met water"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Wegdeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wegdeel"^^xsd:string;
+    rdfs:comment "Kleinste functioneel onafhankelijk stukje weg met gelijkblijvende, homogene eigenschappen en relaties voor wegverkeer en vliegverkeer te land"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Terrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Terrein"^^xsd:string;
+    rdfs:comment "Zichtbaar begrensd stuk grond, niet zijnde een van de andere opdelende ruimtelijke objecten (wegdeel of waterdeel)"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Hoogte rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoogte"^^xsd:string;
+    rdfs:comment "Virtuele objecten met informatie over de hoogte van het terrein of de diepte van het water"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Gebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gebouw"^^xsd:string;
+    rdfs:comment "Vrijstaande, overdekte en geheel of gedeeltelijk met wanden omsloten toegankelijke ruimte, die direct of indirect met de grond is verbonden"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:GeografischGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "GeografischGebied"^^xsd:string;
+    rdfs:comment "Begrensd en benoemd gebied dat door een geografische eenheid beschreven wordt"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Plaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Plaats"^^xsd:string;
+    rdfs:comment "geografische gebied gekenmerkt door een concentratie van gebouwen gebruikt voor wonen een werken"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:PlanTopografie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "PlanTopografie"^^xsd:string;
+    rdfs:comment "ruimtelijk object dat wel gepland is, maar nog niet in uitvoering is; meestal een groot infrastructureel object"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Relief rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Relief"^^xsd:string;
+    rdfs:comment "object dat tot doel heeft hoogteverschillen in het landschap te representeren"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:Spoorbaandeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Spoorbaandeel"^^xsd:string;
+    rdfs:comment "Kleinste functioneel onafhankelijk stukje spoorbaan met gelijkblijvende homogene eigenschappen en relaties dat er binnen een spoorwegnet wordt onderscheiden"^^xsd:string;
+    rdfs:subClassOf n3:_Top10nlObject
+.
+n3:FeatureCollectionT10NL rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "FeatureCollectionT10NL"^^xsd:string
+.
+n3:Dieptelijn rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Dieptelijn"^^xsd:string;
+    rdfs:comment "Lijn gevormd door punten met gelijke waterdiepte"^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:Dieptepunt rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Dieptepunt"^^xsd:string;
+    rdfs:comment "Punt waarvan de waterdiepte bekend is t.o.v. NAP."^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:Hoogtelijn rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoogtelijn"^^xsd:string;
+    rdfs:comment "Lijn die punten van gelijke hoogte met elkaar verbindt."^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:Hoogtepunt rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoogtepunt"^^xsd:string;
+    rdfs:comment "Punt in de kaart, waarvan de hoogte bekend is ten opzichte van NAP."^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:Hoogwaterlijn rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoogwaterlijn"^^xsd:string;
+    rdfs:comment "Lijn die de grens van het water aangeeft als de waterstand op zijn hoogst is"^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:Laagwaterlijn rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Laagwaterlijn"^^xsd:string;
+    rdfs:comment "Lijn die de grens van het water aangeeft als de waterstand op zijn laagst is."^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:Peil rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Peil"^^xsd:string;
+    rdfs:comment "Geeft de streefhoogte aan van het waterniveau t.o.v. NAP in grotere waterplassen."^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:PeilWinterpeil rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "PeilWinterpeil"^^xsd:string;
+    rdfs:comment "Geeft de streefhoogte aan van het waterniveau t.o.v. NAP in grotere waterplassen gedurende de wintermaanden."^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:PeilZomerpeil rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "PeilZomerpeil"^^xsd:string;
+    rdfs:comment "Geeft de streefhoogte aan van het waterniveau t.o.v. NAP in grotere waterplassen gedurende de zomermaanden"^^xsd:string;
+    rdfs:subClassOf n3:Hoogte
+.
+n3:ParkeerplaatsCarpool rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "ParkeerplaatsCarpool"^^xsd:string;
+    rdfs:comment "Parkeerplaats voor personenwagens langs doorgaande wegen t.b.v. carpoolers."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:ParkeerplaatsPR rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "ParkeerplaatsPR"^^xsd:string;
+    rdfs:comment "Parkeergelegenheid ten behoeve van het overstappen op het openbaar vervoer."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Overig_wegdeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_wegdeel"^^xsd:string;
+    rdfs:comment "De waarde van het objectkenmerk is bekend, maar anders dan de genoemde wegtypen."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:StartbaanLandingsbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "StartbaanLandingsbaan"^^xsd:string;
+    rdfs:comment "Strook grond waar vliegtuigen kunnen opstijgen en/of landen"^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:RolbaanPlatform rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "RolbaanPlatform"^^xsd:string;
+    rdfs:comment "Afgebakende taxibaan op een vliegveld (rolbaan). / Terrein voor geparkeerd staande vliegtuigen (platform)"^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Autosnelweg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Autosnelweg"^^xsd:string;
+    rdfs:comment "Weg met gescheiden rijbanen en ongelijkvloerse kruisingen, daartoe aangeduid met het betreffende verkeersbord."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Hoofdweg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoofdweg"^^xsd:string;
+    rdfs:comment "Verharde weg die is aangeduid met een E-nummer, maar niet met een A-nummer, of verharde weg die onderdeel is van een verbindingsroute tussen grotere plaatsen, wat blijkt uit blauwe ANWB-borden, dan wel onderdeel is van een route om eindigende A of E-routes tot een gesloten netwerk te completeren"^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:RegionaleWeg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "RegionaleWeg"^^xsd:string;
+    rdfs:comment "Verharde weg die een verbinding vormt tussen bewoonde oorden of grote stadswijken, en daartoe van twee kanten bewegwijzerd zijn met blauwe ANWB-richtingsborden voor autoverkeer."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:LokaleWeg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "LokaleWeg"^^xsd:string;
+    rdfs:comment "Weg van lokaal belang tussen bewegwijzerde routes."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Straat rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Straat"^^xsd:string;
+    rdfs:comment "Weg van zeer plaatselijk belang, gelegen binnen bebouwd gebied."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Veerverbinding rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Veerverbinding"^^xsd:string;
+    rdfs:comment "Vastgelegde route over water om voertuigen en personen over te zetten al dan niet op basis van een vaste dienstregeling"^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Parkeerplaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Parkeerplaats"^^xsd:string;
+    rdfs:comment "Parkeergelegenheid voor meerdere voertuigen in de openlucht."^^xsd:string;
+    rdfs:subClassOf n3:Wegdeel
+.
+n3:Waterloop rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Waterloop"^^xsd:string;
+    rdfs:comment "Langgerekt waterdeel in de vorm van een sloot, rivier, kanaal, enz."^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:MeerPlas rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "MeerPlas"^^xsd:string;
+    rdfs:comment "Water (meestal) niet gelegen in een waterloop"^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:GreppelDrogeSloot rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "GreppelDrogeSloot"^^xsd:string;
+    rdfs:comment "Een in het algemeen niet watervoerende sloot."^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:Zee_waterdeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zee_waterdeel"^^xsd:string;
+    rdfs:comment "Uitgestrekt oppervlak zout water dat het grootste deel van de aarde bedekt"^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:Droogvallend rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Droogvallend"^^xsd:string;
+    rdfs:comment "Geheel of gedeeltelijk droogvallende gronden, buitendijks gelegen"^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:BronWel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BronWel"^^xsd:string;
+    rdfs:comment "Plaats waar op natuurlijke wijze water uit de grond opwelt"^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:Overig_waterdeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_waterdeel"^^xsd:string;
+    rdfs:comment "De waarde van het objectkenmerk is bekend, maar anders dan de genoemde watertypen"^^xsd:string;
+    rdfs:subClassOf n3:Waterdeel
+.
+n3:GedenktekenMonument rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "GedenktekenMonument"^^xsd:string;
+    rdfs:comment "Topografisch object ter nagedachtenis van een belangrijke persoon of gebeurtenis."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Geluidswering rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Geluidswering"^^xsd:string;
+    rdfs:comment "Constructie ten behoeve van het terugdringen van geluidsoverlast."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Golfmeetpaal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Golfmeetpaal"^^xsd:string;
+    rdfs:comment "Paal uitgerust met instrumenten t.b.v. het doen van waarnemingen betreffende golfbewegingen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:GpsKernnetpunt rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "GpsKernnetpunt"^^xsd:string;
+    rdfs:comment "Punt geschikt voor GPS metingen. (Kan een steen of bout zijn)."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Grenspunt rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Grenspunt"^^xsd:string;
+    rdfs:comment "Aanduiding van een grensscheiding"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:HegHaag rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "HegHaag"^^xsd:string;
+    rdfs:comment "Rij bomen, al of niet in combinatie met struiken, waarbij de onderlinge afstand of onderbegroeiing zodanig is dat tot minstens manshoogte het zicht belemmerd wordt. Maximale inplantbreedte van de stammen: 3 meter. / Een rij naast elkaar geplante struiken (liguster, haagdoorn, coniferen, haagbeuk, e.d.) die op gezette tijden worden geschoren. Minimale hoogte 1 meter,  minimumlengte: 100 meter."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Hekwerk rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hekwerk"^^xsd:string;
+    rdfs:comment "Begrenzing van een terrein in de vorm van een afrastering"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Helikopterlandingsplatform rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Helikopterlandingsplatform"^^xsd:string;
+    rdfs:comment "Platform dat als landings- en vertrekplaats dient voor helikopters"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Hoogspanningsleiding rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoogspanningsleiding"^^xsd:string;
+    rdfs:comment "Leiding waarop elektrische spanning van meer dan 500 volt staat."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Hoogspanningsmast rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hoogspanningsmast"^^xsd:string;
+    rdfs:comment "Mast van een hoogspanningsleiding"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Aanlegsteiger_inrichtingselement rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Aanlegsteiger_inrichtingselement"^^xsd:string;
+    rdfs:comment "In het water uitstekende brug of pier, smaller dan 2 meter, gebruikt om personen en goederen aan wal te brengen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Hunebed rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hunebed"^^xsd:string;
+    rdfs:comment "Voorhistorische begraafplaats, bestaande uit opgestapelde, reusachtige stenen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kaap rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kaap"^^xsd:string;
+    rdfs:comment "Gestel van balken met een daartegen aangebracht scherm van latten of ribben, dat als baak op het land dienst doet voor de zeevaart."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kabelbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kabelbaan"^^xsd:string;
+    rdfs:comment "Kabel waaraan stoeltjes hangen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kabelbaanmast rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kabelbaanmast"^^xsd:string;
+    rdfs:comment "Mast van een kabelbaan"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kilometerpaal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kilometerpaal"^^xsd:string;
+    rdfs:comment "Paal waarop de kilometrering van een weg wordt aangegeven"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:KilometerpaalSpoorweg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KilometerpaalSpoorweg"^^xsd:string;
+    rdfs:comment "Paal waarop de kilometrering van een spoorweg wordt aangegeven"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:KilometerpaalWater rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KilometerpaalWater"^^xsd:string;
+    rdfs:comment "Paal waarop de kilometrering van een water wordt aangegeven."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kilometerraaibord rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kilometerraaibord"^^xsd:string;
+    rdfs:comment "Bord op de oever van een rivier, met daarop vermeld het aantal gehele kilometers van de betreffende kilometerraai. Een kilometerraai is een lijn loodrecht op de lengteas van een rivier, gedacht op onderlinge afstand van 1 kilometer als indeling van het traject."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kilometerraaipaal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kilometerraaipaal"^^xsd:string;
+    rdfs:comment "Paal, meestal geplaatst tegenover een kilometerraaibord, op de andere oever van de rivier."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Koedam rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Koedam"^^xsd:string;
+    rdfs:comment "Onderbreking van een waterloop, door middel van demping, al dan niet met een doorlaatbuis"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Baak rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Baak"^^xsd:string;
+    rdfs:comment "Markering van de loop van de vaargeul."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:KogelvangerSchietbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KogelvangerSchietbaan"^^xsd:string;
+    rdfs:comment "Zandheuvel of ander voorwerp achter de schietschijf op een schietbaan, die de afgevuurde kogels opvangt."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kraan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kraan"^^xsd:string;
+    rdfs:comment "Hijswerktuig om zware voorwerpen op te tillen en te verplaatsen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Kruis rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kruis"^^xsd:string;
+    rdfs:comment "Object tot bezinning en/of verering in de vorm van een kruis of heiligenbeeld."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Leiding rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Leiding"^^xsd:string;
+    rdfs:comment "Koker, buis, draad enz. waardoor of waarlangs een stof of kracht geleid wordt"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Luchtvaartlicht rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Luchtvaartlicht"^^xsd:string;
+    rdfs:comment "Navigatielicht t.b.v. de luchtvaart"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:MarkantObject rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "MarkantObject"^^xsd:string;
+    rdfs:comment "Een object dat vanuit de wijde omgeving zichtbaar is en/of een oriënterende waarde heeft"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Metrostation rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Metrostation"^^xsd:string;
+    rdfs:comment "Halteplaats voor een onder- of bovengronds metronetwerk"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Muur rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Muur"^^xsd:string;
+    rdfs:comment "Relatief smal, rechtopstaand bouwwerk"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Oliepompinstallatie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Oliepompinstallatie"^^xsd:string;
+    rdfs:comment "Productie-installatie om olie uit de grond te pompen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Paal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Paal"^^xsd:string;
+    rdfs:comment "Stevig, langwerpig, rechtop in de grond geplaatst merkteken ter afbakening. / Kilometrering van een dijklichaam"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Bomenrij rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Bomenrij"^^xsd:string;
+    rdfs:comment "Aantal bomen die in een rij staan, waarbij de onderlinge afstand tussen de bomen zodanig is dat de bomenrij tot manshoogte geen zichtbelemmering vormt"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Paalwerk rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Paalwerk"^^xsd:string;
+    rdfs:comment "Palissade, omheining van in de grond geslagen palen of staken ten behoeve van landaanwinning"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Peilschaal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Peilschaal"^^xsd:string;
+    rdfs:comment "Lat met schaalverdeling voor het aflezen van de waterhoogte in een water."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Pijler rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Pijler"^^xsd:string;
+    rdfs:comment "Zuil die een bouwconstructie ondersteunt."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Plaatsnaambord rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Plaatsnaambord"^^xsd:string;
+    rdfs:comment "Bord dat de naam weergeeft van een bewoond oord"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Radiobaken rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Radiobaken"^^xsd:string;
+    rdfs:comment "Radiozendstation op een vliegveld of langs een luchtroute, dat dient als hulpmiddel om de koers voor vliegtuigen te bepalen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Radiotelescoop rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Radiotelescoop"^^xsd:string;
+    rdfs:comment "Instrument waarmee men radiogolven uit de kosmische ruimte kan opvangen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:RdPunt rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "RdPunt"^^xsd:string;
+    rdfs:comment "Getrianguleerd punt."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Scheepvaartlicht rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Scheepvaartlicht"^^xsd:string;
+    rdfs:comment "Licht dat dient voor de ondersteuning bij het navigeren van schepen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Schietbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Schietbaan"^^xsd:string;
+    rdfs:comment "Baan ingericht voor het schieten naar een doel"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Seinmast rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Seinmast"^^xsd:string;
+    rdfs:comment "Mast waarin seinen worden gehesen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Boom rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Boom"^^xsd:string;
+    rdfs:comment "Houtachtig gewas met een enkele, stevige, houtige en overblijvende stam, die zich op een zekere hoogte boven de grond vertakt."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Sluisdeur rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Sluisdeur"^^xsd:string;
+    rdfs:comment "Beweegbare waterkering van een (schut)sluis"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Sneltramhalte rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Sneltramhalte"^^xsd:string;
+    rdfs:comment "Halte aan een sneltramlijn"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Stormvloedkering rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Stormvloedkering"^^xsd:string;
+    rdfs:comment "Waterkering, bedoeld om bij extreem hoge waterstanden water af te sluiten ter bescherming van het achter de kering gelegen land"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Strandpaal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Strandpaal"^^xsd:string;
+    rdfs:comment "Paal op het strand of in de duinen, geplaatst als hulpmiddel bij het uitvoeren van metingen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:StrekdamKribGolfbreker rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "StrekdamKribGolfbreker"^^xsd:string;
+    rdfs:comment "Dam in de richting van de loop van de rivier of kanaal, ter beveiliging van de oevers of brugpijlers of tot beperking van de rivier tot een bepaalde breedte (strekdam). Golfslabreker of stroombreker langs de kust en in revieren, staat loodrecht op de oeverkust (krib). Een uit steenglooing of stortsteen betsaand object, bedoelt voor oeverbescherming (golfbrker)"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Stuw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Stuw"^^xsd:string;
+    rdfs:comment "Vaste of beweegbare constructie die dient om de waterstand bovenstrooms van de constructie te regelen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Tol_inrichtingselement rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tol_inrichtingselement"^^xsd:string;
+    rdfs:comment "Plaats waar men tol moet betalen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Treinstation rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Treinstation"^^xsd:string;
+    rdfs:comment "Halte aan een spoorlijn"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Verkeersgeleider rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Verkeersgeleider"^^xsd:string;
+    rdfs:comment "Obstakel op een weg om het verkeer in goede banen te leiden"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Vlampijp rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Vlampijp"^^xsd:string;
+    rdfs:comment "Affakkelinstallatie."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Botenhelling rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Botenhelling"^^xsd:string;
+    rdfs:comment "Voorziening om boten uit of in het water te helpen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Vliedberg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Vliedberg"^^xsd:string;
+    rdfs:comment "Verhoging in het terrein ter bescherming van de daarop geplaatste bebouwing tegen hoogwater"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Wegafsluiting rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wegafsluiting"^^xsd:string;
+    rdfs:comment "Een fysieke permanente of tijdelijke barrière in of dwars over een weg voor tenminste een gedeelte van de gebruikers van die weg. (b.v paaltjes, slagboom, toegangshek, etc.)"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Wegwijzer rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wegwijzer"^^xsd:string;
+    rdfs:comment "Richtingaanduiding."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Windmolentje rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Windmolentje"^^xsd:string;
+    rdfs:comment "Een vrij op de wind draaiend molentje (met wieken of een rad van schoepen) van metaal en/of kuststof, bestemd voor het bemalen van een sloot. / Klein type molen, herkenbaar aan schuin op een stellage geplaatste wieken, bestemd voor het bemalen van het omliggende terrein (tjasker)."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Zendmast rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zendmast"^^xsd:string;
+    rdfs:comment "Telecommunicatietoren (toren t.b.v. datacommunicatie). / Zendtoren (toren met een zendantenne) / Zend- en/of ontvangstmast (hoge, open constructie t.b.v. het uitzenden en/of ontvangen van beeld- en/of geluidssignalen)."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:ZichtbaarWrak rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "ZichtbaarWrak"^^xsd:string;
+    rdfs:comment "Wrak van vergaan schip dat (deels) boven water uitsteekt."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Overig_inrichtingselement rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_inrichtingselement"^^xsd:string;
+    rdfs:comment "Het type inrichtingselement is bekend, maar anders dan de genoemde waarden"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Busstation rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Busstation"^^xsd:string;
+    rdfs:comment "Een plaats waar verschillende buslijnen samenkomen en waar meerdere bushaltes aanwezig zijn, met het doel dat buspassagiers hier kunnen in-, uit- of overstappen."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Calamiteitendoorgang rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Calamiteitendoorgang"^^xsd:string;
+    rdfs:comment "Doorgang in de verkeersgeleider in de middenberm die hulpdiensten doorgang moet verlenen voor het bestrijden van calamiteiten"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Dukdalf rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Dukdalf"^^xsd:string;
+    rdfs:comment "In het water geplaatste, zware al dan niet  metalen paal of constructie, dienend tot bescherming van bruggen en sluizen"^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Gaswinning_inrichtingselement rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gaswinning_inrichtingselement"^^xsd:string;
+    rdfs:comment "Installatie t.b.v. de winning of transport van aardgas."^^xsd:string;
+    rdfs:subClassOf n3:Inrichtingselement
+.
+n3:Land rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Land"^^xsd:string;
+    rdfs:comment "Begrenzing van Nederland, begrenst door België, Duitsland en de 12-mijls zone."^^xsd:string;
+    rdfs:subClassOf n3:RegistratiefGebied
+.
+n3:Provincie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Provincie"^^xsd:string;
+    rdfs:comment "Staatkundig onderdeel van Nederland."^^xsd:string;
+    rdfs:subClassOf n3:RegistratiefGebied
+.
+n3:Gemeente rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gemeente"^^xsd:string;
+    rdfs:comment "Zelfstandig, zelfbestuur en autonomie bezittend onderdeel van de staat Nederland, onder het bestuur van een raad, een burgemeester en wethouders."^^xsd:string;
+    rdfs:subClassOf n3:RegistratiefGebied
+.
+n3:TerritorialeZee rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "TerritorialeZee"^^xsd:string;
+    rdfs:comment "Een zeestrook, grenzend aan het landgebied van Nederland waarover de soevereiniteit van Nederland zich uitstrekt."^^xsd:string;
+    rdfs:subClassOf n3:RegistratiefGebied
+.
+n3:Waterschap rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Waterschap"^^xsd:string;
+    rdfs:comment "Lichaam dat, onder toezicht van de Provinciale Staten, in een bepaald gebied voor waterlozing en waterkering zorgt."^^xsd:string;
+    rdfs:subClassOf n3:RegistratiefGebied
+.
+n3:Woonkern rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Woonkern"^^xsd:string;
+    rdfs:comment "Bebouwd gebied omsloten door blauwe plaatsnaamborden."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Industriekern rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Industriekern"^^xsd:string;
+    rdfs:comment "Bebouwd gebied omsloten door plaatsnaamborden (zowel blauw als wit) met industriële functie."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Recreatiekern rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Recreatiekern"^^xsd:string;
+    rdfs:comment "Bungalowparken omsloten door plaatsnaamborden (zowel blauw als wit)."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Deelkern rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Deelkern"^^xsd:string;
+    rdfs:comment "Woonkern gelegen binnen de bebouwde kom van een andere plaats."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Gehucht rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gehucht"^^xsd:string;
+    rdfs:comment "Woonplaats of huizengroep zonder bebouwde kom."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Buurtschap rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Buurtschap"^^xsd:string;
+    rdfs:comment "Verspreid staande bebouwing in landelijk gebied met een zekere mate van sociale integratie van de inwoners."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Stadsdeel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Stadsdeel"^^xsd:string;
+    rdfs:comment "Deel van een stad of wijk."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Wijk rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wijk"^^xsd:string;
+    rdfs:comment "Gedeelte van een stad of dorp dat ruimtelijk min of meer een afgesloten geheel vormt."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Buurt rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Buurt"^^xsd:string;
+    rdfs:comment "Gedeelte van een stad of dorp, met zekere mate van sociale intergratie van de bewoners."^^xsd:string;
+    rdfs:subClassOf n3:Plaats
+.
+n3:Wal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wal"^^xsd:string;
+    rdfs:comment "Langgerekte ophoging in het terrein met een hoogte tussen 0,50 en 1,00 meter."^^xsd:string;
+    rdfs:subClassOf n3:Relief
+.
+n3:TaludHoogteverschil rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "TaludHoogteverschil"^^xsd:string;
+    rdfs:comment "Plaatselijk glooiende terreinverheffing of -inzinking (hoogteverschil). / Schuinte van het zijvlak van aardwerken, dijken, spoorbanen, vestingwerke, etc (talud)"^^xsd:string;
+    rdfs:subClassOf n3:Relief
+.
+n3:SteileRandAardrand rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "SteileRandAardrand"^^xsd:string;
+    rdfs:comment "Plotselinge terreinverheffing of inzinking."^^xsd:string;
+    rdfs:subClassOf n3:Relief
+.
+n3:Trein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Trein"^^xsd:string;
+    rdfs:comment "Spoorbaandeel bestemd voor railvoertuig voor de langere afstand dat sneller dan 45 km per uur kan, bestaande uit een enkele of een reeks van locomotieven, treinstellen en/of wagons"^^xsd:string;
+    rdfs:subClassOf n3:Spoorbaandeel
+.
+n3:Tram rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tram"^^xsd:string;
+    rdfs:comment "Spoorbaandeel bestemd voor railvoertuig ten behoeve van personenvervoer over korte afstand, niet harder rijdend dan 45 km per uur."^^xsd:string;
+    rdfs:subClassOf n3:Spoorbaandeel
+.
+n3:Sneltram rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Sneltram"^^xsd:string;
+    rdfs:comment "Spoorbaandeel bestemd voor railvervoer ten behoeve van personenevervoer over korte afstand sneller dan 45 km per uur."^^xsd:string;
+    rdfs:subClassOf n3:Spoorbaandeel
+.
+n3:Metro rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Metro"^^xsd:string;
+    rdfs:comment "Spoorbaandeel bestemd voor al dan niet ondergrondse personentrein in een grote stad."^^xsd:string;
+    rdfs:subClassOf n3:Spoorbaandeel
+.
+n3:Gemengd rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gemengd"^^xsd:string;
+    rdfs:comment "Spoorbaandeel bestemd voor een combinatie van zowel trein, metro, sneltram of tramverkeer"^^xsd:string;
+    rdfs:subClassOf n3:Spoorbaandeel
+.
+n3:Weg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Weg"^^xsd:string;
+    rdfs:comment "Plantopografie van wegdelen."^^xsd:string;
+    rdfs:subClassOf n3:PlanTopografie
+.
+n3:Spoor rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Spoor"^^xsd:string;
+    rdfs:comment "Plantopografie van spoorbaandelen."^^xsd:string;
+    rdfs:subClassOf n3:PlanTopografie
+.
+n3:Water rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Water"^^xsd:string;
+    rdfs:comment "Plantopografie van waterdelen."^^xsd:string;
+    rdfs:subClassOf n3:PlanTopografie
+.
+n3:Overig_planTopografie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_planTopografie"^^xsd:string;
+    rdfs:comment "Plantopografie van overiege objectklassen."^^xsd:string;
+    rdfs:subClassOf n3:PlanTopografie
+.
+n3:Fort rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Fort"^^xsd:string;
+    rdfs:comment "Verdedigingswerk."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Gemaal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gemaal"^^xsd:string;
+    rdfs:comment "Installatie om water omhoog te pompen uit een polder of een kanaal."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Gemeentehuis rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gemeentehuis"^^xsd:string;
+    rdfs:comment "Gebouw waarin de gemeentelijke secretarie gevestigd is."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Gevangenis rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gevangenis"^^xsd:string;
+    rdfs:comment "Gebouwen waarin personen in verzekerde bewaring worden gesteld"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Hotel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Hotel"^^xsd:string;
+    rdfs:comment "Gebouw ten behoeve van de overnachting van reizigers."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Huizenblok rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Huizenblok"^^xsd:string;
+    rdfs:comment "Terrein, volledig of nagenoeg volledig bedekt met bebouwing (niet zijnde lintbebouwing of grote boerderijen met bijbehorende stallen), gelegen in stedelijk/verstedelijkt gebied, waarbij de bebouwing naar alle zijden aaneengesloten is en waar men vanaf de openbare weg van eventuele binnenplaatsen en -tuinen weinig of niets kan zien."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Kapel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kapel"^^xsd:string;
+    rdfs:comment "Gebouwtje dat dient doet als bidruimte."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:KasWarenhuis rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KasWarenhuis"^^xsd:string;
+    rdfs:comment "Voornamelijk uit glas opgebouwde overbouwing van de grond ten behoeve van landbouw"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Kasteel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kasteel"^^xsd:string;
+    rdfs:comment "Versterkt gebouw ofburcht."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Kerk rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kerk"^^xsd:string;
+    rdfs:comment "Bebouwing oorspronkelijk bedoelt voor christelijke erediensten"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Bezoekerscentrum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Bezoekerscentrum"^^xsd:string;
+    rdfs:comment "Informatiecentrum in een culturele instelling, een natuurpark, enz."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:KerncentraleKernreactor rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KerncentraleKernreactor"^^xsd:string;
+    rdfs:comment "Centrale die met kernenergie elektriciteit opwekt (kerncentrale) / Installatie voor het splijten of fuseren van atoomkernen, atoomreactor (kernreactor)."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:KliniekInrichtingSanatorium rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KliniekInrichtingSanatorium"^^xsd:string;
+    rdfs:comment "Inrichting waar patiënten worden verpleegd (kliniek). / Herstellingsoord (sanatorium)."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Klokkentoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Klokkentoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. de ophanging van een uurwerk en/of klokkenspel."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:KloosterAbdij rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KloosterAbdij"^^xsd:string;
+    rdfs:comment "Gebouw bedoeld voor de huisvesting en eventueel het voorzien in levensonderhoud van een geloofsgemeenschap."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Koeltoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Koeltoren"^^xsd:string;
+    rdfs:comment "Torenvormig bouwsel voor het afkoelen van gassen of dampen"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Koepel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Koepel"^^xsd:string;
+    rdfs:comment "Bolvormige constructie als dak van een gebouw."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Kunstijsbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kunstijsbaan"^^xsd:string;
+    rdfs:comment "Gebouw voorzien van een installatie waarmee een ijsvloer kan worden gelegd."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Lichttoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Lichttoren"^^xsd:string;
+    rdfs:comment "Toren als drager van een ter oriëntatie dienend licht, met name langs de kust. Het lichtpatroon van een lichttoren is niet uniek t.o.v. andere lichttorens."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Luchtwachttoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Luchtwachttoren"^^xsd:string;
+    rdfs:comment "Toren vroeger gebruikt t.b.v. het bewaken van het luchtruim."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Manege rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Manege"^^xsd:string;
+    rdfs:comment "Besloten plaats tot beoefening van het paardrijden."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Boortoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Boortoren"^^xsd:string;
+    rdfs:comment "Tijdelijke of permanente toren voor het verrichten van boorwerkzaamheden"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:MarkantGebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "MarkantGebouw"^^xsd:string;
+    rdfs:comment "Gebouw dat sterk opvalt ten opzichte van zijn omgeving"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:MilitairGebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "MilitairGebouw"^^xsd:string;
+    rdfs:comment "Gebouw in gebruik voor militaire doeleinden."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Moskee rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Moskee"^^xsd:string;
+    rdfs:comment "Bebouwing oorspronkelijk bedoelt voor islamitische geloofsuitoefening"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Museum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Museum"^^xsd:string;
+    rdfs:comment "Gebouw waarin voorwerpen van kunst of wetenschap bijeen zijn gebracht en (ten minste voor een gedeelte) voortdurend uitgestald worden."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Observatorium rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Observatorium"^^xsd:string;
+    rdfs:comment "Gebouw t.b.v. het doen van waarnemingen in de ruimte"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:OverigReligieusGebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "OverigReligieusGebouw"^^xsd:string;
+    rdfs:comment "Bebouwing oorspronkelijk bedoelt voor geloofsuitoefening, niet zijnde een kerk, moskee en synagoge"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Paleis rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Paleis"^^xsd:string;
+    rdfs:comment "Gebouw met een openbare of cermoniële functie heeft voor gebruik door de koninkljke familie"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:ParkeerdakParkeerdekParkeergarage rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "ParkeerdakParkeerdekParkeergarage"^^xsd:string;
+    rdfs:comment "Al dan niet open bebouwing, geheel of gedeeltelijk (het dak of een van de onderliggende etages) in gebruik als openbare voorziening voor het parkeren van motorvoertuigen."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Peilmeetstation rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Peilmeetstation"^^xsd:string;
+    rdfs:comment "Installatie die informatie geeft over de landelijke/regionale waterstanden via het Monitoring Systeem Water (MSW). De installatie is voorzien van een Digitaal Niveau Meter (DNM)."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Politiebureau rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Politiebureau"^^xsd:string;
+    rdfs:comment "Plaats waar een afdeling van de politie zetelt."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Brandtoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Brandtoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. het signaleren van een (bos)brand."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Pompstation rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Pompstation"^^xsd:string;
+    rdfs:comment "Installatie waarmee een vloeistof op- of doorgepompt wordt."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Postkantoor rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Postkantoor"^^xsd:string;
+    rdfs:comment "Kantoor waar men administratieve handelingen kan verrichten ten behoeve van postverzending, giro e.d"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:PsychiatrischZiekenhuisPsychiatrischCentrum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "PsychiatrischZiekenhuisPsychiatrischCentrum"^^xsd:string;
+    rdfs:comment "Verzorgingstehuis voor geesteszieken."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Radarpost rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Radarpost"^^xsd:string;
+    rdfs:comment "Plaats waar waarnemingen worden gedaan met behulp van radar, m.n. om vliegtuigen en scheepsbewegingen te observeren."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Radartoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Radartoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. radarsignalering c.q. radargeleiding."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:RadiotorenTelevisietoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "RadiotorenTelevisietoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. het verspreiden van radio- en televisiesignalen."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Recreatiecentrum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Recreatiecentrum"^^xsd:string;
+    rdfs:comment "Terrein van min of meer beperkte omvang, bedoeld voor vrijetijdsbesteding."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Reddingboothuisje rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Reddingboothuisje"^^xsd:string;
+    rdfs:comment "Plaats waar een reddingboot beschikbaar is."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Remise rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Remise"^^xsd:string;
+    rdfs:comment "Wagenloods voor openbare vervoermiddelen"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Rune rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Rune"^^xsd:string;
+    rdfs:comment "Overblijfsel van een verwoest of door ouderdom vervallen gebouw"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Brandweerkazerne rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Brandweerkazerne"^^xsd:string;
+    rdfs:comment "Gebouw voor het stationeren van materieel en manschappen t.b.v. brandbestrijding"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Schaapskooi rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Schaapskooi"^^xsd:string;
+    rdfs:comment "Stal voor schapen"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:School rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "School"^^xsd:string;
+    rdfs:comment "Gebouw in gebruik voor basis, middelbaar of hoger onderwijs"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Schoorsteen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Schoorsteen"^^xsd:string;
+    rdfs:comment "Pijp voor het afvoeren van verbrandingsgassen"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Silo rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Silo"^^xsd:string;
+    rdfs:comment "Gebouw in gebruik als opslagplaats voor stort- of bulkgoederen"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Sporthal rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Sporthal"^^xsd:string;
+    rdfs:comment "Grootschalige voorziening met een meer regionale uitstraling en meerdere velden tbv verschillende of een specifieke tak van sport."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Stadion rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Stadion"^^xsd:string;
+    rdfs:comment "Gebouw met tribunes en een sportveld voor het beoefenen van sport, in het bijzonder voor het houden van grote wedstrijden."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:StadskantoorHulpsecretarie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "StadskantoorHulpsecretarie"^^xsd:string;
+    rdfs:comment "Bureau waar gemeentelijke instellingen, bijvoorbeeld de burgerlijke stand, gevestigd zijn."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Stationsgebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Stationsgebouw"^^xsd:string;
+    rdfs:comment "Een gebouw dat speciaal bedoeld is voor het bedienen van treinreizigers"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Synagoge rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Synagoge"^^xsd:string;
+    rdfs:comment "Bebouwing oorspronkelijk bedoelt voor joodse geloofsuitoefening"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Tank rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tank"^^xsd:string;
+    rdfs:comment "Rond bouwwerk t.b.v. opslag van vloeistof"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Bunker rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Bunker"^^xsd:string;
+    rdfs:comment "Versterkte (schuil)plaats te gebruiken in tijden van oorlog of ramp zowel voor burger- als militaire doeleinden. Kan ook (gedeeltelijk) ondergronds gelegen zijn."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Tankstation rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tankstation"^^xsd:string;
+    rdfs:comment "Inrichting waar motorbrandstof, olie, lucht en koelwater kunnen worden verkregen."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Telecommunicatietoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Telecommunicatietoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. datacommunicatie"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Tol_gebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tol_gebouw"^^xsd:string;
+    rdfs:comment "Een tol is een gebouw aan een verkeers- of waterweg waar tol wordt geheven"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Toren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Toren"^^xsd:string;
+    rdfs:comment "Vrijstaand bouwwerk van grote hoogte in verhouding tot de doorsnede"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Transformatorstation_gebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Transformatorstation_gebouw"^^xsd:string;
+    rdfs:comment "Installatie voor het transformeren van elektrische stroom."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Uitzichttoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Uitzichttoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. de recreatie"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Universiteit rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Universiteit"^^xsd:string;
+    rdfs:comment "Instelling voor wetenschappelijk onderwijs"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Veiling rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Veiling"^^xsd:string;
+    rdfs:comment "Gebouw waar goederen openbaar worden geveild"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Verkeerstoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Verkeerstoren"^^xsd:string;
+    rdfs:comment "Toren t.b.v. verkeersregulatie te land, ter zee of in de lucht"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Vuurtoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Vuurtoren"^^xsd:string;
+    rdfs:comment "Toren als drager van een ter oriëntatie dienend licht, met name langs de kust. Het lichtpatroon van de vuurtoren is uniek t.o.v. elke andere vuurtoren of lichttoren."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Crematorium rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Crematorium"^^xsd:string;
+    rdfs:comment "Gebouw dat dient voor lijkverbranding."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Waterradmolen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Waterradmolen"^^xsd:string;
+    rdfs:comment "Bebouwing t.b.v. het verrichten van arbeid, waarvoor de energie geleverd wordt door stromend water en opgenomen door middel van een schoepenrad."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Watertoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Watertoren"^^xsd:string;
+    rdfs:comment "Toren (oorspronkelijk) bedoeld voor de opslag van drinkwater"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Wegrestaurant rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wegrestaurant"^^xsd:string;
+    rdfs:comment "Restaurant op verzorgingsplaats langs autosnelweg of hoofdweg"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Werf_gebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Werf_gebouw"^^xsd:string;
+    rdfs:comment "Werkplaats waar schepen worden gebouwd of hersteld"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Windmolen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Windmolen"^^xsd:string;
+    rdfs:comment "Bebouwing t.b.v. het verrichten van arbeid (m.u.v. het opwekken van elektrische energie, het malen van granen en het opvijzelen van water), waarvoor de energie geleverd wordt door wind en opgenomen door middel van wieken"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:WindmolenKorenmolen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "WindmolenKorenmolen"^^xsd:string;
+    rdfs:comment "Bebouwing t.b.v. het malen van granen, waarvoor de energie geleverd wordt door wind en opgenomen door middel van wieken."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:WindmolenWatermolen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "WindmolenWatermolen"^^xsd:string;
+    rdfs:comment "Bebouwing t.b.v. het opvijzelen van water, waarvoor de energie geleverd wordt door wind en opgenomen door middel van wieken."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Windturbine rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Windturbine"^^xsd:string;
+    rdfs:comment "Bebouwing t.b.v. het opwekken van elektrische energie, waarvoor de energie geleverd wordt door wind en opgenomen door middel van wieken."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Zendtoren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zendtoren"^^xsd:string;
+    rdfs:comment "Toren met een zendantenne"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Ziekenhuis rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Ziekenhuis"^^xsd:string;
+    rdfs:comment "Instelling voor onderzoek, behandeling en verpleging van patiënten."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Dok rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Dok"^^xsd:string;
+    rdfs:comment "Installatie voor onderhoud en herstel van schepen."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Zwembad_gebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zwembad_gebouw"^^xsd:string;
+    rdfs:comment "Gebouw met zwemfunctionaliteit of een zwembassin, openbaar toegankelijk."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Overig_gebouw rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_gebouw"^^xsd:string;
+    rdfs:comment "De waarde van het objectkenmerk is bekend, maar anders dan de genoemde gebouwtypen."^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Elektriciteitscentrale rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Elektriciteitscentrale"^^xsd:string;
+    rdfs:comment "Gebouw waarin elektriciteit wordt opgewekt"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Fabriek rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Fabriek"^^xsd:string;
+    rdfs:comment "Industriële onderneming waarin op grote schaal stoffen of goederen worden geproduceerd"^^xsd:string;
+    rdfs:subClassOf n3:Gebouw
+.
+n3:Circuit rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Circuit"^^xsd:string;
+    rdfs:comment "Verhard terrein voor snelheidswedstrijden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Crossbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Crossbaan"^^xsd:string;
+    rdfs:comment "Onverhard terrein voor snelheidswedstrijden en hiervoor uitgerust met de nodige voorzieningen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:DierentuinSafaripark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "DierentuinSafaripark"^^xsd:string;
+    rdfs:comment "Publieke tuin / park waarin een verzameling inheemse en uitheemse dieren is ondergebracht (dierentuin). / Groot park met wilde dieren, waar men met een auto kan rijden (safaripark)"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Eendenkooi rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Eendenkooi"^^xsd:string;
+    rdfs:comment "Stuk land en water met een karakteristieke vorm, ingericht om wilde eenden te vangen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Emplacement rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Emplacement"^^xsd:string;
+    rdfs:comment "Het totaal aan sporen op een terrein ten behoeve van het rangeren en stallen van treinen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Erebegraafplaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Erebegraafplaats"^^xsd:string;
+    rdfs:comment "Begraafplaats voor gesneuvelde militairen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Gaswinning_functioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gaswinning_functioneelGebied"^^xsd:string;
+    rdfs:comment "Gebied met installatie(s) t.b.v. de winning of transport van aardgas"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:GebiedMetHogeObjecten rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "GebiedMetHogeObjecten"^^xsd:string;
+    rdfs:comment "Gebied, waarbinnen zich meerdere hoge objecten bevinden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Gebouwencomplex rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Gebouwencomplex"^^xsd:string;
+    rdfs:comment "Geheel van bij elkaar horende gebouwen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Golfterrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Golfterrein"^^xsd:string;
+    rdfs:comment "Terrein toegerust voor de uitoefening van de golfsport"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Arboretum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Arboretum"^^xsd:string;
+    rdfs:comment "Verzameling van verschillende soorten bomen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Grafheuvel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Grafheuvel"^^xsd:string;
+    rdfs:comment "Voorhistorische begraafplaats in de vorm van een heuvel"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Grindwinning rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Grindwinning"^^xsd:string;
+    rdfs:comment "Gebied waar winning van grind plaatsvind (in dagbouw of d.m.v. zuigen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Groeve rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Groeve"^^xsd:string;
+    rdfs:comment "Opengegraven ruimte waaruit een delfstof gewonnen wordt"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Haven_functioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Haven_functioneelGebied"^^xsd:string;
+    rdfs:comment "Lig- en bergplaats voor vaartuigen, inclusief het omliggende terrein"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Heemtuin rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Heemtuin"^^xsd:string;
+    rdfs:comment "Tuin waar de inheemse flora en fauna ter instructie te bezichtigen zijn"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Helikopterlandingsterrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Helikopterlandingsterrein"^^xsd:string;
+    rdfs:comment "Terrein dat als landings- en vertrekplaats dient voor helikopters"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Infiltratiegebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Infiltratiegebied"^^xsd:string;
+    rdfs:comment "Gebied waar water wordt gezuiverd door infiltratie t.b.v. de drinkwatervoorziening."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Jachthaven rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Jachthaven"^^xsd:string;
+    rdfs:comment "Lig- en bergplaats voor pleziervaartuigen, tezamen met het omliggende terrein"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Kartingbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kartingbaan"^^xsd:string;
+    rdfs:comment "Baan waarop met skelters of karts  gereden wordt"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Kassengebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Kassengebied"^^xsd:string;
+    rdfs:comment "Gebied bestaande uit meerdere landbouwkassen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Attractiepark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Attractiepark"^^xsd:string;
+    rdfs:comment "Park ingericht voor vrijetijdsbesteding"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:KazerneLegerplaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KazerneLegerplaats"^^xsd:string;
+    rdfs:comment "Gebouw(-encomplex) bestemd tot huisvesting van soldaten"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Landgoed rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Landgoed"^^xsd:string;
+    rdfs:comment "Buitenverblijf met omliggende landerijen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Mijn rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Mijn"^^xsd:string;
+    rdfs:comment "Plaats waar ertsen, steenkool, enz. worden gedolven"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Milieustraat rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Milieustraat"^^xsd:string;
+    rdfs:comment "Een locatie die specifiek bestemd is voor het brengen van gescheiden huishoudelijk afval en grofvuil."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:MilitairOefengebiedSchietterrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "MilitairOefengebiedSchietterrein"^^xsd:string;
+    rdfs:comment "Militair kamp voor het houden van schietoefeningen met zware vuurwapens (artillerie schietkamp). / Terrein ingericht voor het schieten op doelen (schietkamp). / Terrein waar militairen oefenen (militair oefenterrein)."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Mosselbank rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Mosselbank"^^xsd:string;
+    rdfs:comment "Plaats waar mosselen gekweekt worden."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:NatuurgebiedNatuurreservaat rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "NatuurgebiedNatuurreservaat"^^xsd:string;
+    rdfs:comment "Gebied dat waarde heeft uit een oogpunt van natuurschoon of natuurleven (natuurgebied). / Gebied waarin flora, fauna, enz. beschermd worden (natuurreservaat)."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Oliewinning rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Oliewinning"^^xsd:string;
+    rdfs:comment "Installatie t.b.v. de winning of transport van aardolie."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Openluchtmuseum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Openluchtmuseum"^^xsd:string;
+    rdfs:comment "Historisch museum in de open lucht, waarin de vroegere woon- en werkomgeving van de mens is gereconstrueerd"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Openluchttheater rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Openluchttheater"^^xsd:string;
+    rdfs:comment "Plaats waar toneelvoorstellingen in de openlucht plaatsvinden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Bedrijventerrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Bedrijventerrein"^^xsd:string;
+    rdfs:comment "Het geheel aan gebouwen en terreinen ten behoeve van bedrijven en industrie, inclusief toevoerwegen, tussengelegen water, etc."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Park rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Park"^^xsd:string;
+    rdfs:comment "Een op zichzelf staande groenvoorziening, dienend ter verfraaiing en/of verlevendiging van één of meerdere wijken, zonder hiervan direct deel uit te maken"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Plantsoen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Plantsoen"^^xsd:string;
+    rdfs:comment "Kleinschalige groenvoorziening, soms met wandel- en speelmogelijkheden, temidden van bebouwing, ter verfraaiing en verlevendiging van deze bebouwing."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Productie-installatie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Productie-installatie"^^xsd:string;
+    rdfs:comment "Het geheel van reactorvaten, kolommen, aan- en afvoerpijpen, bebouwing etc. t.b.v. de vervaardiging van chemische producten."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Recreatiegebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Recreatiegebied"^^xsd:string;
+    rdfs:comment "Terrein bedoeld voor vrijetijdsbesteding"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Renbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Renbaan"^^xsd:string;
+    rdfs:comment "Het geheel aan gebouwen en installaties bedoeld voor draf- of renwedstrijden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Skibaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Skibaan"^^xsd:string;
+    rdfs:comment "Terrein ingericht voor het beoefenen van de skisport"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Slipschool rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Slipschool"^^xsd:string;
+    rdfs:comment "Rijschool waar men een slippend voertuig leert beheersen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Sluizencomplex rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Sluizencomplex"^^xsd:string;
+    rdfs:comment "Het geheel aan voorzieningen, zoals gebouwen, terreinen, etc., behorende tot een sluizencomplex (ook schutsluizen en uitwateringssluizen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:SportterreinSportcomplex rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "SportterreinSportcomplex"^^xsd:string;
+    rdfs:comment "Het geheel aan voorzieningen (velden, kleedruimten, groenvoorziening, parkeerterrein, wegen, tribunes, etc.) t.b.v. de beoefening van sport"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Stortplaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Stortplaats"^^xsd:string;
+    rdfs:comment "Plaats waar afval gestort mag worden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Begraafplaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Begraafplaats"^^xsd:string;
+    rdfs:comment "Het geheel aan voorzieningen t.b.v. het begraven van overledenen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Tennispark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tennispark"^^xsd:string;
+    rdfs:comment "Terrein ingericht voor de beoefening van de tennissport"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Transformatorstation_functioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Transformatorstation_functioneelGebied"^^xsd:string;
+    rdfs:comment "Gebied met installatie(s) voor het transformeren van elektrische stroom"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Tuincentrum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Tuincentrum"^^xsd:string;
+    rdfs:comment "Het geheel aan bebouwing en omliggend terrein t.b.v. de (particuliere) verkoop van artikelen voor tuinaanleg"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Verzorgingsplaats rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Verzorgingsplaats"^^xsd:string;
+    rdfs:comment "Locatie langs een autosnelweg  of hoofdweg met een parkeerfunctie, meestal in combinatie met een brandstofverkooppunt en soms aangevuld met een wegrestaurant"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Viskwekerij_functioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Viskwekerij_functioneelGebied"^^xsd:string;
+    rdfs:comment "Terrein met bassins, aangelegd voor het kweken van vis."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:VliegveldLuchthaven rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "VliegveldLuchthaven"^^xsd:string;
+    rdfs:comment "Vliegveld voor verkeersvliegtuigen met groot, effen terrein met al dan niet verharde banen, waar vliegtuigen kunnen opstijgen en landen, eventueel met accomodatie voor ontvangst en vertrek van passagiers en verzending van goederen."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Volkstuinen rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Volkstuinen"^^xsd:string;
+    rdfs:comment "Het geheel aan voorzieningen t.b.v. hobbytuinbouw"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Waterkering rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Waterkering"^^xsd:string;
+    rdfs:comment "Geheel van een dijk of dam, inclusief talud"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Werf_functioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Werf_functioneelGebied"^^xsd:string;
+    rdfs:comment "Werkplaats waar schepen worden gebouwd of hersteld."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Wildwissel rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wildwissel"^^xsd:string;
+    rdfs:comment "Civieltechnisch kunstwerk om dieren een veilige oversteek te bieden over of onder een weg."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Boswachterij rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Boswachterij"^^xsd:string;
+    rdfs:comment "Deel van een houtvesterij onder een boswachter"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Windturbinepark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Windturbinepark"^^xsd:string;
+    rdfs:comment "Concentratie van windturbines"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Woonwagencentrum rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Woonwagencentrum"^^xsd:string;
+    rdfs:comment "Plaats waar gewoond wordt in woonwagens."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Ijsbaan rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Ijsbaan"^^xsd:string;
+    rdfs:comment "Voorziening in de open lucht waar in de winter geschaatst kan worden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Zandwinning rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zandwinning"^^xsd:string;
+    rdfs:comment "Gebied waar winning van zand plaatsvindt door middel van zuigen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Zenderpark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zenderpark"^^xsd:string;
+    rdfs:comment "Gebied waar meerdere zendmasten staan opgesteld"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Ziekenhuiscomplex rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Ziekenhuiscomplex"^^xsd:string;
+    rdfs:comment "Het geheel van gebouwen die tesamen een ziekenhuis vormen"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Zoutwinning rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zoutwinning"^^xsd:string;
+    rdfs:comment "Gebied waar zoutwinning plaatsvindt."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Zuiveringsinstallatie rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zuiveringsinstallatie"^^xsd:string;
+    rdfs:comment "Het gebied omvattende het geheel aan voorzieningen t.b.v. de zuivering van afvalwater"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Zweefvliegveldterrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zweefvliegveldterrein"^^xsd:string;
+    rdfs:comment "Het geheel aan terreinen, gebouwen enz.  voor (de beoefening van) de zweefvliegsport"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:ZwembadComplex rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "ZwembadComplex"^^xsd:string;
+    rdfs:comment "Het geheel aan voorzieningen rond een openbaar zwembad"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Bungalowpark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Bungalowpark"^^xsd:string;
+    rdfs:comment "Oppervlak bebouwd met (luxe) vakantiehuisjes"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Overig_functioneelGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_functioneelGebied"^^xsd:string;
+    rdfs:comment "Het type functioneelgebied is bekend, maar anders dan de genoemde waarden"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:CampingKampeerterrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "CampingKampeerterrein"^^xsd:string;
+    rdfs:comment "Terrein met voorzieningen t.b.v. verblijfsrecreatie voornamelijk voor tenten en caravans"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Campus rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Campus"^^xsd:string;
+    rdfs:comment "Een universiteitsterrein waarop gebouwen en voorzieningen voor zowel docenten als studenten aanwezig zijn"^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:Caravanpark rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Caravanpark"^^xsd:string;
+    rdfs:comment "Terrein met voorzieningen t.b.v. verblijfsrecreatie voornamelijk ingericht met stacaravans."^^xsd:string;
+    rdfs:subClassOf n3:FunctioneelGebied
+.
+n3:BosNaaldbos rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BosNaaldbos"^^xsd:string;
+    rdfs:comment "Oppervlak begroeid met een dusdanige aantal naaldbomen dat de kruinen een min of meer gesloten geheel vormen of, na volgroeiing van de bomen, zullen vormen"^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Braakliggend rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Braakliggend"^^xsd:string;
+    rdfs:comment "Een stuk grond dat geen functie vervuld en niet wordt onderhouden, met uitzondering van landbouwgrond"^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Dodenakker rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Dodenakker"^^xsd:string;
+    rdfs:comment "Terrein, gedeelte van een begraafplaats waar doden zijn of zullen worden begraven, niet gelegen in bos"^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:DodenakkerMetBos rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "DodenakkerMetBos"^^xsd:string;
+    rdfs:comment "Terrein, gedeelte van een begraafplaats waar doden zijn of zullen worden begraven,"^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Duin rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Duin"^^xsd:string;
+    rdfs:comment "Terrein met grondsoort zand, langs de kust, een rivier, in een zandwoestijn of op andere plekken"^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Fruitkwekerij rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Fruitkwekerij"^^xsd:string;
+    rdfs:comment "Terrein met laagstammige fruitbomen en struiken waarvan de vruchten worden geoogst (zoals: rozenbottels, bessen, frambozen, druiven, etc.)."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Grasland rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Grasland"^^xsd:string;
+    rdfs:comment "Terrein, overwegend begroeid met een grasachtige vegetatie."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Heide rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Heide"^^xsd:string;
+    rdfs:comment "Terrein, overwegend begroeid met heidevegetatie en wilde grassoorten."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Populieren rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Populieren"^^xsd:string;
+    rdfs:comment "Terrein, volgens een regelmatig patroon beplant met populieren."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Spoorbaanlichaam rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Spoorbaanlichaam"^^xsd:string;
+    rdfs:comment "Geheel van rails, dwarsliggers e.d. waarover de trein of metro rijdt."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Aanlegsteiger_terrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Aanlegsteiger_terrein"^^xsd:string;
+    rdfs:comment "In het water uitstekende brug of pier, breder dan 2 meter, gebruikt om personen en goederen aan wal te brengen."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Zand rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zand"^^xsd:string;
+    rdfs:comment "Terrein met grondsoort zand, van nature zonder enige begroeiing."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Overig_terrein rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_terrein"^^xsd:string;
+    rdfs:comment "De waarde van het objectkenmerk is bekend, maar anders dan de genoemde waarden. Een niet nader omschreven gebruiksbestemming."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Akkerland rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Akkerland"^^xsd:string;
+    rdfs:comment "Terrein waar landbouwproducten worden verbouwd."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:BasaltblokkenSteenglooiing rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BasaltblokkenSteenglooiing"^^xsd:string;
+    rdfs:comment "Dijkversteviging m.b.v. stenen, tegels, basaltblokken, stortsteen (geen asfalt of bitumen) of een golfslagbreker, stroombreker of strekdam langs de kust en in rivieren."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:BebouwdGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BebouwdGebied"^^xsd:string;
+    rdfs:comment "Een oppervlak, (vrij) intensief gebruikt voor bewoning en/of productie en/of verhandeling van goederen en diensten, plus bijbehorend erf, wegen en openbaar groen (m.u.v. een plantsoen of park)."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Boomgaard rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Boomgaard"^^xsd:string;
+    rdfs:comment "Terrein met hoogstammige fruitbomen"^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:Boomkwekerij rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Boomkwekerij"^^xsd:string;
+    rdfs:comment "Terrein, overwegend in gebruik t.b.v. het opkweken van bomen (inclusief coniferen en sparren) en struiken, waarbij de hoogte van de aanplant niet van belang is."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:BosGemengdBos rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BosGemengdBos"^^xsd:string;
+    rdfs:comment "Oppervlak begroeid met een dusdanige aantal naald- en loofbomen dat de kruinen een min of meer gesloten geheel vormen of, na volgroeiing van de bomen, zullen vormen."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:BosGriend rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BosGriend"^^xsd:string;
+    rdfs:comment "In of aan het water gelegen terrein, begroeid met laagafgeknot wilgenhout t.b.v. de productie van rijshout."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:BosLoofbos rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BosLoofbos"^^xsd:string;
+    rdfs:comment "Oppervlak begroeid met een dusdanige aantal loofbomen dat de kruinen een min of meer gesloten geheel vormen of, na volgroeiing van de bomen, zullen vormen."^^xsd:string;
+    rdfs:subClassOf n3:Terrein
+.
+n3:StreekVeld rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "StreekVeld"^^xsd:string;
+    rdfs:comment "Landstreek, gebied dat cultureel of landschappelijk een eenheid vormt (streek). / Het open land buiten steden en dorpen (veld)."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:TerpWierde rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "TerpWierde"^^xsd:string;
+    rdfs:comment "Verhoging in het landschap oorspronkelijk bedoelt om de daarop gevestigde bebouwing te beschermen tegen het water"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Wad rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Wad"^^xsd:string;
+    rdfs:comment "De buitendijkse gronden bij Friesland, Groningen en Noord-Duitsland die alleen bij vloed onder water komen"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Watergebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Watergebied"^^xsd:string;
+    rdfs:comment "Een complex van meren en plassen"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Zee_geografischGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Zee_geografischGebied"^^xsd:string;
+    rdfs:comment "Uitgestrekt oppervlak zout water dat het grootste deel van de aarde bedekt."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:ZeegatZeearm rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "ZeegatZeearm"^^xsd:string;
+    rdfs:comment "Plaats waar een binnenzee in een zee uitmondt (zeegat). / Lange smalle inham van een zee/ zeearm"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Overig_geografischGebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Overig_geografischGebied"^^xsd:string;
+    rdfs:comment "De waarde van het objectkenmerk is niet bekend"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:BankOndieptePlaat rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "BankOndieptePlaat"^^xsd:string;
+    rdfs:comment "Geheel of gedeeltelijk droogvallende grond (bank). / Ondiepe plaats in een vaarwater (ondiepte). / Zandbank (plaat)."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Bosgebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Bosgebied"^^xsd:string;
+    rdfs:comment "Met bos begroeid gebied"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Duingebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Duingebied"^^xsd:string;
+    rdfs:comment "Heuvels van fijn zand, al dan niet begroeid met helmgras en struiken"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Eiland rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Eiland"^^xsd:string;
+    rdfs:comment "Land, omgeven door water"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:GeulVaargeul rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "GeulVaargeul"^^xsd:string;
+    rdfs:comment "Smal, meestal diep water (geul). / Geul van voldoende diepte als vaarwater tussen ondiepten door (vaargeul)."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Heidegebied rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Heidegebied"^^xsd:string;
+    rdfs:comment "Met heide begroeid gebied"^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:HeuvelBerg rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "HeuvelBerg"^^xsd:string;
+    rdfs:comment "Verhoging van het terrein (heuvel). / Min of meer op zichzelf staande sterke verheffing van het aardoppervlak (berg)."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:KaapHoek rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "KaapHoek"^^xsd:string;
+    rdfs:comment "In zee vooruitstekende landpunt (kaap). / In het water uitstekende landtong (hoek)."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n3:Polder rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Polder"^^xsd:string;
+    rdfs:comment "Door waterscheidingen begrensd stuk land of gebied waarin de waterstand kan worden beheerst door bemaling."^^xsd:string;
+    rdfs:subClassOf n3:GeografischGebied
+.
+n1:Geometry rdf:type <http://www.w3.org/2002/07/owl#Class>;
+    rdfs:label "Geometrie"@nl
+.
+n3:hoogteniveau rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "hoogteniveau"^^xsd:string;
+    rdfs:comment "De relatieve hoogteligging van het geo-object ten opzichte van een ander geo-object."^^xsd:string
+.
+n3:visualisatieCode rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "visualisatieCode"^^xsd:string;
+    rdfs:comment "Code op basis waarvan een gebruiker het object kan visualiseren."^^xsd:string
+.
+n3:nummer rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "nummer"^^xsd:string;
+    rdfs:comment "Het administratieve nummer van het registratief gebied."^^xsd:string;
+    rdfs:comment "Het nummer van het inrichtingselement"^^xsd:string
+.
+n3:bronnauwkeurigheid rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "bronnauwkeurigheid"^^xsd:string;
+    rdfs:comment "Nauwkeurigheid van de gebruikte bron in meters."^^xsd:string
+.
+n3:hoofdafwatering rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "hoofdafwatering"^^xsd:string;
+    rdfs:comment "Aanduiding of het water deel uitmaakt van het hoofdafwateringspatroon (het stelsel van waterlopen in gebruik als primaire afvoermogelijkheid van overtollig oppervlaktewater c.q. aanvoermogelijkheid bij een tekort aan oppervlaktewater, plus bijhorende kunstwerken)"^^xsd:string
+.
+n3:naamOfficieel rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "naamOfficieel"^^xsd:string;
+    rdfs:comment "De officiële naam."^^xsd:string
+.
+n3:soortnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "soortnaam"^^xsd:string;
+    rdfs:comment "De klasse waartoe het inrichtingselement behoort"^^xsd:string;
+    rdfs:comment "Nadere specificatie van het type gebouw."^^xsd:string;
+    rdfs:comment "Verdere specificatie van het type functioneel gebied."^^xsd:string
+.
+n3:brugnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "brugnaam"^^xsd:string;
+    rdfs:comment "De naam van een brug."^^xsd:string
+.
+n3:elektrificatie rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "elektrificatie"^^xsd:string;
+    rdfs:comment "Aanduiding of het spoorbaandeel geëlektrificeerd is of niet."^^xsd:string
+.
+n3:getijdeinvloed rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "getijdeinvloed"^^xsd:string;
+    rdfs:comment "Aanduiding voor het geven van de stroomrichting(en) van (natuurlijke) waterlopen."^^xsd:string
+.
+n3:gescheidenRijbaan rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "gescheidenRijbaan"^^xsd:string;
+    rdfs:comment "Aanduiding of het object onderdeel uitmaakt van een weg met gescheiden rijbanen"^^xsd:string
+.
+n3:tijdstipRegistratie rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "tijdstipRegistratie"^^xsd:string;
+    rdfs:comment "Tijdstip waarop de versie van het object is opgenomen in de registratie"^^xsd:string
+.
+n3:hoogte rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "hoogte"^^xsd:string;
+    rdfs:comment "De hoogte van het object (t.o.v. het maaiveld of t.o.v. NAP)."^^xsd:string;
+    rdfs:comment "Hoogte van het object t.o.v. NAP in meters met een nauwkeurigheid van 1 decimeter. / De diepte van het water"^^xsd:string;
+    rdfs:comment "De hoogte van het inrichtingselement"^^xsd:string
+.
+n3:objectEindTijd rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "objectEindTijd"^^xsd:string;
+    rdfs:comment "Tijdstip waarop het object in de registratie niet meer geldig is"^^xsd:string
+.
+n3:naamFries rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "naamFries"^^xsd:string;
+    rdfs:comment "De Friese naam."^^xsd:string
+.
+n3:baanvaknaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "baanvaknaam"^^xsd:string;
+    rdfs:comment "De naam van het baanvak."^^xsd:string
+.
+n3:naam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "naam"^^xsd:string;
+    rdfs:comment "De naam"^^xsd:string
+.
+n3:bronactualiteit rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "bronactualiteit"^^xsd:string;
+    rdfs:comment "Datum van de gebruikte bron."^^xsd:string
+.
+n3:bronbeschrijving rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "bronbeschrijving"^^xsd:string;
+    rdfs:comment "Beschrijving van de gebruikte bron."^^xsd:string
+.
+n3:identificatie rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "identificatie"^^xsd:string;
+    rdfs:comment '''Unieke identificatie van het object binnen het domein van NEN 3610.
+-- Source --
+NEN 3610:2011'''^^xsd:string
+.
+n3:aantalRijstroken rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "aantalRijstroken"^^xsd:string;
+    rdfs:comment "Het aantal onderverdelingen van een wegdeel d.m.v. strepen, verschil in verharding of kleur."^^xsd:string
+.
+n3:tunnelnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "tunnelnaam"^^xsd:string;
+    rdfs:comment "Naam van een tunnel."^^xsd:string
+.
+n3:aWegnummer rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "aWegnummer"^^xsd:string;
+    rdfs:comment "Nummering van de rijkswegen (autosnelwegen) behorende tot het nationale wegenstelsel"^^xsd:string
+.
+n3:nWegnummer rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "nWegnummer"^^xsd:string;
+    rdfs:comment "Nummering van de provinciale wegen behorende tot het nationale wegenstelsel en nummering van rijkswegen die nog niet de status van autosnelweg hebben."^^xsd:string
+.
+n3:sluisnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "sluisnaam"^^xsd:string;
+    rdfs:comment "De naam van de sluis"^^xsd:string
+.
+n3:sWegnummer rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "sWegnummer"^^xsd:string;
+    rdfs:comment "Nummering van lokale doorgaande wegen binnen / rond de gemeente Amsterdam."^^xsd:string
+.
+n3:afritnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "afritnaam"^^xsd:string;
+    rdfs:comment "Afritbenaming op autosnelweg, vastgesteld door Rijkswaterstaat"^^xsd:string
+.
+n3:knooppuntnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "knooppuntnaam"^^xsd:string;
+    rdfs:comment "Naam van een knooppunt"^^xsd:string
+.
+n3:objectBeginTijd rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "objectBeginTijd"^^xsd:string;
+    rdfs:comment "Tijdstip waarop het object in de registratie is ontstaan"^^xsd:string
+.
+n3:aantalinwoners rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "aantalinwoners"^^xsd:string;
+    rdfs:comment "Aantal inwoners van de plaats."^^xsd:string
+.
+n3:eindRegistratie rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "eindRegistratie"^^xsd:string;
+    rdfs:comment "Tijdstip waarop de versie van het object niet meer geldig is in de registratie"^^xsd:string
+.
+n3:bebouwdeKom rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "bebouwdeKom"^^xsd:string;
+    rdfs:comment "Aanduiding of de plaats tot een bebouwde kom behoort of niet."^^xsd:string
+.
+n3:breedte rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "breedte"^^xsd:string;
+    rdfs:comment "De breedte van het inrichtingselement"^^xsd:string
+.
+n3:eWegnummer rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "eWegnummer"^^xsd:string;
+    rdfs:comment "Nummering van de rijkswegen, die een Europese aansluiting op buitenlandse doorgaande wegen vormen"^^xsd:string
+.
+n3:afritnummer rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "afritnummer"^^xsd:string;
+    rdfs:comment "Afritnummering op autosnelweg, vastgesteld door Rijkswaterstaat"^^xsd:string
+.
+n3:tdnCode rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "tdnCode"^^xsd:string;
+    rdfs:comment "Code die het object in TOP10vector had."^^xsd:string
+.
+n3:naamNL rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "naamNL"^^xsd:string;
+    rdfs:comment "De Nederlandse naam."^^xsd:string
+.
+n3:isBAGnaam rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "isBAGnaam"^^xsd:string;
+    rdfs:comment "Aanduiding of de naam afkomstig is uit de BAG"^^xsd:string;
+    rdfs:comment '''Aanduiding of de naam afkomstig is uit de BAG
+n'''^^xsd:string
+.
+n3:isBAGwoonplaats rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "isBAGwoonplaats"^^xsd:string;
+    rdfs:comment "Aanduiding of de naam afkomstig is uit de BAG"^^xsd:string
+.
+n3:typeWater rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeWater"^^xsd:string;
+    rdfs:comment "Aanduiding of het object een verbinding, een kruising of iets anders"^^xsd:string
+.
+n3:voorkomen rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "voorkomen"^^xsd:string;
+    rdfs:comment "Aanduiding dat er riet op het waterdeel voorkomt"^^xsd:string;
+    rdfs:comment "Aanduiding dat er riet op het terrein voorkomt of dat het drassig/moerassig is."^^xsd:string
+.
+n3:verhardingstype rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "verhardingstype"^^xsd:string;
+    rdfs:comment "Het type verharding van een wegdeel"^^xsd:string
+.
+n3:aantalSporen rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "aantalSporen"^^xsd:string;
+    rdfs:comment "Het aantal sporen van het spoorbaandeel"^^xsd:string
+.
+n3:geometrieVlak rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "geometrieVlak"^^xsd:string;
+    rdfs:comment "De vlakgeometrie van een terrein object."^^xsd:string
+.
+n3:hartGeometrie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "hartGeometrie"^^xsd:string;
+    rdfs:comment "De geometrie van de hartlijn of kruisingspunt van een wegdeel"^^xsd:string
+.
+n3:geometrie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "geometrie"^^xsd:string;
+    rdfs:comment "De lijn- of puntgeometrie van een hoogte object"^^xsd:string;
+    rdfs:comment "De vlak-, lijn- of puntgeometrie van het geplande object."^^xsd:string;
+    rdfs:comment "De vlak- of multivlakgeometrie van een registratief gebied."^^xsd:string;
+    rdfs:comment "De punt- of vlakgeometrie van een gebouw object"^^xsd:string;
+    rdfs:comment "De vlak- of puntgeometrie van de plaats."^^xsd:string;
+    rdfs:comment "De punt-, lijn- of vlakgeometrie van een waterdeel object"^^xsd:string;
+    rdfs:comment "De punt-, vlak- of multivlakgeometrie van een functioneel gebied object."^^xsd:string;
+    rdfs:comment "De punt- of lijngeometrie van een inrichtingelement."^^xsd:string;
+    rdfs:comment "De punt- of vlakgeometrie van een geografisch gebied object."^^xsd:string;
+    rdfs:comment "De geometrie van een spoorbaandeel (lijn of punt)"^^xsd:string
+.
+n3:typeInfrastructuur rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeInfrastructuur"^^xsd:string;
+    rdfs:comment "Aanduiding of het object een verbinding, een kruising of iets anders is."^^xsd:string;
+    rdfs:comment "Aanduiding of het object een verbinding of een kruising is. Kruising is meestal een wissel."^^xsd:string
+.
+n3:status rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "status"^^xsd:string;
+    rdfs:comment "De gebruiksstatus van het object."^^xsd:string
+.
+n3:hoogteklasse rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "hoogteklasse"^^xsd:string;
+    rdfs:comment "De klasse van hoogte waar de bebouwing toe behoort"^^xsd:string;
+    rdfs:comment "Klasse van de hoogte van een object ten opzichte van het maaiveld"^^xsd:string
+.
+n3:fysiekVoorkomen rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "fysiekVoorkomen"^^xsd:string;
+    rdfs:comment "De plaats waar het object zich bevindt t.o.v. andere constructies."^^xsd:string
+.
+n3:vaarwegklasse rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "vaarwegklasse"^^xsd:string;
+    rdfs:comment "CEMT klasses van vaarwegen, welke gebaseerd zijn op de afmetingen en laadvermogen van standaardschepen en duwstellen voor de binnen- en riviervaart in West-Europa. De klasses I t/m VII zijn in 1992 bepaald door de Conferentie van Europese Ministers van Verkeer (C.E.M.T.). Naderhand is klasse 0 (vaarwegen kleiner dan die van klasse I) daaraan toegevoegd. Klasse VII komt in Nederland niet voor."^^xsd:string
+.
+n3:typeLandgebruik rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeLandgebruik"^^xsd:string;
+    rdfs:comment "De gebruiksbestemming van het terrein."^^xsd:string
+.
+n3:brontype rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "brontype"^^xsd:string;
+    rdfs:comment "Aanduiding welk soort bron is gebruikt."^^xsd:string
+.
+n3:typeSpoorbaan rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeSpoorbaan"^^xsd:string;
+    rdfs:comment "Het soort vervoermiddel waarvoor het spoorbaandeel bestemd is."^^xsd:string
+.
+n3:breedteklasse rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "breedteklasse"^^xsd:string;
+    rdfs:comment "De breedte van het water ingedeeld in klassen."^^xsd:string
+.
+n3:typeGebied rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeGebied"^^xsd:string;
+    rdfs:comment "Aanduiding van het type plaats."^^xsd:string
+.
+n3:functie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "functie"^^xsd:string;
+    rdfs:comment "De functie van het water."^^xsd:string;
+    rdfs:comment "Aanduiding of het object een geluidswerende of scheidende functie heeft."^^xsd:string
+.
+n3:spoorbreedte rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "spoorbreedte"^^xsd:string;
+    rdfs:comment "De breedteklasse van het spoor"^^xsd:string
+.
+n3:typeObject rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeObject"^^xsd:string;
+    rdfs:comment "Het type of soort gepland object."^^xsd:string
+.
+n3:vervoerfunctie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "vervoerfunctie"^^xsd:string;
+    rdfs:comment "De functie waarvoor het spoor gebruikt wordt (of werd)"^^xsd:string
+.
+n3:typeRegistratiefGebied rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeRegistratiefGebied"^^xsd:string;
+    rdfs:comment "Het soort registratief gebied"^^xsd:string
+.
+n3:typeGeografischGebied rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeGeografischGebied"^^xsd:string;
+    rdfs:comment "Het soort geografisch gebied"^^xsd:string
+.
+n3:typeRelief rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeRelief"^^xsd:string;
+    rdfs:comment "Het soort reliëf."^^xsd:string
+.
+n3:lijnGeometrie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "lijnGeometrie"^^xsd:string;
+    rdfs:comment "De lijngeometrie van het reliëf object."^^xsd:string
+.
+n3:hoofdverkeersgebruik rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "hoofdverkeersgebruik"^^xsd:string;
+    rdfs:comment "Soort verkeer waarvoor een weg bestemd is"^^xsd:string
+.
+n3:typeHoogte rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeHoogte"^^xsd:string;
+    rdfs:comment "Het soort hoogte object, bijv. hoogtlijn"^^xsd:string
+.
+n3:typeFunctioneelGebied rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeFunctioneelGebied"^^xsd:string;
+    rdfs:comment "Het soort functioneel gebied."^^xsd:string
+.
+n3:gebruiksdoel rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "gebruiksdoel"^^xsd:string;
+    rdfs:comment "Huidig gebruiksdoel van een gebouw, conform de BAG classificatie voor panden"^^xsd:string
+.
+n3:typeInrichtingselement rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeInrichtingselement"^^xsd:string;
+    rdfs:comment "Het soort inrichtingselement"^^xsd:string
+.
+n3:typeGebouw rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeGebouw"^^xsd:string;
+    rdfs:comment "Het oorspronkelijk gebruiksdoel van het gebouw."^^xsd:string
+.
+n3:referentievlak rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "referentievlak"^^xsd:string;
+    rdfs:comment "Referentievlak ten opzichte waarvan de hoogten gedefinieerd zijn."^^xsd:string
+.
+n3:typeWeg rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "typeWeg"^^xsd:string;
+    rdfs:comment "Het soort weg"^^xsd:string
+.
+n3:verhardingsbreedteklasse rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "verhardingsbreedteklasse"^^xsd:string;
+    rdfs:comment "De breedte van de verharding, ingedeeld in klassen"^^xsd:string
+.
+n3:hoofdGeometrie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "hoofdGeometrie"^^xsd:string;
+    rdfs:comment "De hoofdgeometrie van een wegdeel (vlak, lijn of punt)"^^xsd:string
+.
+n3:mutatieType rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "mutatieType"^^xsd:string;
+    rdfs:comment "Het soort mutatie dat een object als laatste ondergaan heeft."^^xsd:string
+.
+n3:taludGeometrie rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "taludGeometrie"^^xsd:string;
+    rdfs:comment "De lijngeometrieën van zowel de hoge als de lage zijde van een talud."^^xsd:string
+.
+n3:FeatureMember rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "FeatureMember"^^xsd:string
+.
+n4:top10nl rdf:type <http://www.w3.org/2002/07/owl#Ontology>;
+    rdfs:label "top10nl vocabulaire"^^xsd:string
+.
+n2:FunctioneelGebied shacl:scopeClass n3:FunctioneelGebied;
+    shacl:property n2:FunctioneelGebied_naamNl;
+    shacl:property n2:FunctioneelGebied_geometrie;
+    shacl:property n2:FunctioneelGebied_soortnaam;
+    shacl:property n2:FunctioneelGebied_naamFries;
+    shacl:property n2:FunctioneelGebied_typeFunctioneelGebied
+.
+n2:FunctioneelGebied_naamNl shacl:predicate n3:naamNL;
+    shacl:datatype xsd:string
+.
+n2:FunctioneelGebied_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:FunctioneelGebied_soortnaam shacl:predicate n3:soortnaam;
+    shacl:datatype xsd:string
+.
+n2:FunctioneelGebied_naamFries shacl:predicate n3:naamFries;
+    shacl:datatype xsd:string
+.
+n2:FunctioneelGebied_typeFunctioneelGebied shacl:predicate n3:typeFunctioneelGebied;
+    shacl:class n3:FunctioneelGebied;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/FunctioneelGebied>
+.
+n2:_Top10nlObject shacl:scopeClass n3:_Top10nlObject;
+    shacl:property n2:_Top10nlObject_objectBeginTijd;
+    shacl:property n2:_Top10nlObject_eindRegistratie;
+    shacl:property n2:_Top10nlObject_tdnCode;
+    shacl:property n2:_Top10nlObject_brontype;
+    shacl:property n2:_Top10nlObject_mutatieType;
+    shacl:property n2:_Top10nlObject_visualisatieCode;
+    shacl:property n2:_Top10nlObject_bronnauwkeurigheid;
+    shacl:property n2:_Top10nlObject_tijdstipRegistratie;
+    shacl:property n2:_Top10nlObject_objectEindTijd;
+    shacl:property n2:_Top10nlObject_bronactualiteit;
+    shacl:property n2:_Top10nlObject_bronbeschrijving;
+    shacl:property n2:_Top10nlObject_identificatie
+.
+n2:_Top10nlObject_objectBeginTijd shacl:predicate n3:objectBeginTijd;
+    shacl:datatype xsd:date
+.
+n2:_Top10nlObject_eindRegistratie shacl:predicate n3:eindRegistratie;
+    shacl:datatype xsd:date
+.
+n2:_Top10nlObject_tdnCode shacl:predicate n3:tdnCode;
+    shacl:datatype xsd:integer
+.
+n2:_Top10nlObject_brontype shacl:predicate n3:brontype;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Bron>
+.
+n2:_Top10nlObject_mutatieType shacl:predicate n3:mutatieType;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Mutatiesoort>
+.
+n2:_Top10nlObject_visualisatieCode shacl:predicate n3:visualisatieCode;
+    shacl:datatype xsd:integer
+.
+n2:_Top10nlObject_bronnauwkeurigheid shacl:predicate n3:bronnauwkeurigheid;
+    shacl:datatype xsd:float
+.
+n2:_Top10nlObject_tijdstipRegistratie shacl:predicate n3:tijdstipRegistratie;
+    shacl:datatype xsd:date
+.
+n2:_Top10nlObject_objectEindTijd shacl:predicate n3:objectEindTijd;
+    shacl:datatype xsd:date
+.
+n2:_Top10nlObject_bronactualiteit shacl:predicate n3:bronactualiteit;
+    shacl:datatype xsd:date
+.
+n2:_Top10nlObject_bronbeschrijving shacl:predicate n3:bronbeschrijving;
+    shacl:datatype xsd:string
+.
+n2:_Top10nlObject_identificatie shacl:predicate n3:identificatie;
+    shacl:datatype xsd:string
+.
+n2:Inrichtingselement shacl:scopeClass n3:Inrichtingselement;
+    shacl:property n2:Inrichtingselement_soortnaam;
+    shacl:property n2:Inrichtingselement_hoogteniveau;
+    shacl:property n2:Inrichtingselement_naam;
+    shacl:property n2:Inrichtingselement_nummer;
+    shacl:property n2:Inrichtingselement_typeInrichtingselement;
+    shacl:property n2:Inrichtingselement_breedte;
+    shacl:property n2:Inrichtingselement_geometrie;
+    shacl:property n2:Inrichtingselement_hoogte
+.
+n2:Inrichtingselement_soortnaam shacl:predicate n3:soortnaam;
+    shacl:datatype xsd:string
+.
+n2:Inrichtingselement_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:Inrichtingselement_naam shacl:predicate n3:naam;
+    shacl:datatype xsd:string
+.
+n2:Inrichtingselement_nummer shacl:predicate n3:nummer;
+    shacl:datatype xsd:string
+.
+n2:Inrichtingselement_typeInrichtingselement shacl:predicate n3:typeInrichtingselement;
+    shacl:class n3:Inrichtingselement;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Inrichtingselement>
+.
+n2:Inrichtingselement_breedte shacl:predicate n3:breedte;
+    shacl:datatype xsd:integer
+.
+n2:Inrichtingselement_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Inrichtingselement_hoogte shacl:predicate n3:hoogte;
+    shacl:datatype xsd:float
+.
+n2:RegistratiefGebied shacl:scopeClass n3:RegistratiefGebied;
+    shacl:property n2:RegistratiefGebied_naamNl;
+    shacl:property n2:RegistratiefGebied_nummer;
+    shacl:property n2:RegistratiefGebied_naamOfficieel;
+    shacl:property n2:RegistratiefGebied_naamFries;
+    shacl:property n2:RegistratiefGebied_geometrie;
+    shacl:property n2:RegistratiefGebied_typeRegistratiefGebied
+.
+n2:RegistratiefGebied_naamNl shacl:predicate n3:naamNL;
+    shacl:datatype xsd:string
+.
+n2:RegistratiefGebied_nummer shacl:predicate n3:nummer;
+    shacl:datatype xsd:string
+.
+n2:RegistratiefGebied_naamOfficieel shacl:predicate n3:naamOfficieel;
+    shacl:datatype xsd:string
+.
+n2:RegistratiefGebied_naamFries shacl:predicate n3:naamFries;
+    shacl:datatype xsd:string
+.
+n2:RegistratiefGebied_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:RegistratiefGebied_typeRegistratiefGebied shacl:predicate n3:typeRegistratiefGebied;
+    shacl:class n3:RegistratiefGebied;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/RegistratiefGebied>
+.
+n2:Waterdeel shacl:scopeClass n3:Waterdeel;
+    shacl:property n2:Waterdeel_hoofdafwatering;
+    shacl:property n2:Waterdeel_brugnaam;
+    shacl:property n2:Waterdeel_naamNl;
+    shacl:property n2:Waterdeel_hoogteniveau;
+    shacl:property n2:Waterdeel_voorkomen;
+    shacl:property n2:Waterdeel_typeWater;
+    shacl:property n2:Waterdeel_breedteklasse;
+    shacl:property n2:Waterdeel_isBagnaam;
+    shacl:property n2:Waterdeel_naamOfficieel;
+    shacl:property n2:Waterdeel_functie;
+    shacl:property n2:Waterdeel_vaarwegklasse;
+    shacl:property n2:Waterdeel_fysiekVoorkomen;
+    shacl:property n2:Waterdeel_naamFries;
+    shacl:property n2:Waterdeel_getijdeinvloed;
+    shacl:property n2:Waterdeel_geometrie;
+    shacl:property n2:Waterdeel_sluisnaam
+.
+n2:Waterdeel_hoofdafwatering shacl:predicate n3:hoofdafwatering;
+    shacl:datatype xsd:boolean
+.
+n2:Waterdeel_brugnaam shacl:predicate n3:brugnaam;
+    shacl:datatype xsd:string
+.
+n2:Waterdeel_naamNl shacl:predicate n3:naamNL;
+    shacl:datatype xsd:string
+.
+n2:Waterdeel_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:Waterdeel_voorkomen shacl:predicate n3:voorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Voorkomen_waterdeel>
+.
+n2:Waterdeel_typeWater shacl:predicate n3:typeWater;
+    shacl:class n3:Waterdeel;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Waterdeel>
+.
+n2:Waterdeel_breedteklasse shacl:predicate n3:breedteklasse;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Breedteklasse>
+.
+n2:Waterdeel_isBagnaam shacl:predicate n3:isBAGnaam;
+    shacl:datatype xsd:boolean
+.
+n2:Waterdeel_naamOfficieel shacl:predicate n3:naamOfficieel;
+    shacl:datatype xsd:string
+.
+n2:Waterdeel_functie shacl:predicate n3:functie;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Functie_waterdeel>
+.
+n2:Waterdeel_vaarwegklasse shacl:predicate n3:vaarwegklasse;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Vaarwegklasse>
+.
+n2:Waterdeel_fysiekVoorkomen shacl:predicate n3:fysiekVoorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/FysiekVoorkomen_waterdeel>
+.
+n2:Waterdeel_naamFries shacl:predicate n3:naamFries;
+    shacl:datatype xsd:string
+.
+n2:Waterdeel_getijdeinvloed shacl:predicate n3:getijdeinvloed;
+    shacl:datatype xsd:boolean
+.
+n2:Waterdeel_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Waterdeel_sluisnaam shacl:predicate n3:sluisnaam;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel shacl:scopeClass n3:Wegdeel;
+    shacl:property n2:Wegdeel_brugnaam;
+    shacl:property n2:Wegdeel_hartGeometrie;
+    shacl:property n2:Wegdeel_verhardingstype;
+    shacl:property n2:Wegdeel_hoogteniveau;
+    shacl:property n2:Wegdeel_naam;
+    shacl:property n2:Wegdeel_status;
+    shacl:property n2:Wegdeel_fysiekVoorkomen;
+    shacl:property n2:Wegdeel_gescheidenRijbaan;
+    shacl:property n2:Wegdeel_typeInfrastructuur;
+    shacl:property n2:Wegdeel_knooppuntnaam;
+    shacl:property n2:Wegdeel_afritnaam;
+    shacl:property n2:Wegdeel_sWegnummer;
+    shacl:property n2:Wegdeel_hoofdverkeersgebruik;
+    shacl:property n2:Wegdeel_aWegnummer;
+    shacl:property n2:Wegdeel_nWegnummer;
+    shacl:property n2:Wegdeel_aantalRijstroken;
+    shacl:property n2:Wegdeel_tunnelnaam;
+    shacl:property n2:Wegdeel_isBagnaam;
+    shacl:property n2:Wegdeel_verhardingsbreedteklasse;
+    shacl:property n2:Wegdeel_afritnummer;
+    shacl:property n2:Wegdeel_hoofdGeometrie;
+    shacl:property n2:Wegdeel_typeWeg;
+    shacl:property n2:Wegdeel_eWegnummer
+.
+n2:Wegdeel_brugnaam shacl:predicate n3:brugnaam;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_hartGeometrie shacl:predicate n3:hartGeometrie;
+    shacl:class n1:Geometry
+.
+n2:Wegdeel_verhardingstype shacl:predicate n3:verhardingstype;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Verhardingstype>
+.
+n2:Wegdeel_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:Wegdeel_naam shacl:predicate n3:naam;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_status shacl:predicate n3:status;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Status>
+.
+n2:Wegdeel_fysiekVoorkomen shacl:predicate n3:fysiekVoorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/FysiekVoorkomen_wegdeel>
+.
+n2:Wegdeel_gescheidenRijbaan shacl:predicate n3:gescheidenRijbaan;
+    shacl:datatype xsd:boolean
+.
+n2:Wegdeel_typeInfrastructuur shacl:predicate n3:typeInfrastructuur;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/TypeInfrastructuur_wegdeel>
+.
+n2:Wegdeel_knooppuntnaam shacl:predicate n3:knooppuntnaam;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_afritnaam shacl:predicate n3:afritnaam;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_sWegnummer shacl:predicate n3:sWegnummer;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_hoofdverkeersgebruik shacl:predicate n3:hoofdverkeersgebruik;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Hoofdverkeersgebruik>
+.
+n2:Wegdeel_aWegnummer shacl:predicate n3:aWegnummer;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_nWegnummer shacl:predicate n3:nWegnummer;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_aantalRijstroken shacl:predicate n3:aantalRijstroken;
+    shacl:datatype xsd:integer
+.
+n2:Wegdeel_tunnelnaam shacl:predicate n3:tunnelnaam;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_isBagnaam shacl:predicate n3:isBAGnaam;
+    shacl:datatype xsd:boolean
+.
+n2:Wegdeel_verhardingsbreedteklasse shacl:predicate n3:verhardingsbreedteklasse;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Verhardingsbreedteklasse>
+.
+n2:Wegdeel_afritnummer shacl:predicate n3:afritnummer;
+    shacl:datatype xsd:string
+.
+n2:Wegdeel_hoofdGeometrie shacl:predicate n3:hoofdGeometrie;
+    shacl:class n1:Geometry
+.
+n2:Wegdeel_typeWeg shacl:predicate n3:typeWeg;
+    shacl:class n3:Wegdeel;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Wegdeel>
+.
+n2:Wegdeel_eWegnummer shacl:predicate n3:eWegnummer;
+    shacl:datatype xsd:string
+.
+n2:Terrein shacl:scopeClass n3:Terrein;
+    shacl:property n2:Terrein_hoogteniveau;
+    shacl:property n2:Terrein_geometrieVlak;
+    shacl:property n2:Terrein_fysiekVoorkomen;
+    shacl:property n2:Terrein_voorkomen;
+    shacl:property n2:Terrein_typeLandgebruik;
+    shacl:property n2:Terrein_naam
+.
+n2:Terrein_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:Terrein_geometrieVlak shacl:predicate n3:geometrieVlak;
+    shacl:class n1:Geometry
+.
+n2:Terrein_fysiekVoorkomen shacl:predicate n3:fysiekVoorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/FysiekVoorkomen_terrein>
+.
+n2:Terrein_voorkomen shacl:predicate n3:voorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Voorkomen_terrein>
+.
+n2:Terrein_typeLandgebruik shacl:predicate n3:typeLandgebruik;
+    shacl:class n3:Terrein;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Terrein>
+.
+n2:Terrein_naam shacl:predicate n3:naam;
+    shacl:datatype xsd:string
+.
+n2:Hoogte shacl:scopeClass n3:Hoogte;
+    shacl:property n2:Hoogte_geometrie;
+    shacl:property n2:Hoogte_hoogteklasse;
+    shacl:property n2:Hoogte_typeHoogte;
+    shacl:property n2:Hoogte_referentievlak
+.
+n2:Hoogte_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Hoogte_hoogteklasse shacl:predicate n3:hoogte;
+    shacl:datatype xsd:float
+.
+n2:Hoogte_typeHoogte shacl:predicate n3:typeHoogte;
+    shacl:class n3:Hoogte;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Hoogte>
+.
+n2:Hoogte_referentievlak shacl:predicate n3:referentievlak;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Referentievlak>
+.
+n2:Gebouw shacl:scopeClass n3:Gebouw;
+    shacl:property n2:Gebouw_hoogteniveau;
+    shacl:property n2:Gebouw_fysiekVoorkomen;
+    shacl:property n2:Gebouw_status;
+    shacl:property n2:Gebouw_hoogte;
+    shacl:property n2:Gebouw_hoogteklasse;
+    shacl:property n2:Gebouw_naam;
+    shacl:property n2:Gebouw_geometrie;
+    shacl:property n2:Gebouw_soortnaam;
+    shacl:property n2:Gebouw_gebruiksdoel;
+    shacl:property n2:Gebouw_typeGebouw
+.
+n2:Gebouw_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:Gebouw_fysiekVoorkomen shacl:predicate n3:fysiekVoorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/FysiekVoorkomen_gebouw>
+.
+n2:Gebouw_status shacl:predicate n3:status;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Status>
+.
+n2:Gebouw_hoogte shacl:predicate n3:hoogte;
+    shacl:datatype xsd:float
+.
+n2:Gebouw_hoogteklasse shacl:predicate n3:hoogteklasse;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Hoogteklasse_gebouw>
+.
+n2:Gebouw_naam shacl:predicate n3:naam;
+    shacl:datatype xsd:string
+.
+n2:Gebouw_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Gebouw_soortnaam shacl:predicate n3:soortnaam;
+    shacl:datatype xsd:string
+.
+n2:Gebouw_gebruiksdoel shacl:predicate n3:gebruiksdoel;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Gebruiksdoel>
+.
+n2:Gebouw_typeGebouw shacl:predicate n3:typeGebouw;
+    shacl:class n3:Gebouw;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Gebouw>
+.
+n2:GeografischGebied shacl:scopeClass n3:GeografischGebied;
+    shacl:property n2:GeografischGebied_naamNl;
+    shacl:property n2:GeografischGebied_typeGeografischGebied;
+    shacl:property n2:GeografischGebied_geometrie;
+    shacl:property n2:GeografischGebied_naamFries
+.
+n2:GeografischGebied_naamNl shacl:predicate n3:naamNL;
+    shacl:datatype xsd:string
+.
+n2:GeografischGebied_typeGeografischGebied shacl:predicate n3:typeGeografischGebied;
+    shacl:class n3:GeografischGebied;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/GeografischGebied>
+.
+n2:GeografischGebied_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:GeografischGebied_naamFries shacl:predicate n3:naamFries;
+    shacl:datatype xsd:string
+.
+n2:Plaats shacl:scopeClass n3:Plaats;
+    shacl:property n2:Plaats_bebouwdeKom;
+    shacl:property n2:Plaats_naamFries;
+    shacl:property n2:Plaats_geometrie;
+    shacl:property n2:Plaats_aantalinwoners;
+    shacl:property n2:Plaats_isBagwoonplaats;
+    shacl:property n2:Plaats_naamOfficieel;
+    shacl:property n2:Plaats_typeGebied;
+    shacl:property n2:Plaats_naamNl
+.
+n2:Plaats_bebouwdeKom shacl:predicate n3:bebouwdeKom;
+    shacl:datatype xsd:boolean
+.
+n2:Plaats_naamFries shacl:predicate n3:naamFries;
+    shacl:datatype xsd:string
+.
+n2:Plaats_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Plaats_aantalinwoners shacl:predicate n3:aantalinwoners;
+    shacl:datatype xsd:integer
+.
+n2:Plaats_isBagwoonplaats shacl:predicate n3:isBAGwoonplaats;
+    shacl:datatype xsd:boolean
+.
+n2:Plaats_naamOfficieel shacl:predicate n3:naamOfficieel;
+    shacl:datatype xsd:string
+.
+n2:Plaats_typeGebied shacl:predicate n3:typeGebied;
+    shacl:class n3:Plaats;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Plaats>
+.
+n2:Plaats_naamNl shacl:predicate n3:naamNL;
+    shacl:datatype xsd:string
+.
+n2:PlanTopografie shacl:scopeClass n3:PlanTopografie;
+    shacl:property n2:PlanTopografie_typeObject;
+    shacl:property n2:PlanTopografie_naam;
+    shacl:property n2:PlanTopografie_geometrie
+.
+n2:PlanTopografie_typeObject shacl:predicate n3:typeObject;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Plantopografie>
+.
+n2:PlanTopografie_naam shacl:predicate n3:naam;
+    shacl:datatype xsd:string
+.
+n2:PlanTopografie_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Relief shacl:scopeClass n3:Relief;
+    shacl:property n2:Relief_functie;
+    shacl:property n2:Relief_hoogteklasse;
+    shacl:property n2:Relief_taludGeometrie;
+    shacl:property n2:Relief_typeRelief;
+    shacl:property n2:Relief_lijnGeometrie;
+    shacl:property n2:Relief_hoogteniveau
+.
+n2:Relief_functie shacl:predicate n3:functie;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Functie_relief>
+.
+n2:Relief_hoogteklasse shacl:predicate n3:hoogteklasse;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Hoogteklasse_relief>
+.
+n2:Relief_taludGeometrie shacl:predicate n3:taludGeometrie;
+    shacl:class n1:Geometry
+.
+n2:Relief_typeRelief shacl:predicate n3:typeRelief;
+    shacl:class n3:Relief;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Relief>
+.
+n2:Relief_lijnGeometrie shacl:predicate n3:lijnGeometrie;
+    shacl:class n1:Geometry
+.
+n2:Relief_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:Spoorbaandeel shacl:scopeClass n3:Spoorbaandeel;
+    shacl:property n2:Spoorbaandeel_tunnelnaam;
+    shacl:property n2:Spoorbaandeel_geometrie;
+    shacl:property n2:Spoorbaandeel_typeInfrastructuur;
+    shacl:property n2:Spoorbaandeel_vervoerfunctie;
+    shacl:property n2:Spoorbaandeel_spoorbreedte;
+    shacl:property n2:Spoorbaandeel_typeSpoorbaan;
+    shacl:property n2:Spoorbaandeel_baanvaknaam;
+    shacl:property n2:Spoorbaandeel_fysiekVoorkomen;
+    shacl:property n2:Spoorbaandeel_status;
+    shacl:property n2:Spoorbaandeel_brugnaam;
+    shacl:property n2:Spoorbaandeel_elektrificatie;
+    shacl:property n2:Spoorbaandeel_aantalSporen;
+    shacl:property n2:Spoorbaandeel_hoogteniveau
+.
+n2:Spoorbaandeel_tunnelnaam shacl:predicate n3:tunnelnaam;
+    shacl:datatype xsd:string
+.
+n2:Spoorbaandeel_geometrie shacl:predicate n3:geometrie;
+    shacl:class n1:Geometry
+.
+n2:Spoorbaandeel_typeInfrastructuur shacl:predicate n3:typeInfrastructuur;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/TypeInfrastructuur_spoorbaandeel>
+.
+n2:Spoorbaandeel_vervoerfunctie shacl:predicate n3:vervoerfunctie;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/VervoerFunctie>
+.
+n2:Spoorbaandeel_spoorbreedte shacl:predicate n3:spoorbreedte;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Spoorbreedte>
+.
+n2:Spoorbaandeel_typeSpoorbaan shacl:predicate n3:typeSpoorbaan;
+    shacl:class n3:Spoorbaandeel;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Spoorbaandeel>
+.
+n2:Spoorbaandeel_baanvaknaam shacl:predicate n3:baanvaknaam;
+    shacl:datatype xsd:string
+.
+n2:Spoorbaandeel_fysiekVoorkomen shacl:predicate n3:fysiekVoorkomen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/FysiekVoorkomen_spoorbaandeel>
+.
+n2:Spoorbaandeel_status shacl:predicate n3:status;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/Status>
+.
+n2:Spoorbaandeel_brugnaam shacl:predicate n3:brugnaam;
+    shacl:datatype xsd:string
+.
+n2:Spoorbaandeel_elektrificatie shacl:predicate n3:elektrificatie;
+    shacl:datatype xsd:boolean
+.
+n2:Spoorbaandeel_aantalSporen shacl:predicate n3:aantalSporen;
+    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+    shacl:in <http://brt.basisregistraties.overheid.nl/top10nl/id/collectie/AantalSporen>
+.
+n2:Spoorbaandeel_hoogteniveau shacl:predicate n3:hoogteniveau;
+    shacl:datatype xsd:integer
+.
+n2:FeatureCollectionT10NL shacl:scopeClass n3:FeatureCollectionT10NL;
+    shacl:property n2:FeatureCollectionT10NL_featureMember
+.
+n2:FeatureCollectionT10NL_featureMember shacl:predicate n3:FeatureMember;
+    shacl:class n3:_Top10nlObject
+.

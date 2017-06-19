@@ -1,0 +1,157 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix kkg:  <http://localhost:8080/catalogus/kkg/def/model/>.
+@prefix n2: <http://localhost:8080/catalogus/kkg/def/model#>.	
+
+kkg:Objecttype rdf:type sh:Shape;
+	sh:scopeClass kkg:Objecttype;
+	sh:property kkg:Objecttype01;
+	sh:property kkg:Objecttype02;
+	sh:property kkg:Objecttype03;
+	sh:property kkg:Objecttype04;
+	sh:property kkg:Objecttype05;
+	sh:property kkg:Objecttype06;
+.
+kkg:Objecttype01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Externekoppeling;
+.
+kkg:Objecttype02 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Relatiesoort;
+.
+kkg:Objecttype03 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Gegevensgroepcompositie;
+.
+kkg:Objecttype04 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Attribuutsoort;
+.
+kkg:Objecttype05 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:maaktOnderdeelUitVan;
+	sh:class kkg:Generalisatie;
+.
+kkg:Objecttype06 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:waarvoorGeldt;
+	sh:class kkg:Constraint;
+.
+kkg:Relatiesoort rdf:type sh:Shape;
+	sh:scopeClass kkg:Relatiesoort;
+.
+kkg:Relatieklasse rdf:type sh:Shape;
+	sh:scopeClass kkg:Relatieklasse;
+	sh:property kkg:Relatieklasse01;
+	sh:property kkg:Relatieklasse02;
+	sh:property kkg:Relatieklasse03;
+	sh:property kkg:Relatieklasse04;
+.
+kkg:Relatieklasse01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Relatiesoort;
+.
+kkg:Relatieklasse02 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Attribuutsoort;
+.
+kkg:Relatieklasse03 rdf:type sh:PropertyContraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Gegevensgroepcompositie;
+.
+kkg:Relatieklasse04 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:waarvoorGeldt;
+	sh:class kkg:Constraint;
+.
+kkg:Generalisatie rdf:type sh:Shape;
+	sh:scopeClass kkg:Generalisatie;
+	sh:property kkg:Generalisatie01;
+.
+kkg:Generalisatie01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:verwijstNaarGenerieke;
+	sh:class kkg:Objecttype;
+.
+kkg:Externekoppeling rdf:type sh:Shape;
+	sh:scopeClass kkg:Externekoppeling;
+	sh:property kkg:Externekoppeling01;
+.
+kkg:Externekoppeling01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:gerelateerdObjecttype;
+	sh:class kkg:Objecttype;
+.
+kkg:Relatierol rdf:type sh:Shape;
+	sh:scopeClass kkg:Relatierol;
+.
+kkg:Gegevensgroepcompositie rdf:type sh:Shape;
+	sh:scopeClass kkg:Gegevensgroepcompositie;
+	sh:property kkg:Gegevensgroepcompositie01;
+.
+kkg:Gegevensgroepcompositie01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:verwijstNaarGerelateerde;
+	sh:class kkg:Gegevensgroeptype;
+.
+kkg:Gegevensgroeptype rdf:type sh:Shape;
+	sh:scopeClass kkg:Gegevensgroeptype;
+	sh:property kkg:Gegevensgroeptype01;
+	sh:property kkg:Gegevensgroeptype02;
+	sh:property kkg:Gegevensgroeptype03;
+.
+kkg:Gegevensgroeptype01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:bezit;
+	sh:class kkg:Attribuutsoort;
+.
+kkg:Gegegevensgroeptype02 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:gegevensgroep;
+	sh:class kkg:Gegevensgroepcompositie;
+.
+kkg:Gegevensgroeptype03 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:waarvoorGeldt;
+	sh:class kkg:Constraint;
+.
+kkg:Constraint rdf:type sh:Shape;
+	sh:scopeClass kkg:Constraint;
+.
+kkg:Datatype rdf:type sh:Shape;
+	sh:scopeClass kkg:Datatype;
+.
+kkg:Attribuutsoort rdf:type sh:Shape;
+	sh:scopeClass kkg:Attribuutsoort;
+	sh:property kkg:Attribuutsoort01;
+.
+kkg:Attribuutsoort01 rdf:type sh:PropertyConstraint;
+	sh:predicate kkg:heeftAlsAttribuut;
+	sh:class kkg:Datatype;
+.
+kkg:bezit rdf:type sh:Shape;
+	rdfs:label "bezit";
+.
+kkg:maaktOnderdeelUitVan rdf:type sh:Shape;
+	rdfs:label "maakt als specifiek object onderdeel uit van";
+.
+kkg:waarvoorGeldt rdf:type sh:Shape;
+	rdfs:label "waarvoor geldt";
+.
+kkg:verwijstNaarGenerieke rdf:type sh:Shape;
+	rdfs:label "verwijst naar generieke";
+.
+kkg:gerelateerdObjecttype rdf:type sh:Shape;
+	rdfs:label "gerelateerd objecttype";
+.
+kkg:verwijstNaarGerelateerde rdf:type sh:Shape;
+	rdfs:label "verwijst naar gerelateerde";
+.
+kkg:gegevensgroep rdf:type sh:Shape;
+	rdfs:label "gegevensgroep";
+.
+kkg:heeftAlsAttribuut rdf:type sh:Shape;
+	rdfs:label "heeft als attribuut";
+.

@@ -1,0 +1,9 @@
+@echo off
+echo Creating concatenated file O...
+powershell -Command "(gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Catalogus-metadata DSO O.ttl'"
+echo Creating concatenated file T...
+powershell -Command "(gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Catalogus-metadata DSO T.ttl'"
+echo Creating concatenated file A...
+powershell -Command "(gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Catalogus-metadata DSO A.ttl'"
+echo Whoohoo! All done!
+pause

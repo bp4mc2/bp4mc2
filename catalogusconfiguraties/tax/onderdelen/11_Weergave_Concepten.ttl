@@ -1,27 +1,3 @@
-@prefix stage: <http://localhost:8080/catalogus/tax/stage#>.
-@prefix updatestage: <http://localhost:8080/catalogus/tax/update/>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: <http://localhost:8080/catalogus/tax/container/>.
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax: <http://bp4mc2.org/skosax#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes: <http://purl.org/iso25964/skos-thes#>.
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
-@prefix dct: <http://purl.org/dc/terms/>.
-@prefix dctype: <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: <http://www.opengis.net/ont/geosparql#>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix prov: <http://www.w3.org/ns/prov#>.
-@prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>.
-@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: <http://www.w3.org/ns/dcat#>.
 
 #
 # PAGINA'S (REPRESENTATIONS)
@@ -253,6 +229,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		construct {
 			<@SUBJECT@> ?p ?o.
@@ -275,31 +253,15 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						}
 					}
 					GRAPH doc:mastergraph {
-						<@SUBJECT@> rdfs:isDefinedBy ?g
+						<@SUBJECT@> rdfs:isDefinedBy ?g.
 					}
 					FILTER (
-						?p != rdf:type
-						&& ?p != rdfs:label
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
-						&& ?p != bp4mc2:signature
-						&& ?p != dct:type
-						&& ?p != skos:member
-						&& ?p != prov:generatedAtTime
-						&& ?p != prov:invalidatedAtTime
-						&& ?p != prov:wasGeneratedBy
-						&& ?p != dct:valid
-						&& ?p != foaf:focus
-						&& ?p != skoslex:Actor
-						&& ?p != skoslex:Object
-						&& ?p != prov:startedAtTime
-						&& ?p != prov:endedAtTime
-						&& ?p != prov:wasAssociatedWith
-						&& ?p != prov:actedOnBehalfOf
-						&& ?p != skos:editorialNote
-						&& ?p != rdfs:isDefinedBy
-						&& ?p != skos:inScheme
-						&& ?p != owl:sameAs
+						?p = rdfs:comment
+						|| ?p = skos:definition
+						|| ?p = skos:scopeNote
+						|| ?p = dct:source
+						|| ?p = skos:comment
+						|| ?p = skos:member
 					)
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
@@ -313,31 +275,39 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 						}
 					}
-					FILTER (
-						?p != rdf:type
-						&& ?p != rdfs:label
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
-						&& ?p != bp4mc2:signature
-						&& ?p != dct:type
-						&& ?p != skos:member
-						&& ?p != prov:generatedAtTime
-						&& ?p != prov:invalidatedAtTime
-						&& ?p != prov:wasGeneratedBy
-						&& ?p != dct:valid
-						&& ?p != foaf:focus
-						&& ?p != skoslex:Actor
-						&& ?p != skoslex:Object
-						&& ?p != prov:startedAtTime
-						&& ?p != prov:endedAtTime
-						&& ?p != prov:wasAssociatedWith
-						&& ?p != prov:actedOnBehalfOf
-						&& ?p != skos:editorialNote
-						&& ?p != rdfs:isDefinedBy
-						&& ?p != skos:inScheme
-						&& ?p != owl:sameAs
-					)
+				FILTER (
+					?p = rdfs:comment
+					|| ?p = skos:definition
+					|| ?p = skos:scopeNote
+					|| ?p = dct:source
+					|| ?p = skos:comment
+					|| ?p = skos:member
+				)
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				UNION 
+				{
+					GRAPH ?objectgraph {
+						<@SUBJECT@> ?p ?o.
+						<@SUBJECT@> rdf:type skos:Concept.
+						?o rdf:type ?type .
+					}
+					FILTER (
+						?p = skoslex:actor
+						|| ?p = skoslex:agent
+						|| ?p = skoslex:object
+						|| ?p = thes:broaderGeneric
+						|| ?p = thes:narrowerGeneric
+						|| ?p = thes:broaderPartitive
+						|| ?p = thes:narrowerPartitive
+						|| ?p = skos:semanticRelation
+						|| ?p = skos:closeMatch
+						|| ?p = skos:exactMatch
+						|| ?p = skos:relatedMatch
+						|| ?p = skos:broadMatch
+						|| ?p = skos:narrowMatch
+						|| ?p = skos:altLabel
+					)
 				}
 				OPTIONAL {
 					?o rdfs:label ?olabel.
@@ -355,11 +325,28 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						}
 					}
 				}
+				FILTER NOT EXISTS {
+					{
+						?o kddef:status kdstat:Afgekeurd.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Niet_beoordeeld.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Ter_afkeuring.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Ter_validatie.
+					}
+				}
 			}
 			UNION {
-				
 				GRAPH ?altSubjectGraph {
-					{ ?s skoslex:affects <@SUBJECT@> }
+					{ ?s skoslex:affects <@SUBJECT@> 
+					}
 					UNION { ?s skoslex:classification <@SUBJECT@> }
 					UNION { ?s skoslex:refersTo <@SUBJECT@> }
 					FILTER NOT EXISTS {
@@ -379,7 +366,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 	'''
 .
 
-# Query voor WeergaveTabel
+# Query voor Gerelateerde Concepten WeergaveTabel
 stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -395,6 +382,8 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
 		
 		CONSTRUCT {
 			<@SUBJECT@> ?p ?s.
@@ -404,6 +393,7 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		WHERE {
 			GRAPH ?g {
 				?s ?p <@SUBJECT@>.
+				?s kddef:status ?status.
 				OPTIONAL {
 					?s rdfs:label ?s_label.
 					FILTER( LANG( ?s_label ) = "" || LANGMATCHES( LANG( ?s_label ), "nl" ) )
@@ -411,6 +401,10 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 				FILTER NOT EXISTS {
 					?s prov:invalidatedAtTime ?time.
 				}
+				FILTER (
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
+				)
 			}
 			GRAPH doc:mastergraph {
 				?s rdfs:isDefinedBy ?g.
@@ -436,14 +430,14 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix elmo: <http://bp4mc2.org/elmo/def#>
-		
+				
 		CONSTRUCT {
 			?concept elmo:name ?concept_label
 		}
 		WHERE {
-			SELECT * WHERE
-			{
-				{
+			SELECT * 
+				WHERE {
+					{
 					GRAPH ?g {
 						?concept rdf:type skos:Concept.
 						?concept skos:prefLabel ?concept_label.

@@ -1,0 +1,9 @@
+@echo off
+echo Creating concatenated file O...
+powershell -Command "(gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Testdata concepten O.ttl'"
+echo Creating concatenated file T...
+powershell -Command "(gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Testdata concepten T.ttl'"
+echo Creating concatenated file A...
+powershell -Command "(gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Testdata concepten A.ttl'"
+echo Whoohoo! All done!
+pause

@@ -10,6 +10,15 @@
 # CONTAINERS
 #
 
+# Twee soorten containers:
+# POST
+# 	- Voegt één of meerdere nieuwe begrippen toe
+# 	- Geeft een foutmelding als één of meerdere van de geuploade begrippen al bestaan
+# PUT
+# 	- Update bestaande begrippen
+#	- Geeft een foutmelding als één of meerdere van de geuploade begrippen nog niet bestaan
+# 
+
 # Uploadcontainer Excel
 container:excelupload a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
@@ -41,7 +50,7 @@ container:excelupdate a elmo:Container;
     elmo:translator elmo:TableExcelTranslator;
     rdfs:label "Upload een enkel Concept via Excel (.xls)";
     elmo:replaces container:generiek;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+    elmo:query stage:DSOUploadScenePUT;
 .
 # Updatecontainer Turtle
 container:ttlupdate a elmo:Container;
@@ -51,19 +60,69 @@ container:ttlupdate a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
     elmo:replaces container:generiek;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+    elmo:query stage:DSOUploadScenePUT;
 .
 
-# Updatecontainer Omgevingsdocumenten
-container:odupdate a elmo:Container;
+# Container PUT XML Concepten
+container:concepten-put-xml a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
     elmo:contains stage:DSOHeader;
     elmo:contains stage:DSOFooter;
     elmo:representation elmo:UploadRepresentation;
-    rdfs:label "Upload een Omgevingsdocument (.xml)";
+    rdfs:label "Update bestaande concepten (.xml)";
     elmo:replaces container:generiek;
 	elmo:translator elmo:ODTranslator;
-    elmo:query stage:DSOSpecifiekeUploadScene;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xml {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST XML Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-xml a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.xml)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xml {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
 .
 
 
@@ -110,17 +169,12 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix activity: <http://localhost:8080/catalogus/dso/id/concept/@CURRENTMOMENT@>
 			
 		
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:generiek {
-			?s rdfs:label ?spreflabel.
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			}
 		} WHERE {
 			GRAPH container:generiek {
 				{
@@ -136,33 +190,39 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
-			concept:tomcatUser rdf:type prov:Agent.
-			concept:tomcatUser rdfs:label "Tomcat User".
-			concept:tomcatUser foaf:givenName "Tomcat User".
-			concept:tomcatUser foaf:mbox "tomcat@user.org".
-			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:generiek {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -230,8 +290,10 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s bp4mc2:signature ?sig.
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -265,8 +327,10 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 			
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:generiek {
@@ -320,8 +384,10 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -342,10 +408,12 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {
@@ -387,7 +455,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 # - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
 # - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
 
-stage:DSOSpecifiekeUploadScene a elmo:Scene;
+stage:DSOUploadScenePUT a elmo:Scene;
 	rdfs:label "Postquery inladen gegevens";
 	elmo:index "2";
 	elmo:query '''
@@ -398,7 +466,7 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 		prefix dctype: <http://purl.org/dc/dcmitype/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
@@ -409,17 +477,12 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 		prefix activity: <http://localhost:8080/catalogus/dso/id/concept/@CURRENTMOMENT@>
 			
 	
-		DELETE FROM versiongraph:version {
-            ?s?p?o
-		}
-		WHERE {
-            GRAPH versiongraph:version {
-                ?s?p?o
-            }
-		}
+		CLEAR GRAPH versiongraph:version
 		
-		INSERT INTO container:generiek {
-			?s rdfs:label ?spreflabel.
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			}
 		} WHERE {
 			GRAPH container:generiek {
 				{
@@ -435,33 +498,39 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		INSERT INTO doc:mastergraph {
-            doc:mastergraph rdf:type void:Dataset.
-            doc:mastergraph rdfs:label "Concepten".
-            versiongraph:version dct:isVersionOf doc:mastergraph.
-            dataset:concepten rdf:type skos:ConceptScheme.
-            dataset:concepten rdfs:label "Conceptschema".
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
 		}
 		
-		INSERT INTO versiongraph:version {
-            dataset:concepten rdfs:isDefinedBy versiongraph:version.
-            versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-            versiongraph:version prov:wasGeneratedBy activity:Upload.
-			versiongraph:version rdf:type prov:Entity.
-			versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-			activity:Upload rdf:type prov:Activity.
-			activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
-			activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-			activity:Upload prov:wasAssociatedWith concept:tomcatUser.
-			concept:tomcatUser rdf:type prov:Agent.
-			concept:tomcatUser rdfs:label "Tomcat User".
-			concept:tomcatUser foaf:givenName "Tomcat User".
-			concept:tomcatUser foaf:mbox "tomcat@user.org".
-			concept:tomcatUser prov:actedOnBehalfOf "Apache".
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
 		}
 
-		INSERT INTO container:generiek {
-            ?s bp4mc2:signature ?sig.
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
@@ -487,8 +556,10 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
             }
 		}
 		
-		INSERT INTO versiongraph:version {
-			?s ?p ?o
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH container:generiek {
@@ -542,8 +613,10 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
-		DELETE FROM doc:mastergraph {
-			?s ?p ?o
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
@@ -564,10 +637,12 @@ stage:DSOSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 
-		INSERT INTO doc:mastergraph {
-			?s rdf:type ?type.
-			?s rdfs:isDefinedBy versiongraph:version.
-			?s bp4mc2:signature ?sig
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
 		}
 		WHERE {
 			GRAPH versiongraph:version {

@@ -1,0 +1,89 @@
+#
+#
+#
+# BEHEER HOMONIEMEN -1
+#
+#
+#
+
+
+#Hoofdpagina Homoniemen -1 Rapportage
+stage:TaxHomoniemen a elmo:Representation;
+	elmo:url-pattern "/query/homoniemen1$";
+	elmo:contains stage:TaxHeader;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxHomoniemenTabel;
+	elmo:contains stage:TaxHomoniemenUitleg;
+.
+
+stage:TaxHomoniemenUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:without-parameter "term";
+	elmo:data [
+		rdfs:label "Homoniemen";
+	]
+.
+
+# Weergave van homoniemen
+stage:TaxHomoniemenTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "2";
+	elmo:query stage:TaxHomoniemenQuery;
+	elmo:fragment [
+		rdfs:label "Populatie";		
+		elmo:applies-to "graph";
+	];
+		elmo:fragment [
+		rdfs:label "Begrip";		
+		elmo:applies-to "begrip";
+	];
+		elmo:fragment [
+		rdfs:label "Komt ook voor in";		
+		elmo:applies-to "graph2";
+	];
+.
+
+#query geeft aan of een begrip in kader 1 ook voorkomt als exact hetzelfde begrip in kader 2
+stage:TaxHomoniemenQuery a elmo:query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
+		
+		SELECT ?graph ?graph_label
+			?begrip ?begrip_label
+			?graph2 ?graph2_label
+		WHERE {
+			GRAPH ?graph {
+			?begrip rdf:type ?klasse.
+				OPTIONAL {
+					?begrip rdfs:label ?begrip_label.
+					FILTER (lang(?begrip_label)="" or lang(?begrip_label)="@LANGUAGE@")
+				}
+				OPTIONAL {
+					?graph rdfs:label ?graph_label
+					FILTER (lang(?graph_label)="" or lang(?graph_label)="@LANGUAGE@")
+				}
+			#	FILTER (?klasse=frames:Begrip or ?klasse=frames:Gebeurtenis)
+				FILTER NOT EXISTS {
+					?graph prov:invalidatedAtTime ?time.
+                }
+			}
+			GRAPH ?graph2 {
+				?begrip rdf:type ?klasse.
+				OPTIONAL {
+					?graph2 rdfs:label ?graph2_label
+					FILTER (lang(?graph2_label)="" or lang(?graph2_label)="@LANGUAGE@")
+				}
+				FILTER NOT EXISTS {
+					?graph2 prov:invalidatedAtTime ?time.
+                }
+			}
+			GRAPH doc:mastergraph {
+				?graph rdfs:isDefinedBy ?graph.
+                ?graph2 rdfs:isDefinedBy ?graph2.
+            }
+		}
+	'''
+.

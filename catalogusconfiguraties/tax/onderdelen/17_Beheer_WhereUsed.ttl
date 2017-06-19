@@ -1,0 +1,122 @@
+#
+#
+#
+# BEHEER WHERE USED 
+#
+#
+#
+
+
+
+# Hoofdpagina Where Used Rapportage
+stage:TaxWhereUsedPagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/tax/query/whereused(|/|\\..+)$";
+	elmo:contains stage:TaxWhereUsedTabel;
+	elmo:contains stage:TaxWhereUsedIndex;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxWhereUsedUitleg;
+.
+
+stage:TaxWhereUsedUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:data [
+		rdfs:label "Where Used";
+		elmo:html '''
+			<p>De lijst bevat alle concepten en de relaties die andere subjecten met dit concept hebben.</p>
+		''';
+	]
+.
+
+# Index voor op de alfabetische weergave 
+stage:TaxWhereUsedIndex a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/catalogus/tax/query/whereused";
+		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "2";
+.
+
+# Where Used-tabel voor op de alfabetische weergave 
+stage:TaxWhereUsedTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:with-parameter "term";
+	elmo:index "3";
+	elmo:query stage:TaxWhereUsedQuery;
+.
+
+#
+# QUERY'S
+#
+
+# Query voor tonen alle triples <subject - predicate - object> van alle objecten
+stage:TaxWhereUsedQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix doc: 		<http://localhost:8080/catalogus/tax/concepten/doc/>
+		prefix concept: 	<http://localhost:8080/catalogus/tax/id/concept/>
+		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix thes: 		<http://purl.org/iso25964/skos-thes#>
+		prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
+		prefix container: 	<http://localhost:8080/catalogus/tax/container/>
+		
+		SELECT ?concept ?concept_label ?link ?subject ?subject_label
+		WHERE {
+			GRAPH ?g {
+				{
+					?concept rdf:type skos:Concept.
+					?concept rdfs:label ?concept_label.
+					?concept kddef:status ?status.
+					?subject ?link ?concept.
+					?subject rdfs:label ?subject_label.
+				}
+				UNION
+				{
+					?concept rdf:type skos:Concept.
+					?concept skos:altLabel ?concept_label.
+					?concept kddef:status ?status.
+					OPTIONAL {
+						?concept rdfs:label ?clabel.
+						?subject ?link ?concept.
+						?subject rdfs:label ?subject_label.
+					}
+				}
+				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+				FILTER(
+						?link =  thes:broaderGeneric
+						|| ?link = thes:narrowerGeneric
+						|| ?link = thes:broaderPartitive
+						|| ?link = thes:narrowerPartitive
+						|| ?link = skos:semanticRelation
+						|| ?link = skos:closeMatch
+						|| ?link = skos:exactMatch
+						|| ?link = skos:relatedMatch
+						|| ?link = skos:broadMatch
+						|| ?link = skos:narrowMatch
+						|| ?link = skoslex:actor
+						|| ?link = skoslex:agent
+						|| ?link = skoslex:object
+					)
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
+				}
+				FILTER (
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
+				)
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
+				FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "nl" ) )
+			}
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY str(lcase(?concept_label))
+	'''
+.
