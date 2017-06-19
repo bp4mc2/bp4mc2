@@ -72,21 +72,19 @@ container:concepten-put-xml a elmo:Container;
     rdfs:label "Update bestaande concepten (.xml)";
     elmo:replaces container:generiek;
 	elmo:translator elmo:ODTranslator;
-	elmo:assert-not [
-		elmo:assertion: '''
-			{
-				prefix container: <http://localhost:8080/catalogus/dso/container/>
-				prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-				prefix skos: <http://www.w3.org/2004/02/skos/core#>
-				
-				ASK {
-					GRAPH container:concepten-put-xml {
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xml {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
 						?s rdf:type skos:Concept.
-					}
-					FILTER NOT EXISTS {
-						GRAPH doc:mastergraph {
-							?s rdf:type skos:Concept.
-						}
 					}
 				}
 			}
@@ -107,20 +105,18 @@ container:concepten-post-xml a elmo:Container;
     rdfs:label "Voeg nieuwe concepten toe (.xml)";
     elmo:replaces container:generiek;
 	elmo:translator elmo:ODTranslator;
-	elmo:assert-not [
-		elmo:assertion: '''
-			{
-				prefix container: <http://localhost:8080/catalogus/dso/container/>
-				prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-				prefix skos: <http://www.w3.org/2004/02/skos/core#>
-				
-				ASK {
-					GRAPH container:concepten-post-xml {
-						?s rdf:type skos:Concept.
-					}
-					GRAPH doc:mastergraph {
-						?s rdf:type skos:Concept.
-					}
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xml {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
 				}
 			}
 		''';
