@@ -9,9 +9,9 @@
 
 kkgshape:Objecttype rdf:type sh:NodeShape;
 	rdfs:label "Objecttype";
-	sh:property kkgshape:bezitRelatiesoort;
-	sh:property kkgshape:bezitGegevensgroep;
-	sh:property kkgshape:bezitAttribuutsoort;
+	sh:property kkgshape:relatiesoort;
+	sh:property kkgshape:gegevensgroep;
+	sh:property kkgshape:attribuutsoort;
 	sh:property kkgshape:naam;
 	sh:property kkgshape:herkomst;
 	sh:property kkgshape:code;
@@ -31,7 +31,7 @@ kkgshape:GeneralisatieShape rdf:type sh:NodeShape;
 .
 kkgshape:Gegevensgroep rdf:type sh:NodeShape;
 	rdfs:label "Gegevensgroep";
-	sh:property kkgshape:heeftGegevensgroeptype;
+	sh:property kkgshape:gegevensgroeptype;
 	sh:property kkgshape:naam;
 	sh:property kkgshape:objecttype;
 	sh:property kkgshape:gerelateerdGegevensGroeptype;
@@ -42,8 +42,8 @@ kkgshape:Gegevensgroep rdf:type sh:NodeShape;
 .
 kkgshape:Gegevensgroeptype rdf:type sh:NodeShape;
 	rdfs:label "Gegevensgroeptype";
-	sh:property kkgshape:bezitGegevensgroep;
-	sh:property kkgshape:bezitAttribuutsoort;
+	sh:property kkgshape:gegevensgroep;
+	sh:property kkgshape:attribuutsoort;
 	sh:property kkgshape:naam;
 	sh:property kkgshape:herkomst;
 	sh:property kkgshape:code;
@@ -135,7 +135,7 @@ kkgshape:PrimitiefDatatype rdf:type sh:NodeShape;
 .
 kkgshape:ComplexDatatype rdf:type sh:NodeShape;
 	rdfs:label "Complex Datatype";
-	sh:property kkgshape:bezitDataElement;
+	sh:property kkgshape:dataElement;
 	sh:property kkgshape:naam;
 	sh:property kkgshape:herkomst;
 	sh:property kkgshape:definitie;
@@ -145,11 +145,11 @@ kkgshape:ComplexDatatype rdf:type sh:NodeShape;
 .
 kkgshape:Enumeratie rdf:type sh:NodeShape;
 	rdfs:label "Enumeratie";
-	sh:property kkgshape:bezitEnumeratiewaarde;
+	sh:property kkgshape:enumeratiewaarde;
 .
 kkgshape:Referentielijst rdf:type sh:NodeShape;
 	rdfs:label "Referentielijst";
-	sh:property kkgshape:bezitReferentieElement;
+	sh:property kkgshape:referentieElement;
 	sh:property kkgshape:naam;
 	sh:property kkgshape:herkomst;
 	sh:property kkgshape:definitie;
@@ -159,7 +159,7 @@ kkgshape:Referentielijst rdf:type sh:NodeShape;
 .
 kkgshape:Union rdf:type sh:NodeShape;
 	rdfs:label "Union";
-	sh:property kkgshape:bezitUnionElement;
+	sh:property kkgshape:unionElement;
 	sh:property kkgshape:naam;
 	sh:property kkgshape:herkomst;
 	sh:property kkgshape:definitie;
@@ -322,31 +322,31 @@ kkgshape:formeelPatroon rdf:type sh:PropertyShape;
 
 ### PROPERTY SHAPES - tussen shapes
 	
-kkgshape:bezitRelatiesoort rdf:type sh:PropertyShape;
+kkgshape:relatiesoort rdf:type sh:PropertyShape;
 	rdfs:label "bezit Relatiesoort";
 	sh:node kkgshape:Relatiesoort;
 .
-kkgshape:bezitGegevensgroep rdf:type sh:PropertyShape;
+kkgshape:gegevensgroep rdf:type sh:PropertyShape;
 	rdfs:label "bezit Gegevensgroep";
 	sh:node kkgshape:Gegevensgroep;
 .
-kkgshape:bezitAttribuutsoort rdf:type sh:PropertyShape;
+kkgshape:attribuutsoort rdf:type sh:PropertyShape;
 	rdfs:label "bezit Attribuutsoort";
 	sh:node kkgshape:Attribuutsoort;
 .
-kkgshape:bezitDataElement rdf:type sh:PropertyShape;
+kkgshape:dataElement rdf:type sh:PropertyShape;
 	rdfs:label "bezit Data Element";
 	sh:node kkgshape:DataElement;
 .
-kkgshape:bezitEnumeratiewaarde rdf:type sh:PropertyShape;
+kkgshape:enumeratiewaarde rdf:type sh:PropertyShape;
 	rdfs:label "bezit Enumeratiewaarde";
 	sh:node kkgshape:Enumeratiewaarde;
 .
-kkgshape:bezitReferentieElement rdf:type sh:PropertyShape;
+kkgshape:referentieElement rdf:type sh:PropertyShape;
 	rdfs:label "bezit Referentie Element";
 	sh:node kkgshape:ReferentieElement;
 .
-kkgshape:bezitUnionElement rdf:type sh:PropertyShape;
+kkgshape:unionElement rdf:type sh:PropertyShape;
 	rdfs:label "bezit Union Element";
 	sh:node kkgshape:UnionElement;
 .
@@ -354,11 +354,11 @@ kkgshape:verwijstNaar rdf:type sh:PropertyShape;
 	rdfs:label "verwijst naar";
 	sh:node kkgshape:Objecttype;
 .
-kkgshape:heeftGegevensgroeptype rdf:type sh:PropertyShape;
+kkgshape:gegevensgroeptype rdf:type sh:PropertyShape;
 	rdfs:label "heeft";
 	sh:node kkgshape:Gegevensgroeptype;
 .
-kkgshape:heefDatatype rdf:type sh:PropertyShape;
+kkgshape:datatype rdf:type sh:PropertyShape;
 	rdfs:label "heeft datatype";
 	sh:node kkgshape:Datatype;
 .
