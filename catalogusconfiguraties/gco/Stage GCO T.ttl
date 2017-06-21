@@ -547,6 +547,7 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 		elmo:data [
 			elmo:index "5";
 			rdfs:label "KKG";
+			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/kkg-lijst"];
 			elmo:data [ elmo:index "2"; rdfs:label "Vocabulaire"; html:link "query/kkg-model"];
 			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/kkg-visualisatie"];
 		];
@@ -585,6 +586,41 @@ stage:Welkom a elmo:Part;
 		}
 	'''
 . 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+
+stage:kkg-lijst	a	elmo:Representation;
+	elmo:url-pattern	"/query/kkg-lijst(\\.(xml|ttl|json))?$";
+	elmo:contains stage:Menu;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select ?type ?node ?node_label ?shape ?shape_label ?vocterm
+		where {
+			graph <http://bp4mc2.org/id/dataset/kkg> {
+				{
+					?shape rdf:type sh:NodeShape.
+					?shape rdfs:label ?shape_label.
+					OPTIONAL {?shape sh:targetClass ?vocterm}
+					BIND ("Node" as ?type)
+				}
+				UNION
+				{
+					?node sh:property ?shape.
+					?node rdfs:label ?node_label.
+					?shape rdfs:label ?shape_label.
+					OPTIONAL {?shape sh:path ?vocterm}
+					BIND ("Property" as ?type)
+				}
+			}
+		}
+	''';
+.
+ 
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
