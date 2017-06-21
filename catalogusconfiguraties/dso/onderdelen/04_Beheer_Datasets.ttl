@@ -69,24 +69,13 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		
 		INSERT {
 			GRAPH container:datasetupload {
-				?s rdfs:label ?slabel.
+				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
 			GRAPH container:datasetupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
-				}
-				UNION {
-					?s dct:title ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}

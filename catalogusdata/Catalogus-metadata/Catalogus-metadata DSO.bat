@@ -1,9 +1,9 @@
 @echo off
 echo Creating concatenated file O...
-powershell -Command "(gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Catalogus-metadata DSO O.ttl'"
+powershell -Command "$myFile = (gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl'; [System.IO.File]::WriteAllLines('Catalogus-metadata DSO O.ttl', $myFile)"
 echo Creating concatenated file T...
-powershell -Command "(gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Catalogus-metadata DSO T.ttl'"
+powershell -Command "$myFile = (gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl'; [System.IO.File]::WriteAllLines('Catalogus-metadata DSO T.ttl', $myFile)"
 echo Creating concatenated file A...
-powershell -Command "(gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Catalogus-metadata DSO A.ttl'"
+powershell -Command "$myFile = (gc 'Catalogus-metadata DSO local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl'; [System.IO.File]::WriteAllLines('Catalogus-metadata DSO A.ttl', $myFile)"
 echo Whoohoo! All done!
 pause

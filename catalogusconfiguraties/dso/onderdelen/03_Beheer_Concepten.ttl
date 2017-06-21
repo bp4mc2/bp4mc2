@@ -77,6 +77,7 @@ container:concepten-put-xml a elmo:Container;
 			prefix container: <http://localhost:8080/catalogus/dso/container/>
 			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 			
 			ASK {
 				GRAPH container:concepten-put-xml {
@@ -85,6 +86,7 @@ container:concepten-put-xml a elmo:Container;
 				FILTER NOT EXISTS {
 					GRAPH doc:mastergraph {
 						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
 					}
 				}
 			}
@@ -110,6 +112,7 @@ container:concepten-post-xml a elmo:Container;
 			prefix container: <http://localhost:8080/catalogus/dso/container/>
 			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 			
 			ASK {
 				GRAPH container:concepten-post-xml {
@@ -117,6 +120,7 @@ container:concepten-post-xml a elmo:Container;
 				}
 				GRAPH doc:mastergraph {
 					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
 				}
 			}
 		''';
@@ -177,15 +181,9 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -485,15 +483,9 @@ stage:DSOUploadScenePUT a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}

@@ -97,6 +97,11 @@ stage:WeergaveTabelActivity a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:indx "13";
@@ -139,6 +144,11 @@ stage:WeergaveTabelAgent a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
 		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
@@ -211,8 +221,6 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 			<@SUBJECT@> ?p ?o.
 			FILTER (
 				?p != rdf:type
-				&& ?p != skos:prefLabel
-				&& ?p != skos:notation
 				&& ?p != bp4mc2:signature
 				&& ?p != dct:type
 				&& ?p != skos:member
@@ -253,8 +261,6 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 			<@SUBJECT@> ?p ?o.
 			FILTER (
 				?p != rdf:type
-				&& ?p != skos:prefLabel
-				&& ?p != skos:notation
 				&& ?p != bp4mc2:signature
 				&& ?p != dct:type
 				&& ?p != skos:member
