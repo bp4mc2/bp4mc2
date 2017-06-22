@@ -23,7 +23,9 @@ stage:WeergavePaginaConcepten a elmo:Representation;
 
 # Algemene tabelweergave
 stage:WeergaveTabelConcepten a elmo:Part;
+
 	elmo:index "01";
+	
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
 		elmo:appearance elmo:HiddenAppearance
@@ -184,7 +186,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Namens organisatie"@nl;
 		elmo:applies-to prov:actedOnBehalfOf;
 		elmo:index "32";
-	];
+	];	
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
 
@@ -333,6 +335,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			skoslex:refersTo rdfs:label "Verwijst naar".
 			skoslex:classification rdfs:label "Classificatie".
 			skos:Collection elmo:name "Collectie".
+			#skos:closeMatch elmo:name "Lijkt op".
 		}
 		WHERE {
 			{
@@ -544,6 +547,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?s rdfs:label ?slabel.
 			<@IDSUBJECT@> skoslex:refersTo ?act.
 			?act rdfs:label ?actlabel.
+			<@IDSUBJECT@> skos:closeMatch ?toe_label.
+			
 		}
 		WHERE {
 			{
@@ -554,6 +559,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							<@IDSUBJECT@> rdf:type skos:Concept.
 							?g prov:wasGeneratedBy ?a.
 							?g prov:generatedAtTime ?sStartTime.
+						
+							
 							OPTIONAL {
 								<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
 							}
@@ -640,6 +647,32 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							)	
 						}
 					}
+					
+					
+#Maken van het onderdeel toeleidingsbgrippen in de tabel
+					
+					OPTIONAL {
+						GRAPH ?cg {
+							?toe skos:closeMatch <@IDSUBJECT@>.
+							?toe rdfs:label ?toe_label.
+							?cg prov:generatedAtTime ?cgStartTime.
+							
+							OPTIONAL {
+								?toe prov:invalidatedAtTime ?cgEndTime.
+							}
+							FILTER (
+								strdt( ?cgStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?cgEndTime )
+									|| strdt( ?cgEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)	
+						}
+					}
+
+#--------------------------------------------------------------					
+					
+					
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
 				UNION
