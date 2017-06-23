@@ -621,18 +621,13 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		
 		INSERT {
 			GRAPH container:catalogusupload {
-				?s rdfs:label ?slabel.
+				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
 			GRAPH container:catalogusupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -835,6 +830,56 @@ container:excelupload a elmo:Container;
 	elmo:translator elmo:TableExcelTranslator;
 	rdfs:label "Upload concepten via Excel (.xls)";
 	elmo:replaces container:generiek;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:excelupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:excelupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
 	elmo:query stage:DSOGeneriekeUploadScene;
 .
 
@@ -846,8 +891,59 @@ container:ttlupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
 	elmo:replaces container:generiek;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
 	elmo:query stage:DSOGeneriekeUploadScene;
 .
+
 # Updatecontainer Excel
 container:excelupdate a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
@@ -857,8 +953,59 @@ container:excelupdate a elmo:Container;
     elmo:translator elmo:TableExcelTranslator;
     rdfs:label "Upload een enkel Concept via Excel (.xls)";
     elmo:replaces container:generiek;
+		elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:excelupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:excelupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
+
 # Updatecontainer Turtle
 container:ttlupdate a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
@@ -867,6 +1014,56 @@ container:ttlupdate a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
     elmo:replaces container:generiek;
+		elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -884,6 +1081,7 @@ container:concepten-put-xml a elmo:Container;
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 			prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 			
 			ASK {
 				GRAPH container:concepten-put-xml {
@@ -892,11 +1090,62 @@ container:concepten-put-xml a elmo:Container;
 				FILTER NOT EXISTS {
 					GRAPH doc:mastergraph {
 						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
 					}
 				}
 			}
 		''';
 		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xml {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xml {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -917,6 +1166,7 @@ container:concepten-post-xml a elmo:Container;
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
 			prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 			
 			ASK {
 				GRAPH container:concepten-post-xml {
@@ -924,10 +1174,61 @@ container:concepten-post-xml a elmo:Container;
 				}
 				GRAPH doc:mastergraph {
 					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
 				}
 			}
 		''';
 		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xml {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xml {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -984,15 +1285,9 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -1292,15 +1587,9 @@ stage:DSOUploadScenePUT a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -1544,24 +1833,13 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		
 		INSERT {
 			GRAPH container:datasetupload {
-				?s rdfs:label ?slabel.
+				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
 			GRAPH container:datasetupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
-				}
-				UNION {
-					?s dct:title ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -3091,51 +3369,56 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "00";
+	];
+	elmo:fragment [
 		rdfs:label "Notitie"@nl;
 		elmo:applies-to skos:notation;
-		elmo:index "1";
+		elmo:index "01";
 	];
 	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "2";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Definitie"@nl;
 		elmo:applies-to skos:definition;
-		elmo:index "3";
+		elmo:index "03";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
-		elmo:index "4";
+		elmo:index "04";
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "5";
+		elmo:index "05";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "6";
+		elmo:index "06";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is specialisatie van"@nl;
 		elmo:applies-to thes:broaderGeneric;
-		elmo:index "7";
+		elmo:index "07";
 	];
 	elmo:fragment [
 		rdfs:label "Is generalisatie van"@nl;
 		elmo:applies-to thes:narrowerGeneric;
-		elmo:index "8";
+		elmo:index "08";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is onderdeel van"@nl;
 		elmo:applies-to thes:broaderPartitive;
-		elmo:index "9";
+		elmo:index "09";
 	];
 	elmo:fragment [
 		rdfs:label "Bestaat uit"@nl;
@@ -3626,8 +3909,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							)
 							FILTER (
 								?p != rdf:type
-								&& ?p != skos:prefLabel
-								&& ?p != skos:notation
 								&& ?p != bp4mc2:signature
 								&& ?p != dct:type
 								&& ?p != skos:member
@@ -3647,8 +3928,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							}
 							FILTER (
 								?p != rdf:type
-								&& ?p != skos:prefLabel
-								&& ?p != skos:notation
 								&& ?p != bp4mc2:signature
 								&& ?p != dct:type
 								&& ?p != skos:member
@@ -3716,8 +3995,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -3782,8 +4059,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			#			}
 			#			FILTER (
 			#				?p != rdf:type
-			#				&& ?p != skos:prefLabel
-			#				&& ?p != skos:notation
 			#				&& ?p != bp4mc2:signature
 			#				&& ?p != dct:type
 			#				&& ?p != skos:member
@@ -3822,58 +4097,47 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
-				{
-					GRAPH ?graph {
-						<@IDSUBJECT@> rdf:type skos:Concept.
-						?graph prov:generatedAtTime ?concept_label.
-						OPTIONAL {
-							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
-						}
-					}
-					GRAPH doc:mastergraph {
-						<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
-						?graph dc:isVersionOf doc:mastergraph
-					}	
-					FILTER( ?graph != ?actualGraph )
-					FILTER( substr("@GRAPH@",2) = "GRAPH@" )
-				}
-				UNION {
-					GRAPH ?graph {
-						<@IDSUBJECT@> rdf:type skos:Concept.
-						?graph prov:generatedAtTime ?concept_label.
-						OPTIONAL {
-							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?graph dc:isVersionOf doc:mastergraph
-					}	
-					FILTER( ?graph != <@GRAPH@> )
-					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-				}
-				FILTER( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
-			}
-			UNION
-			{
 				GRAPH ?graph {
 					<@IDSUBJECT@> rdf:type skos:Concept.
 					?graph prov:generatedAtTime ?concept_label.
-					?graph prov:generatedAtTime ?startTime.
 					OPTIONAL {
 						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
+				}
+				GRAPH ?actualGraph {
+					<@IDSUBJECT@> rdf:type skos:Concept.
+					?actualGraph prov:generatedAtTime ?startTime.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+					}
 					FILTER (
-						strdt( ?startTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
-						|| (
-							bound( ?actueeltot )
-							&& strdt( ?actueeltot, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?endTime )
+							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
 						)
 					)
 				}
 				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph
+					?graph dc:isVersionOf doc:mastergraph.
+					?actualGraph dc:isVersionOf doc:mastergraph.
 				}
-				FILTER( !contains( "@SUBJECT@", "@IDSUBJECT@" ) )
+				FILTER( ?graph != ?actualGraph )
+				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH ?graph {
+					<@IDSUBJECT@> rdf:type skos:Concept.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != <@GRAPH@> )
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
 		}
 		ORDER BY DESC(lcase(?concept_label))
@@ -3928,31 +4192,36 @@ stage:WeergaveTabelWaardelijsten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "2";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Definitie"@nl;
 		elmo:applies-to skos:definition;
-		elmo:index "3";
+		elmo:index "03";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
-		elmo:index "4";
+		elmo:index "04";
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "5";
+		elmo:index "05";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "6";
+		elmo:index "06";
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
@@ -4106,8 +4375,6 @@ stage:WeergaveTabelWaardelijstenQuery a elmo:Query;
 				}
 				FILTER (
 					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
 					&& ?p != bp4mc2:signature
 					&& ?p != dct:type
 					&& ?p != skos:member
@@ -4131,8 +4398,6 @@ stage:WeergaveTabelWaardelijstenQuery a elmo:Query;
 				}
 				FILTER (
 					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
 					&& ?p != bp4mc2:signature
 					&& ?p != dct:type
 					&& ?p != skos:member
@@ -4374,31 +4639,36 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "2";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Definitie"@nl;
 		elmo:applies-to skos:definition;
-		elmo:index "3";
+		elmo:index "03";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
-		elmo:index "4";
+		elmo:index "04";
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "5";
+		elmo:index "05";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "6";
+		elmo:index "06";
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
@@ -4548,8 +4818,6 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 				}
 				FILTER (
 					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
 					&& ?p != bp4mc2:signature
 					&& ?p != dct:type
 					&& ?p != skos:member
@@ -4567,8 +4835,6 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 				}
 				FILTER (
 					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
 					&& ?p != bp4mc2:signature
 					&& ?p != dct:type
 					&& ?p != skos:member
@@ -4832,6 +5098,11 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:indx "13";
@@ -5012,8 +5283,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -5031,8 +5300,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -5158,6 +5425,11 @@ stage:WeergaveTabelDataset a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
 		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
@@ -5304,8 +5576,6 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -5331,8 +5601,6 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -5452,6 +5720,11 @@ stage:WeergaveTabelDistribution a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
 		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
@@ -5576,8 +5849,6 @@ stage:WeergaveTabelDistributionQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -5595,8 +5866,6 @@ stage:WeergaveTabelDistributionQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -5761,6 +6030,11 @@ stage:WeergaveTabelActivity a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:indx "13";
@@ -5803,6 +6077,11 @@ stage:WeergaveTabelAgent a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
 		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
@@ -5875,8 +6154,6 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 			<@SUBJECT@> ?p ?o.
 			FILTER (
 				?p != rdf:type
-				&& ?p != skos:prefLabel
-				&& ?p != skos:notation
 				&& ?p != bp4mc2:signature
 				&& ?p != dct:type
 				&& ?p != skos:member
@@ -5917,8 +6194,6 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 			<@SUBJECT@> ?p ?o.
 			FILTER (
 				?p != rdf:type
-				&& ?p != skos:prefLabel
-				&& ?p != skos:notation
 				&& ?p != bp4mc2:signature
 				&& ?p != dct:type
 				&& ?p != skos:member
@@ -6083,46 +6358,51 @@ stage:WeergaveTabelShapes a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "2";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Definitie"@nl;
 		elmo:applies-to skos:definition;
-		elmo:index "3";
+		elmo:index "03";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
-		elmo:index "4";
+		elmo:index "04";
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "5";
+		elmo:index "05";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "6";
+		elmo:index "06";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is specialisatie van"@nl;
 		elmo:applies-to thes:broaderGeneric;
-		elmo:index "7";
+		elmo:index "07";
 	];
 	elmo:fragment [
 		rdfs:label "Is generalisatie van"@nl;
 		elmo:applies-to thes:narrowerGeneric;
-		elmo:index "8";
+		elmo:index "08";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is onderdeel van"@nl;
 		elmo:applies-to thes:broaderPartitive;
-		elmo:index "9";
+		elmo:index "09";
 	];
 	elmo:fragment [
 		rdfs:label "Bestaat uit"@nl;
@@ -6282,8 +6562,6 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -6300,8 +6578,6 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -6352,8 +6628,6 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 						<@SUBJECT@> ?p ?o.
 						FILTER (
 							?p != rdf:type
-							&& ?p != skos:prefLabel
-							&& ?p != skos:notation
 							&& ?p != bp4mc2:signature
 							&& ?p != dct:type
 							&& ?p != skos:member
@@ -6477,46 +6751,51 @@ stage:WeergaveTabelNormen a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "2";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Definitie"@nl;
 		elmo:applies-to skos:definition;
-		elmo:index "3";
+		elmo:index "03";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
-		elmo:index "4";
+		elmo:index "04";
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "5";
+		elmo:index "05";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "6";
+		elmo:index "06";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is specialisatie van"@nl;
 		elmo:applies-to thes:broaderGeneric;
-		elmo:index "7";
+		elmo:index "07";
 	];
 	elmo:fragment [
 		rdfs:label "Is generalisatie van"@nl;
 		elmo:applies-to thes:narrowerGeneric;
-		elmo:index "8";
+		elmo:index "08";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is onderdeel van"@nl;
 		elmo:applies-to thes:broaderPartitive;
-		elmo:index "9";
+		elmo:index "09";
 	];
 	elmo:fragment [
 		rdfs:label "Bestaat uit"@nl;
@@ -6675,8 +6954,6 @@ stage:WeergaveTabelNormenQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -6693,8 +6970,6 @@ stage:WeergaveTabelNormenQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -6747,8 +7022,6 @@ stage:WeergaveTabelNormenQuery a elmo:Query;
 						}
 						FILTER (
 							?p != rdf:type
-							&& ?p != skos:prefLabel
-							&& ?p != skos:notation
 							&& ?p != bp4mc2:signature
 							&& ?p != dct:type
 							&& ?p != skos:member

@@ -790,58 +790,47 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
-				{
-					GRAPH ?graph {
-						<@IDSUBJECT@> rdf:type skos:Concept.
-						?graph prov:generatedAtTime ?concept_label.
-						OPTIONAL {
-							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
-						}
-					}
-					GRAPH doc:mastergraph {
-						<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
-						?graph dc:isVersionOf doc:mastergraph
-					}	
-					FILTER( ?graph != ?actualGraph )
-					FILTER( substr("@GRAPH@",2) = "GRAPH@" )
-				}
-				UNION {
-					GRAPH ?graph {
-						<@IDSUBJECT@> rdf:type skos:Concept.
-						?graph prov:generatedAtTime ?concept_label.
-						OPTIONAL {
-							<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
-						}
-					}
-					GRAPH doc:mastergraph {
-						?graph dc:isVersionOf doc:mastergraph
-					}	
-					FILTER( ?graph != <@GRAPH@> )
-					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-				}
-				FILTER( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
-			}
-			UNION
-			{
 				GRAPH ?graph {
 					<@IDSUBJECT@> rdf:type skos:Concept.
 					?graph prov:generatedAtTime ?concept_label.
-					?graph prov:generatedAtTime ?startTime.
 					OPTIONAL {
 						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
+				}
+				GRAPH ?actualGraph {
+					<@IDSUBJECT@> rdf:type skos:Concept.
+					?actualGraph prov:generatedAtTime ?startTime.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+					}
 					FILTER (
-						strdt( ?startTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
-						|| (
-							bound( ?actueeltot )
-							&& strdt( ?actueeltot, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?endTime )
+							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
 						)
 					)
 				}
 				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph
+					?graph dc:isVersionOf doc:mastergraph.
+					?actualGraph dc:isVersionOf doc:mastergraph.
 				}
-				FILTER( !contains( "@SUBJECT@", "@IDSUBJECT@" ) )
+				FILTER( ?graph != ?actualGraph )
+				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH ?graph {
+					<@IDSUBJECT@> rdf:type skos:Concept.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != <@GRAPH@> )
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
 		}
 		ORDER BY DESC(lcase(?concept_label))
