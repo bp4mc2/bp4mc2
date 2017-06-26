@@ -1,0 +1,58 @@
+# This file contains the specification for the Open API Specification 2.0
+# It uses SHACL to defined the data model as defined by the Open API Specification 2.0
+# Remark: no RDF vocabulary is yet available for the Open API Specification, so no sh:targetClass or sh:path clauses are defined!
+
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix swagger: <http://bp4mc2.org/def/openapi2.0/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+swagger:Swagger a sh:Shape;
+	rdfs:label "Swagger";
+	rdfs:comment "This is the root document object for the API specification. It combines what previously was the Resource Listing and API Declaration (version 1.2 and earlier) together into one document.";
+	sh:property [
+		rdfs:label "swagger";
+		rdfs:comment '''Required. Specifies the Swagger Specification version being used. It can be used by the Swagger UI and other clients to interpret the API listing. The value MUST be "2.0".''';
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
+	]
+	sh:property [
+		rdfs:label "info";
+		rdfs:comment "Required. Provides metadata about the API. The metadata can be used by the clients if needed.";
+		sh:class swagger:Info;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+	sh:property [
+		rdfs:label "host";
+		rdfs:comment "The host (name or ip) serving the API. This MUST be the host only and does not include the scheme nor sub-paths. It MAY include a port. If the  host  is not included, the host serving the documentation is to be used (including the port). The  host  does not support path templating.";
+		sh:datatype xsd:string;
+		sh:maxCount 1;
+	];
+	sh:property [
+		rdfs:label "basePath";
+		rdfs:comment "The base path on which the API is served, which is relative to the  host . If it is not included, the API is served directly under the  host . The value MUST start with a leading slash ( / ). The  basePath  does not support path templating.";
+		sh:datatype xsd:string;
+		sh:maxCount 1;
+	];
+	sh:property [
+		rdfs:label "schemes";
+		rdfs:comment "The transfer protocol of the API. Values MUST be from the list:  "http" ,  "https" ,  "ws" ,  "wss" . If the  schemes  is not included, the default scheme to be used is the one used to access the Swagger definition itself.";
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		rdfs:label "consumes";
+		rdfs:comment "A list of MIME types the APIs can consume. This is global to all APIs but can be overridden on specific API calls. Value MUST be as described under Mime Types.";
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		rdfs:label "produces";
+		rdfs:comment "A list of MIME types the APIs can produce. This is global to all APIs but can be overridden on specific API calls. Value MUST be as described under Mime Types.";
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		rdfs:label "paths";
+		rdfs:comment "Required. The available paths and operations for the API.";
+		sh:class swagger:Paths
+	];
+.

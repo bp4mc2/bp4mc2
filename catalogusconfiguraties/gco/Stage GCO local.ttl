@@ -545,6 +545,13 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/dcat-nl-visualisatie"];
 		];
 		elmo:data [
+			elmo:index "5";
+			rdfs:label "KKG";
+			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/kkg-lijst"];
+			elmo:data [ elmo:index "2"; rdfs:label "Vocabulaire"; html:link "query/kkg-model"];
+			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/kkg-visualisatie"];
+		];
+		elmo:data [
 			elmo:index "9";
 			rdfs:label "Sync";
 			elmo:data [ elmo:index "1"; rdfs:label "Alles (initial start)"; html:link "update/sync"];
@@ -572,6 +579,107 @@ stage:Welkom a elmo:Part;
 			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/bp4m2c.png".
 			<urn:image> html:width "1518".
 			<urn:image> html:height "1791".
+			<urn:image> html:top "0".
+			<urn:image> html:left "0".
+		}
+		where {
+		}
+	'''
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:kkg-lijst	a	elmo:Representation;
+	elmo:url-pattern	"/query/kkg-lijst(\\.(xml|ttl|json))?$";
+	elmo:contains stage:Menu;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select ?type ?node ?node_label ?shape ?shape_label ?vocterm
+		where {
+			graph <http://bp4mc2.org/id/dataset/kkg> {
+				{
+					?shape rdf:type sh:NodeShape.
+					?shape rdfs:label ?shape_label.
+					OPTIONAL {?shape sh:targetClass ?vocterm}
+					BIND ("Node" as ?type)
+				}
+				UNION
+				{
+					?node sh:property ?shape.
+					?node rdfs:label ?node_label.
+					?shape rdfs:label ?shape_label.
+					OPTIONAL {?shape sh:path ?vocterm}
+					BIND ("Property" as ?type)
+				}
+			}
+		}
+	''';
+.
+ 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:kkg-model	a	elmo:Representation;
+	elmo:url-pattern	"/query/kkg-model(\\.(xml|ttl|json))?$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		construct {
+			?nshape sh:targetClass ?nshape.
+			?nshape rdf:type owl:Class.
+			?nshape sh:name ?nlabel.
+			?nshape sh:property ?pshape.
+			?pshape sh:path ?pshape.
+			?pshape rdf:type rdf:Property.
+			?pshape sh:name ?plabel.
+			?pshape ?psp ?pso.
+			?pshape sh:class ?refshape
+		}
+		where {
+			graph <http://bp4mc2.org/id/dataset/kkg> {
+				?nshape rdf:type sh:NodeShape.
+				?nshape rdfs:label ?nlabel.
+				OPTIONAL {
+					?nshape sh:property ?pshape.
+					?pshape rdfs:label ?plabel.
+					?pshape ?psp ?pso
+					OPTIONAL {?pshape sh:node ?refshape}
+				}
+			}
+		}
+	''';
+.
+ 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:kkg-visualisatie	a	elmo:Representation;
+	elmo:url-pattern	"/query/kkg-visualisatie$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:ImageAppearance;
+	elmo:query '''
+		prefix html: <http://www.w3.org/1999/xhtml/vocab#>
+		prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+		construct {
+			<urn:image> html:img "https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/visualisatie/kkg.png".
+			<urn:image> html:width "807".
+			<urn:image> html:height "696".
 			<urn:image> html:top "0".
 			<urn:image> html:left "0".
 		}

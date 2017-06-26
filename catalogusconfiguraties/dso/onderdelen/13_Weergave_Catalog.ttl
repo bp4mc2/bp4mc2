@@ -36,6 +36,11 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:indx "13";
@@ -216,8 +221,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member
@@ -235,8 +238,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 					}
 					FILTER (
 						?p != rdf:type
-						&& ?p != skos:prefLabel
-						&& ?p != skos:notation
 						&& ?p != bp4mc2:signature
 						&& ?p != dct:type
 						&& ?p != skos:member

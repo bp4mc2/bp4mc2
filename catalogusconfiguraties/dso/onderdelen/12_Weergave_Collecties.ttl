@@ -38,31 +38,36 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "2";
+		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Definitie"@nl;
 		elmo:applies-to skos:definition;
-		elmo:index "3";
+		elmo:index "03";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
-		elmo:index "4";
+		elmo:index "04";
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "5";
+		elmo:index "05";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "6";
+		elmo:index "06";
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
@@ -212,8 +217,6 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 				}
 				FILTER (
 					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
 					&& ?p != bp4mc2:signature
 					&& ?p != dct:type
 					&& ?p != skos:member
@@ -231,8 +234,6 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 				}
 				FILTER (
 					?p != rdf:type
-					&& ?p != skos:prefLabel
-					&& ?p != skos:notation
 					&& ?p != bp4mc2:signature
 					&& ?p != dct:type
 					&& ?p != skos:member

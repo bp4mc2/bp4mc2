@@ -1,11 +1,11 @@
 @echo off
 echo Creating concatenated file O...
-powershell -Command "(gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.so.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', '' | Out-File -encoding UTF8 'Testdata Tax O.ttl'"
+powershell -Command "$myFile = (gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.so.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Testdata Tax O.ttl', $myFile)"
 echo Creating concatenated file T...
-powershell -Command "(gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.in.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', '' | Out-File -encoding UTF8 'Testdata Tax T.ttl'"
+powershell -Command "$myFile = (gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.in.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Testdata Tax T.ttl', $myFile)"
 echo Creating concatenated file A...
-powershell -Command "(gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.fto.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', '' | Out-File -encoding UTF8 'Testdata Tax A.ttl'"
+powershell -Command "$myFile = (gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.fto.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Testdata Tax A.ttl', $myFile)"
 echo Creating concatenated file P...
-powershell -Command "(gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.cs.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', '' | Out-File -encoding UTF8 'Testdata Tax P.ttl'"
+powershell -Command "$myFile = (gc 'Testdata Tax local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.cs.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Testdata Tax P.ttl', $myFile)"
 echo Whoohoo! All done!
 pause

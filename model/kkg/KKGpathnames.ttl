@@ -1,0 +1,126 @@
+@prefix rdf:		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
+@prefix owl:		<http://www.w3.org/2002/07/owl#>.
+@prefix sh:			<http://www.w3.org/ns/shacl#>.
+@prefix dcat:		<http://www.w3.org/ns/dcat#>.
+@prefix dct:		<http://purl.org/dc/terms/>.
+@prefix dctype:		<http://purl.org/dc/dcmitype/>.
+@prefix foaf:		<http://xmlns.com/foaf/0.1/>.
+@prefix skos:		<http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>.
+@prefix prov:		<http://www.w3.org/ns/prov#>.
+@prefix dqv: 		<http://www.w3.org/ns/dqv#>.
+@prefix adms: 		<http://www.w3.org/ns/adms#>.
+@prefix wdrs: 		<http://www.w3.org/2007/05/powder-s#>.
+@prefix xsi: 		<http://www.w3.org/2001/XMLSchema-instance>.
+@prefix ldqd:    	<http://www.w3.org/2016/05/ldqd#>. 
+
+@prefix kkgshape:	<http://localhost:8080/kkg/def/model/>.
+@prefix kkgmodel:	<http://localhost:8080/kkg/def/model/UNKNOWN#>.
+
+kkgshape:Objecttype sh:targetClass rdfs:Class;
+.
+kkgshape:GeneralisatieShape  sh:targetClass rdfs:subClassOf;
+.
+kkgshape:Gegevensgroep sh:targetClass owl:ObjectProperty;
+.
+kkgshape:Gegevensgroeptype sh:targetClass rdfs:Class;
+.
+kkgshape:Relatiesoort sh:targetClass owl:ObjectProperty;
+.
+kkgshape:Relatierol sh:targetClass owl:ObjectProperty;
+.
+kkgshape:Relatieklasse sh:targetClass rdfs:Class;
+.
+kkgshape:Attribuutsoort sh:targetClass owl:ObjectProperty;
+.
+kkgshape:PrimitiefDatatype sh:targetClass xsi:simpletype;
+.
+kkgshape:ComplexDatatype sh:targetClass xsi:complextype;
+.
+kkgshape:Datatype sh:targetClass kkgmodel:unknown;
+.
+kkgshape:Enumeratie sh:targetClass kkgmodel:unknown;
+.
+kkgshape:Referentielijst sh:targetClass owl:Class;
+.
+kkgshape:Union sh:targetClass rdfs:datatype;
+.
+kkgshape:Codelijst sh:targetClass rdfs:datatype;
+.
+kkgshape:Enumeratiewaarde sh:targetClass kkgmodel:unknown;
+.
+kkgshape:ReferentieElement sh:targetClass rdf:property;
+.
+kkgshape:UnionElement sh:targetClass rdf:property;
+.
+kkgshape:Constraint sh:targetClass owl:DatatypeProperty;
+.
+kkgshape:DataElement sh:targetClass rdf:property;
+.
+
+kkgshape:naam sh:path skos:prefLabel;.
+kkgshape:herkomst sh:path dct:source;.
+kkgshape:code sh:path kkgmodel:unknown;.
+kkgshape:definitie sh:path skos:definition;.
+kkgshape:herkomstdefinitie sh:path dcat:dataset;.
+kkgshape:datumOpname sh:path prov:generatedAtTime;.
+kkgshape:uniekeAanduiding sh:path skos:notation;.
+kkgshape:populatie sh:path ldqd:completeness;.
+kkgshape:kwaliteit sh:path ldqd:semanticAccuracy;.
+kkgshape:toelichting sh:path skos:scopeNote;.
+kkgshape:indicatieAbstractObject sh:path kkgmodel:unknown;.
+kkgshape:objecttype sh:path kkgshape:Objecttype;.
+kkgshape:gerelateerdGegevensGroeptype sh:path kkgmodel:unknown;.
+kkgshape:uniDirectioneel sh:path rdf:object;.
+kkgshape:kardinaliteit sh:path owl:cardinality;.
+kkgshape:typeAggregatie sh:path kkgmodel:unknown;.
+kkgshape:indicatieMaterieleHistorie sh:path rdf:property;.
+kkgshape:indicatieFormeleHistorie sh:path rdf:property;.
+kkgshape:authentiek	sh:path ldqd:trustworthiness;.
+kkgshape:mogelijkGeenWaarde sh:path xsi:nil;.
+kkgshape:gerelateerdObjecttype sh:path rdfs:subClassOf;.
+kkgshape:indicatieAfleidbaar sh:path prov:wasDerivedFrom;.
+kkgshape:domeinType sh:path rdfs:range;.
+kkgshape:domeinLengte sh:path kkgmodel:unknown;.
+kkgshape:domeinPatroon sh:path kkgmodel:unknown;.
+kkgshape:domeinFormeelPatroon sh:path kkgmodel:unknown;.
+kkgshape:locatie sh:path dct:spatial;.
+kkgshape:identificerend sh:path kkgmodel:unknown;.
+kkgshape:patroon sh:path kkgmodel:unknown;.
+kkgshape:formeelPatroon sh:path kkgmodel:unknown;.
+
+
+kkgshape:bezitRelatiesoort sh:path rdf:property;
+	sh:class kkgshape:Relatiesoort;
+.
+kkgshape:bezitGegevensgroep sh:path rdf:property;
+	sh:class kkgshape:Gegevensgroep;
+.
+kkgshape:bezitAttribuutsoort sh:path rdf:property;
+	sh:class kkgshape:Attribuutsoort;
+.
+kkgshape:bezitDataElement sh:path rdf:property;
+	sh:class kkgshape:Dataelement;
+.
+kkgshape:bezitEnumeratiewaarde sh:path rdf:property;
+	sh:class kkgshape:Enumeratiewaarde;
+.
+kkgshape:bezitReferentieElement sh:path rdf:property;
+	sh:class kkgshape:ReferentieElement;
+.
+kkgshape:bezitUnionElement sh:path rdf:property;
+	sh:class kkgshape:UnionElement;
+.
+kkgshape:verwijstNaar sh:path skos:semanticRelation;
+	sh:class kkgshape:Objecttype;
+.
+kkgshape:heeftGegevensgroeptype sh:path owl:DatatypeProperty;
+	sh:class kkgshape:Gegevensgroeptype;
+.
+kkgshape:heeftDatatype sh:path owl:DatatypeProperty;
+	sh:class kkgshape:Datatype;
+.
+
+
