@@ -634,32 +634,26 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							)	
 						}
 					}
-					
-					
-#Maken van het onderdeel toeleidingsbgrippen in de tabel
-					
+# toeleidingsbegrippen  
 					OPTIONAL {
-						GRAPH ?cg {
+						GRAPH ?tg {
 							?toe skos:closeMatch <@IDSUBJECT@>.
 							?toe rdfs:label ?toe_label.
-							?cg prov:generatedAtTime ?cgStartTime.
+							?tg prov:generatedAtTime ?tgStartTime.
 							
 							OPTIONAL {
-								?toe prov:invalidatedAtTime ?cgEndTime.
+								?toe prov:invalidatedAtTime ?tgEndTime.
 							}
 							FILTER (
-								strdt( ?cgStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								strdt( ?tgStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
 								&& (
-									!bound( ?cgEndTime )
-									|| strdt( ?cgEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+									!bound( ?tgEndTime )
+									|| strdt( ?tgEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
 								)
 							)	
 						}
 					}
-
-#--------------------------------------------------------------					
-					
-					
+#------------------------					
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
 				UNION
@@ -709,6 +703,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 								?col rdfs:label ?col_label.
 							}
 							?cg prov:generatedAtTime ?cStartTime.
+							
+
 							OPTIONAL {
 								?col prov:invalidatedAtTime ?cEndTime.
 							}
@@ -727,6 +723,34 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							)	
 						}
 					}
+# Historie toeleidingsbegrippen
+					OPTIONAL {
+						GRAPH ?tg {
+							?toe skos:member <@IDSUBJECT@>.
+							OPTIONAL {
+								?toe rdfs:label ?toe_label.
+							}
+							?toe prov:generatedAtTime ?tgStartTime.
+							OPTIONAL {
+								?toe prov:invalidatedAtTime ?tgEndTime.
+							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								}
+							}
+							BIND( IF( BOUND( ?invTime ), ?invTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sEndTime )
+							FILTER (
+								strdt( ?tgStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								&& (
+									!bound( ?tgEndTime )
+									|| strdt( ?tgEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+								)
+							)	
+						}
+					}
+#-------------------------------
+					
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
 			}
