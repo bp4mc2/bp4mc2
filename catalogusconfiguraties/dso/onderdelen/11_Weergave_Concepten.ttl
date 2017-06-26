@@ -335,101 +335,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			skoslex:refersTo rdfs:label "Verwijst naar".
 			skoslex:classification rdfs:label "Classificatie".
 			skos:Collection elmo:name "Collectie".
-			#skos:closeMatch elmo:name "Lijkt op".
 		}
 		WHERE {
-			{
-				{
-					{
-						GRAPH ?subjectGraph {
-							<@IDSUBJECT@> rdf:type ?type.
-							OPTIONAL {
-								<@IDSUBJECT@> rdfs:label ?concept_label.
-								<@IDSUBJECT@> ?p ?o.
-							}
-						}
-						GRAPH ?objectGraph {
-							?o rdfs:label ?olabel.
-							?o rdf:type ?otype.
-						}
-						GRAPH doc:mastergraph {
-							<@IDSUBJECT@> rdfs:isDefinedBy ?subjectGraph.
-							?o rdfs:isDefinedBy ?objectGraph.
-							?objectGraph dc:isVersionOf doc:mastergraph
-						}
-					}
-					UNION
-					{
-						GRAPH ?altSubjectGraph {
-							?s ?sp <@IDSUBJECT@>.
-							?s rdf:type ?stype.
-							OPTIONAL {
-								?s rdfs:label ?slabel.
-							}
-							FILTER NOT EXISTS {
-								?s prov:invalidatedAtTime ?time.
-							}
-						}
-						OPTIONAL {
-							GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
-								?s rdfs:label ?slabel.
-							}
-						}
-						GRAPH doc:mastergraph {
-							?s rdfs:isDefinedBy ?altSubjectGraph.
-						}
-						OPTIONAL {
-							<@IDSUBJECT@> rdfs:label ?concept_label.
-							<@IDSUBJECT@> rdf:type ?type.
-						}
-					}
-					FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
-				}
-				UNION
-				{
-					{
-						GRAPH <@GRAPH@> {
-							<@IDSUBJECT@> rdf:type ?type.
-							OPTIONAL {
-								<@IDSUBJECT@> rdfs:label ?concept_label.
-								<@IDSUBJECT@> ?p ?o.
-							}
-						}
-						GRAPH ?objectGraph {
-							?o rdfs:label ?olabel.
-							?o rdf:type ?otype.
-						}
-						GRAPH doc:mastergraph {
-							?o rdfs:isDefinedBy ?objectGraph.
-							?objectGraph dc:isVersionOf doc:mastergraph
-						}
-					}
-					UNION
-					{
-						GRAPH ?altSubjectGraph {
-							?s ?sp <@IDSUBJECT@>.
-							?s rdf:type ?stype.
-							OPTIONAL {
-								?s rdfs:label ?slabel.
-							}
-							FILTER NOT EXISTS {
-								?s prov:invalidatedAtTime ?time.
-							}
-						}
-						GRAPH doc:mastergraph {
-							?s rdfs:isDefinedBy ?altSubjectGraph.
-						}
-						OPTIONAL {
-							<@IDSUBJECT@> rdfs:label ?concept_label.
-							<@IDSUBJECT@> rdf:type ?type.
-						}
-					}
-					
-					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-				}
-				FILTER ( contains( "@SUBJECT@", "@IDSUBJECT@" ) )
-			}
-			UNION 
 			{
 				GRAPH ?g {
 					<@IDSUBJECT@> rdf:type ?type.
@@ -468,7 +375,86 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 						)
 					)
 				}
-				FILTER ( !contains( "@SUBJECT@", "@IDSUBJECT@" ) )
+				UNION
+				{
+					GRAPH ?subjectGraph {
+						<@IDSUBJECT@> rdf:type ?type.
+						OPTIONAL {
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+							<@IDSUBJECT@> ?p ?o.
+						}
+					}
+					GRAPH ?objectGraph {
+						?o rdfs:label ?olabel.
+						?o rdf:type ?otype.
+					}
+					GRAPH doc:mastergraph {
+						<@IDSUBJECT@> rdfs:isDefinedBy ?subjectGraph.
+						?o rdfs:isDefinedBy ?objectGraph.
+						?objectGraph dc:isVersionOf doc:mastergraph
+					}
+				}
+				UNION
+				{
+					GRAPH ?altSubjectGraph {
+						?s ?sp <@IDSUBJECT@>.
+						?s rdf:type ?stype.
+						OPTIONAL {
+							?s rdfs:label ?slabel.
+						}
+						
+					}
+					GRAPH doc:mastergraph {
+						?s rdfs:isDefinedBy ?altSubjectGraph.
+					}
+					OPTIONAL {
+						<@IDSUBJECT@> rdfs:label ?concept_label.
+						<@IDSUBJECT@> rdf:type ?type.
+					}
+				}
+				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION
+			{
+				{
+					GRAPH <@GRAPH@> {
+						<@IDSUBJECT@> rdf:type ?type.
+						OPTIONAL {
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+							<@IDSUBJECT@> ?p ?o.
+						}
+					}
+					GRAPH ?objectGraph {
+						?o rdfs:label ?olabel.
+						?o rdf:type ?otype.
+					}
+					GRAPH doc:mastergraph {
+						?o rdfs:isDefinedBy ?objectGraph.
+						?objectGraph dc:isVersionOf doc:mastergraph
+					}
+				}
+				UNION
+				{
+					GRAPH ?altSubjectGraph {
+						?s ?sp <@IDSUBJECT@>.
+						?s rdf:type ?stype.
+						OPTIONAL {
+							?s rdfs:label ?slabel.
+						}
+						FILTER NOT EXISTS {
+							?s prov:invalidatedAtTime ?time.
+						}
+					}
+					GRAPH doc:mastergraph {
+						?s rdfs:isDefinedBy ?altSubjectGraph.
+					}
+					OPTIONAL {
+						<@IDSUBJECT@> rdfs:label ?concept_label.
+						<@IDSUBJECT@> rdf:type ?type.
+					}
+				}
+				
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
 			
 			# UNION {
@@ -509,6 +495,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		}
 	''';
 .
+
 
 
 #
