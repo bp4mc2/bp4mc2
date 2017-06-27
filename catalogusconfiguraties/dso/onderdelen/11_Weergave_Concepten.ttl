@@ -302,6 +302,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix tr: <http://localhost:8080/toepasbareregels/>
 	
 		construct {
 			<@IDSUBJECT@> ?p ?o.
@@ -338,42 +339,44 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		}
 		WHERE {
 			{
-				GRAPH ?g {
-					<@IDSUBJECT@> rdf:type ?type.
-					?g prov:generatedAtTime ?startTime.
-					OPTIONAL {
-						<@IDSUBJECT@> rdfs:label ?concept_label.
-					}
-					OPTIONAL {
-						<@IDSUBJECT@> ?p ?o.
+				{
+					GRAPH ?g {
+						<@IDSUBJECT@> rdf:type ?type.
+						?g prov:generatedAtTime ?startTime.
+						OPTIONAL {
+							<@IDSUBJECT@> rdfs:label ?concept_label.
+						}
+						OPTIONAL {
+							<@IDSUBJECT@> ?p ?o.
+							FILTER (
+								?p = skos:semanticRelation
+								|| ?p = thes:broaderGeneric
+								|| ?p = thes:narrowerGeneric
+								|| ?p = thes:broaderPartitive
+								|| ?p = thes:narrowerPartitive
+								|| ?p = skoslex:affects
+								|| ?p = skoslex:refersTo
+								|| ?p = skoslex:object
+								|| ?p = skoslex:actor
+								|| ?p = skos:closeMatch
+								|| ?p = skos:exactMatch
+								|| ?p = skos:relatedMatch
+								|| ?p = skos:broadMatch
+								|| ?p = skos:narrowMatch
+								|| ?p = dc:source
+							)
+						}
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+						}
 						FILTER (
-							?p = skos:semanticRelation
-							|| ?p = thes:broaderGeneric
-							|| ?p = thes:narrowerGeneric
-							|| ?p = thes:broaderPartitive
-							|| ?p = thes:narrowerPartitive
-							|| ?p = skoslex:affects
-							|| ?p = skoslex:refersTo
-							|| ?p = skoslex:object
-							|| ?p = skoslex:actor
-							|| ?p = skos:closeMatch
-							|| ?p = skos:exactMatch
-							|| ?p = skos:relatedMatch
-							|| ?p = skos:broadMatch
-							|| ?p = skos:narrowMatch
-							|| ?p = dc:source
+							strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
 						)
 					}
-					OPTIONAL {
-						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
-					}
-					FILTER (
-						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
-						&& (
-							!bound( ?endTime )
-							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
-						)
-					)
 				}
 				UNION
 				{
@@ -483,7 +486,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			# }
 			# UNION {
 			#	SERVICE <http://localhost:8080/toepasbareregels/sparql> {
-			#		GRAPH <http://localhost:8080/toepasbareregels/container/generiek> {
+			#		GRAPH tr:functionelestructuur {
 			#			?act skoslex:object <@IDSUBJECT@>.
 			#			?act rdf:type ?act_type.
 			#			OPTIONAL {
@@ -519,6 +522,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix tr: <http://localhost:8080/toepasbareregels/>
 		
 		construct {
 			<@IDSUBJECT@> ?p ?o.
@@ -699,9 +703,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					OPTIONAL {
 						GRAPH ?cg {
 							?col skos:member <@IDSUBJECT@>.
-							OPTIONAL {
-								?col rdfs:label ?col_label.
-							}
+							?col rdfs:label ?col_label.
 							?cg prov:generatedAtTime ?cStartTime.
 							
 
@@ -726,11 +728,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 # Historie toeleidingsbegrippen
 					OPTIONAL {
 						GRAPH ?tg {
-							?toe skos:member <@IDSUBJECT@>.
-							OPTIONAL {
-								?toe rdfs:label ?toe_label.
-							}
-							?toe prov:generatedAtTime ?tgStartTime.
+							?toe skos:closeMatch <@IDSUBJECT@>.
+							?toe rdfs:label ?toe_label.
+							?tg prov:generatedAtTime ?tgStartTime.
 							OPTIONAL {
 								?toe prov:invalidatedAtTime ?tgEndTime.
 							}
@@ -775,7 +775,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			# }
 			# UNION {
 			#	SERVICE <http://localhost:8080/toepasbareregels/sparql> {
-			#		GRAPH <http://localhost:8080/toepasbareregels/container/generiek> {
+			#		GRAPH tr:functionelestructuur {
 			#			?act skoslex:object <@IDSUBJECT@>.
 			#			OPTIONAL {
 			#				?act rdfs:label ?actlabel.
