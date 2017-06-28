@@ -1,0 +1,56 @@
+#
+#
+#
+# OVERZICHTSPAGINA DATASETS
+#
+#
+#
+
+
+# REPRESENTATIONS
+
+# Overzichtspagina Datasets
+stage:TaxDatasetOverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/tax/query/overzichtdatasets(|/|\\..+)$";
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxMenu;
+	elmo:contains stage:TaxDatasetTabel;
+.
+
+# Datasettabel voor overzichtsweergave
+stage:TaxDatasetTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:TaxDatasetQuery;
+.
+
+# QUERY
+
+# query voor tonen alle datasets
+stage:TaxDatasetQuery a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				?dataset rdfs:comment ?uitleg.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+.

@@ -1,43 +1,85 @@
-#
-#
-#
-#
-# BEHEER CONCEPTEN
-#
-#
-#
-#
 # CONTAINERS
-#
 
-# Uploadcontainer Excel
-container:excelupload a elmo:Container;
+# Uploadcontainer ttl
+container:ttlupload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
-	elmo:representation elmo:UploadRepresentation;
-	elmo:translator elmo:TableExcelTranslator;
-	rdfs:label "Upload concepten via Excel (.xls)";
 	elmo:replaces container:generiek;
-	elmo:query stage:TaxGeneriekeUploadScene;
+	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
 .
 
-# Updatecontainer Excel
-container:excelupdate a elmo:Container;
-    elmo:contains stage:TaxBeheermenu;
-    elmo:contains stage:TaxHeader;
-    elmo:contains stage:TaxFooter;
+# Updatecontainer Turtle
+container:ttlupdate a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
-    elmo:translator elmo:TableExcelTranslator;
-    rdfs:label "Upload een enkel Concept via Excel (.xls)";
+    elmo:contains stage:TaxBeheermenu;
+    elmo:contains stage:TaxFooter;
     elmo:replaces container:generiek;
-    elmo:query stage:TaxSpecifiekeUploadScene;
+    rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+.
+
+#PRODUCTIONS
+
+#production ttlupload, label dataset en trap uploadquery af
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxSelectDataset;
+	elmo:contains stage:TaxGeneriekeUploadScene;
+.
+
+#production ttlupdate, label dataset en trap uploadquery af
+updatestage:syncttlupdate a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxSelectDataset;
+	elmo:contains stage:TaxSpecifiekeUploadScene;
+.
+
+#FORMS
+
+# Selecteer dataset 
+stage:TaxSelectDataset a elmo:Form;
+	rdfs:label "Selecteer dataset";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "dataset";
+		rdfs:label "Selecteer dataset"@nl;
+		elmo:valuesFrom stage:search_datasets;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#PARTS
+
+#Zoeken van datasets
+stage:search_datasets a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+			?dataset rdfs:label ?dataset_label
+		}
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+			}
+		}
+		ORDER BY DESC(?dataset_label)
+	''';
 .
 
 
-
-#
 # SCENES
-#
+
 
 # Standaardquery voor generieke uploadcontainers
 # Algoritme:
@@ -76,6 +118,7 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		prefix dataset: <http://localhost:8080/catalogus/tax/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/tax/id/concept/>
 		prefix activity: <http://localhost:8080/catalogus/tax/id/concept/@CURRENTMOMENT@>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
 			
 		
 		DELETE {
@@ -165,6 +208,20 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 					ORDER BY ?s ?p ?o
 				}
             }
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				SELECT ?s ?p ?o 
+				WHERE {
+					?s rdf:type skos:Concept.
+				}
+			}
 		}
 		
 		INSERT {
@@ -483,6 +540,20 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
             }
 		}
 		
+		INSERT {
+			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				SELECT ?s ?p ?o 
+				WHERE {
+					?s rdf:type skos:Concept.
+				}
+			}
+		}
+				
 		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o

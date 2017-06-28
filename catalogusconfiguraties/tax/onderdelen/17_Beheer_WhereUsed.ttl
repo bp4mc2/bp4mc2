@@ -65,8 +65,9 @@ stage:TaxWhereUsedQuery a elmo:Query;
 		prefix thes: 		<http://purl.org/iso25964/skos-thes#>
 		prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
 		prefix container: 	<http://localhost:8080/catalogus/tax/container/>
+		prefix dct: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?link ?subject ?subject_label
+		SELECT ?concept ?concept_label ?link ?link_label ?subject ?subject_label
 		WHERE {
 			GRAPH ?g {
 				{
@@ -110,12 +111,44 @@ stage:TaxWhereUsedQuery a elmo:Query;
 					?status = kdstat:Gevalideerd ||
 					?status = kdstat:Geverifieerd
 				)
-				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
-				FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "nl" ) )
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "@LANGUAGE@" ) )
+				FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "@LANGUAGE@" ) )
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g
 			}
+			BIND (
+				IF(?link = skos:member,  "Lid van",
+					IF(?link =	skos:semanticRelation,  "Heeft betrekking op",
+						IF(?link =	thes:broaderGeneric,  "Is specialisatie van",
+							IF(?link =	thes:narrowerGeneric,  "Is generalisatie van",
+								IF(?link =	thes:broaderPartitive,  "Is onderdeel van",
+									IF(?link =	thes:narrowerPartitive,  "Bestaat uit",
+										IF(?link =	dct:source,  "Bronnen",
+											IF(?link =	skoslex:actor,  "Heeft als actor",
+												IF(?link =	skoslex:object,  "Heeft als object",
+													IF(?link =	skoslex:agent,  "Heeft als agent",
+														IF(?link =	skos:closeMatch,  "Is ongeveer hetzelfde als",
+															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
+																IF(?link =	skos:relatedMatch,  "Zie ook ",
+																	IF(?link =	skos:broadMatch,  "Breder dan",
+																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		)
+																	)
+																)
+															)
+														)
+													)
+												)
+											)
+										)
+									)
+								)
+							)
+						)
+					)
+				) AS ?link_label
+			) 
 		}
 		ORDER BY str(lcase(?concept_label))
 	'''

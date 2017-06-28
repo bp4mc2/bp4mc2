@@ -13,13 +13,15 @@
 concept:GeneriekeSchildpad a skos:Concept;
 	skos:prefLabel "GeneriekeSchildpad";
 	rdfs:label "Generieke schildpad";
-	skos:definition "Een schildpad zo generiek dat het zijn gelijke niet kent";
+	skos:definition "Een schildpad zo generiek dat het zijn gelijke niet kent.";
 	skos:inScheme concept:schildpadDomein;
 	skos:altLabel "Generieke tortoise";
 	dct:source concept:Art1_2Lid1Awb;
 	dct:valid "1-1-2001";
 	thes:narrowerGeneric concept:SpecifiekeSchildpad;
-	skos:semanticRelation concept:AndereSchildpad
+	skos:semanticRelation concept:AndereSchildpad;
+	skoslex:refersTo concept:GeneriekeActiviteit;
+	skoslex:object concept:GeneriekeNorm
 .
 
 concept:SpecifiekeSchildpad a skos:Concept;
@@ -31,6 +33,17 @@ concept:SpecifiekeSchildpad a skos:Concept;
 	dct:source concept:Art1_2Lid1Awb;
 	dct:valid "1-1-2001 - 1-1-2017";
 	skos:semanticRelation concept:AndereSchildpad
+.
+
+concept:NogSpecifiekereSchildpad a skos:Concept;
+	skos:prefLabel "NogSpecifiekeSchildpad";
+	rdfs:label "Nog specifiekere schildpad";
+	skos:definition "Een behoorlijk specifieke schildpad";
+	skos:inScheme concept:schildpadDomein;
+	skos:altLabel "Nog specifiekere tortoise";
+	dct:source concept:Art1_2Lid1Awb;
+	dct:valid "1-1-2001 - 1-1-2017";
+	skos:broaderGeneric concept:SpecifiekeSchildpad
 .
 
 concept:Kop a skos:Concept;
@@ -166,7 +179,7 @@ concept:NogSpecifiekerObject a skos:Concept, skoslex:Object;
 	thes:broaderGeneric concept:SpecifiekObject
 .
 
-concept:SinglObject a skos:Concept, skoslex:Object;
+concept:SingleObject a skos:Concept, skoslex:Object;
 	skos:prefLabel "SingleObject";
 	rdfs:label "Single object";
 	skos:inScheme concept:schildpadDomein
@@ -174,10 +187,11 @@ concept:SinglObject a skos:Concept, skoslex:Object;
 
 # Collecties
 collection:StandaardSchildpadden a skos:Collection;
-	rdfs:label "Standaard schildpadden";
+	rdfs:label "Standaard schildpadden.";
 	skos:prefLabel "StandaardSchildpadden";
 	skos:member concept:GeneriekeSchildpad;
 	skos:member concept:SpecifiekeSchildpad;
+	skos:member concept:NogSpecifiekereSchildpad;
 .
 
 collection:AndereSchildpadden a skos:Collection;
@@ -238,7 +252,7 @@ collection:Toeleidingsbegrippen a skos:Collection;
 
 concept:Zeedier a skos:Concept;
 	skos:closeMatch concept:GeneriekeSchildpad;
-	rdfs:label "Zeedier";
+	rdfs:label "zeedier";
 	skos:prefLabel "Zeedier";
 .
 

@@ -45,9 +45,48 @@ stage:TaxMenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
 	elmo:data [ 
 		elmo:data [	
-			rdfs:label "Hoofdpagina";
+			rdfs:label "Concepten";
 			elmo:index "1";
-			xhtml:link "/catalogus/tax";
+			elmo:data [
+			rdfs:label "Alle concepten";
+			elmo:index "1";
+			xhtml:link "/catalogus/tax/query/overzichtspagina?term=";
+			];
+			elmo:data [
+				rdfs:label "BRT";
+				elmo:index "2";
+				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brt";
+			];
+			elmo:data [
+				rdfs:label "BRK intern (juridisch)";
+				elmo:index "5";
+				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brk-intern-juridisch";
+			];
+			elmo:data [
+				rdfs:label "BRK intern (niet-juridisch)";
+				elmo:index "6";
+				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brk-intern";
+			];
+			elmo:data [
+				rdfs:label "BRK";
+				elmo:index "7";
+				xhtml:link "catalogus/tax/query/overzichtspagina?term=&dataset=brk";
+			];
+			elmo:data [
+				rdfs:label "BAG";
+				elmo:index "4";
+				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=bag";
+			];
+			elmo:data [
+				rdfs:label "TAX";
+				elmo:index "3";
+				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=tax";
+			];
+		];
+		elmo:data [
+			rdfs:label "Overzicht datasets";
+			elmo:index "2";
+			xhtml:link "/catalogus/tax/query/overzichtdatasets";
 		];
 	#	elmo:data [
 	#		rdfs:label "BEHEER";
@@ -84,11 +123,16 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "2";
 				xhtml:link "/catalogus/tax/container/ttlupload";
 			];
-		#	elmo:data [
-		#		rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-		#		elmo:index "3";
-		#		xhtml:link "/catalogus/tax/container/datasetupload";
-		#	];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "3";
+				xhtml:link "/catalogus/tax/update/syncttlupload";
+			];
+			elmo:data [
+				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
+				elmo:index "5";
+				xhtml:link "/catalogus/tax/container/datasetupload";
+			];
 			elmo:data [
 				rdfs:label "Upload status (RDF of Turtle)";					#Voor het updaten van de status-graph, deze bevat geen concepten en kan dus niet via 'Upload concepten'.
 				elmo:index "4";
@@ -107,6 +151,11 @@ stage:TaxBeheermenu a elmo:Part;
 				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
 				elmo:index "4";
 				xhtml:link "/catalogus/tax/container/ttlupdate";
+			];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "5";
+				xhtml:link "/catalogus/tax/update/syncttlupdate";
 			];
 		];
 		elmo:data [
@@ -134,22 +183,22 @@ stage:TaxBeheermenu a elmo:Part;
 		#	];
 			elmo:data [
 				rdfs:label "Statuscontrole";								#alle begrippen en hun status. Hoofdpagina bevat alleen gevalideerde/geverifieerde begrippen
-				elmo:index "6";
+				elmo:index "1";
 				xhtml:link "/catalogus/tax/query/statuscontrole";
 			];
 			elmo:data [
 				rdfs:label "Looping";										#triples waar zowel <A skos:SemanticRelation B> als <B skos:SemanticRelation A> bestaat, waardoor er een loop ontstaat
-				elmo:index "7";
+				elmo:index "6";
 				xhtml:link "/catalogus/tax/query/loopingcontrole";
 			];
 			elmo:data [
 				rdfs:label "Where used";									#triples waar geldt <B ?relatie A>, dus alle subjecten gerelateerd aan een object
-				elmo:index "8";
+				elmo:index "4";
 				xhtml:link "/catalogus/tax/query/whereused?term=";
 			];
 			elmo:data [
 				rdfs:label "Niet Gevalideerde Links";						#triples waarbij een gevalideerd concept gelinkt is aan een niet-gevalideerd object
-				elmo:index "9";
+				elmo:index "5";
 				xhtml:link "/catalogus/tax/query/nietgevalideerdelinks";
 			];
 		];

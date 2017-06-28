@@ -32,6 +32,10 @@ stage:TaxLoopingUitleg a elmo:Part;
 # Weergave van gerelateerde concepten (looping)
 stage:TaxLoopingTabel a elmo:Part;
 	elmo:index "2";
+	elmo:fragment [
+		elmo:applies-to "link";
+		elmo:appearance elmo:GlobalLink;
+	];
 	elmo:appearance elmo:TableAppearance;
 	elmo:query stage:TaxLoopingQuery
 .
@@ -54,7 +58,9 @@ stage:TaxLoopingQuery a elmo:query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		
-		SELECT DISTINCT ?Subject ?Subject_label ?link ?Object ?Object_label
+		SELECT 	DISTINCT ?Subject ?Subject_label 
+				?link ?link_label 
+				?Object ?Object_label
 		WHERE {
   			{
                 SELECT ?Subject ?Subject_label ?link ?Object ?Object_label ?AltObject
@@ -122,7 +128,38 @@ stage:TaxLoopingQuery a elmo:query;
   			FILTER (												
 				?Subject = ?AltObject
 			)
-  		#	BIND( "Gerelateerd aan" AS ?Relatie )
+			BIND (
+				IF(?link = skos:member,  "Lid van",
+					IF(?link =	skos:semanticRelation,  "Heeft betrekking op",
+						IF(?link =	thes:broaderGeneric,  "Is specialisatie van",
+							IF(?link =	thes:narrowerGeneric,  "Is generalisatie van",
+								IF(?link =	thes:broaderPartitive,  "Is onderdeel van",
+									IF(?link =	thes:narrowerPartitive,  "Bestaat uit",
+										IF(?link =	dct:source,  "Bronnen",
+											IF(?link =	skoslex:actor,  "Heeft als actor",
+												IF(?link =	skoslex:object,  "Heeft als object",
+													IF(?link =	skoslex:agent,  "Heeft als agent",
+														IF(?link =	skos:closeMatch,  "Is ongeveer hetzelfde als",
+															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
+																IF(?link =	skos:relatedMatch,  "Zie ook ",
+																	IF(?link =	skos:broadMatch,  "Breder dan",
+																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		)
+																	)
+																)
+															)
+														)
+													)
+												)
+											)
+										)
+									)
+								)
+							)
+						)
+					)
+				) AS ?link_label
+			) 
 		}
 		ORDER BY ?Subject_label
 	'''
