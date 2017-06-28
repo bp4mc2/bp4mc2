@@ -3717,42 +3717,45 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						)
 					}
-				}
-				UNION
-				{
-					GRAPH ?subjectGraph {
-						<@IDSUBJECT@> rdf:type ?type.
-						OPTIONAL {
-							<@IDSUBJECT@> rdfs:label ?concept_label.
-							<@IDSUBJECT@> ?p ?o.
-						}
-					}
-					GRAPH ?objectGraph {
-						?o rdfs:label ?olabel.
+					GRAPH ?og {
 						?o rdf:type ?otype.
-					}
-					GRAPH doc:mastergraph {
-						<@IDSUBJECT@> rdfs:isDefinedBy ?subjectGraph.
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
-				}
-				UNION
-				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@IDSUBJECT@>.
-						?s rdf:type ?stype.
+						?og prov:generatedAtTime ?oStartTime.
+						?o rdfs:label ?olabel.
 						OPTIONAL {
-							?s rdfs:label ?slabel.
+							?o prov:invalidatedAtTime ?oEndTime.
 						}
-						
+						FILTER (
+							strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?oEndTime )
+								|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
 					}
 					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
+						?g dc:isVersionOf doc:mastergraph.
+						?og dc:isVersionOf doc:mastergraph.
 					}
 					OPTIONAL {
-						<@IDSUBJECT@> rdfs:label ?concept_label.
-						<@IDSUBJECT@> rdf:type ?type.
+						GRAPH ?altSubjectGraph {
+							?s ?sp <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							?s rdfs:label ?slabel.
+							?altSubjectGraph prov:generatedAtTime ?altStartTime.
+							OPTIONAL {
+								?s prov:invalidatedAtTime ?altEndTime.
+							}
+							FILTER (
+								strdt( ?altStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?altEndTime )
+									|| strdt( ?altEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)	
+						}
+						GRAPH doc:mastergraph {
+							?altSubjectGraph dc:isVersionOf doc:mastergraph.
+						}
 					}
 				}
 				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
@@ -3765,35 +3768,75 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 						OPTIONAL {
 							<@IDSUBJECT@> rdfs:label ?concept_label.
 							<@IDSUBJECT@> ?p ?o.
+							FILTER (
+								?p = skos:semanticRelation
+								|| ?p = thes:broaderGeneric
+								|| ?p = thes:narrowerGeneric
+								|| ?p = thes:broaderPartitive
+								|| ?p = thes:narrowerPartitive
+								|| ?p = skoslex:affects
+								|| ?p = skoslex:refersTo
+								|| ?p = skoslex:object
+								|| ?p = skoslex:actor
+								|| ?p = skos:closeMatch
+								|| ?p = skos:exactMatch
+								|| ?p = skos:relatedMatch
+								|| ?p = skos:broadMatch
+								|| ?p = skos:narrowMatch
+								|| ?p = dc:source
+							)
 						}
 					}
-					GRAPH ?objectGraph {
+					GRAPH ?og {
 						?o rdfs:label ?olabel.
 						?o rdf:type ?otype.
-					}
-					GRAPH doc:mastergraph {
-						?o rdfs:isDefinedBy ?objectGraph.
-						?objectGraph dc:isVersionOf doc:mastergraph
-					}
-				}
-				UNION
-				{
-					GRAPH ?altSubjectGraph {
-						?s ?sp <@IDSUBJECT@>.
-						?s rdf:type ?stype.
+						?og prov:generatedAtTime ?oStartTime.
 						OPTIONAL {
-							?s rdfs:label ?slabel.
+							?o prov:invalidatedAtTime ?oEndTime.
 						}
-						FILTER NOT EXISTS {
-							?s prov:invalidatedAtTime ?time.
+						GRAPH <@GRAPH@> {
+							OPTIONAL {
+								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+							}
 						}
+						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+						FILTER (
+							strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+							&& (
+								!bound( ?oEndTime )
+								|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+							)
+						)	
 					}
 					GRAPH doc:mastergraph {
-						?s rdfs:isDefinedBy ?altSubjectGraph.
+						?og dc:isVersionOf doc:mastergraph.
 					}
 					OPTIONAL {
-						<@IDSUBJECT@> rdfs:label ?concept_label.
-						<@IDSUBJECT@> rdf:type ?type.
+						GRAPH ?altSubjectGraph {
+							?s ?sp <@IDSUBJECT@>.
+							?s rdfs:label ?slabel.
+							?s rdf:type ?stype.
+							?altSubjectGraph prov:generatedAtTime ?altStartTime.		
+							OPTIONAL {
+								?s prov:invalidatedAtTime ?altEndTime.
+							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?altInvTime.
+								}
+							}
+							BIND( IF( BOUND( ?altInvTime ), ?altInvTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?altSEndTime )
+							FILTER (
+								strdt( ?altStartTime, xsd:dateTime ) <= strdt( ?altSEndTime, xsd:dateTime )
+								&& (
+									!bound( ?altEndTime )
+									|| strdt( ?altEndTime, xsd:dateTime ) > strdt( ?altSEndTime, xsd:dateTime )
+								)
+							)	
+						}
+						GRAPH doc:mastergraph {
+							?altSubjectGraph dc:isVersionOf doc:mastergraph.
+						}
 					}
 				}
 				
@@ -4005,8 +4048,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					GRAPH <@GRAPH@> {
 						<@IDSUBJECT@> ?p ?o.
 						<@IDSUBJECT@> rdf:type skos:Concept.
-						?g prov:wasGeneratedBy ?a.
-						?g prov:generatedAtTime ?sStartTime.
+						<@GRAPH@> prov:wasGeneratedBy ?a.
+						<@GRAPH@> prov:generatedAtTime ?sStartTime.
 						OPTIONAL {
 							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
 						}
@@ -4027,15 +4070,15 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							}
 							GRAPH <@GRAPH@> {
 								OPTIONAL {
-									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+									<@IDSUBJECT@> prov:invalidatedAtTime ?oInvTime.
 								}
 							}
-							BIND( IF( BOUND( ?invTime ), ?invTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sEndTime )
+							BIND( IF( BOUND( ?oInvTime ), ?oInvTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?oSEndTime )
 							FILTER (
-								strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?oSEndTime, xsd:dateTime )
 								&& (
 									!bound( ?oEndTime )
-									|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?oSEndTime, xsd:dateTime )
 								)
 							)	
 						}
@@ -4045,22 +4088,21 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							?col skos:member <@IDSUBJECT@>.
 							?col rdfs:label ?col_label.
 							?cg prov:generatedAtTime ?cStartTime.
-							
 
 							OPTIONAL {
 								?col prov:invalidatedAtTime ?cEndTime.
 							}
 							GRAPH <@GRAPH@> {
 								OPTIONAL {
-									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+									<@IDSUBJECT@> prov:invalidatedAtTime ?cInvTime.
 								}
 							}
-							BIND( IF( BOUND( ?invTime ), ?invTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sEndTime )
+							BIND( IF( BOUND( ?cInvTime ), ?cInvTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?cSEndTime )
 							FILTER (
-								strdt( ?cStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								strdt( ?cStartTime, xsd:dateTime ) <= strdt( ?cSEndTime, xsd:dateTime )
 								&& (
 									!bound( ?cEndTime )
-									|| strdt( ?cEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+									|| strdt( ?cEndTime, xsd:dateTime ) > strdt( ?cSEndTime, xsd:dateTime )
 								)
 							)	
 						}
@@ -4076,15 +4118,15 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							}
 							GRAPH <@GRAPH@> {
 								OPTIONAL {
-									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+									<@IDSUBJECT@> prov:invalidatedAtTime ?toeInvTime.
 								}
 							}
-							BIND( IF( BOUND( ?invTime ), ?invTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sEndTime )
+							BIND( IF( BOUND( ?toeInvTime ), ?toeInvTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?toeSEndTime )
 							FILTER (
-								strdt( ?tgStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								strdt( ?tgStartTime, xsd:dateTime ) <= strdt( ?toeSEndTime, xsd:dateTime )
 								&& (
 									!bound( ?tgEndTime )
-									|| strdt( ?tgEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+									|| strdt( ?tgEndTime, xsd:dateTime ) > strdt( ?toeSEndTime, xsd:dateTime )
 								)
 							)	
 						}
