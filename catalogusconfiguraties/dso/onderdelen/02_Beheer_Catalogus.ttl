@@ -70,18 +70,13 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		
 		INSERT {
 			GRAPH container:catalogusupload {
-				?s rdfs:label ?slabel.
+				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
 			GRAPH container:catalogusupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}

@@ -1,9 +1,9 @@
 @echo off
 echo Creating concatenated file O...
-powershell -Command "(gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl' | Out-File -encoding UTF8 'Testdata concepten O.ttl'"
+powershell -Command "$myFile = (gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl'; [System.IO.File]::WriteAllLines('Testdata concepten O.ttl', $myFile)"
 echo Creating concatenated file T...
-powershell -Command "(gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl' | Out-File -encoding UTF8 'Testdata concepten T.ttl'"
+powershell -Command "$myFile = (gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl'; [System.IO.File]::WriteAllLines('Testdata concepten O.ttl', $myFile)"
 echo Creating concatenated file A...
-powershell -Command "(gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl' | Out-File -encoding UTF8 'Testdata concepten A.ttl'"
+powershell -Command "$myFile = (gc 'Testdata concepten local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl'; [System.IO.File]::WriteAllLines('Testdata concepten O.ttl', $myFile)"
 echo Whoohoo! All done!
 pause
