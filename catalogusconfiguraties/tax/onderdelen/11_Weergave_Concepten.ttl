@@ -130,6 +130,11 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:altLabel;
 		elmo:index "29";
 	];
+	elmo:fragment [
+		rdfs:label "Dataset"@nl;
+		elmo:applies-to skos:inScheme;
+		elmo:index "30";
+	];
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
 
@@ -262,6 +267,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						|| ?p = dct:source
 						|| ?p = skos:comment
 						|| ?p = skos:member
+						|| ?p = skos:inScheme
 					)
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
 				}
@@ -275,14 +281,15 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 						}
 					}
-				FILTER (
-					?p = rdfs:comment
-					|| ?p = skos:definition
-					|| ?p = skos:scopeNote
-					|| ?p = dct:source
-					|| ?p = skos:comment
-					|| ?p = skos:member
-				)
+					FILTER (
+						?p = rdfs:comment
+						|| ?p = skos:definition
+						|| ?p = skos:scopeNote
+						|| ?p = dct:source
+						|| ?p = skos:comment
+						|| ?p = skos:member
+						|| ?p = skos:inScheme
+					)
 					FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 				}
 				UNION 
