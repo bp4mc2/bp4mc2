@@ -181,6 +181,11 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "4";
 				xhtml:link "/container/ttlupdate";
 			];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "5";
+				xhtml:link "/update/syncttlupdate";
+			];
 		];
 		elmo:data [
 			rdfs:label "Rapportages";										#Koppeling naar alle rapportages
@@ -259,15 +264,31 @@ container:ttlupload a elmo:Container;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
 .
 
+# Updatecontainer Turtle
+container:ttlupdate a elmo:Container;
+    elmo:representation elmo:UploadRepresentation;
+    elmo:contains stage:TaxBeheermenu;
+    elmo:contains stage:TaxFooter;
+    elmo:replaces container:generiek;
+    rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+.
 
 #PRODUCTIONS
 
-#production ttl, label dataset en trap uploadquery af
+#production ttlupload, label dataset en trap uploadquery af
 updatestage:syncttlupload a elmo:Production;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
 	elmo:queryForm stage:TaxSelectDataset;
 	elmo:contains stage:TaxGeneriekeUploadScene;
+.
+
+#production ttlupdate, label dataset en trap uploadquery af
+updatestage:syncttlupdate a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxSelectDataset;
+	elmo:contains stage:TaxSpecifiekeUploadScene;
 .
 
 #FORMS
@@ -646,6 +667,257 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		CLEAR GRAPH container:excelupload		
 		CLEAR GRAPH container:ttlupload
 	''';
+.
+
+# Standaardquery voor specifieke uploadcontainers
+# Algoritme:
+#
+# - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
+# - Vul mastergraph aan met nieuwe versie
+# - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
+# - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
+# - Update de aanpasdatum van de Catalogus, CatalogRecord en Dataset
+# - Voeg in de nieuwe GRAPH de concepten toe die een andere hash dan de hash in de mastergraph hebben (d.w.z., die gewijzigd zijn)
+# - Voeg voor de gewijzigde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
+# - Verwijder de concepten uit de mastergraph die voorkomen in de nieuwe GRAPH (d.w.z. gewijzigd zijn)
+# - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
+# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
+
+#Specifieke uploadquery
+stage:TaxSpecifiekeUploadScene a elmo:Scene;
+	rdfs:label "Postquery inladen gegevens";
+	elmo:index "2";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://pdok-ld-gck.fto.kadaster.nl/container/>
+		prefix doc: <http://pdok-ld-gck.fto.kadaster.nl/concepten/doc/>
+		prefix loc: <http://pdok-ld-gck.fto.kadaster.nl/id/>
+		prefix versiongraph: <http://pdok-ld-gck.fto.kadaster.nl/concepten/doc/@CURRENTMOMENT@>
+		prefix dataset: <http://pdok-ld-gck.fto.kadaster.nl/id/dataset/>
+		prefix concept: <http://pdok-ld-gck.fto.kadaster.nl/id/concept/>
+		prefix activity: <http://pdok-ld-gck.fto.kadaster.nl/id/concept/@CURRENTMOMENT@>
+			
+	
+		DELETE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s rdfs:label ?spreflabel.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				{
+					{ ?s skos:prefLabel ?spreflabel. }
+					UNION { ?s dct:title ?spreflabel. }
+					FILTER NOT EXISTS {
+						?s rdfs:label ?slabel.
+					}
+				}
+				UNION {
+					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Concepten - tax-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
+		}
+
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:generiek {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = skos:Concept
+							|| ?type = skos:Collection
+							|| ?type = skoslex:Act
+							|| ?type = skoslex:Norm
+							|| ?type = skoslex:Object
+							|| ?type = skoslex:Actor
+							|| ?type = owl:Class
+							|| ?type = dctype:Text
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				SELECT ?s ?p ?o 
+				WHERE {
+					?s rdf:type skos:Concept.
+				}
+			}
+		}
+				
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type ?type.
+			    ?s ?p ?o.
+			    ?s bp4mc2:signature ?sig
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s bp4mc2:signature ?sig
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+			}
+		}
+
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+			    ?s rdf:type ?type.
+			    ?s bp4mc2:signature ?sig.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+					|| ?type = skoslex:Act
+					|| ?type = skoslex:Norm
+					|| ?type = skoslex:Object
+					|| ?type = skoslex:Actor
+					|| ?type = owl:Class
+					|| ?type = dctype:Text
+				)
+            }
+		}
+		
+		CLEAR GRAPH container:generiek		
+		CLEAR GRAPH container:excelupdate		
+		CLEAR GRAPH container:ttlupdate
+	''';
 . 
 #
 #
@@ -670,16 +942,6 @@ container:excelupload a elmo:Container;
 	elmo:query stage:TaxGeneriekeUploadScene;
 .
 
-# Uploadcontainer ttl
-#container:ttlupload a elmo:Container;
-#	elmo:contains stage:TaxBeheermenu;
-#	elmo:contains stage:TaxFooter;
-#	elmo:representation elmo:UploadRepresentation;
-#	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
-#	elmo:replaces container:generiek;
-#	elmo:query stage:TaxGeneriekeUploadScene;
-#.
-
 # Updatecontainer Excel
 container:excelupdate a elmo:Container;
     elmo:contains stage:TaxBeheermenu;
@@ -692,16 +954,7 @@ container:excelupdate a elmo:Container;
     elmo:query stage:TaxSpecifiekeUploadScene;
 .
 
-# Updatecontainer Turtle
-container:ttlupdate a elmo:Container;
-    elmo:contains stage:TaxBeheermenu;
-    elmo:contains stage:TaxHeader;
-    elmo:contains stage:TaxFooter;
-    elmo:representation elmo:UploadRepresentation;
-    rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
-    elmo:replaces container:generiek;
-    elmo:query stage:TaxSpecifiekeUploadScene;
-.
+
 
 #
 # SCENES
