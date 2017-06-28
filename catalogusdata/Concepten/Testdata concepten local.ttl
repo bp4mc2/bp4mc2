@@ -35,6 +35,17 @@ concept:SpecifiekeSchildpad a skos:Concept;
 	skos:semanticRelation concept:AndereSchildpad
 .
 
+concept:NogSpecifiekereSchildpad a skos:Concept;
+	skos:prefLabel "NogSpecifiekeSchildpad";
+	rdfs:label "Nog specifiekere schildpad";
+	skos:definition "Een behoorlijk specifieke schildpad";
+	skos:inScheme concept:schildpadDomein;
+	skos:altLabel "Nog specifiekere tortoise";
+	dct:source concept:Art1_2Lid1Awb;
+	dct:valid "1-1-2001 - 1-1-2017";
+	skos:broaderGeneric concept:SpecifiekeSchildpad
+.
+
 concept:Kop a skos:Concept;
 	skos:prefLabel "Kop";
 	rdfs:label "Kop";
@@ -168,7 +179,7 @@ concept:NogSpecifiekerObject a skos:Concept, skoslex:Object;
 	thes:broaderGeneric concept:SpecifiekObject
 .
 
-concept:SinglObject a skos:Concept, skoslex:Object;
+concept:SingleObject a skos:Concept, skoslex:Object;
 	skos:prefLabel "SingleObject";
 	rdfs:label "Single object";
 	skos:inScheme concept:schildpadDomein
@@ -176,10 +187,11 @@ concept:SinglObject a skos:Concept, skoslex:Object;
 
 # Collecties
 collection:StandaardSchildpadden a skos:Collection;
-	rdfs:label "Standaard schildpadden";
+	rdfs:label "Standaard schildpadden.";
 	skos:prefLabel "StandaardSchildpadden";
 	skos:member concept:GeneriekeSchildpad;
 	skos:member concept:SpecifiekeSchildpad;
+	skos:member concept:NogSpecifiekereSchildpad;
 .
 
 collection:AndereSchildpadden a skos:Collection;
