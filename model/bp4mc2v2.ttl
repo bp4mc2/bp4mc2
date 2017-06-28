@@ -22,14 +22,16 @@ model:Concept rdf:type sh:NodeShape;
 	rdfs:label "Concept";
 	rdfs:comment "Concepten zijn, ideeën, betekenissen of (categorieën van) objecten en gebeurtenissen";
 	sh:targetClass skos:Concept;
+	sh:property model:conceptDomein;
+	sh:property model:conceptBron;
 	sh:property model:conceptLabel;
 	sh:property model:conceptNaam;
-	sh:property model:conceptDomein;
+	sh:property model:conceptSynoniem;	
+	sh:property model:conceptAlternatieveSchrijfwijze
 	sh:property model:conceptDefinitie;
-	sh:property model:conceptUitleg;
 	sh:property model:conceptToelichting;
-	sh:property model:conceptSynoniem;
-	sh:property model:conceptBron;
+	sh:property model:conceptUitleg;
+	sh:property model:conceptRationale;
 	sh:property model:conceptIsSpecialisatieVan;
 	sh:property model:conceptIsGeneralisatieVan;
 	sh:property model:conceptIsOnderdeelVan;
@@ -42,12 +44,31 @@ model:Concept rdf:type sh:NodeShape;
 	sh:property model:conceptIsEngerDanInAnderSchema;
 	sh:property model:conceptIsGemaaktDoor;
 	sh:property model:conceptIsTopConceptOf;
-	sh:property model:conceptHeeftTopConcept;
+.
+model:conceptDomein rdf:type sh:PropertyShape;
+	rdfs:label "Domein";
+	rdfs:comment "Het Concept wordt gedefinieerd binnen de context van een conceptschema";
+	sh:path skos:inScheme;
+	sh:name "skos:inScheme";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+	sh:class skos:ConceptScheme;
+.
+model:conceptBron rdf:type sh:PropertyShape;
+	rdfs:label "Bron"@nl;
+	rdfs:label "source"@en;
+	rdfs:comment "Een Concept kan zijn ontleend aan een formele bron";
+	sh:path dct:source;
+	sh:name "dct:source";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
 .
 model:conceptLabel rdf:type sh:PropertyShape;
 	rdfs:label "Label";
 	rdfs:comment "Een concept kan een label hebben";
 	sh:path rdfs:label;
+	sh:name "rdfs:label";
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
@@ -56,41 +77,9 @@ model:conceptNaam rdf:type sh:PropertyShape;
 	rdfs:label "Naam";
 	rdfs:comment "Een Concept heeft een voorkeurnaam";
 	sh:path skos:prefLabel;
+	sh:name "skos:prefLabel";
 	sh:datatype xsd:string;
 	sh:minCount 1;
-	sh:maxCount 1;
-.
-model:conceptDomein rdf:type sh:PropertyShape;
-	rdfs:label "Domein";
-	rdfs:comment "Het Concept wordt gedefinieerd binnen de context van een conceptschema";
-	sh:path skos:inScheme;
-	sh:datatype xsd:string;
-	sh:minCount 1;
-	sh:maxCount 1;
-	sh:class skos:ConceptScheme;
-.
-model:conceptDefinitie rdf:type sh:PropertyShape;
-	rdfs:label "Definitie";
-	rdfs:comment "Een begrip heeft een formele definitie";
-	sh:path skos:definition;
-	sh:datatype xsd:string;
-	sh:minCount 1;
-	sh:maxCount 1;
-.
-model:conceptUitleg rdf:type sh:PropertyShape;
-	rdfs:label "Uitleg"@nl;
-	rdfs:label "Comment"@en;
-	rdfs:comment "Een Concept heeft een uitleg op taalniveau B1 (klare taal)";
-	sh:path rdfs:comment;
-	sh:datatype xsd:string;
-	sh:maxCount 1;
-.
-model:conceptToelichting rdf:type sh:PropertyShape;
-	rdfs:label "Toelichting"@nl;
-	rdfs:label "Scopenote"@en;
-	rdfs:comment "Een Concept kan een toelichting hebben";
-	sh:path skos:scopeNote;
-	sh:datatype xsd:string;
 	sh:maxCount 1;
 .
 model:conceptSynoniem rdf:type sh:PropertyShape;
@@ -98,20 +87,54 @@ model:conceptSynoniem rdf:type sh:PropertyShape;
 	rdfs:label "Synonym"@en;
 	rdfs:comment "Een Concept kan één of meerder synoniemen hebben";
 	sh:path skos:altLabel;
+	sh:name "skos:altLabel";
 	sh:datatype xsd:string;
 .
-model:conceptBron rdf:type sh:PropertyShape;
-	rdfs:label "Bron"@nl;
-	rdfs:label "source"@en;
-	rdfs:comment "Een Concept kan zijn ontleend aan een formele bron";
-	sh:path dct:source;
+model:conceptAlternatieveSchrijfwijze rdf:type sh:PropertyShape;
+	rdfs:label "Alternatieve schrijfwijze"@nl;
+	rdfs:label "Alternative notation"@nl;
+	rdfs:comment "De term van een concept kan een alternatieve schrijfwijze hebben, die ook gevonden moet worden bij zoekvragen of indexeren van teksten. Voorbeelde zijn vaak voorkomende foutieve schrijfwijzen of meervoud.";
+	sh:path skos:hiddenLabel;
+	sh:name "skos:hiddenLabel";
+.
+model:conceptDefinitie rdf:type sh:PropertyShape;
+	rdfs:label "Definitie";
+	rdfs:comment "Een begrip heeft een formele definitie";
+	sh:path skos:definition;
+	sh:name "skos:definition";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+model:conceptToelichting rdf:type sh:PropertyShape;
+	rdfs:label "Toelichting"@nl;
+	rdfs:label "Scopenote"@en;
+	rdfs:comment "Een Concept kan een toelichting hebben";
+	sh:path skos:scopeNote;
+	sh:name "skos:scopeNote";
 	sh:datatype xsd:string;
 	sh:maxCount 1;
+.
+model:conceptUitleg rdf:type sh:PropertyShape;
+	rdfs:label "Uitleg"@nl;
+	rdfs:label "Comment"@en;
+	rdfs:comment "Een Concept heeft een uitleg op taalniveau B1 (klare taal)";
+	sh:path rdfs:comment;
+	sh:name "rdfs:comment";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+.
+model:conceptRationale a sh:PropertyShape;
+	rdfs:label "rationale";
+	sh:name "skos:editorialNote";
+	rdfs:comment "Een concept kent rationale van de definitie";
+	sh:path skos:editorialNote;
 .
 model:conceptIsSpecialisatieVan rdf:type sh:PropertyShape;
 	rdfs:label "is specialisatie van";
 	rdfs:comment "Een Concept kan een specialisatie van een ander Concept zijn";
 	sh:path thes:broaderGeneric;
+	sh:name "skos-thes:broaderGeneric";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -119,6 +142,7 @@ model:conceptIsGeneralisatieVan rdf:type sh:PropertyShape;
 	rdfs:label "is generalisatie van";
 	rdfs:comment "Een Concept kan een generalisatie van een ander Concept zijn";
 	sh:path thes:narrowerGeneric;
+	sh:name "skos-thes:narrowerGeneric";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -126,6 +150,7 @@ model:conceptIsOnderdeelVan rdf:type sh:PropertyShape;
 	rdfs:label "is onderdeel van";
 	rdfs:comment "Een Concept kan een aanduiding zijn van een onderdeel van iets dat met een ander Concept wordt aangeduid";
 	sh:path thes:broaderPartitive;
+	sh:name "skos-thes:broaderPartitive";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -133,6 +158,7 @@ model:conceptBestaatUit rdf:type sh:PropertyShape;
 	rdfs:label "bestaat uit";
 	rdfs:comment "Een Concept kan een aanduiding zijn van iets dat bestaat uit onderdelen die met andere Concepten worden aangeduid";
 	sh:path thes:narrowerPartitive;
+	sh:name "skos-thes:narrowerPartitive";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -140,6 +166,7 @@ model:conceptHeeftBetrekkingOp rdf:type sh:PropertyShape;
 	rdfs:label "heeft betrekking op";
 	rdfs:comment "Een Concept kan betrekking hebben op een ander Concept";
 	sh:path skos:semanticRelation;
+	sh:name "skos:semanticRelation";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -147,6 +174,7 @@ model:conceptIsOngeveerHetzelfdeAls rdf:type sh:PropertyShape;
 	rdfs:label "is ongeveer hetzelfde als (in ander Conceptenschema)";
 	rdfs:comment "Een Concept in een Conceptenschema kan ongeveer dezelfde betekenis hebben als een Concept in een ander Conceptenschema, maar niet omgekeerd";
 	sh:path skos:closeMatch;
+	sh:name "skos:closeMatch";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -154,6 +182,7 @@ model:conceptIsHetzelfdeAls rdf:type sh:PropertyShape;
 	rdfs:label "is hetzelfde als (in ander Conceptschema)";
 	rdfs:comment "Een Concept in een Conceptenschema kan dezelfde betekenis hebben als een Concept in een ander Conceptenschema";
 	sh:path skos:exactMatch;
+	sh:name "skos:exactMatch";
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -161,6 +190,7 @@ model:conceptZieOok rdf:type sh:PropertyShape;
 	rdfs:label "zie ook (in ander Conceptenschema)";
 	rdfs:comment "Een Concept in een Conceptenschema kan gerelateerd aan een Concept in een ander Conceptenschema";
 	sh:path skos:relatedMatch;
+	sh:name "skos:relatedMatch"; 
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -175,6 +205,7 @@ model:conceptIsEngerDanInAnderSchema rdf:type sh:PropertyShape;
 	rdfs:label "is enger dan (in ander Conceptenschema)";
 	rdfs:comment "Een Concept in een Conceptenschema kan een engere betekenis hebben dan een Concept in een ander Conceptenschema"; 
 	sh:path skos:narrowMatch;
+	sh:name "skos:narrowMatch;
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -189,27 +220,48 @@ model:conceptIsGemaaktDoor rdf:type sh:PropertyShape;
 .
 model:conceptIsTopConceptOf rdf:type sh:PropertyShape;
 	sh:path skos:topConceptOf;
+	sh:name "skos:topConceptOf";
 	sh:datatype xsd:string;
 	sh:maxCount 1;
 	sh:class skos:ConceptScheme;
 .
-model:conceptHeeftTopConcept rdf:type sh:PropertyShape;
-	sh:path skos:hasTopConcept;
-	sh:datatype xsd:string;
+### Concepteschrijving
+model:conceptBeschrijving rdf:type sh:NodeShape;
+	rdfs:label "Concept beschrijving";
+	sh:property model:conceptBeschrijvingBetreft;
+	sh:property model:conceptBeschrijvingType;
+.
+model:conceptBeschrijvingBetreft rdf:type sh:PropertyShape;
+	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
+	sh:path foaf:primaryTopic;
 	sh:class skos:Concept;
+.
+model:conceptBeschrijvingType rdf:type sh:PropertyShape;
+	rdfs:label "rol van entiteit";
+	rdfs:comment "Een conceptbeschrijving vervult de rol van entiteit";
+	sh:path rdf:type;
+	sh:hasValue prov:Entity;
 .
 ### Activiteit
 model:Activiteit rdf:type sh:NodeShape;
 	rdfs:label "Activiteit";
 	sh:targetClass skoslex:Act;
+	sh:name "skoslex:Act";
 	sh:property model:activiteitActor;
 	sh:property model:activiteitObject;
 .
 model:activiteitActor rdf:type sh:PropertyShape;
+	rdfs:label "actor";
+	sh:name "skoslex:actor";
+	rdfs:comment "Een handeling wordt uitgevoerd door een actor";
 	sh:path skoslex:actor;
 	sh:class skoslex:Actor;
 .
 model:activiteitObject rdf:type sh:PropertyShape;
+	rdfs:label "object";
+	sh:name "skoslex:object";
+	rdfs:comment "Een handeling wordt uitgevoerd in relatie tot een object";
 	sh:path skoslex:object;
 	sh:class skoslex:Object;
 .
@@ -249,45 +301,70 @@ model:normVerwijstNaar rdf:type sh:PropertyShape;
 model:Collection rdf:type sh:NodeShape;
 	rdfs:label "Collectie";
 	sh:targetClass skos:Collection;
+	sh:name "skos:Collection";
 	sh:property model:collectieLabel;
-	sh:property model:collectieNaam;
 	sh:property model:collectieLid;
+	sh:property model:collectieHeeftTopConcept;
 .
 model:collectieLabel rdf:type sh:PropertyShape;
+	rdfs:label "heeft label";
 	sh:path rdfs:label;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
-model:collectieNaam rdf:type sh:PropertyShape;
-	sh:path skos:prefLabel;
-	sh:datatype xsd:string;
-	sh:minCount 1;
-	sh:maxCount 1;
-.
-model:collectieLid rdf:Type sh:PropertyShape;
+model:collectieLid rdf:type sh:PropertyShape;
+	rdfs:label "heeft lid";
 	sh:path skos:member;
+	sh:name "skos:memer";
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:class skos:Concept;
 .
+model:collectieHeeftTopConcept rdf:type sh:PropertyShape;
+	rdfs:label "Heeft top concept";
+	sh:path skos:hasTopConcept;
+	sh:name "skos:hasTopConcept";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+	sh:class skos:Concept;
+.
+### Collection beschrijving
+model:collectieBeschrijving rdf:type sh:NodeShape;
+	rdfs:label "Collectie beschrijving";
+	sh:property model:collectieBeschrijvingBetreft;
+	sh:property model:collectieBeschrijvingType;
+.
+model:collectieBeschrijvingBetreft rdf:type sh:PropertyShape;
+	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
+	sh:path foaf:primaryTopic;
+	sh:class skos:Collection;
+.
+model:collectieBeschrijvingType rdf:type sh:PropertyShape;
+	rdfs:label "rol van entiteit";
+	rdfs:comment "Een collectiebeschrijving vervult de rol van entiteit";
+	sh:path rdf:type;
+	sh:hasValue prov:Entity;
+.
 ### ConceptSchema
 model:ConceptSchema rdf:type sh:NodeShape;
 	rdfs:label "Concepten Schema";
+	sh:name "skos:ConceptScheme";
 	sh:targetClass skos:ConceptScheme;
-	sh:targetClass prov:Entity;
-	sh:property model:conceptSchemaLabel;
-	sh:property model:conceptSchemaNaam;
+	sh:property model:conceptSchemaGrondslag;
+	sh:property model:conceptSchemaType;
 .
-model:conceptSchemaLabel rdf:type sh:PropertyShape;
-	sh:predicate rdfs:label;
-	sh:datatype xsd:string;
+model:conceptSchemaGrondslag rdf:type sh:PropertyShape;
+	rdfs:label "grondslag";
+	sh:path model:conceptSchemaType;
+	sh:class dctype:Text;
 .
-model:conceptSchemaNaam rdf:type sh:PropertyShape;
-	sh:predicate skos:prefLabel;
-	sh:datatype xsd:string;
-	sh:minCount 1;
-	sh:maxCount 1;
+model:conceptSchemaType rdf:type sh:PropertyShape;
+	rdfs:label "rol van dataset";
+	rdfs:comment "Een begrippenkader vervult de rol van dataset";
+	sh:path rdf:type;
+	sh:hasValue dcat:Dataset;
 .
 ### Catalogus
 model:Catalogus rdf:type sh:NodeShape;
@@ -308,51 +385,66 @@ model:Catalogus rdf:type sh:NodeShape;
 	sh:property model:catalogusTaxonomy;
 .
 model:catalogusTitel rdf:type sh:PropertyShape;
+	rdfs:label "naam";
+	sh:name "dcterms:title";
 	sh:path dct:title;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusBeschrijving rdf:type sh:PropertyShape;
+	rdfs:label "beschrijving";
+	sh:name "dcterms:description";
 	sh:path dct:description;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusDatumVanUitgifte rdf:type sh:PropertyShape;
+	rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
 	sh:path dct:issued;
 	sh:datatype xsd:dateTime;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusDatumVanWijziging rdf:type sh:PropertyShape;
+	rdfs:label "datum wijziging";
+	sh:name "dcterms:modified";
 	sh:path dct:modified;
 	sh:datatype xsd:dateTime;
 .
 model:catalogusTaal rdf:type sh:PropertyShape;
+	rdfs:label "taal";
+	sh:name "dcterms:language";
 	sh:path dct:language;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 .
 model:catalogusLicentie rdf:type sh:PropertyShape;
+	sh:name "dcterms:license";
 	sh:path dct:license;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusRechten rdf:type sh:PropertyShape;
+	sh:name "dcterms:rights";
 	sh:path dct:rights;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusHomepage rdf:type sh:PropertyShape;
+	rdfs:label "homepage";
+	sh:name "foaf:homepage";
 	sh:path foaf:homepage;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusWerkingsgebied rdf:type sh:PropertyShape;
+	rdfs:label "werkingsgebied";
 	sh:path dct:spatial;
 	sh:datatype xsd:string;
 	sh:class dct:Location;
@@ -360,6 +452,8 @@ model:catalogusWerkingsgebied rdf:type sh:PropertyShape;
 	sh:maxCount 1;
 .
 model:catalogusUitgevendeInstantie rdf:type sh:PropertyShape;
+	rdfs:label "uitgever";
+	sh:class foaf:Agent;
 	sh:path dct:publisher;
 	sh:datatype xsd:string;
 	sh:class foaf:Agent;
@@ -379,40 +473,56 @@ model:catalogusTaxonomy rdf:type sh:PropertyShape;
 	sh:datatype xsd:string;
 	sh:class skos:ConceptScheme;
 .
+model:catalogusOmvat rdf:type sh:PropertyShape;
+	rdfs:label "omvat";
+	sh:path dcat:record:
+	sh:class dcat:CatalogRecord;
+.
 ### Catalogus Record
 model:CatalogusRecord rdf:type sh:NodeShape;
 	rdfs:label "Catalogus Record";
 	sh:targetClass dcat:CatalogRecord;
+	sh:property model:catalogusrecordType;
 	sh:property model:catalogusrecordTitel;
 	sh:property model:catalogusrecordBeschrijving;
 	sh:property model:catalogusrecordDatumVanUitgifte;
 	sh:property model:catalogusrecordDatumVanWijziging;
 	sh:property model:catalogusrecordHoofdonderwerp;
 .
+sh:catalogusrecordType rdf:type sh:PropertyShape;
+	rdfs:label "rol van entiteit";
+	sh:path rdf:type;
+	sh:hasValue prov:Entity;
+.
 model:catalogusrecordTitel rdf:type sh:PropertyShape;
+	sh:name "dcterms:title";
 	sh:path dct:title;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusrecordBeschrijving rdf:type sh:PropertyShape;
+	sh:name "dcterms:description";
 	sh:path dct:description;
 	sh:datatype xsd:string;
 	sh:maxCount 1;
 .
 model:catalogusrecordDatumVanUitgifte rdf:type sh:PropertyShape;
+	sh:name "dcterms:issued";
 	sh:path dct:issued;
 	sh:datatype xsd:date;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusrecordDatumVanWijziging rdf:type sh:PropertyShape;
+	sh:name "dcterms:modified";
 	sh:path dct:modified;
 	sh:datatype xsd:date;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:catalogusrecordHoofdonderwerp rdf:type sh:PropertyShape;
+	sh:name "foaf:primaryTopic";
 	sh:path foaf:primaryTopic;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -422,8 +532,8 @@ model:catalogusrecordHoofdonderwerp rdf:type sh:PropertyShape;
 ### Dataset
 model:Dataset rdf:type sh:NodeShape;
 	rdfs:label "Dataset";
+	sh:name "dcat:Dataset";
 	sh:targetClass dcat:Dataset;
-	sh:targetClass prov:Entity;
 	sh:property model:datasetTitel;
 	sh:property model:datasetBeschrijving;
 	sh:property model:datasetDatumVanUitgifte;
@@ -438,24 +548,36 @@ model:Dataset rdf:type sh:NodeShape;
 	sh:property model:datasetThema;
 .
 model:datasetTitel rdf:type sh:PropertyShape;
+	rdfs:label "titel";
+	sh:name "dcterms:title";
+	rdfs:comment "De dataset heeft een naam";
 	sh:path dct:title;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:datasetBeschrijving rdf:type sh:PropertyShape;
+	rdfs:label "beschrijving";
+	sh:name "dcterms:description";
 	sh:path dct:description;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:datasetDatumVanUitgifte rdf:type sh:PropertyShape;
+	rdfs:label "datum van publicatie";
+	sh:name "dcterms:issued";
+	rdfs:comment "De dataset is op enig moment gepubliceerd";
 	sh:path dct:issued;
 	sh:datatype xsd:date;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:datasetTaal rdf:type sh:PropertyShape;
+	rdfs:label "taal";
+	sh:name "dcterms:language";
+	rdfs:comment "De taal waarin de dataset is  beschreven";
+	rdf:value "@nl";
 	sh:path dct:language;
 	sh:datatype xsd:string;
 .
@@ -507,11 +629,125 @@ model:datasetThema rdf:type sh:PropertyShape;
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
+### Datasetversie
+model:Datasetversie rdf:type sh:NodeShape;
+	rdfs:label "Datasetversie";
+	sh:property model:Datasetversie_informatiemodel;
+	sh:property model:Datasetversie_naam;
+	sh:property model:Datasetversie_publicatiedatum;
+	sh:property model:Datasetversie_beschrijving;
+	sh:property model:Datasetversie_taal;
+	sh:property model:Datasetversie_distributie;
+	sh:property model:Datasetversie_versieVan;
+	sh:property model:Datasetversie_werkingsgebied;
+	sh:targetClass dcat:Dataset;
+.
+model:Datasetversie_beschrijving rdf:type sh:PropertyShape;
+	rdfs:label "beschrijving";
+	sh:name "dctterms:description";
+	rdf:value "<beschrijving>";
+	sh:path dct:description;
+.
+model:Datasetversie_informatiemodel rdf:type sh:PropertyShape;
+	rdfs:label "beschreven door";
+	rdfs:comment "Bij een dataset hoort een informatiemodel";
+	sh:class adms:Asset;
+	rdfs:value "kadaster.nl/schemas/imkad";
+	sh:path wdrs:describedBy;
+.
+model:Datasetversie_naam rdf:type sh:PropertyShape;
+	rdfs:label "naam";
+	sh:name "dcterms:title";
+	sh:path dct:title;
+.
+model:Datasetversie_publicatiedatum rdf:type sh:PropertyShape;
+	rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
+	sh:path dct:issued;
+.
+model:Datasetversie_taal rdf:type sh:PropertyShape;
+	rdfs:label "taal";
+	sh:name "dcterms:language";
+	sh:path dct:language;
+.
+model:Datasetversie_distributie rdf:type sh:PropertyShape;
+	rdfs:label "Distributie";
+	sh:path dcat:distribution;
+	sh:class dcat:Distribution;
+.
+model:Datasetversie_versieVan rdf:type sh:PropertyShape;
+	rdfs:label "versie van";
+	sh:path dct:isVersionOf;
+	sh:valueShape model:Dataset;
+	sh:maxCount 1;
+.
+model:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
+	rdfs:label "werkingsgebied";
+	rdfs:comment "Het (geografische) gebied waar de dataset over gaat";
+	sh:class dct:location
+	sh:path dct:spatial;
+.
+### Informatieproduct 
+model:Informatieproduct rdf:type sh:NodeShape;
+	rdfs:label "Informatieproduct";
+	sh:targetClass [rdfs:subClassOf dcat:Dataset];
+.
+### Informatiemodel
+model:Informatiemodel rdf:type sh:NodeShape;
+	rdfs:label "Informatiemodel";
+	sh:name "adms:Asset";
+	sh:targetClass adms:Asset;
+	sh:property model:informatiemodel_naam;
+	sh:property model:informatiemodel_beschrijving;
+	sh:property model:informatiemodel_versie;
+	sh:property model:informatiemodel_publicatiedatum;
+	sh:property model:informatiemodel_releaseNotes;
+	sh:property model:informatiemodel_betreft;
+	sh:property model:informatiemodel_type;
+.
+model:informatiemodel_naam rdf:type sh:PropertyShape;
+	rdfs:label "naam";
+	sh:name "dcterms:title";
+	rdf:value "IMKAD";
+	sh:path dct:title;
+.
+model:informatiemodel_beschrijving rdf:type sh:PropertyShape;
+	rdfs:label "beschrijving";
+	sh:name "dcterms:description";
+	rdf:value <beschrijving>;
+	sh:path dcterms:description;
+.
+model:informatiemodel_versie rdf:type sh:PropertyShape;
+	rdfs:label "versie";
+	sh:name "adms:version";
+	sh:path adms:version;
+.
+model:informatiemodel_publicatiedatum rdf:type sh:PropertyShape;
+	rdfs:label "publicatiedatum";
+	sh:name "dcterms:issued";
+	sh:path dct:issued;
+.
+model:informatiemodel_releaseNotes rdf:type sh:PropertyShape;
+	rdfs:label "release notes";
+	sh:name "adms:versionNotes";
+	rdf:value <release notes>;
+	sh:path adms:versionNotes;
+.
+model:informatiemodel_betreft rdf:type sh:PropertyShape;
+	rdfs:label "betreft";
+	sh:name "foaf:primaryTopic";
+	sh:path foaf:primaryTopic;
+	sh:class skos:ConceptScheme;
+.
+model:informatiemodel_type rdf:type sh:PropertyShape;
+	rdfs:label "rol van entiteit";
+	sh:path rdf:type;
+	sh:hasValue prov:Entity;
+.
 ### Distributie
 model:distributie rdf:type sh:NodeShape;
 	rdfs:label "Distributie";
 	sh:targetClass dcat:Distribution;
-	sh:targetClass prov:Entity;
 	sh:property model:distributieTitel;
 	sh:property model:distributieBeschrijving;
 	sh:property model:distributieDatumVanUitgifte;
@@ -585,20 +821,18 @@ model:gepubliceerdNamens rdf:type sh:PropertyShape;
 ### Document
 model:Document rdf:type sh:NodeShape;
 	rdfs:label "Document";	
-	sh:targetClass foaf:Document;
-	sh:targetClass prov:Entity;
-	sh:property model:documentNaam;
+	sh:targetClass dctype:Text;
+	sh:property model:document_versieVan;
 .
-model:documentNaam rdf:type sh:PropertyShape;
-	sh:predicate skos:prefLabel;
-	sh:datatype xsd:string;
+model:document_versieVan rdf:type sh:PropertyShape;
+	rdfs:label "versie van";
+	sh:path adms:isVersionOf;
+	sh:valueShape model:Datasetversie;
 	sh:minCount 1;
-	sh:maxCount 1;
 .
 ### Provenance Entiteit
 model:ProvenanceEntiteit rdf:type sh:NodeShape;
 	rdfs:label "Provenance Entiteit";
-	sh:targetClass prov:Entity;
 	sh:property model:provenanceEntiteitIsAfgeleidVan;
 	sh:property model:provenanceEntiteitIsAangemaaktDoor;
 .
@@ -644,6 +878,11 @@ model:overheidsOrganisatieNaam rdf:type sh:PropertyShape;
 	sh:predicate overheid:Organisatie;
 	sh:datatype xsd:string;
 	sh:class overheid:Organisatie;
+.
+### Werkingsgebied
+model:werkingsgebied rdf:type sh:NodeShape;
+	rdfs:label "werkingsgebied";
+	sh:targetClass dcterms:location;
 .
 
 
