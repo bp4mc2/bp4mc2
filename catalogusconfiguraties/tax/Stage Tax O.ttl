@@ -99,32 +99,32 @@ stage:TaxMenu a elmo:Part;
 			elmo:data [
 				rdfs:label "BRT";
 				elmo:index "2";
-				xhtml:link "/query/overzichtspagina?term=&dataset=brt";
+				xhtml:link "/query/overzichtspagina?term=&dataset=brt-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BRK intern (juridisch)";
 				elmo:index "5";
-				xhtml:link "/query/overzichtspagina?term=&dataset=brk-intern-juridisch";
+				xhtml:link "/query/overzichtspagina?term=&dataset=brk-intern-juridisch-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BRK intern (niet-juridisch)";
 				elmo:index "6";
-				xhtml:link "/query/overzichtspagina?term=&dataset=brk-intern";
+				xhtml:link "/query/overzichtspagina?term=&dataset=brk-intern-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BRK";
 				elmo:index "7";
-				xhtml:link "catalogus/tax/query/overzichtspagina?term=&dataset=brk";
+				xhtml:link "/query/overzichtspagina?term=&dataset=brk-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BAG";
 				elmo:index "4";
-				xhtml:link "/query/overzichtspagina?term=&dataset=bag";
+				xhtml:link "/query/overzichtspagina?term=&dataset=bag-begrippen";
 			];
 			elmo:data [
 				rdfs:label "TAX";
 				elmo:index "3";
-				xhtml:link "/query/overzichtspagina?term=&dataset=tax";
+				xhtml:link "/query/overzichtspagina?term=&dataset=tax-begrippen";
 			];
 		];
 		elmo:data [
@@ -247,8 +247,17 @@ stage:TaxBeheermenu a elmo:Part;
 			];
 		];
 		elmo:data [
-			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
+			rdfs:label "Exporteren";										#alle hulpmiddelen die geen rapportages zijn
 			elmo:index "5";
+			elmo:data [
+				rdfs:label "Exporteren van data";
+				elmo:index "1";
+				xhtml:link "/query/exporteren";
+			];
+		];
+		elmo:data [
+			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
+			elmo:index "6";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -4559,6 +4568,72 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 			)
 			}
 		ORDER BY str(lcase(?Frame_label))
+	'''
+. 
+#
+# PRODUCTION
+
+# production om subset in named graph te plaatsen en te tonen voor download
+#updatestage:TaxExportConcepten a elmo:Production;
+#	elmo:contains stage:TaxBeheermenu;
+#	elmo:contains stage:TaxFooter;
+#	elmo:queryForm stage:TaxSelectDataset;
+#	elmo:contains stage:TaxConceptenDatasetQuery;
+#	elmo:contains stage:TaxExportConceptenScene;
+#.
+
+stage:TaxExporteren rdf:type elmo:Representation;
+	elmo:url-pattern "query/exporteren$";
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+#	elmo:queryForm stage:TaxSelectDataset;
+	elmo:contains stage:ExporterenBegrip;
+.
+
+stage:ExporterenBegrip rdf:type elmo:Representation;																											
+	elmo:index "1";																						
+	elmo:appearance elmo:HtmlAppearance;																
+	elmo:data [
+		rdfs:label "Exporteren van begrippen";
+		elmo:data [																							
+		   elmo:html '''																	
+				<p><a href='/query/exportbegrippen.ttl'>Turtle export van begrippen</a></p>					
+				<p><a href='/query/exportbegrippen.json'>JSON export van begrippen</a></p>					
+				<p><a href='/query/exportbegrippen.xml'>XML export van begrippen</a></p>					
+				'''																					
+		];
+	];
+.			
+
+stage:ExportBegrippen rdf:type elmo:Representation;
+	elmo:url-pattern "/exportbegrippen(|/|\\..+)$";
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:index "0";
+	elmo:query '''
+		prefix prov:	<http://www.w3.org/ns/prov#>
+		prefix kddef:	<http://kadaster.basisregistraties.overheid.nl/som/def#>
+		prefix kdstat:	<http://kadaster.basisregistraties.overheid.nl/id/status/>
+		prefix doc:		<http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
+		CONSTRUCT {
+			?concept ?p ?o 
+		}
+		WHERE {
+			GRAPH ?g {
+				?concept ?p ?o .
+				?concept kddef:status ?status.
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
+				}
+				FILTER (
+					?status = kdstat:Gevalideerd ||
+					?status = kdstat:Geverifieerd
+				)
+			}
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g
+			}
+		}
 	'''
 . 
 #
