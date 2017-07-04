@@ -377,24 +377,28 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						)
 					}
-					GRAPH ?og {
-						?o rdf:type ?otype.
-						?og prov:generatedAtTime ?oStartTime.
-						?o rdfs:label ?olabel.
-						OPTIONAL {
-							?o prov:invalidatedAtTime ?oEndTime.
-						}
-						FILTER (
-							strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
-							&& (
-								!bound( ?oEndTime )
-								|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
-							)
-						)
-					}
 					GRAPH doc:mastergraph {
 						?g dc:isVersionOf doc:mastergraph.
-						?og dc:isVersionOf doc:mastergraph.
+					}
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdf:type ?otype.
+							?og prov:generatedAtTime ?oStartTime.
+							?o rdfs:label ?olabel.
+							OPTIONAL {
+								?o prov:invalidatedAtTime ?oEndTime.
+							}
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)
+						}
+						GRAPH doc:mastergraph {
+							?og dc:isVersionOf doc:mastergraph.
+						}
 					}
 					OPTIONAL {
 						GRAPH ?altSubjectGraph {
@@ -447,29 +451,31 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						}
 					}
-					GRAPH ?og {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-						?og prov:generatedAtTime ?oStartTime.
-						OPTIONAL {
-							?o prov:invalidatedAtTime ?oEndTime.
-						}
-						GRAPH <@GRAPH@> {
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+							?og prov:generatedAtTime ?oStartTime.
 							OPTIONAL {
-								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								?o prov:invalidatedAtTime ?oEndTime.
 							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								}
+							}
+							BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+								)
+							)	
 						}
-						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
-						FILTER (
-							strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
-							&& (
-								!bound( ?oEndTime )
-								|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
-							)
-						)	
-					}
-					GRAPH doc:mastergraph {
-						?og dc:isVersionOf doc:mastergraph.
+						GRAPH doc:mastergraph {
+							?og dc:isVersionOf doc:mastergraph.
+						}
 					}
 					OPTIONAL {
 						GRAPH ?altSubjectGraph {

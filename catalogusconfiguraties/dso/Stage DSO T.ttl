@@ -405,76 +405,82 @@ stage:DSOBeheermenu a elmo:Part;
 			];
 			elmo:data [
 				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
-				elmo:index "02";
+				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (Excel)";
-				elmo:index "03";
+				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
-				elmo:index "04";
+				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (XML)";
-				elmo:index "05";
+				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+				elmo:index "7";
+				xhtml:link "/catalogus/dso/container/datasetupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "API's concepten";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Concepten POST Turtle";
+				elmo:index "01";
+				xhtml:link "/catalogus/dso/container/concepten-post-ttl";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT Turtle";
+				elmo:index "02";
+				xhtml:link "/catalogus/dso/container/concepten-put-ttl";
+			];
+			elmo:data [
+				rdfs:label "Concepten POST XML";
+				elmo:index "03";
 				xhtml:link "/catalogus/dso/container/concepten-post-xml";
 			];
 			elmo:data [
-				rdfs:label "Update bestaande concepten (XML)";
-				elmo:index "06";
+				rdfs:label "Concepten PUT XML";
+				elmo:index "04";
 				xhtml:link "/catalogus/dso/container/concepten-put-xml";
 			];
 			elmo:data [
-				rdfs:label "Upload dataset-metadata via Turtle (ttl)";
-				elmo:index "7";
-				xhtml:link "/catalogus/dso/container/datasetupload";
-				rdfs:label "Voeg nieuwe concepten toe (JSON)";
+				rdfs:label "Concepten POST Excel";
+				elmo:index "05";
+				xhtml:link "/catalogus/dso/container/concepten-post-xls";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT Excel";
+				elmo:index "06";
+				xhtml:link "/catalogus/dso/container/concepten-put-xls";
+			];
+			elmo:data [
+				rdfs:label "Concepten POST JSON";
 				elmo:index "07";
 				xhtml:link "/catalogus/dso/container/concepten-post-json";
 			];
 			elmo:data [
-				rdfs:label "Update bestaande concepten (JSON)";
+				rdfs:label "Concepten PUT JSON";
 				elmo:index "08";
 				xhtml:link "/catalogus/dso/container/concepten-put-json";
 			];
 			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (JSON/LD)";
+				rdfs:label "Concepten POST JSON-LD";
 				elmo:index "09";
 				xhtml:link "/catalogus/dso/container/concepten-post-jsonld";
 			];
 			elmo:data [
-				rdfs:label "Update bestaande concepten (JSON/LD)";
+				rdfs:label "Concepten PUT JSON-LD";
 				elmo:index "10";
 				xhtml:link "/catalogus/dso/container/concepten-put-jsonld";
-			];
-			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (Turtle)";
-				elmo:index "11";
-				xhtml:link "/catalogus/dso/container/concepten-post-ttl";
-			];
-			elmo:data [
-				rdfs:label "Update bestaande concepten (Turtle)";
-				elmo:index "12";
-				xhtml:link "/catalogus/dso/container/concepten-put-ttl";
-			];
-			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (Excel)";
-				elmo:index "13";
-				xhtml:link "/catalogus/dso/container/concepten-post-xls";
-			];
-			elmo:data [
-				rdfs:label "Update bestaande concepten (Excel)";
-				elmo:index "14";
-				xhtml:link "/catalogus/dso/container/concepten-put-xls";
 			];
 		];
 		elmo:data[
 			rdfs:label "Upload modellen";
-			elmo:index "3";
+			elmo:index "4";
 			elmo:data [
 				rdfs:label "Upload UML-model (XMI)";
 				elmo:index "1";
@@ -488,7 +494,7 @@ stage:DSOBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Acties";
-			elmo:index "4";
+			elmo:index "5";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -507,7 +513,7 @@ stage:DSOBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Sync";
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [
 				rdfs:label "Sync Model";
 				elmo:index "1";
@@ -532,7 +538,7 @@ stage:DSOBeheermenu a elmo:Part;
 		elmo:data [
 			rdfs:label "Help";
 			xhtml:link "/catalogus/dso/query/beheerhelp";
-			elmo:index "6"
+			elmo:index "9"
 		];
 	]
 .
@@ -1299,7 +1305,7 @@ container:concepten-put-json a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.json)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1385,7 +1391,7 @@ container:concepten-post-json a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.json)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1470,7 +1476,7 @@ container:concepten-put-jsonld a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.jsonld)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1555,7 +1561,7 @@ container:concepten-post-jsonld a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.jsonld)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1638,7 +1644,6 @@ container:concepten-put-ttl a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.ttl)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1723,7 +1728,6 @@ container:concepten-post-ttl a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.ttl)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1807,7 +1811,7 @@ container:concepten-put-xls a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.xls)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	elmo:translator elmo:TableExcelTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -1892,7 +1896,7 @@ container:concepten-post-xls a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.xls)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	elmo:translator elmo:TableExcelTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
@@ -4220,24 +4224,28 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						)
 					}
-					GRAPH ?og {
-						?o rdf:type ?otype.
-						?og prov:generatedAtTime ?oStartTime.
-						?o rdfs:label ?olabel.
-						OPTIONAL {
-							?o prov:invalidatedAtTime ?oEndTime.
-						}
-						FILTER (
-							strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
-							&& (
-								!bound( ?oEndTime )
-								|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
-							)
-						)
-					}
 					GRAPH doc:mastergraph {
 						?g dc:isVersionOf doc:mastergraph.
-						?og dc:isVersionOf doc:mastergraph.
+					}
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdf:type ?otype.
+							?og prov:generatedAtTime ?oStartTime.
+							?o rdfs:label ?olabel.
+							OPTIONAL {
+								?o prov:invalidatedAtTime ?oEndTime.
+							}
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)
+						}
+						GRAPH doc:mastergraph {
+							?og dc:isVersionOf doc:mastergraph.
+						}
 					}
 					OPTIONAL {
 						GRAPH ?altSubjectGraph {
@@ -4290,29 +4298,31 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						}
 					}
-					GRAPH ?og {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-						?og prov:generatedAtTime ?oStartTime.
-						OPTIONAL {
-							?o prov:invalidatedAtTime ?oEndTime.
-						}
-						GRAPH <@GRAPH@> {
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+							?og prov:generatedAtTime ?oStartTime.
 							OPTIONAL {
-								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								?o prov:invalidatedAtTime ?oEndTime.
 							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								}
+							}
+							BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+								)
+							)	
 						}
-						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
-						FILTER (
-							strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
-							&& (
-								!bound( ?oEndTime )
-								|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
-							)
-						)	
-					}
-					GRAPH doc:mastergraph {
-						?og dc:isVersionOf doc:mastergraph.
+						GRAPH doc:mastergraph {
+							?og dc:isVersionOf doc:mastergraph.
+						}
 					}
 					OPTIONAL {
 						GRAPH ?altSubjectGraph {
