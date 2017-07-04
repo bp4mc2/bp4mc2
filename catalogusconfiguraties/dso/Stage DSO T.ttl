@@ -360,15 +360,20 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1";
 				xhtml:link "/catalogus/dso";
 			];
+			elmo:data [
+				rdfs:label "Catalogus";
+				elmo:index "2";
+				xhtml:link "/catalogus/dso/doc/catalogus/Beestjes";
+			];
 			elmo:data [ 
 				rdfs:label "IMOD";
-				elmo:index "2";
+				elmo:index "3";
 				xhtml:link "/catalogus/dso/query/vocabulary?model=http://data.test.pdok.nl/catalogus/dso/def/IMOD";
 			];
 			elmo:data [
 				rdfs:label "Help";
 				xhtml:link "/catalogus/dso/query/help";
-				elmo:index "3"
+				elmo:index "4"
 			];
 			elmo:index "7";
 		];
@@ -422,6 +427,11 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Update bestaande concepten (XML)";
 				elmo:index "6";
 				xhtml:link "/catalogus/dso/container/concepten-put-xml";
+			];
+			elmo:data [
+				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+				elmo:index "7";
+				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data[
@@ -1839,9 +1849,9 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:datasetupload {
-				?s dct:title ?spreflabel.
+				?s rdfs:label ?spreflabel.
 				FILTER NOT EXISTS {
-					?s rdfs:label ?slabel.
+					?s dct:title ?slabel.
 				}
 			}
 		}
@@ -1891,6 +1901,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 						FILTER (
 							?type = dcat:Dataset
 							|| ?type = dcat:Distribution
+							|| ?type = dcat:Catalog
 						)
 					}
 					ORDER BY ?s ?p ?o
@@ -1910,6 +1921,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1918,6 +1930,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -1940,6 +1953,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1948,6 +1962,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -1966,6 +1981,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1989,6 +2005,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -2012,6 +2029,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 		}
@@ -2030,6 +2048,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
             }
 		}
@@ -5021,14 +5040,13 @@ stage:DSOCollectieConceptenQueryWithoutParam a elmo:Query;
 
 # Standaard weergavepagina
 stage:WeergavePaginaCatalog a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/doc/catalogus(|/)$";
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:WeergaveVersiesCatalog;
 	elmo:contains stage:WeergaveTabelCatalog;
-	elmo:applies-to [
-		rdf:type dcat:Catalog;
-	];
+	elmo:applies-to [rdf:type dcat:Catalog];
 .
 
 
@@ -5038,7 +5056,6 @@ stage:WeergavePaginaCatalog a elmo:Representation;
 
 # Algemene tabelweergave
 stage:WeergaveTabelCatalog a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "01";
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
@@ -5153,12 +5170,16 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:index "50";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
+	elmo:fragment [
+		rdfs:label "Taxonomy"@nl;
+		elmo:applies-to dcat:themeTaxonomy;
+		elmo:index "51";
+	];
 	elmo:query stage:WeergaveTabelCatalogQuery;
 .
 
 # Tabel met vorige versies
 stage:WeergaveVersies a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -5214,7 +5235,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 			<@SUBJECT@> prov:wasGeneratedBy ?a.
 			<@SUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
-			?c rdfs:label ?clabel.
 		}
 		WHERE {
 			{
@@ -5260,9 +5280,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 				OPTIONAL {
 					?a rdfs:label ?alabel.
 				}
-				OPTIONAL {
-					?c dct:title ?clabel.
-				}	
+
 			}
 		}
 	'''

@@ -73,9 +73,9 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:datasetupload {
-				?s dct:title ?spreflabel.
+				?s rdfs:label ?spreflabel.
 				FILTER NOT EXISTS {
-					?s rdfs:label ?slabel.
+					?s dct:title ?slabel.
 				}
 			}
 		}
@@ -125,6 +125,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 						FILTER (
 							?type = dcat:Dataset
 							|| ?type = dcat:Distribution
+							|| ?type = dcat:Catalog
 						)
 					}
 					ORDER BY ?s ?p ?o
@@ -144,6 +145,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -152,6 +154,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -174,6 +177,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -182,6 +186,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -200,6 +205,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -223,6 +229,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -246,6 +253,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 		}
@@ -264,6 +272,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
             }
 		}

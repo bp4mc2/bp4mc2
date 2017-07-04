@@ -12,14 +12,13 @@
 
 # Standaard weergavepagina
 stage:WeergavePaginaCatalog a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/doc/catalogus(|/)$";
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:WeergaveVersiesCatalog;
 	elmo:contains stage:WeergaveTabelCatalog;
-	elmo:applies-to [
-		rdf:type dcat:Catalog;
-	];
+	elmo:applies-to [rdf:type dcat:Catalog];
 .
 
 
@@ -29,7 +28,6 @@ stage:WeergavePaginaCatalog a elmo:Representation;
 
 # Algemene tabelweergave
 stage:WeergaveTabelCatalog a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "01";
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
@@ -144,12 +142,16 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:index "50";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
+	elmo:fragment [
+		rdfs:label "Taxonomy"@nl;
+		elmo:applies-to dcat:themeTaxonomy;
+		elmo:index "51";
+	];
 	elmo:query stage:WeergaveTabelCatalogQuery;
 .
 
 # Tabel met vorige versies
 stage:WeergaveVersies a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -205,7 +207,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 			<@SUBJECT@> prov:wasGeneratedBy ?a.
 			<@SUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
-			?c rdfs:label ?clabel.
 		}
 		WHERE {
 			{
@@ -251,9 +252,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 				OPTIONAL {
 					?a rdfs:label ?alabel.
 				}
-				OPTIONAL {
-					?c dct:title ?clabel.
-				}	
+
 			}
 		}
 	'''

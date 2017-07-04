@@ -8,7 +8,7 @@
 
 @prefix stage: 			<http://localhost:8080/catalogus/dso/stage#>.
 @prefix updatestage: 	<http://localhost:8080/catalogus/dso/update/>.
-@prefix elmo: 			<http://bp4mc2.org/elmo2/def#>.
+@prefix elmo: 			<http://bp4mc2.org/elmo/def#>.
 @prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xhtml: 			<http://www.w3.org/1999/xhtml/vocab#>.
@@ -360,15 +360,20 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1";
 				xhtml:link "/catalogus/dso";
 			];
+			elmo:data [
+				rdfs:label "Catalogus";
+				elmo:index "2";
+				xhtml:link "/catalogus/dso/doc/catalogus/Beestjes";
+			];
 			elmo:data [ 
 				rdfs:label "IMOD";
-				elmo:index "2";
+				elmo:index "3";
 				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/IMOD";
 			];
 			elmo:data [
 				rdfs:label "Help";
 				xhtml:link "/catalogus/dso/query/help";
-				elmo:index "3"
+				elmo:index "4"
 			];
 			elmo:index "7";
 		];
@@ -422,6 +427,11 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Update bestaande concepten (XML)";
 				elmo:index "6";
 				xhtml:link "/catalogus/dso/container/concepten-put-xml";
+			];
+			elmo:data [
+				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+				elmo:index "7";
+				xhtml:link "/catalogus/dso/container/datasetupload";
 			];
 		];
 		elmo:data[
@@ -591,7 +601,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1266,7 +1276,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1568,7 +1578,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1815,7 +1825,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1839,9 +1849,9 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:datasetupload {
-				?s dct:title ?spreflabel.
+				?s rdfs:label ?spreflabel.
 				FILTER NOT EXISTS {
-					?s rdfs:label ?slabel.
+					?s dct:title ?slabel.
 				}
 			}
 		}
@@ -1891,6 +1901,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 						FILTER (
 							?type = dcat:Dataset
 							|| ?type = dcat:Distribution
+							|| ?type = dcat:Catalog
 						)
 					}
 					ORDER BY ?s ?p ?o
@@ -1910,6 +1921,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1918,6 +1930,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -1940,6 +1953,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1948,6 +1962,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -1966,6 +1981,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1989,6 +2005,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -2012,6 +2029,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 		}
@@ -2030,6 +2048,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
             }
 		}
@@ -2917,7 +2936,7 @@ stage:WeergaveTabelQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -3668,7 +3687,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix tr: <http://localhost:8080/toepasbareregels/>
 		
@@ -4198,7 +4217,7 @@ stage:WeergaveTabelWaardelijstenQuery a elmo:Query;
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/collection/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -4645,7 +4664,7 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/collection/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -5021,14 +5040,13 @@ stage:DSOCollectieConceptenQueryWithoutParam a elmo:Query;
 
 # Standaard weergavepagina
 stage:WeergavePaginaCatalog a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/doc/catalogus(|/)$";
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:WeergaveVersiesCatalog;
 	elmo:contains stage:WeergaveTabelCatalog;
-	elmo:applies-to [
-		rdf:type dcat:Catalog;
-	];
+	elmo:applies-to [rdf:type dcat:Catalog];
 .
 
 
@@ -5038,7 +5056,6 @@ stage:WeergavePaginaCatalog a elmo:Representation;
 
 # Algemene tabelweergave
 stage:WeergaveTabelCatalog a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "01";
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
@@ -5153,12 +5170,16 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:index "50";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
+	elmo:fragment [
+		rdfs:label "Taxonomy"@nl;
+		elmo:applies-to dcat:themeTaxonomy;
+		elmo:index "51";
+	];
 	elmo:query stage:WeergaveTabelCatalogQuery;
 .
 
 # Tabel met vorige versies
 stage:WeergaveVersies a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -5204,7 +5225,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -5214,7 +5235,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 			<@SUBJECT@> prov:wasGeneratedBy ?a.
 			<@SUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
-			?c rdfs:label ?clabel.
 		}
 		WHERE {
 			{
@@ -5260,9 +5280,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 				OPTIONAL {
 					?a rdfs:label ?alabel.
 				}
-				OPTIONAL {
-					?c dct:title ?clabel.
-				}	
+
 			}
 		}
 	'''
@@ -5491,7 +5509,7 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -5772,7 +5790,7 @@ stage:WeergaveTabelDistributionQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -6088,7 +6106,7 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -6128,7 +6146,7 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -6479,7 +6497,7 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		
@@ -6872,7 +6890,7 @@ stage:WeergaveTabelNormenQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
