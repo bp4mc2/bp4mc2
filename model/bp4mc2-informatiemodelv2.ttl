@@ -15,85 +15,85 @@
 @prefix dqv: 		<http://www.w3.org/ns/dqv#>.
 @prefix model:  	<http://data.ontwikkeling.pdok.nl/dso/def/model/>.
 
-model:Class a sh:NodeShape;
+model:Class rdf:type sh:NodeShape;
 	rdfs:label "Shape voor owl:Class";
 	rdfs:comment "owl:Class";
 	sh:targetClass owl:Class;
 	sh:property model:Class_label;
 	sh:property model:Class_subject;
 .
-model:Class_label a sh:NodeShape;
+model:Class_label rdf:type sh:NodeShape;
 	sh:path rdfs:label;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
-model:Class_subject a sh:PropertyShape;
+model:Class_subject rdf:type sh:PropertyShape;
 	sh:path dct:subject;
 	sh:class skos:Concept;
 .
-model:Property a sh:NodeShape;
+model:Property rdf:type sh:NodeShape;
 	rdfs:label "Shape voor eigenschap";
 	sh:targetClass rdf:Property;
 	sh:property model:Property_label;
 	sh:property model:Property_subject;
 .
-model:Property_label a sh:PropertyShape;
+model:Property_label rdf:type sh:PropertyShape;
 	sh:path rdfs:label;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
-model:Property_subject a sh:PropertyShape;
+model:Property_subject rdf:type sh:PropertyShape;
 	sh:path dct:subject;
 	sh:class skos:Concept;
 .
-model:DatatypeProperty a sh:NodeShape;
+model:DatatypeProperty rdf:type sh:NodeShape;
 	rdfs:label "Shape voor attribuut-eigenschap";
 	sh:targetClass owl:DatatypeProperty;
 .
-model:ObjectProperty a sh:NodeShape;
+model:ObjectProperty rdf:type sh:NodeShape;
 	rdfs:label "Shape voor relatie-eigenschap";
 	sh:targetClass owl:ObjectProperty;
 .
-model:Shape a sh:NodeShape;
+model:Shape rdf:type sh:NodeShape;
 	rdfs:label "Shape voor gegevensstructuur";
 	sh:targetClass sh:Shape;
 	sh:property model:Shape_targetClass;
 	sh:property model:Shape_property;
 .
-model:Shape_targetClass a sh:PropertyShape;
+model:Shape_targetClass rdf:type sh:PropertyShape;
 	sh:path sh:targetClass;
 	sh:minCount 1;
 	sh:maxCount 1;
 	sh:class owl:Class;
 .
-model:Shape_property a sh:PropertyShape;
+model:Shape_property rdf:type sh:PropertyShape;
 	sh:path sh:property;
 	sh:class sh:PropertyConstraint;
 .
-model:PropertyConstraint a sh:NodeShape;
+model:PropertyConstraint rdf:type sh:NodeShape;
 	rdfs:label "Shape voor gegevensconstraint";
 	sh:targetClass sh:PropertyShape;
 	sh:property model:PropertyConstraint_predicate;
 	sh:property model:PropertyConstraint_class;
 	sh:property model:PropertyConstraint_datatype;
 .
-model:PropertyConstraint_predicate a sh:PropertyShape;
+model:PropertyConstraint_predicate rdf:type sh:PropertyShape;
 	sh:path sh:path;
 	sh:minCount 1;
 	sh:maxCount 1;
 	sh:class rdf:Property
 .
-model:PropertyConstraint_class a sh:PropertyShape;
+model:PropertyConstraint_class rdf:type sh:PropertyShape;
 	sh:path sh:class;
 	sh:class owl:Class
 .
-model:PropertyConstraint_datatype a sh:PropertyShape;
+model:PropertyConstraint_datatype rdf:type sh:PropertyShape;
 	sh:path sh:datatype;
 	sh:class rdfs:Datatype;
 .
-model:Datatype a sh:NodeShape;
+model:Datatype rdf:type sh:NodeShape;
 	rdfs:label "Shape voor datatype";
 	sh:targetClass rdfs:Datatype;
 .
