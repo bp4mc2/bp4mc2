@@ -400,38 +400,76 @@ stage:DSOBeheermenu a elmo:Part;
 			elmo:index "2";
 			elmo:data [
 				rdfs:label "Upload of update volledige dataset (Excel)";
-				elmo:index "1";
+				elmo:index "01";
 				xhtml:link "/catalogus/dso/container/excelupload";
 			];
 			elmo:data [
 				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
-				elmo:index "2";
+				elmo:index "02";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (Excel)";
-				elmo:index "3";
+				elmo:index "03";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
-				elmo:index "4";
+				elmo:index "04";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
 				rdfs:label "Voeg nieuwe concepten toe (XML)";
-				elmo:index "5";
+				elmo:index "05";
 				xhtml:link "/catalogus/dso/container/concepten-post-xml";
 			];
 			elmo:data [
 				rdfs:label "Update bestaande concepten (XML)";
-				elmo:index "6";
+				elmo:index "06";
 				xhtml:link "/catalogus/dso/container/concepten-put-xml";
 			];
 			elmo:data [
-				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+				rdfs:label "Upload dataset-metadata via Turtle (ttl)";
 				elmo:index "7";
 				xhtml:link "/catalogus/dso/container/datasetupload";
+				rdfs:label "Voeg nieuwe concepten toe (JSON)";
+				elmo:index "07";
+				xhtml:link "/catalogus/dso/container/concepten-post-json";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (JSON)";
+				elmo:index "08";
+				xhtml:link "/catalogus/dso/container/concepten-put-json";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuwe concepten toe (JSON/LD)";
+				elmo:index "09";
+				xhtml:link "/catalogus/dso/container/concepten-post-jsonld";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (JSON/LD)";
+				elmo:index "10";
+				xhtml:link "/catalogus/dso/container/concepten-put-jsonld";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuwe concepten toe (Turtle)";
+				elmo:index "11";
+				xhtml:link "/catalogus/dso/container/concepten-post-ttl";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (Turtle)";
+				elmo:index "12";
+				xhtml:link "/catalogus/dso/container/concepten-put-ttl";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuwe concepten toe (Excel)";
+				elmo:index "13";
+				xhtml:link "/catalogus/dso/container/concepten-post-xls";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (Excel)";
+				elmo:index "14";
+				xhtml:link "/catalogus/dso/container/concepten-put-xls";
 			];
 		];
 		elmo:data[
@@ -1079,6 +1117,11 @@ container:ttlupdate a elmo:Container;
     elmo:query stage:DSOUploadScenePUT;
 .
 
+
+
+# API Upload containers ---------------------------------------------------------------------------------------------------------------------------
+
+# Upload XML API-----------------------------------------------------------------------------------------------------------------------------------
 # Container PUT XML Concepten
 container:concepten-put-xml a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
@@ -1245,6 +1288,682 @@ container:concepten-post-xml a elmo:Container;
     elmo:query stage:DSOUploadScenePUT;
 .
 
+
+# Upload JSON API-------------------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT JSON Concepten
+container:concepten-put-json a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.json)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-json {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+
+# Container POST JSON Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-json a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.json)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-json {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+
+
+# upload JSON/LD  API ------------------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT JSON/LD Concepten
+container:concepten-put-jsonld a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.jsonld)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-jsonld {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST JSON/LD Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-jsonld a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.jsonld)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-jsonld {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Upload Turtle API ------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT Turtle Concepten
+container:concepten-put-ttl a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.ttl)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-ttl {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST Turtle Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-ttl a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.ttl)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-ttl {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+
+.
+	
+# Upload Excel API ------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT Excel Concepten
+container:concepten-put-xls a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.xls)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-xls {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST Excel Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-xls a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.xls)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-xls {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
 
 #
 # SCENES
@@ -5355,7 +6074,6 @@ stage:WeergavePaginaDataset a elmo:Representation;
 
 # Tabel met vorige versies
 stage:WeergaveVersiesDataset a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
