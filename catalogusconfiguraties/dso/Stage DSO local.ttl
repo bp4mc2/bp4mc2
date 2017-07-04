@@ -8,7 +8,7 @@
 
 @prefix stage: 			<http://localhost:8080/catalogus/dso/stage#>.
 @prefix updatestage: 	<http://localhost:8080/catalogus/dso/update/>.
-@prefix elmo: 			<http://bp4mc2.org/elmo2/def#>.
+@prefix elmo: 			<http://bp4mc2.org/elmo/def#>.
 @prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xhtml: 			<http://www.w3.org/1999/xhtml/vocab#>.
@@ -360,15 +360,20 @@ stage:DSOMenu a elmo:Part;
 				elmo:index "1";
 				xhtml:link "/catalogus/dso";
 			];
+			elmo:data [
+				rdfs:label "Catalogus";
+				elmo:index "2";
+				xhtml:link "/catalogus/dso/doc/catalogus/Beestjes";
+			];
 			elmo:data [ 
 				rdfs:label "IMOD";
-				elmo:index "2";
+				elmo:index "3";
 				xhtml:link "/catalogus/dso/query/vocabulary?model=http://localhost:8080/catalogus/dso/def/IMOD";
 			];
 			elmo:data [
 				rdfs:label "Help";
 				xhtml:link "/catalogus/dso/query/help";
-				elmo:index "3"
+				elmo:index "4"
 			];
 			elmo:index "7";
 		];
@@ -400,28 +405,71 @@ stage:DSOBeheermenu a elmo:Part;
 			];
 			elmo:data [
 				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
-				elmo:index "2";
+				elmo:index "02";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (Excel)";
-				elmo:index "3";
+				elmo:index "03";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
-				elmo:index "4";
+				elmo:index "04";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
 				rdfs:label "Voeg nieuwe concepten toe (XML)";
-				elmo:index "5";
+				elmo:index "05";
 				xhtml:link "/catalogus/dso/container/concepten-post-xml";
 			];
 			elmo:data [
 				rdfs:label "Update bestaande concepten (XML)";
-				elmo:index "6";
+				elmo:index "06";
 				xhtml:link "/catalogus/dso/container/concepten-put-xml";
+			];
+			elmo:data [
+				rdfs:label "Upload dataset-metadata via Turtle (ttl)";
+				elmo:index "7";
+				xhtml:link "/catalogus/dso/container/datasetupload";
+				rdfs:label "Voeg nieuwe concepten toe (JSON)";
+				elmo:index "07";
+				xhtml:link "/catalogus/dso/container/concepten-post-json";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (JSON)";
+				elmo:index "08";
+				xhtml:link "/catalogus/dso/container/concepten-put-json";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuwe concepten toe (JSON/LD)";
+				elmo:index "09";
+				xhtml:link "/catalogus/dso/container/concepten-post-jsonld";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (JSON/LD)";
+				elmo:index "10";
+				xhtml:link "/catalogus/dso/container/concepten-put-jsonld";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuwe concepten toe (Turtle)";
+				elmo:index "11";
+				xhtml:link "/catalogus/dso/container/concepten-post-ttl";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (Turtle)";
+				elmo:index "12";
+				xhtml:link "/catalogus/dso/container/concepten-put-ttl";
+			];
+			elmo:data [
+				rdfs:label "Voeg nieuwe concepten toe (Excel)";
+				elmo:index "13";
+				xhtml:link "/catalogus/dso/container/concepten-post-xls";
+			];
+			elmo:data [
+				rdfs:label "Update bestaande concepten (Excel)";
+				elmo:index "14";
+				xhtml:link "/catalogus/dso/container/concepten-put-xls";
 			];
 		];
 		elmo:data[
@@ -591,7 +639,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1069,6 +1117,11 @@ container:ttlupdate a elmo:Container;
     elmo:query stage:DSOUploadScenePUT;
 .
 
+
+
+# API Upload containers ---------------------------------------------------------------------------------------------------------------------------
+
+# Upload XML API-----------------------------------------------------------------------------------------------------------------------------------
 # Container PUT XML Concepten
 container:concepten-put-xml a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
@@ -1236,6 +1289,682 @@ container:concepten-post-xml a elmo:Container;
 .
 
 
+# Upload JSON API-------------------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT JSON Concepten
+container:concepten-put-json a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.json)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-json {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+
+# Container POST JSON Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-json a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.json)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-json {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-json {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+
+
+# upload JSON/LD  API ------------------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT JSON/LD Concepten
+container:concepten-put-jsonld a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.jsonld)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-jsonld {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST JSON/LD Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-jsonld a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.jsonld)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-jsonld {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-jsonld {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Upload Turtle API ------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT Turtle Concepten
+container:concepten-put-ttl a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.ttl)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-ttl {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST Turtle Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-ttl a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.ttl)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-ttl {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-ttl {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+
+.
+	
+# Upload Excel API ------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT Excel Concepten
+container:concepten-put-xls a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Update bestaande concepten (.xls)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-put-xls {
+					?s rdf:type skos:Concept.
+				}
+				FILTER NOT EXISTS {
+					GRAPH doc:mastergraph {
+						?s rdf:type skos:Concept.
+						?s bp4mc2:signature ?sig.
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die nog niet bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-put-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
+# Container POST Excel Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concepten-post-xls a elmo:Container;
+    elmo:contains stage:DSOBeheermenu;
+    elmo:contains stage:DSOHeader;
+    elmo:contains stage:DSOFooter;
+    elmo:representation elmo:UploadRepresentation;
+    rdfs:label "Voeg nieuwe concepten toe (.xls)";
+    elmo:replaces container:generiek;
+	elmo:translator elmo:ODTranslator;
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+			
+			ASK {
+				GRAPH container:concepten-post-xls {
+					?s rdf:type skos:Concept.
+				}
+				GRAPH doc:mastergraph {
+					?s rdf:type skos:Concept.
+					?s bp4mc2:signature ?sig.
+				}
+			}
+		''';
+		rdfs:label "De upload bevat concepten die al bestaan.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:concepten-post-xls {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+    elmo:query stage:DSOUploadScenePUT;
+.
+
 #
 # SCENES
 #
@@ -1266,7 +1995,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1568,7 +2297,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1815,7 +2544,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -1839,9 +2568,9 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		} WHERE {
 			GRAPH container:datasetupload {
-				?s dct:title ?spreflabel.
+				?s rdfs:label ?spreflabel.
 				FILTER NOT EXISTS {
-					?s rdfs:label ?slabel.
+					?s dct:title ?slabel.
 				}
 			}
 		}
@@ -1891,6 +2620,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 						FILTER (
 							?type = dcat:Dataset
 							|| ?type = dcat:Distribution
+							|| ?type = dcat:Catalog
 						)
 					}
 					ORDER BY ?s ?p ?o
@@ -1910,6 +2640,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1918,6 +2649,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -1940,6 +2672,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1948,6 +2681,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 					FILTER (
 						?type = dcat:Dataset
 						|| ?type = dcat:Distribution
+						|| ?type = dcat:Catalog
 					)
 				}
 			}
@@ -1966,6 +2700,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -1989,6 +2724,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 			FILTER NOT EXISTS {
@@ -2012,6 +2748,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 		}
@@ -2030,6 +2767,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
             }
 		}
@@ -2917,7 +3655,7 @@ stage:WeergaveTabelQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -3668,7 +4406,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix tr: <http://localhost:8080/toepasbareregels/>
 		
@@ -4206,7 +4944,7 @@ stage:WeergaveTabelWaardelijstenQuery a elmo:Query;
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/collection/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -4653,7 +5391,7 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/collection/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -5076,14 +5814,13 @@ stage:DSOCollectieConceptenQueryWithoutParam a elmo:Query;
 
 # Standaard weergavepagina
 stage:WeergavePaginaCatalog a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/doc/catalogus(|/)$";
 	elmo:contains stage:DSOMenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:WeergaveVersiesCatalog;
 	elmo:contains stage:WeergaveTabelCatalog;
-	elmo:applies-to [
-		rdf:type dcat:Catalog;
-	];
+	elmo:applies-to [rdf:type dcat:Catalog];
 .
 
 
@@ -5093,7 +5830,6 @@ stage:WeergavePaginaCatalog a elmo:Representation;
 
 # Algemene tabelweergave
 stage:WeergaveTabelCatalog a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "01";
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
@@ -5208,12 +5944,16 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:index "50";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
+	elmo:fragment [
+		rdfs:label "Taxonomy"@nl;
+		elmo:applies-to dcat:themeTaxonomy;
+		elmo:index "51";
+	];
 	elmo:query stage:WeergaveTabelCatalogQuery;
 .
 
 # Tabel met vorige versies
 stage:WeergaveVersies a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -5259,7 +5999,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -5269,7 +6009,6 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 			<@SUBJECT@> prov:wasGeneratedBy ?a.
 			<@SUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
-			?c rdfs:label ?clabel.
 		}
 		WHERE {
 			{
@@ -5315,9 +6054,7 @@ stage:WeergaveTabelCatalogQuery a elmo:Query;
 				OPTIONAL {
 					?a rdfs:label ?alabel.
 				}
-				OPTIONAL {
-					?c dct:title ?clabel.
-				}	
+
 			}
 		}
 	'''
@@ -5392,7 +6129,6 @@ stage:WeergavePaginaDataset a elmo:Representation;
 
 # Tabel met vorige versies
 stage:WeergaveVersiesDataset a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -5546,7 +6282,7 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -5827,7 +6563,7 @@ stage:WeergaveTabelDistributionQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -6143,7 +6879,7 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -6183,7 +6919,7 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
@@ -6534,7 +7270,7 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		
@@ -6927,7 +7663,7 @@ stage:WeergaveTabelNormenQuery a elmo:Query;
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo2/def/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
