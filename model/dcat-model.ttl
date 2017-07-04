@@ -1,0 +1,361 @@
+@prefix dcat-model: <http://bp4mc2.org/def/dcat-model/>.
+
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix overheid: <http://standaarden.overheid.nl/owms/terms/>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix schema: <http://schema.org/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix v: <http://www.w3.org/2006/vcard/ns#>.
+@prefix xml: <http://www.w3.org/XML/1998/namespace>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+
+# =======
+#
+# Core DCAT
+#
+# =======
+dcat-model:Dataset a sh:NodeShape;
+	rdfs:label "Dataset"@en;
+	sh:name "dcat:Dataset";
+	sh:targetClass dcat:Dataset;
+	sh:property [
+		rdfs:label "Title"@en;
+		sh:name "dct:title";
+		sh:path dct:title;
+	];
+	sh:property [
+		rdfs:label "Description"@en;
+		sh:name "dct:description";
+		sh:path dct:description;
+	];
+	sh:propery [
+		rdfs:label "Issued"@en;
+		sh:name "dct:issued";
+		sh:path dct:issued;
+	];
+	sh:property [
+		rdfs:label "Modified"@en;
+		sh:name "dct:modified";
+		sh:path dct:modified;
+	];
+	sh:property [
+		rdfs:label "Identifier"@en;
+		sh:name "dct:identifier";
+		sh:path dct:identifier;
+	];
+	sh:property [
+		rdfs:label "Keyword"@en;
+		sh:name "dcat:keyword";
+		sh:path dcat:keyword;
+	];
+	sh:property [
+		rdfs:label "Language"@en;
+		sh:name "dct:language";
+		sh:path dct:language;
+		sh:class dct:LinguisticSystem;
+	];
+	sh:property [
+		rdfs:label "Contact point"@en;
+		sh:name "dcat:contactPoint";
+		sh:path dcat:contactPoint;
+		sh:class vcard:Kind;
+	];
+	sh:property [
+		rdfs:label "Temporal"@en;
+		sh:name "dct:temporal";
+		sh:path dct:temporal;
+		sh:class dct:PeriodOfTime;
+	];
+	sh:property [
+		rdfs:label "Spatial"@en;
+		sh:name "dct:spatial";
+		sh:path dct:spatial;
+		sh:class dct:Location;
+	];
+	sh:property [
+		rdfs:label "accrualPeriodicy"@en;
+		sh:name "dct:accrualPeriodicy";
+		sh:path dct:accrualPeriodicy;
+		sh:class dct:Frequency;
+	];
+	sh:property [
+		rdfs:label "Landing page"@en;
+		sh:name "dcat:landingPage";
+		sh:path dcat:landingPage;
+	];
+	sh:property [
+		rdfs:label "Theme"@en;
+		sh:name "dcat:theme";
+		sh:path dcat:theme;
+		sh:class skos:Concept
+	];
+	sh:property [
+		rdfs:label "Distribution"@en;
+		sh:name "dcat:distribution";
+		sh:path dcat:distribution;
+		sh:class dcat:Distribution;
+	];
+	sh:property [
+		rdfs:label "Publisher"@en;
+		sh:name "dct:publisher";
+		sh:path dct:publisher;
+		sh:class foaf:Agent;
+	];
+.
+
+dcat-model:Distribution a sh:NodeShape;
+	rdfs:label "Distribution"@en;
+	sh:name "dcat:Distribution";
+	sh:targetClass dcat:Distribution;
+	sh:property [
+		rdfs:label "Title"@en;
+		sh:name "dct:title";
+		sh:path dct:title;
+	];
+	sh:property [
+		rdfs:label "Description"@en;
+		sh:name "dct:description";
+		sh:path dct:description;
+	];
+	sh:property [
+		rdfs:label "Issued"@en;
+		sh:name "dct:issued";
+		sh:path dct:issued;
+	];
+	sh:property [
+		rdfs:label "Modified"@en;
+		sh:name "dct:modified";
+		sh:path dct:modified;
+	];
+	sh:property [
+		rdfs:label "License"@en;
+		sh:name "dct:license";
+		sh:path dct:license;
+		sh:class dct:LicenseDocument;
+	];
+	sh:property [
+		rdfs:label "Rights"@en;
+		sh:name "dct:rights";
+		sh:path dct:rights;
+		sh:class dct:RightsStatement;
+	];
+	sh:property [
+		rdfs:label "Access URL"@en;
+		sh:name "dcat:accessURL";
+		sh:path dcat:accessURL;
+	];
+	sh:property [
+		rdfs:label "Download URL"@en;
+		sh:name "dcat:downloadURL";
+		sh:path dcat:downloadURL;
+	];
+	sh:property [
+		rdfs:label "Media type"@en;
+		sh:name "dcat:mediaType";
+		sh:path dcat:mediaType;
+		sh:class dct:MediaTypeOrExtent;
+	];
+	sh:property [
+		rdfs:label "Format"@en;
+		sh:name "dct:format";
+		sh:path dct:format;
+		sh:class dct:MediaTypeOrExtent;
+	];
+	sh:property [
+		rdfs:label "Byte size"@en;
+		sh:name "dcat:byteSize";
+		sh:path dcat:byteSize;
+	];
+.
+
+dcat-model:Catalog a sh:NodeShape;
+	rdfs:label "Catalog"@en;
+	sh:name "dcat:Catalog";
+	sh:targetClass dcat:Catalog;
+	sh:property [
+		rdfs:label "Title"@en;
+		sh:name "dct:title";
+		sh:path dct:title;
+	];
+	sh:property [
+		rdfs:label "Description"@en;
+		sh:name "dct:description";
+		sh:path dct:description;
+	];
+	sh:property [
+		rdfs:label "Issued"@en;
+		sh:name "dct:issued";
+		sh:path dct:issued;
+	];
+	sh:property [
+		rdfs:label "Modified"@en;
+		sh:name "dct:Modified";
+		sh:path dct:modified;
+	];
+	sh:property [
+		rdfs:label "Language"@en;
+		sh:name "dct:language";
+		sh:path dct:language;
+		sh:class dct:LinguisticSystem;
+	];
+	sh:property [
+		rdfs:label "License"@en;
+		sh:name "dct:license";
+		sh:path dct:license;
+		sh:class dct:LicenseDocument;
+	];
+	sh:property [
+		rdfs:label "Rights"@en;
+		sh:name "dct:rights";
+		sh:path dct:rights;
+		sh:class dct:RightsStatement;
+	];
+	sh:property [
+		rdfs:label "Spatial"@en;
+		sh:name "dct:spatial";
+		sh:path dct:spatial;
+		sh:class dct:Location;
+	];
+	sh:property [
+		rdfs:label "Homepage"@en;
+		sh:name "foaf:homepage";
+		sh:path foaf:homepage;
+		sh:class foaf:Document;
+	];
+	sh:property [
+		rdfs:label "Dataset"@en;
+		sh:name "dcat:dataset";
+		sh:path dcat:dataset;
+		sh:class dcat:Dataset;
+	];
+	sh:property [
+		rdfs:label "Record"@en;
+		sh:name "dcat:record";
+		sh:path dcat:record;
+		sh:class dcat:CatalogRecord;
+	];
+	sh:property [
+		rdfs:label "Publisher"@en;
+		sh:name "dct:publisher";
+		sh:path dct:publisher;
+		sh:class foaf:Agent;
+	];
+	sh:property [
+		rdfs:label "Theme taxonomy"@en;
+		sh:name "dcat:themeTaxonomy";
+		sh:path dcat:themeTaxonomy;
+		sh:class skos:ConceptScheme;
+	];
+.
+
+dcat-model:CatalogRecord a sh:NodeShape;
+	rdfs:label "Catalog record"@en;
+	sh:name "dcat:CatalogRecord";
+	sh:targetClass dcat:CatalogRecord;
+	sh:property [
+		rdfs:label "Title"@en;
+		sh:name "dct:title";
+		sh:path dct:title;
+	];
+	sh:property [
+		rdfs:label "Description"@en;
+		sh:name "dct:description";
+		sh:path dct:description;
+	];
+	sh:property [
+		rdfs:label "Issued"@en;
+		sh:name "dct:issued";
+		sh:path dct:issued;
+	];
+	sh:property [
+		rdfs:label "Modified"@en;
+		sh:name "dct:modified";
+		sh:path dct:modified;
+	];
+	sh:property [
+		rdfs:label "Primary topic"@en;
+		sh:name "foaf:primaryTopic";
+		sh:path foaf:primaryTopic;
+		sh:class dcat:Dataset;
+	];
+.
+
+# =======
+#
+# Borrowed
+#
+# =======
+dcat-model:ConceptScheme a sh:NodeShape;
+	rdfs:label "Concept scheme"@en;
+	sh:name "skos:ConceptScheme";
+	sh:targetClass skos:ConceptScheme;
+.
+dcat-model:Concept a sh:NodeShape;
+	rdfs:label "Concept"@en;
+	sh:name "skos:Concept";
+	sh:targetClass skos:Concept;
+	sh:property [
+		rdfs:label "In scheme"@en;
+		sh:name "skos:inScheme";
+		sh:path skos:inScheme;
+		sh:class skos:ConceptScheme;
+	];
+.
+dcat-model:Agent a sh:NodeShape;
+	rdfs:label "Agent"@en;
+	sh:name "foaf:Agent";
+	sh:targetClass foaf:Agent;
+.
+dcat-model:Dataset-dct a sh:NodeShape;
+	rdfs:label "Dataset (dctype)"@en;
+	sh:name "dctype:Dataset";
+	sh:targetClass dctype:Dataset;
+.
+dcat-model:LinguisticSystem a sh:NodeShape;
+	rdfs:label "Linguistic system"@en;
+	sh:name "dct:LinguisticSystem";
+	sh:targetClass dct:LinguisticSystem;
+.
+dcat-model:Kind a sh:NodeShape;
+	rdfs:label "Kind"@en;
+	sh:name "vcard:Kind";
+	sh:targetClass vcard:Kind;
+.
+dcat-model:PeriodOfTime a sh:NodeShape;
+	rdfs:label "Period of time"@en;
+	sh:name "dct:PeriodOfTime";
+	sh:targetClass dct:PeriodOfTime;
+.
+dcat-model:Location a sh:NodeShape;
+	rdfs:label "Location"@en;
+	sh:name "dct:Location";
+	sh:targetClass dct:Location;
+.
+dcat-model:Frequency a sh:NodeShape;
+	rdfs:label "Frequency"@en;
+	sh:name "dct:Frequency";
+	sh:targetClass dct:Frequency;
+.
+dcat-model:LicenseDocument a sh:NodeShape;
+	rdfs:label "License document"@en;
+	sh:name "dct:LicenseDocument";
+	sh:targetClass dct:LicenseDocument;
+.
+dcat-model:RightsStatement a sh:NodeShape;
+	rdfs:label "RightsStatement"@en;
+	sh:name "dct:RightsStatement";
+	sh:targetClass dct:RightsStatement;
+.
+dcat-model:MediaTypeOrExtent a sh:NodeShape;
+	rdfs:label "MediaTypeOrExtent"@en;
+	sh:name "dct:MediaTypeOrExtent";
+	sh:targetClass dct:MediaTypeOrExtent;
+.

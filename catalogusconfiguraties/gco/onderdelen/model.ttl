@@ -36,10 +36,10 @@ stage:ModelQuery a elmo:Query;
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape a shacl:Shape.
+				?shape a shacl:NodeShape.
 				?shape ?sp ?so.
 				OPTIONAL {
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
 						?subclass rdfs:subClassOf ?superclass
@@ -49,7 +49,7 @@ stage:ModelQuery a elmo:Query;
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
 					OPTIONAL {
-						?pc shacl:predicate ?property.
+						?pc shacl:path ?property.
 						OPTIONAL {
 							?property rdfs:subPropertyOf* ?subproperty.
 							?subproperty rdfs:subPropertyOf ?superproperty
@@ -81,13 +81,13 @@ stage:ModelYed a elmo:Representation;
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape shacl:scopeClass ?element.
+				?shape shacl:targetClass ?element.
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
 					select ?shape ?pc ?class (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						?pc shacl:class ?class.
 #						OPTIONAL {?pred rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:minCount ?minc}
@@ -99,7 +99,7 @@ stage:ModelYed a elmo:Representation;
 					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 #						OPTIONAL {?pred rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:datatype ?datatype}
 						OPTIONAL {?pc shacl:minCount ?minc}

@@ -27,7 +27,7 @@ model:Concept rdf:type sh:NodeShape;
 	sh:property model:conceptLabel;
 	sh:property model:conceptNaam;
 	sh:property model:conceptSynoniem;	
-	sh:property model:conceptAlternatieveSchrijfwijze
+	sh:property model:conceptAlternatieveSchrijfwijze;
 	sh:property model:conceptDefinitie;
 	sh:property model:conceptToelichting;
 	sh:property model:conceptUitleg;
@@ -205,7 +205,7 @@ model:conceptIsEngerDanInAnderSchema rdf:type sh:PropertyShape;
 	rdfs:label "is enger dan (in ander Conceptenschema)";
 	rdfs:comment "Een Concept in een Conceptenschema kan een engere betekenis hebben dan een Concept in een ander Conceptenschema"; 
 	sh:path skos:narrowMatch;
-	sh:name "skos:narrowMatch;
+	sh:name skos:narrowMatch;
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
 .
@@ -475,7 +475,7 @@ model:catalogusTaxonomy rdf:type sh:PropertyShape;
 .
 model:catalogusOmvat rdf:type sh:PropertyShape;
 	rdfs:label "omvat";
-	sh:path dcat:record:
+	sh:path dcat:record;
 	sh:class dcat:CatalogRecord;
 .
 ### Catalogus Record
@@ -684,7 +684,7 @@ model:Datasetversie_versieVan rdf:type sh:PropertyShape;
 model:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
 	rdfs:label "werkingsgebied";
 	rdfs:comment "Het (geografische) gebied waar de dataset over gaat";
-	sh:class dct:location
+	sh:class dct:location;
 	sh:path dct:spatial;
 .
 ### Informatieproduct 
@@ -714,8 +714,8 @@ model:informatiemodel_naam rdf:type sh:PropertyShape;
 model:informatiemodel_beschrijving rdf:type sh:PropertyShape;
 	rdfs:label "beschrijving";
 	sh:name "dcterms:description";
-	rdf:value <beschrijving>;
-	sh:path dcterms:description;
+	rdf:value "<beschrijving>";
+	sh:path dct:description;
 .
 model:informatiemodel_versie rdf:type sh:PropertyShape;
 	rdfs:label "versie";
@@ -730,7 +730,7 @@ model:informatiemodel_publicatiedatum rdf:type sh:PropertyShape;
 model:informatiemodel_releaseNotes rdf:type sh:PropertyShape;
 	rdfs:label "release notes";
 	sh:name "adms:versionNotes";
-	rdf:value <release notes>;
+	rdf:value "<release notes>";
 	sh:path adms:versionNotes;
 .
 model:informatiemodel_betreft rdf:type sh:PropertyShape;
@@ -882,7 +882,7 @@ model:overheidsOrganisatieNaam rdf:type sh:PropertyShape;
 ### Werkingsgebied
 model:werkingsgebied rdf:type sh:NodeShape;
 	rdfs:label "werkingsgebied";
-	sh:targetClass dcterms:location;
+	sh:targetClass dct:location;
 .
 
 
