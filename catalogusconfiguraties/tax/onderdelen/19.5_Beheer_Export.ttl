@@ -1,36 +1,27 @@
-stage:TaxExporteren rdf:type elmo:Representation;
-	elmo:url-pattern "query/exporteren$";
+#
+# PRODUCTION
+
+# production om subset in named graph te plaatsen en te tonen voor download
+updatestage:TaxExportConcepten a elmo:Production;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
 	elmo:queryForm stage:TaxSelectDataset;
-	elmo:contains stage:ExporterenBegrip;
+	elmo:contains stage:ExportSubsetBegrippenQueryScene;
 .
 
-stage:ExporterenBegrip rdf:type elmo:Part;																											
-	elmo:index "1";																						
-	elmo:appearance elmo:HtmlAppearance;																
-	elmo:data [
-		rdfs:label "Exporteren van begrippen";
-		elmo:data [																							
-		   elmo:html '''																	
-				<p><a href='/catalogus/tax/query/exportbegrippen.ttl'>Turtle export van begrippen</a></p>					
-				<p><a href='/catalogus/tax/query/exportbegrippen.json'>JSON export van begrippen</a></p>					
-				<p><a href='/catalogus/tax/query/exportbegrippen.xml'>XML export van begrippen</a></p>					
-				'''																					
-		];
-	];
-.			
-
-stage:ExportBegrippen rdf:type elmo:Representation;
-	elmo:url-pattern "/exportbegrippen(|/|\\..+)$";
+stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Part;
+	elmo:url-pattern "/exportsubsetbegrippen(|/|\\..+)$";
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
-	elmo:index "0";
+	elmo:appearance elmo:ContentAppearance;
+	elmo:index "2";
 	elmo:query '''
 		prefix prov:	<http://www.w3.org/ns/prov#>
 		prefix kddef:	<http://kadaster.basisregistraties.overheid.nl/som/def#>
 		prefix kdstat:	<http://kadaster.basisregistraties.overheid.nl/id/status/>
 		prefix doc:		<http://localhost:8080/catalogus/tax/concepten/doc/>
+		prefix skos:	<http://www.w3.org/2004/02/skos/core#>
+		prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 		CONSTRUCT {
 			?concept ?p ?o 
 		}
@@ -38,6 +29,7 @@ stage:ExportBegrippen rdf:type elmo:Representation;
 			GRAPH ?g {
 				?concept ?p ?o .
 				?concept kddef:status ?status.
+				?concept skos:inScheme <@DATASET@>.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -69,3 +61,4 @@ stage:ExportBegrippen rdf:type elmo:Representation;
 		}
 	'''
 .
+
