@@ -32,6 +32,7 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# This nodeshape doesn't contain a sh:severity triple, because it refers to a datatype, not a class
 dcat-eu:DateOrDateTimeDataType rdf:type sh:NodeShape ;
   rdfs:comment "Date time date disjunction shape checks that a datatype property receives a date or a dateTime literal" ;
   rdfs:label "Date time date disjunction" ;
@@ -49,11 +50,17 @@ dcat-eu:DateOrDateTimeDataType rdf:type sh:NodeShape ;
 dcat-eu:Frequency rdf:type sh:NodeShape ;
   sh:targetClass dct:Frequency;
   sh:name "dct:Frequency";
+  rdfs:label "Frequency"@en;
+  rdfs:comment "A rate at which something recurs, e.g. the publication of a Dataset."@en;
+  sh:severity sh:Info;
 .
 
 dcat-eu:LicenseDocument rdf:type sh:NodeShape ;
   sh:targetClass dct:LicenseDocument;
   sh:name "dct:LicenseDocument";
+  rdfs:label "Licence document"@en;
+  rdfs:comment "A legal document giving official permission to do something with a resource."@en;
+  sh:severity sh:Warning;
   sh:property [
       sh:path dct:type ;
       sh:class skos:Concept ;
@@ -66,18 +73,31 @@ dcat-eu:LicenseDocument rdf:type sh:NodeShape ;
 dcat-eu:LinguisticSystem rdf:type sh:NodeShape ;
   sh:targetClass dct:LinguisticSystem;
   sh:name "dct:LinguisticSystem";
+  rdfs:label "Linguistic system"@en;
+  rdfs:comment "A system of signs, symbols, sounds, gestures, or rules used in communication, e.g. a language"@en;
+  sh:severity sh:Info;
 .
 dcat-eu:Location rdf:type sh:NodeShape ;
   sh:targetClass dct:Location;
   sh:name "dct:Location";
+  rdfs:label "Location"@en;
+  rdfs:comment "A spatial region or named place. It can be represented using a controlled vocabulary or with geographic coordinates. In the latter case, the use of the Core Location Vocabulary is recommended, following the approach described in the GeoDCAT-AP specification."@en;
+  sh:severity sh:Info;
+  rdfs:seeAlso <https://joinup.ec.europa.eu/asset/core_location/description>;
 .
-dcat-eu::MediaTypeOrExtent rdf:type sh:NodeShape ;
+dcat-eu:MediaTypeOrExtent rdf:type sh:NodeShape ;
   sh:targetClass dct:MediaTypeOrExtent;
   sh:name "dct:MediaTypeOrExtent";
+  rdfs:label "Media type or extent"@en;
+  rdfs:comment "A media type or extent, e.g. the format of a computer file"@en;
+  sh:severity sh:Info;
 .
 dcat-eu:PeriodOfTime rdf:type sh:NodeShape ;
   sh:targetClass dct:PeriodOfTime;
   sh:name "dct:PeriodOfTime";
+  rdfs:label "Period of time"@en;
+  rdfs:comment "An interval of time that is named or defined by its start and end dates."@en;
+  sh:severity sh:Info;
   sh:property [
       sh:path schema:endDate ;
       sh:maxCount 1 ;
@@ -95,18 +115,30 @@ dcat-eu:PeriodOfTime rdf:type sh:NodeShape ;
 dcat-eu:ProvenanceStatement rdf:type sh:NodeShape ;
   sh:targetClass dct:ProvenanceStatement;
   sh:name "dct:ProvenanceStatement";
+  rdfs:label "Provenance statement"@en;
+  rdfs:comment "A statement of any changes in ownership and custody of a resource since its creation that are significant for its authenticity, integrity, and interpretation"@en;
+  sh:severity sh:Info;
 .
 dcat-eu:RightsStatement rdf:type sh:NodeShape ;
   sh:targetClass dct:RightsStatement;
   sh:name "dct:RightsStatement";
+  rdfs:label "Rights statement"@en;
+  rdfs:comment "A statement about the intellectual property rights (IPR) held in or over a resource, a legal document giving official permission to do something with a resource, or a statement about access rights."@en;
+  sh:severity sh:Info;
 .
 dcat-eu:Standard rdf:type sh:NodeShape ;
   sh:targetClass dct:Standard;
   sh:name "dct:Standard";
+  rdfs:label "Standard"@en;
+  rdfs:comment "A standard or other specification to which a Dataset or Distribution conforms"@en;
+  sh:severity sh:Info;
 .
 dcat-eu:Checksum rdf:type sh:NodeShape ;
   sh:targetClass spdx:Checksum;
   sh:name "spdx:Checksum";
+  rdfs:label "Checksum"@en;
+  rdfs:comment "A value that allows the contents of a file to be authenticated. This class allows the results of a variety of checksum and cryptographic message digest algorithms to be represented."@en;
+  sh:severity sh:Info;
   sh:property [
       sh:path spdx:algorithm ;
       sh:maxCount 1 ;
@@ -124,8 +156,12 @@ dcat-eu:Checksum rdf:type sh:NodeShape ;
       sh:severity sh:Violation ;
     ] ;
 .
-dcat-eu:Concept rdf:type sh:NodeShape ;
+dcat-eu:Category rdf:type sh:NodeShape ;
   sh:targetClass skos:Concept;
+  sh:name "skos:Concept";
+  rdfs:label "Category"@en;
+  rdfs:comment "A subject of a Dataset."@en;
+  sh:severity sh:Warning;
   sh:property [
       sh:path skos:prefLabel ;
       sh:minCount 1 ;
@@ -137,6 +173,9 @@ dcat-eu:Concept rdf:type sh:NodeShape ;
 dcat-eu:ConceptScheme rdf:type sh:NodeShape ;
   sh:targetClass skos:ConceptScheme;
   sh:name "skos:ConceptScheme";
+  rdfs:label "Category scheme"@en;
+  rdfs:comment "A concept collection (e.g. controlled vocabulary) in which the Category is defined."@en;
+  sh:severity sh:Warning;
   sh:property [
       sh:path dct:title ;
       sh:minCount 1 ;
@@ -148,9 +187,16 @@ dcat-eu:ConceptScheme rdf:type sh:NodeShape ;
 dcat-eu:Kind rdf:type sh:NodeShape ;
   sh:targetClass vcard:Kind;
   sh:name "vcard:Kind";
+  rdfs:label "Kind"@en;
+  rdfs:comment "A description following the vCard specification, e.g. to provide telephone number and e-mail address for a contact point. Note that the class Kind is the parent class for the four explicit types of vCards (Individual, Organization, Location, Group)."@en;
+  sh:severity sh:Info;
 .
 dcat-eu:Identifier rdf:type sh:NodeShape ;
   sh:targetClass adms:Identifier;
+  rdfs:label "Identifier"@en;
+  sh:name "adms:Identifier";
+  rdfs:comment "An identifier in a particular context, consisting of the string that is the identifier; an optional identifier for the identifier scheme; an optional identifier for the version of the identifier scheme; an optional identifier for the agency that manages the identifier scheme"@en;
+  sh:severity sh:Info;
   sh:property [
       sh:path skos:notation ;
       sh:maxCount 1 ;
@@ -162,52 +208,70 @@ dcat-eu:Identifier rdf:type sh:NodeShape ;
 dcat-eu:Catalog rdf:type sh:NodeShape ;
   sh:targetClass dcat:Catalog;
   sh:name "dcat:Catalog" ;
+  sh:severity sh:Violation ;
+  rdfs:label "Catalogue"@en;
+  rdfs:comment "A catalogue or repository that hosts the Datasets being described."@en;
   sh:property [
       sh:path dct:description ;
       sh:minCount 1 ;
       sh:name "dct:description" ;
+	  rdfs:label "description"@en;
+	  rdfs:comment "This property contains a free-text account of the Catalogue. This property can be repeated for parallel language versions of the description. For further information on multilingual issues, please refer to section 8."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
+	  sh:datatype rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:hasPart ;
       sh:class dcat:Catalog ;
       sh:name "dct:hasPart" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  rdfs:label "has part"@en;
+	  rdfs:comment "This property refers to a related Catalogue that is part of the described Catalogue"@en;
     ] ;
   sh:property [
       sh:path dct:isPartOf ;
       sh:class dcat:Catalog ;
       sh:maxCount 1 ;
       sh:name "dct:isPartOf" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  rdfs:label "is part of"@en;
+	  rdfs:comment "This property refers to a related Catalogue in which the described Catalogue is physically or logically included."@en;
     ] ;
   sh:property [
       sh:path dct:issued ;
       sh:maxCount 1 ;
       sh:name "dct:issued" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
+	  rdfs:label "release date"@en;
+	  rdfs:comment "This property contains the date of formal issuance (e.g., publication) of the Catalogue."@en;
     ] ;
   sh:property [
       sh:path dct:language ;
       sh:class dct:LinguisticSystem ;
       sh:name "dct:language" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
+	  rdfs:label "language"@en;
+	  rdfs:comment "This property refers to a language used in the textual metadata describing titles, descriptions, etc. of the Datasets in the Catalogue. This property can be repeated if the metadata is provided in multiple languages."@en;
     ] ;
   sh:property [
       sh:path dct:license ;
       sh:class dct:LicenseDocument ;
       sh:maxCount 1 ;
       sh:name "dct:license" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "license"@en;
+	  rdfs:comment "This property refers to the licence under which the Catalogue can be used or reused."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dct:modified ;
       sh:maxCount 1 ;
       sh:name "dct:modified" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
+	  rdfs:label "update/modification date"@en;
+	  rdfs:comment "This property contains the most recent date on which the Catalogue was modified."@en;
     ] ;
   sh:property [
       sh:path dct:publisher ;
@@ -215,30 +279,42 @@ dcat-eu:Catalog rdf:type sh:NodeShape ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
       sh:name "dct:publisher" ;
+	  rdfs:label "publisher"@en;
+	  rdfs:comment "This property refers to an entity (organisation) responsible for making the Catalogue available."@en;
+      sh:severity sh:Violation ;
     ] ;
   sh:property [
       sh:path dct:rights ;
       sh:class dct:RightsStatement ;
       sh:maxCount 1 ;
       sh:name "dct:rights" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  rdfs:label "rights"@en;
+	  rdfs:comment "This property refers to a statement that specifies rights associated with the Catalogue."@en;
     ] ;
   sh:property [
       sh:path dct:spatial ;
       sh:class dct:Location ;
       sh:name "dct:spatial" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  rdfs:label "spatial / geographic"@en;
+	  rdfs:comment "This property refers to a geographical area covered by the Catalogue."@en;
     ] ;
   sh:property [
       sh:path dct:title ;
       sh:minCount 1 ;
       sh:name "dct:title" ;
+	  rdfs:label "title"@en;
+	  rdfs:comment "This property contains a name given to the Catalogue. This property can be repeated for parallel language versions of the name."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
+	  sh:datatype rdfs:Literal;
     ] ;
   sh:property [
       sh:path dcat:dataset ;
       sh:class dcat:Dataset ;
+	  rdfs:label "dataset"@en;
+	  rdfs:comment "This property links the Catalogue with a Dataset that is part of the Catalogue."@en;
       sh:minCount 1 ;
       sh:name "dcat:dataset" ;
       sh:severity sh:Violation ;
@@ -247,78 +323,115 @@ dcat-eu:Catalog rdf:type sh:NodeShape ;
       sh:path dcat:record ;
       sh:class dcat:CatalogRecord ;
       sh:name "dcat:record" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  rdfs:label "record"@en;
+	  rdfs:comment "This property refers to a Catalogue Record that is part of the Catalogue"@en;
     ] ;
   sh:property [
       sh:path dcat:themeTaxonomy ;
       sh:class skos:ConceptScheme ;
       sh:name "dcat:themeTaxonomy" ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
+	  rdfs:label "themes"@en;
+	  rdfs:comment "This property refers to a knowledge organization system used to classify the Catalogue's Datasets."@en;
     ] ;
   sh:property [
       sh:path foaf:homepage ;
       sh:class foaf:Document ;
       sh:maxCount 1 ;
       sh:name "foaf:homepage" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "homepage"@en;
+	  rdfs:comment "This property refers to a web page that acts as the main page for the Catalogue."@en;
+      sh:severity sh:Warning ;
     ] ;
 .
 dcat-eu:CatalogRecord rdf:type sh:NodeShape ;
   sh:targetClass dcat:CatalogRecord;
   sh:name "dcat:CatalogRecord";
+  rdfs:label "Catalogue record"@en;
+  rdfs:comment "A description of a Dataset’s entry in the Catalogue."@en;
+  sh:severity sh:Info;
   sh:property [
       sh:path dct:conformsTo ;
-      sh:class dct:Standard ;
+      sh:class dct:Standard ; # The documentation is not clear: the diagram shows dct:Standard, the table shows rdfs:Resource
       sh:maxCount 1 ;
       sh:name "dct:conformsTo" ;
+	  rdfs:label "application profile"@en;
+	  rdfs:comment "This property refers to an Application Profile that the Dataset’s metadata conforms to"@en;
       sh:nodeKind sh:BlankNodeOrIRI ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dct:issued ;
       sh:maxCount 1 ;
       sh:name "dct:issued" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "listing date"@en;
+	  rdfs:comment "This property contains the date on which the description of the Dataset was included in the Catalogue."@en;
+      sh:severity sh:Warning ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
   sh:property [
       sh:path dct:language ;
       sh:class dct:LinguisticSystem ;
       sh:name "dct:language" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "language"@en;
+	  rdfs:comment "This property refers to a language used in the textual metadata describing titles, descriptions, etc. of the Dataset. This property can be repeated if the metadata is provided in multiple languages."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:modified ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
       sh:name "dct:modified" ;
+	  rdfs:label "update/ modification date"@en;
+	  rdfs:comment "This property links the Catalogue Record to the Dataset described in the record."@en;
       sh:node dcat-eu:DateOrDateTimeDataType ;
+	  sh:severity sh:Violation ;
     ] ;
   sh:property [
       sh:path dct:source ;
       sh:class dcat:CatalogRecord ;
       sh:maxCount 1 ;
       sh:name "dct:source" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "source metadata"@en;
+	  rdfs:comment "This property refers to the original metadata that was used in creating metadata for the Dataset"@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:title ;
       sh:name "dct:title" ;
+	  rdfs:label "title"@en;
+	  rdfs:comment "This property contains a name given to the Catalogue Record. This property can be repeated for parallel language versions of the name."@en;
       sh:nodeKind sh:Literal ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  sh:class rdfs:Literal;
+    ] ;
+  # Property "description" below was missing in original file, but is present in the specs
+  sh:property [
+      sh:path dct:description ;
+      sh:name "dct:description" ;
+	  rdfs:label "description"@en;
+	  rdfs:comment "This property contains a free-text account of the record. This property can be repeated for parallel language versions of the description."@en;
+      sh:nodeKind sh:Literal ;
+      sh:severity sh:Info ;
+	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path adms:status ;
-      sh:class skos:Concept ;
+	  sh:node dcat-eu:Status;
       sh:maxCount 1 ;
       sh:name "adms:status" ;
+	  rdfs:label "change type"@en;
+	  rdfs:comment "This property refers to the type of the latest revision of a Dataset's entry in the Catalogue. It MUST take one of the values :created, :updated or :deleted depending on whether this latest revision is a result of a creation, update or deletion."@en;
       sh:nodeKind sh:IRI ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path foaf:primaryTopic ;
 	  sh:name "foaf:primaryTopic";
       sh:class dcat:Dataset ;
+	  rdfs:label "primary topic"@en;
+	  rdfs:comment "This property links the Catalogue Record to the Dataset described in the record."@en;
       sh:maxCount 1 ;
       sh:minCount 1 ;
       sh:severity sh:Violation ;
@@ -327,129 +440,186 @@ dcat-eu:CatalogRecord rdf:type sh:NodeShape ;
 dcat-eu:Dataset rdf:type sh:NodeShape ;
   sh:targetClass dcat:Dataset;
   sh:name "dcat:Dataset";
+  sh:severity sh:Violation ;
+  rdfs:label "Dataset"@en;
+  rdfs:comment "A conceptual entity that represents the information published."@en;
   sh:property [
       sh:path dct:accessRights ;
       sh:class dct:RightsStatement ;
       sh:maxCount 1 ;
       sh:name "dct:accessRights" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "access rights"@en;
+	  rdfs:comment "This property refers to information that indicates whether the Dataset is open data, has access restrictions or is not public. A controlled vocabulary with three members (:public, :restricted, :non-public) will be created and maintained by the Publications Office of the EU."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:accrualPeriodicity ;
       sh:class dct:Frequency ;
       sh:maxCount 1 ;
       sh:name "dct:accrualPeriodicity" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "frequency"@en;
+	  rdfs:comment "This property refers to the frequency at which the Dataset is updated."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:conformsTo ;
       sh:class dct:Standard ;
       sh:name "dct:conformsTo" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "conforms to"@en;
+	  rdfs:comment "This property refers to an implementing rule or other specification."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:description ;
       sh:minCount 1 ;
       sh:name "dct:description" ;
+	  rdfs:label "description"@en;
+	  rdfs:comment "This property contains a free-text account of the Dataset. This property can be repeated for parallel language versions of the description."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
+	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:hasVersion ;
       sh:class dcat:Dataset ;
       sh:name "dct:hasVersion" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "has version"@en;
+	  rdfs:comment "This property refers to a related Dataset that is a version, edition, or adaptation of the described Dataset."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:isVersionOf ;
       sh:class dcat:Dataset ;
       sh:name "dct:isVersionOf" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "is version of"@en;
+	  rdfs:comment "This property refers to a related Dataset of which the described Dataset is a version, edition, or adaptation."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:issued ;
       sh:maxCount 1 ;
       sh:name "dct:issued" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "release date"@en;
+	  rdfs:comment "This property contains the date of formal issuance (e.g., publication) of the Dataset."@en;
+      sh:severity sh:Info ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
   sh:property [
       sh:path dct:language ;
       sh:class dct:LinguisticSystem ;
       sh:name "dct:language" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "language"@en;
+	  rdfs:comment "This property refers to a language of the Dataset. This property can be repeated if there are multiple languages in the Dataset."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:modified ;
       sh:maxCount 1 ;
       sh:name "dct:modified" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "update/ modification date"@en;
+	  rdfs:comment "This property contains the most recent date on which the Dataset was changed or modified."@en;
+      sh:severity sh:Info ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
   sh:property [
       sh:path dct:provenance ;
       sh:class dct:ProvenanceStatement ;
       sh:name "dct:provenance" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "provenance"@en;
+	  rdfs:comment "This property contains a statement about the lineage of a Dataset."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:publisher ;
       sh:class foaf:Agent ;
       sh:maxCount 1 ;
       sh:name "dct:publisher" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "publisher"@en;
+	  rdfs:comment "This property refers to an entity (organisation) responsible for making the Dataset available."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dct:relation ;
       sh:class rdfs:Resource ;
       sh:name "dct:relation" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "related resource"@en;
+	  rdfs:comment "This property refers to a related resource."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:source ;
       sh:class dcat:Dataset ;
       sh:name "dct:source" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "source"@en;
+	  rdfs:comment "This property refers to a related Dataset from which the described Dataset is derived."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:spatial ;
       sh:class dct:Location ;
       sh:name "dct:spatial" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "spatial/ geographical coverage"@en;
+	  rdfs:comment "This property refers to a geographic region that is covered by the Dataset."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:temporal ;
       sh:class dct:PeriodOfTime ;
       sh:name "dct:temporal" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "temporal coverage"@en;
+	  rdfs:comment "This property refers to a temporal period that the Dataset covers."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:title ;
       sh:minCount 1 ;
       sh:name "dct:title" ;
+	  rdfs:label "title"@en;
+	  rdfs:comment "This property contains a name given to the Dataset. This property can be repeated for parallel language versions of the name."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
+	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:type ;
-      sh:class skos:Concept ;
+      sh:node dcat-eu:DatasetType ;
       sh:maxCount 1 ;
       sh:name "dct:type" ;
+	  rdfs:label "type"@en;
+	  rdfs:comment "This property refers to the type of the Dataset. A controlled vocabulary for the values has not been established."@en;
       sh:nodeKind sh:IRI ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path owl:versionInfo ;
       sh:maxCount 1 ;
       sh:name "owl:versionInfo" ;
+	  rdfs:label "version"@en;
+	  rdfs:comment "This property contains a version number or other version designation of the Dataset."@en;
       sh:nodeKind sh:Literal ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  sh:class rdfs:Literal;
+    ] ;
+  # The property "dct:identifier" is missing in the original file, but present in the original documentation
+  sh:property [
+      sh:path dct:identifier ;
+      sh:class rdfs:Literal ;
+      sh:name "dct:identifier" ;
+	  rdfs:label "identifier"@en;
+	  rdfs:comment "This property contains the main identifier for the Dataset, e.g. the URI or other unique identifier in the context of the Catalogue."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path adms:identifier ;
       sh:class adms:Identifier ;
       sh:name "adms:identifier" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "other identifier"@en;
+	  rdfs:comment "This property refers to a secondary identifier of the Dataset, such as MAST/ADS, DataCite, DOI, EZID or W3ID."@en;
+	  rdfs:seeAlso <http://archive.stsci.edu/pub_dsn.html>;
+	  rdfs:seeAlso <http://www.datacite.org>;
+	  rdfs:seeAlso <http://www.doi.org>;
+	  rdfs:seeAlso <http://n2t.net/ezid>;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path adms:sample ;
@@ -461,37 +631,70 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
       sh:path dcat:contactPoint ;
       sh:class vcard:Kind ;
       sh:name "dcat:contactPoint" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "contact point"@en;
+	  rdfs:comment "This property contains contact information that can be used for sending comments about the Dataset."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dcat:distribution ;
       sh:class dcat:Distribution ;
       sh:name "dcat:distribution" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "dataset distribution"@en;
+	  rdfs:comment "This property links the Dataset to an available Distribution."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dcat:landingPage ;
       sh:class foaf:Document ;
       sh:name "dcat:landingPage" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "landing page"@en;
+	  rdfs:comment "This property refers to a web page that provides access to the Dataset, its Distributions and/or additional information. It is intended to point to a landing page at the original data provider, not to a page on a site of a third party, such as an aggregator."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dcat:theme ;
-      sh:class skos:Concept ;
+      sh:node dcat-eu:Category ;
       sh:name "dcat:theme" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "theme/ category"@en;
+	  rdfs:comment "This property refers to a category of the Dataset. A Dataset may be associated with multiple themes."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path foaf:page ;
       sh:class foaf:Document ;
       sh:name "foaf:page" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "documentation"@en;
+	  rdfs:comment "This property refers to a page or document about this Dataset."@en;
+      sh:severity sh:Info ;
     ] ;
+  # The property "keyword" below is missing in the original document, but present in the table of the original documentation
+  sh:property [
+      sh:path dcat:keyword;
+	  sh:class rdfs:Literal;
+	  sh:nodeKind sh:Literal;
+	  sh:name "dct:keyword";
+	  rdfs:label "keyword/ tag"@en;
+	  rdfs:comment "This property contains a keyword or tag describing the Dataset."@en;
+	  sh:severity sh:Warning;
+  ];
+  # The property "version notes" below is missing in the original document, but present in the table of the original documentation
+  sh:property [
+      sh:path adms:versionNotes;
+	  sh:class rdfs:Literal;
+	  sh:nodeKind sh:Literal;
+	  sh:name "adms:versionNotes";
+	  rdfs:label "version notes"@en;
+	  rdfs:comment "This property contains a description of the differences between this version and a previous version of the Dataset. This property can be repeated for parallel language versions of the version notes."@en;
+	  sh:severity sh:Info;
+  ];
 .
 
 dcat-eu:Distribution rdf:type sh:NodeShape ;
   sh:targetClass dcat:Distribution;
   sh:name "dcat:Distribution";
+  rdfs:label "Distribution"@en;
+  rdfs:comment "A physical embodiment of the Dataset in a particular format."@en;
+  sh:severity sh:Warning;
   sh:property [
       sh:path dct:conformsTo ;
       sh:name "dct:conformsTo" ;
@@ -603,6 +806,10 @@ dcat-eu:Distribution rdf:type sh:NodeShape ;
 dcat-eu:Agent rdf:type sh:NodeShape ;
   sh:targetClass foaf:Agent;
   sh:name "foaf:Agent";
+  sh:severity sh:Violation ;
+  rdfs:label "Agent"@en;
+  rdfs:comment "An entity that is associated with Catalogues and/or Datasets. If the Agent is an organisation, the use of the Organization Ontology is recommended. See section 7 for a discussion on Agent roles."@en;
+  rdfs:seeAlso <http://www.w3.org/TR/2013/CR-vocab-org-20130625>;
   sh:property [
       sh:path dct:type ;
       sh:class skos:Concept ;
@@ -622,15 +829,72 @@ dcat-eu:Agent rdf:type sh:NodeShape ;
 dcat-eu:Document rdf:type sh:NodeShape ;
   sh:targetClass foaf:Document;
   sh:name "foaf:Document";
+  rdfs:label "Document"@en;
+  rdfs:comment "A textual resource intended for human consumption that contains information, e.g. a web page about a Dataset."@en;
+  sh:severity sh:Info;
 .
 
-#Extra (ontbrak in originele bestand)
+# --
+# Extra nodeshapes (not present in the original file)
+# --
 dcat-eu:Resource rdf:type sh:NodeShape;
   sh:targetClass rdfs:Resource;
   sh:name "rdfs:Resource";
+  sh:severity sh:Violation ;
+  rdfs:label "Resource"@en;
+  rdfs:comment "Anything described by RDF."@en;
 .
+
+# This nodeshape is necessary to show the rdfs:subClassOf relation in the diagram.
+# For this reason, the nodeshape doesn't contain a sh:severity triple.
 dcat-eu:Dataset-dct a sh:NodeShape;
 	rdfs:label "Dataset (dctype)"@en;
 	sh:name "dctype:Dataset";
 	sh:targetClass dctype:Dataset;
+.
+dcat-eu:Literal rdf:type sh:NodeShape;
+  sh:targetClass rdfs:Literal;
+  sh:name "rdfs:Literal";
+  sh:targetClass rdfs:Literal;
+  sh:severity sh:Violation ;
+  rdfs:label "Literal"@en;
+  rdfs:comment "A literal value such as a string or integer; Literals may be typed, e.g. as a date according to xsd:date. Literals that contain human-readable text have an optional language tag as defined by BCP 47"@en;
+  rdfs:seeAlso <http://www.rfc-editor.org/rfc/bcp/bcp47.txt>;
+.
+dcat-eu:PublisherType rdf:type sh:NodeShape ;
+  sh:targetClass skos:Concept;
+  sh:name "skos:Concept";
+  rdfs:label "Publisher type"@en;
+  rdfs:comment "A type of organisation that acts as a publisher"@en;
+  sh:severity sh:Info;
+  sh:property [
+      sh:path skos:prefLabel ;
+      sh:minCount 1 ;
+      sh:name "skos:prefLabel" ;
+      sh:nodeKind sh:Literal ;
+      sh:severity sh:Violation ;
+    ] ;
+.
+dcat-eu:Status rdf:type sh:NodeShape ;
+  sh:targetClass skos:Concept;
+  sh:name "skos:Concept";
+  rdfs:label "Status"@en;
+  rdfs:comment "An indication of the maturity of a Distribution or the type of change of a Catalogue Record."@en;
+  sh:severity sh:Info;
+  sh:property [
+      sh:path skos:prefLabel ;
+      sh:minCount 1 ;
+      sh:name "skos:prefLabel" ;
+      sh:nodeKind sh:Literal ;
+      sh:severity sh:Violation ;
+    ] ;
+.
+# The shape "dataset type" below doesn't exist in the documentation, but is implied by the existance of dct:type in the Dataset shape
+# Hack: by ommitting the sh:severity, the shape won't be visible in the list
+dcat-eu:DatasetType rdf:type sh:NodeShape;
+	sh:targetClass skos:Concept;
+	sh:name "skos:Concept";
+	rdfs:label "Dataset type"@en;
+	rdfs:comment "A type of dataset"@en;
+#	sh:severity sh:Info;
 .
