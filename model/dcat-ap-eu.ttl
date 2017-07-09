@@ -36,6 +36,7 @@
 dcat-eu:DateOrDateTimeDataType rdf:type sh:NodeShape ;
   rdfs:comment "Date time date disjunction shape checks that a datatype property receives a date or a dateTime literal" ;
   rdfs:label "Date time date disjunction" ;
+  sh:name "rdfs:Literal typed as xsd:date or xsd:dateTime";
   sh:message "The values must be data typed as either xsd:date or xsd:dateTime" ;
   sh:or (
       [
@@ -63,9 +64,11 @@ dcat-eu:LicenseDocument rdf:type sh:NodeShape ;
   sh:severity sh:Warning;
   sh:property [
       sh:path dct:type ;
-      sh:class skos:Concept ;
+      sh:node dcat-eu:LicenseType;
       sh:maxCount 1 ;
       sh:name "dct:type" ;
+	  rdfs:label "License type"@en;
+	  rdfs:comment "This property refers to a type of licence, e.g. indicating 'public domain' or 'royalties required'."@en;
       sh:nodeKind sh:IRI ;
       sh:severity sh:Violation ;
     ] ;
@@ -101,14 +104,20 @@ dcat-eu:PeriodOfTime rdf:type sh:NodeShape ;
   sh:property [
       sh:path schema:endDate ;
       sh:maxCount 1 ;
-      sh:severity sh:Violation ;
+	  sh:name "schema:endDate";
+	  rdfs:label "end date/time"@en;
+	  rdfs:comment "This property contains the end of the period"@en;
+      sh:severity sh:Info ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
   sh:property [
       sh:path schema:startDate ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
-      sh:severity sh:Violation ;
+	  sh:name "schema:startDate";
+	  rdfs:label "start date/time"@en;
+	  rdfs:comment "This property contains the start of the period"@en;
+      sh:severity sh:Info ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
 .
@@ -144,6 +153,8 @@ dcat-eu:Checksum rdf:type sh:NodeShape ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
       sh:name "spdx:algorithm" ;
+	  rdfs:label "algorithm"@en;
+	  rdfs:comment "This property identifies the algorithm used to produce the subject Checksum. Currently, SHA-1 is the only supported algorithm. It is anticipated that other algorithms will be supported at a later time."@en;
       sh:nodeKind sh:IRI ;
       sh:severity sh:Violation ;
     ] ;
@@ -152,6 +163,8 @@ dcat-eu:Checksum rdf:type sh:NodeShape ;
       sh:maxCount 1 ;
       sh:minCount 1 ;
       sh:name "spdx:checksumValue" ;
+	  rdfs:label "checksum value"@en;
+	  rdfs:comment "This property provides a lower case hexadecimal encoded digest value produced using a specific algorithm."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
     ] ;
@@ -166,6 +179,8 @@ dcat-eu:Category rdf:type sh:NodeShape ;
       sh:path skos:prefLabel ;
       sh:minCount 1 ;
       sh:name "skos:prefLabel" ;
+	  rdfs:label "preferred label"@en;
+	  rdfs:comment "This property contains a preferred label of the category. This property can be repeated for parallel language versions of the label."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
     ] ;
@@ -180,6 +195,8 @@ dcat-eu:ConceptScheme rdf:type sh:NodeShape ;
       sh:path dct:title ;
       sh:minCount 1 ;
       sh:name "dct:title" ;
+	  rdfs:label "title"@en;
+	  rdfs:comment "This property contains a name of the category scheme. May be repeated for different versions of the name"@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
     ] ;
@@ -201,6 +218,9 @@ dcat-eu:Identifier rdf:type sh:NodeShape ;
       sh:path skos:notation ;
       sh:maxCount 1 ;
       sh:name "skos:notation" ;
+	  rdfs:label "notation"@en;
+	  rdfs:comment "This property contains a string that is an identifier in the context of the identifier scheme referenced by its datatype."@en;
+	  rdfs:seeAlso <http://purl.org/spar/datacite/ResourceIdentifierScheme>;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
     ] ;
@@ -625,7 +645,9 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
       sh:path adms:sample ;
       sh:class dcat:Distribution ;
       sh:name "adms:sample" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "sample"@en;
+	  rdfs:comment "This property refers to a sample distribution of the dataset"@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dcat:contactPoint ;
@@ -698,47 +720,63 @@ dcat-eu:Distribution rdf:type sh:NodeShape ;
   sh:property [
       sh:path dct:conformsTo ;
       sh:name "dct:conformsTo" ;
+	  rdfs:label "linked schemas"@en;
+	  rdfs:comment "This property refers to an established schema to which the described Distribution conforms."@en;
       sh:nodeKind sh:BlankNodeOrIRI ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
+	  sh:class dct:Standard #reference to dct:Standard was not present in original file
     ] ;
   sh:property [
       sh:path dct:description ;
       sh:name "dctdescription" ;
+	  rdfs:label "description"@en;
+	  rdfs:comment "This property contains a free-text account of the Distribution. This property can be repeated for parallel language versions of the description."@en;
       sh:nodeKind sh:Literal ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
+	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:format ;
       sh:class dct:MediaTypeOrExtent ;
       sh:maxCount 1 ;
       sh:name "dct:format" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "format"@en;
+	  rdfs:comment "This property refers to the file format of the Distribution."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dct:issued ;
       sh:maxCount 1 ;
       sh:name "dct:issued" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "release date"@en;
+	  rdfs:comment "This property contains the date of formal issuance (e.g., publication) of the Distribution."@en;
+      sh:severity sh:Info ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
   sh:property [
       sh:path dct:language ;
       sh:class dct:LinguisticSystem ;
       sh:name "dct:language" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "language"@en;
+	  rdfs:comment "This property refers to a language used in the Distribution. This property can be repeated if the metadata is provided in multiple languages."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:license ;
       sh:class dct:LicenseDocument ;
       sh:maxCount 1 ;
       sh:name "dct:license" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "license"@en;
+	  rdfs:comment "This property refers to the licence under which the Distribution is made available."@en;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path dct:modified ;
       sh:maxCount 1 ;
       sh:name "dct:modified" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "update/ modification date"@en;
+	  rdfs:comment "This property contains the most recent date on which the Distribution was changed or modified."@en;
+      sh:severity sh:Info ;
       sh:node dcat-eu:DateOrDateTimeDataType ;
     ] ;
   sh:property [
@@ -746,34 +784,44 @@ dcat-eu:Distribution rdf:type sh:NodeShape ;
       sh:class dct:RightsStatement ;
       sh:maxCount 1 ;
       sh:name "dct:rights" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "rights"@en;
+	  rdfs:comment "This property refers to a statement that specifies rights associated with the Distribution."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dct:title ;
       sh:name "dct:title" ;
+	  rdfs:label "title"@en;
+	  rdfs:comment "This property contains a name given to the Distribution. This property can be repeated for parallel language versions of the description."@en;
       sh:nodeKind sh:Literal ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path spdx:checksum ;
       sh:class spdx:Checksum ;
       sh:maxCount 1 ;
       sh:name "spdx:checksum" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "checksum"@en;
+	  rdfs:comment "This property provides a mechanism that can be used to verify that the contents of a distribution have not changed"@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path adms:status ;
-      sh:class skos:Concept ;
+	  sh:node dcat-eu:Status;
       sh:maxCount 1 ;
       sh:name "adms:status" ;
+	  rdfs:label "status"@en;
+	  rdfs:comment "This property refers to the maturity of the Distribution"@en;
       sh:nodeKind sh:IRI ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dcat:accessURL ;
       sh:class rdfs:Resource ;
       sh:minCount 1 ;
       sh:name "dcat:accessURL" ;
+	  rdfs:label "access URL"@en;
+	  rdfs:comment "This property contains a URL that gives access to a Distribution of the Dataset. The resource at the access URL may contain information about how to get the Dataset."@en;
       sh:severity sh:Violation ;
     ] ;
   sh:property [
@@ -781,26 +829,34 @@ dcat-eu:Distribution rdf:type sh:NodeShape ;
       sh:datatype xsd:decimal ;
       sh:maxCount 1 ;
       sh:name "dcat:byteSize" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "byte size"@en;
+	  rdfs:comment "This property contains the size of a Distribution in bytes."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dcat:downloadURL ;
       sh:class rdfs:Resource ;
       sh:name "dcat:downloadURL" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "download URL"@en;
+	  rdfs:comment "This property contains a URL that is a direct link to a downloadable file in a given format."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path dcat:mediaType ;
       sh:class dct:MediaTypeOrExtent ;
       sh:maxCount 1 ;
       sh:name "dcat:mediaType" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "media type"@en;
+	  rdfs:comment "This property refers to the media type of the Distribution as defined in the official register of media types managed by IANA."@en;
+      sh:severity sh:Info ;
     ] ;
   sh:property [
       sh:path foaf:page ;
       sh:class foaf:Document ;
       sh:name "foaf:page" ;
-      sh:severity sh:Violation ;
+	  rdfs:label "documentation"@en;
+	  rdfs:comment "This property refers to a page or document about this Distribution."@en;
+      sh:severity sh:Info ;
     ] ;
 .
 dcat-eu:Agent rdf:type sh:NodeShape ;
@@ -812,15 +868,19 @@ dcat-eu:Agent rdf:type sh:NodeShape ;
   rdfs:seeAlso <http://www.w3.org/TR/2013/CR-vocab-org-20130625>;
   sh:property [
       sh:path dct:type ;
-      sh:class skos:Concept ;
+	  sh:node dcat-eu:PublisherType; #Not sure
       sh:maxCount 1 ;
       sh:name "dct:type" ;
+	  rdfs:label "type"@en;
+	  rdfs:comment "This property refers to a type of the agent that makes the Catalogue or Dataset available"@en;
       sh:nodeKind sh:IRI ;
-      sh:severity sh:Violation ;
+      sh:severity sh:Warning ;
     ] ;
   sh:property [
       sh:path foaf:name ;
 	  sh:name "foaf:name";
+	  rdfs:label "name"@en;
+	  rdfs:comment "This property contains a name of the agent. This property can be repeated for different versions of the name (e.g. the name in different languages)"@en;
       sh:minCount 1 ;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
@@ -849,6 +909,7 @@ dcat-eu:Resource rdf:type sh:NodeShape;
 # For this reason, the nodeshape doesn't contain a sh:severity triple.
 dcat-eu:Dataset-dct a sh:NodeShape;
 	rdfs:label "Dataset (dctype)"@en;
+	rdfs:comment "A dctype Dataset"@en;
 	sh:name "dctype:Dataset";
 	sh:targetClass dctype:Dataset;
 .
@@ -871,6 +932,8 @@ dcat-eu:PublisherType rdf:type sh:NodeShape ;
       sh:path skos:prefLabel ;
       sh:minCount 1 ;
       sh:name "skos:prefLabel" ;
+	  rdfs:label "preferred label"@en;
+	  rdfs:comment "This property contains a preferred label of the category. This property can be repeated for parallel language versions of the label."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
     ] ;
@@ -885,6 +948,8 @@ dcat-eu:Status rdf:type sh:NodeShape ;
       sh:path skos:prefLabel ;
       sh:minCount 1 ;
       sh:name "skos:prefLabel" ;
+	  rdfs:label "preferred label"@en;
+	  rdfs:comment "This property contains a preferred label of the category. This property can be repeated for parallel language versions of the label."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
     ] ;
@@ -896,5 +961,13 @@ dcat-eu:DatasetType rdf:type sh:NodeShape;
 	sh:name "skos:Concept";
 	rdfs:label "Dataset type"@en;
 	rdfs:comment "A type of dataset"@en;
+#	sh:severity sh:Info;
+.
+# The same holds for "license type"
+dcat-eu:LicenseType rdf:type sh:NodeShape;
+	sh:targetClass skos:Concept;
+	sh:name "skos:Concept";
+	rdfs:label "License type"@en;
+	rdfs:comment "A type of license"@en;
 #	sh:severity sh:Info;
 .
