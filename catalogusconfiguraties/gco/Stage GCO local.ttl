@@ -706,9 +706,13 @@ stage:dcat-vergelijking_classes a elmo:Part;
 		elmo:applies-to "sapnl";
 		rdfs:label "DCAT AP-NL";
 	];
+	elmo:fragment [
+		elmo:applies-to "sgco";
+		rdfs:label "DCAT GCO";
+	];
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
-		select ?class ?smodel ?smodel_label ?sapeu ?sapeu_label ?sapnl ?sapnl_label
+		select ?class ?smodel ?smodel_label ?sapeu ?sapeu_label ?sapnl ?sapnl_label ?sgco ?sgco_label
 		where {
 			{
 				graph <http://bp4mc2.org/id/dataset/dcat-model> {
@@ -733,6 +737,14 @@ stage:dcat-vergelijking_classes a elmo:Part;
 					?sapnl sh:name ?sapnl_label
 				}
 			}
+			union
+			{
+				graph <http://bp4mc2.org/id/dataset/bp4mc2-datasets> {
+					?sgco rdf:type sh:NodeShape.
+					?sgco sh:targetClass ?class.
+					?sgco sh:name ?sgco_label
+				}
+			}
 		}
 	''';
 .
@@ -753,9 +765,17 @@ stage:dcat-vergelijking_properties a elmo:Part;
 		elmo:applies-to "pnapeu";
 		rdfs:label "DCAT AP-EU";
 	];
+	elmo:fragment [
+		elmo:applies-to "pnapnl";
+		rdfs:label "DCAT AP-NL";
+	];
+	elmo:fragment [
+		elmo:applies-to "pngco";
+		rdfs:label "DCAT GCO";
+	];
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
-		select (iri(concat(str(?class),str(?property))) as ?predicate) ?class ?class_label ?pnmodel ?pnapeu
+		select (iri(concat(str(?class),str(?property))) as ?predicate) ?class ?class_label ?pnmodel ?pnapeu ?pnapnl ?pngco
 		where {
 			{
 				graph <http://bp4mc2.org/id/dataset/dcat-model> {
@@ -776,6 +796,28 @@ stage:dcat-vergelijking_properties a elmo:Part;
 					?sapeu sh:property ?papeu.
 					?papeu sh:path ?property.
 					?papeu sh:name ?pnapeu
+				}
+			}
+			union
+			{
+				graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+					?sapnl rdf:type sh:NodeShape.
+					?sapnl sh:targetClass ?class.
+					?sapnl sh:name ?class_label.
+					?sapnl sh:property ?papnl.
+					?papnl sh:path ?property.
+					?papnl sh:name ?pnapnl
+				}
+			}
+			union
+			{
+				graph <http://bp4mc2.org/id/dataset/bp4mc2-datasets> {
+					?sgco rdf:type sh:NodeShape.
+					?sgco sh:targetClass ?class.
+					?sgco sh:name ?class_label.
+					?sgco sh:property ?pgco.
+					?pgco sh:path ?property.
+					?pgco sh:name ?pngco
 				}
 			}
 		}
@@ -886,6 +928,7 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "4"; rdfs:label "Lijst AP-NL"; html:link "query/dcat-nl"];
 			elmo:data [ elmo:index "5"; rdfs:label "Vocabulaire AP-NL"; html:link "query/dcat-nl-vocab"];
 			elmo:data [ elmo:index "6"; rdfs:label "Visualisatie AP-NL"; html:link "query/dcat-nl-visualisatie"];
+			elmo:data [ elmo:index "7"; rdfs:label "Vergelijking"; html:link "query/dcat-vergelijking"];
 		];
 		elmo:data [
 			elmo:index "5";
