@@ -6,15 +6,14 @@ updatestage:TaxExportConcepten a elmo:Production;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
 	elmo:queryForm stage:TaxSelectDataset;
-	elmo:contains stage:ExportSubsetBegrippenQueryScene;
+#	elmo:contains stage:ExportSubsetBegrippenQueryScene;
 .
 
-stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Part;
+stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 	elmo:url-pattern "/exportsubsetbegrippen(|/|\\..+)$";
-	elmo:contains stage:TaxBeheermenu;
-	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxSelectDataset;
 	elmo:appearance elmo:ContentAppearance;
-	elmo:index "2";
+	elmo:index "1";
 	elmo:query '''
 		prefix prov:	<http://www.w3.org/ns/prov#>
 		prefix kddef:	<http://kadaster.basisregistraties.overheid.nl/som/def#>
@@ -22,6 +21,9 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Part;
 		prefix doc:		<http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix skos:	<http://www.w3.org/2004/02/skos/core#>
 		prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 		CONSTRUCT {
 			?concept ?p ?o 
 		}
@@ -37,27 +39,31 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Part;
 					?status = kdstat:Gevalideerd ||
 					?status = kdstat:Geverifieerd
 				)
-				FILTER NOT EXISTS {
-					{
-						?o kddef:status kdstat:Afgekeurd.
-					}
-					UNION
-					{
-						?o kddef:status kdstat:Niet_beoordeeld.
-					}
-					UNION
-					{
-						?o kddef:status kdstat:Ter_afkeuring.
-					}
-					UNION
-					{
-						?o kddef:status kdstat:Ter_validatie.
-					}
-				}
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g
 			}
+			OPTIONAL {
+				GRAPH ?og {
+					?o rdf:type ?otype.
+					?o kddef:status ?ostatus.
+				}
+				GRAPH doc:mastergraph {
+					?o rdfs:isDefinedBy ?og.
+				}
+			}
+			FILTER(
+				!isIRI( ?o )
+				||
+				(
+					BOUND( ?otype )
+					&& BOUND( ?ostatus )
+					&& (
+						?ostatus = kdstat:Gevalideerd
+						|| ?ostatus = kdstat:Geverifieerd
+					)
+				)
+			)
 		}
 	'''
 .
