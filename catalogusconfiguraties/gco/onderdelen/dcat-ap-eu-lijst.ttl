@@ -104,8 +104,9 @@ stage:dcat-ap-eu-lijst_properties a elmo:Part;
 				OPTIONAL {?prop sh:datatype ?datatype. ?datatype ^sh:targetClass/sh:name ?datatype_label}
 				OPTIONAL {?prop sh:class ?refclass. ?refclass ^sh:targetClass/sh:name ?refclass_label}
 				OPTIONAL {?prop sh:node ?refshape. ?refshape sh:name ?refshape_label}
-				BIND (if(bound(?datatype),?datatype,if(bound(?refshape),?refshape,?refclass)) as ?range)
-				BIND (if(bound(?datatype_label),?datatype_label,if(bound(?refshape_label),?refshape_label,?refclass_label)) as ?range_label)
+				OPTIONAL {?prop sh:nodeKind ?nodekind}
+				BIND (if(bound(?datatype),?datatype,if(bound(?refshape),?refshape,if(?nodekind=sh:Literal,rdfs:Literal,?refclass))) as ?range)
+				BIND (if(bound(?datatype_label),?datatype_label,if(bound(?refshape_label),?refshape_label,if(?nodekind=sh:Literal,"rdfs:Literal",?refclass_label))) as ?range_label)
 			}
 			graph <@STAGE@> {
 				?severity rdfs:label ?severity_label.

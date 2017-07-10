@@ -239,7 +239,6 @@ dcat-eu:Catalog rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a free-text account of the Catalogue. This property can be repeated for parallel language versions of the description. For further information on multilingual issues, please refer to section 8."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
-	  sh:datatype rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:hasPart ;
@@ -328,7 +327,6 @@ dcat-eu:Catalog rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a name given to the Catalogue. This property can be repeated for parallel language versions of the name."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
-	  sh:datatype rdfs:Literal;
     ] ;
   sh:property [
       sh:path dcat:dataset ;
@@ -424,7 +422,6 @@ dcat-eu:CatalogRecord rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a name given to the Catalogue Record. This property can be repeated for parallel language versions of the name."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Info ;
-	  sh:class rdfs:Literal;
     ] ;
   # Property "description" below was missing in original file, but is present in the specs
   sh:property [
@@ -434,7 +431,6 @@ dcat-eu:CatalogRecord rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a free-text account of the record. This property can be repeated for parallel language versions of the description."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Info ;
-	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path adms:status ;
@@ -497,7 +493,6 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a free-text account of the Dataset. This property can be repeated for parallel language versions of the description."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
-	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:hasVersion ;
@@ -598,7 +593,6 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a name given to the Dataset. This property can be repeated for parallel language versions of the name."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Violation ;
-	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:type ;
@@ -618,15 +612,14 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a version number or other version designation of the Dataset."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Info ;
-	  sh:class rdfs:Literal;
     ] ;
   # The property "dct:identifier" is missing in the original file, but present in the original documentation
   sh:property [
       sh:path dct:identifier ;
-      sh:class rdfs:Literal ;
       sh:name "dct:identifier" ;
 	  rdfs:label "identifier"@en;
 	  rdfs:comment "This property contains the main identifier for the Dataset, e.g. the URI or other unique identifier in the context of the Catalogue."@en;
+      sh:nodeKind sh:Literal;
       sh:severity sh:Info ;
     ] ;
   sh:property [
@@ -692,7 +685,6 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
   # The property "keyword" below is missing in the original document, but present in the table of the original documentation
   sh:property [
       sh:path dcat:keyword;
-	  sh:class rdfs:Literal;
 	  sh:nodeKind sh:Literal;
 	  sh:name "dct:keyword";
 	  rdfs:label "keyword/ tag"@en;
@@ -702,7 +694,6 @@ dcat-eu:Dataset rdf:type sh:NodeShape ;
   # The property "version notes" below is missing in the original document, but present in the table of the original documentation
   sh:property [
       sh:path adms:versionNotes;
-	  sh:class rdfs:Literal;
 	  sh:nodeKind sh:Literal;
 	  sh:name "adms:versionNotes";
 	  rdfs:label "version notes"@en;
@@ -733,7 +724,6 @@ dcat-eu:Distribution rdf:type sh:NodeShape ;
 	  rdfs:comment "This property contains a free-text account of the Distribution. This property can be repeated for parallel language versions of the description."@en;
       sh:nodeKind sh:Literal ;
       sh:severity sh:Warning ;
-	  sh:class rdfs:Literal;
     ] ;
   sh:property [
       sh:path dct:format ;
@@ -913,6 +903,14 @@ dcat-eu:Dataset-dct a sh:NodeShape;
 	sh:name "dctype:Dataset";
 	sh:targetClass dctype:Dataset;
 .
+
+dcat-eu:Decimal a sh:NodeShape;
+	sh:targetClass xsd:decimal;
+	rdfs:label "Decimal datatype"@en;
+	rdfs:comment "Decimal datatype"@en;
+	sh:name "xsd:decimal";
+.
+
 dcat-eu:Literal rdf:type sh:NodeShape;
   sh:targetClass rdfs:Literal;
   sh:name "rdfs:Literal";

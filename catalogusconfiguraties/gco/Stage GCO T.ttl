@@ -270,8 +270,9 @@ stage:dcat-ap-eu-lijst_properties a elmo:Part;
 				OPTIONAL {?prop sh:datatype ?datatype. ?datatype ^sh:targetClass/sh:name ?datatype_label}
 				OPTIONAL {?prop sh:class ?refclass. ?refclass ^sh:targetClass/sh:name ?refclass_label}
 				OPTIONAL {?prop sh:node ?refshape. ?refshape sh:name ?refshape_label}
-				BIND (if(bound(?datatype),?datatype,if(bound(?refshape),?refshape,?refclass)) as ?range)
-				BIND (if(bound(?datatype_label),?datatype_label,if(bound(?refshape_label),?refshape_label,?refclass_label)) as ?range_label)
+				OPTIONAL {?prop sh:nodeKind ?nodekind}
+				BIND (if(bound(?datatype),?datatype,if(bound(?refshape),?refshape,if(?nodekind=sh:Literal,rdfs:Literal,?refclass))) as ?range)
+				BIND (if(bound(?datatype_label),?datatype_label,if(bound(?refshape_label),?refshape_label,if(?nodekind=sh:Literal,"rdfs:Literal",?refclass_label))) as ?range_label)
 			}
 			graph <@STAGE@> {
 				?severity rdfs:label ?severity_label.
@@ -667,6 +668,118 @@ stage:dcat-nl_properties a elmo:Part;
 			}
 		}
 		order by ?class_label ?severity_level ?property
+	''';
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.test.pdok.nl/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+stage:dcat-vergelijking	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-vergelijking$";
+	elmo:contains stage:Menu;
+	elmo:contains stage:dcat-vergelijking_classes;
+	elmo:contains stage:dcat-vergelijking_properties;
+.
+
+stage:dcat-vergelijking_classes a elmo:Part;
+	elmo:index "1";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "class";
+		elmo:appearance elmo:HiddenAppearance;
+		elmo:name "SUBJECT";
+	];
+	elmo:fragment [
+		elmo:applies-to "smodel";
+		rdfs:label "DCAT (W3)";
+	];
+	elmo:fragment [
+		elmo:applies-to "sapeu";
+		rdfs:label "DCAT AP-EU";
+	];
+	elmo:fragment [
+		elmo:applies-to "sapnl";
+		rdfs:label "DCAT AP-NL";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select ?class ?smodel ?smodel_label ?sapeu ?sapeu_label ?sapnl ?sapnl_label
+		where {
+			{
+				graph <http://bp4mc2.org/id/dataset/dcat-model> {
+					?smodel rdf:type sh:NodeShape.
+					?smodel sh:targetClass ?class.
+					?smodel sh:name ?smodel_label
+				}
+			}
+			union
+			{
+				graph <http://bp4mc2.org/id/dataset/dcat-ap-eu> {
+					?sapeu rdf:type sh:NodeShape.
+					?sapeu sh:targetClass ?class.
+					?sapeu sh:name ?sapeu_label
+				}
+			}
+			union
+			{
+				graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+					?sapnl rdf:type sh:NodeShape.
+					?sapnl sh:targetClass ?class.
+					?sapnl sh:name ?sapnl_label
+				}
+			}
+		}
+	''';
+.
+
+stage:dcat-vergelijking_properties a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "predicate";
+		elmo:appearance elmo:HiddenAppearance;
+		elmo:name "SUBJECT";
+	];
+	elmo:fragment [
+		elmo:applies-to "pnmodel";
+		rdfs:label "DCAT (W3)";
+	];
+	elmo:fragment [
+		elmo:applies-to "pnapeu";
+		rdfs:label "DCAT AP-EU";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select (iri(concat(str(?class),str(?property))) as ?predicate) ?class ?class_label ?pnmodel ?pnapeu
+		where {
+			{
+				graph <http://bp4mc2.org/id/dataset/dcat-model> {
+					?smodel rdf:type sh:NodeShape.
+					?smodel sh:targetClass ?class.
+					?smodel sh:name ?class_label.
+					?smodel sh:property ?pmodel.
+					?pmodel sh:path ?property.
+					?pmodel sh:name ?pnmodel.
+				}
+			}
+			union
+			{
+				graph <http://bp4mc2.org/id/dataset/dcat-ap-eu> {
+					?sapeu rdf:type sh:NodeShape.
+					?sapeu sh:targetClass ?class.
+					?sapeu sh:name ?class_label.
+					?sapeu sh:property ?papeu.
+					?papeu sh:path ?property.
+					?papeu sh:name ?pnapeu
+				}
+			}
+		}
+		order by ?class ?property
 	''';
 . 
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
