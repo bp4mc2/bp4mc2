@@ -1,0 +1,116 @@
+@prefix concept:		<http://localhost:8080/catalogus/dso/id/concept/>.
+@prefix collection:		<http://localhost:8080/catalogus/dso/id/collection/>.
+@prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: 			<http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: 		<http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: 			<http://purl.org/iso25964/skos-thes#>.
+@prefix dc: 			<http://purl.org/dc/elements/1.1/>.
+@prefix dct: 			<http://purl.org/dc/terms/>.
+@prefix dctype: 		<http://purl.org/dc/dcmitype/>.
+
+# Concepten
+concept:GeneriekeSchildpad a skos:Concept;
+	skos:prefLabel "GeneriekeSchildpad";
+	rdfs:label "Generieke schildpad";
+	skos:definition "Een schildpad zo generiek dat het zijn gelijke niet kent";
+	skos:inScheme concept:schildpadDomein;
+	skos:altLabel "Generieke tortoise";
+	skos:altLabel "Generiek beestgeval met een schild op zijn rug dat zwemt, soms dan";
+	dct:source concept:Art1_2Lid1Awb;
+	dct:valid "1-1-2001";
+	thes:narrowerGeneric concept:SpecifiekeSchildpad;
+	thes:narrowerPartitive concept:Lijf;
+	skos:semanticRelation concept:AndereSchildpad;
+	skoslex:refersTo concept:GeneriekeActiviteit;
+	skoslex:object concept:GeneriekeNorm
+.
+
+concept:SpecifiekeSchildpad a skos:Concept;
+	skos:prefLabel "SpecifiekeSchildpad";
+	rdfs:label "Specifieke schildpad";
+.
+
+concept:NogSpecifiekereSchildpad a skos:Concept;
+	skos:prefLabel "NogSpecifiekeSchildpad";
+	rdfs:label "Nog specifiekere schildpad";
+	thes:broaderGeneric concept:SpecifiekeSchildpad
+.
+
+concept:Kop a skos:Concept;
+	skos:prefLabel "Kop";
+	rdfs:label "Kop";
+	thes:broaderPartitive concept:GeneriekeSchildpad
+.
+
+concept:Lijf a skos:Concept;
+	skos:prefLabel "Lijf";
+	rdfs:label "Lijf";
+.
+
+concept:SingleSchildpad a skos:Concept;
+	skos:prefLabel "SingleSchildpad";
+	rdfs:label "Single schildpad";
+.
+
+# Activiteiten
+concept:GeneriekeActiviteit a skos:Concept, skoslex:Act;
+	skos:prefLabel "GeneriekeActiviteit";
+	rdfs:label "Generieke activiteit";
+.
+
+# Normen
+concept:GeneriekeNorm a skos:Concept, skoslex:Norm;
+	skos:prefLabel "GeneriekeNorm";
+	rdfs:label "Generieke norm";
+.
+
+# Objecten
+concept:GeneriekObject a skos:Concept, skoslex:Object;
+	skos:prefLabel "GeneriekObject";
+	rdfs:label "Generiek object";
+.
+
+# Collecties
+collection:StandaardSchildpadden a skos:Collection;
+	rdfs:label "Standaard schildpadden.";
+	skos:prefLabel "StandaardSchildpadden";
+	skos:member concept:GeneriekeSchildpad;
+	skos:member concept:SpecifiekeSchildpad;
+	skos:member concept:NogSpecifiekereSchildpad;
+.
+
+# Waardelijsten
+collection:Waardelijsten a skos:Collection;
+	rdfs:label "Waardelijsten";
+	skos:prefLabel "Waardelijsten";
+	skos:member collection:Lichaamsdelen;
+.
+
+collection:Lichaamsdelen a skos:Collection;
+	rdfs:label "Lichaamsdelen";
+	skos:prefLabel "Lichaamsdelen";
+	skos:member concept:Kop;
+	skos:member concept:Lijf;
+	skos:member concept:Poten;
+.
+
+# Toeleidingsbegrippen
+collection:Toeleidingsbegrippen a skos:Collection;
+	rdfs:label "Toeleidingsbegrippen";
+	skos:prefLabel "Toeleidingsbegrippen";
+	skos:member concept:Zeedier;
+.
+
+concept:Zeedier a skos:Concept;
+	skos:closeMatch concept:GeneriekeSchildpad;
+	rdfs:label "zeedier";
+	skos:prefLabel "Zeedier";
+.
+
+# Bronnen
+concept:Art1_2Lid1Awb a dctype:Text;
+	rdfs:label "Artikel 1:2 Lid 1 Awb";
+	dct:source <http://www.internetconsultatie.nl/omgevingswet_besluit_activiteitenleefomgeving>;
+	dct:valid "2016-07-01";
+.
