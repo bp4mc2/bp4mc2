@@ -306,13 +306,18 @@ stage:DSOMenu a elmo:Part;
 			];
 		];
 		elmo:data [
+			rdfs:label "Datasets";
+			xhtml:link "/catalogus/dso/query/overzichtdatasets";
+			elmo:index "4";
+		];
+		elmo:data [
 			rdfs:label "Producten/diensten";
 			xhtml:link "/catalogus/dso/query/producten";
-			elmo:index "4"
+			elmo:index "5"
 		];
 		elmo:data [
 			rdfs:label "Model Catalogus";
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [	
 				elmo:index "2";
 				rdfs:label "Vocabulaire";
@@ -331,7 +336,7 @@ stage:DSOMenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Requirements Catalogus";
-			elmo:index "5";
+			elmo:index "7";
 			elmo:data [
 				elmo:index "1";
 				rdfs:label "Lijst";
@@ -363,7 +368,7 @@ stage:DSOMenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Catalogus";
 				elmo:index "2";
-				xhtml:link "/catalogus/dso/doc/catalogus/Beestjes";
+				xhtml:link "/catalogus/dso/doc/catalogus/DigitaalStelselOmgevingswet";
 			];
 			elmo:data [ 
 				rdfs:label "IMOD";
@@ -375,7 +380,7 @@ stage:DSOMenu a elmo:Part;
 				xhtml:link "/catalogus/dso/query/help";
 				elmo:index "4"
 			];
-			elmo:index "7";
+			elmo:index "8";
 		];
 	]
 .
@@ -405,71 +410,33 @@ stage:DSOBeheermenu a elmo:Part;
 			];
 			elmo:data [
 				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
-				elmo:index "02";
+				elmo:index "2";
 				xhtml:link "/catalogus/dso/container/ttlupload";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (Excel)";
-				elmo:index "03";
+				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
 				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
-				elmo:index "04";
+				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
 				rdfs:label "Voeg nieuwe concepten toe (XML)";
-				elmo:index "05";
+				elmo:index "5";
 				xhtml:link "/catalogus/dso/container/concepten-post-xml";
 			];
 			elmo:data [
 				rdfs:label "Update bestaande concepten (XML)";
-				elmo:index "06";
+				elmo:index "6";
 				xhtml:link "/catalogus/dso/container/concepten-put-xml";
 			];
 			elmo:data [
-				rdfs:label "Upload dataset-metadata via Turtle (ttl)";
+				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 				elmo:index "7";
 				xhtml:link "/catalogus/dso/container/datasetupload";
-				rdfs:label "Voeg nieuwe concepten toe (JSON)";
-				elmo:index "07";
-				xhtml:link "/catalogus/dso/container/concepten-post-json";
-			];
-			elmo:data [
-				rdfs:label "Update bestaande concepten (JSON)";
-				elmo:index "08";
-				xhtml:link "/catalogus/dso/container/concepten-put-json";
-			];
-			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (JSON/LD)";
-				elmo:index "09";
-				xhtml:link "/catalogus/dso/container/concepten-post-jsonld";
-			];
-			elmo:data [
-				rdfs:label "Update bestaande concepten (JSON/LD)";
-				elmo:index "10";
-				xhtml:link "/catalogus/dso/container/concepten-put-jsonld";
-			];
-			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (Turtle)";
-				elmo:index "11";
-				xhtml:link "/catalogus/dso/container/concepten-post-ttl";
-			];
-			elmo:data [
-				rdfs:label "Update bestaande concepten (Turtle)";
-				elmo:index "12";
-				xhtml:link "/catalogus/dso/container/concepten-put-ttl";
-			];
-			elmo:data [
-				rdfs:label "Voeg nieuwe concepten toe (Excel)";
-				elmo:index "13";
-				xhtml:link "/catalogus/dso/container/concepten-post-xls";
-			];
-			elmo:data [
-				rdfs:label "Update bestaande concepten (Excel)";
-				elmo:index "14";
-				xhtml:link "/catalogus/dso/container/concepten-put-xls";
 			];
 		];
 		elmo:data[
@@ -527,6 +494,16 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Sync Begrippen (model)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/update/syncBegrippen";
+			];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "5";
+				xhtml:link "/catalogus/dso/update/syncttlupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "6";
+				xhtml:link "/catalogus/dso/update/syncttlupdate";
 			];
 		];
 		elmo:data [
@@ -2513,6 +2490,67 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:DSODatasetUploadScene;
+.
+#
+#PRODUCTIONS
+#
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOGeneriekeUploadScene;
+.
+updatestage:syncttlupdate a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOSpecifiekeUploadScene;
+.
+#
+#FORMS
+#
+
+# Selecteer dataset 
+stage:DSOSelectDataset a elmo:Form;
+	rdfs:label "Selecteer dataset";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "dataset";
+		rdfs:label "Selecteer dataset"@nl;
+		elmo:valuesFrom stage:search_datasets;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+#PARTS
+#
+
+#Zoeken van datasets
+stage:search_datasets a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+			?dataset rdfs:label ?dataset_label
+		}
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+			}
+		}
+		ORDER BY DESC(?dataset_label)
+	''';
 .
 
 #
@@ -6055,6 +6093,63 @@ stage:WeergaveVersiesCatalogQuery a elmo:Query;
 #
 #
 #
+# OVERZICHTSPAGINA DATASETS
+#
+#
+#
+
+
+# REPRESENTATIONS
+
+# Overzichtspagina Datasets
+stage:DSODatasetOverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/overzichtdatasets(|/|\\..+)$";
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:DSODatasetTabel;
+.
+
+# Datasettabel voor overzichtsweergave
+stage:DSODatasetTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:DSODatasetQuery;
+.
+
+# QUERY
+
+# query voor tonen alle datasets
+stage:DSODatasetQuery a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				?dataset rdfs:comment ?uitleg.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+. 
+#
+#
+#
 # WEERGAVEPAGINA'S
 #
 #
@@ -6231,18 +6326,18 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
-			<@SUBJECT@> ?p ?o.
+			<@IDSUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
-			<@SUBJECT@> prov:wasGeneratedBy ?a.
-			<@SUBJECT@> prov:generatedAtTime ?t.
+			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
+			<@IDSUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
 		}
 		WHERE {
 			{
 				{
 					GRAPH ?g {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Dataset.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type dcat:Dataset.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -6269,8 +6364,8 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 				UNION
 				{
 					GRAPH <@GRAPH@> {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Dataset.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type dcat:Dataset.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -6311,18 +6406,18 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/concept/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 
-		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Dataset.
+					<@IDSUBJECT@> rdf:type dcat:Dataset.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
 				}
 				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
+					<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
 					?graph dc:isVersionOf doc:mastergraph
 				}	
 				FILTER( ?graph != ?actualGraph )
@@ -6330,10 +6425,10 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 			}
 			UNION {
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Dataset.
+					<@IDSUBJECT@> rdf:type dcat:Dataset.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
 				}
 				GRAPH doc:mastergraph {

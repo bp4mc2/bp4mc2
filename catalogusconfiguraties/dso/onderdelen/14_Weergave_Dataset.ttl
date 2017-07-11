@@ -177,18 +177,18 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
-			<@SUBJECT@> ?p ?o.
+			<@IDSUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
-			<@SUBJECT@> prov:wasGeneratedBy ?a.
-			<@SUBJECT@> prov:generatedAtTime ?t.
+			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
+			<@IDSUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
 		}
 		WHERE {
 			{
 				{
 					GRAPH ?g {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Dataset.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type dcat:Dataset.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -215,8 +215,8 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 				UNION
 				{
 					GRAPH <@GRAPH@> {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Dataset.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type dcat:Dataset.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -257,18 +257,18 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 
-		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Dataset.
+					<@IDSUBJECT@> rdf:type dcat:Dataset.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
 				}
 				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
+					<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
 					?graph dc:isVersionOf doc:mastergraph
 				}	
 				FILTER( ?graph != ?actualGraph )
@@ -276,10 +276,10 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 			}
 			UNION {
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Dataset.
+					<@IDSUBJECT@> rdf:type dcat:Dataset.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
 				}
 				GRAPH doc:mastergraph {
