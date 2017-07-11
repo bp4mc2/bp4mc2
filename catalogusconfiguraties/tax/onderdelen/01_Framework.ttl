@@ -54,39 +54,34 @@ stage:TaxMenu a elmo:Part;
 			];
 			elmo:data [
 				rdfs:label "BRT";
-				elmo:index "2";
+				elmo:index "5";
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brt-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BRK intern (juridisch)";
-				elmo:index "5";
+				elmo:index "3";
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brk-intern-juridisch-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BRK intern (niet-juridisch)";
-				elmo:index "6";
+				elmo:index "4";
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brk-intern-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BRK";
-				elmo:index "7";
+				elmo:index "2";
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=brk-begrippen";
 			];
 			elmo:data [
 				rdfs:label "BAG";
-				elmo:index "4";
+				elmo:index "6";
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=bag-begrippen";
 			];
 			elmo:data [
 				rdfs:label "TAX";
-				elmo:index "3";
+				elmo:index "7";
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=tax-begrippen";
 			];
-		];
-		elmo:data [
-			rdfs:label "Overzicht datasets";
-			elmo:index "2";
-			xhtml:link "/catalogus/tax/query/overzichtdatasets";
 		];
 	#	elmo:data [
 	#		rdfs:label "BEHEER";
@@ -111,8 +106,13 @@ stage:TaxBeheermenu a elmo:Part;
 			xhtml:link "/catalogus/tax";
 		];
 		elmo:data [
-			rdfs:label "Upload";											#Voor het vervangen van de gehele concepten-dataset. 
+			rdfs:label "Overzicht datasets";
 			elmo:index "2";
+			xhtml:link "/catalogus/tax/query/overzichtdatasets";
+		];
+		elmo:data [
+			rdfs:label "Upload";											#Voor het vervangen van de gehele concepten-dataset. 
+			elmo:index "3";
 		#	elmo:data [
 		#		rdfs:label "Upload concepten (Excel)";
 		#		elmo:index "1";
@@ -141,7 +141,7 @@ stage:TaxBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Update";											#Voor het updaten van specifieke concepten. Al bestaande concepten die niet worden aangepast, blijven aanwezig.
-			elmo:index "3";
+			elmo:index "4";
 		#	elmo:data [
 		#		rdfs:label "Upload een enkel Concept (Excel)";
 		#		elmo:index "3";
@@ -160,7 +160,7 @@ stage:TaxBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Rapportages";										#Koppeling naar alle rapportages
-			elmo:index "4";
+			elmo:index "5";
 			elmo:data [
 				rdfs:label "Relatiecontrole";								#triples waar <A skos:SemanticRelation B> wel bestaat, maar de omgekeerde relatie ontbreekt
 				elmo:index "2";
@@ -171,11 +171,11 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/catalogus/tax/query/missinglinks";
 			];
-		#	elmo:data [
-		#		rdfs:label "Homoniemen";									#begrippen die in meerdere begripskaders voorkomen
-		#		elmo:index "4";
-		#		xhtml:link "/catalogus/tax/query/homoniemen1";
-		#	];
+			elmo:data [
+				rdfs:label "Homoniemen";									#begrippen die in meerdere begripskaders voorkomen
+				elmo:index "4";
+				xhtml:link "/catalogus/tax/query/homoniemen1";
+			];
 		#	elmo:data [
 		#		rdfs:label "Homoniemen2";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
 		#		elmo:index "5";
@@ -203,21 +203,22 @@ stage:TaxBeheermenu a elmo:Part;
 			];
 		];
 		elmo:data [
-			rdfs:label "Exporteren";										#alle hulpmiddelen die geen rapportages zijn
-			elmo:index "5";
-			elmo:data [
-				rdfs:label "Exporteren van data";
-				elmo:index "1";
-				xhtml:link "/catalogus/tax/query/exporteren";
-			];
-		];
-		elmo:data [
 			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
 			elmo:index "6";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
 				xhtml:link "/catalogus/tax/update/clearalldata";
+			];
+			elmo:data [
+				rdfs:label "Exporteren van specifieke dataset";
+				elmo:index "2";
+				xhtml:link "/catalogus/tax/query/exportsubsetbegrippen";
+			];
+			elmo:data [
+				rdfs:label "Exporteren van alle data";
+				elmo:index "3";
+				xhtml:link "/catalogus/tax/query/exporteren";
 			];
 		];
 	]

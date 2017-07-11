@@ -1,24 +1,12 @@
-#
-# PRODUCTION
-
-# production om subset in named graph te plaatsen en te tonen voor download
-#updatestage:TaxExportConcepten a elmo:Production;
-#	elmo:contains stage:TaxBeheermenu;
-#	elmo:contains stage:TaxFooter;
-#	elmo:queryForm stage:TaxSelectDataset;
-#	elmo:contains stage:TaxConceptenDatasetQuery;
-#	elmo:contains stage:TaxExportConceptenScene;
-#.
-
 stage:TaxExporteren rdf:type elmo:Representation;
 	elmo:url-pattern "query/exporteren$";
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
-#	elmo:queryForm stage:TaxSelectDataset;
+	elmo:queryForm stage:TaxSelectDataset;
 	elmo:contains stage:ExporterenBegrip;
 .
 
-stage:ExporterenBegrip rdf:type elmo:Representation;																											
+stage:ExporterenBegrip rdf:type elmo:Part;																											
 	elmo:index "1";																						
 	elmo:appearance elmo:HtmlAppearance;																
 	elmo:data [
@@ -57,6 +45,23 @@ stage:ExportBegrippen rdf:type elmo:Representation;
 					?status = kdstat:Gevalideerd ||
 					?status = kdstat:Geverifieerd
 				)
+				FILTER NOT EXISTS {
+					{
+						?o kddef:status kdstat:Afgekeurd.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Niet_beoordeeld.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Ter_afkeuring.
+					}
+					UNION
+					{
+						?o kddef:status kdstat:Ter_validatie.
+					}
+				}
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g

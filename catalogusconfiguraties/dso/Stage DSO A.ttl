@@ -424,6 +424,7 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
+<<<<<<< HEAD
 				rdfs:label "Voeg nieuwe concepten toe (XML)";
 				elmo:index "5";
 				xhtml:link "/catalogus/dso/container/concepten-post-xml";
@@ -437,11 +438,70 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 				elmo:index "7";
 				xhtml:link "/catalogus/dso/container/datasetupload";
+=======
+				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+				elmo:index "7";
+				xhtml:link "/catalogus/dso/container/datasetupload";
+			];
+		];
+		elmo:data [
+			rdfs:label "API's concepten";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Concepten POST Turtle";
+				elmo:index "01";
+				xhtml:link "/catalogus/dso/container/concepten-post-ttl";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT Turtle";
+				elmo:index "02";
+				xhtml:link "/catalogus/dso/container/concepten-put-ttl";
+			];
+			elmo:data [
+				rdfs:label "Concepten POST XML";
+				elmo:index "03";
+				xhtml:link "/catalogus/dso/container/concepten-post-xml";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT XML";
+				elmo:index "04";
+				xhtml:link "/catalogus/dso/container/concepten-put-xml";
+			];
+			elmo:data [
+				rdfs:label "Concepten POST Excel";
+				elmo:index "05";
+				xhtml:link "/catalogus/dso/container/concepten-post-xls";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT Excel";
+				elmo:index "06";
+				xhtml:link "/catalogus/dso/container/concepten-put-xls";
+			];
+			elmo:data [
+				rdfs:label "Concepten POST JSON";
+				elmo:index "07";
+				xhtml:link "/catalogus/dso/container/concepten-post-json";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT JSON";
+				elmo:index "08";
+				xhtml:link "/catalogus/dso/container/concepten-put-json";
+			];
+			elmo:data [
+				rdfs:label "Concepten POST JSON-LD";
+				elmo:index "09";
+				xhtml:link "/catalogus/dso/container/concepten-post-jsonld";
+			];
+			elmo:data [
+				rdfs:label "Concepten PUT JSON-LD";
+				elmo:index "10";
+				xhtml:link "/catalogus/dso/container/concepten-put-jsonld";
+>>>>>>> 7075d838a1f14b6959c445a28f0ca68a146d0923
 			];
 		];
 		elmo:data[
 			rdfs:label "Upload modellen";
-			elmo:index "3";
+			elmo:index "4";
 			elmo:data [
 				rdfs:label "Upload UML-model (XMI)";
 				elmo:index "1";
@@ -455,7 +515,7 @@ stage:DSOBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Acties";
-			elmo:index "4";
+			elmo:index "5";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -474,7 +534,7 @@ stage:DSOBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Sync";
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [
 				rdfs:label "Sync Model";
 				elmo:index "1";
@@ -509,7 +569,7 @@ stage:DSOBeheermenu a elmo:Part;
 		elmo:data [
 			rdfs:label "Help";
 			xhtml:link "/catalogus/dso/query/beheerhelp";
-			elmo:index "6"
+			elmo:index "9"
 		];
 	]
 .
@@ -1276,7 +1336,7 @@ container:concepten-put-json a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.json)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1362,7 +1422,7 @@ container:concepten-post-json a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.json)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1447,7 +1507,7 @@ container:concepten-put-jsonld a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.jsonld)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1532,7 +1592,7 @@ container:concepten-post-jsonld a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.jsonld)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	# elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1615,7 +1675,6 @@ container:concepten-put-ttl a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.ttl)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1700,7 +1759,6 @@ container:concepten-post-ttl a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.ttl)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1784,7 +1842,7 @@ container:concepten-put-xls a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Update bestaande concepten (.xls)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	elmo:translator elmo:TableExcelTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -1869,7 +1927,7 @@ container:concepten-post-xls a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Voeg nieuwe concepten toe (.xls)";
     elmo:replaces container:generiek;
-	elmo:translator elmo:ODTranslator;
+	elmo:translator elmo:TableExcelTranslator;
 	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
@@ -4258,24 +4316,28 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						)
 					}
-					GRAPH ?og {
-						?o rdf:type ?otype.
-						?og prov:generatedAtTime ?oStartTime.
-						?o rdfs:label ?olabel.
-						OPTIONAL {
-							?o prov:invalidatedAtTime ?oEndTime.
-						}
-						FILTER (
-							strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
-							&& (
-								!bound( ?oEndTime )
-								|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
-							)
-						)
-					}
 					GRAPH doc:mastergraph {
 						?g dc:isVersionOf doc:mastergraph.
-						?og dc:isVersionOf doc:mastergraph.
+					}
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdf:type ?otype.
+							?og prov:generatedAtTime ?oStartTime.
+							?o rdfs:label ?olabel.
+							OPTIONAL {
+								?o prov:invalidatedAtTime ?oEndTime.
+							}
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+								)
+							)
+						}
+						GRAPH doc:mastergraph {
+							?og dc:isVersionOf doc:mastergraph.
+						}
 					}
 					OPTIONAL {
 						GRAPH ?altSubjectGraph {
@@ -4328,29 +4390,31 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						}
 					}
-					GRAPH ?og {
-						?o rdfs:label ?olabel.
-						?o rdf:type ?otype.
-						?og prov:generatedAtTime ?oStartTime.
-						OPTIONAL {
-							?o prov:invalidatedAtTime ?oEndTime.
-						}
-						GRAPH <@GRAPH@> {
+					OPTIONAL {
+						GRAPH ?og {
+							?o rdfs:label ?olabel.
+							?o rdf:type ?otype.
+							?og prov:generatedAtTime ?oStartTime.
 							OPTIONAL {
-								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								?o prov:invalidatedAtTime ?oEndTime.
 							}
+							GRAPH <@GRAPH@> {
+								OPTIONAL {
+									<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+								}
+							}
+							BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+							FILTER (
+								strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+								&& (
+									!bound( ?oEndTime )
+									|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+								)
+							)	
 						}
-						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
-						FILTER (
-							strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
-							&& (
-								!bound( ?oEndTime )
-								|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
-							)
-						)	
-					}
-					GRAPH doc:mastergraph {
-						?og dc:isVersionOf doc:mastergraph.
+						GRAPH doc:mastergraph {
+							?og dc:isVersionOf doc:mastergraph.
+						}
 					}
 					OPTIONAL {
 						GRAPH ?altSubjectGraph {
@@ -4474,7 +4538,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 							<@IDSUBJECT@> rdf:type skos:Concept.
 							?g prov:wasGeneratedBy ?a.
 							?g prov:generatedAtTime ?sStartTime.
-						
 							
 							OPTIONAL {
 								<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
@@ -4495,36 +4558,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 								&& ?p != dct:type
 								&& ?p != skos:member
 							)
-						}
-					}
-					UNION
-					{
-						GRAPH ?g {
-							<@IDSUBJECT@> ?p ?o.
-							<@IDSUBJECT@> rdf:type skos:Concept.
-							?g prov:wasGeneratedBy ?a.
-							?g prov:generatedAtTime ?sStartTime.
-							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
-							OPTIONAL {
-								?a rdfs:label ?alabel.
-							}
-							FILTER (
-								?p != rdf:type
-								&& ?p != bp4mc2:signature
-								&& ?p != dct:type
-								&& ?p != skos:member
-							)
-							FILTER ( strdt( ?sEndTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime )
-						}
-						GRAPH doc:mastergraph {
-							<@IDSUBJECT@> rdfs:isDefinedBy ?g.
-						}
-						FILTER NOT EXISTS {
-							GRAPH ?altG {
-								<@IDSUBJECT@> rdf:type skos:Concept.
-								?altG prov:generatedAtTime ?altStartTime.
-								FILTER( strdt( ?altStartTime, xsd:dateTime ) >= strdt( ?sEndTime, xsd:dateTime ) )
-							}
 						}
 					}
 					OPTIONAL {
@@ -4709,6 +4742,45 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		}
 	'''
 .
+
+
+
+#
+#					UNION
+#					{
+#						GRAPH ?g {
+#							<@IDSUBJECT@> ?p ?o.
+#							<@IDSUBJECT@> rdf:type skos:Concept.
+#							?g prov:wasGeneratedBy ?a.
+#							?g prov:generatedAtTime ?sStartTime.
+#							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
+#							OPTIONAL {
+#								?a rdfs:label ?alabel.
+#							}
+#							FILTER (
+#								?p != rdf:type
+#								&& ?p != bp4mc2:signature
+#								&& ?p != dct:type
+#								&& ?p != skos:member
+#							)
+#							FILTER ( strdt( ?sEndTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime )
+#						}
+#						GRAPH doc:mastergraph {
+#							<@IDSUBJECT@> rdfs:isDefinedBy ?g.
+#						}
+#						FILTER NOT EXISTS {
+#							GRAPH ?altG {
+#								<@IDSUBJECT@> rdf:type skos:Concept.
+#								?altG prov:generatedAtTime ?altStartTime.
+#								FILTER( strdt( ?altStartTime, xsd:dateTime ) >= strdt( ?sEndTime, xsd:dateTime ) )
+#							}
+#						}
+#					}
+#
+
+
+
+
 
 # Query voor weergave versies
 stage:WeergaveVersiesConceptenQuery a elmo:Query;
@@ -5434,30 +5506,35 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		}
 		WHERE {
 			{
-				GRAPH ?g {
-					<@IDSUBJECT@> rdf:type skos:Collection.
-					OPTIONAL {
-						<@IDSUBJECT@> ?p ?o.
-					}
-					?g prov:generatedAtTime ?startTime.
-					?g prov:wasGeneratedBy ?a.
-					FILTER (
-						?p != rdf:type
-						&& ?p != bp4mc2:signature
-						&& ?p != dct:type
-						&& ?p != skos:member
-						&& ?p != dct:title
-					)
-					OPTIONAL {
-						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
-					}
-					FILTER (
-						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
-						&& (
-							!bound( ?endTime )
-							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+				{
+					GRAPH ?g {
+						<@IDSUBJECT@> rdf:type skos:Collection.
+						OPTIONAL {
+							<@IDSUBJECT@> ?p ?o.
+						}
+						?g prov:generatedAtTime ?startTime.
+						?g prov:wasGeneratedBy ?a.
+						OPTIONAL {
+							?a rdfs:label ?alabel.
+						}
+						FILTER (
+							?p != rdf:type
+							&& ?p != bp4mc2:signature
+							&& ?p != dct:type
+							&& ?p != skos:member
+							&& ?p != dct:title
 						)
-					)
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+						}
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
+					}
 				}
 				OPTIONAL {
 					GRAPH ?og {
@@ -5528,6 +5605,48 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		}
 	'''
 .
+
+#
+#				UNION
+#				{
+#					GRAPH ?g {
+#						<@IDSUBJECT@> rdf:type skos:Collection.
+#						OPTIONAL {
+#							<@IDSUBJECT@> ?p ?o.
+#						}
+#						?g prov:generatedAtTime ?startTime.
+#						?g prov:wasGeneratedBy ?a.
+#						FILTER (
+#							?p != rdf:type
+#							&& ?p != bp4mc2:signature
+#							&& ?p != dct:type
+#							&& ?p != skos:member
+#							&& ?p != dct:title
+#						)
+#						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+#						OPTIONAL {
+#							?a rdfs:label ?alabel.
+#						}
+#						FILTER (
+#							?p != rdf:type
+#							&& ?p != bp4mc2:signature
+#							&& ?p != dct:type
+#							&& ?p != skos:member
+#						)
+#						FILTER ( strdt( ?endTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime )
+#					}
+#					GRAPH doc:mastergraph {
+#						<@IDSUBJECT@> rdfs:isDefinedBy ?g.
+#					}
+#					FILTER NOT EXISTS {
+#						GRAPH ?altG {
+#							<@IDSUBJECT@> rdf:type skos:Concept.
+#							?altG prov:generatedAtTime ?altStartTime.
+#							FILTER( strdt( ?altStartTime, xsd:dateTime ) >= strdt( ?endTime, xsd:dateTime ) )
+#						}
+#					}
+#				}
+#
 
 
 # Query voor weergave versies

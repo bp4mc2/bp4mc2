@@ -206,30 +206,35 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		}
 		WHERE {
 			{
-				GRAPH ?g {
-					<@IDSUBJECT@> rdf:type skos:Collection.
-					OPTIONAL {
-						<@IDSUBJECT@> ?p ?o.
-					}
-					?g prov:generatedAtTime ?startTime.
-					?g prov:wasGeneratedBy ?a.
-					FILTER (
-						?p != rdf:type
-						&& ?p != bp4mc2:signature
-						&& ?p != dct:type
-						&& ?p != skos:member
-						&& ?p != dct:title
-					)
-					OPTIONAL {
-						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
-					}
-					FILTER (
-						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
-						&& (
-							!bound( ?endTime )
-							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+				{
+					GRAPH ?g {
+						<@IDSUBJECT@> rdf:type skos:Collection.
+						OPTIONAL {
+							<@IDSUBJECT@> ?p ?o.
+						}
+						?g prov:generatedAtTime ?startTime.
+						?g prov:wasGeneratedBy ?a.
+						OPTIONAL {
+							?a rdfs:label ?alabel.
+						}
+						FILTER (
+							?p != rdf:type
+							&& ?p != bp4mc2:signature
+							&& ?p != dct:type
+							&& ?p != skos:member
+							&& ?p != dct:title
 						)
-					)
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+						}
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
+					}
 				}
 				OPTIONAL {
 					GRAPH ?og {
@@ -300,6 +305,48 @@ stage:WeergaveTabelCollectiesQuery a elmo:Query;
 		}
 	'''
 .
+
+#
+#				UNION
+#				{
+#					GRAPH ?g {
+#						<@IDSUBJECT@> rdf:type skos:Collection.
+#						OPTIONAL {
+#							<@IDSUBJECT@> ?p ?o.
+#						}
+#						?g prov:generatedAtTime ?startTime.
+#						?g prov:wasGeneratedBy ?a.
+#						FILTER (
+#							?p != rdf:type
+#							&& ?p != bp4mc2:signature
+#							&& ?p != dct:type
+#							&& ?p != skos:member
+#							&& ?p != dct:title
+#						)
+#						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+#						OPTIONAL {
+#							?a rdfs:label ?alabel.
+#						}
+#						FILTER (
+#							?p != rdf:type
+#							&& ?p != bp4mc2:signature
+#							&& ?p != dct:type
+#							&& ?p != skos:member
+#						)
+#						FILTER ( strdt( ?endTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime )
+#					}
+#					GRAPH doc:mastergraph {
+#						<@IDSUBJECT@> rdfs:isDefinedBy ?g.
+#					}
+#					FILTER NOT EXISTS {
+#						GRAPH ?altG {
+#							<@IDSUBJECT@> rdf:type skos:Concept.
+#							?altG prov:generatedAtTime ?altStartTime.
+#							FILTER( strdt( ?altStartTime, xsd:dateTime ) >= strdt( ?endTime, xsd:dateTime ) )
+#						}
+#					}
+#				}
+#
 
 
 # Query voor weergave versies
