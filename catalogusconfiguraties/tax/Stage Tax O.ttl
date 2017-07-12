@@ -446,8 +446,6 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -776,8 +774,6 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -1657,8 +1653,6 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -1919,10 +1913,6 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 							GRAPH ?og {
 								?Object rdf:type skos:Concept.
 								?Object skos:semanticRelation ?Subject.
-								OPTIONAL {
-									?Object rdfs:label ?Object_label.
-									FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
-								}
 								FILTER NOT EXISTS {
 									?Object prov:invalidatedAtTime ?otime.
 								}
