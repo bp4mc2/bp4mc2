@@ -1,0 +1,9 @@
+@echo off
+echo Creating concatenated file T...
+powershell -Command "$myFile = (gc 'datasets local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.in.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Datasets Tax T.ttl', $myFile)"
+echo Creating concatenated file A...
+powershell -Command "$myFile = (gc 'datasets local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.fto.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Datasets Tax A.ttl', $myFile)"
+echo Creating concatenated file P...
+powershell -Command "$myFile = (gc 'datasets local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.cs.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('Datasets Tax P.ttl', $myFile)"
+echo Whoohoo! All done!
+pause

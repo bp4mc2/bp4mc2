@@ -1,0 +1,152 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix concept:	<http://pdok-ld-gck.in.kadaster.nl/id/begrip/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>.
+@prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>.
+@prefix collectie: <http://pdok-ld-gck.in.kadaster.nl/id/collectie/>.
+
+concept:giraffe rdf:type skos:Concept;
+	rdfs:label "giraffe"@nl;
+	rdfs:label "giraffe"@en;
+	kddef:status kdstat:Afgekeurd;
+.
+
+concept:walvis rdf:type skos:Concept ;
+	rdfs:label "walvis - ter afkeuring"@nl ;
+	rdfs:label "whale"@en ;
+	kddef:status kdstat:Ter_afkeuring 
+.
+
+concept:vos rdf:type skos:Concept ;
+	rdfs:label "vos - ter validatie"@nl ;
+	rdfs:label "fox"@en ;
+	kddef:status kdstat:Ter_validatie ;
+.
+
+concept:beer rdf:type skos:Concept ;
+	rdfs:label "beer - niet beoordeeld"@nl ;
+	rdfs:label "bear"@en ;
+	kddef:status kdstat:Niet_beoordeeld ;
+.
+
+concept:hond rdf:type skos:Concept ;
+	rdfs:label "hond"@nl ;
+	rdfs:label "dog"@en ;
+	kddef:status kdstat:Gevalideerd ;
+	kddef:validatie-annotatie "20170608 dit is een validatie annotatie" ;
+	skos:prefLabel "hond"@nl ;
+	skos:prefLabel "dog"@en ;
+	rdfs:comment "Dit is een uitleg voor het concept hond" ;
+	skos:definition "Dit is een formele definitie voor het concept hond." ;
+	skos:scopeNote "Dit is een toelichting voor het concept hond." ;
+	dct:source "Dit is een bron voor het concept hond." ;
+	skos:comment "Dit is commentaar voor het concept hond." ; 
+	skoslex:actor concept:rendier ;
+	skoslex:agent concept:olifant ;
+	skoslex:object concept:mier ;
+	skos:member collectie:beesten ;
+	thes:broaderGeneric concept:dier ;
+	thes:narrowerGeneric concept:puppy ;
+	thes:broaderPartitive concept:dierenrijk ;
+	thes:narrowerPartitive concept:poten ;
+	thes:narrowerPartitive concept:kop ;
+	thes:narrowerPartitive concept:lijf ;
+	thes:narrowerPartitive concept:staart ;
+	skos:semanticRelation concept:rendier ;
+	skos:semanticRelation concept:walvis ;
+	skos:semanticRelation concept:beer ;
+	skos:semanticRelation concept:olifant ;
+	skos:semanticRelation concept:giraffe ;
+	skos:closeMatch concept:vos ;
+	skos:closeMatch concept:puppy ;
+	skos:exactMatch concept:huisdier ;
+	skos:relatedMatch concept:kat ;
+	skos:broadMatch concept:puppy ;
+	skos:narrowMatch concept:dier ; 
+.
+
+concept:rendier rdf:type skos:Concept ;
+	rdfs:label "rendier" ;
+	rdfs:label "reindeer"@en ;
+	kddef:status kdstat:Geverifieerd ;
+	rdfs:comment "Dit is een uitleg voor het concept rendier." ;
+	skos:definition "Dit is een formele definitie voor het concept rendier." ;
+	skos:scopeNote "Dit is een toelichting voor het concept rendier." ;
+	skoslex:actor concept:olifant ;
+	skoslex:agent concept:hond ;
+	skos:member collectie:beesten ;
+	thes:broaderGeneric concept:dier ;
+	thes:broaderPartitive concept:dierenrijk ;
+	thes:narrowerPartitive concept:poten ;
+	thes:narrowerPartitive concept:kop ;
+	thes:narrowerPartitive concept:lijf ;
+	thes:narrowerPartitive concept:staart ;
+	skos:semanticRelation concept:hond ;
+	skos:semanticRelation concept:walvis ;
+	skos:semanticRelation concept:beer ;
+	skos:semanticRelation concept:kerst ;
+	skos:closeMatch concept:hert ;
+	skos:narrowMatch concept:dier ; 
+.
+
+concept:olifant rdf:type skos:Concept ;
+	rdfs:label "olifant"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:dier rdf:type skos:Concept ; 
+	rdfs:label "dier"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:puppy rdf:type skos:Concept ;
+	rdfs:label "puppy"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:closeMatch concept:hond ;
+.
+
+concept:dierenrijk rdf:type skos:Concept ;
+	rdfs:label "dierenrijk" ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:poten rdf:type skos:Concept ;
+	rdfs:label "poten"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:kop rdf:type skos:Concept ;
+	rdfs:label "kop"@nl ;
+	kddef:status kdstat:Geverifieerd ;
+.
+
+concept:lijf rdf:type skos:Concept ;
+	rdfs:label "lijf"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:staart rdf:type skos:Concept ;
+	rdfs:label "staart"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:huisdier rdf:type skos:Concept ;
+	rdfs:label "huisdier" ;
+	kddef:status kdstat:Gevalideerd ;
+.
+
+concept:hert rdf:type skos:Concept ;
+	rdfs:label "hert"@nl ;
+	kddef:status kdstat:Geverifieerd ;
+.
+
+concept:kerst rdf:type skos:Concept ;
+	rdfs:label "kerst"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+.

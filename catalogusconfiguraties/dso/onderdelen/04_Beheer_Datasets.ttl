@@ -19,6 +19,67 @@ container:datasetupload a elmo:Container;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:DSODatasetUploadScene;
 .
+#
+#PRODUCTIONS
+#
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOGeneriekeUploadScene;
+.
+updatestage:syncttlupdate a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOSpecifiekeUploadScene;
+.
+#
+#FORMS
+#
+
+# Selecteer dataset 
+stage:DSOSelectDataset a elmo:Form;
+	rdfs:label "Selecteer dataset";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "dataset";
+		rdfs:label "Selecteer dataset"@nl;
+		elmo:valuesFrom stage:search_datasets;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+#PARTS
+#
+
+#Zoeken van datasets
+stage:search_datasets a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+			?dataset rdfs:label ?dataset_label
+		}
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+			}
+		}
+		ORDER BY DESC(?dataset_label)
+	''';
+.
 
 #
 # SCENES
