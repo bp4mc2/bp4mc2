@@ -64,45 +64,17 @@ stage:DSOConceptenQuery a elmo:Query;
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
-			{
-				GRAPH ?g {
-					?concept rdf:type skos:Concept.
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {?concept skos:definition ?uitleg}
-					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-					}
-					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-					}
-					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-					}
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+				?concept rdfs:label ?concept_label.
+				OPTIONAL {?concept skos:definition ?uitleg}
+				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
 				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g
-				}
-				FILTER( substr( "@TYPE@",2 ) = "TYPE@" )
 			}
-			UNION
-			{
-				GRAPH ?g {
-					?concept rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {?concept skos:definition ?uitleg}
-					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g
-				}
-				FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g
 			}
 			FILTER NOT EXISTS {
 				GRAPH ?toeleidingsGraph {
