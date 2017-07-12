@@ -1,0 +1,120 @@
+@prefix concept:		<http://localhost:8080/catalogus/dso/id/concept/>.
+@prefix collection:		<http://localhost:8080/catalogus/dso/id/collection/>.
+@prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: 			<http://www.w3.org/2004/02/skos/core#>.
+@prefix skoslex: 		<http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: 			<http://purl.org/iso25964/skos-thes#>.
+@prefix dc: 			<http://purl.org/dc/elements/1.1/>.
+@prefix dct: 			<http://purl.org/dc/terms/>.
+@prefix dctype: 		<http://purl.org/dc/dcmitype/>.
+
+# Concepten
+concept:GeneriekBeest a skos:Concept;
+	skos:prefLabel "GeneriekBeest";
+	rdfs:label "Generiek beest";
+	skos:definition "Een beest zo generiek dat het zijn gelijke niet kent";
+	skos:inScheme concept:beestDomein;
+	skos:altLabel "Generiek dier";
+	dct:source concept:Art1_2Lid1Awb;
+	dct:valid "1-1-2001";
+	thes:narrowerGeneric concept:SpecifiekBeest;
+	thes:narrowerPartitive concept:Lijf;
+	skos:semanticRelation concept:AnderBeest;
+	skoslex:refersTo concept:GeneriekeActiviteit;
+	skoslex:object concept:GeneriekeNorm
+.
+
+concept:SpecifiekBeest a skos:Concept;
+	skos:prefLabel "SpecifiekBeest";
+	rdfs:label "Specifieke beest";
+.
+
+concept:NogSpecifiekerBeest a skos:Concept;
+	skos:prefLabel "NogSpecifiekBeest";
+	rdfs:label "Nog specifiekere beest";
+	thes:broaderGeneric concept:SpecifiekBeest
+.
+
+concept:AnderBeest a skos:Concept;
+	skos:prefLabel "AnderBeest";
+	rdfs:label "Ander beest";
+.
+
+concept:Kop a skos:Concept;
+	skos:prefLabel "Kop";
+	rdfs:label "Kop";
+	thes:broaderPartitive concept:GeneriekBeest
+.
+
+concept:Lijf a skos:Concept;
+	skos:prefLabel "Lijf";
+	rdfs:label "Lijf";
+.
+
+concept:SingleBeest a skos:Concept;
+	skos:prefLabel "SingleBeest";
+	rdfs:label "Single beest";
+.
+
+# Activiteiten
+concept:GeneriekeActiviteit a skos:Concept, skoslex:Act;
+	skos:prefLabel "GeneriekeActiviteit";
+	rdfs:label "Generieke activiteit";
+.
+
+# Normen
+concept:GeneriekeNorm a skos:Concept, skoslex:Norm;
+	skos:prefLabel "GeneriekeNorm";
+	rdfs:label "Generieke norm";
+.
+
+# Objecten
+concept:GeneriekObject a skos:Concept, skoslex:Object;
+	skos:prefLabel "GeneriekObject";
+	rdfs:label "Generiek object";
+.
+
+# Collecties
+collection:StandaardBeesten a skos:Collection;
+	rdfs:label "Standaard beesten";
+	skos:prefLabel "StandaardBeesten";
+	skos:member concept:GeneriekBeest;
+	skos:member concept:SpecifiekBeest;
+	skos:member concept:NogSpecifiekerBeest;
+.
+
+# Waardelijsten
+collection:Waardelijsten a skos:Collection;
+	rdfs:label "Waardelijsten";
+	skos:prefLabel "Waardelijsten";
+	skos:member collection:Lichaamsdelen;
+.
+
+collection:Lichaamsdelen a skos:Collection;
+	rdfs:label "Lichaamsdelen";
+	skos:prefLabel "Lichaamsdelen";
+	skos:member concept:Kop;
+	skos:member concept:Lijf;
+	skos:member concept:Poten;
+.
+
+# Toeleidingsbegrippen
+collection:Toeleidingsbegrippen a skos:Collection;
+	rdfs:label "Toeleidingsbegrippen";
+	skos:prefLabel "Toeleidingsbegrippen";
+	skos:member concept:Monster;
+.
+
+concept:Monster a skos:Concept;
+	skos:closeMatch concept:GeneriekBeest;
+	rdfs:label "monster";
+	skos:prefLabel "Monster";
+.
+
+# Bronnen
+concept:Art1_2Lid1Awb a dctype:Text;
+	rdfs:label "Artikel 1:2 Lid 1 Awb";
+	dct:source <http://www.internetconsultatie.nl/omgevingswet_besluit_activiteitenleefomgeving>;
+	dct:valid "2016-07-01";
+.

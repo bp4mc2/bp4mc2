@@ -1908,6 +1908,24 @@ stage:TaxRelatiecontroleQuery a elmo:query;
                     GRAPH ?sg {
                         ?Subject rdf:type skos:Concept.
                         ?Subject skos:semanticRelation ?Object.
+						OPTIONAL {
+							GRAPH ?og {
+								?Object rdf:type skos:Concept.
+								OPTIONAL {
+									?Object skos:semanticRelation ?AltObject.
+								}
+								OPTIONAL {
+									?Object rdfs:label ?Object_label.
+									FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
+								}
+								FILTER NOT EXISTS {
+									?Object prov:invalidatedAtTime ?otime.
+								}
+							}
+							GRAPH doc:mastergraph {
+								?Object rdfs:isDefinedBy ?og.
+							}
+						}
                         OPTIONAL {
                             ?Subject rdfs:label ?Subject_label.
                             FILTER( LANG( ?Subject_label ) = "" || LANGMATCHES( LANG( ?Subject_label ), "nl" ) )
@@ -1915,30 +1933,16 @@ stage:TaxRelatiecontroleQuery a elmo:query;
                         FILTER NOT EXISTS {
                             ?Subject prov:invalidatedAtTime ?time.
                         }
-                    }
-                    GRAPH ?og {
-                        ?Object rdf:type skos:Concept.
-                        OPTIONAL {
-                            ?Object skos:semanticRelation ?AltObject.
-                        }
-                        OPTIONAL {
-                            ?Object rdfs:label ?Object_label.
-                            FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
-                        }
-                        FILTER NOT EXISTS {
-                            ?Object prov:invalidatedAtTime ?otime.
-                        }
+						FILTER(
+							!BOUND( ?AltObject )
+							|| ( ?AltObject != ?Subject )
+						)
                     }
                     GRAPH doc:mastergraph {
                         ?Subject rdfs:isDefinedBy ?sg.
-                        ?Object rdfs:isDefinedBy ?og.
                     }
                 }
   			}
-  			FILTER NOT EXISTS {
-				?Subject skos:semanticRelation ?Object.
-    			?Object skos:semanticRelation ?Subject.
-			}
   			BIND( "Gerelateerd aan" AS ?Relatie )
 		}
 		ORDER BY ?Subject_label
