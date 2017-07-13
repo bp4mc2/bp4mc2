@@ -163,27 +163,27 @@ stage:TaxBeheermenu a elmo:Part;
 			elmo:index "3";
 		#	elmo:data [
 		#		rdfs:label "Upload concepten (Excel)";
-		#		elmo:index "1";
+		#		elmo:index "4";
 		#		xhtml:link "/container/excelupload";
 		#	];
-			elmo:data [
-				rdfs:label "Upload concepten (RDF of Turtle)";
-				elmo:index "2";
-				xhtml:link "/container/ttlupload";
-			];
-			elmo:data [
-				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
-				elmo:index "3";
-				xhtml:link "/update/syncttlupload";
-			];
+		#	elmo:data [
+		#		rdfs:label "Upload concepten (RDF of Turtle)";
+		#		elmo:index "2";
+		#		xhtml:link "/container/ttlupload";
+		#	];
+		#	elmo:data [
+		#		rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+		#		elmo:index "3";
+		#		xhtml:link "/update/syncttlupload";
+		#	];
 			elmo:data [
 				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
-				elmo:index "5";
+				elmo:index "1";
 				xhtml:link "/container/datasetupload";
 			];
 			elmo:data [
 				rdfs:label "Upload status (RDF of Turtle)";					#Voor het updaten van de status-graph, deze bevat geen concepten en kan dus niet via 'Upload concepten'.
-				elmo:index "4";
+				elmo:index "5";
 				xhtml:link "/container/statusupload";
 			];
 		];
@@ -446,8 +446,6 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -776,8 +774,6 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -1657,8 +1653,6 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -1903,7 +1897,7 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 		SELECT DISTINCT ?Subject ?Subject_label ?Relatie ?Object ?Object_label
 		WHERE {
   			{
-                SELECT ?Subject ?Subject_label ?Object ?Object_label ?AltObject
+                SELECT ?Subject ?Subject_label ?Object ?Object_label
                 WHERE {
                     GRAPH ?sg {
                         ?Subject rdf:type skos:Concept.
@@ -1915,30 +1909,35 @@ stage:TaxRelatiecontroleQuery a elmo:query;
                         FILTER NOT EXISTS {
                             ?Subject prov:invalidatedAtTime ?time.
                         }
+						FILTER NOT EXISTS {
+							GRAPH ?og {
+								?Object rdf:type skos:Concept.
+								?Object skos:semanticRelation ?Subject.
+								FILTER NOT EXISTS {
+									?Object prov:invalidatedAtTime ?otime.
+								}
+							}
+							GRAPH doc:mastergraph {
+								?Object rdfs:isDefinedBy ?og.
+							}
+						}
                     }
-                    GRAPH ?og {
-                        ?Object rdf:type skos:Concept.
-                        OPTIONAL {
-                            ?Object skos:semanticRelation ?AltObject.
-                        }
-                        OPTIONAL {
-                            ?Object rdfs:label ?Object_label.
-                            FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
-                        }
-                        FILTER NOT EXISTS {
-                            ?Object prov:invalidatedAtTime ?otime.
-                        }
-                    }
+					GRAPH ?og {
+						?Object rdf:type skos:Concept.
+						OPTIONAL {
+							?Object rdfs:label ?Object_label.
+							FILTER( LANG( ?Object_label ) = "" || LANGMATCHES( LANG( ?Object_label ), "nl" ) )
+						}
+						FILTER NOT EXISTS {
+							?Object prov:invalidatedAtTime ?otime.
+						}
+					}
                     GRAPH doc:mastergraph {
                         ?Subject rdfs:isDefinedBy ?sg.
-                        ?Object rdfs:isDefinedBy ?og.
+						?Object rdfs:isDefinedBy ?og.
                     }
                 }
   			}
-  			FILTER NOT EXISTS {
-				?Subject skos:semanticRelation ?Object.
-    			?Object skos:semanticRelation ?Subject.
-			}
   			BIND( "Gerelateerd aan" AS ?Relatie )
 		}
 		ORDER BY ?Subject_label
