@@ -40,7 +40,7 @@ stage:TaxLoopingTabel a elmo:Part;
 	elmo:query stage:TaxLoopingQuery
 .
 
-#query toont alle triples <A skos:semanticRelation B>, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
+#query toont alle triples, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
 stage:TaxLoopingQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -89,6 +89,7 @@ stage:TaxLoopingQuery a elmo:query;
 							|| ?link = skoslex:actor
 							|| ?link = skoslex:agent
 							|| ?link = skoslex:object
+							|| ?link = skos:member
 						)
                     }
                     GRAPH ?og {
@@ -117,6 +118,7 @@ stage:TaxLoopingQuery a elmo:query;
 							|| ?link = skoslex:actor
 							|| ?link = skoslex:agent
 							|| ?link = skoslex:object
+							|| ?link = skos:member
 						)
                     }
                     GRAPH doc:mastergraph {
@@ -143,7 +145,9 @@ stage:TaxLoopingQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)

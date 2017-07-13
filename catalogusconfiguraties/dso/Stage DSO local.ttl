@@ -639,6 +639,7 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/dso/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/catalogus/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix catalogus: <http://localhost:8080/catalogus/dso/id/catalogus/>
 		prefix activity: <http://localhost:8080/catalogus/dso/id/catalogus/@CURRENTMOMENT@>
@@ -683,11 +684,17 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				catalogus:tomcatUser rdf:type prov:Agent.
 				catalogus:tomcatUser rdfs:label "Tomcat User".
 				catalogus:tomcatUser foaf:givenName "Tomcat User".
 				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".	
 			}
 		}
 		
@@ -1969,6 +1976,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/dso/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix activity: <http://localhost:8080/catalogus/dso/id/concept/@CURRENTMOMENT@>
@@ -2010,6 +2018,11 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				concept:tomcatUser rdf:type prov:Agent.
 				concept:tomcatUser rdfs:label "Tomcat User".
 				concept:tomcatUser foaf:givenName "Tomcat User".
@@ -2579,6 +2592,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/dso/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix catalogus: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix activity: <http://localhost:8080/catalogus/dso/id/dataset/@CURRENTMOMENT@>
@@ -2623,6 +2637,11 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				catalogus:tomcatUser rdf:type prov:Agent.
 				catalogus:tomcatUser rdfs:label "Tomcat User".
 				catalogus:tomcatUser foaf:givenName "Tomcat User".
