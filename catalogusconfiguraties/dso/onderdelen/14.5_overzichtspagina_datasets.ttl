@@ -27,7 +27,29 @@ stage:DSODatasetTabel a elmo:Part;
 	];
 	elmo:query stage:DSODatasetQuery;
 .
-
+stage:GlossaryDatasets a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		CONSTRUCT ?dataset ?dataset_label
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+.
 # QUERY
 
 # query voor tonen alle datasets

@@ -58,6 +58,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/tax/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/tax/datasets/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/tax/>
 		prefix dataset: <http://localhost:8080/catalogus/tax/id/dataset/>
 		prefix catalogus: <http://localhost:8080/catalogus/tax/id/dataset/>
 		prefix activity: <http://localhost:8080/catalogus/tax/id/dataset/@CURRENTMOMENT@>
@@ -121,11 +122,16 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
-				catalogus:tomcatUser rdf:type prov:Agent.
-				catalogus:tomcatUser rdfs:label "Tomcat User".
-				catalogus:tomcatUser foaf:givenName "Tomcat User".
-				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
+				concept:tomcatUser rdf:type prov:Agent.
+				concept:tomcatUser rdfs:label "Tomcat User".
+				concept:tomcatUser foaf:givenName "Tomcat User".
+				concept:tomcatUser foaf:mbox "tomcat@user.org".
+				concept:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
 		
