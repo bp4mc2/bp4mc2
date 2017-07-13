@@ -193,39 +193,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				}
             }
 		}
-		
-		INSERT {
-			GRAPH ?g {
-				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
-			}
-		}
-		WHERE {
-			GRAPH doc:mastergraph {
-				?s rdfs:isDefinedBy ?g.
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Dataset
-					|| ?type = dcat:Distribution
-					|| ?type = dcat:Catalog
-				)
-			}
-			FILTER NOT EXISTS {
-				GRAPH container:datasetupload {
-					?s rdf:type ?type.
-					FILTER (
-						?type = dcat:Dataset
-						|| ?type = dcat:Distribution
-						|| ?type = dcat:Catalog
-					)
-				}
-			}
-			FILTER NOT EXISTS {
-				GRAPH ?g {
-					?s prov:invalidatedAtTime ?time.
-				}
-			}
-		}
-		
+				
 		DELETE {
 			GRAPH doc:mastergraph {
 				?s bp4mc2:signature ?sig.
@@ -278,7 +246,8 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		
 		INSERT {
 			GRAPH ?g {
-				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@".
+				?s dct:modified "@CURRENTMOMENT@".
 			}
 		}
 		WHERE {
@@ -296,6 +265,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			FILTER NOT EXISTS {
 				GRAPH ?g {
 					?s prov:invalidatedAtTime ?time.
+					?s dct:modfied ?time.
 				}
 			}
 		}
