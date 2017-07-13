@@ -332,18 +332,7 @@ container:concepten-put-xml a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
-	];
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:concepten-put-xml {
+					UNION
 					{
 						?s rdf:type skos:Concept.
 						FILTER NOT EXISTS {
@@ -360,7 +349,7 @@ container:concepten-put-xml a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder term bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -415,18 +404,7 @@ container:concepten-post-xml a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
-	];
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:concepten-post-xml {
+					UNION 
 					{
 						?s rdf:type skos:Concept.
 						FILTER NOT EXISTS {
@@ -443,7 +421,7 @@ container:concepten-post-xml a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder term bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .

@@ -938,6 +938,14 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "3"; rdfs:label "Visualisatie"; html:link "query/kkg-visualisatie"];
 		];
 		elmo:data [
+			elmo:index "6";
+			rdfs:label "Vocabulaires";
+			elmo:data [ elmo:index "1"; rdfs:label "rdf"; html:link "query/voc-rdf"];
+			elmo:data [ elmo:index "2"; rdfs:label "dcat"; html:link "query/voc-dcat"];
+			elmo:data [ elmo:index "3"; rdfs:label "rdfs"; html:link "query/voc-rdfs"];
+			elmo:data [ elmo:index "4"; rdfs:label "shacl"; html:link "query/voc-shacl"];
+		];
+		elmo:data [
 			elmo:index "9";
 			rdfs:label "Sync";
 			elmo:data [ elmo:index "1"; rdfs:label "Alles (initial start)"; html:link "update/sync-all"];
@@ -1750,6 +1758,7 @@ updatestage:sync-all a elmo:Production;
 	elmo:contains	stage:sync_import_powder-s;
 	elmo:contains	stage:sync_import_prov;
 	elmo:contains	stage:sync_import_rdf-schema;
+	elmo:contains	stage:sync_import_shacl;
 	elmo:contains	stage:sync_import_skos;
 	elmo:contains	stage:sync_import_skos-thes;
 	elmo:contains	stage:sync_import_skos-lex;
@@ -1792,6 +1801,7 @@ updatestage:sync-imports a elmo:Production;
 	elmo:contains	stage:sync_import_powder-s;
 	elmo:contains	stage:sync_import_prov;
 	elmo:contains	stage:sync_import_rdf-schema;
+	elmo:contains	stage:sync_import_shacl;
 	elmo:contains	stage:sync_import_skos;
 	elmo:contains	stage:sync_import_skos-thes;
 	elmo:contains	stage:sync_import_skos-lex;
@@ -2127,6 +2137,22 @@ stage:sync_import_rdf-schema a elmo:Scene;
 		}
 	''';
 .
+stage:sync_import_shacl a elmo:Scene;
+	elmo:index "313";
+	rdfs:label "shacl vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://localhost:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/shacl.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
 stage:sync_import_skos a elmo:Scene;
 	elmo:index "313";
 	rdfs:label "skos vocabulary import";
@@ -2249,6 +2275,38 @@ stage:sync_dcat_ap_eu a elmo:Scene;
 	''';
 .
  
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+
+stage:voc-dcat	a	elmo:Representation;
+	elmo:url-pattern	"/query/voc-dcat$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:webpage "https://github.com/bp4mc2/bp4mc2/raw/master/model/imported/dcat.rdf";
+.
+stage:voc-rdf	a	elmo:Representation;
+	elmo:url-pattern	"/query/voc-rdf$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:webpage "https://github.com/bp4mc2/bp4mc2/raw/master/model/imported/22-rdf-syntax-ns.rdf";
+.
+stage:voc-rdfs	a	elmo:Representation;
+	elmo:url-pattern	"/query/voc-rdfs$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:webpage "https://github.com/bp4mc2/bp4mc2/raw/master/model/imported/rdf-schema.rdf";
+.
+stage:voc-shacl	a	elmo:Representation;
+	elmo:url-pattern	"/query/voc-shacl$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:webpage "https://github.com/bp4mc2/bp4mc2/raw/master/model/imported/shacl.ttl";
+. 
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.

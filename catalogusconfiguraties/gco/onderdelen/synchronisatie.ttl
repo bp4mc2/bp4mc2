@@ -32,6 +32,7 @@ updatestage:sync-all a elmo:Production;
 	elmo:contains	stage:sync_import_powder-s;
 	elmo:contains	stage:sync_import_prov;
 	elmo:contains	stage:sync_import_rdf-schema;
+	elmo:contains	stage:sync_import_shacl;
 	elmo:contains	stage:sync_import_skos;
 	elmo:contains	stage:sync_import_skos-thes;
 	elmo:contains	stage:sync_import_skos-lex;
@@ -74,6 +75,7 @@ updatestage:sync-imports a elmo:Production;
 	elmo:contains	stage:sync_import_powder-s;
 	elmo:contains	stage:sync_import_prov;
 	elmo:contains	stage:sync_import_rdf-schema;
+	elmo:contains	stage:sync_import_shacl;
 	elmo:contains	stage:sync_import_skos;
 	elmo:contains	stage:sync_import_skos-thes;
 	elmo:contains	stage:sync_import_skos-lex;
@@ -403,6 +405,22 @@ stage:sync_import_rdf-schema a elmo:Scene;
 		where {
 			service <http://localhost:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/rdf-schema.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_shacl a elmo:Scene;
+	elmo:index "313";
+	rdfs:label "shacl vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://localhost:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/shacl.ttl> {
 					?s?p?o
 				}
 			}

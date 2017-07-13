@@ -71,9 +71,9 @@ stage:DSOWelkomstpagina rdf:type elmo:Representation;
 					</div>
 					<div class='welkom' style='float: right'>
 						<br/><br/>
-						<a href='/catalogus/dso/query/overzichtspagina?type=Act&amp;term=a'>
+						<a href='/catalogus/dso/query/model'>
 							<img src='images/activiteitenicon.png'/>
-							<br/>Alle activiteiten
+							<br/>Model Catalogus
 						</a>
 					</div>
 				</div>
@@ -258,35 +258,6 @@ stage:DSOMenu a elmo:Part;
 			];
 		];
 		elmo:data [
-			rdfs:label "Activiteiten";
-			elmo:index "2";
-			elmo:data [
-				rdfs:label "Alle activiteiten";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act";
-				elmo:index "1"
-			];
-			elmo:data [
-				rdfs:label "Omgevingswet";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=Omgevingswet";
-				elmo:index "2"
-			];
-			elmo:data [
-				rdfs:label "BAL";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BAL";
-				elmo:index "3"
-			];
-			elmo:data [
-				rdfs:label "BBL";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BBL";
-				elmo:index "4"
-			];
-			elmo:data [
-				rdfs:label "BKL";
-				xhtml:link "/catalogus/dso/query/overzichtspagina?term=&type=Act&dataset=BKL";
-				elmo:index "5"
-			];
-		];
-		elmo:data [
 			rdfs:label "Registraties";
 			elmo:index "3";
 			elmo:data [
@@ -306,13 +277,18 @@ stage:DSOMenu a elmo:Part;
 			];
 		];
 		elmo:data [
+			rdfs:label "Datasets";
+			xhtml:link "/catalogus/dso/query/overzichtdatasets";
+			elmo:index "4";
+		];
+		elmo:data [
 			rdfs:label "Producten/diensten";
 			xhtml:link "/catalogus/dso/query/producten";
-			elmo:index "4"
+			elmo:index "5"
 		];
 		elmo:data [
 			rdfs:label "Model Catalogus";
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [	
 				elmo:index "2";
 				rdfs:label "Vocabulaire";
@@ -331,7 +307,7 @@ stage:DSOMenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Requirements Catalogus";
-			elmo:index "5";
+			elmo:index "7";
 			elmo:data [
 				elmo:index "1";
 				rdfs:label "Lijst";
@@ -363,7 +339,7 @@ stage:DSOMenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Catalogus";
 				elmo:index "2";
-				xhtml:link "/catalogus/dso/doc/catalogus/Beestjes";
+				xhtml:link "/catalogus/dso/doc/catalogus/DigitaalStelselOmgevingswet";
 			];
 			elmo:data [ 
 				rdfs:label "IMOD";
@@ -375,7 +351,7 @@ stage:DSOMenu a elmo:Part;
 				xhtml:link "/catalogus/dso/query/help";
 				elmo:index "4"
 			];
-			elmo:index "7";
+			elmo:index "8";
 		];
 	]
 .
@@ -398,23 +374,23 @@ stage:DSOBeheermenu a elmo:Part;
 		elmo:data [
 			rdfs:label "Upload concepten";
 			elmo:index "2";
+			# elmo:data [
+			#	rdfs:label "Upload of update volledige dataset (Excel)";
+			#	elmo:index "1";
+			#	xhtml:link "/catalogus/dso/container/excelupload";
+			# ];
+			# elmo:data [
+			#	rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
+			#	elmo:index "2";
+			#	xhtml:link "/catalogus/dso/container/ttlupload";
+			# ];
 			elmo:data [
-				rdfs:label "Upload of update volledige dataset (Excel)";
-				elmo:index "1";
-				xhtml:link "/catalogus/dso/container/excelupload";
-			];
-			elmo:data [
-				rdfs:label "Upload op update volledige dataset (RDF of Turtle)";
-				elmo:index "2";
-				xhtml:link "/catalogus/dso/container/ttlupload";
-			];
-			elmo:data [
-				rdfs:label "Upload of update enkel concept (Excel)";
+				rdfs:label "Upload of update dataset (Excel)";
 				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload of update enkel concept (RDF of Turtle)";
+				rdfs:label "Upload of update dataset (RDF of Turtle)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
@@ -533,6 +509,16 @@ stage:DSOBeheermenu a elmo:Part;
 				rdfs:label "Sync Begrippen (model)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/update/syncBegrippen";
+			];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "5";
+				xhtml:link "/catalogus/dso/update/syncttlupload";
+			];
+			elmo:data [
+				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				elmo:index "6";
+				xhtml:link "/catalogus/dso/update/syncttlupdate";
 			];
 		];
 		elmo:data [
@@ -1185,18 +1171,7 @@ container:concepten-put-xml a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
-	];
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:concepten-put-xml {
+					UNION
 					{
 						?s rdf:type skos:Concept.
 						FILTER NOT EXISTS {
@@ -1213,7 +1188,7 @@ container:concepten-put-xml a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder term bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1268,18 +1243,7 @@ container:concepten-post-xml a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
-	];
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:concepten-post-xml {
+					UNION 
 					{
 						?s rdf:type skos:Concept.
 						FILTER NOT EXISTS {
@@ -1296,7 +1260,7 @@ container:concepten-post-xml a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder term bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -2528,6 +2492,67 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:DSODatasetUploadScene;
+.
+#
+#PRODUCTIONS
+#
+updatestage:syncttlupload a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOGeneriekeUploadScene;
+.
+updatestage:syncttlupdate a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOSpecifiekeUploadScene;
+.
+#
+#FORMS
+#
+
+# Selecteer dataset 
+stage:DSOSelectDataset a elmo:Form;
+	rdfs:label "Selecteer dataset";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "dataset";
+		rdfs:label "Selecteer dataset"@nl;
+		elmo:valuesFrom stage:search_datasets;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+#PARTS
+#
+
+#Zoeken van datasets
+stage:search_datasets a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		CONSTRUCT {
+			?dataset rdfs:label ?dataset_label
+		}
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+			}
+		}
+		ORDER BY DESC(?dataset_label)
+	''';
 .
 
 #
@@ -3954,37 +3979,37 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Heeft betrekking op"@nl;
 		elmo:applies-to skos:semanticRelation;
-		elmo:indx "11";
+		elmo:index "11";
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
 		elmo:applies-to skos:altLabel;
-		elmo:indx "12";
+		elmo:index "12";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
-		elmo:indx "13";
+		elmo:index "13";
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
-		elmo:indx "14";
+		elmo:index "14";
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
-		elmo:indx "15";
+		elmo:index "15";
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
 		elmo:applies-to skos:member;
-		elmo:indx "16";
+		elmo:index "16";
 	];
 	elmo:fragment [
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
-		elmo:indx "17";
+		elmo:index "17";
 	];
 	elmo:fragment [
 		rdfs:label "Is gerealiseerd in"@nl;
@@ -6137,6 +6162,63 @@ stage:WeergaveVersiesCatalogQuery a elmo:Query;
 #
 #
 #
+# OVERZICHTSPAGINA DATASETS
+#
+#
+#
+
+
+# REPRESENTATIONS
+
+# Overzichtspagina Datasets
+stage:DSODatasetOverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/overzichtdatasets(|/|\\..+)$";
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:DSODatasetTabel;
+.
+
+# Datasettabel voor overzichtsweergave
+stage:DSODatasetTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:DSODatasetQuery;
+.
+
+# QUERY
+
+# query voor tonen alle datasets
+stage:DSODatasetQuery a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				?dataset rdfs:comment ?uitleg.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+. 
+#
+#
+#
 # WEERGAVEPAGINA'S
 #
 #
@@ -6313,18 +6395,18 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
 		construct {
-			<@SUBJECT@> ?p ?o.
+			<@IDSUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
-			<@SUBJECT@> prov:wasGeneratedBy ?a.
-			<@SUBJECT@> prov:generatedAtTime ?t.
+			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
+			<@IDSUBJECT@> prov:generatedAtTime ?t.
 			?a rdfs:label ?alabel.
 		}
 		WHERE {
 			{
 				{
 					GRAPH ?g {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Dataset.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type dcat:Dataset.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -6351,8 +6433,8 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 				UNION
 				{
 					GRAPH <@GRAPH@> {
-						<@SUBJECT@> ?p ?o.
-						<@SUBJECT@> rdf:type dcat:Dataset.
+						<@IDSUBJECT@> ?p ?o.
+						<@IDSUBJECT@> rdf:type dcat:Dataset.
 						?g prov:wasGeneratedBy ?a.
 						?g prov:generatedAtTime ?t.
 					}
@@ -6393,18 +6475,18 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 
-		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
 		WHERE {
 			{
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Dataset.
+					<@IDSUBJECT@> rdf:type dcat:Dataset.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
 				}
 				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
+					<@IDSUBJECT@> rdfs:isDefinedBy ?actualGraph.
 					?graph dc:isVersionOf doc:mastergraph
 				}	
 				FILTER( ?graph != ?actualGraph )
@@ -6412,10 +6494,10 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 			}
 			UNION {
 				GRAPH ?graph {
-					<@SUBJECT@> rdf:type dcat:Dataset.
+					<@IDSUBJECT@> rdf:type dcat:Dataset.
 					?graph prov:generatedAtTime ?concept_label.
 					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -7903,13 +7985,7 @@ stage:DSOTree a elmo:Part;
 #		1) Ophalen van alle subjects en objects die in de boom moeten komen
 #		2) Koppelen van de collecties aan die subjects en objects
 #
-#	Het eerste deel (ophalen alle subjects en objects) valt weer uiteen in twee delen:
-#		- eentje voor als er gÃ©Ã©n TYPE is meegegeven
-#		- eentje voor als dat wel gebeurd is
-#	Die twee delen zijn in feite gelijk aan elkaar, met als enige verschil dat:
-#		- er in het eerste geval getest wordt op rdf:type skos:Concept.
-#		- er in het tweede geval getest wordt op rdf:type skoslex:@TYPE@
-#	Het daadwerkelijk ophalen van de subjects en objects bestaat ook weer uit drie delen:
+#	Het daadwerkelijk ophalen van de subjects en objects bestaat uit drie delen:
 #		a) Het ophalen van de triples met als predicates thes:broaderGeneric en thes:broaderPartitive
 #		b) Het ophalen van de triples met als predicates thes:narrowerGeneric en thes:narrowerPartitive
 #			N.B. deze laatste triples worden 'omgedraaid' in de weergave, omdat thes:narrowerGeneric de inverse is van thes:broaderGeneric
@@ -7954,263 +8030,107 @@ stage:DSOTreeQuery a elmo:Query;
 		}
 		WHERE {
 			{
-				{
-					SELECT ?s, ?sLabel, ?o, ?oLabel
-					WHERE {
-						{
-							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
-							WHERE {
-								GRAPH ?broaderSubjectGraph {
-									{
-										?broaderSubject rdf:type skos:Concept.
-										?broaderSubject rdfs:label ?broaderSubjectLabel.
-										?broaderSubject thes:broaderGeneric ?broaderObject.
-									}
-									UNION
-									{
-										?broaderSubject rdf:type skos:Concept.
-										?broaderSubject rdfs:label ?broaderSubjectLabel.
-										?broaderSubject thes:broaderPartitive ?broaderObject.									
-									}
-									FILTER NOT EXISTS {
-										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
-									}
-									FILTER NOT EXISTS {
-										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-									}
-									FILTER NOT EXISTS {
-										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-									}
-									FILTER NOT EXISTS {
-										?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-									}
-								}
-								GRAPH ?broaderObjectGraph {
-									?broaderObject rdf:type skos:Concept.
-									?broaderObject rdfs:label ?broaderObjectLabel.
-									FILTER NOT EXISTS {
-										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
-									}
-									FILTER NOT EXISTS {
-										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-									}
-									FILTER NOT EXISTS {
-										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-									}
-									FILTER NOT EXISTS {
-										?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-									}
-								}
-								GRAPH doc:mastergraph {
-									?broaderSubject rdfs:isDefinedBy ?broaderSubjectGraph.
-									?broaderObject rdfs:isDefinedBy ?broaderObjectGraph.
-								}
-							}
-						}
-						UNION
-						{
-							SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
-							WHERE {
-								GRAPH ?narrowerSubjectGraph {
-									{
-										?narrowerSubject rdf:type skos:Concept.
-										?narrowerSubject rdfs:label ?narrowerSubjectLabel.
-										?narrowerSubject thes:narrowerGeneric ?narrowerObject.
-									}
-									UNION
-									{
-										?narrowerSubject rdf:type skos:Concept.
-										?narrowerSubject rdfs:label ?narrowerSubjectLabel.
-										?narrowerSubject thes:narrowerPartitive ?narrowerObject.
-									}
-									FILTER NOT EXISTS {
-										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
-									}
-									FILTER NOT EXISTS {
-										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-									}
-									FILTER NOT EXISTS {
-										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-									}
-									FILTER NOT EXISTS {
-										?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-									}
-								}
-								GRAPH ?narrowerObjectGraph {
-									?narrowerObject rdf:type skos:Concept.
-									?narrowerObject rdfs:label ?narrowerObjectLabel.
-									FILTER NOT EXISTS {
-										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
-									}
-									FILTER NOT EXISTS {
-										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-									}
-									FILTER NOT EXISTS {
-										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-									}
-									FILTER NOT EXISTS {
-										?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-									}
-								}
-								GRAPH doc:mastergraph {
-									?narrowerSubject rdfs:isDefinedBy ?narrowerSubjectGraph.
-									?narrowerObject rdfs:isDefinedBy ?narrowerObjectGraph.
-								}
-							}
-						}
-						UNION
-						{
-							SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
-							WHERE {
-								GRAPH ?subjectGraph {
-									?subject rdf:type skos:Concept.
-									?subject rdfs:label ?subjectLabel.
-									OPTIONAL { ?subject ?predicate ?object }
-									FILTER(
-										?predicate != thes:broaderGeneric &&
-										?predicate != thes:broaderPartitive
-									)
-									FILTER NOT EXISTS {
-										?subject prov:invalidatedAtTime ?subjectTime.
-									}
-									FILTER NOT EXISTS {
-										?subject rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-									}
-									FILTER NOT EXISTS {
-										?subject rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-									}
-									FILTER NOT EXISTS {
-										?subject rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-									}
-								}
-								GRAPH doc:mastergraph {
-									?subject rdfs:isDefinedBy ?subjectGraph.
-								}
-								OPTIONAL {
-									GRAPH ?objectGraph {
-										?object rdf:type skos:Concept.
-										?object rdfs:label ?objectLabel.
-										FILTER NOT EXISTS {
-											?object prov:invalidatedAtTime ?objectTime.
-										}
-										FILTER NOT EXISTS {
-											?object rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-										}
-										FILTER NOT EXISTS {
-											?object rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-										}
-										FILTER NOT EXISTS {
-											?object rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-										}
-									}
-									GRAPH doc:mastergraph {
-										?object rdfs:isDefinedBy ?objectGraph.
-									}
-								}
-							}
-						}
-					}
-				}
-				FILTER( substr( "@TYPE@",2 ) = "TYPE@" )
-			}
-			UNION
-			{
-				{
-					SELECT ?s, ?sLabel, ?o, ?oLabel
-					WHERE {
-						{
-							SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
-							WHERE {
-								GRAPH ?broaderSubjectGraph {
-									?broaderSubject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
+				SELECT ?s, ?sLabel, ?o, ?oLabel
+				WHERE {
+					{
+						SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
+						WHERE {
+							GRAPH ?broaderSubjectGraph {
+								{
+									?broaderSubject rdf:type skos:Concept.
 									?broaderSubject rdfs:label ?broaderSubjectLabel.
-									?broaderSubject ?broaderPredicate ?broaderObject.
-									FILTER(
-										?broaderPredicate = thes:broaderGeneric
-										|| ?broaderPredicate = thes:broaderPartitive
-									)
-									FILTER NOT EXISTS {
-										?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
-									}
+									?broaderSubject thes:broaderGeneric ?broaderObject.
 								}
-								GRAPH ?broaderObjectGraph {
-									?broaderObject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
-									?broaderObject rdfs:label ?broaderObjectLabel.
-									FILTER NOT EXISTS {
-										?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
-									}
+								UNION
+								{
+									?broaderSubject rdf:type skos:Concept.
+									?broaderSubject rdfs:label ?broaderSubjectLabel.
+									?broaderSubject thes:broaderPartitive ?broaderObject.									
 								}
-								GRAPH doc:mastergraph {
-									?broaderSubject rdfs:isDefinedBy ?broaderSubjectGraph.
-									?broaderObject rdfs:isDefinedBy ?broaderObjectGraph.
+								FILTER NOT EXISTS {
+									?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
 								}
 							}
+							GRAPH ?broaderObjectGraph {
+								?broaderObject rdf:type skos:Concept.
+								?broaderObject rdfs:label ?broaderObjectLabel.
+								FILTER NOT EXISTS {
+									?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
+								}
+							}
+							GRAPH doc:mastergraph {
+								?broaderSubject rdfs:isDefinedBy ?broaderSubjectGraph.
+								?broaderObject rdfs:isDefinedBy ?broaderObjectGraph.
+							}
 						}
-						UNION
-						{
-							SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
-							WHERE {
-								GRAPH ?narrowerSubjectGraph {
-									?narrowerSubject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
+					}
+					UNION
+					{
+						SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
+						WHERE {
+							GRAPH ?narrowerSubjectGraph {
+								{
+									?narrowerSubject rdf:type skos:Concept.
 									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
-									?narrowerSubject ?narrowerPredicate ?narrowerObject.
-									FILTER(
-										?narrowerPredicate = thes:narrowerGeneric
-										|| ?narrowerPredicate = thes:narrowerPartitive
-									)
-									FILTER NOT EXISTS {
-										?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
-									}
+									?narrowerSubject thes:narrowerGeneric ?narrowerObject.
 								}
-								GRAPH ?narrowerObjectGraph {
-									?narrowerObject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
-									?narrowerObject rdfs:label ?narrowerObjectLabel.
-									FILTER NOT EXISTS {
-										?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
-									}
+								UNION
+								{
+									?narrowerSubject rdf:type skos:Concept.
+									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
+									?narrowerSubject thes:narrowerPartitive ?narrowerObject.
 								}
-								GRAPH doc:mastergraph {
-									?narrowerSubject rdfs:isDefinedBy ?narrowerSubjectGraph.
-									?narrowerObject rdfs:isDefinedBy ?narrowerObjectGraph.
+								FILTER NOT EXISTS {
+									?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
 								}
 							}
+							GRAPH ?narrowerObjectGraph {
+								?narrowerObject rdf:type skos:Concept.
+								?narrowerObject rdfs:label ?narrowerObjectLabel.
+								FILTER NOT EXISTS {
+									?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
+								}
+							}
+							GRAPH doc:mastergraph {
+								?narrowerSubject rdfs:isDefinedBy ?narrowerSubjectGraph.
+								?narrowerObject rdfs:isDefinedBy ?narrowerObjectGraph.
+							}
 						}
-						UNION
-						{
-							SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
-							WHERE {
-								GRAPH ?subjectGraph {
-									?subject rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
-									?subject rdfs:label ?subjectLabel.
-									OPTIONAL { ?subject ?predicate ?object }
-									FILTER(
-										?predicate != thes:broaderGeneric &&
-										?predicate != thes:broaderPartitive
-									)
+					}
+					UNION
+					{
+						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
+						WHERE {
+							GRAPH ?subjectGraph {
+								?subject rdf:type skos:Concept.
+								?subject rdfs:label ?subjectLabel.
+								OPTIONAL { ?subject ?predicate ?object }
+								FILTER(
+									?predicate != thes:broaderGeneric &&
+									?predicate != thes:broaderPartitive
+								)
+								FILTER NOT EXISTS {
+									?subject prov:invalidatedAtTime ?subjectTime.
+								}
+							}
+							GRAPH doc:mastergraph {
+								?subject rdfs:isDefinedBy ?subjectGraph.
+							}
+							OPTIONAL {
+								GRAPH ?objectGraph {
+									?object rdf:type skos:Concept.
+									?object rdfs:label ?objectLabel.
 									FILTER NOT EXISTS {
-										?subject prov:invalidatedAtTime ?subjectTime.
+										?object prov:invalidatedAtTime ?objectTime.
 									}
 								}
 								GRAPH doc:mastergraph {
-									?subject rdfs:isDefinedBy ?subjectGraph.
-								}
-								OPTIONAL {
-									GRAPH ?objectGraph {
-										?object rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
-										?object rdfs:label ?objectLabel.
-										FILTER NOT EXISTS {
-											?object prov:invalidatedAtTime ?objectTime.
-										}
-									}
-									GRAPH doc:mastergraph {
-										?object rdfs:isDefinedBy ?objectGraph.
-									}
+									?object rdfs:isDefinedBy ?objectGraph.
 								}
 							}
 						}
 					}
 				}
-				FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
 			}
 			OPTIONAL {
 				GRAPH ?sCollectionGraph {
@@ -8356,45 +8276,17 @@ stage:DSOConceptenQuery a elmo:Query;
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
-			{
-				GRAPH ?g {
-					?concept rdf:type skos:Concept.
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {?concept skos:definition ?uitleg}
-					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Act>.
-					}
-					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Norm>.
-					}
-					FILTER NOT EXISTS {
-						?concept rdf:type <http://bp4mc2.org/def/skos-lex/Object>.
-					}
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+				?concept rdfs:label ?concept_label.
+				OPTIONAL {?concept skos:definition ?uitleg}
+				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
 				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g
-				}
-				FILTER( substr( "@TYPE@",2 ) = "TYPE@" )
 			}
-			UNION
-			{
-				GRAPH ?g {
-					?concept rdf:type <http://bp4mc2.org/def/skos-lex/@TYPE@>.
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {?concept skos:definition ?uitleg}
-					FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g
-				}
-				FILTER( substr( "@TYPE@",2 ) != "TYPE@" )
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g
 			}
 			FILTER NOT EXISTS {
 				GRAPH ?toeleidingsGraph {
@@ -9893,3 +9785,57 @@ stage:DSOSearchQuery a elmo:Query;
 	''';
 .
  
+#
+#
+#
+# PRODUCTEN
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Standaard zoekpagina
+stage:DSOProducten a elmo:Representation;
+	elmo:url-pattern "query/producten";
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Producten/diensten";
+		elmo:html '''Deze pagina is nog in opbouw.'''
+	];
+. 
+#
+#
+#
+# REGISTRATIES
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Standaard zoekpagina
+stage:DSORegistraties a elmo:Representation;
+	elmo:url-pattern "query/registraties";
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Registraties";
+		elmo:html '''
+			<ul>
+				<li><a href='http://data.acceptatie.pdok.nl/catalogus/dso/query/vocabulary?model=http://data.acceptatie.pdok.nl/catalogus/dso/def/BRK'>BRK</a></li>
+				<li><a href='http://data.acceptatie.pdok.nl/catalogus/dso/query/vocabulary?model=http://data.acceptatie.pdok.nl/catalogus/dso/def/BRT'>BRT</a></li>
+				<li><a href='http://data.acceptatie.pdok.nl/catalogus/dso/query/vocabulary?model=http://data.acceptatie.pdok.nl/catalogus/dso/def/BAG'>BAG</a></li>
+			</ul>
+		'''
+	];
+. 
