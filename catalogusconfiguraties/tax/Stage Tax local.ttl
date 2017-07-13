@@ -2104,6 +2104,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member 
 					)
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
@@ -2160,7 +2161,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
@@ -3038,8 +3041,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
-			<@SUBJECT@> skoslex:refersTo ?s.
-			?s rdfs:label ?slabel.
 		}
 		WHERE {
 			{
@@ -3749,7 +3750,7 @@ stage:TaxLoopingTabel a elmo:Part;
 	elmo:query stage:TaxLoopingQuery
 .
 
-#query toont alle triples <A skos:semanticRelation B>, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
+#query toont alle triples, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
 stage:TaxLoopingQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -3798,6 +3799,7 @@ stage:TaxLoopingQuery a elmo:query;
 							|| ?link = skoslex:actor
 							|| ?link = skoslex:agent
 							|| ?link = skoslex:object
+							|| ?link = skos:member
 						)
                     }
                     GRAPH ?og {
@@ -3826,6 +3828,7 @@ stage:TaxLoopingQuery a elmo:query;
 							|| ?link = skoslex:actor
 							|| ?link = skoslex:agent
 							|| ?link = skoslex:object
+							|| ?link = skos:member
 						)
                     }
                     GRAPH doc:mastergraph {
@@ -3852,7 +3855,9 @@ stage:TaxLoopingQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
@@ -4340,6 +4345,7 @@ stage:TaxWhereUsedQuery a elmo:Query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member
 					)
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
@@ -4369,7 +4375,9 @@ stage:TaxWhereUsedQuery a elmo:Query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
@@ -4495,6 +4503,7 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member 
 					)
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
@@ -4548,7 +4557,9 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)

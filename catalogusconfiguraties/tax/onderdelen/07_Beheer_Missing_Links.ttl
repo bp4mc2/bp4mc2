@@ -109,6 +109,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member 
 					)
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
@@ -165,7 +166,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
