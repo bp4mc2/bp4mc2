@@ -353,6 +353,7 @@ stage:search_datasets a elmo:Part;
 	elmo:query '''
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix prov: <http://www.w3.org/ns/prov#>
 		CONSTRUCT {
 			?dataset rdfs:label ?dataset_label
 		}
@@ -360,6 +361,9 @@ stage:search_datasets a elmo:Part;
 			GRAPH ?g {
 				?dataset rdf:type skos:ConceptScheme.
 				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
 			}
 		}
 		ORDER BY DESC(?dataset_label)
@@ -807,6 +811,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				concept:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
+		
 
 		INSERT {
 			GRAPH container:generiek {

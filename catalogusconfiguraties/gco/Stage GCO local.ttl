@@ -960,6 +960,7 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			rdfs:label "Vocabulaires";
 			elmo:data [ elmo:index "1"; rdfs:label "rdf"; html:link "query/voc-rdf"];
 			elmo:data [ elmo:index "2"; rdfs:label "dcat"; html:link "query/voc-dcat"];
+			elmo:data [ elmo:index "2"; rdfs:label "geosparql"; html:link "query/voc-geosparql"];
 			elmo:data [ elmo:index "3"; rdfs:label "rdfs"; html:link "query/voc-rdfs"];
 			elmo:data [ elmo:index "4"; rdfs:label "shacl"; html:link "query/voc-shacl"];
 		];
@@ -1771,6 +1772,7 @@ updatestage:sync-all a elmo:Production;
 	elmo:contains	stage:sync_import_dctype;
 	elmo:contains	stage:sync_import_dqv;
 	elmo:contains	stage:sync_import_foaf;
+	elmo:contains	stage:sync_import_geosparql;
 	elmo:contains	stage:sync_import_ldqd;
 	elmo:contains	stage:sync_import_owl;
 	elmo:contains	stage:sync_import_powder-s;
@@ -1814,6 +1816,7 @@ updatestage:sync-imports a elmo:Production;
 	elmo:contains	stage:sync_import_dctype;
 	elmo:contains	stage:sync_import_dqv;
 	elmo:contains	stage:sync_import_foaf;
+	elmo:contains	stage:sync_import_geosparql;
 	elmo:contains	stage:sync_import_ldqd;
 	elmo:contains	stage:sync_import_owl;
 	elmo:contains	stage:sync_import_powder-s;
@@ -2075,6 +2078,22 @@ stage:sync_import_foaf a elmo:Scene;
 		}
 	''';
 .
+stage:sync_import_geosparql a elmo:Scene;
+	elmo:index "307";
+	rdfs:label "geosparql vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://localhost:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/geosparql_vocab_all.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
 stage:sync_import_ldqd a elmo:Scene;
 	elmo:index "308";
 	rdfs:label "ldqd vocabulary import";
@@ -2306,6 +2325,12 @@ stage:voc-dcat	a	elmo:Representation;
 	elmo:contains	stage:Menu;
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:webpage "https://github.com/bp4mc2/bp4mc2/raw/master/model/imported/dcat.rdf";
+.
+stage:voc-geosparql	a	elmo:Representation;
+	elmo:url-pattern	"/query/voc-geosparql$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:webpage "https://github.com/bp4mc2/bp4mc2/raw/master/model/imported/geosparql_vocab_all.rdf";
 .
 stage:voc-rdf	a	elmo:Representation;
 	elmo:url-pattern	"/query/voc-rdf$";

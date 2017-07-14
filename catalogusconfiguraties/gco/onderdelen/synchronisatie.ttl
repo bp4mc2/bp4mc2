@@ -27,6 +27,7 @@ updatestage:sync-all a elmo:Production;
 	elmo:contains	stage:sync_import_dctype;
 	elmo:contains	stage:sync_import_dqv;
 	elmo:contains	stage:sync_import_foaf;
+	elmo:contains	stage:sync_import_geosparql;
 	elmo:contains	stage:sync_import_ldqd;
 	elmo:contains	stage:sync_import_owl;
 	elmo:contains	stage:sync_import_powder-s;
@@ -70,6 +71,7 @@ updatestage:sync-imports a elmo:Production;
 	elmo:contains	stage:sync_import_dctype;
 	elmo:contains	stage:sync_import_dqv;
 	elmo:contains	stage:sync_import_foaf;
+	elmo:contains	stage:sync_import_geosparql;
 	elmo:contains	stage:sync_import_ldqd;
 	elmo:contains	stage:sync_import_owl;
 	elmo:contains	stage:sync_import_powder-s;
@@ -325,6 +327,22 @@ stage:sync_import_foaf a elmo:Scene;
 		where {
 			service <http://localhost:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/foaf.rdf> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+stage:sync_import_geosparql a elmo:Scene;
+	elmo:index "307";
+	rdfs:label "geosparql vocabulary import";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/imports> {
+			?s?p?o
+		}
+		where {
+			service <http://localhost:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/imported/geosparql_vocab_all.rdf> {
 					?s?p?o
 				}
 			}
