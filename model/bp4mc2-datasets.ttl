@@ -74,6 +74,7 @@ model:catalogusTaal rdf:type sh:PropertyShape;
 	sh:minCount 1;
 .
 model:catalogusLicentie rdf:type sh:PropertyShape;
+	rdfs:label "cataloguslicentie";
 	sh:name "dct:license";
 	sh:path dct:license;
 	sh:datatype xsd:string;
@@ -81,6 +82,7 @@ model:catalogusLicentie rdf:type sh:PropertyShape;
 	sh:maxCount 1;
 .
 model:catalogusRechten rdf:type sh:PropertyShape;
+	rdfs:label "catalogusrechten";
 	sh:name "dct:rights";
 	sh:path dct:rights;
 	sh:datatype xsd:string;
@@ -97,6 +99,7 @@ model:catalogusHomepage rdf:type sh:PropertyShape;
 .
 model:catalogusWerkingsgebied rdf:type sh:PropertyShape;
 	rdfs:label "werkingsgebied";
+	sh:name "dct:spatial";
 	sh:path dct:spatial;
 	sh:datatype xsd:string;
 	sh:class dct:Location;
@@ -105,30 +108,32 @@ model:catalogusWerkingsgebied rdf:type sh:PropertyShape;
 .
 model:catalogusUitgevendeInstantie rdf:type sh:PropertyShape;
 	rdfs:label "uitgever";
+	sh:name "foaf:Agent";
 	sh:class foaf:Agent;
 	sh:path dct:publisher;
 	sh:datatype xsd:string;
 	sh:class foaf:Agent;
 .
 model:catalogusRecord rdf:type sh:PropertyShape;
+	rdfs:label "catalogusrecord"@nl;
+	sh:name "dcat:record";
 	sh:path dcat:record;
 	sh:datatype xsd:string;
 	sh:class dcat:CatalogRecord;
 .
 model:catalogusDataset rdf:type sh:PropertyShape;
+	rdfs:label "dataset"@nl;
+	sh:name "dcat:dataset";
 	sh:path dcat:dataset;
 	sh:datatype xsd:string;
 	sh:class dcat:Dataset;
 .
 model:catalogusTaxonomy rdf:type sh:PropertyShape;
+	rdfs:label "taxonomie"@nl;
+	sh:name "dcat:themeTaxonomy";
 	sh:path dcat:themeTaxonomy;
 	sh:datatype xsd:string;
 	sh:class skos:ConceptScheme;
-.
-model:catalogusOmvat rdf:type sh:PropertyShape;
-	rdfs:label "omvat";
-	sh:path dcat:record;
-	sh:class dcat:CatalogRecord;
 .
 ### Catalogus Record
 model:CatalogusRecord rdf:type sh:NodeShape;
