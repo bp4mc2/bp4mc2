@@ -1,0 +1,50 @@
+#
+#
+#
+# CLEAR ALL DATA
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle gegevens te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalldata a elmo:Production;
+	elmo:contains stage:BAGBeheermenu;
+	elmo:contains stage:BAGHeader;
+	elmo:contains stage:BAGFooter;
+	elmo:queryForm stage:BAGDummyForm;
+	elmo:contains stage:ClearAllDataScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:BAGDummyForm a elmo:Form.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearAllDataScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder alle data";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+			FILTER regex(?g, "^http://localhost:8080/catalogus/bag/(?!stage)")
+			FILTER( ?g != container:smw )
+		}
+	'''
+.
