@@ -1,0 +1,116 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix concept: <http://pdok-ld-gck.in.kadaster.nl/id/begrip/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>.
+@prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>.
+@prefix collectie: <http://pdok-ld-gck.in.kadaster.nl/id/collectie/>.
+
+concept:hond rdf:type skos:Concept ;
+	rdfs:label "hond"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skoslex:actor concept:rendier ;
+	skoslex:agent concept:olifant ;
+	skoslex:object concept:mier ;
+	skos:member collectie:beesten ;
+	thes:broaderGeneric concept:dier ;
+	thes:narrowerGeneric concept:puppy ;
+	thes:broaderPartitive concept:dierenrijk ;
+	thes:narrowerPartitive concept:staart ;
+	skos:semanticRelation concept:giraffe ;
+	skos:closeMatch concept:knuffel ;
+	skos:exactMatch concept:huisdier ;
+	skos:relatedMatch concept:kat ;
+	skos:broadMatch concept:leeuw	;
+	skos:narrowMatch concept:beest ;
+.
+
+concept:rendier rdf:type skos:Concept ;
+	rdfs:label "rendier"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skoslex:actor concept:hond ;
+.
+
+concept:olifant rdf:type skos:Concept ;
+	rdfs:label "olifant"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skoslex:agent concept:hond ;
+.
+
+concept:mier rdf:type skos:Concept ;
+	rdfs:label "mier"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skoslex:object concept:hond ;
+.
+
+collectie:beesten rdf:type skos:Concept ;
+	rdfs:label "beesten"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:member concept:hond ;
+.
+
+concept:dier rdf:type skos:Concept ;
+	rdfs:label "dier"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	thes:broaderGeneric concept:hond ;
+.
+
+concept:puppy rdf:type skos:Concept ;
+	rdfs:label "puppy"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	thes:narrowerGeneric concept:hond ;
+.
+
+concept:dierenrijk rdf:type skos:Concept ;
+	rdfs:label "dierenrijk"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	thes:broaderPartitive concept:hond ;
+.
+
+concept:staart rdf:type skos:Concept ;
+	rdfs:label "staart"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	thes:narrowerPartitive concept:hond ;
+.
+
+concept:giraffe rdf:type skos:Concept ;
+	rdfs:label "giraffe"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:semanticRelation concept:hond ;
+.
+
+concept:knuffel rdf:type skos:Concept ;
+	rdfs:label "knuffel"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:closeMatch concept:hond ;
+.
+
+concept:huisdier rdf:type skos:Concept ;
+	rdfs:label "huisdier"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:exactMatch concept:hond ;
+.
+
+concept:kat rdf:type skos:Concept ;
+	rdfs:label "kat"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:relatedMatch concept:hond ;
+.
+
+concept:leeuw rdf:type skos:Concept ;
+	rdfs:label "leeuw"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:broadMatch concept:hond	;
+.
+
+concept:beest rdf:type skos:Concept ;
+	rdfs:label "beest"@nl ;
+	kddef:status kdstat:Gevalideerd ;
+	skos:narrowMatch concept:hond ;
+.
+
+
