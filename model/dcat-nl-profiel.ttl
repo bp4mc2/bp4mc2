@@ -64,8 +64,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Uniforme identificatie van de dataset. Range is niet URI maar vrije tekst omdat het hier om de letters van string gaat (de literal) en niet om de link. Zie de sectie over Identificatie elders in dit document.";
 		sh:name "dct:identifier";
 		sh:path dct:identifier;
-		sh:minCount 1;
-		sh:maxCount 1;
 		sh:datatype xsd:string;
 		sh:severity sh:Violation;
 	];
@@ -92,7 +90,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Laatste datum waarop de dataset zelf is gewijzigd. Deze datum zegt niets over de wijzigingsdatum van de metadata van de dataset.";
 		sh:name "dct:modified";
 		sh:path dct:modified;
-		sh:minCount 1;
 		sh:maxCount 1;
 		sh:datatype xsd:date;
 		sh:severity sh:Violation;
@@ -102,7 +99,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Taal van de inhoud van de dataset. Herhaalbaar indien meerdere talen voorkomen.";
 		sh:name "dct:language";
 		sh:path dct:language;
-		sh:minCount 1;
 		sh:datatype xml:lang;
 		sh:severity sh:Violation;
 	];
@@ -162,8 +158,7 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Webpagina, meestal bij de verstrekker, die toelichting geeft bij de dataset, de distributies en metadata die de verstrekker geeft.";
 		sh:name "dcat:landingPage";
 		sh:path dcat:landingPage;
-		sh:maxCount 1;
-		sh:class foaf:Document;
+		sh:datatype xsd:anyURI;
 		sh:severity sh:Warning;
 	];
 	sh:property [
@@ -180,8 +175,8 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Periode in de tijd waarop de dataset betrekking heeft.";
 		sh:name "dct:temporal";
 		sh:path dct:temporal;
-		sh:class dct:PeriodOfTime; #Dit zou wel eens niet kunnen kloppen, maar wordt niet duidelijk uit de documentatie
-		sh:severity sh:Warning; #Dit is eigenlijk nog een uitzoekpunt, want een resource is wat onhandig: liever met begin-end tijd
+		sh:class overheid:Period; #In de nieuwe registratie staat overheid:Period, maar dat vind ik persoonlijk onhandig
+		sh:severity sh:Warning;
 	];
 	sh:property [
 		rdfs:label "Licentie"@nl;
@@ -280,7 +275,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		sh:severity sh:Info;
 	];
 	sh:property [
-		#Deze property ontbreekt in de tabel, maar staat wel in het figuur
 		rdfs:label "Distributie"@nl;
 		rdfs:comment "De distributie(s) van een dataset";
 		sh:name "dcat:distribution";
