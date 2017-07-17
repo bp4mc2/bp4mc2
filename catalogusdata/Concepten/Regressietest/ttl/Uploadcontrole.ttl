@@ -8,6 +8,7 @@
 @prefix dc: 			<http://purl.org/dc/elements/1.1/>.
 @prefix dct: 			<http://purl.org/dc/terms/>.
 @prefix dctype: 		<http://purl.org/dc/dcmitype/>.
+@prefix foaf:			<http://xmlns.com/foaf/0.1/>.
 
 # Concepten
 concept:GeneriekBeest a skos:Concept;
@@ -17,12 +18,17 @@ concept:GeneriekBeest a skos:Concept;
 	skos:comment "Uitleg";
 	skos:definition "Definitie";
 	skos:scopeNote "Toelichting";
-	skos:inScheme concept:beestDomein;
+	skos:inScheme concept:BeestDomein;
 	skos:altLabel "Generiek dier";
 	dct:valid "1-1-2001";	
 	thes:narrowerGeneric concept:SpecifiekBeest;
 	thes:narrowerPartitive concept:Lijf;
 	skos:semanticRelation concept:AnderBeest;
+	foaf:focus concept:Focusbeest;
+	skos:exactMatch concept:HetzelfdeBeest;
+	skos:relatedMatch concept:GerelateerdBeest;
+	skos:broadMatch concept:BrederBeest;
+	skos:narrowMatch concept:EngerBeest;
 	dct:source concept:Bron;
 .
 
@@ -40,6 +46,31 @@ concept:NogSpecifiekerBeest a skos:Concept;
 concept:AnderBeest a skos:Concept;
 	skos:prefLabel "AnderBeest";
 	rdfs:label "Ander beest";
+.
+
+concept:Focusbeest a skos:Concept;
+	skos:prefLabel "Focusbeest";
+	rdfs:label "Focusbeest";
+.
+
+concept:HetzelfdeBeest a skos:Concept;
+	skos:prefLabel "HetzelfdeBeest";
+	rdfs:label "Hetzelfde beest";
+.
+
+concept:GerelateerdBeest a skos:Concept;
+	skos:prefLabel "GerelateerdBeest";
+	rdfs:label "Gerelateerd beest";
+.
+
+concept:BrederBeest a skos:Concept;
+	skos:prefLabel "BrederBeest";
+	rdfs:label "Breder beest";
+.
+
+concept:EngerBeest a skos:Concept;
+	skos:prefLabel "EngerBeest";
+	rdfs:label "Enger beest";
 .
 
 concept:Kop a skos:Concept;

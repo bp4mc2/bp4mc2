@@ -175,6 +175,9 @@ container:excelupdate a elmo:Container;
 						FILTER NOT EXISTS {
 							?s rdfs:label ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
 					}
 					UNION
 					{
@@ -182,6 +185,9 @@ container:excelupdate a elmo:Container;
 						FILTER NOT EXISTS {
 							?s rdfs:label ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
 					}
 				}
 			}
@@ -200,6 +206,9 @@ container:excelupdate a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
 					}
 					UNION
 					{
@@ -207,6 +216,9 @@ container:excelupdate a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
 					}
 				}
 			}
@@ -975,6 +987,9 @@ container:concepten-put-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s rdfs:label ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
 					}
 					UNION
 					{
@@ -982,6 +997,9 @@ container:concepten-put-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s rdfs:label ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
 					}
 				}
 			}
@@ -1000,6 +1018,9 @@ container:concepten-put-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
 					}
 					UNION
 					{
@@ -1007,6 +1028,9 @@ container:concepten-put-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
 					}
 				}
 			}
@@ -1058,6 +1082,9 @@ container:concepten-post-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s rdfs:label ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
 					}
 					UNION
 					{
@@ -1065,6 +1092,9 @@ container:concepten-post-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s rdfs:label ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
 					}
 				}
 			}
@@ -1083,6 +1113,9 @@ container:concepten-post-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
 					}
 					UNION
 					{
@@ -1090,6 +1123,9 @@ container:concepten-post-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
 					}
 				}
 			}
@@ -1137,6 +1173,7 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/dso/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix activity: <http://localhost:8080/catalogus/dso/id/concept/@CURRENTMOMENT@>
@@ -1178,6 +1215,11 @@ stage:DSOGeneriekeUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				concept:tomcatUser rdf:type prov:Agent.
 				concept:tomcatUser rdfs:label "Tomcat User".
 				concept:tomcatUser foaf:givenName "Tomcat User".
@@ -1439,6 +1481,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/dso/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
 		prefix activity: <http://localhost:8080/catalogus/dso/id/concept/@CURRENTMOMENT@>
@@ -1480,6 +1523,11 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				concept:tomcatUser rdf:type prov:Agent.
 				concept:tomcatUser rdfs:label "Tomcat User".
 				concept:tomcatUser foaf:givenName "Tomcat User".

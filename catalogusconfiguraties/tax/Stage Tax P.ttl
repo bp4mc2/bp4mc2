@@ -353,6 +353,7 @@ stage:search_datasets a elmo:Part;
 	elmo:query '''
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix prov: <http://www.w3.org/ns/prov#>
 		CONSTRUCT {
 			?dataset rdfs:label ?dataset_label
 		}
@@ -360,6 +361,9 @@ stage:search_datasets a elmo:Part;
 			GRAPH ?g {
 				?dataset rdf:type skos:ConceptScheme.
 				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
 			}
 		}
 		ORDER BY DESC(?dataset_label)
@@ -404,6 +408,7 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix loc: <http://pdok-ld-gck.cs.kadaster.nl/id/>
 		prefix versiongraph: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://pdok-ld-gck.cs.kadaster.nl/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
 		prefix activity: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/@CURRENTMOMENT@>
@@ -460,6 +465,11 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				concept:tomcatUser rdf:type prov:Agent.
 				concept:tomcatUser rdfs:label "Tomcat User".
 				concept:tomcatUser foaf:givenName "Tomcat User".
@@ -733,6 +743,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix loc: <http://pdok-ld-gck.cs.kadaster.nl/id/>
 		prefix versiongraph: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://pdok-ld-gck.cs.kadaster.nl/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
 		prefix activity: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/@CURRENTMOMENT@>
@@ -788,6 +799,11 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				concept:tomcatUser rdf:type prov:Agent.
 				concept:tomcatUser rdfs:label "Tomcat User".
 				concept:tomcatUser foaf:givenName "Tomcat User".
@@ -795,6 +811,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				concept:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
+		
 
 		INSERT {
 			GRAPH container:generiek {
@@ -1604,6 +1621,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix loc: <http://pdok-ld-gck.cs.kadaster.nl/id/>
 		prefix versiongraph: <http://pdok-ld-gck.cs.kadaster.nl/datasets/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://pdok-ld-gck.cs.kadaster.nl/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix catalogus: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix activity: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/@CURRENTMOMENT@>
@@ -1667,6 +1685,11 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				catalogus:tomcatUser rdf:type prov:Agent.
 				catalogus:tomcatUser rdfs:label "Tomcat User".
 				catalogus:tomcatUser foaf:givenName "Tomcat User".
@@ -2104,6 +2127,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member 
 					)
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
@@ -2160,7 +2184,9 @@ stage:TaxMissingLinksQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
@@ -3038,8 +3064,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
-			<@SUBJECT@> skoslex:refersTo ?s.
-			?s rdfs:label ?slabel.
 		}
 		WHERE {
 			{
@@ -3749,7 +3773,7 @@ stage:TaxLoopingTabel a elmo:Part;
 	elmo:query stage:TaxLoopingQuery
 .
 
-#query toont alle triples <A skos:semanticRelation B>, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
+#query toont alle triples, waarvan de omgekeerde relatie ook een geldige triple is, en er een loop ontstaat
 stage:TaxLoopingQuery a elmo:query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -3798,6 +3822,7 @@ stage:TaxLoopingQuery a elmo:query;
 							|| ?link = skoslex:actor
 							|| ?link = skoslex:agent
 							|| ?link = skoslex:object
+							|| ?link = skos:member
 						)
                     }
                     GRAPH ?og {
@@ -3826,6 +3851,7 @@ stage:TaxLoopingQuery a elmo:query;
 							|| ?link = skoslex:actor
 							|| ?link = skoslex:agent
 							|| ?link = skoslex:object
+							|| ?link = skos:member
 						)
                     }
                     GRAPH doc:mastergraph {
@@ -3852,7 +3878,9 @@ stage:TaxLoopingQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
@@ -4340,6 +4368,7 @@ stage:TaxWhereUsedQuery a elmo:Query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member
 					)
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
@@ -4369,7 +4398,9 @@ stage:TaxWhereUsedQuery a elmo:Query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
@@ -4495,6 +4526,7 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 						|| ?link = skoslex:actor
 						|| ?link = skoslex:agent
 						|| ?link = skoslex:object
+						|| ?link = skos:member 
 					)
 					OPTIONAL {
 						?Frame rdfs:label ?Frame_label.
@@ -4548,7 +4580,9 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
 																IF(?link =	skos:relatedMatch,  "Zie ook ",
 																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																		IF(?link = skos:member, "Lid van",
+																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
+																			)
 																		)
 																	)
 																)
