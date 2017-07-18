@@ -1,0 +1,112 @@
+#
+#
+#
+# MODEL EN VOCABULAIRE
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Vocabulairepagina
+stage:VocabulairePagina	a	elmo:Representation;
+	elmo:url-pattern "/catalogus/bag/query/vocabulary";
+	elmo:contains stage:BAGHeader;
+	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGMenu;
+	elmo:contains stage:search_models;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:BAGSelectModel;
+	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:BAGSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+	elmo:index "2";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
+.
+
+# PARTS
+
+# Zoeken van modellen
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://localhost:8080/catalogus/bag/(?!stage)")
+            }
+            LIMIT 100
+        }
+		ORDER BY DESC(?label)
+    ''';
+.
+
+# QUERY'S
+
+# Query voor Vocabulairepagina
+stage:VocabulaireQuery a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix bag: <http://www.w3.org/ns/bag#>
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			?shape bag:scopeClass ?element.
+			?shape bag:property ?pc.
+			?pc bag:predicate ?pred.
+			?pc bag:class ?class.
+			?pc bag:datatype ?datatype.
+			?pc bag:in ?collection.
+		}
+		WHERE {
+			GRAPH <@MODEL@> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
+				OPTIONAL {
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
+				}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					?shape bag:scopeClass ?element.
+					?shape bag:property ?pc.
+					?pc bag:predicate ?pred.
+					OPTIONAL {?pc bag:class ?class}
+					OPTIONAL {?pc bag:datatype ?datatype}
+					OPTIONAL {?pc bag:in ?collection}
+				}
+				FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
+			}
+		}
+	'''
+.

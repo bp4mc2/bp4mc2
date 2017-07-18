@@ -528,6 +528,19 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
+		INSERT {
+			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				SELECT ?s ?p ?o 
+				WHERE {
+					?s rdf:type skos:Concept.
+				}
+			}
+		}
 
 		INSERT {
 			GRAPH container:generiek {
@@ -558,19 +571,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
             }
 		}
 		
-		INSERT {
-			GRAPH container:generiek {
-				?s skos:inScheme <@DATASET@>.
-			}
-		}
-		WHERE {
-			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
-			}
-		}
+		
 				
 		INSERT {
 			GRAPH versiongraph:version {
@@ -631,12 +632,14 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		
 		DELETE {
 			GRAPH doc:mastergraph {
-				?s ?p ?o
+				?s rdfs:isDefinedBy ?versiongraph.
+				?s bp4mc2:signature ?sig.
 			}
 		}
 		WHERE {
 			GRAPH doc:mastergraph {
-				?s ?p ?o
+				?s rdfs:isDefinedBy ?versiongraph.
+				?s bp4mc2:signature ?sig.
 			}
 			GRAPH versiongraph:version {
 				?s rdf:type ?type.
@@ -657,7 +660,8 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			GRAPH doc:mastergraph {
 				?s rdf:type ?type.
 				?s rdfs:isDefinedBy versiongraph:version.
-				?s bp4mc2:signature ?sig
+				?s bp4mc2:signature ?sig .
+				?s skos:inScheme <@DATASET@>.
 			}
 		}
 		WHERE {
