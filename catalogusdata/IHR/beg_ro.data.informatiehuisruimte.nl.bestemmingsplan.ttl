@@ -10,12 +10,19 @@
 @prefix ro_nen3610_beg: <http://data.informatiehuisruimte.nl/nen3610/id/begrip/> .
 
 ro_begkr:ro a skos:ConceptScheme ;
+  skos:prefLabel "ro";
   rdfs:label "Begrippen ruimtelijke ordening"@nl ;
   skos:hasTopConcept
     ro_beg:AanduidingActueelOfHistorisch
 
 .
-
+ro_col:RuimtelijkeOrdening a skos:Collection;
+	skos:prefLabel "RuimtelijkeOrdening"@nl;
+	rdfs:label "Begrippen ruimtelijke ordening";
+	skos:member ro_col:Normen;
+	skos:member ro_col:Planstatussen;
+	skos:member ro_col:Bestemmingshoofdgroep;
+.
 ro_nen3610_beg:GeoObject a skos:Concept ;
   rdfs:label "Geo-object"@nl ;
   skos:prefLabel "Geo-object"@nl ;
@@ -148,7 +155,7 @@ ro_beg:tenGevolgeVan a skos:Concept ;
 
 ro_beg:omvangwaarde a skos:Concept ;
   rdfs:label "omvangwaarde"@nl ;
-  skos:preflabel "omvangwaarde"@nl ;
+  skos:prefLabel "omvangwaarde"@nl ;
   skos:topConceptOf ro_begkr:ro ;
   skos:inScheme ro_begkr:ro ;
   dcterms:source <http://www.geonovum.nl/wegwijzer/standaarden/informatiemodel-ruimtelijke-ordening-imro2012>
@@ -1022,28 +1029,33 @@ ro_beg:OverigeZone_Gebiedsaanduiding a skos:Concept ;
 
 <https://www.nen.nl/NEN-Shop/Norm/NEN-36102011-nl.htm> a dctypes:Text ;
   rdfs:label "NEN 3610:2011 nl"@nl ;
+  skos:prefLabel "NEN-36102011-nl";
   rdfs:seeAlso <https://www.nen.nl/NEN-Shop/Norm/NEN-36102011-nl.htm>
 .
 
 <http://www.geonovum.nl/wegwijzer/standaarden/informatiemodel-ruimtelijke-ordening-imro2012> a dctypes:Text ;
   rdfs:label "Informatiemodel Ruimtelijke Ordening (IMRO2012)"@nl ;
+  skos:prefLabel "informatiemodel-ruimtelijke-ordening-imro2012";
   rdfs:seeAlso <http://www.geonovum.nl/wegwijzer/standaarden/informatiemodel-ruimtelijke-ordening-imro2012>
 .
 
 <jci1.31:c:BWBR0020449&hoofdstuk=3&afdeling=3.1&artikel=3.1&lid=1&z=2016-04-14&g=2016-04-14> a dctypes:Text ;
   rdfs:label "artikel 3.1, eerste lid, van de Wet ruimtelijke ordening"@nl ;
+  skos:prefLabel " ";
   rdfs:seeAlso <http://wetten.overheid.nl/jci1.3:c:BWBR0020449&hoofdstuk=3&afdeling=3.1&artikel=3.1&lid=1&z=2016-04-14&g=2016-04-14> ;
   skos:broadMatch <http://linkeddata.overheid.nl/terms/bwb/id/BWBR0020449/8715424/2009-07-15/2008-07-01>
 .
 
 <jci1.31:c:BWBR0020449&hoofdstuk=3&afdeling=3.5&paragraaf=3.5.1&artikel=3.26&lid=3&z=2016-04-14&g=2016-04-14> a dctypes:Text ;
   rdfs:label "artikel 3.26, derde lid, van de Wet ruimtelijke ordening"@nl ;
+  skos:prefLabel " ";
   rdfs:seeAlso <http://wetten.overheid.nl/jci1.3:c:BWBR0020449&hoofdstuk=3&afdeling=3.5&paragraaf=3.5.1&artikel=3.26&lid=3&z=2016-04-14&g=2016-04-14> ;
   skos:broadMatch <http://linkeddata.overheid.nl/terms/bwb/id/BWBR0020449/8715744/2013-04-25/2013-04-25>
 .
 
 <jci1.31:c:BWBR0020449&hoofdstuk=3&afdeling=3.5&paragraaf=3.5.2&artikel=3.28&lid=3&z=2016-04-14&g=2016-04-14> a dctypes:Text ;
   rdfs:label "artikel 3.28, derde lid, van de Wet ruimtelijke ordening"@nl ;
+  skos:prefLabel " ";
   rdfs:seeAlso <http://wetten.overheid.nl/jci1.3:c:BWBR0020449&hoofdstuk=3&afdeling=3.5&paragraaf=3.5.2&artikel=3.28&lid=3&z=2016-04-14&g=2016-04-14> ;
   skos:broadMatch <http://linkeddata.overheid.nl/terms/bwb/id/BWBR0020449/8715774/2013-04-25/2013-04-25>
 .
@@ -1116,16 +1128,19 @@ ro_beg:Geconsolideerd_Planstatus a skos:Concept ;
   skos:notation "geconsolideerd"
 .
 
-ro_col:Bestemmingshoofdgroep a skos:Collection .
+ro_col:Bestemmingshoofdgroep a skos:Collection; 
+rdfs:label "Bestemmingshoofdgroep";
+skos:prefLabel "Bestemmingshoofdgroep";
+.
 
 ro_col:Normen a skos:Collection ;
   rdfs:label "Normen"@nl ;
   skos:prefLabel "Normen"@nl ;
   skos:member
-    ro_beg:IMRO2012 ,
-    ro_beg:PRBP2012 ,
-    ro_beg:IMROPT2012 ,
-    ro_beg:PRABPK2012
+    ro_beg:IMRO2012,
+    ro_beg:PRBP2012,
+    ro_beg:IMROPT2012,
+    ro_beg:PRABPK2012,
 .
 
 
