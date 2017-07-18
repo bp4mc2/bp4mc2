@@ -54,55 +54,33 @@
 stage:BAGWelkomstpagina rdf:type elmo:Representation;
 	elmo:url-pattern "/catalogus/bag(|/)$";
 	elmo:contains stage:BAGMenu;
-	elmo:contains stage:BAGHeader;
+#	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGtree;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
-		rdfs:label "Welkom op de Catalogus BAG";
+		rdfs:label "Welkom op de beslisboom BAG";
 		elmo:html '''
-			<div style='width: 67%; float: left;'>
+			<div style='width: 100%; float: left;'>
 				<div style='width: 100%; display: table'>
-					<div class='welkom' style='float: left'>
-						<br/><br/>
-						<a href='/catalogus/bag/query/overzichtspagina?term='>
-							<img src='images/begrippenicon.png'/>
-							<br/>Alle concepten
-						</a>
-					</div>
-					<div class='welkom' style='float: right'>
-						<br/><br/>
-						<a href='/catalogus/bag/query/model'>
-							<img src='images/activiteitenicon.png'/>
-							<br/>Model Catalogus
-						</a>
+					<div style='position: relative; font-size:16px; left: middle'>
+						<p>
+							<center>Welkom bij de beslisbomen.</center>
+						</p>
 					</div>
 				</div>
 				<div style='width: 100%; display: table'>
-					<div class='welkom' style='float: left'>
-						<br/><br/>
-						<a href='/catalogus/bag/query/producten'>
-							<img src='images/productenicon.png'/>
-							<br/>Producten/diensten
+					<div class='welkom' style='float: left' >
+						<a href='/catalogus/bag/id/decision/Pand' style='position: relative; top:50%; font-size:20px; color:red; vertical-align: middle'>
+							Beslisboom Pand
 						</a>
 					</div>
 					<div class='welkom' style='float: right'>
-						<br/><br/>
-						<a href='/catalogus/bag/query/registraties'>
-							<img src='images/overicon.png'/>
-							<br/>Registraties
+						<a href='/catalogus/bag/id/decision/Verblijfsobject' style='position: relative; top: 50%; font-size:20px; color:red; vertical-align: middle'>
+							Beslisboom Verblijfsobject
 						</a>
 					</div>
 				</div>
-			</div>
-			<div style='width: 33%; float: right'>
-				<center>
-				<img src='images/KaartNederland.png'/><br/>
-				<select name='regio'>
-					<option value='Aa en Maas'>Aa en Maas</option>
-					<option value='Amersfoort'>Amersfoort</option>
-					<option value='Apeldoorn'>Apeldoorn</option>
-				</select>
-				</center>
 			</div>
 		''';
 	];
@@ -112,54 +90,16 @@ stage:BAGWelkomstpagina rdf:type elmo:Representation;
 stage:BAGHelp rdf:type elmo:Representation;
 	elmo:url-pattern "/catalogus/bag/query/help(|/)$";
 	elmo:contains stage:BAGMenu;
-	elmo:contains stage:BAGHeader;
+#	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
 		rdfs:label "Help";
-		elmo:html '''<h3>Catalogus</h3>
+		elmo:html '''<h3>BAG beslisboom</h3>
 			<div><p>De Catalogus bestaat uit de volgende pagina's:
-				<ul>
-					<li><b>Concepten</b> - HiÃ«rarchische, alfabetische en grafische weergave van alle concepten in de Catalogus. Klik op een plusje om de onderliggende concepten te tonen of op een concept voor detailinformatie over dat concept.</li>
-					<li><b>Collecties</b> - Alfabetische weergave van alle collecties in de Catalogus. Klik op een letter om alle concepten met die beginletter te tonen of op een concept voor detailinformatie over dat concept.</li>
-					<li><b>Modellen</b> - Grafische weergave van de onderliggende modellen in de Catalogus.</li>
-					<li><b>Vocabulaires</b> - Weergave van de onderliggende vocabulaires in de Catalogus.</li>
-					<li><b>Beheer</b> - Via beheer kunt u inloggen als admin.</li>
-				 </ul></p></div>
-				 
-				 <h3>Termen en definities</h3>
-				<div><p>In de Catalogus zijn de volgende termen terug te vinden:
-				<ul>
-				<li><b>Concept</b>: de naam van het concept. De conventie is om dit in CamelCase te schrijven. Bijvoorbeeld: <i>BesluitVanAlgemeneStrekking</i> of <i>Activiteit</i>. Let op: op dit moment kan de Catalogus niet correct omgaan met spaties in de naam van een concept.</li>
-				<li><b>Definitie</b>: een omschrijving van het concept. Vaak zal dit de definitie zijn die door de wet gegeven wordt. Bijvoorbeeld: <i>Een juridisch relevante handeling, mogelijk met rechtsgevolgen.</i></li>
-				<li><b>Domein</b>: het domein waar het concept zich in bevindt. Vaak zal dit voor Ã©Ã©n conceptenlijst hetzelfde zijn. Bijvoorbeeld: <i>PBAG.</i></li>
-				<li><b>Toelichting</b>: een nadere toelichting over het concept. Bijvoorbeeld: <i>Dit concept is niet in de wet gedefinieerd, maar wel zeer relevant.</i></li>
-				<li><b>Synoniem</b>: als het concept een synoniem heeft, dan kan dat in deze kolom geplaatst worden. Bijvoorbeeld: <i>rechtshandeling.</i></li>
-				<li><b>Bron</b>: de bron van het concept. Vaak zal dit een wetsartikel zijn. Bijvoorbeeld: <i>Art 1 lid 2 BW.</i></li>
-				</ul>
-				Tussen verschillende concepten kunnen de volgende relaties gelegd zijn:
-				<ul>
-				<li><b>Specialisatie</b>: het concept is een specialisatie van een ander concept, d.w.z. een verbijzondering van dat andere concept. Bijvoorbeeld een <u>racefiets</u> is een specialisatie van een <u>fiets</u>.
-				<div class="explanation">In wetteksten is een specialisatie vaak te herkennen aan de zinsconstructie <i>Een {concept} is een {ander concept} datâ€¦</i> Zie bijvoorbeeld artikel 3.261 lid 1 van het Ontwerpbesluit activiteiten leefomgeving (BAL), waarin staat dat: <i>Het exploiteren van een jachthaven (â€¦) is een milieubelastende activiteit als bedoeld in artikel 2.1.</i> Hier is <u>exploiteren van een jachthaven</u> dus een specialisatie van <u>milieubelastende activiteit</u>.</div></li>
-				
-				<li><b>Generalisatie</b>: het concept is een generalisatie van een ander concept, d.w.z. een veralgemenisering van dat andere concept. Dit is het omgekeerde van een specialisatie. Bijvoorbeeld een <u>fiets</u> is een generalisatie van een <u>racefiets</u>.
-				<div class="explanation">In wetteksten is een generalisatie vaak te herkennen aan de zinsconstructie <i>Een {concept} is een {ander concept} of een {nog ander concept} ofâ€¦</i> Zie bijvoorbeeld Bijlage I.A BAL, waarin <i>bodembeschermende voorziening</i> wordt gedefinieerd als: <i>vloeistofdichte bodemvoorziening, aaneengesloten bodemvoorziening, elementenvoorziening, lekbak, geomembraanbak, of vulpuntmorsbak</i>. Hier is <u>bodembeschermende voorziening</u> dus een generalisatie van <u>vloeistofdichte bodemvoorziening</u>, maar ook van <u>aaneengesloten bodemvoorziening</u>, <u>elementenvoorziening</u>, etc.</div></li>
-				
-				<li><b>Onderdeel</b>: het concept is een onderdeel van een ander concept. Bijvoorbeeld een <u>wiel</u> is een onderdeel van een <u>fiets</u>.
-				<div class="explanation">In wetteksten is een onderdeel vaak te herkennen aan de zinsconstructie <i>Een {concept} is een (onder)deel van een {ander concept}</i>. Zie bijvoorbeeld Bijlage I.A BAL, waarin <i>aanstroomoppervlak filterpakket</i> wordt gedefinieerd als <i>deel van een filterpakket waar de lucht doorstroomt</i>. Hier is <u>aanstroomoppervlak filterpakket</u> dus een onderdeel van <u>filterpakket</u>.</div></li>
-				
-				<li><b>Bestaat uit</b>: het concept bestaat uit een (of meerdere) ander(e) concept(pen). Dit is het omgekeerde van een onderdeel. Bijvoorbeeld een <u>fiets</u> bestaat uit een <u>wiel</u>.
-				<div class="explanation">In wetteksten is dit vaak te herkennen de zinsconstructie <i>Een {concept} bestaat uit een {ander concept} en een {nog ander concept} enâ€¦</i> Zie bijvoorbeeld Bijlage I.A BAL, waarin <i>tankinstallatie</i> wordt gedefinieerd als <i>geheel van een of meer tankzuilen dat bestaat uit pompen, leidingen, meet- en regelwerken, schakelaars en vulpistolen.</i> Hier bestaat <u>tankinstallatie</u> dus uit <u>pompen</u>, maar ook uit <u>leidingen</u>, <u>meet- en regelwerken</u>, etc.</div></li>
-				
-				<li><b>Semantische relatie</b>: het concept heeft betrekking op een ander concept, d.w.z. het is eraan gerelateerd. Bijvoorbeeld een <u>bekeuring</u> heeft betrekking op een <u>bekeurde</u>.
-				<div class="explanation">In wetteksten komt een semantische relatie vaak voor in combinatie met een specialisatie, in een zinsconstructie als <i>Een {concept} is een {ander concept} dat betrekking heeft op een {nog ander concept}.</i> Zie bijvoorbeeld Bijlage I.A BAL, waarin <i>ondergrens</i> wordt gedefinieerd als <i>een drempelwaarde waarboven een emissie als relevant wordt beschouwd.</i> Hier heeft <u>ondergrens</u> dus een semantische relatie (heeft betrekking op) <u>emissie</u> (en is een specialisatie van <u>drempelwaarde</u>).</div></li>
-
-				</ul>
 				</p>
-				</div>
-				
-				<h3>Bewerken concepten</h3>
-				<div><p>Invoerfunctionaliteit in de Catalogus is momenteel beschikbaar, door een e-mail met data te sturen aan de beheerder, onder vermelding van het beoogde domein, bijvoorbeeld: catalogus/bag. Data kan momenteel aangeleverd worden via Excel of in Turtle-formaat. Er wordt gewerkt aan invoerfunctionaliteit die beheerders in staat stelt dit zelf te doen, mits geautoriseerd. Eenmaal vastgelegd, kunnen de concepten in de Catalogus bekeken worden.</p></div>'''
+			</div>
+		'''
 	];
 .
 
@@ -167,19 +107,18 @@ stage:BAGHelp rdf:type elmo:Representation;
 stage:BAGBeheerHelp rdf:type elmo:Representation;
 	elmo:url-pattern "/catalogus/bag/query/beheerhelp(|/)$";
 	elmo:contains stage:BAGBeheermenu;
-	elmo:contains stage:BAGHeader;
+#	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
 		rdfs:label "Help";
 		elmo:html '''<div>Op deze beheerpagina kunnen de volgende acties worden uitgevoerd:
 				<ul>
-					<li>Hoofdpagina - keer terug naar de hoofdpagina van het BAG.</li>
-					<li>Upload - kies de wijze van uploaden van nieuwe data uit het menu. Upload vervolgens het bronbestand. Een succesvolle import is te herkennen door het zeer kort verschijnen van het woord 'Succes'.</li>
-					<li>Speciaal
+					<li>Hoofdpagina - keer terug naar de hoofdpagina van de BAG.</li>
+					<li>Upload - kies de wijze van uploaden van nieuwe data uit het menu. Upload vervolgens het bronbestand. Een succesvolle import is te herkennen door het verschijnen van 'Upload successful'.</li>
+					<li>Acties
 						<ul>
 							<li>Verwijder alle data - hiermee worden alle gegevens uit de Catalogus verwijderd. Wees hier dus voorzichtig mee!</li>
-							<li>Laad data uit VocBench - hiermee worden gegevens overgeladen uit een VocBench-installatie. Werkt momenteel alleen lokaal.</li>
 						</ul>
 					</li>
 				</ul>
@@ -191,7 +130,7 @@ stage:BAGBeheerHelp rdf:type elmo:Representation;
 stage:BAGBeheerpagina rdf:type elmo:Representation;
 	elmo:url-pattern "/catalogus/bag/admin(|/)$";
 	elmo:contains stage:BAGBeheermenu;
-	elmo:contains stage:BAGHeader;
+#	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
@@ -216,7 +155,9 @@ stage:BAGBeheerpagina rdf:type elmo:Representation;
 # Header
 stage:BAGHeader a elmo:Part;
 	elmo:appearance elmo:HeaderAppearance;
-	# elmo:data [elmo:html "<a href='http://data.test.pdok.nl/catalogus/bag'><img src='http://data.test.pdok.nl/catalogus/images/LogoOMGWklein.png'></img></a>"^^rdf:HTML];
+	elmo:data [
+		elmo:html "<a href='http://data.test.pdok.nl/catalogus/bag'><img src='http://data.test.pdok.nl/catalogus/images/Kadasterlogo.png'></img></a>"^^rdf:HTML
+	];
 .
 
 # Menubalk hoofdmenu
