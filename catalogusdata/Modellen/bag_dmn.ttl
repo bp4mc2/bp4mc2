@@ -1,7 +1,7 @@
 @prefix xsd: 			<http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
-@prefix shacl: 			<http://www.w3.org/ns/shacl#>.
+@prefix sh: 			<http://www.w3.org/ns/shacl#>.
 @prefix owl:			<http://www.w3.org/2002/07/owl#>.
 @prefix dmn: 			<http://www.omg.org/spec/DMN/20151101/dmn#>.
 @prefix def:			<http://bag.basisregistraties.overheid.nl/def/>.
@@ -9,7 +9,7 @@
 @prefix structuur:		<http://bag.basisregistraties.overheid.nl/id/structuur/>.
 
 # Ontology
-def:bag rdf:type <http://www.w3.org/2002/07/owl#Ontology>;
+def:bag rdf:type owl:Ontology;
     rdfs:label "Basisregistraties adressen en gebouwen"^^xsd:string
 .
 
@@ -25,87 +25,99 @@ dmn:InformationRequirement rdf:type owl:Class;
 .
 
 # ObjectProperties
-dmn:informationRequirement rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+dmn:informationRequirement rdf:type owl:ObjectProperty;
     rdfs:label "informationRequirement"^^xsd:string;
     rdfs:comment '''Eigenschap nodig om vragen aan beslisbomen te verbinden.'''^^xsd:string
 .
 
-dmn:requiredDecision rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+dmn:requiredDecision rdf:type owl:ObjectProperty;
     rdfs:label "requiredDecision"^^xsd:string;
     rdfs:comment '''Een gekoppelde vraag.'''^^xsd:string
 .
 
 # DatatypeProperties
-dmn:allowedAnswers rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+dmn:allowedAnswers rdf:type owl:DatatypeProperty;
     rdfs:label "allowedAnswers"^^xsd:string;
     rdfs:comment '''Toegestane antwoorden op de vraag.'''^^xsd:string
 .
 
-dmn:description rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+dmn:description rdf:type owl:DatatypeProperty;
     rdfs:label "description"^^xsd:string;
     rdfs:comment '''Toelichting op de vraag.'''^^xsd:string
 .
 
-dmn:id rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+dmn:id rdf:type owl:DatatypeProperty;
     rdfs:label "id"^^xsd:string;
     rdfs:comment '''id van de beslisboom of vraag.'''^^xsd:string
 .
 
-dmn:name rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+dmn:name rdf:type owl:DatatypeProperty;
     rdfs:label "name"^^xsd:string;
     rdfs:comment '''Naam van de beslisboom of vraag.'''^^xsd:string
 .
 
-dmn:question rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+dmn:question rdf:type owl:DatatypeProperty;
     rdfs:label "question"^^xsd:string;
     rdfs:comment '''De vraag.'''^^xsd:string
 .
 
-# Shacl
-structuur:Decision shacl:scopeClass dmn:Decision;
-    shacl:property structuur:Decision_allowedAnswers;
-	shacl:property structuur:Decision_description;
-	shacl:property structuur:Decision_id;
-	shacl:property structuur:Decision_informationRequirement;
-	shacl:property structuur:Decision_name;
-	shacl:property structuur:Decision_question
+# Shapes
+structuur:Decision rdf:type sh:Shape;
+	sh:scopeClass dmn:Decision;
+	rdfs:label "dmn:Decision";
+    sh:property structuur:Decision_allowedAnswers;
+	sh:property structuur:Decision_description;
+	sh:property structuur:Decision_id;
+	sh:property structuur:Decision_informationRequirement;
+	sh:property structuur:Decision_name;
+	sh:property structuur:Decision_question
 .
 
-structuur:Decision_allowedAnswers shacl:predicate dmn:allowedAnswers;
-    shacl:datatype xsd:string
+structuur:InformationRequirement rdf:type sh:Shape;
+	sh:scopeClass dmn:InformationRequirement;
+	rdfs:label "dmn:InformationRequirement";
+	sh:property structuur:InformationRequirement_requiredDecision
 .
 
-structuur:Decision_description shacl:predicate dmn:description;
-    shacl:datatype xsd:string
+# PropertyConstraints
+structuur:Decision_allowedAnswers rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:allowedAnswers;
+	rdfs:label "dmn:allowedAnswers";
+    sh:datatype xsd:string
 .
 
-structuur:Decision_id shacl:predicate dmn:id;
-    shacl:datatype xsd:string
+structuur:Decision_description rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:description;
+	rdfs:label "dmn:description";
+    sh:datatype xsd:string
 .
 
-structuur:Decision_informationRequirement shacl:predicate dmn:informationRequirement;
-    shacl:class dmn:InformationRequirement
+structuur:Decision_id rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:id;
+	rdfs:label "dmn:id";
+    sh:datatype xsd:string
 .
 
-structuur:Decision_name shacl:predicate dmn:name;
-    shacl:datatype xsd:string
+structuur:Decision_informationRequirement rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:informationRequirement;
+	rdfs:label "dmn:informationRequirement";
+    sh:class dmn:InformationRequirement
 .
 
-structuur:Decision_question shacl:predicate dmn:question;
-    shacl:datatype xsd:string
+structuur:Decision_name rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:name;
+	rdfs:label "dmn:name";
+    sh:datatype xsd:string
 .
 
-structuur:InformationRequirement shacl:scopeClass dmn:InformationRequirement;
-	shacl:property structuur:InformationRequirement_requiredDecision
+structuur:Decision_question rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:question;
+	rdfs:label "dmn:question";
+    sh:datatype xsd:string
 .
 
-structuur:InformationRequirement_requiredDecision shacl:predicate dmn:requiredDecision;
-    shacl:class dmn:Decision
+structuur:InformationRequirement_requiredDecision rdf:type sh:PropertyConstraint;
+	sh:predicate dmn:requiredDecision;
+	rdfs:label "dmn:requiredDecision";
+    sh:class dmn:Decision
 .
-
-# Shape -> nodeShape
-# scopeClass -> targetClass
-# PropertyConstraint -> PropertyShape
-# predicate -> path
-
-# shacl:name "dmn:Decision"
