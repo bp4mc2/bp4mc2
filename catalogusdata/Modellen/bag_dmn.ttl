@@ -1,0 +1,111 @@
+@prefix xsd: 			<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix shacl: 			<http://www.w3.org/ns/shacl#>.
+@prefix owl:			<http://www.w3.org/2002/07/owl#>.
+@prefix dmn: 			<http://www.omg.org/spec/DMN/20151101/dmn#>.
+@prefix def:			<http://bag.basisregistraties.overheid.nl/def/>.
+@prefix bag:			<http://brk.basisregistraties.overheid.nl/def/bag#>.
+@prefix structuur:		<http://bag.basisregistraties.overheid.nl/id/structuur/>.
+
+# Ontology
+def:bag rdf:type <http://www.w3.org/2002/07/owl#Ontology>;
+    rdfs:label "Basisregistraties adressen en gebouwen"^^xsd:string
+.
+
+# Classes
+dmn:Decision rdf:type owl:Class;
+    rdfs:label "Decision"^^xsd:string;
+    rdfs:comment '''Een beslissing kan ofwel een beslisboom, ofwel een vraag zijn.'''^^xsd:string
+.
+
+dmn:InformationRequirement rdf:type owl:Class;
+	rdfs:label "InformationRequirement"^^xsd:string;
+	rdfs:comment '''De klasse die beslisbomen verbindt aan vragen.'''^^xsd:string
+.
+
+# ObjectProperties
+dmn:informationRequirement rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "informationRequirement"^^xsd:string;
+    rdfs:comment '''Eigenschap nodig om vragen aan beslisbomen te verbinden.'''^^xsd:string
+.
+
+dmn:requiredDecision rdf:type <http://www.w3.org/2002/07/owl#ObjectProperty>;
+    rdfs:label "requiredDecision"^^xsd:string;
+    rdfs:comment '''Een gekoppelde vraag.'''^^xsd:string
+.
+
+# DatatypeProperties
+dmn:allowedAnswers rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "allowedAnswers"^^xsd:string;
+    rdfs:comment '''Toegestane antwoorden op de vraag.'''^^xsd:string
+.
+
+dmn:description rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "description"^^xsd:string;
+    rdfs:comment '''Toelichting op de vraag.'''^^xsd:string
+.
+
+dmn:id rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "id"^^xsd:string;
+    rdfs:comment '''id van de beslisboom of vraag.'''^^xsd:string
+.
+
+dmn:name rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "name"^^xsd:string;
+    rdfs:comment '''Naam van de beslisboom of vraag.'''^^xsd:string
+.
+
+dmn:question rdf:type <http://www.w3.org/2002/07/owl#DatatypeProperty>;
+    rdfs:label "question"^^xsd:string;
+    rdfs:comment '''De vraag.'''^^xsd:string
+.
+
+# Shacl
+structuur:Decision shacl:scopeClass dmn:Decision;
+    shacl:property structuur:Decision_allowedAnswers;
+	shacl:property structuur:Decision_description;
+	shacl:property structuur:Decision_id;
+	shacl:property structuur:Decision_informationRequirement;
+	shacl:property structuur:Decision_name;
+	shacl:property structuur:Decision_question
+.
+
+structuur:Decision_allowedAnswers shacl:predicate dmn:allowedAnswers;
+    shacl:datatype xsd:string
+.
+
+structuur:Decision_description shacl:predicate dmn:description;
+    shacl:datatype xsd:string
+.
+
+structuur:Decision_id shacl:predicate dmn:id;
+    shacl:datatype xsd:string
+.
+
+structuur:Decision_informationRequirement shacl:predicate dmn:informationRequirement;
+    shacl:class dmn:InformationRequirement
+.
+
+structuur:Decision_name shacl:predicate dmn:name;
+    shacl:datatype xsd:string
+.
+
+structuur:Decision_question shacl:predicate dmn:question;
+    shacl:datatype xsd:string
+.
+
+structuur:InformationRequirement shacl:scopeClass dmn:InformationRequirement;
+	shacl:property structuur:InformationRequirement_requiredDecision
+.
+
+structuur:InformationRequirement_requiredDecision shacl:predicate dmn:requiredDecision;
+    shacl:class dmn:Decision
+.
+
+# Shape -> nodeShape
+# scopeClass -> targetClass
+# PropertyConstraint -> PropertyShape
+# predicate -> path
+
+# shacl:name "dmn:Decision"
