@@ -56,7 +56,10 @@ stage:BAGWelkomstpagina rdf:type elmo:Representation;
 	elmo:contains stage:BAGMenu;
 #	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
-	elmo:contains stage:BAGtree;
+	elmo:contains stage:BAGWelkomsttekst;
+	elmo:contains stage:BAGTree;
+.
+stage:BAGWelkomsttekst rdf:type elmo:Part;	
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:data [
 		rdfs:label "Welkom op de beslisboom BAG";
@@ -3880,14 +3883,12 @@ stage:BAGTreeQuery a elmo:Query;
 		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
 		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		
 		CONSTRUCT {
 			?s rdfs:label ?sLabel.
 			?o rdfs:label ?oLabel.
-			?s thes:broaderGeneric ?o.
-			?s skos:member ?sCollection.
-			#?sCollection skos:inScheme ?scheme.
-			?sCollection rdfs:label ?sCollectionLabel.
+			?o dmn:informationRequirement ?s.
 		}
 		WHERE {
 			{
@@ -3898,23 +3899,17 @@ stage:BAGTreeQuery a elmo:Query;
 						WHERE {
 							GRAPH ?broaderSubjectGraph {
 								{
-									?broaderSubject rdf:type skos:Concept.
-									?broaderSubject rdfs:label ?broaderSubjectLabel.
-									?broaderSubject thes:broaderGeneric ?broaderObject.
-								}
-								UNION
-								{
-									?broaderSubject rdf:type skos:Concept.
-									?broaderSubject rdfs:label ?broaderSubjectLabel.
-									?broaderSubject thes:broaderPartitive ?broaderObject.									
+									?broaderSubject rdf:type dmn:Decision.
+									?broaderSubject dmn:label ?broaderSubjectLabel.
+									?broaderSubject dmn:informationRequirement/dmn:requiredDecision ?broaderObject.
 								}
 								FILTER NOT EXISTS {
 									?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
 								}
 							}
 							GRAPH ?broaderObjectGraph {
-								?broaderObject rdf:type skos:Concept.
-								?broaderObject rdfs:label ?broaderObjectLabel.
+								?broaderObject rdf:type dmn:Decision.
+								?broaderObject dmn:question ?broaderObjectLabel.
 								FILTER NOT EXISTS {
 									?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
 								}
@@ -3925,149 +3920,11 @@ stage:BAGTreeQuery a elmo:Query;
 							}
 						}
 					}
-					UNION
-					{
-						SELECT DISTINCT ?narrowerSubject AS ?o, ?narrowerSubjectLabel AS ?oLabel, ?narrowerObject AS ?s, ?narrowerObjectLabel AS ?sLabel
-						WHERE {
-							GRAPH ?narrowerSubjectGraph {
-								{
-									?narrowerSubject rdf:type skos:Concept.
-									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
-									?narrowerSubject thes:narrowerGeneric ?narrowerObject.
-								}
-								UNION
-								{
-									?narrowerSubject rdf:type skos:Concept.
-									?narrowerSubject rdfs:label ?narrowerSubjectLabel.
-									?narrowerSubject thes:narrowerPartitive ?narrowerObject.
-								}
-								FILTER NOT EXISTS {
-									?narrowerSubject prov:invalidatedAtTime ?narrowerSubjectTime.
-								}
-							}
-							GRAPH ?narrowerObjectGraph {
-								?narrowerObject rdf:type skos:Concept.
-								?narrowerObject rdfs:label ?narrowerObjectLabel.
-								FILTER NOT EXISTS {
-									?narrowerObject prov:invalidatedAtTime ?narrowerObjectTime.
-								}
-							}
-							GRAPH doc:mastergraph {
-								?narrowerSubject rdfs:isDefinedBy ?narrowerSubjectGraph.
-								?narrowerObject rdfs:isDefinedBy ?narrowerObjectGraph.
-							}
-						}
-					}
-					UNION
-					{
-						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
-						WHERE {
-							GRAPH ?subjectGraph {
-								?subject rdf:type skos:Concept.
-								?subject rdfs:label ?subjectLabel.
-								OPTIONAL { ?subject ?predicate ?object }
-								FILTER(
-									?predicate != thes:broaderGeneric &&
-									?predicate != thes:broaderPartitive
-								)
-								FILTER NOT EXISTS {
-									?subject prov:invalidatedAtTime ?subjectTime.
-								}
-							}
-							GRAPH doc:mastergraph {
-								?subject rdfs:isDefinedBy ?subjectGraph.
-							}
-							OPTIONAL {
-								GRAPH ?objectGraph {
-									?object rdf:type skos:Concept.
-									?object rdfs:label ?objectLabel.
-									FILTER NOT EXISTS {
-										?object prov:invalidatedAtTime ?objectTime.
-									}
-								}
-								GRAPH doc:mastergraph {
-									?object rdfs:isDefinedBy ?objectGraph.
-								}
-							}
-						}
-					}
-				}
-			}
-			OPTIONAL {
-				GRAPH ?sCollectionGraph {
-					?sCollection skos:member ?s.
-					?sCollection rdfs:label ?sCollectionLabel.
-					OPTIONAL {
-						?sCollection skos:inScheme ?scheme.
-					}
-					FILTER NOT EXISTS {
-						?sCollection prov:invalidatedAtTime ?sCollectionTime.
-					}
-					FILTER NOT EXISTS {
-						{
-							GRAPH ?sParentGraph {
-								?s ?sParentPredicate ?sParent.
-								FILTER(
-									?sParentPredicate = thes:broaderGeneric ||
-									?sParentPredicate = thes:broaderPartitive
-								)
-								FILTER NOT EXISTS {
-									?s prov:invalidatedAtTime ?sParentTime.
-								}
-							}
-							GRAPH ?sCollectionGraph {
-								?sCollection skos:member ?sParent.
-							}
-							GRAPH doc:mastergraph {
-								?s rdfs:isDefinedBy ?sParentGraph.
-							}
-						}
-						UNION
-						{
-							GRAPH ?sChildGraph {
-								?sChild ?sChildPredicate ?s.
-								FILTER(
-									?sChildPredicate = thes:narrowerGeneric ||
-									?sChildPredicate = thes:narrowerPartitive
-								)
-								FILTER NOT EXISTS {
-									?sChild prov:invalidatedAtTime ?sChildTime.
-								}
-							}
-							GRAPH ?sCollectionGraph {
-								?sCollection skos:member ?sChild.
-							}
-							GRAPH doc:mastergraph {
-								?sChild rdfs:isDefinedBy ?sChildGraph.
-							}
-						}
-					}
-				}
-				GRAPH doc:mastergraph {
-					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
-				}
-				FILTER NOT EXISTS {
-					GRAPH ?waardelijstenGraph {
-						collection:Waardelijsten skos:member ?sCollection.
-					}
-					GRAPH doc:mastergraph {
-						collection:Waardelijsten rdfs:isDefinedBy ?waardelijstenGraph.
-					}
-				}
-			}
-			FILTER NOT EXISTS {
-				GRAPH ?toeleidingsGraph {
-					collection:Toeleidingsbegrippen skos:member ?s.
-					FILTER NOT EXISTS {
-						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
-					}
-				}
-				GRAPH doc:mastergraph {
-					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					
 				}
 			}
 		}
-		ORDER BY lcase(?scheme), lcase(?sCollectionLabel), lcase(?oCollectionLabel), lcase(?sLabel), lcase(?oLabel)
+		ORDER BY lcase(?sLabel), lcase(?oLabel)
 	'''
 .
  
