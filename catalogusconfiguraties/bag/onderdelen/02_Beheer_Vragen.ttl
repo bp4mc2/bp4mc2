@@ -25,6 +25,7 @@ container:vragen a elmo:Container;
 			ASK {
 				GRAPH container:vragen {
 					?s rdf:type dmn:Decision.
+					?s dmn:question ?question.
 					FILTER NOT EXISTS {
 						?s dmn:description ?description.
 					}
@@ -84,9 +85,9 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 				?s ?p ?o.
 			}
 		} WHERE {
-			SELECT  iri(replace(str(?subject),"urn:uuid:","")) as ?s
+			SELECT  iri(replace(str(?subject),"urn:uuid:","http://localhost:8080/catalogus/bag/id/decision/")) as ?s
 					?p
-					iri(replace(str(?object),"urn:uuid:","")) as ?o
+					iri(replace(str(?object),"urn:uuid:","http://localhost:8080/catalogus/bag/id/decision/")) as ?o
 			WHERE {
 				GRAPH container:vragen {
 					?subject ?p ?object
@@ -103,7 +104,7 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 				?s ?p ?o.
 			}
 		} WHERE {
-			SELECT  iri(replace(str(?subject),"urn:uuid:","")) as ?s
+			SELECT  iri(replace(str(?subject),"urn:uuid:","http://localhost:8080/catalogus/bag/id/decision/")) as ?s
 					?p
 					?o
 			WHERE {
@@ -178,11 +179,8 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 						?s ?p ?o.
 						?s rdf:type ?type.
 						FILTER (
-							?type = skos:Concept
-							|| ?type = skos:Collection
+							?type = dmn:InformationRequirement
 							|| ?type = dmn:Decision
-							|| ?type = owl:Class
-							|| ?type = dctype:Text
 						)
 					}
 					ORDER BY ?s ?p ?o
@@ -201,11 +199,8 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 			    ?s ?p ?o.
 			    ?s bp4mc2:signature ?sig
 				FILTER (
-					?type = skos:Concept
-					|| ?type = skos:Collection
+					?type = dmn:InformationRequirement
 					|| ?type = dmn:Decision
-					|| ?type = owl:Class
-					|| ?type = dctype:Text
 				)
 			}
 			FILTER NOT EXISTS {
@@ -227,12 +222,8 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 			GRAPH versiongraph:version {
 				?s rdf:type ?type.
 				FILTER (
-					?type = skos:Concept
-					|| ?type = skos:Collection
+					?type = dmn:InformationRequirement
 					|| ?type = dmn:Decision
-					|| ?type = owl:Class
-					|| ?type = dctype:Text
-
 				)
 			}
 			FILTER NOT EXISTS {
@@ -254,12 +245,8 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 			GRAPH versiongraph:version {
 				?s rdf:type ?type.
 				FILTER (
-					?type = skos:Concept
-					|| ?type = skos:Collection
+					?type = dmn:InformationRequirement
 					|| ?type = dmn:Decision
-					|| ?type = owl:Class
-					|| ?type = dctype:Text
-
 				)
 			}
 		}
@@ -276,16 +263,13 @@ stage:BAGVragenUploadScenePUT a elmo:Scene;
 			    ?s rdf:type ?type.
 			    ?s bp4mc2:signature ?sig.
 				FILTER (
-					?type = skos:Concept
-					|| ?type = skos:Collection
+					?type = dmn:InformationRequirement
 					|| ?type = dmn:Decision
-					|| ?type = owl:Class
-					|| ?type = dctype:Text
 				)
             }
 		}
 		
+		CLEAR GRAPH container:generiek
+		CLEAR GRAPH container:vragen
 	''';
 .
-
-#  CLEAR GRAPH container:generiek		
