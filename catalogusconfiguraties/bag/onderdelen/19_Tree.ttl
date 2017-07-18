@@ -60,9 +60,9 @@ stage:BAGTreeQuery a elmo:Query;
 		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		
 		CONSTRUCT {
-			?s dmn:label ?sLabel.
-			?o dmn:label ?oLabel.
-			?s dmn:informationRequirement/dmn:requiredDecision ?o.
+			?s rdfs:label ?sLabel.
+			?o rdfs:label ?oLabel.
+			?o dmn:informationRequirement ?s.
 		}
 		WHERE {
 			{
@@ -83,7 +83,7 @@ stage:BAGTreeQuery a elmo:Query;
 							}
 							GRAPH ?broaderObjectGraph {
 								?broaderObject rdf:type dmn:Decision.
-								?broaderObject dmn:label ?broaderObjectLabel.
+								?broaderObject dmn:question ?broaderObjectLabel.
 								FILTER NOT EXISTS {
 									?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
 								}
@@ -94,34 +94,7 @@ stage:BAGTreeQuery a elmo:Query;
 							}
 						}
 					}
-					UNION
-					{
-						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
-						WHERE {
-							GRAPH ?subjectGraph {
-								?subject rdf:type dmn:Decision.
-								?subject dmn:label ?subjectLabel.
-								FILTER NOT EXISTS {
-									?subject prov:invalidatedAtTime ?subjectTime.
-								}
-							}
-							GRAPH doc:mastergraph {
-								?subject rdfs:isDefinedBy ?subjectGraph.
-							}
-							OPTIONAL {
-								GRAPH ?objectGraph {
-									?object rdf:type dmn:Decision.
-									?object dmn:label ?objectLabel.
-									FILTER NOT EXISTS {
-										?object prov:invalidatedAtTime ?objectTime.
-									}
-								}
-								GRAPH doc:mastergraph {
-									?object rdfs:isDefinedBy ?objectGraph.
-								}
-							}
-						}
-					}
+					
 				}
 			}
 		}
