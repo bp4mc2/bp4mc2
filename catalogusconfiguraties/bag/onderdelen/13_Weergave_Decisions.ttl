@@ -159,10 +159,13 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 	
 		CONSTRUCT {
 			<@IDSUBJECT@> ?p ?o.
-			<@IDSUBJECT@> rdfs:label ?slabel.
+			<@IDSUBJECT@> rdfs:label ?label.
 			<@IDSUBJECT@> elmo:style ?type.
 			?o rdfs:label ?olabel.
 			?o elmo:style ?otype.
+			?s dmn:requiredDecision <@IDSUBJECT@>.
+			?s rdfs:label ?slabel.
+			?s elmo:style ?stype.
 			
 			dmn:Decision elmo:name "Beslisboom".
 			dmn:Question elmo:name "Vraag".
@@ -178,13 +181,13 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 						GRAPH ?g {
 							{
 								<@IDSUBJECT@> rdf:type ?type.
-								<@IDSUBJECT@> rdfs:label ?slabel.
+								<@IDSUBJECT@> rdfs:label ?label.
 								FILTER NOT EXISTS {
 									<@IDSUBJECT@> dmn:question ?question.
 								}
 							}
 							UNION {
-								<@IDSUBJECT@> dmn:question ?slabel.
+								<@IDSUBJECT@> dmn:question ?label.
 								BIND ( dmn:Question AS ?type )
 							}
 							?g prov:generatedAtTime ?sStartTime.
@@ -253,26 +256,24 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 						}
 					}
 					OPTIONAL {
-						GRAPH ?sg {
-							{
-								?s rdf:type ?stype.
-								?s rdfs:label ?slabel.
-								?s dmn:informationRequirement/dmn:requiredDecision <@IDSUBJECT@>.
-							}
-							?sg prov:generatedAtTime ?sStartTime.
+						GRAPH ?altSubjectGraph {
+							?s dmn:informationRequirement/dmn:requiredDecision <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							?s rdfs:label ?slabel.
+							?altSubjectGraph prov:generatedAtTime ?altStartTime.
 							OPTIONAL {
-								?s prov:invalidatedAtTime ?sEndTime.
+								?s prov:invalidatedAtTime ?altEndTime.
 							}
 							FILTER (
-								strdt( ?sStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+								strdt( ?altStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
 								&& (
-									!bound( ?sEndTime )
-									|| strdt( ?sEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+									!bound( ?altEndTime )
+									|| strdt( ?altEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
 								)
 							)	
 						}
 						GRAPH doc:mastergraph {
-							?sg dct:isVersionOf doc:mastergraph.
+							?altSubjectGraph dct:isVersionOf doc:mastergraph.
 						}
 					}
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
@@ -282,13 +283,13 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 					GRAPH <@GRAPH@> {
 						{
 							<@IDSUBJECT@> rdf:type ?type.
-							<@IDSUBJECT@> rdfs:label ?slabel.
+							<@IDSUBJECT@> rdfs:label ?label.
 							FILTER NOT EXISTS {
 								<@IDSUBJECT@> dmn:question ?question.
 							}
 						}
 						UNION {
-							<@IDSUBJECT@> dmn:question ?slabel.
+							<@IDSUBJECT@> dmn:question ?label.
 							BIND ( dmn:Question AS ?type )
 						}
 						?g prov:generatedAtTime ?sStartTime.
@@ -350,27 +351,25 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 						}
 					}
 					OPTIONAL {
-						GRAPH ?sg {
-							{
-								?s rdf:type ?stype.
-								?s rdfs:label ?slabel.
-								?s dmn:informationRequirement/dmn:requiredDecision <@IDSUBJECT@>.
-							}
-							?sg prov:generatedAtTime ?sStartTime.
+						GRAPH ?altSubjectGraph {
+							?s dmn:informationRequirement/dmn:requiredDecision <@IDSUBJECT@>.
+							?s rdf:type ?stype.
+							?s rdfs:label ?slabel.
+							?altSubjectGraph prov:generatedAtTime ?altStartTime.
 							OPTIONAL {
-								?s prov:invalidatedAtTime ?sEndTime.
+								?s prov:invalidatedAtTime ?altEndTime.
 							}
 							GRAPH <@GRAPH@> {
 								OPTIONAL {
-									<@IDSUBJECT@> prov:invalidatedAtTime ?sInvTime.
+									<@IDSUBJECT@> prov:invalidatedAtTime ?altInvTime.
 								}
 							}
-							BIND( IF( BOUND( ?sInvTime ), ?sInvTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?sSEndTime )
+							BIND( IF( BOUND( ?altInvTime ), ?altInvTime, "@TIMESTAMP@"^^xsd:dateTime ) AS ?altSEndTime )
 							FILTER (
-								strdt( ?sStartTime, xsd:dateTime ) <= strdt( ?sSEndTime, xsd:dateTime )
+								strdt( ?altStartTime, xsd:dateTime ) <= strdt( ?altSEndTime, xsd:dateTime )
 								&& (
-									!bound( ?sEndTime )
-									|| strdt( ?sEndTime, xsd:dateTime ) > strdt( ?sSEndTime, xsd:dateTime )
+									!bound( ?altEndTime )
+									|| strdt( ?altEndTime, xsd:dateTime ) > strdt( ?altSEndTime, xsd:dateTime )
 								)
 							)	
 						}
@@ -411,7 +410,6 @@ stage:WeergaveTabelDecisionsQuery a elmo:Query;
 			<@IDSUBJECT@> ?p ?o.
 			<@IDSUBJECT@> rdfs:label ?slabel.
 			?o rdfs:label ?olabel.
-			?col rdfs:label ?col_label.
 			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
 			<@IDSUBJECT@> prov:generatedAtTime ?sStartTime.
 			?a rdfs:label ?alabel.
