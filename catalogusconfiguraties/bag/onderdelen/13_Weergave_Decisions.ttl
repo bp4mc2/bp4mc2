@@ -14,7 +14,6 @@ stage:WeergavePaginaDecisions a elmo:Representation;
 	elmo:applies-to [
 		rdf:type dmn:Decision
 	];
-	elmo:uri-pattern "/id/begrip/";
 .
 
 #
@@ -143,7 +142,7 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
         prefix elmo: <http://bp4mc2.org/elmo/def#>
 		prefix sh: <http://www.w3.org/ns/shacl#>
@@ -195,6 +194,7 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 									?p != dmn:informationRequirement
 									&& ?p != rdfs:label
 									&& ?p != dmn:question
+									&& ?p != dct:source
 								)
 							}
 							UNION
@@ -220,7 +220,7 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 							)
 						}
 						GRAPH doc:mastergraph {
-							?g dc:isVersionOf doc:mastergraph.
+							?g dct:isVersionOf doc:mastergraph.
 						}
 					}
 					OPTIONAL {
@@ -249,7 +249,7 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 							)	
 						}
 						GRAPH doc:mastergraph {
-							?og dc:isVersionOf doc:mastergraph.
+							?og dct:isVersionOf doc:mastergraph.
 						}
 					}
 					OPTIONAL {
@@ -272,7 +272,7 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 							)	
 						}
 						GRAPH doc:mastergraph {
-							?sg dc:isVersionOf doc:mastergraph.
+							?sg dct:isVersionOf doc:mastergraph.
 						}
 					}
 					FILTER( substr("@GRAPH@",2) = "GRAPH@")
@@ -298,6 +298,7 @@ stage:WeergaveGrafischDecisionsQuery a elmo:Query;
 								?p != dmn:informationRequirement
 								&& ?p != rdfs:label
 								&& ?p != dmn:question
+								&& ?p != dct:source
 							)
 						}
 						UNION
@@ -395,7 +396,7 @@ stage:WeergaveTabelDecisionsQuery a elmo:Query;
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://localhost:8080/catalogus/bag/container/>
 		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
@@ -568,7 +569,7 @@ stage:WeergaveTabelDecisionsQuery a elmo:Query;
 stage:WeergaveVersiesDecisionsQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix container: <http://localhost:8080/catalogus/bag/container/>
 		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
 		prefix dataset: <http://localhost:8080/catalogus/bag/id/dataset/>
@@ -601,8 +602,8 @@ stage:WeergaveVersiesDecisionsQuery a elmo:Query;
 					)
 				}
 				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph.
-					?actualGraph dc:isVersionOf doc:mastergraph.
+					?graph dct:isVersionOf doc:mastergraph.
+					?actualGraph dct:isVersionOf doc:mastergraph.
 				}
 				FILTER( ?graph != ?actualGraph )
 				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
@@ -616,7 +617,7 @@ stage:WeergaveVersiesDecisionsQuery a elmo:Query;
 					}
 				}
 				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph
+					?graph dct:isVersionOf doc:mastergraph
 				}	
 				FILTER( ?graph != <@GRAPH@> )
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
