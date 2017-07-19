@@ -3,7 +3,7 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConcepten a elmo:Representation;
+stage:WeergavePaginaDecisions a elmo:Representation;
 	elmo:contains stage:BAGMenu;
 	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
@@ -11,6 +11,7 @@ stage:WeergavePaginaConcepten a elmo:Representation;
 	elmo:contains stage:WeergaveTabelDecisions;
 	#elmo:contains stage:WeergaveVersiesDecisions;
 	#elmo:contains stage:WeergaveGrafischDecisions;
+	elmo:applies-to [rdf:type dmn:Decision ];
 	elmo:uri-pattern "/id/decision/";
 .
 
@@ -29,18 +30,25 @@ stage:WeergaveTabelDecisions a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Naam"@nl;
-		elmo:applies-to dmn:name;
+		elmo:applies-to rdfs:label;
 		elmo:index "00";
 	];
 	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to dmn:description;
+		elmo:appearance elmo:MarkdownAppearance;
 		elmo:index "02";
 	];
 	elmo:fragment [
 		rdfs:label "Heeft betrekking op"@nl;
 		elmo:applies-to skos:semanticRelation;
 		elmo:index "03";
+	];
+	elmo:fragment [
+		rdfs:label "Voorbeeld"@nl;
+		elmo:applies-to skos:example;
+		elmo:index "04";
+		elmo:appearance elmo:ImageAppearance;
 	];
 
 	elmo:query stage:WeergaveTabelDecisionQuery;
