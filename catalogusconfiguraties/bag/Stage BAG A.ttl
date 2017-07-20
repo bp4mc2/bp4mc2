@@ -33,7 +33,8 @@
 @prefix adms: 			<http://www.w3.org/ns/adms#>.
 @prefix wdrs: 			<http://www.w3.org/2007/05/powder-s#>.
 @prefix yed: 			<http://bp4mc2.org/yed#>.
-@prefix dmn:			<http://www.omg.org/spec/DMN/20151101/dmn#>. 
+@prefix dmn:			<http://www.omg.org/spec/DMN/20151101/dmn#>.
+@prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>. 
 #
 #
 #
@@ -222,11 +223,6 @@ stage:BAGBeheermenu a elmo:Part;
 				elmo:index "1";
 				xhtml:link "/catalogus/bag/update/clearalldata";
 			];
-		];
-		elmo:data [
-			rdfs:label "Concepten";
-			elmo:index "6";
-			xhtml:link "/catalogus/bag/query/overzichtspagina?term=";
 		];
 		elmo:data [
 			rdfs:label "Help";
@@ -1631,6 +1627,11 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
+		rdfs:label "Beslisboom"@nl;
+		elmo:applies-to skos:member;
+		elmo:index "00";
+	];
+	elmo:fragment [
 		rdfs:label "Notitie"@nl;
 		elmo:applies-to skos:notation;
 		elmo:index "01";
@@ -1663,6 +1664,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
 		elmo:index "06";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [ 
 		rdfs:label "Is specialisatie van"@nl;
@@ -1713,14 +1715,10 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
-		rdfs:label "Lid van"@nl;
-		elmo:applies-to skos:member;
-		elmo:index "16";
-	];
-	elmo:fragment [
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
 		elmo:index "17";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Is gerealiseerd in"@nl;
@@ -1787,6 +1785,12 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:index "33";
 		elmo:appearance elmo:ImageAppearance;
 	];
+	elmo:fragment [
+		rdfs:label "Status"@nl;
+		elmo:applies-to kddef:status;
+		elmo:index "34";
+		elmo:appearance elmo:HiddenAppearance;
+	];
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
 
@@ -1804,56 +1808,38 @@ stage:WeergaveGrafischConcepten a elmo:Part;
 		elmo:index "3";
 	];
 	elmo:fragment [
-		elmo:applies-to "Collectie";
+		elmo:applies-to "Beslisboom";
 		xhtml:stylesheet '''
-			fill: orange;
+			fill: blue;
 			fill-opacity: .3;
 			stroke #666;
 		''';
 		elmo:index "4";
 	];
 	elmo:fragment [
-		elmo:applies-to "Regeling";
+		elmo:applies-to "Vraag";
 		xhtml:stylesheet '''
-			fill: gray;
+			fill: yellow;
 			fill-opacity: .3;
 			stroke #666;
 		''';
 		elmo:index "1";
 	];
     elmo:fragment [
-        elmo:applies-to "Gegevensklasse";
+        elmo:applies-to "Regeling";
         xhtml:stylesheet '''
-			fill: blue;
+			fill: gray;
 			fill-opacity: .3;
 			stroke: #666;
 		''';
 		elmo:index "6";
     ];
-	elmo:fragment [
-		elmo:applies-to "Norm";
-		xhtml:stylesheet '''
-			fill: purple;
-			fill-opacity: .3;
-			stroke #666;
-		''';
-		elmo:index "2";
-	];
-	elmo:fragment [
-		elmo:applies-to "Act";
-		xhtml:stylesheet '''
-			fill: yellow;
-			fill-opacity: .3;
-			stroke #666;
-		''';
-		elmo:index "2";
-	];
 	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
 # Tabel met vorige versies
 stage:WeergaveVersiesConcepten a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -1890,7 +1876,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix dctype: <http://purl.org/dc/dcmitype/>
         prefix elmo: <http://bp4mc2.org/elmo/def#>
 		prefix sh: <http://www.w3.org/ns/shacl#>
@@ -1913,35 +1899,43 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			?s ?sp <@IDSUBJECT@>.
 			?s rdfs:label ?slabel.
 			?s elmo:style ?stype.
-			?act skoslex:object <@IDSUBJECT@>.
-			?act rdfs:label ?actlabel.
-			?act elmo:style ?act_type.
 			skos:Concept elmo:name "Concept".
-			skos:member rdfs:label "Lid van".
-			skos:inScheme rdfs:label "Domein".
-			skos:semanticRelation rdfs:label "Heeft betrekking op".
+			skos:member rdfs:label "Vraag".
+			skos:semanticRelation rdfs:label "Zie ook".
 			thes:broaderGeneric rdfs:label "Is specialisatie van".
 			thes:narrowerGeneric rdfs:label "Is generalisatie van".
 			thes:broaderPartitive rdfs:label "Is onderdeel van".
 			thes:narrowerPartitive rdfs:label "Bestaat uit".
-			dc:source rdfs:label "Heeft als bron".
-			skoslex:actor rdfs:label "Heeft als actor".
-			skoslex:object rdfs:label "Heeft als object".
-			owl:Class elmo:name "Gegevensklasse".
-			owl:Class rdfs:label "Heeft als klasse".
-			skoslex:Norm elmo:name "Norm".
-			skoslex:Act elmo:name "Act".
+			dct:source rdfs:label "Heeft als bron".
 			dctype:Text elmo:name "Regeling".
-			skoslex:affects rdfs:label "Heeft invloed op".
-			skoslex:refersTo rdfs:label "Verwijst naar".
-			skoslex:classification rdfs:label "Classificatie".
-			skos:Collection elmo:name "Collectie".
+			skos:Collection elmo:name "Beslisboom".
+			skos:Question elmo:name "Vraag".
 		}
 		WHERE {
 			{
 				{
 					GRAPH ?g {
-						<@IDSUBJECT@> rdf:type ?type.
+						<@IDSUBJECT@> rdf:type ?concept_type.
+						OPTIONAL {
+							GRAPH ?collectionGraph {
+								?collection skos:member <@IDSUBJECT@>.
+								?collectionGraph prov:generatedAtTime ?cStartTime.
+								OPTIONAL {
+									?collection prov:invalidatedAtTime ?cEndTime.
+								}
+								FILTER (
+									strdt( ?cStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+									&& (
+										!bound( ?cEndTime )
+										|| strdt( ?cEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+									)
+								)	
+							}
+							GRAPH doc:mastergraph {
+								?collectionGraph dct:isVersionOf doc:mastergraph.
+							}
+						}
+						BIND( IF( BOUND( ?collection ), skos:Question, ?concept_type ) AS ?type )
 						?g prov:generatedAtTime ?startTime.
 						OPTIONAL {
 							<@IDSUBJECT@> rdfs:label ?concept_label.
@@ -1950,6 +1944,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							<@IDSUBJECT@> ?p ?o.
 							FILTER (
 								?p = skos:semanticRelation
+								|| ?p = skos:member
 								|| ?p = thes:broaderGeneric
 								|| ?p = thes:narrowerGeneric
 								|| ?p = thes:broaderPartitive
@@ -1963,7 +1958,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 								|| ?p = skos:relatedMatch
 								|| ?p = skos:broadMatch
 								|| ?p = skos:narrowMatch
-								|| ?p = dc:source
+								|| ?p = dct:source
 							)
 						}
 						OPTIONAL {
@@ -1978,11 +1973,31 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 						)
 					}
 					GRAPH doc:mastergraph {
-						?g dc:isVersionOf doc:mastergraph.
+						?g dct:isVersionOf doc:mastergraph.
 					}
 					OPTIONAL {
 						GRAPH ?og {
-							?o rdf:type ?otype.
+							?o rdf:type ?object_type.
+							OPTIONAL {
+								GRAPH ?oCollectionGraph {
+									?oCollection skos:member ?o.
+									?oCollectionGraph prov:generatedAtTime ?oCStartTime.
+									OPTIONAL {
+										?oCollection prov:invalidatedAtTime ?oCEndTime.
+									}
+									FILTER (
+										strdt( ?oCStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+										&& (
+											!bound( ?oCEndTime )
+											|| strdt( ?oCEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+										)
+									)	
+								}
+								GRAPH doc:mastergraph {
+									?oCollectionGraph dct:isVersionOf doc:mastergraph.
+								}
+							}
+							BIND( IF( BOUND( ?oCollection ), skos:Question, ?object_type ) AS ?otype )
 							?og prov:generatedAtTime ?oStartTime.
 							?o rdfs:label ?olabel.
 							OPTIONAL {
@@ -1997,7 +2012,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)
 						}
 						GRAPH doc:mastergraph {
-							?og dc:isVersionOf doc:mastergraph.
+							?og dct:isVersionOf doc:mastergraph.
 						}
 					}
 					OPTIONAL {
@@ -2018,7 +2033,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)	
 						}
 						GRAPH doc:mastergraph {
-							?altSubjectGraph dc:isVersionOf doc:mastergraph.
+							?altSubjectGraph dct:isVersionOf doc:mastergraph.
 						}
 					}
 				}
@@ -2028,12 +2043,39 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			{
 				{
 					GRAPH <@GRAPH@> {
-						<@IDSUBJECT@> rdf:type ?type.
+						<@IDSUBJECT@> rdf:type ?concept_type.
+						OPTIONAL {
+							GRAPH ?collectionGraph {
+								?collection skos:member <@IDSUBJECT@>.
+								?collectionGraph prov:generatedAtTime ?cStartTime.
+								OPTIONAL {
+									?collection prov:invalidatedAtTime ?cEndTime.
+								}
+								GRAPH <@GRAPH@> {
+									OPTIONAL {
+										<@IDSUBJECT@> prov:invalidatedAtTime ?cInvTime.
+									}
+								}
+								BIND( IF( BOUND( ?cInvTime ), ?cInvTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?cSEndTime )
+								FILTER (
+									strdt( ?cStartTime, xsd:dateTime ) <= strdt( ?cSEndTime, xsd:dateTime )
+									&& (
+										!bound( ?cEndTime )
+										|| strdt( ?cEndTime, xsd:dateTime ) > strdt( ?cSEndTime, xsd:dateTime )
+									)
+								)
+							}
+							GRAPH doc:mastergraph {
+								?collectionGraph dct:isVersionOf doc:mastergraph.
+							}
+						}
+						BIND( IF( BOUND( ?collection ), skos:Question, ?concept_type ) AS ?type )
 						OPTIONAL {
 							<@IDSUBJECT@> rdfs:label ?concept_label.
 							<@IDSUBJECT@> ?p ?o.
 							FILTER (
 								?p = skos:semanticRelation
+								|| ?p = skos:member
 								|| ?p = thes:broaderGeneric
 								|| ?p = thes:narrowerGeneric
 								|| ?p = thes:broaderPartitive
@@ -2047,14 +2089,40 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 								|| ?p = skos:relatedMatch
 								|| ?p = skos:broadMatch
 								|| ?p = skos:narrowMatch
-								|| ?p = dc:source
+								|| ?p = dct:source
 							)
 						}
 					}
 					OPTIONAL {
 						GRAPH ?og {
-							?o rdfs:label ?olabel.
-							?o rdf:type ?otype.
+							?o rdf:type ?object_type.
+							OPTIONAL {
+								GRAPH ?oCollectionGraph {
+									?oCollection skos:member ?o.
+									?oCollectionGraph prov:generatedAtTime ?oCStartTime.
+									OPTIONAL {
+										?oCollection prov:invalidatedAtTime ?oCEndTime.
+									}
+									GRAPH <@GRAPH@> {
+										OPTIONAL {
+											<@IDSUBJECT@> prov:invalidatedAtTime ?oCInvTime.
+										}
+									}
+									BIND( IF( BOUND( ?oCInvTime ), ?oCInvTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?oCSEndTime )
+									FILTER (
+										strdt( ?oCStartTime, xsd:dateTime ) <= strdt( ?oCSEndTime, xsd:dateTime )
+										&& (
+											!bound( ?oCEndTime )
+											|| strdt( ?oCEndTime, xsd:dateTime ) > strdt( ?oCSEndTime, xsd:dateTime )
+										)
+									)
+								}
+								GRAPH doc:mastergraph {
+									?oCollectionGraph dct:isVersionOf doc:mastergraph.
+								}
+							}
+							BIND( IF( BOUND( ?oCollection ), skos:Question, ?object_type ) AS ?otype )
+							?o rdfs:label ?olabel.	
 							?og prov:generatedAtTime ?oStartTime.
 							OPTIONAL {
 								?o prov:invalidatedAtTime ?oEndTime.
@@ -2074,7 +2142,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)	
 						}
 						GRAPH doc:mastergraph {
-							?og dc:isVersionOf doc:mastergraph.
+							?og dct:isVersionOf doc:mastergraph.
 						}
 					}
 					OPTIONAL {
@@ -2101,49 +2169,13 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 							)	
 						}
 						GRAPH doc:mastergraph {
-							?altSubjectGraph dc:isVersionOf doc:mastergraph.
+							?altSubjectGraph dct:isVersionOf doc:mastergraph.
 						}
 					}
 				}
 				
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
-			
-			# UNION {
-			#	SERVICE <http://almere.pilod.nl/sparql> {
-			#		SERVICE <http://data.pdok.nl/sparql> {
-			#			GRAPH brt:top10nl-metadata {
-			#				{
-			#					<@IDSUBJECT@> rdf:type ?type.
-			#					OPTIONAL {
-			#						<@IDSUBJECT@> rdfs:label ?concept_label.
-			#						<@IDSUBJECT@> ?p ?o.
-			#						?o rdfs:label ?olabel.
-			#						?o rdf:type ?otype.
-			#					}
-			#				}
-			#				UNION {
-			#					?s ?sp <@IDSUBJECT@>.
-			#					?s rdf:type ?stype.
-			#					OPTIONAL {
-			#						?s rdfs:label ?slabel.
-			#					}
-			#				}
-			#			}
-			#		}
-			#	}
-			# }
-			# UNION {
-			#	SERVICE <http://data.acceptatie.pdok.nl/toepasbareregels/sparql> {
-			#		GRAPH tr:functionelestructuur {
-			#			?act skoslex:object <@IDSUBJECT@>.
-			#			?act rdf:type ?act_type.
-			#			OPTIONAL {
-			#				?act rdfs:label ?actlabel.
-			#			}
-			#		}
-			#	}
-			# }
 		}
 	''';
 .
@@ -2162,7 +2194,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/bag/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/bag/concepten/doc/>
@@ -2447,7 +2479,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 stage:WeergaveVersiesConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/bag/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/bag/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/bag/id/dataset/>
@@ -2479,8 +2511,8 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 					)
 				}
 				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph.
-					?actualGraph dc:isVersionOf doc:mastergraph.
+					?graph dct:isVersionOf doc:mastergraph.
+					?actualGraph dct:isVersionOf doc:mastergraph.
 				}
 				FILTER( ?graph != ?actualGraph )
 				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
@@ -2494,7 +2526,7 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 					}
 				}
 				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph
+					?graph dct:isVersionOf doc:mastergraph
 				}	
 				FILTER( ?graph != <@GRAPH@> )
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
@@ -2511,7 +2543,7 @@ stage:BAGGlossary elmo:appearance elmo:HiddenAppearance;
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
+		prefix dct: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix container: <http://data.acceptatie.pdok.nl/catalogus/bag/container/>
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/bag/concepten/doc/>
@@ -2625,6 +2657,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
 		elmo:index "04";
+		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
@@ -2636,6 +2669,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
 		elmo:index "06";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
@@ -2646,16 +2680,19 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:indx "13";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
 		elmo:indx "14";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
 		elmo:indx "15";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
@@ -2666,26 +2703,31 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
 		elmo:indx "17";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum"@nl;
 		elmo:applies-to prov:startedAtTime;
 		elmo:index "27";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum"@nl;
 		elmo:applies-to prov:endedAtTime;
 		elmo:index "28";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Uitgevoerd door"@nl;
 		elmo:applies-to prov:wasAssociatedWith;
 		elmo:index "29";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Namens organisatie"@nl;
 		elmo:applies-to prov:actedOnBehalfOf;
 		elmo:index "32";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:query stage:WeergaveTabelCollectiesQuery;
 .
@@ -4700,7 +4742,6 @@ stage:BAGTreeQuery a elmo:Query;
 				}
 			}
 		}
-		ORDER BY lcase(?sCollectionLabel), lcase(?oCollectionLabel), lcase(?sLabel), lcase(?oLabel)
 	'''
 .
  
@@ -5082,75 +5123,27 @@ stage:BAGSearchQuery a elmo:Query;
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
-			{
-				GRAPH ?g {
-					{
-						?concept rdf:type skos:Concept
-					}
-					UNION {
-						?concept rdf:type skos:Collection
-					}
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {
-						?concept skos:definition ?uitleg.
-					}
-					FILTER regex(?concept_label,'@TERM@','i').
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-					FILTER NOT EXISTS {
-						GRAPH ?toeleidingsGraph {
-							collection:Toeleidingsbegrippen skos:member ?concept.
-							FILTER NOT EXISTS {
-								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
-							}
-						}
-						GRAPH doc:mastergraph {
-							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
-						}
-					}
+			GRAPH ?g {
+				{
+					?concept rdf:type skos:Concept
 				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g.
+				UNION {
+					?concept rdf:type skos:Collection
+				}
+				?concept rdfs:label ?concept_label.
+				OPTIONAL {
+					?concept skos:scopeNote ?uitleg.
+				}
+				FILTER (
+					regex(?concept_label,'@TERM@','i')
+					|| regex(?uitleg,'@TERM@','i')
+				)
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
 				}
 			}
-			UNION {
-				GRAPH ?g {
-					?toeleiding rdf:type skos:Concept.
-					?toeleiding rdfs:label ?toeleiding_label.
-					?toeleiding ?match ?concept.
-					FILTER (
-						?match = skos:closeMatch
-						|| ?match = skos:exactMatch
-						|| ?match = skos:broadMatch
-						|| ?match = skos:narrowMatch
-						|| ?match = skos:relatedMatch
-					)				
-					FILTER regex(?toeleiding_label,'@TERM@','i').
-					FILTER NOT EXISTS {
-						?toeleiding prov:invalidatedAtTime ?ttime.
-					}
-				}
-				GRAPH ?conceptgraph {
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {
-						?concept skos:definition ?uitleg.
-					}
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-				}
-				GRAPH ?toeleidingsGraph {
-					collection:Toeleidingsbegrippen skos:member ?toeleiding.
-					FILTER NOT EXISTS {
-						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
-					}
-				}
-				GRAPH doc:mastergraph {
-					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
-					?toeleiding rdfs:isDefinedBy ?g.
-					?concept rdfs:isDefinedBy ?conceptgraph.
-				}				
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g.
 			}
 		}
 		ORDER BY lcase(?concept_label)
