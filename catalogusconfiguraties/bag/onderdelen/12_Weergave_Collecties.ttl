@@ -41,6 +41,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Naam"@nl;
 		elmo:applies-to skos:prefLabel;
 		elmo:index "01";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
@@ -124,7 +125,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 
 # Tabel met vorige versies
 stage:WeergaveVersiesCollecties a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -155,7 +156,7 @@ stage:WeergaveVersiesCollecties a elmo:Part;
 # Conceptentabel voor op de collectiepagina
 stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 	elmo:with-parameter "term";
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "03";
 	elmo:fragment [
 		elmo:applies-to "uitleg";
@@ -166,7 +167,7 @@ stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 
 stage:BAGCollectieConceptenWithoutParam a elmo:Part;
 	elmo:without-parameter "term";
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "03";
 	elmo:fragment [
 		elmo:applies-to "uitleg";
@@ -418,7 +419,7 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
 		WHERE {
 			{
 				GRAPH ?cg {
@@ -516,7 +517,7 @@ stage:BAGCollectieConceptenQueryWithoutParam a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
 		WHERE {
 			{
 				GRAPH ?cg {

@@ -1604,6 +1604,7 @@ stage:WeergavePaginaConcepten a elmo:Representation;
 	elmo:contains stage:WeergaveTabelConcepten;
 	elmo:contains stage:WeergaveVersiesConcepten;
 	elmo:contains stage:WeergaveGrafischConcepten;
+	elmo:contains stage:BAGGlossary;
 	elmo:applies-to [
 		rdf:type skos:Concept
 	];
@@ -1627,6 +1628,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Naam"@nl;
 		elmo:applies-to skos:prefLabel;
 		elmo:index "00";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Notitie"@nl;
@@ -1648,6 +1650,8 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
 		elmo:index "04";
+		elmo:appearance elmo:MarkdownAppearance;
+		# xhtml:glossary stage:BAGGlossary;
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
@@ -1694,16 +1698,19 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:index "13";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
 		elmo:index "14";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
 		elmo:index "15";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
@@ -1754,21 +1761,25 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Startdatum"@nl;
 		elmo:applies-to prov:startedAtTime;
 		elmo:index "27";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum"@nl;
 		elmo:applies-to prov:endedAtTime;
 		elmo:index "28";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Uitgevoerd door"@nl;
 		elmo:applies-to prov:wasAssociatedWith;
 		elmo:index "29";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Namens organisatie"@nl;
 		elmo:applies-to prov:actedOnBehalfOf;
 		elmo:index "32";
+		elmo:appearance elmo:HiddenAppearance;
 	];	
 	elmo:fragment [
 		rdfs:label "Voorbeeld"@nl;
@@ -2491,6 +2502,68 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 		}
 		ORDER BY DESC(lcase(?concept_label))
 	'''
+.
+
+# Glossary
+stage:BAGGlossary elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/bag/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+				
+		CONSTRUCT {
+			?concept elmo:name ?concept_label
+		}
+		WHERE {
+			SELECT * 
+			WHERE {
+				{
+					GRAPH ?g {
+						?concept rdf:type skos:Concept.
+						?concept skos:prefLabel ?concept_label.
+						FILTER NOT EXISTS {
+							?concept prov:invalidatedAtTime ?time.
+						}
+						FILTER( ?concept != <@SUBJECT@> )
+					}
+					GRAPH ?sg {
+						<@SUBJECT@> ?p ?concept.
+					}
+					GRAPH doc:mastergraph {
+						?concept rdfs:isDefinedBy ?g.
+						<@SUBJECT@> rdfs:isDefinedBy ?sg.
+					}
+					FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+				}
+				UNION {
+					GRAPH <@GRAPH@> {
+						?concept rdf:type skos:Concept.
+						?concept skos:prefLabel ?concept_label.
+						FILTER( ?concept != <@SUBJECT@> )
+					}
+					GRAPH ?sg {
+						<@SUBJECT@> ?p ?concept.
+					}
+					GRAPH doc:mastergraph {
+						<@SUBJECT@> rdfs:isDefinedBy ?sg.
+					}
+					FILTER( substr("@GRAPH@",2) != "GRAPH@" )
+				}
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
+			} 
+		}
+	''';
 . 
 #
 #
@@ -2535,6 +2608,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Naam"@nl;
 		elmo:applies-to skos:prefLabel;
 		elmo:index "01";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
@@ -2618,7 +2692,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 
 # Tabel met vorige versies
 stage:WeergaveVersiesCollecties a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -2649,7 +2723,7 @@ stage:WeergaveVersiesCollecties a elmo:Part;
 # Conceptentabel voor op de collectiepagina
 stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 	elmo:with-parameter "term";
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "03";
 	elmo:fragment [
 		elmo:applies-to "uitleg";
@@ -2660,7 +2734,7 @@ stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 
 stage:BAGCollectieConceptenWithoutParam a elmo:Part;
 	elmo:without-parameter "term";
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "03";
 	elmo:fragment [
 		elmo:applies-to "uitleg";
@@ -2912,7 +2986,7 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
 		WHERE {
 			{
 				GRAPH ?cg {
@@ -3010,7 +3084,7 @@ stage:BAGCollectieConceptenQueryWithoutParam a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
 		WHERE {
 			{
 				GRAPH ?cg {
@@ -3109,6 +3183,7 @@ stage:WeergavePaginaDecisions a elmo:Representation;
 	elmo:contains stage:WeergaveTabelDecisions;
 	elmo:contains stage:WeergaveVersiesDecisions;
 	elmo:contains stage:WeergaveGrafischDecisions;
+	elmo:contains stage:PopupTabelDecisions;
 	elmo:applies-to [
 		rdf:type dmn:Decision
 	];
@@ -3117,6 +3192,65 @@ stage:WeergavePaginaDecisions a elmo:Representation;
 #
 # HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
 #
+
+stage:PopupTabelDecisions a elmo:Part;
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Toelichting"@nl;
+		elmo:applies-to skos:scopeNote;
+		elmo:index "03";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "Voorbeeld"@nl;
+		elmo:applies-to skos:example;
+		elmo:index "33";
+		elmo:appearance elmo:ImageAppearance;
+	];
+	elmo:query stage:PopupQuery
+.
+
+stage:PopupQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/bag/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix dmn:	<http://www.omg.org/spec/DMN/20151101/dmn#>
+		
+		CONSTRUCT {
+			?s ?p ?o.
+		}
+		WHERE {
+			GRAPH ?g {
+				<@IDSUBJECT@> skos:semanticRelation ?s.
+			}
+			GRAPH ?sg {
+				?s ?p ?o.
+				FILTER(
+					?p = rdfs:label
+					|| ?p = skos:scopeNote
+					|| ?p = skos:example
+				)
+			}
+		}
+	'''
+.
+
+
+
 
 # Algemene tabelweergave
 stage:WeergaveTabelDecisions a elmo:Part;
@@ -4518,53 +4652,55 @@ stage:BAGTreeQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/bag/container/>
 		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
-		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
-		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
-		prefix dmn: <http://www.omg.org/spec/DMN/20151101/dmn#>
 		
 		CONSTRUCT {
 			?s rdfs:label ?sLabel.
 			?o rdfs:label ?oLabel.
-			?o dmn:informationRequirement ?s.
+			?s skos:member ?sCollection.
+			?s ?p ?o.
+			?sCollection rdfs:label ?sCollectionLabel.
 		}
 		WHERE {
-			{
-				SELECT ?s, ?sLabel, ?o, ?oLabel
-				WHERE {
-					{
-						SELECT DISTINCT ?broaderSubject AS ?s, ?broaderSubjectLabel AS ?sLabel, ?broaderObject AS ?o, ?broaderObjectLabel AS ?oLabel
-						WHERE {
-							GRAPH ?broaderSubjectGraph {
-								{
-									?broaderSubject rdf:type dmn:Decision.
-									?broaderSubject rdfs:label ?broaderSubjectLabel.
-									?broaderSubject dmn:informationRequirement/dmn:requiredDecision ?broaderObject.
-								}
-								FILTER NOT EXISTS {
-									?broaderSubject prov:invalidatedAtTime ?broaderSubjectTime.
-								}
-							}
-							GRAPH ?broaderObjectGraph {
-								?broaderObject rdf:type dmn:Decision.
-								?broaderObject dmn:question ?broaderObjectLabel.
-								FILTER NOT EXISTS {
-									?broaderObject prov:invalidatedAtTime ?broaderObjectTime.
-								}
-							}
-							GRAPH doc:mastergraph {
-								?broaderSubject rdfs:isDefinedBy ?broaderSubjectGraph.
-								?broaderObject rdfs:isDefinedBy ?broaderObjectGraph.
-							}
+			GRAPH ?g {
+				?s rdf:type skos:Concept.
+				?s rdfs:label ?sLabel.
+				OPTIONAL {
+					?s ?p ?o.
+				}
+				FILTER NOT EXISTS {
+					?s prov:invalidatedAtTime ?sTime.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g.
+			}
+			OPTIONAL {
+				GRAPH ?og {
+					?o rdf:type skos:Concept.
+					?o rdfs:label ?oLabel.
+					FILTER NOT EXISTS {
+						?o prov:invalidatedAtTime ?oTime.
 					}
-					
+				}
+				GRAPH doc:mastergraph {
+					?o rdfs:isDefinedBy ?og.
+				}
+			}
+			OPTIONAL {
+				GRAPH ?sCollectionGraph {
+					?sCollection skos:member ?s.
+					?sCollection rdfs:label ?sCollectionLabel.
+					FILTER NOT EXISTS {
+						?sCollection prov:invalidatedAtTime ?sCollectionTime.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
 				}
 			}
 		}
-		}
-		ORDER BY lcase(?sLabel), lcase(?oLabel)
-		
+		ORDER BY lcase(?sCollectionLabel), lcase(?oCollectionLabel), lcase(?sLabel), lcase(?oLabel)
 	'''
 .
  
