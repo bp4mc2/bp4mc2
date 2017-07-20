@@ -2284,6 +2284,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix loc: <http://data.test.pdok.nl/catalogus/dso/id/>
 		prefix versiongraph: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://data.test.pdok.nl/catalogus/dso/>
 		prefix dataset: <http://data.test.pdok.nl/catalogus/dso/id/dataset/>
 		prefix concept: <http://data.test.pdok.nl/catalogus/dso/id/concept/>
 		prefix activity: <http://data.test.pdok.nl/catalogus/dso/id/concept/@CURRENTMOMENT@>
@@ -2325,6 +2326,11 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
 				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
 				concept:tomcatUser rdf:type prov:Agent.
 				concept:tomcatUser rdfs:label "Tomcat User".
 				concept:tomcatUser foaf:givenName "Tomcat User".
@@ -2673,39 +2679,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				}
             }
 		}
-		
-		INSERT {
-			GRAPH ?g {
-				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
-			}
-		}
-		WHERE {
-			GRAPH doc:mastergraph {
-				?s rdfs:isDefinedBy ?g.
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Dataset
-					|| ?type = dcat:Distribution
-					|| ?type = dcat:Catalog
-				)
-			}
-			FILTER NOT EXISTS {
-				GRAPH container:datasetupload {
-					?s rdf:type ?type.
-					FILTER (
-						?type = dcat:Dataset
-						|| ?type = dcat:Distribution
-						|| ?type = dcat:Catalog
-					)
-				}
-			}
-			FILTER NOT EXISTS {
-				GRAPH ?g {
-					?s prov:invalidatedAtTime ?time.
-				}
-			}
-		}
-		
+				
 		DELETE {
 			GRAPH doc:mastergraph {
 				?s bp4mc2:signature ?sig.
@@ -2758,7 +2732,8 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		
 		INSERT {
 			GRAPH ?g {
-				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@".
+				?s dct:modified "@CURRENTMOMENT@".
 			}
 		}
 		WHERE {
@@ -2776,6 +2751,7 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			FILTER NOT EXISTS {
 				GRAPH ?g {
 					?s prov:invalidatedAtTime ?time.
+					?s dct:modfied ?time.
 				}
 			}
 		}
@@ -5975,8 +5951,9 @@ stage:WeergaveTabelCatalog a elmo:Part;
 		elmo:index "42";
 	];
 	elmo:fragment [
-		rdfs:label "Datasets"@nl;
-		elmo:applies-to dcat:dataset;
+		rdfs:label "datasets"@nl;
+		elmo:applies-to skos:ConceptScheme;
+		xhtml:glossary stage:GlossaryDatasets;
 		elmo:index "45";
 	];
 	elmo:fragment [
@@ -6188,7 +6165,29 @@ stage:DSODatasetTabel a elmo:Part;
 	];
 	elmo:query stage:DSODatasetQuery;
 .
-
+stage:GlossaryDatasets a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		CONSTRUCT ?dataset ?dataset_label
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+.
 # QUERY
 
 # query voor tonen alle datasets
@@ -6215,7 +6214,8 @@ stage:DSODatasetQuery a elmo:Query;
 		}
 		ORDER BY (?dataset)
 	'''
-. 
+.
+ 
 #
 #
 #
