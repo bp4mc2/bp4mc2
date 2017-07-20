@@ -1,0 +1,118 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+stage:dcat-ap-nl-lijst	a	elmo:Representation;
+	elmo:url-pattern	"/query/dcat-ap-nl-lijst$";
+	elmo:contains stage:Menu;
+	elmo:contains stage:dcat-ap-nl-lijst_classes;
+	elmo:contains stage:dcat-ap-nl-lijst_properties;
+.
+
+stage:dcat-ap-nl-lijst_classes a elmo:Part;
+	elmo:index "1";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "severity";
+		rdfs:label "Req";
+	];
+	elmo:fragment [
+		elmo:applies-to "class";
+		rdfs:label "Class name";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Usage note for the Application Profile";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select ?severity ?severity_label ?class ?class_label ?comment ?uri
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape sh:targetClass ?class.
+				?shape sh:name ?uri.
+				?shape sh:severity ?severity.
+				OPTIONAL {?shape rdfs:comment ?comment}
+				OPTIONAL {?shape rdfs:label ?class_label}
+			}
+			graph <@STAGE@> {
+				?severity rdfs:label ?severity_label.
+				?severity rdf:value ?severity_level.
+			}
+		}
+		order by ?severity_level ?class_label
+	''';
+.
+
+stage:dcat-ap-nl-lijst_properties a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:ShortTableAppearance;
+	elmo:fragment [
+		elmo:applies-to "class";
+		rdfs:label "Class";
+	];
+	elmo:fragment [
+		elmo:applies-to "severity";
+		rdfs:label "Req";
+	];
+	elmo:fragment [
+		elmo:applies-to "property";
+		rdfs:label "Property";
+	];
+	elmo:fragment [
+		elmo:applies-to "uri";
+		elmo:appearance elmo:GlobalLink;
+		rdfs:label "URI";
+	];
+	elmo:fragment [
+		elmo:applies-to "comment";
+		rdfs:label "Usage note";
+	];
+	elmo:fragment [
+		elmo:applies-to "card";
+		rdfs:label "Card";
+	];
+	elmo:fragment [
+		elmo:applies-to "range";
+		rdfs:label "Range";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>
+		prefix dcterms: <http://purl.org/dc/terms/>
+		select distinct ?class ?class_label ?severity ?severity_label ?property ?uri ?uri_label ?range ?range_label ?comment ?card
+		where {
+			graph <http://bp4mc2.org/id/dataset/dcat-nl-profiel> {
+				?shape sh:targetClass ?class.
+				?shape sh:name ?class_label.
+				?shape sh:property ?prop.
+				?prop sh:severity ?severity.
+				?prop sh:path ?uri.
+				?prop sh:name ?uri_label.
+				?prop rdfs:label ?property.
+				OPTIONAL {?prop rdfs:comment ?comment}
+				OPTIONAL {?prop sh:minCount ?minc}
+				OPTIONAL {?prop sh:maxCount ?maxc}
+				BIND (concat(if(bound(?minc),?minc,"0"),"..",if(bound(?maxc),?maxc,"n")) as ?card)
+				OPTIONAL {?prop sh:datatype ?datatype. ?datatype ^sh:targetClass/sh:name ?datatype_label}
+				OPTIONAL {?prop sh:class ?refclass. ?refclass ^sh:targetClass/sh:name ?refclass_label}
+				OPTIONAL {?prop sh:node ?refshape. ?refshape sh:name ?refshape_label}
+				OPTIONAL {?prop sh:nodeKind ?nodekind}
+				BIND (if(bound(?datatype),?datatype,if(bound(?refshape),?refshape,if(?nodekind=sh:Literal,rdfs:Literal,?refclass))) as ?range)
+				BIND (if(bound(?datatype_label),?datatype_label,if(bound(?refshape_label),?refshape_label,if(?nodekind=sh:Literal,"rdfs:Literal",?refclass_label))) as ?range_label)
+			}
+			graph <@STAGE@> {
+				?severity rdfs:label ?severity_label.
+				?severity rdf:value ?severity_level.
+			}
+		}
+		order by ?class_label ?severity_level ?property
+	''';
+.

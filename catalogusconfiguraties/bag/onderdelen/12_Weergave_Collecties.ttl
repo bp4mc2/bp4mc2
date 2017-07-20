@@ -1,0 +1,604 @@
+#
+#
+#
+# COLLECTIES
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Standaard collectiepagina
+stage:WeergavePaginaCollecties a elmo:Representation;
+	elmo:contains stage:WeergaveTabelCollecties;
+	elmo:contains stage:BAGCollectieConceptenWithParamTerm;
+	elmo:contains stage:BAGCollectieConceptenWithoutParam;
+	elmo:contains stage:WeergaveVersiesCollecties;
+	elmo:contains stage:BAGHeader;
+	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGMenu;
+	elmo:contains stage:BAGTree;
+	elmo:contains stage:BAGIndexCollecties;
+	elmo:applies-to [
+		rdf:type skos:Collection
+	];
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Algemene tabelweergave
+stage:WeergaveTabelCollecties a elmo:Part;
+	elmo:index "01";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "01";
+	];
+	elmo:fragment [
+		rdfs:label "Uitleg"@nl;
+		elmo:applies-to skos:comment;
+		elmo:index "02";
+	];
+	elmo:fragment [
+		rdfs:label "Definitie"@nl;
+		elmo:applies-to skos:definition;
+		elmo:index "03";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "Toelichting"@nl;
+		elmo:applies-to skos:scopeNote;
+		elmo:index "04";
+	];
+	elmo:fragment [ 
+		rdfs:label "Bron"@nl;
+		elmo:applies-to dct:source;
+		elmo:appearance elmo:GlobalLink;
+		elmo:index "05";
+	];
+	elmo:fragment [
+		rdfs:label "Domein"@nl;
+		elmo:applies-to skos:inScheme;
+		elmo:index "06";
+	];
+	elmo:fragment [
+		rdfs:label "Synoniemen"@nl;
+		elmo:applies-to skos:altLabel;
+		elmo:indx "12";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum versie"@nl;
+		elmo:applies-to prov:generatedAtTime;
+		elmo:indx "13";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum versie"@nl;
+		elmo:applies-to prov:invalidatedAtTime;
+		elmo:indx "14";
+	];
+	elmo:fragment [
+		rdfs:label "Laatste activiteit"@nl;
+		elmo:applies-to prov:wasGeneratedBy;
+		elmo:indx "15";
+	];
+	elmo:fragment [
+		rdfs:label "Lid van"@nl;
+		elmo:applies-to skos:member;
+		elmo:indx "16";
+	];
+	elmo:fragment [
+		rdfs:label "Periode geldigheid"@nl;
+		elmo:applies-to dct:valid;
+		elmo:indx "17";
+	];
+	elmo:fragment [
+		rdfs:label "Startdatum"@nl;
+		elmo:applies-to prov:startedAtTime;
+		elmo:index "27";
+	];
+	elmo:fragment [
+		rdfs:label "Einddatum"@nl;
+		elmo:applies-to prov:endedAtTime;
+		elmo:index "28";
+	];
+	elmo:fragment [
+		rdfs:label "Uitgevoerd door"@nl;
+		elmo:applies-to prov:wasAssociatedWith;
+		elmo:index "29";
+	];
+	elmo:fragment [
+		rdfs:label "Namens organisatie"@nl;
+		elmo:applies-to prov:actedOnBehalfOf;
+		elmo:index "32";
+	];
+	elmo:query stage:WeergaveTabelCollectiesQuery;
+.
+
+# Tabel met vorige versies
+stage:WeergaveVersiesCollecties a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "90";
+	elmo:fragment [
+		elmo:applies-to "graph";
+		elmo:name "graph";
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Andere versies";
+		xhtml:link "/catalogus/bag/query/versie"
+	];
+	elmo:fragment [
+		elmo:applies-to "actueeltot";
+		rdfs:label "Actueel tot";
+	];
+	elmo:fragment [
+		elmo:applies-to "slabel";
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		elmo:applies-to "graphlabel";
+		rdfs:label "Datum versie"@nl;
+	];
+	
+	elmo:query stage:WeergaveVersiesCollectiesQuery;
+.
+
+# Conceptentabel voor op de collectiepagina
+stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
+	elmo:with-parameter "term";
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "03";
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:BAGCollectieConceptenQueryWithParamTerm;
+.
+
+stage:BAGCollectieConceptenWithoutParam a elmo:Part;
+	elmo:without-parameter "term";
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "03";
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:BAGCollectieConceptenQueryWithoutParam;
+.
+
+#
+# QUERY'S
+#
+
+# Query voor WeergaveTabel
+stage:WeergaveTabelCollectiesQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/collection/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		
+		construct {
+			<@IDSUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel.
+			?o rdfs:label ?oelabel.
+			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
+			<@IDSUBJECT@> prov:generatedAtTime ?startTime.
+			?a rdfs:label ?alabel.
+		}
+		WHERE {
+			{
+				{
+					GRAPH ?g {
+						<@IDSUBJECT@> rdf:type skos:Collection.
+						OPTIONAL {
+							<@IDSUBJECT@> ?p ?o.
+						}
+						?g prov:generatedAtTime ?startTime.
+						?g prov:wasGeneratedBy ?a.
+						OPTIONAL {
+							?a rdfs:label ?alabel.
+						}
+						FILTER (
+							?p != rdf:type
+							&& ?p != bp4mc2:signature
+							&& ?p != dct:type
+							&& ?p != skos:member
+							&& ?p != dct:title
+						)
+						OPTIONAL {
+							<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+						}
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
+					}
+				}
+				OPTIONAL {
+					GRAPH ?og {
+						?og prov:generatedAtTime ?oStartTime.
+						?o rdfs:label ?olabel.
+						OPTIONAL {
+							?o prov:invalidatedAtTime ?oEndTime.
+						}
+						FILTER (
+							strdt( ?oStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?oEndTime )
+								|| strdt( ?oEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
+					}
+					GRAPH doc:mastergraph {
+						?og dc:isVersionOf doc:mastergraph.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?g dc:isVersionOf doc:mastergraph.
+				}
+				FILTER( substr("@GRAPH@",2) = "GRAPH@")
+			}
+			UNION
+			{
+				GRAPH <@GRAPH@> {
+					<@IDSUBJECT@> rdf:type skos:Collection.
+					<@IDSUBJECT@> ?p ?o.
+					<@GRAPH@> prov:wasGeneratedBy ?a.
+					<@GRAPH@> prov:generatedAtTime ?startTime.
+					FILTER (
+						?p != rdf:type
+						&& ?p != bp4mc2:signature
+						&& ?p != dct:type
+						&& ?p != skos:member
+						&& ?p != dct:title
+					)
+				}
+				OPTIONAL {
+					GRAPH ?og {
+						?o rdfs:label ?olabel.
+						?og prov:generatedAtTime ?oStartTime.
+						OPTIONAL {
+							?o prov:invalidatedAtTime ?oEndTime.
+						}
+						GRAPH <@GRAPH@> {
+							OPTIONAL {
+								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+							}
+						}
+						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+						FILTER (
+							strdt( ?oStartTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+							&& (
+								!bound( ?oEndTime )
+								|| strdt( ?oEndTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+							)
+						)	
+					}
+					GRAPH doc:mastergraph {
+						?og dc:isVersionOf doc:mastergraph.
+					}
+				}
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+		}
+	'''
+.
+
+#
+#				UNION
+#				{
+#					GRAPH ?g {
+#						<@IDSUBJECT@> rdf:type skos:Collection.
+#						OPTIONAL {
+#							<@IDSUBJECT@> ?p ?o.
+#						}
+#						?g prov:generatedAtTime ?startTime.
+#						?g prov:wasGeneratedBy ?a.
+#						FILTER (
+#							?p != rdf:type
+#							&& ?p != bp4mc2:signature
+#							&& ?p != dct:type
+#							&& ?p != skos:member
+#							&& ?p != dct:title
+#						)
+#						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+#						OPTIONAL {
+#							?a rdfs:label ?alabel.
+#						}
+#						FILTER (
+#							?p != rdf:type
+#							&& ?p != bp4mc2:signature
+#							&& ?p != dct:type
+#							&& ?p != skos:member
+#						)
+#						FILTER ( strdt( ?endTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime )
+#					}
+#					GRAPH doc:mastergraph {
+#						<@IDSUBJECT@> rdfs:isDefinedBy ?g.
+#					}
+#					FILTER NOT EXISTS {
+#						GRAPH ?altG {
+#							<@IDSUBJECT@> rdf:type skos:Concept.
+#							?altG prov:generatedAtTime ?altStartTime.
+#							FILTER( strdt( ?altStartTime, xsd:dateTime ) >= strdt( ?endTime, xsd:dateTime ) )
+#						}
+#					}
+#				}
+#
+
+
+# Query voor weergave versies
+stage:WeergaveVersiesCollectiesQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+
+		SELECT DISTINCT (<@IDSUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
+		WHERE {
+			{
+				GRAPH ?graph {
+					<@IDSUBJECT@> rdf:type skos:Collection.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH ?actualGraph {
+					<@IDSUBJECT@> rdf:type skos:Collection.
+					?actualGraph prov:generatedAtTime ?startTime.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?endTime.
+					}
+					FILTER (
+						strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?endTime )
+							|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph.
+					?actualGraph dc:isVersionOf doc:mastergraph.
+				}
+				FILTER( ?graph != ?actualGraph )
+				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH ?graph {
+					<@IDSUBJECT@> rdf:type skos:Collection.
+					?graph prov:generatedAtTime ?concept_label.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?actueeltot.
+					}
+				}
+				GRAPH doc:mastergraph {
+					?graph dc:isVersionOf doc:mastergraph
+				}	
+				FILTER( ?graph != <@GRAPH@> )
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+		}
+		ORDER BY DESC(lcase(?concept_label))
+	'''
+.
+
+stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix dc: <http://purl.org/dc/terms/>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+			{
+				GRAPH ?cg {
+					<@IDSUBJECT@> skos:member ?concept.
+					<@IDSUBJECT@> rdf:type skos:Collection.
+					?cg prov:generatedAtTime ?cStartTime.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?cEndTime.
+					}
+					FILTER (
+						strdt( ?cStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?cEndTime )
+							|| strdt( ?cEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
+				}
+				GRAPH doc:mastergraph {
+					?cg dc:isVersionOf doc:mastergraph.
+				}
+				OPTIONAL {
+					GRAPH ?g {
+						?concept rdf:type skos:Concept.
+						?concept rdfs:label ?concept_label.
+						OPTIONAL {
+							?concept skos:definition ?uitleg
+						}	
+						?g prov:generatedAtTime ?startTime.
+						OPTIONAL {
+							?concept prov:invalidatedAtTime ?endTime.
+						}
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
+					}
+					GRAPH doc:mastergraph {
+						?g dc:isVersionOf doc:mastergraph.
+					}
+				}
+				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION
+			{
+				GRAPH <@GRAPH@> {
+					<@IDSUBJECT@> skos:member ?concept.
+					<@IDSUBJECT@> rdf:type skos:Collection.
+				}
+				OPTIONAL {
+					GRAPH ?g {
+						?concept rdf:type skos:Concept.
+						?concept rdfs:label ?concept_label.
+						OPTIONAL {
+							?concept skos:definition ?uitleg
+						}	
+						?g prov:generatedAtTime ?startTime.
+						OPTIONAL {
+							?concept prov:invalidatedAtTime ?endTime.
+						}
+						GRAPH <@GRAPH@> {
+							OPTIONAL {
+								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+							}
+						}
+						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+							)
+						)	
+					}
+					GRAPH doc:mastergraph {
+						?g dc:isVersionOf doc:mastergraph.
+					}
+				}
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+			FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.
+
+stage:BAGCollectieConceptenQueryWithoutParam a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix dc: <http://purl.org/dc/terms/>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+			{
+				GRAPH ?cg {
+					<@IDSUBJECT@> skos:member ?concept.
+					<@IDSUBJECT@> rdf:type skos:Collection.
+					?cg prov:generatedAtTime ?cStartTime.
+					OPTIONAL {
+						<@IDSUBJECT@> prov:invalidatedAtTime ?cEndTime.
+					}
+					FILTER (
+						strdt( ?cStartTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+						&& (
+							!bound( ?cEndTime )
+							|| strdt( ?cEndTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+						)
+					)
+				}
+				GRAPH doc:mastergraph {
+					?cg dc:isVersionOf doc:mastergraph.
+				}
+				OPTIONAL {
+					GRAPH ?g {
+						?concept rdf:type skos:Concept.
+						?concept rdfs:label ?concept_label.
+						OPTIONAL {
+							?concept skos:definition ?uitleg
+						}	
+						?g prov:generatedAtTime ?startTime.
+						OPTIONAL {
+							?concept prov:invalidatedAtTime ?endTime.
+						}
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= "@TIMESTAMP@"^^xsd:dateTime
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > "@TIMESTAMP@"^^xsd:dateTime
+							)
+						)
+					}
+					GRAPH doc:mastergraph {
+						?g dc:isVersionOf doc:mastergraph.
+					}
+				}
+				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
+			}
+			UNION {
+				GRAPH <@GRAPH@> {
+					<@IDSUBJECT@> skos:member ?concept.
+					<@IDSUBJECT@> rdf:type skos:Collection.
+				}
+				OPTIONAL {
+					GRAPH ?g {
+						?concept rdf:type skos:Concept.
+						?concept rdfs:label ?concept_label.
+						OPTIONAL {
+							?concept skos:definition ?uitleg
+						}	
+						?g prov:generatedAtTime ?startTime.
+						OPTIONAL {
+							?concept prov:invalidatedAtTime ?endTime.
+						}
+						GRAPH <@GRAPH@> {
+							OPTIONAL {
+								<@IDSUBJECT@> prov:invalidatedAtTime ?invTime.
+							}
+						}
+						BIND( IF( BOUND( ?invTime ), ?invTime, "@CURRENTMOMENT@"^^xsd:dateTime ) AS ?sEndTime )
+						FILTER (
+							strdt( ?startTime, xsd:dateTime ) <= strdt( ?sEndTime, xsd:dateTime )
+							&& (
+								!bound( ?endTime )
+								|| strdt( ?endTime, xsd:dateTime ) > strdt( ?sEndTime, xsd:dateTime )
+							)
+						)	
+					}
+					GRAPH doc:mastergraph {
+						?g dc:isVersionOf doc:mastergraph.
+					}
+				}
+				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
+			}
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.

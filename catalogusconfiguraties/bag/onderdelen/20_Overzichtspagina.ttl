@@ -1,0 +1,92 @@
+#
+#
+#
+# OVERZICHTSPAGINA
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Overzichtspagina concepten
+stage:BAGOverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/bag/query/overzichtspagina(|/|\\..+)$";
+	elmo:contains stage:BAGConceptentabel;
+	elmo:contains stage:BAGIndexConcepten;
+	elmo:contains stage:BAGHeader;
+	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGMenu;
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+# Index voor op de alfabetische weergave concepten
+stage:BAGIndexConcepten a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "/catalogus/bag/query/overzichtspagina";
+		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term";
+	];
+	elmo:index "02";
+.
+
+# Conceptentabel voor op de alfabetische weergave concepten
+stage:BAGConceptentabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "03";
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:BAGConceptenQuery;
+.
+
+#
+# QUERY'S
+#
+
+# Query voor tonen alle concepten
+stage:BAGConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+				?concept rdfs:label ?concept_label.
+				OPTIONAL {?concept skos:definition ?uitleg}
+				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?toeleidingsGraph {
+					collection:Toeleidingsbegrippen skos:member ?concept.
+					FILTER NOT EXISTS {
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+					}
+				}
+				GRAPH doc:mastergraph {
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+				}
+			}
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.

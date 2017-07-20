@@ -3,7 +3,8 @@
 # ! NB: Deze versie van het profiel zou het nieuwe dcat-nl profiel moeten volgen
 # !     Zoals op de site dcat-nl.info
 # !
-# !     Op dit moment is dit bestand nog een kopie van het origele dcat 0.6
+# !     Er zijn enkele issues met de inhoud op die site. Hieronder wordt steeds aangegeven welke beslissing is genomen,
+# !     en waar eventueel afwijkingen met de inhoud op de site optreden.
 # !
 # ====
 @prefix dcat-nl: <http://bp4mc2.org/def/dcat-nl/>.
@@ -63,8 +64,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Uniforme identificatie van de dataset. Range is niet URI maar vrije tekst omdat het hier om de letters van string gaat (de literal) en niet om de link. Zie de sectie over Identificatie elders in dit document.";
 		sh:name "dct:identifier";
 		sh:path dct:identifier;
-		sh:minCount 1;
-		sh:maxCount 1;
 		sh:datatype xsd:string;
 		sh:severity sh:Violation;
 	];
@@ -91,7 +90,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Laatste datum waarop de dataset zelf is gewijzigd. Deze datum zegt niets over de wijzigingsdatum van de metadata van de dataset.";
 		sh:name "dct:modified";
 		sh:path dct:modified;
-		sh:minCount 1;
 		sh:maxCount 1;
 		sh:datatype xsd:date;
 		sh:severity sh:Violation;
@@ -101,7 +99,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Taal van de inhoud van de dataset. Herhaalbaar indien meerdere talen voorkomen.";
 		sh:name "dct:language";
 		sh:path dct:language;
-		sh:minCount 1;
 		sh:datatype xml:lang;
 		sh:severity sh:Violation;
 	];
@@ -159,10 +156,9 @@ dcat-nl:Dataset a sh:NodeShape;
 	sh:property [
 		rdfs:label "Landingspagina"@nl;
 		rdfs:comment "Webpagina, meestal bij de verstrekker, die toelichting geeft bij de dataset, de distributies en metadata die de verstrekker geeft.";
-		sh:name "dcat:landingsPage";
-		sh:path dcat:landingsPage;
-		sh:maxCount 1;
-		sh:class foaf:Document;
+		sh:name "dcat:landingPage";
+		sh:path dcat:landingPage;
+		sh:datatype xsd:anyURI;
 		sh:severity sh:Warning;
 	];
 	sh:property [
@@ -179,8 +175,8 @@ dcat-nl:Dataset a sh:NodeShape;
 		rdfs:comment "Periode in de tijd waarop de dataset betrekking heeft.";
 		sh:name "dct:temporal";
 		sh:path dct:temporal;
-		sh:class dct:PeriodOfTime; #Dit zou wel eens niet kunnen kloppen, maar wordt niet duidelijk uit de documentatie
-		sh:severity sh:Warning; #Dit is eigenlijk nog een uitzoekpunt, want een resource is wat onhandig: liever met begin-end tijd
+		sh:class overheid:Period; #In de nieuwe registratie staat overheid:Period, maar dat vind ik persoonlijk onhandig
+		sh:severity sh:Warning;
 	];
 	sh:property [
 		rdfs:label "Licentie"@nl;
@@ -279,7 +275,6 @@ dcat-nl:Dataset a sh:NodeShape;
 		sh:severity sh:Info;
 	];
 	sh:property [
-		#Deze property ontbreekt in de tabel, maar staat wel in het figuur
 		rdfs:label "Distributie"@nl;
 		rdfs:comment "De distributie(s) van een dataset";
 		sh:name "dcat:distribution";
@@ -376,6 +371,7 @@ dcat-nl:Distributie a sh:NodeShape;
 		sh:severity sh:Info;
 	];
 .
+#CatalogusRecord is opgesteld obv hetgeen op dcat-nl.info staat bij "Catalogus", aangezien het lijkt dat hier juist een CatalogusRecord wordt bedoeld.
 dcat-nl:Catalogusrecord a sh:NodeShape;
 	dct:type dcat-nl:Kernklasse;
 	rdfs:label "Catalogusrecord"@nl;
@@ -386,11 +382,11 @@ dcat-nl:Catalogusrecord a sh:NodeShape;
 	sh:property [
 		rdfs:label "Catalogus"@nl;
 		rdfs:comment "Catalogus waartoe het record behoort";
-		sh:name "dcat:Catalog"; #Zou dit niet dcat:catalog moeten zijn? Overigens staat in het plaatje dct:partOf??
+		sh:name "dcat:Catalog"; #Een catalogusrecord kent geen relatie naar de Catalogus. Conform DCAT loopt de relatie van catalogus naar catalogusrecord via dcat:record
 		sh:path dcat:Catalog;
 		sh:minCount 1;
 		sh:maxCount 1;
-		sh:class dcat:Catalog; #In de tabel staat donl:Catalogus: hoe gaan we hier mee om?
+		sh:class dcat:Catalog;
 		sh:severity sh:Violation;
 	];
 	sh:property [
@@ -400,7 +396,7 @@ dcat-nl:Catalogusrecord a sh:NodeShape;
 		sh:path dcat:identifier;
 		sh:minCount 1;
 		sh:maxCount 1;
-		sh:datatype xsd:anyURI; #In tabel staat foaf:Document klopt dit?? Ik zou eerder adms:Identifier verwachten, maar dat is in de datatype tabel een URI en geen URL. In het plaatje is het een simpel attribuut, dus dan zou het eerder xsd:anyURI zijn.
+		sh:datatype xsd:anyURI;
 		sh:severity sh:Violation;
 	];
 	sh:property [
@@ -425,7 +421,7 @@ dcat-nl:Catalogusrecord a sh:NodeShape;
 	];
 	sh:property [
 		rdfs:label "Soort wijziging"@nl;
-		rdfs:comment "Indicatie van de soort van de laatste wijziging: :created, :updated of :deleted";
+		rdfs:comment "Indicatie van de soort van de laatste wijziging: :created, :updated of :deleted. Let op: Dit is iets anders dan de adms:status van de distributie.";
 		sh:name "adms:status";
 		sh:path adms:status;
 		sh:maxCount 1;
@@ -469,6 +465,7 @@ dcat-nl:Catalogus a sh:NodeShape;
 	rdfs:comment "Een verzameling beschrijvingen van Datasets. Data.overheid.nl houdt een registratie bij van Catalogi en geeft URIs uit waarmee Catalogi geïdentificeerd worden.";
 	sh:name "dcat:Catalog";
 	sh:targetClass dcat:Catalog;
+	sh:severity sh:Violation; #Ontbrak in 0.6. Aangezien in dcat-ap-eu deze klasse verplicht is, is dit overgenomen in dcat-ap-nl.
 	sh:property [
 		rdfs:label "Verwijzing"@nl;
 		sh:name "dct:identifier";
@@ -739,7 +736,7 @@ dcat-nl:RecordStatus a sh:NodeShape;
 	sh:name "overheid:RecordStatus";
 	sh:property [
 		sh:path skos:inScheme;
-		sh:targetNode overheid:RecordStatus;
+		sh:targetNode overheid:RecordStatus; #overheid:RecordStatus bestaat nog niet. Ik zou verwachten dat we hier een dcat-nl waardelijst introduceren. De waarden zouden eigenlijk uit de AP-EU variant moeten komen, maar die lijkt geen waarden te hebben?
 	]
 .
 dcat-nl:Taal a sh:NodeShape;

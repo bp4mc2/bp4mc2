@@ -1,0 +1,113 @@
+#
+#
+#
+# SEARCH
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Standaard zoekpagina
+stage:BAGSearch a elmo:Representation;
+	elmo:url-pattern "query/search";
+	elmo:contains stage:BAGMenu;
+	elmo:contains stage:BAGHeader;
+	elmo:contains stage:BAGFooter;
+	elmo:query stage:BAGSearchQuery;
+.
+
+
+#
+# QUERY'S
+#
+
+# Zoekquery
+stage:BAGSearchQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/bag/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+			{
+				GRAPH ?g {
+					{
+						?concept rdf:type skos:Concept
+					}
+					UNION {
+						?concept rdf:type skos:Collection
+					}
+					?concept rdfs:label ?concept_label.
+					OPTIONAL {
+						?concept skos:definition ?uitleg.
+					}
+					FILTER regex(?concept_label,'@TERM@','i').
+					FILTER NOT EXISTS {
+						?concept prov:invalidatedAtTime ?time.
+					}
+					FILTER NOT EXISTS {
+						GRAPH ?toeleidingsGraph {
+							collection:Toeleidingsbegrippen skos:member ?concept.
+							FILTER NOT EXISTS {
+								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+							}
+						}
+						GRAPH doc:mastergraph {
+							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+						}
+					}
+				}
+				GRAPH doc:mastergraph {
+					?concept rdfs:isDefinedBy ?g.
+				}
+			}
+			UNION {
+				GRAPH ?g {
+					?toeleiding rdf:type skos:Concept.
+					?toeleiding rdfs:label ?toeleiding_label.
+					?toeleiding ?match ?concept.
+					FILTER (
+						?match = skos:closeMatch
+						|| ?match = skos:exactMatch
+						|| ?match = skos:broadMatch
+						|| ?match = skos:narrowMatch
+						|| ?match = skos:relatedMatch
+					)				
+					FILTER regex(?toeleiding_label,'@TERM@','i').
+					FILTER NOT EXISTS {
+						?toeleiding prov:invalidatedAtTime ?ttime.
+					}
+				}
+				GRAPH ?conceptgraph {
+					?concept rdfs:label ?concept_label.
+					OPTIONAL {
+						?concept skos:definition ?uitleg.
+					}
+					FILTER NOT EXISTS {
+						?concept prov:invalidatedAtTime ?time.
+					}
+				}
+				GRAPH ?toeleidingsGraph {
+					collection:Toeleidingsbegrippen skos:member ?toeleiding.
+					FILTER NOT EXISTS {
+						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
+					}
+				}
+				GRAPH doc:mastergraph {
+					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
+					?toeleiding rdfs:isDefinedBy ?g.
+					?concept rdfs:isDefinedBy ?conceptgraph.
+				}				
+			}
+		}
+		ORDER BY lcase(?concept_label)
+		LIMIT 100
+	''';
+.

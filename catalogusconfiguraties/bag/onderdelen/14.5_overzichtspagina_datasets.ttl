@@ -1,0 +1,79 @@
+#
+#
+#
+# OVERZICHTSPAGINA DATASETS
+#
+#
+#
+
+
+# REPRESENTATIONS
+
+# Overzichtspagina Datasets
+stage:BAGDatasetOverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/bag/query/overzichtdatasets(|/|\\..+)$";
+	elmo:contains stage:BAGHeader;
+	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGMenu;
+	elmo:contains stage:BAGDatasetTabel;
+.
+
+# Datasettabel voor overzichtsweergave
+stage:BAGDatasetTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:BAGDatasetQuery;
+.
+stage:GlossaryDatasets a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		CONSTRUCT ?dataset ?dataset_label
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+.
+# QUERY
+
+# query voor tonen alle datasets
+stage:BAGDatasetQuery a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				?dataset rdfs:comment ?uitleg.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
+	'''
+.
