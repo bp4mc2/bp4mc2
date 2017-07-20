@@ -41,6 +41,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Naam"@nl;
 		elmo:applies-to skos:prefLabel;
 		elmo:index "01";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
@@ -57,6 +58,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Toelichting"@nl;
 		elmo:applies-to skos:scopeNote;
 		elmo:index "04";
+		elmo:appearance elmo:MarkdownAppearance;
 	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
@@ -68,6 +70,7 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
 		elmo:index "06";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
@@ -78,16 +81,19 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
 		elmo:indx "13";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
 		elmo:indx "14";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
 		elmo:indx "15";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
@@ -98,33 +104,38 @@ stage:WeergaveTabelCollecties a elmo:Part;
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
 		elmo:indx "17";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum"@nl;
 		elmo:applies-to prov:startedAtTime;
 		elmo:index "27";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum"@nl;
 		elmo:applies-to prov:endedAtTime;
 		elmo:index "28";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Uitgevoerd door"@nl;
 		elmo:applies-to prov:wasAssociatedWith;
 		elmo:index "29";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
 		rdfs:label "Namens organisatie"@nl;
 		elmo:applies-to prov:actedOnBehalfOf;
 		elmo:index "32";
+		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:query stage:WeergaveTabelCollectiesQuery;
 .
 
 # Tabel met vorige versies
 stage:WeergaveVersiesCollecties a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "90";
 	elmo:fragment [
 		elmo:applies-to "graph";
@@ -155,7 +166,7 @@ stage:WeergaveVersiesCollecties a elmo:Part;
 # Conceptentabel voor op de collectiepagina
 stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 	elmo:with-parameter "term";
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "03";
 	elmo:fragment [
 		elmo:applies-to "uitleg";
@@ -166,7 +177,7 @@ stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 
 stage:BAGCollectieConceptenWithoutParam a elmo:Part;
 	elmo:without-parameter "term";
-	elmo:appearance elmo:TableAppearance;
+	elmo:appearance elmo:ShortTableAppearance;
 	elmo:index "03";
 	elmo:fragment [
 		elmo:applies-to "uitleg";
@@ -418,7 +429,7 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
 		WHERE {
 			{
 				GRAPH ?cg {
@@ -516,7 +527,7 @@ stage:BAGCollectieConceptenQueryWithoutParam a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
 		WHERE {
 			{
 				GRAPH ?cg {

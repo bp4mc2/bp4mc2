@@ -11,6 +11,7 @@ stage:WeergavePaginaDecisions a elmo:Representation;
 	elmo:contains stage:WeergaveTabelDecisions;
 	elmo:contains stage:WeergaveVersiesDecisions;
 	elmo:contains stage:WeergaveGrafischDecisions;
+	elmo:contains stage:PopupTabelDecisions;
 	elmo:applies-to [
 		rdf:type dmn:Decision
 	];
@@ -19,6 +20,65 @@ stage:WeergavePaginaDecisions a elmo:Representation;
 #
 # HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
 #
+
+stage:PopupTabelDecisions a elmo:Part;
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance
+	];
+	elmo:fragment [
+		rdfs:label "Toelichting"@nl;
+		elmo:applies-to skos:scopeNote;
+		elmo:index "03";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:fragment [
+		rdfs:label "Voorbeeld"@nl;
+		elmo:applies-to skos:example;
+		elmo:index "33";
+		elmo:appearance elmo:ImageAppearance;
+	];
+	elmo:query stage:PopupQuery
+.
+
+stage:PopupQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/bag/container/>
+		prefix doc: <http://localhost:8080/catalogus/bag/concepten/doc/>
+		prefix dataset: <http://localhost:8080/catalogus/bag/id/dataset/>
+		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix dmn:	<http://www.omg.org/spec/DMN/20151101/dmn#>
+		
+		CONSTRUCT {
+			?s ?p ?o.
+		}
+		WHERE {
+			GRAPH ?g {
+				<@IDSUBJECT@> skos:semanticRelation ?s.
+			}
+			GRAPH ?sg {
+				?s ?p ?o.
+				FILTER(
+					?p = rdfs:label
+					|| ?p = skos:scopeNote
+					|| ?p = skos:example
+				)
+			}
+		}
+	'''
+.
+
+
+
 
 # Algemene tabelweergave
 stage:WeergaveTabelDecisions a elmo:Part;
