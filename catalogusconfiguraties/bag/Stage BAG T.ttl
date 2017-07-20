@@ -213,6 +213,11 @@ stage:BAGBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/catalogus/bag/container/ttlupdate";
 			];
+			elmo:data[
+				rdfs:label "Upload Vocabulaire";
+				elmo:index "4";
+				xhtml:link "/catalogus/bag/container/Vocabulaire";
+			];
 		];
 		elmo:data [
 			rdfs:label "Acties";
@@ -1589,6 +1594,13 @@ stage:ClearAllDataScene a elmo:Scene;
 			FILTER( ?g != container:smw )
 		}
 	'''
+.
+ 
+container:Vocabulaire a elmo:Container;
+	rdfs:label "Upload Vocabulaire";
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:BAGBeheermenu;
+	elmo:replaces <http://bag.basisregistraties.overheid.nl/id/dataset/bag>;
 .
  
 #
