@@ -214,9 +214,14 @@ stage:BAGBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/catalogus/bag/container/ttlupdate";
 			];
+			elmo:data [
+				rdfs:label "Upload begrippen via Excel";
+				elmo:index "4";
+				xhtml:link "/catalogus/bag/container/excelupdate";
+			];
 			elmo:data[
 				rdfs:label "Upload Vocabulaire";
-				elmo:index "4";
+				elmo:index "5";
 				xhtml:link "/catalogus/bag/container/Vocabulaire";
 			];
 		];
@@ -5006,12 +5011,12 @@ stage:BAGModelQuery a elmo:Query;
 		construct {
 			?shape ?sp ?so.
 			?class rdf:type rdfs:Class.
-			?class rdfs:comment "".
+			?class rdfs:comment ?ccomment.
 			?subclass rdfs:subClassOf ?superclass.
 			?superclass rdf:type rdfs:Class.
 			?pc ?pcp ?pco.
 			?property rdf:type rdf:Property.
-			?property rdfs:comment "".
+			?property rdfs:comment ?pcomment.
 			?subproperty rdfs:subPropertyOf ?superproperty.
 			?superproperty rdf:type rdf:Property.
 		}
@@ -5021,14 +5026,17 @@ stage:BAGModelQuery a elmo:Query;
 				?shape ?sp ?so.
 				OPTIONAL {
 					?shape shacl:targetClass ?class.
+					?shape rdfs:comment ?ccomment.
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
-						?subclass rdfs:subClassOf ?superclass
+						?subclass rdfs:subClassOf ?superclass.
+						?class rdfs:comment ?ccomment.
 					}
 				}
 				OPTIONAL {
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
+					?pc rdfs:comment ?pcomment.
 					OPTIONAL {
 						?pc shacl:path ?property.
 						OPTIONAL {
@@ -5115,6 +5123,7 @@ stage:BAGSearch a elmo:Representation;
 	elmo:contains stage:BAGMenu;
 	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGTree;
 	elmo:query stage:BAGSearchQuery;
 .
 
@@ -5137,7 +5146,7 @@ stage:BAGSearchQuery a elmo:Query;
 		WHERE {
 			GRAPH ?g {
 				{
-					?concept rdf:type skos:Concept
+					?concept rdf:type skos:Concept.
 				}
 				UNION {
 					?concept rdf:type skos:Collection
