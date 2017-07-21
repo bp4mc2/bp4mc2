@@ -2783,6 +2783,11 @@ stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 		elmo:applies-to "uitleg";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	
 	elmo:query stage:BAGCollectieConceptenQueryWithParamTerm;
 .
 
@@ -3040,7 +3045,7 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label 
 		WHERE {
 			{
 				GRAPH ?cg {
@@ -3080,10 +3085,8 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 							)
 						)
 					}
-					GRAPH doc:mastergraph {
-						?g dc:isVersionOf doc:mastergraph.
-					}
-				}
+		
+				
 				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
 			}
 			UNION
@@ -5133,11 +5136,17 @@ stage:BAGSearchQuery a elmo:Query;
 		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/bag/id/concept/>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?collection ?concept_label ?uitleg ?collection_label
 		WHERE {
-			GRAPH ?g {
+			
+			
+		GRAPH ?g {
 				{
-					?concept rdf:type skos:Concept
+					?collection rdf:type skos:Collection.
+					?collection rdfs:label ?collection_label}
+				UNION
+				{
+					?concept rdf:type skos:Concept.	
 				}
 				UNION {
 					?concept rdf:type skos:Collection
@@ -5146,13 +5155,16 @@ stage:BAGSearchQuery a elmo:Query;
 				OPTIONAL {
 					?concept skos:scopeNote ?uitleg.
 				}
+								
 				FILTER (
 					regex(?concept_label,'@TERM@','i')
 					|| regex(?uitleg,'@TERM@','i')
 				)
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
+					
 				}
+				FILTER BOUND (?collection_label)
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g.

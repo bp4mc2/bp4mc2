@@ -172,6 +172,11 @@ stage:BAGCollectieConceptenWithParamTerm a elmo:Part;
 		elmo:applies-to "uitleg";
 		elmo:appearance elmo:MarkdownAppearance;
 	];
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	
 	elmo:query stage:BAGCollectieConceptenQueryWithParamTerm;
 .
 
@@ -429,7 +434,7 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 		prefix concept: <http://localhost:8080/catalogus/bag/id/concept/>
 		prefix dc: <http://purl.org/dc/terms/>
 		
-		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label
+		SELECT ?concept AS ?Vraag ?concept_label AS ?Vraag_label 
 		WHERE {
 			{
 				GRAPH ?cg {
@@ -469,10 +474,8 @@ stage:BAGCollectieConceptenQueryWithParamTerm a elmo:Query;
 							)
 						)
 					}
-					GRAPH doc:mastergraph {
-						?g dc:isVersionOf doc:mastergraph.
-					}
-				}
+		
+				
 				FILTER ( substr("@GRAPH@",2) = "GRAPH@" )
 			}
 			UNION
