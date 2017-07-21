@@ -36,75 +36,27 @@ stage:BAGSearchQuery a elmo:Query;
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
-			{
-				GRAPH ?g {
-					{
-						?concept rdf:type skos:Concept
-					}
-					UNION {
-						?concept rdf:type skos:Collection
-					}
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {
-						?concept skos:definition ?uitleg.
-					}
-					FILTER regex(?concept_label,'@TERM@','i').
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-					FILTER NOT EXISTS {
-						GRAPH ?toeleidingsGraph {
-							collection:Toeleidingsbegrippen skos:member ?concept.
-							FILTER NOT EXISTS {
-								collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
-							}
-						}
-						GRAPH doc:mastergraph {
-							collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
-						}
-					}
+			GRAPH ?g {
+				{
+					?concept rdf:type skos:Concept
 				}
-				GRAPH doc:mastergraph {
-					?concept rdfs:isDefinedBy ?g.
+				UNION {
+					?concept rdf:type skos:Collection
+				}
+				?concept rdfs:label ?concept_label.
+				OPTIONAL {
+					?concept skos:scopeNote ?uitleg.
+				}
+				FILTER (
+					regex(?concept_label,'@TERM@','i')
+					|| regex(?uitleg,'@TERM@','i')
+				)
+				FILTER NOT EXISTS {
+					?concept prov:invalidatedAtTime ?time.
 				}
 			}
-			UNION {
-				GRAPH ?g {
-					?toeleiding rdf:type skos:Concept.
-					?toeleiding rdfs:label ?toeleiding_label.
-					?toeleiding ?match ?concept.
-					FILTER (
-						?match = skos:closeMatch
-						|| ?match = skos:exactMatch
-						|| ?match = skos:broadMatch
-						|| ?match = skos:narrowMatch
-						|| ?match = skos:relatedMatch
-					)				
-					FILTER regex(?toeleiding_label,'@TERM@','i').
-					FILTER NOT EXISTS {
-						?toeleiding prov:invalidatedAtTime ?ttime.
-					}
-				}
-				GRAPH ?conceptgraph {
-					?concept rdfs:label ?concept_label.
-					OPTIONAL {
-						?concept skos:definition ?uitleg.
-					}
-					FILTER NOT EXISTS {
-						?concept prov:invalidatedAtTime ?time.
-					}
-				}
-				GRAPH ?toeleidingsGraph {
-					collection:Toeleidingsbegrippen skos:member ?toeleiding.
-					FILTER NOT EXISTS {
-						collection:Toeleidingsbegrippen prov:invalidatedAtTime ?ctime.
-					}
-				}
-				GRAPH doc:mastergraph {
-					collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeleidingsGraph.
-					?toeleiding rdfs:isDefinedBy ?g.
-					?concept rdfs:isDefinedBy ?conceptgraph.
-				}				
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?g.
 			}
 		}
 		ORDER BY lcase(?concept_label)

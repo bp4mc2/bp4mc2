@@ -1,0 +1,313 @@
+@prefix xsd: 			<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: 			<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: 			<http://www.w3.org/ns/shacl#>.
+@prefix owl:			<http://www.w3.org/2002/07/owl#>.
+@prefix dmn: 			<http://www.omg.org/spec/DMN/20151101/dmn#>.
+@prefix def:			<http://bag.basisregistraties.overheid.nl/def/>.
+@prefix bag:			<http://brk.basisregistraties.overheid.nl/def/bag#>.
+@prefix structuur:		<http://bag.basisregistraties.overheid.nl/id/structuur/>.
+@prefix skos:			<http://www.w3.org/2004/02/skos/core#>.
+@prefix skos-thes:		<http://purl.org/iso25964/skos-thes#>.
+@prefix skoslex:		<http://bp4mc2.org/def/skos-lex/>.
+@prefix prov: 			<http://www.w3.org/ns/prov#>.
+@prefix dct:			<http://purl.org/dc/terms/>.
+@prefix dctype: 		<http://purl.org/dc/dcmitype/>.
+
+def:Vraagboom rdf:type sh:NodeShape;
+	rdfs:label "Vraagboom";
+	sh:name "Vraagboom";
+	sh:targetClass skos:Collection;
+	sh:property def:vraagboomLabel;
+	sh:property def:vraagboomNaam;
+	sh:property def:vraagboomLid;
+.
+def:vraagboomLabel rdf:type sh:PropertyShape;
+	rdfs:label "Vraagboom Label";
+	sh:name "Vraagboom Label";
+	sh:path rdfs:label;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+def:vraagboomNaam rdf:type sh:PropertyShape;
+	rdfs:label "Vraagboom Naam";
+	sh:name "Vraagboom Naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+def:vraagboomLid rdf:type sh:PropertyShape;
+	rdfs:label "Vraagboom Lid";
+	sh:name "Vraagboom Lid";
+	sh:path skos:member;
+	sh:class skos:Concept;
+.
+def:Vraag rdf:type sh:NodeShape;
+	rdfs:label "Vraag";
+	sh:name "Vraag";
+	sh:targetClass skos:Concept;
+	sh:property def:vraagLabel;
+	sh:property def:vraagNaam;
+	sh:property def:vraagToelichting;
+	sh:property def:vraagBron;
+	sh:property def:vraagHeeftBetrekkingOp;
+	sh:property def:vraagLidVan;
+.
+def:vraagLabel rdf:Type sh:PropertyShape;
+	rdfs:label "Vraag label";
+	sh:name "Vraag label";
+	sh:path rdfs:label;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+.
+def:vraagNaam rdf:type sh:PropertyShape;
+	rdfs:label "Vraag naam";
+	sh:name "Vraag naam";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+def:vraagToelichting rdf:type sh:PropertyShape;
+	rdfs:label "Vraag toelichting";
+	sh:name "Vraag toelichting";
+	sh:path skos:scopeNote;
+	sh:datatype xsd:string;
+.
+def:vraagBron rdf:type sh:PropertyShape;
+	rdfs:label "Vraag bron";
+	sh:name "Vraag bron";
+	sh:path dct:source;
+	sh:class dctype:Text;
+.
+def:vraagHeeftBetrekkingOp rdf:type sh:PropertyShape;
+	rdfs:label "Vraag heeft betrekking op";
+	sh:name "Vraag heeft betrekking op";
+	sh:path skos:semanticRelation;
+	sh:class skos:Concept;
+.
+def:vraagLidVan rdf:type sh:PropertyShape;
+	rdfs:label "Vraag is lid van";
+	sh:name "Vraag is lid van";
+	sh:path skos:member;
+	sh:class skos:Collection;
+.
+def:Concept rdf:type sh:NodeShape;
+	rdfs:label "Concept";
+	rdfs:comment "Concepten zijn, ideeën, betekenissen of (categorieën van) objecten en gebeurtenissen";
+	sh:targetClass skos:Concept;
+	sh:property def:conceptDomein;
+	sh:property def:conceptBron;
+	sh:property def:conceptLabel;
+	sh:property def:conceptNaam;
+	sh:property def:conceptSynoniem;	
+	sh:property def:conceptAlternatieveSchrijfwijze;
+	sh:property def:conceptDefinitie;
+	sh:property def:conceptToelichting;
+	sh:property def:conceptUitleg;
+	sh:property def:conceptRationale;
+	sh:property def:conceptIsSpecialisatieVan;
+	sh:property def:conceptIsGeneralisatieVan;
+	sh:property def:conceptIsOnderdeelVan;
+	sh:property def:conceptBestaatUit;
+	sh:property def:conceptHeeftBetrekkingOp;
+	sh:property def:conceptIsOngeveerHetzelfdeAls;
+	sh:property def:conceptIsHetzelfdeAls;
+	sh:property def:conceptZieOok;
+	sh:property def:conceptIsBrederDanInAnderSchema;
+	sh:property def:conceptIsEngerDanInAnderSchema;
+	sh:property def:conceptIsGemaaktDoor;
+	sh:property def:conceptIsTopConceptOf;
+	sh:property def:conceptHeeftVoorbeeld;
+.
+def:conceptDomein rdf:type sh:PropertyShape;
+	rdfs:label "Domein";
+	rdfs:comment "Het Concept wordt gedefinieerd binnen de context van een conceptschema";
+	sh:path skos:inScheme;
+	sh:name "skos:inScheme";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+	sh:class skos:ConceptScheme;
+.
+def:conceptBron rdf:type sh:PropertyShape;
+	rdfs:label "Bron"@nl;
+	rdfs:label "source"@en;
+	rdfs:comment "Een Concept kan zijn ontleend aan een formele bron";
+	sh:path dct:source;
+	sh:name "dct:source";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+.
+def:conceptLabel rdf:type sh:PropertyShape;
+	rdfs:label "Label";
+	rdfs:comment "Een concept kan een label hebben";
+	sh:path rdfs:label;
+	sh:name "rdfs:label";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+def:conceptNaam rdf:type sh:PropertyShape;
+	rdfs:label "Naam";
+	rdfs:comment "Een Concept heeft een voorkeurnaam";
+	sh:path skos:prefLabel;
+	sh:name "skos:prefLabel";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+def:conceptSynoniem rdf:type sh:PropertyShape;
+	rdfs:label "Synoniem"@nl;
+	rdfs:label "Synonym"@en;
+	rdfs:comment "Een Concept kan één of meerder synoniemen hebben";
+	sh:path skos:altLabel;
+	sh:name "skos:altLabel";
+	sh:datatype xsd:string;
+.
+def:conceptAlternatieveSchrijfwijze rdf:type sh:PropertyShape;
+	rdfs:label "Alternatieve schrijfwijze"@nl;
+	rdfs:label "Alternative notation"@nl;
+	rdfs:comment "De term van een concept kan een alternatieve schrijfwijze hebben, die ook gevonden moet worden bij zoekvragen of indexeren van teksten. Voorbeelde zijn vaak voorkomende foutieve schrijfwijzen of meervoud.";
+	sh:path skos:hiddenLabel;
+	sh:name "skos:hiddenLabel";
+.
+def:conceptDefinitie rdf:type sh:PropertyShape;
+	rdfs:label "Definitie";
+	rdfs:comment "Een begrip heeft een formele definitie";
+	sh:path skos:definition;
+	sh:name "skos:definition";
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
+def:conceptToelichting rdf:type sh:PropertyShape;
+	rdfs:label "Toelichting"@nl;
+	rdfs:label "Scopenote"@en;
+	rdfs:comment "Een Concept kan een toelichting hebben";
+	sh:path skos:scopeNote;
+	sh:name "skos:scopeNote";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+.
+def:conceptUitleg rdf:type sh:PropertyShape;
+	rdfs:label "Uitleg"@nl;
+	rdfs:label "Comment"@en;
+	rdfs:comment "Een Concept heeft een uitleg op taalniveau B1 (klare taal)";
+	sh:path rdfs:comment;
+	sh:name "rdfs:comment";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+.
+def:conceptRationale a sh:PropertyShape;
+	rdfs:label "rationale";
+	sh:name "skos:editorialNote";
+	rdfs:comment "Een concept kent rationale van de definitie";
+	sh:path skos:editorialNote;
+.
+def:conceptIsSpecialisatieVan rdf:type sh:PropertyShape;
+	rdfs:label "is specialisatie van";
+	rdfs:comment "Een Concept kan een specialisatie van een ander Concept zijn";
+	sh:path skos-thes:broaderGeneric;
+	sh:name "skos-thes:broaderGeneric";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsGeneralisatieVan rdf:type sh:PropertyShape;
+	rdfs:label "is generalisatie van";
+	rdfs:comment "Een Concept kan een generalisatie van een ander Concept zijn";
+	sh:path skos-thes:narrowerGeneric;
+	sh:name "skos-thes:narrowerGeneric";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsOnderdeelVan rdf:type sh:PropertyShape;
+	rdfs:label "is onderdeel van";
+	rdfs:comment "Een Concept kan een aanduiding zijn van een onderdeel van iets dat met een ander Concept wordt aangeduid";
+	sh:path skos-thes:broaderPartitive;
+	sh:name "skos-thes:broaderPartitive";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptBestaatUit rdf:type sh:PropertyShape;
+	rdfs:label "bestaat uit";
+	rdfs:comment "Een Concept kan een aanduiding zijn van iets dat bestaat uit onderdelen die met andere Concepten worden aangeduid";
+	sh:path skos-thes:narrowerPartitive;
+	sh:name "skos-thes:narrowerPartitive";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptHeeftBetrekkingOp rdf:type sh:PropertyShape;
+	rdfs:label "heeft betrekking op";
+	rdfs:comment "Een Concept kan betrekking hebben op een ander Concept";
+	sh:path skos:semanticRelation;
+	sh:name "skos:semanticRelation";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsOngeveerHetzelfdeAls rdf:type sh:PropertyShape;
+	rdfs:label "is ongeveer hetzelfde als (in ander Conceptenschema)";
+	rdfs:comment "Een Concept in een Conceptenschema kan ongeveer dezelfde betekenis hebben als een Concept in een ander Conceptenschema, maar niet omgekeerd";
+	sh:path skos:closeMatch;
+	sh:name "skos:closeMatch";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsHetzelfdeAls rdf:type sh:PropertyShape;
+	rdfs:label "is hetzelfde als (in ander Conceptschema)";
+	rdfs:comment "Een Concept in een Conceptenschema kan dezelfde betekenis hebben als een Concept in een ander Conceptenschema";
+	sh:path skos:exactMatch;
+	sh:name "skos:exactMatch";
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptZieOok rdf:type sh:PropertyShape;
+	rdfs:label "zie ook (in ander Conceptenschema)";
+	rdfs:comment "Een Concept in een Conceptenschema kan gerelateerd aan een Concept in een ander Conceptenschema";
+	sh:path skos:relatedMatch;
+	sh:name "skos:relatedMatch"; 
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsBrederDanInAnderSchema rdf:type sh:PropertyShape;
+	rdfs:label "is breder dan (in ander Conceptenschema)";
+	rdfs:comment "Een Concept in een Conceptenschema kan een bredere betekenis hebben dan een Concept in een ander Conceptenschema";
+	sh:path skos:broadMatch;
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsEngerDanInAnderSchema rdf:type sh:PropertyShape;
+	rdfs:label "is enger dan (in ander Conceptenschema)";
+	rdfs:comment "Een Concept in een Conceptenschema kan een engere betekenis hebben dan een Concept in een ander Conceptenschema"; 
+	sh:path skos:narrowMatch;
+	sh:name skos:narrowMatch;
+	sh:datatype xsd:string;
+	sh:class skos:Concept;
+.
+def:conceptIsGemaaktDoor rdf:type sh:PropertyShape;
+	rdfs:label "is tot stand gekomen door";
+	rdfs:comment "Een Entiteit kan tot stand gekomen zijn door een bepaalde handeling";
+	sh:path prov:wasGeneratedBy;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+	sh:class prov:Agent;
+.
+def:conceptIsTopConceptOf rdf:type sh:PropertyShape;
+	sh:path skos:topConceptOf;
+	sh:name "skos:topConceptOf";
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+	sh:class skos:ConceptScheme;
+.
+def:conceptHeeftVoorbeeld rdf:type sh:PropertyShape;
+	rdfs:label "Shape voor een concept voorbeeld";
+	rdfs:comment "Een concept kan een voorbeeld bevatten in de vorm van een afbeelding waarin het gebruik van het bewuste concept wordt verduidelijkt";
+	sh:name "skos:example";
+	sh:path skos:example;
+.
+	
+
+	
