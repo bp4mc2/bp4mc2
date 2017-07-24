@@ -480,6 +480,20 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 
 		INSERT {
 			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				SELECT ?s ?p ?o 
+				WHERE {
+					?s rdf:type skos:Concept.
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
 				?s bp4mc2:signature ?sig.
 			}
 		}
@@ -505,20 +519,6 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 					ORDER BY ?s ?p ?o
 				}
             }
-		}
-		
-		INSERT {
-			GRAPH container:generiek {
-				?s skos:inScheme <@DATASET@>.
-			}
-		}
-		WHERE {
-			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
-			}
 		}
 		
 		INSERT {
@@ -685,7 +685,8 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			GRAPH doc:mastergraph {
 				?s rdf:type ?type.
 				?s rdfs:isDefinedBy versiongraph:version.
-				?s bp4mc2:signature ?sig
+				?s bp4mc2:signature ?sig.
+				?s skos:inScheme <@DATASET@>.
 			}
 		}
 		WHERE {
@@ -812,6 +813,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
+		
 		INSERT {
 			GRAPH container:generiek {
 				?s skos:inScheme <@DATASET@>.
@@ -825,7 +827,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				}
 			}
 		}
-
+		
 		INSERT {
 			GRAPH container:generiek {
 				?s bp4mc2:signature ?sig.
@@ -854,9 +856,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				}
             }
 		}
-		
-		
-				
+						
 		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o
@@ -882,6 +882,9 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				GRAPH doc:mastergraph {
 					?s bp4mc2:signature ?sig
 				}
+			}
+			FILTER NOT EXISTS {
+				?s skos:inScheme ?o.
 			}
 		}
 		
@@ -1086,8 +1089,6 @@ stage:TaxGeneriekeUploadQuery a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -3068,6 +3069,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
+			?s skos:inScheme ?dataset.
 		}
 		WHERE {
 			{
@@ -3081,6 +3083,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
+					?s skos:inScheme ?dataset.
+					?dataset rdfs:label ?dataset_label.
 				}
 				FILTER (
 					?p = rdfs:comment
@@ -3303,7 +3307,9 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 			} 
 		}
 	''';
-. 
+.
+
+ 
 
 
 #
