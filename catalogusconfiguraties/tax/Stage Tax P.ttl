@@ -3070,6 +3070,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
 			?s skos:inScheme ?dataset.
+			?dataset rdfs:label ?datasetlabel.
 		}
 		WHERE {
 			{
@@ -3084,6 +3085,12 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
 					?s skos:inScheme ?dataset.
+				}
+				GRAPH ?dsg {
+					?dataset rdfs:label ?datasetlabel. 
+				}
+				GRAPH doc:mastergraph {
+					?dataset rdfs:isDefinedBy ?dsg.
 				}
 				FILTER (
 					?p = rdfs:comment
