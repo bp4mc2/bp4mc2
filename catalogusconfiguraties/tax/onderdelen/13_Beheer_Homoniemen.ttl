@@ -34,10 +34,17 @@ stage:TaxHomoniemenTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Concept";		
 		elmo:applies-to "conceptlabel";
+		elmo:index "1";
 	];
-		elmo:fragment [
+	elmo:fragment [
 		rdfs:label "Dataset";		
 		elmo:applies-to "datasetlabel";
+		elmo:index "2";
+	];
+	elmo:fragment [
+		rdfs:label "Status";		
+		elmo:applies-to "statuslabel";
+		elmo:index "2";
 	];
 .
 
@@ -48,10 +55,12 @@ stage:TaxHomoniemenQuery a elmo:query;
 		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 		PREFIX prov: <http://www.w3.org/ns/prov#>
-		SELECT ?conceptlabel ?datasetlabel
+		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		PREFIX container: <http://localhost:8080/catalogus/tax/container/>
+		SELECT ?conceptlabel ?datasetlabel ?statuslabel
 		WHERE {
 			{
-				SELECT DISTINCT ?concept  (COUNT(?concept) AS ?total)
+			SELECT DISTINCT ?concept  (COUNT(?concept) AS ?total)
 				WHERE {
 					GRAPH doc:mastergraph {
 						?concept skos:inScheme ?dataset.
@@ -61,7 +70,8 @@ stage:TaxHomoniemenQuery a elmo:query;
 				HAVING (COUNT(?concept) > 1 )
 			}
 			GRAPH ?cg {
-				?concept rdfs:label ?conceptlabel
+				?concept rdfs:label ?conceptlabel.
+				?concept kddef:status ?status.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -70,6 +80,12 @@ stage:TaxHomoniemenQuery a elmo:query;
 				?dataset rdfs:label ?datasetlabel. 
 				FILTER NOT EXISTS {
 					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			OPTIONAL {
+				GRAPH container:statusupload {
+					?status rdfs:label ?statuslabel.
+					FILTER (lang(?statuslabel)="" || lang(?statuslabel)="nl")
 				}
 			}
 			FILTER( LANG( ?conceptlabel ) = "" || LANGMATCHES( LANG( ?conceptlabel ), "nl" ) )

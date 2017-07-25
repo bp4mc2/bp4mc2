@@ -224,11 +224,11 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "4";
 				xhtml:link "/catalogus/tax/query/homoniemen1";
 			];
-		#	elmo:data [
-		#		rdfs:label "Homoniemen2";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
-		#		elmo:index "5";
-		#		xhtml:link "/catalogus/tax/query/homoniemen2";
-		#	];
+			elmo:data [
+				rdfs:label "Synoniemen";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
+				elmo:index "5";
+				xhtml:link "/catalogus/tax/query/synoniemen";
+			];
 			elmo:data [
 				rdfs:label "Statuscontrole";								#alle begrippen en hun status. Hoofdpagina bevat alleen gevalideerde/geverifieerde begrippen
 				elmo:index "1";
@@ -3659,10 +3659,17 @@ stage:TaxHomoniemenTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Concept";		
 		elmo:applies-to "conceptlabel";
+		elmo:index "1";
 	];
-		elmo:fragment [
+	elmo:fragment [
 		rdfs:label "Dataset";		
 		elmo:applies-to "datasetlabel";
+		elmo:index "2";
+	];
+	elmo:fragment [
+		rdfs:label "Status";		
+		elmo:applies-to "statuslabel";
+		elmo:index "2";
 	];
 .
 
@@ -3673,10 +3680,12 @@ stage:TaxHomoniemenQuery a elmo:query;
 		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 		PREFIX prov: <http://www.w3.org/ns/prov#>
-		SELECT ?conceptlabel ?datasetlabel
+		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		PREFIX container: <http://localhost:8080/catalogus/tax/container/>
+		SELECT ?conceptlabel ?datasetlabel ?statuslabel
 		WHERE {
 			{
-				SELECT DISTINCT ?concept  (COUNT(?concept) AS ?total)
+			SELECT DISTINCT ?concept  (COUNT(?concept) AS ?total)
 				WHERE {
 					GRAPH doc:mastergraph {
 						?concept skos:inScheme ?dataset.
@@ -3686,7 +3695,8 @@ stage:TaxHomoniemenQuery a elmo:query;
 				HAVING (COUNT(?concept) > 1 )
 			}
 			GRAPH ?cg {
-				?concept rdfs:label ?conceptlabel
+				?concept rdfs:label ?conceptlabel.
+				?concept kddef:status ?status.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -3695,6 +3705,12 @@ stage:TaxHomoniemenQuery a elmo:query;
 				?dataset rdfs:label ?datasetlabel. 
 				FILTER NOT EXISTS {
 					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			OPTIONAL {
+				GRAPH container:statusupload {
+					?status rdfs:label ?statuslabel.
+					FILTER (lang(?statuslabel)="" || lang(?statuslabel)="nl")
 				}
 			}
 			FILTER( LANG( ?conceptlabel ) = "" || LANGMATCHES( LANG( ?conceptlabel ), "nl" ) )
@@ -3710,76 +3726,112 @@ stage:TaxHomoniemenQuery a elmo:query;
 #
 #
 #
-# BEHEER HOMONIEMEN - 2
+# BEHEER Synoniemen
 #
 #
 #
 
 
-#Hoofdpagina Homoniemen - 2 Rapportage
+#Hoofdpagina Synoniemen Rapportage
 stage:TaxHomoniemen2 a elmo:Representation;
-	elmo:url-pattern "/query/homoniemen2$";
+	elmo:url-pattern "/query/synoniemen$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
-	elmo:contains stage:TaxHomoniemen2Tabel;
-	elmo:contains stage:TaxHomoniemen2Uitleg;
+	elmo:contains stage:TaxSynoniemenTabel;
+	elmo:contains stage:TaxSynoniemenUitleg;
 .
 
-stage:TaxHomoniemen2Uitleg a elmo:Part;
+stage:TaxSynoniemenUitleg a elmo:Part;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:index "1";
 	elmo:without-parameter "term";
 	elmo:data [
-		rdfs:label "Homoniemen2";
+		rdfs:label "Synoniemen";
 	]
 .
 
-# Weergave van homoniemen - 2
-stage:TaxHomoniemen2Tabel a elmo:Part;
+# Weergave van Synoniemen
+stage:TaxSynoniemenTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
-	elmo:query stage:TaxHomoniemen2Query;
+	elmo:query stage:TaxSynoniemenQuery;
 	elmo:fragment [
-		rdfs:label "Homoniem";						#de term die als homoniem voorkomt
-		elmo:applies-to "homoniem";
+		rdfs:label "Concept";						#de term die als homoniem voorkomt
+		elmo:applies-to "conceptlabel";
+		elmo:index "1";
 	];
 	elmo:fragment [
 		rdfs:label "Populatie";						#het begrippenkader van het begrip
-		elmo:applies-to "graph";
+		elmo:applies-to "datasetlabel";
+		elmo:index "2";
 	];
 	elmo:fragment [
-		rdfs:label "Type";							#of het gaat om de begripsterm zelf, of een synoniem
-		elmo:applies-to "pt1";
+		rdfs:label "Status";						#de status van het begrip
+		elmo:applies-to "conceptstatuslabel";
+		elmo:index "3";
 	];
 	elmo:fragment [
-		rdfs:label "Begrip";						#de URI van het begrip waar ook nog een homoniem van bestaat
-		elmo:applies-to "begrip";
+		rdfs:label "In";							#het begrippenkader van het 'andere' begrip (homoniem)
+		elmo:applies-to "domeinlabel";
+		elmo:index "5";
 	];
 	elmo:fragment [
-		rdfs:label "Status";						#de status van dit begrip
-		elmo:applies-to "status1";
+		rdfs:label "Komt ook voor als";				#of het gaat om de term dan wel het synoniem van dat 'andere' begrip
+		elmo:applies-to "synoniemlabel";
+		elmo:index "4";
 	];
 	elmo:fragment [
-		rdfs:label "Komt ook voor in";				#het begrippenkader van het 'andere' begrip (homoniem)
-		elmo:applies-to "graph2";
-	];
-	elmo:fragment [
-		rdfs:label "Als";							#of het gaat om de term dan wel het synoniem van dat 'andere' begrip
-		elmo:applies-to "pt2";
-	];
-	elmo:fragment [
-		rdfs:label "Van begrip";					#de URI van het 'andere' begrip
-		elmo:applies-to "begrip2";
-	];
-	elmo:fragment [
-		rdfs:label "Met status";					#de status van het 'andere' begrip
-		elmo:applies-to "status2";
+		rdfs:label "Status";						#de status van synoniem
+		elmo:applies-to "synoniemstatuslabel";
+		elmo:index "6";
 	];
 .
 
-stage:TaxHomoniemen2Query a elmo:query;
+stage:TaxSynoniemenQuery a elmo:query;
 	elmo:query '''
+		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
+		PREFIX prov: <http://www.w3.org/ns/prov#>
+		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		PREFIX container: <http://localhost:8080/catalogus/tax/container/>
+		SELECT DISTINCT ?conceptlabel ?conceptstatuslabel ?datasetlabel ?synoniemlabel ?domeinlabel  ?synoniemstatuslabel
+		WHERE {
+			GRAPH ?cg {
+				?concept rdf:type skos:Concept.
+				?concept rdfs:label ?conceptlabel.	
+				?concept skos:altLabel ?synoniem.
+				?concept kddef:status ?conceptstatus.
+			}
+			GRAPH ?dsg {
+			?dataset rdfs:label ?datasetlabel.
+			?domein rdfs:label ?domeinlabel.
+			}
+			GRAPH ?sg {
+				?synoniem rdfs:label ?synoniemlabel.
+				?synoniem kddef:status ?synoniemstatus.
+			}
+			OPTIONAL {
+				GRAPH container:statusupload {
+					?conceptstatus rdfs:label ?conceptstatuslabel.
+					?synoniemstatus rdfs:label ?synoniemstatuslabel.
+					FILTER (lang(?conceptstatuslabel)="" || lang(?conceptstatuslabel)="nl")
+					FILTER (lang(?synoniemstatuslabel)="" || lang(?synoniemstatuslabel)="nl")
+				}
+			}
+			FILTER( LANG( ?conceptlabel ) = "" || LANGMATCHES( LANG( ?conceptlabel ), "nl" ) )
+			GRAPH doc:mastergraph {
+				?concept rdfs:isDefinedBy ?cg.
+				?dataset rdfs:isDefinedBy ?dsg.
+				?domein rdfs:isDefinedBy ?dsg.
+				?concept skos:inScheme ?dataset.
+				?synoniem rdfs:isDefinedBy ?sg.
+				?synoniem skos:inScheme ?domein.
+			}
+		}
+	ORDER BY ?conceptlabel
 	'''
 . 
 #
