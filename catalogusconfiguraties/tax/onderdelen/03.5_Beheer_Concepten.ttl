@@ -7,6 +7,26 @@ container:ttlupload a elmo:Container;
 	elmo:contains stage:TaxFooter;
 	elmo:replaces container:generiek;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/concept/>
+						)
+					}
+				}
+			}
+		''';
+	];
 .
 
 # Updatecontainer Turtle
@@ -16,6 +36,26 @@ container:ttlupdate a elmo:Container;
     elmo:contains stage:TaxFooter;
     elmo:replaces container:generiek;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/concept/>
+						)
+					}
+				}
+			}
+		''';
+	];
 .
 
 #PRODUCTIONS

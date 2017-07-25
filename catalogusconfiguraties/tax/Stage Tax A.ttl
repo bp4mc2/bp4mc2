@@ -291,6 +291,26 @@ container:ttlupload a elmo:Container;
 	elmo:contains stage:TaxFooter;
 	elmo:replaces container:generiek;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://pdok-ld-gck.fto.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						FILTER(
+							?s != <http://pdok-ld-gck.fto.kadaster.nl/id/concept/>
+						)
+					}
+				}
+			}
+		''';
+	];
 .
 
 # Updatecontainer Turtle
@@ -300,6 +320,26 @@ container:ttlupdate a elmo:Container;
     elmo:contains stage:TaxFooter;
     elmo:replaces container:generiek;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://pdok-ld-gck.fto.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						FILTER(
+							?s != <http://pdok-ld-gck.fto.kadaster.nl/id/concept/>
+						)
+					}
+				}
+			}
+		''';
+	];
 .
 
 #PRODUCTIONS
@@ -3069,7 +3109,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
-			?s skos:inScheme ?dataset.
+			<@SUBJECT@> skos:inScheme ?dataset.
 			?dataset rdfs:label ?datasetlabel.
 		}
 		WHERE {
@@ -3084,7 +3124,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
-					?s skos:inScheme ?dataset.
+					<@SUBJECT@> skos:inScheme ?dataset.
 				}
 				GRAPH ?dsg {
 					?dataset rdfs:label ?datasetlabel. 
@@ -3099,7 +3139,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
-					|| ?p = skos:inScheme
 					|| ?p = skoslex:actor
 					|| ?p = skoslex:agent
 					|| ?p = skoslex:object
@@ -3114,6 +3153,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:broadMatch
 					|| ?p = skos:narrowMatch
 					|| ?p = skos:altLabel
+					|| ?p = skos:inScheme
+					|| ?p = rdfs:label
 				)
 				FILTER( substr("@GRAPH@",2) = "GRAPH@")
 			}
@@ -3134,7 +3175,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
-					|| ?p = skos:inScheme
 					|| ?p = skoslex:actor
 					|| ?p = skoslex:agent
 					|| ?p = skoslex:object
@@ -3148,7 +3188,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:relatedMatch
 					|| ?p = skos:broadMatch
 					|| ?p = skos:narrowMatch
-					|| ?p = skos:altLabel					
+					|| ?p = skos:altLabel	
+					|| ?p = skos:inScheme
+					|| ?p = rdfs:label
 				)
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
@@ -4644,13 +4686,13 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 		CONSTRUCT {
-			?concept ?p ?o 
+			?concept ?p ?o .
+			?concept rdf:type skos:Concept .
 		}
 		WHERE {
 			GRAPH ?g {
 				?concept ?p ?o .
 				?concept kddef:status ?status.
-				?concept skos:inScheme <@DATASET@>.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -4660,7 +4702,8 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 				)
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+				?concept rdfs:isDefinedBy ?g.
+				?concept skos:inScheme <@DATASET@>.
 			}
 			OPTIONAL {
 				GRAPH ?og {
@@ -4923,7 +4966,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
-					?concept skos:inScheme <http://pdok-ld-gck.fto.kadaster.nl/id/dataset/@DATASET@>.
 					OPTIONAL {
 				#		?concept skos:definition ?uitleg
 						?concept rdfs:comment ?uitleg
@@ -4934,7 +4976,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdf:type skos:Concept.
 					?concept skos:altLabel ?concept_label.
 					?concept kddef:status ?status.
-					?concept skos:inScheme <http://pdok-ld-gck.fto.kadaster.nl/id/dataset/@DATASET@>.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
 				#		?concept skos:definition ?definition.
@@ -4953,7 +4994,8 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+				?concept rdfs:isDefinedBy ?g .
+				?concept skos:inScheme <http://pdok-ld-gck.fto.kadaster.nl/id/dataset/@DATASET@>.
 			}
 		}
 		ORDER BY str(lcase(?concept_label))
