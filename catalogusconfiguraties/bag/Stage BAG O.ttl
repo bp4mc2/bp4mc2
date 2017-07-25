@@ -73,7 +73,7 @@ stage:BAGWelkomsttekst rdf:type elmo:Part;
 						<p>Welkom bij de praktijkuitwerking voor de BAG</p>
 						<p>De praktijkuitwerking is bedoeld om bronhouders te ondersteunen bij objectafbakening (panden en verblijfsobjecten) in de dagelijkse praktijk, waarbij met name ook de â€˜grijzeâ€™ gebieden aan bod komen. </p>
 						<p>Daarnaast zal de praktijkuitwerking ook ondersteuning geven bij de functionele registratie van (wijziging van) objecten in de BAG en voor de toepassing van modelbesluiten (wanneer gebruik je welk brondocument? Wat mag je met een schriftelijke verklaring/procesverbaal?, Archivering van het brondocument valt buiten scope)</p>
-						<p>Kies in het linkervenster voor â€˜Pandâ€™ of â€˜Verblijfsobjectâ€™ en dan de gewenste vraag in de beslisboom voor de bijbehorende uitwerking.</p>
+						<p>Kies in het linkervenster voor Pand of Verblijfsobject en dan de gewenste vraag in de beslisboom voor de bijbehorende uitwerking.</p>
 					</div>
 				</div>
 			</div>
@@ -268,7 +268,7 @@ stage:BAGFooter a elmo:Part;
 				</div>
 				<div class="col-sm-3">
 					<h4>Contact</h4>
-					<p><a href="mailto:martijn.klomp@kadaster.nl">Martijn Klomp</a></p>
+					<p><a href="mailto:martijn.klomp2@kadaster.nl">Martijn Klomp</a></p>
 				</div>
 				<div class="col-sm-3">
 					<h4>Proclaimer</h4>
@@ -5123,7 +5123,6 @@ stage:BAGSearch a elmo:Representation;
 	elmo:contains stage:BAGMenu;
 	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
-	elmo:contains stage:BAGTree;
 	elmo:query stage:BAGSearchQuery;
 .
 
@@ -5142,11 +5141,17 @@ stage:BAGSearchQuery a elmo:Query;
 		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/bag/id/concept/>
 		prefix prov: <http://www.w3.org/ns/prov#>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?collection ?concept_label ?uitleg ?collection_label
 		WHERE {
-			GRAPH ?g {
+			
+			
+		GRAPH ?g {
 				{
-					?concept rdf:type skos:Concept.
+					?collection rdf:type skos:Collection.
+					?collection rdfs:label ?collection_label}
+				UNION
+				{
+					?concept rdf:type skos:Concept.	
 				}
 				UNION {
 					?concept rdf:type skos:Collection
@@ -5161,7 +5166,9 @@ stage:BAGSearchQuery a elmo:Query;
 				)
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
+					
 				}
+				FILTER BOUND (?collection_label)
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g.
