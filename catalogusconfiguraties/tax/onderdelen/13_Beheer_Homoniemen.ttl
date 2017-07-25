@@ -32,58 +32,53 @@ stage:TaxHomoniemenTabel a elmo:Part;
 	elmo:index "2";
 	elmo:query stage:TaxHomoniemenQuery;
 	elmo:fragment [
-		rdfs:label "Populatie";		
-		elmo:applies-to "graph";
+		rdfs:label "Concept";		
+		elmo:applies-to "conceptlabel";
 	];
 		elmo:fragment [
-		rdfs:label "Begrip";		
-		elmo:applies-to "begrip";
-	];
-		elmo:fragment [
-		rdfs:label "Komt ook voor in";		
-		elmo:applies-to "graph2";
+		rdfs:label "Dataset";		
+		elmo:applies-to "datasetlabel";
 	];
 .
 
-#query geeft aan of een begrip in kader 1 ook voorkomt als exact hetzelfde begrip in kader 2
+#query geeft aan of een begrip in meerdere domeinen voorkomt
 stage:TaxHomoniemenQuery a elmo:query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
-		
-		SELECT ?graph ?graph_label
-			?begrip ?begrip_label
-			?graph2 ?graph2_label
+		PREFIX doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
+		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX prov: <http://www.w3.org/ns/prov#>
+		SELECT ?conceptlabel ?datasetlabel
 		WHERE {
-			GRAPH ?graph {
-			?begrip rdf:type skos:Concept.
-				OPTIONAL {
-					?begrip rdfs:label ?begrip_label.
-					FILTER (lang(?begrip_label)="" or lang(?begrip_label)="@LANGUAGE@")
+			{
+				SELECT DISTINCT ?concept  (COUNT(?concept) AS ?total)
+				WHERE {
+					GRAPH doc:mastergraph {
+						?concept skos:inScheme ?dataset.
+					}
 				}
-				OPTIONAL {
-					?graph rdfs:label ?graph_label
-					FILTER (lang(?graph_label)="" or lang(?graph_label)="@LANGUAGE@")
-				}
-			#	FILTER (?klasse=frames:Begrip or ?klasse=frames:Gebeurtenis)
-				FILTER NOT EXISTS {
-					?graph prov:invalidatedAtTime ?time.
-                }
+				GROUP BY ?concept
+				HAVING (COUNT(?concept) > 1 )
 			}
-			GRAPH ?graph2 {
-				?begrip rdf:type skos:Concept.
-				OPTIONAL {
-					?graph2 rdfs:label ?graph2_label
-					FILTER (lang(?graph2_label)="" or lang(?graph2_label)="@LANGUAGE@")
-				}
+			GRAPH ?cg {
+				?concept rdfs:label ?conceptlabel
 				FILTER NOT EXISTS {
-					?graph2 prov:invalidatedAtTime ?time.
-                }
+					?concept prov:invalidatedAtTime ?time.
+				}
 			}
+			GRAPH ?dsg {
+				?dataset rdfs:label ?datasetlabel. 
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			FILTER( LANG( ?conceptlabel ) = "" || LANGMATCHES( LANG( ?conceptlabel ), "nl" ) )
+			FILTER( LANG( ?datasetlabel ) = "" || LANGMATCHES( LANG( ?datasetlabel ), "nl" ) )
 			GRAPH doc:mastergraph {
-				?graph rdfs:isDefinedBy ?graph.
-                ?graph2 rdfs:isDefinedBy ?graph2.
-            }
+				?concept rdfs:isDefinedBy ?cg.
+				?dataset rdfs:isDefinedBy ?dsg.
+				?concept skos:inScheme ?dataset.
+			}
 		}
 	'''
 .
