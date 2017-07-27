@@ -37,14 +37,24 @@ stage:TaxHomoniemenTabel a elmo:Part;
 		elmo:index "1";
 	];
 	elmo:fragment [
-		rdfs:label "Dataset";		
-		elmo:applies-to "datasetlabel";
+		rdfs:label "Populatie";		
+		elmo:applies-to "dataset1label";
 		elmo:index "2";
 	];
 	elmo:fragment [
-		rdfs:label "Status";		
-		elmo:applies-to "statuslabel";
-		elmo:index "2";
+		rdfs:label "Met status";		
+		elmo:applies-to "status1label";
+		elmo:index "3";
+	];
+	elmo:fragment [
+		rdfs:label "Komt ook voor in";		
+		elmo:applies-to "dataset2label";
+		elmo:index "4";
+	];
+	elmo:fragment [
+		rdfs:label "Met status";		
+		elmo:applies-to "status2label";
+		elmo:index "5";
 	];
 .
 
@@ -52,48 +62,53 @@ stage:TaxHomoniemenTabel a elmo:Part;
 stage:TaxHomoniemenQuery a elmo:query;
 	elmo:query '''
 		PREFIX doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
-		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 		PREFIX prov: <http://www.w3.org/ns/prov#>
 		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 		PREFIX container: <http://localhost:8080/catalogus/tax/container/>
-		SELECT ?conceptlabel ?datasetlabel ?statuslabel
+		SELECT DISTINCT ?conceptlabel ?dataset1label ?status1label ?dataset2label ?status2label
 		WHERE {
-			{
-				SELECT DISTINCT ?concept
-				WHERE {
-					GRAPH doc:mastergraph {
-						?concept skos:inScheme ?dataset.
-					}
-				}
-				GROUP BY ?concept
-				HAVING (COUNT(?concept) > 1 )
-			}
-			GRAPH ?cg {
-				?concept rdfs:label ?conceptlabel.
-				?concept kddef:status ?status.
+			GRAPH ?g {
+				?concept skos:prefLabel ?conceptlabel.
+				?concept kddef:status ?status1.
 				FILTER NOT EXISTS {
-					?concept prov:invalidatedAtTime ?time.
+					?concept prov:invalidatedAtTime ?c1time.
+				}
+			}
+			GRAPH ?g2 {
+				?concept2 skos:prefLabel ?conceptlabel.
+				?concept2 kddef:status ?status2.
+				FILTER NOT EXISTS {
+					?concept2 prov:invalidatedAtTime ?c2time.
 				}
 			}
 			GRAPH ?dsg {
-				?dataset rdfs:label ?datasetlabel. 
+				?dataset1 rdfs:label ?dataset1label. 
 				FILTER NOT EXISTS {
-					?dataset prov:invalidatedAtTime ?time.
+					?dataset1 prov:invalidatedAtTime ?d1time.
+				}
+				?dataset2 rdfs:label ?dataset2label. 
+				FILTER NOT EXISTS {
+					?dataset2 prov:invalidatedAtTime ?d2time.
 				}
 			}
 			OPTIONAL {
 				GRAPH container:statusupload {
-					?status rdfs:label ?statuslabel.
-					FILTER (lang(?statuslabel)="" || lang(?statuslabel)="nl")
+					?status1 rdfs:label ?status1label.
+					?status2 rdfs:label ?status2label.
+					FILTER (lang(?status1label)="" || lang(?status1label)="nl")
+					FILTER (lang(?status2label)="" || lang(?status2label)="nl")
 				}
 			}
-			FILTER( LANG( ?conceptlabel ) = "" || LANGMATCHES( LANG( ?conceptlabel ), "nl" ) )
-			FILTER( LANG( ?datasetlabel ) = "" || LANGMATCHES( LANG( ?datasetlabel ), "nl" ) )
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?cg.
+				?concept rdfs:isDefinedBy ?g.
+				?concept2 rdfs:isDefinedBy ?g2. 
 				?dataset rdfs:isDefinedBy ?dsg.
+				?concept skos:inScheme ?dataset1.
+				?concept2 skos:inScheme ?dataset2.
 			}
+			FILTER (?concept != ?concept2)
 		}
 	'''
 .
