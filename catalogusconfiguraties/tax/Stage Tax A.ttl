@@ -3782,38 +3782,40 @@ stage:TaxHomoniemenQuery a elmo:query;
 		PREFIX prov: <http://www.w3.org/ns/prov#>
 		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 		PREFIX container: <http://pdok-ld-gck.fto.kadaster.nl/container/>
-		SELECT DISTINCT ?conceptlabel ?dataset1label ?status1label ?dataset2label ?status2label
+		SELECT DISTINCT ?concept ?concept_label ?dataset1 ?dataset1_label ?status1 ?status1_label ?dataset2 ?dataset2_label ?status2 ?status2_label
 		WHERE {
 			GRAPH ?g {
-				?concept skos:prefLabel ?conceptlabel.
+				?concept rdf:type skos:Concept.
+				?concept skos:prefLabel ?concept_label.
 				?concept kddef:status ?status1.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?c1time.
 				}
 			}
 			GRAPH ?g2 {
-				?concept2 skos:prefLabel ?conceptlabel.
+				?concept2 rdf:type skos:Concept.
+				?concept2 skos:prefLabel ?concept_label.
 				?concept2 kddef:status ?status2.
 				FILTER NOT EXISTS {
 					?concept2 prov:invalidatedAtTime ?c2time.
 				}
 			}
 			GRAPH ?dsg {
-				?dataset1 rdfs:label ?dataset1label. 
+				?dataset1 rdfs:label ?dataset1_label. 
 				FILTER NOT EXISTS {
 					?dataset1 prov:invalidatedAtTime ?d1time.
 				}
-				?dataset2 rdfs:label ?dataset2label. 
+				?dataset2 rdfs:label ?dataset2_label. 
 				FILTER NOT EXISTS {
 					?dataset2 prov:invalidatedAtTime ?d2time.
 				}
 			}
 			OPTIONAL {
 				GRAPH container:statusupload {
-					?status1 rdfs:label ?status1label.
-					?status2 rdfs:label ?status2label.
-					FILTER (lang(?status1label)="" || lang(?status1label)="nl")
-					FILTER (lang(?status2label)="" || lang(?status2label)="nl")
+					?status1 rdfs:label ?status1_label.
+					?status2 rdfs:label ?status2_label.
+					FILTER (lang(?status1_label)="" || lang(?status1_label)="nl")
+					FILTER (lang(?status2_label)="" || lang(?status2_label)="nl")
 				}
 			}
 			GRAPH doc:mastergraph {
