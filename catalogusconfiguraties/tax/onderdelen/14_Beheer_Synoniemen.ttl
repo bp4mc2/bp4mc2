@@ -65,41 +65,6 @@ stage:TaxSynoniemenTabel a elmo:Part;
 
 stage:TaxSynoniemenQuery a elmo:query;
 	elmo:query '''
-		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-		PREFIX doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
-		PREFIX prov: <http://www.w3.org/ns/prov#>
-		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
-		PREFIX container: <http://localhost:8080/catalogus/tax/container/>
-		SELECT DISTINCT ?conceptlabel ?conceptstatuslabel ?datasetlabel ?synoniemlabel ?domeinlabel  ?synoniemstatuslabel
-		WHERE {
-			GRAPH ?cg {
-				?concept rdf:type skos:Concept.
-				?concept rdfs:label ?conceptlabel.	
-				?concept skos:altLabel ?synoniem.
-				?concept kddef:status ?conceptstatus.
-			}
-			GRAPH ?dsg {
-				?dataset rdfs:label ?datasetlabel.
-				?domein rdfs:label ?domeinlabel.
-			}
-			OPTIONAL {
-				GRAPH container:statusupload {
-					?conceptstatus rdfs:label ?conceptstatuslabel.
-					?synoniemstatus rdfs:label ?synoniemstatuslabel.
-					FILTER (lang(?conceptstatuslabel)="" || lang(?conceptstatuslabel)="nl")
-					FILTER (lang(?synoniemstatuslabel)="" || lang(?synoniemstatuslabel)="nl")
-				}
-			}
-			FILTER( LANG( ?conceptlabel ) = "" || LANGMATCHES( LANG( ?conceptlabel ), "nl" ) )
-			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?cg.
-				?dataset rdfs:isDefinedBy ?dsg.
-				?domein rdfs:isDefinedBy ?dsg.
-				?concept skos:inScheme ?dataset.
-			}
-		}
-	ORDER BY ?conceptlabel
+		
 	'''
 .
