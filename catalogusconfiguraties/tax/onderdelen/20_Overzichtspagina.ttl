@@ -121,6 +121,7 @@ stage:TaxConceptenQuery a elmo:Query;
 						?concept rdfs:label ?clabel.
 				#		?concept skos:definition ?definition.
 						?concept rdfs:comment ?definition.
+						FILTER( LANG( ?clabel ) = "" || LANGMATCHES( LANG( ?clabel ), "nl" ) )
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
 					}
 				}
