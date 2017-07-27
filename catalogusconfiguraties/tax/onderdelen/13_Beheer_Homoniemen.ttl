@@ -60,7 +60,7 @@ stage:TaxHomoniemenQuery a elmo:query;
 		SELECT ?conceptlabel ?datasetlabel ?statuslabel
 		WHERE {
 			{
-			SELECT DISTINCT ?concept  (COUNT(?concept) AS ?total)
+				SELECT DISTINCT ?concept
 				WHERE {
 					GRAPH doc:mastergraph {
 						?concept skos:inScheme ?dataset.
@@ -93,7 +93,6 @@ stage:TaxHomoniemenQuery a elmo:query;
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?cg.
 				?dataset rdfs:isDefinedBy ?dsg.
-				?concept skos:inScheme ?dataset.
 			}
 		}
 	'''

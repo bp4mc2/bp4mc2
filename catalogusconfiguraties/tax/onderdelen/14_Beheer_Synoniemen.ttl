@@ -81,12 +81,8 @@ stage:TaxSynoniemenQuery a elmo:query;
 				?concept kddef:status ?conceptstatus.
 			}
 			GRAPH ?dsg {
-			?dataset rdfs:label ?datasetlabel.
-			?domein rdfs:label ?domeinlabel.
-			}
-			GRAPH ?sg {
-				?synoniem rdfs:label ?synoniemlabel.
-				?synoniem kddef:status ?synoniemstatus.
+				?dataset rdfs:label ?datasetlabel.
+				?domein rdfs:label ?domeinlabel.
 			}
 			OPTIONAL {
 				GRAPH container:statusupload {
@@ -102,8 +98,6 @@ stage:TaxSynoniemenQuery a elmo:query;
 				?dataset rdfs:isDefinedBy ?dsg.
 				?domein rdfs:isDefinedBy ?dsg.
 				?concept skos:inScheme ?dataset.
-				?synoniem rdfs:isDefinedBy ?sg.
-				?synoniem skos:inScheme ?domein.
 			}
 		}
 	ORDER BY ?conceptlabel

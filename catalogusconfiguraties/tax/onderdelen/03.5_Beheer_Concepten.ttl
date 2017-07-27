@@ -27,6 +27,54 @@ container:ttlupload a elmo:Container;
 			}
 		''';
 	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
 .
 
 # Updatecontainer Turtle
@@ -56,6 +104,54 @@ container:ttlupdate a elmo:Container;
 			}
 		''';
 	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+	];	
 .
 
 #PRODUCTIONS
@@ -189,15 +285,9 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -241,10 +331,7 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
+				?s rdf:type skos:Concept.
 			}
 		}
 		
@@ -524,15 +611,9 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s skos:prefLabel ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -577,10 +658,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
+				?s rdf:type skos:Concept.
 			}
 		}
 		
