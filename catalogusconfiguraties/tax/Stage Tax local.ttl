@@ -2978,6 +2978,11 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "00";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to rdfs:comment;
 		elmo:index "02";
@@ -3184,6 +3189,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> skos:prefLabel ?spreflabel.
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
@@ -3198,6 +3204,10 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					OPTIONAL {
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
+					}
+					OPTIONAL {
+						<@SUBJECT@> skos:prefLabel ?spreflabel.
+						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -3243,6 +3253,10 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					OPTIONAL {
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
+					}
+					OPTIONAL {
+						<@SUBJECT@> skos:prefLabel ?spreflabel.
+						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
 					}
 				}
 				FILTER (
