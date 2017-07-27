@@ -19,9 +19,13 @@ container:ttlupload a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:inScheme ?dataset.
 						}
-						FILTER(
-							?s != <http://localhost:8080/catalogus/tax/id/concept/>
-						)
+						UNION
+						{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+					}
 					}
 				}
 			}
@@ -96,9 +100,6 @@ container:ttlupdate a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:inScheme ?dataset.
 						}
-						FILTER(
-							?s != <http://localhost:8080/catalogus/tax/id/concept/>
-						)
 					}
 				}
 			}
@@ -331,7 +332,11 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				?s rdf:type skos:Concept.
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+				)
 			}
 		}
 		
@@ -658,7 +663,11 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				?s rdf:type skos:Concept.
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+				)
 			}
 		}
 		

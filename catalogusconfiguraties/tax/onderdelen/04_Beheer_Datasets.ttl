@@ -85,20 +85,9 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:datasetupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
-				}
-				UNION {
-					?s dct:title ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
+				?s dct:title ?slabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
