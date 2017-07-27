@@ -162,7 +162,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
-					?concept skos:inScheme <http://localhost:8080/catalogus/tax/id/dataset/@DATASET@>.
 					OPTIONAL {
 				#		?concept skos:definition ?uitleg
 						?concept rdfs:comment ?uitleg
@@ -173,7 +172,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdf:type skos:Concept.
 					?concept skos:altLabel ?concept_label.
 					?concept kddef:status ?status.
-					?concept skos:inScheme <http://localhost:8080/catalogus/tax/id/dataset/@DATASET@>.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
 				#		?concept skos:definition ?definition.
@@ -192,7 +190,8 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+				?concept rdfs:isDefinedBy ?g .
+				?concept skos:inScheme <http://localhost:8080/catalogus/tax/id/dataset/@DATASET@>.
 			}
 		}
 		ORDER BY str(lcase(?concept_label))

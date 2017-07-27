@@ -7,6 +7,74 @@ container:ttlupload a elmo:Container;
 	elmo:contains stage:TaxFooter;
 	elmo:replaces container:generiek;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/concept/>
+						)
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
 .
 
 # Updatecontainer Turtle
@@ -16,6 +84,74 @@ container:ttlupdate a elmo:Container;
     elmo:contains stage:TaxFooter;
     elmo:replaces container:generiek;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/concept/>
+						)
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+	];	
 .
 
 #PRODUCTIONS
@@ -149,15 +285,9 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -196,6 +326,17 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 
 		INSERT {
 			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type skos:Concept.
+			}
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
 				?s bp4mc2:signature ?sig.
 			}
 		}
@@ -221,20 +362,6 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 					ORDER BY ?s ?p ?o
 				}
             }
-		}
-		
-		INSERT {
-			GRAPH container:generiek {
-				?s skos:inScheme <@DATASET@>.
-			}
-		}
-		WHERE {
-			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
-			}
 		}
 		
 		INSERT {
@@ -401,7 +528,8 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 			GRAPH doc:mastergraph {
 				?s rdf:type ?type.
 				?s rdfs:isDefinedBy versiongraph:version.
-				?s bp4mc2:signature ?sig
+				?s bp4mc2:signature ?sig.
+				?s skos:inScheme <@DATASET@>.
 			}
 		}
 		WHERE {
@@ -483,15 +611,9 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s skos:prefLabel ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -528,6 +650,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 			}
 		}
 		
+		
 		INSERT {
 			GRAPH container:generiek {
 				?s skos:inScheme <@DATASET@>.
@@ -535,13 +658,10 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
+				?s rdf:type skos:Concept.
 			}
 		}
-
+		
 		INSERT {
 			GRAPH container:generiek {
 				?s bp4mc2:signature ?sig.
@@ -570,9 +690,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				}
             }
 		}
-		
-		
-				
+						
 		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o
@@ -598,6 +716,9 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 				GRAPH doc:mastergraph {
 					?s bp4mc2:signature ?sig
 				}
+			}
+			FILTER NOT EXISTS {
+				?s skos:inScheme ?o.
 			}
 		}
 		
