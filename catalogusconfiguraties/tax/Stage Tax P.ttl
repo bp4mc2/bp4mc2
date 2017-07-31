@@ -3863,29 +3863,38 @@ stage:TaxSynoniemenTabel a elmo:Part;
 	elmo:index "2";
 	elmo:query stage:TaxSynoniemenQuery;
 	elmo:fragment [
-		rdfs:label "Concept";						#de term die als homoniem voorkomt
+		rdfs:label "Concept";			
 		elmo:applies-to "concept1";
 	];
 	elmo:fragment [
-		rdfs:label "In";						#het begrippenkader van het begrip
-		elmo:applies-to "dataset1";
-	];
-	elmo:fragment [
-		rdfs:label "Met status";						#de status van het begrip
-		elmo:applies-to "status1";
-	];
-	elmo:fragment [
-		rdfs:label "Komt ook voor in";							#het begrippenkader van het 'andere' begrip (homoniem)
-		elmo:applies-to "dataset2";
-	];
-	elmo:fragment [
-		rdfs:label "als";				#of het gaat om de term dan wel het synoniem van dat 'andere' begrip
+		rdfs:label "met synoniem";			
 		elmo:applies-to "altlabel1";
 	];
 	elmo:fragment [
-		rdfs:label "Met status";						#de status van synoniem
+		rdfs:label "in dataset";			
+		elmo:applies-to "dataset1";
+	];
+	elmo:fragment [
+		rdfs:label "met de status";			
+		elmo:applies-to "status1";
+	];
+	elmo:fragment [
+		rdfs:label "komt voor als concept";			
+		elmo:applies-to "concept2";
+	];
+	elmo:fragment [
+		rdfs:label "met synoniem";			
+		elmo:applies-to "altlabel2";
+	];
+	elmo:fragment [
+		rdfs:label "in dataset";			
+		elmo:applies-to "dataset2";
+	];
+	elmo:fragment [
+		rdfs:label "met de status";			
 		elmo:applies-to "status2";
 	];
+	
 .
 
 stage:TaxSynoniemenQuery a elmo:query;
@@ -3897,7 +3906,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 	PREFIX prov: <http://www.w3.org/ns/prov#>
 	PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 	PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
-	SELECT DISTINCT ?concept1 ?concept1_label  ?altlabel1 ?dataset1 ?dataset1_label ?status1 ?status1_label ?dataset2 ?dataset2_label ?status2 ?status2_label
+	SELECT DISTINCT ?concept1 ?concept1_label  ?altlabel1 ?dataset1 ?dataset1_label ?status1 ?status1_label ?concept2 ?concept2_label ?altlabel2 ?dataset2 ?dataset2_label ?status2 ?status2_label
 	WHERE {
 		GRAPH ?g1 {
 			?concept1 rdf:type skos:Concept.
@@ -3958,6 +3967,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 		)
 		FILTER (?concept1 != ?concept2)
 	}	
+	ORDER BY ?concept1_label
 	'''
 . 
 #
