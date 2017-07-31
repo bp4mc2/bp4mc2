@@ -86,13 +86,11 @@ stage:TaxHomoniemenQuery a elmo:query;
 			}
 			GRAPH ?g2 {
 				?concept2 rdf:type skos:Concept.
-				?concept2 rdfs:label ?concept_label.
 				?concept2 skos:prefLabel ?preflabel.
 				?concept2 kddef:status ?status2.
 				FILTER NOT EXISTS {
 					?concept2 prov:invalidatedAtTime ?c2time.
 				}
-				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH ?dsg {
 				?dataset1 rdfs:label ?dataset1_label. 
