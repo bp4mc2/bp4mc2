@@ -84,6 +84,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 			?concept1 kddef:status ?status1.
 			OPTIONAL {
 				?concept1 skos:altLabel ?altlabel1.
+				FILTER( LANG( ?altlabel1 ) = "" || LANGMATCHES( LANG( ?altlabel1 ), "nl" ) )
 			}
 			FILTER( LANG( ?concept1_label ) = "" || LANGMATCHES( LANG( ?concept1_label ), "nl" ) )
 			FILTER NOT EXISTS {
@@ -97,6 +98,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 			?concept2 kddef:status ?status2.
 			OPTIONAL {
 				?concept2 skos:altLabel ?altlabel2.
+				FILTER( LANG( ?altlabel2 ) = "" || LANGMATCHES( LANG( ?altlabel2 ), "nl" ) )
 			}
 			FILTER( LANG( ?concept2_label ) = "" || LANGMATCHES( LANG( ?concept2_label ), "nl" ) )
 			FILTER NOT EXISTS {
@@ -123,6 +125,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 		}
 		GRAPH doc:mastergraph {
 			?concept1 rdfs:isDefinedBy ?g1.
+			?concept2 rdfs:isDefinedBy ?g2.
 			?dataset1 rdfs:isDefinedBy ?dsg.
 			?dataset2 rdfs:isDefinedBy ?dsg.
 			?concept1 skos:inScheme ?dataset1.
