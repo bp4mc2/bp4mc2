@@ -56,86 +56,78 @@ stage:TaxWhereUsedTabel a elmo:Part;
 # Query voor tonen alle triples <subject - predicate - object> van alle objecten
 stage:TaxWhereUsedQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: 		<http://www.w3.org/ns/prov#>
-		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-		prefix doc: 		<http://localhost:8080/catalogus/tax/concepten/doc/>
-		prefix concept: 	<http://localhost:8080/catalogus/tax/id/concept/>
-		prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
-		prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
-		prefix thes: 		<http://purl.org/iso25964/skos-thes#>
-		prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
-		prefix container: 	<http://localhost:8080/catalogus/tax/container/>
-		prefix dct: <http://purl.org/dc/terms/>
-		
-		SELECT ?concept ?concept_label ?link ?link_label ?subject ?subject_label
-		WHERE {
-			GRAPH ?g {
-				{
-					?concept rdf:type skos:Concept.
-					?concept rdfs:label ?concept_label.
-					?concept kddef:status ?status.
-					?subject ?link ?concept.
-					?subject rdfs:label ?subject_label.
-				}
-				UNION
-				{
-					?concept rdf:type skos:Concept.
-					?concept skos:altLabel ?concept_label.
-					?concept kddef:status ?status.
-					OPTIONAL {
-						?concept rdfs:label ?clabel.
-						?subject ?link ?concept.
-						?subject rdfs:label ?subject_label.
-					}
-				}
-				FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
-				FILTER(
-						?link =  thes:broaderGeneric
-						|| ?link = thes:narrowerGeneric
-						|| ?link = thes:broaderPartitive
-						|| ?link = thes:narrowerPartitive
-						|| ?link = skos:semanticRelation
-						|| ?link = skos:closeMatch
-						|| ?link = skos:exactMatch
-						|| ?link = skos:relatedMatch
-						|| ?link = skos:broadMatch
-						|| ?link = skos:narrowMatch
-						|| ?link = skoslex:actor
-						|| ?link = skoslex:agent
-						|| ?link = skoslex:object
-						|| ?link = skos:member
-					)
-				FILTER NOT EXISTS {
-					?concept prov:invalidatedAtTime ?time.
-				}
-				FILTER (
-					?status = kdstat:Gevalideerd ||
-					?status = kdstat:Geverifieerd
-				)
-				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "@LANGUAGE@" ) )
-				FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "@LANGUAGE@" ) )
+	prefix prov: 		<http://www.w3.org/ns/prov#>
+	prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+	prefix doc: 		<http://localhost:8080/catalogus/tax/concepten/doc/>
+	prefix concept: 	<http://localhost:8080/catalogus/tax/id/concept/>
+	prefix kddef:		<http://kadaster.basisregistraties.overheid.nl/som/def#>
+	prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
+	prefix thes: 		<http://purl.org/iso25964/skos-thes#>
+	prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
+	prefix container: 	<http://localhost:8080/catalogus/tax/container/>
+	prefix dct: <http://purl.org/dc/terms/>
+	
+	SELECT ?concept ?concept_label ?link ?link_label ?subject ?subject_label
+	WHERE {
+		GRAPH ?g {
+			?concept rdf:type skos:Concept.
+			?concept rdfs:label ?concept_label.
+			?concept kddef:status ?status.
+			FILTER NOT EXISTS {
+				?concept prov:invalidatedAtTime ?time.
 			}
-			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+			FILTER (
+				?status = kdstat:Gevalideerd ||
+				?status = kdstat:Geverifieerd
+			)
+			FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "@LANGUAGE@" ) )
+		}
+		GRAPH ?sg {
+			?subject ?link ?concept.
+			?subject rdfs:label ?subject_label.
+			FILTER( LANG( ?subject_label ) = "" || LANGMATCHES( LANG( ?subject_label ), "@LANGUAGE@" ) )
+			FILTER NOT EXISTS {
+				?subject prov:invalidatedAtTime ?stime.
 			}
-			BIND (
-				IF(?link = skos:member,  "Lid van",
-					IF(?link =	skos:semanticRelation,  "Heeft betrekking op",
-						IF(?link =	thes:broaderGeneric,  "Is specialisatie van",
-							IF(?link =	thes:narrowerGeneric,  "Is generalisatie van",
-								IF(?link =	thes:broaderPartitive,  "Is onderdeel van",
-									IF(?link =	thes:narrowerPartitive,  "Bestaat uit",
-										IF(?link =	dct:source,  "Bronnen",
-											IF(?link =	skoslex:actor,  "Heeft als actor",
-												IF(?link =	skoslex:object,  "Heeft als object",
-													IF(?link =	skoslex:agent,  "Heeft als agent",
-														IF(?link =	skos:closeMatch,  "Is ongeveer hetzelfde als",
-															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
-																IF(?link =	skos:relatedMatch,  "Zie ook ",
-																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link = skos:member, "Lid van",
-																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
-																			)
+			FILTER(
+				?link =  thes:broaderGeneric
+				|| ?link = thes:narrowerGeneric
+				|| ?link = thes:broaderPartitive
+				|| ?link = thes:narrowerPartitive
+				|| ?link = skos:semanticRelation
+				|| ?link = skos:closeMatch
+				|| ?link = skos:exactMatch
+				|| ?link = skos:relatedMatch
+				|| ?link = skos:broadMatch
+				|| ?link = skos:narrowMatch
+				|| ?link = skoslex:actor
+				|| ?link = skoslex:agent
+				|| ?link = skoslex:object
+				|| ?link = skos:member
+			)
+		}
+		GRAPH doc:mastergraph {
+			?concept rdfs:isDefinedBy ?g.
+			?subject rdfs:isDefinedBy ?sg.
+		}
+		FILTER regex(?concept_label, '^[^a-z0-9]*@TERM@', 'i').
+		BIND (
+			IF(?link = skos:member,  "Lid van",
+				IF(?link =	skos:semanticRelation,  "Heeft betrekking op",
+					IF(?link =	thes:broaderGeneric,  "Is specialisatie van",
+						IF(?link =	thes:narrowerGeneric,  "Is generalisatie van",
+							IF(?link =	thes:broaderPartitive,  "Is onderdeel van",
+								IF(?link =	thes:narrowerPartitive,  "Bestaat uit",
+									IF(?link =	dct:source,  "Bronnen",
+										IF(?link =	skoslex:actor,  "Heeft als actor",
+											IF(?link =	skoslex:object,  "Heeft als object",
+												IF(?link =	skoslex:agent,  "Heeft als agent",
+													IF(?link =	skos:closeMatch,  "Is ongeveer hetzelfde als",
+														IF(?link =	skos:exactMatch,  "Is hetzelfde als",
+															IF(?link =	skos:relatedMatch,  "Zie ook ",
+																IF(?link =	skos:broadMatch,  "Breder dan",
+																	IF(?link = skos:member, "Lid van",
+																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
 																		)
 																	)
 																)
@@ -150,9 +142,10 @@ stage:TaxWhereUsedQuery a elmo:Query;
 							)
 						)
 					)
-				) AS ?link_label
-			) 
-		}
-		ORDER BY str(lcase(?concept_label))
+				)
+			) AS ?link_label
+		) 
+	}
+	ORDER BY str(lcase(?concept_label))
 	'''
 .
