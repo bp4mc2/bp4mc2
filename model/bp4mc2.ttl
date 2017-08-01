@@ -221,6 +221,7 @@ model:conceptIsGemaaktDoor rdf:type sh:PropertyShape;
 model:conceptIsTopConceptOf rdf:type sh:PropertyShape;
 	sh:path skos:topConceptOf;
 	sh:name "skos:topConceptOf";
+	rdfs:comment "Een concept kan het meest generieke concept zijn binnen een concepten schema";
 	sh:datatype xsd:string;
 	sh:maxCount 1;
 	sh:class skos:ConceptScheme;
@@ -233,6 +234,7 @@ model:conceptBeschrijving rdf:type sh:NodeShape;
 .
 model:conceptBeschrijvingBetreft rdf:type sh:PropertyShape;
 	rdfs:label "betreft";
+	rdfs:comment "Een conceptbeschrijving kan het belangrijkste onderwerp van een conceptschema weergeven";
 	sh:name "foaf:primaryTopic";
 	sh:path foaf:primaryTopic;
 	sh:class skos:Concept;
@@ -246,6 +248,7 @@ model:conceptBeschrijvingType rdf:type sh:PropertyShape;
 ### Activiteit
 model:Activiteit rdf:type sh:NodeShape;
 	rdfs:label "Activiteit";
+	rdfs:comment "Een concept welke een handeling beschrijft. Een activiteit is een juridische constructie die een verzameling van activiteiten weergeeft, uitgevoerd door een Actor met betrekking tot een bepaald Object"; 
 	sh:targetClass skoslex:Act;
 	sh:name "skoslex:Act";
 	sh:property model:activiteitActor;
@@ -268,38 +271,53 @@ model:activiteitObject rdf:type sh:PropertyShape;
 ### Actor
 model:Actor rdf:type sh:NodeShape;
 	rdfs:label "Actor";
+	rdfs:comment "Een Actor is een zeker persoon (individu, groep of organisatie) die een Activiteit uitvoert";
 	sh:targetClass skoslex:Actor;
+.
+### Agent 
+model:Agent rdf:type sh:NodeShape;
+	rdfs:label "Agent";
+	rdfs:comment "Een Agent is een zeker persoon(individu, groep of organisatie) betrokken bij een Activiteit, zonder daadwerkelijk de Activiteit zelf uit te voeren";
+	sh:targetClass skoslex:Agent;
 .
 ### Object 
 model:Object rdf:type sh:NodeShape;
 	rdfs:label "Object";
+	rdfs:comment "Een Object is een zeker ding (niet een Actor) dat wordt gemaakt, gebruikt of veranderd gedurende een Activiteit";
 	sh:targetClass skoslex:Object;
 .
 ### Norm
 model:Norm rdf:type sh:NodeShape;
 	rdfs:label "Norm";
+	rdfs:comment "Een concept welke een norm beschrijft. Een norm heeft betrekking op een Activiteit. Het impliceert wat wel of niet is toegestaan met betrekking tot een Activiteit. Een Norm vertegenwoordigd een verzameling regels die van toepassing zijn op een Activiteit.";
 	sh:targetClass skoslex:Norm;
 	sh:property model:normNaam;
 	sh:property model:normHeeftInvloedOp;
 	sh:property model:normVerwijstNaar;
 .
 model:normNaam rdf:type sh:PropertyShape;
+	rdfs:comment "Een Norm kan een naam hebben";
 	sh:path skos:prefLabel;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:normHeeftInvloedOp rdf:type sh:PropertyShape;
+	rdfs:label "Heeft betrekking op";
+	rdfs:comment "Heeft betrekking op verbind een Norm met de Activiteit die wordt beinvloed door de Norm. Zo een Activiteit wordt beperkt door de regels die worden geidentificeerd door de Norm"; 
 	sh:path skoslex:affects;
 	sh:class skoslex:Act;
 .
 model:normVerwijstNaar rdf:type sh:PropertyShape;
+	rdfs:label "Verwijst naar";
+	rdfs:comment "Verwijst naar verbind een Norm met de Activiteit waarnaar wordt verwezen door de Norm. Zo een Activiteit heeft een zekere relatie met de Norm, zonder nadere specificatie. De Activiteit kan worden beinvloed door de Norm, maar kan ook een voorwaarde zijn of simpelweg vermeld zijn in de regels";
 	sh:path skoslex:refersTo;
 	sh:class skoslex:Act;
 .
 ### Collection
 model:Collection rdf:type sh:NodeShape;
 	rdfs:label "Collectie";
+	rdfs:comment "Een collectie is een verzameling van Concepten";
 	sh:targetClass skos:Collection;
 	sh:name "skos:Collection";
 	sh:property model:collectieLabel;
@@ -308,6 +326,7 @@ model:Collection rdf:type sh:NodeShape;
 .
 model:collectieLabel rdf:type sh:PropertyShape;
 	rdfs:label "heeft label";
+	rdfs:label "Een Collectie heeft een label";
 	sh:path rdfs:label;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -315,6 +334,7 @@ model:collectieLabel rdf:type sh:PropertyShape;
 .
 model:collectieLid rdf:type sh:PropertyShape;
 	rdfs:label "heeft lid";
+	rdfs:comment "Een collectie heeft één of meerdere leden";
 	sh:path skos:member;
 	sh:name "skos:memer";
 	sh:datatype xsd:string;
@@ -323,6 +343,7 @@ model:collectieLid rdf:type sh:PropertyShape;
 .
 model:collectieHeeftTopConcept rdf:type sh:PropertyShape;
 	rdfs:label "Heeft top concept";
+	rdfs:comment "Een Collectie heeft een top concept";
 	sh:path skos:hasTopConcept;
 	sh:name "skos:hasTopConcept";
 	sh:datatype xsd:string;
@@ -374,6 +395,7 @@ model:Informatieproduct rdf:type sh:NodeShape;
 ### Informatiemodel
 model:Informatiemodel rdf:type sh:NodeShape;
 	rdfs:label "Informatiemodel";
+	rdfs:comment "Beschrijving van een informatiemodel in termen van gegevenskalssen, eigenschappen en waardenlijsten, inclusief de relaties naar concepten";
 	sh:name "adms:Asset";
 	sh:targetClass adms:Asset;
 	sh:property model:informatiemodel_naam;

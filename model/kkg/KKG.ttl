@@ -16,13 +16,18 @@
 @prefix xsi: 		<http://www.w3.org/2001/XMLSchema-instance>.
 @prefix ldqd:    	<http://www.w3.org/2016/05/ldqd#>. 
 
-@prefix kkgshape:		<http://localhost:8080/kkg/def/model/>.
+@prefix kkgshape:		<http://localhost:8080/dso/shacl/def/model/>.
 
 ### NODESHAPES
+
+kkgshape:KKG rdf:type owl:Ontology;
+	rdfs:label "KKG";
+.
 
 kkgshape:Objecttype rdf:type sh:NodeShape;
 	rdfs:label "Objecttype";
 	sh:targetClass rdfs:Class;
+	sh:name "kkg:Objecttype";
 	sh:property kkgshape:verwijstNaar;
 	sh:property kkgshape:gegevensgroep;
 	sh:property kkgshape:attribuut;

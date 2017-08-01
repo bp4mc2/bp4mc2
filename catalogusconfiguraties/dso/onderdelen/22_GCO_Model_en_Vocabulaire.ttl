@@ -42,12 +42,12 @@ stage:DSOModelQuery a elmo:Query;
 		construct {
 			?shape ?sp ?so.
 			?class rdf:type rdfs:Class.
-			?class rdfs:comment "".
+			?class rdfs:comment ?ccomment.
 			?subclass rdfs:subClassOf ?superclass.
 			?superclass rdf:type rdfs:Class.
 			?pc ?pcp ?pco.
 			?property rdf:type rdf:Property.
-			?property rdfs:comment "".
+			?property rdfs:comment ?pcomment.
 			?subproperty rdfs:subPropertyOf ?superproperty.
 			?superproperty rdf:type rdf:Property.
 		}
@@ -57,11 +57,16 @@ stage:DSOModelQuery a elmo:Query;
 				?shape ?sp ?so.
 				OPTIONAL {
 					?shape shacl:targetClass ?class.
+
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
-						?subclass rdfs:subClassOf ?superclass
+						?subclass rdfs:subClassOf ?superclass.
 					}
 				}
+				OPTIONAL {
+					?shape rdfs:comment ?currentccomment.
+				}
+				BIND( IF( BOUND(?currentccomment), ?currentccomment, "") AS ?ccomment )	
 				OPTIONAL {
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
@@ -73,6 +78,10 @@ stage:DSOModelQuery a elmo:Query;
 						}
 					}
 				}
+				OPTIONAL {
+					?pc rdfs:comment ?currentpcomment.
+				}
+				BIND( IF( BOUND(?currentpcomment), ?currentpcomment, "") AS ?pcomment )	
 			}
 		}
 	''';
