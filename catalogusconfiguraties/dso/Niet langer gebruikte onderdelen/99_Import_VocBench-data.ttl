@@ -1,0 +1,48 @@
+#
+#
+#
+# IMPORTEREN DATA VOCBENCH
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Pagina om alle data vanuit VocBench in te laden
+updatestage:importvbdata a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSODummyForm;
+	elmo:contains stage:DSOLoadVBDataScene;
+	elmo:contains stage:DSOGeneriekeUploadScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:DSODummyForm a elmo:Form.
+
+#
+# SCENES
+#
+
+# Query om VocBench-gegevens in te laden vanuit GraphDB
+stage:DSOLoadVBDataScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Laden gegevens vanuit VocBench";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s?p?o
+			}
+		}
+		WHERE {
+			SERVICE <http://localhost:7200/repositories/catalogus> {
+				?s?p?o
+			}
+		}
+	'''
+.
