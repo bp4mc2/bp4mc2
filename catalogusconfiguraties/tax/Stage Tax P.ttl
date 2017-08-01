@@ -3346,6 +3346,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> skos:prefLabel ?spreflabel.
 						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
 					}
+					FILTER NOT EXISTS {
+						<@SUBJECT@> prov:invalidatedAtTime ?stime.
+					}
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
@@ -3395,6 +3398,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> skos:prefLabel ?spreflabel.
 						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
 					}
+					FILTER NOT EXISTS {
+						<@SUBJECT@> prov:invalidatedAtTime ?stime.
+					}
 				}
 				FILTER (
 					?p = rdfs:comment
@@ -3430,7 +3436,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					?col skos:member <@SUBJECT@>.
 					?col rdfs:label ?col_label.
 					FILTER NOT EXISTS {
-						?col prov:invalidatedAtTime ?time.
+						?col prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -3442,6 +3448,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					?o rdf:type ?otype.
 					OPTIONAL {
 						?o kddef:status ?ostatus.
+					}
+					FILTER NOT EXISTS {
+						?o prov:invalidatedAtTime ?otime.
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -4874,102 +4883,100 @@ stage:TaxNietGevalideerdeLinksTabel a elmo:Part;
 #	alle triples waarbij het object NIET gevalideerd is 
 stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
-		prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
-		prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix owl: <http://www.w3.org/2002/07/owl#>
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
-		prefix dct: <http://purl.org/dc/terms/>
-		
-		SELECT 	#?graph ?graph_label
-				?klasse
-				?status ?status_label
-				?Frame ?Frame_label
-				?link ?link_label
-				?FrameRef ?FrameRef_label
-				?FR_status ?FR_status_label
-		WHERE {
-			{
-				GRAPH ?mg		{
-					?Frame rdf:type ?klasse.
-					?Frame ?link ?FrameRef.
-					?Frame kddef:status ?status.
-					?FrameRef kddef:status ?FR_status.
-					FILTER(
-						?link =  thes:broaderGeneric
-						|| ?link = thes:narrowerGeneric
-						|| ?link = thes:broaderPartitive
-						|| ?link = thes:narrowerPartitive
-						|| ?link = skos:semanticRelation
-						|| ?link = skos:closeMatch
-						|| ?link = skos:exactMatch
-						|| ?link = skos:relatedMatch
-						|| ?link = skos:broadMatch
-						|| ?link = skos:narrowMatch
-						|| ?link = skoslex:actor
-						|| ?link = skoslex:agent
-						|| ?link = skoslex:object
-						|| ?link = skos:member 
-					)
-					OPTIONAL {
-						?Frame rdfs:label ?Frame_label.
-						FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
-					}
-				#	OPTIONAL {
-				#		?graph rdfs:label ?graph_label.
-				#		FILTER (lang(?graph_label)="" || lang(?graph_label)="@LANG@")
-				#	}
-					FILTER NOT EXISTS {
-                        ?Frame prov:invalidatedAtTime ?time.
-					}
-					OPTIONAL {
-						?FrameRef rdfs:label ?FrameRef_label.
-						FILTER (lang(?FrameRef_label)="" || lang(?FrameRef_label)="nl")
-					}
-				}
-					FILTER (
-						?FR_status = kdstat:Afgekeurd 
-						|| ?FR_status = kdstat:Niet_beoordeeld
-						|| ?FR_status = kdstat:Ter_afkeuring
-						|| ?FR_status = kdstat:Ter_validatie
-					)
-					GRAPH doc:mastergraph {
-						?FrameRef rdfs:isDefinedBy ?frameRefGraph.
-					}
-				}
+	prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+	prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+	prefix skos: <http://www.w3.org/2004/02/skos/core#>
+	prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+	prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+	prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
+	prefix prov: <http://www.w3.org/ns/prov#>
+	prefix owl: <http://www.w3.org/2002/07/owl#>
+	prefix thes: <http://purl.org/iso25964/skos-thes#>
+	prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+	prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+	prefix dct: <http://purl.org/dc/terms/>
+
+	SELECT 	?klasse
+			?status ?status_label
+			?Frame ?Frame_label
+			?link ?link_label
+			?FrameRef ?FrameRef_label
+			?FR_status ?FR_status_label
+	WHERE {
+			GRAPH ?mg		{
+				?Frame rdf:type ?klasse.
+				?Frame ?link ?FrameRef.
+				?Frame kddef:status ?status.
+				FILTER(
+					?link =  thes:broaderGeneric
+					|| ?link = thes:narrowerGeneric
+					|| ?link = thes:broaderPartitive
+					|| ?link = thes:narrowerPartitive
+					|| ?link = skos:semanticRelation
+					|| ?link = skos:closeMatch
+					|| ?link = skos:exactMatch
+					|| ?link = skos:relatedMatch
+					|| ?link = skos:broadMatch
+					|| ?link = skos:narrowMatch
+					|| ?link = skoslex:actor
+					|| ?link = skoslex:agent
+					|| ?link = skoslex:object
+					|| ?link = skos:member 
+				)
 				OPTIONAL {
-					GRAPH container:statusupload {
-						?status rdfs:label ?status_label.
-						?FR_status rdfs:label ?FR_status_label.
-						FILTER (lang(?status_label)="" || lang(?status_label)="nl")
-						FILTER (lang(?FR_status_label)="" || lang(?FR_status_label)="nl")
-					}
+					?Frame rdfs:label ?Frame_label.
+					FILTER (lang(?Frame_label)="" || lang(?Frame_label)="nl")
 				}
-				GRAPH doc:mastergraph {
-					?Frame rdfs:isDefinedBy ?mg.
+				FILTER NOT EXISTS {
+					?Frame prov:invalidatedAtTime ?time.
 				}
-			BIND (
-				IF(?link = skos:member,  "Lid van",
-					IF(?link =	skos:semanticRelation,  "Heeft betrekking op",
-						IF(?link =	thes:broaderGeneric,  "Is specialisatie van",
-							IF(?link =	thes:narrowerGeneric,  "Is generalisatie van",
-								IF(?link =	thes:broaderPartitive,  "Is onderdeel van",
-									IF(?link =	thes:narrowerPartitive,  "Bestaat uit",
-										IF(?link =	dct:source,  "Bronnen",
-											IF(?link =	skoslex:actor,  "Heeft als actor",
-												IF(?link =	skoslex:object,  "Heeft als object",
-													IF(?link =	skoslex:agent,  "Heeft als agent",
-														IF(?link =	skos:closeMatch,  "Is ongeveer hetzelfde als",
-															IF(?link =	skos:exactMatch,  "Is hetzelfde als",
-																IF(?link =	skos:relatedMatch,  "Zie ook ",
-																	IF(?link =	skos:broadMatch,  "Breder dan",
-																		IF(?link = skos:member, "Lid van",
-																			IF(?link =	skos:narrowMatch,  "Enger dan", " "
-																			)
+			}
+			GRAPH ?frameRefGraph {
+				?FrameRef rdf:type ?FRType.
+				?FrameRef kddef:status ?FR_status.
+				OPTIONAL {
+					?FrameRef rdfs:label ?FrameRef_label.
+					FILTER (lang(?FrameRef_label)="" || lang(?FrameRef_label)="nl")
+				}
+				FILTER NOT EXISTS {
+					?FrameRef prov:invalidatedAtTime ?FRtime.
+				}
+				FILTER (
+					?FR_status = kdstat:Afgekeurd 
+					|| ?FR_status = kdstat:Niet_beoordeeld
+					|| ?FR_status = kdstat:Ter_afkeuring
+					|| ?FR_status = kdstat:Ter_validatie
+				)
+			}
+			OPTIONAL {
+				GRAPH container:statusupload {
+					?status rdfs:label ?status_label.
+					?FR_status rdfs:label ?FR_status_label.
+					FILTER (lang(?status_label)="" || lang(?status_label)="nl")
+					FILTER (lang(?FR_status_label)="" || lang(?FR_status_label)="nl")
+				}
+			}
+			GRAPH doc:mastergraph {
+				?Frame rdfs:isDefinedBy ?mg.
+				?FrameRef rdfs:isDefinedBy ?frameRefGraph.
+			}
+		BIND (
+			IF(?link = skos:member,  "Lid van",
+				IF(?link =	skos:semanticRelation,  "Heeft betrekking op",
+					IF(?link =	thes:broaderGeneric,  "Is specialisatie van",
+						IF(?link =	thes:narrowerGeneric,  "Is generalisatie van",
+							IF(?link =	thes:broaderPartitive,  "Is onderdeel van",
+								IF(?link =	thes:narrowerPartitive,  "Bestaat uit",
+									IF(?link =	dct:source,  "Bronnen",
+										IF(?link =	skoslex:actor,  "Heeft als actor",
+											IF(?link =	skoslex:object,  "Heeft als object",
+												IF(?link =	skoslex:agent,  "Heeft als agent",
+													IF(?link =	skos:closeMatch,  "Is ongeveer hetzelfde als",
+														IF(?link =	skos:exactMatch,  "Is hetzelfde als",
+															IF(?link =	skos:relatedMatch,  "Zie ook ",
+																IF(?link =	skos:broadMatch,  "Breder dan",
+																	IF(?link = skos:member, "Lid van",
+																		IF(?link =	skos:narrowMatch,  "Enger dan", " "
 																		)
 																	)
 																)
@@ -4984,10 +4991,11 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 							)
 						)
 					)
-				) AS ?link_label
-			)
-			}
-		ORDER BY str(lcase(?Frame_label))
+				)
+			) AS ?link_label
+		)
+		}
+	ORDER BY str(lcase(?Frame_label))
 	'''
 . 
 #
