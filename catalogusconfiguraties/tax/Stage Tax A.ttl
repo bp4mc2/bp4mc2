@@ -259,8 +259,18 @@ stage:TaxBeheermenu a elmo:Part;
 				xhtml:link "/update/clearalldata";
 			];
 			elmo:data [
-				rdfs:label "Exporteren van specifieke dataset";
+				rdfs:label "Verwijder enkel concept";
 				elmo:index "2";
+				xhtml:link "/update/clearsingleconcept";
+			];
+			elmo:data [
+				rdfs:label "Verwijder alle concepten";
+				elmo:index "3";
+				xhtml:link "/update/clearalleconcepten";
+			];
+			elmo:data [
+				rdfs:label "Exporteren van specifieke dataset";
+				elmo:index "3";
 				xhtml:link "/query/exportsubsetbegrippen";
 			];
 		#	elmo:data [
@@ -2082,6 +2092,91 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 #
 #
 #
+# CLEAR SINGLE CONCEPT
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle data over een enkel concept te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearsingleconcept a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:search_concepts;
+	elmo:queryForm stage:TaxSelectConceptForm;
+	elmo:contains stage:ClearSingleConceptScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:TaxSelectConceptForm a elmo:Form;
+	rdfs:label "Selecteer concept";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Selecteer concept"@nl;
+		elmo:valuesFrom stage:search_concepts;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+# PARTS
+#
+
+stage:search_concepts a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		CONSTRUCT {
+			?concept rdfs:label ?label
+		}
+		WHERE {
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+    			BIND( str(?concept) AS ?label )
+			}
+			FILTER regex(?g, "^http://pdok-ld-gck.fto.kadaster.nl/(?!stage)")
+		}
+	''';
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van enkel concept
+stage:ClearSingleConceptScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder enkel concept";
+	elmo:query '''
+		DELETE {
+			GRAPH ?g {
+				<@CONCEPT@> ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				<@CONCEPT@> ?p ?o
+			}
+			FILTER regex(?g, "^http://pdok-ld-gck.fto.kadaster.nl/(?!stage)")
+		}
+	'''
+.
+ 
+#
+#
+#
 # CLEAR ALL DATA
 #
 #
@@ -2123,6 +2218,58 @@ stage:ClearAllDataScene a elmo:Scene;
 		WHERE {
 			GRAPH ?g {
 				?s ?p ?o
+			}
+			FILTER regex(?g, "^http://pdok-ld-gck.fto.kadaster.nl/(?!stage)")
+		}
+	'''
+.
+
+#
+#
+#
+# CLEAR ALLE CONCEPTEN
+#
+#
+#
+
+
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle concepten te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalleconcepten a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxDummyForm;
+	elmo:contains stage:ClearAllConceptsScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:TaxDummyForm a elmo:Form.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearAllConceptsScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder alle concepten";
+	elmo:query '''
+		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o ; rdf:type skos:Concept
 			}
 			FILTER regex(?g, "^http://pdok-ld-gck.fto.kadaster.nl/(?!stage)")
 		}
