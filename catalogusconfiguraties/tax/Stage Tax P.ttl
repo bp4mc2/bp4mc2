@@ -224,11 +224,11 @@ stage:TaxBeheermenu a elmo:Part;
 				elmo:index "4";
 				xhtml:link "/query/homoniemen1";
 			];
-		#	elmo:data [
-		#		rdfs:label "Homoniemen2";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
-		#		elmo:index "5";
-		#		xhtml:link "/query/homoniemen2";
-		#	];
+			elmo:data [
+				rdfs:label "Synoniemen";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
+				elmo:index "5";
+				xhtml:link "/query/synoniemen";
+			];
 			elmo:data [
 				rdfs:label "Statuscontrole";								#alle begrippen en hun status. Hoofdpagina bevat alleen gevalideerde/geverifieerde begrippen
 				elmo:index "1";
@@ -236,17 +236,17 @@ stage:TaxBeheermenu a elmo:Part;
 			];
 			elmo:data [
 				rdfs:label "Looping";										#triples waar zowel <A skos:SemanticRelation B> als <B skos:SemanticRelation A> bestaat, waardoor er een loop ontstaat
-				elmo:index "6";
+				elmo:index "7";
 				xhtml:link "/query/loopingcontrole";
 			];
 			elmo:data [
 				rdfs:label "Where used";									#triples waar geldt <B ?relatie A>, dus alle subjecten gerelateerd aan een object
-				elmo:index "4";
+				elmo:index "8";
 				xhtml:link "/query/whereused?term=";
 			];
 			elmo:data [
 				rdfs:label "Niet Gevalideerde Links";						#triples waarbij een gevalideerd concept gelinkt is aan een niet-gevalideerd object
-				elmo:index "5";
+				elmo:index "6";
 				xhtml:link "/query/nietgevalideerdelinks";
 			];
 		];
@@ -259,15 +259,25 @@ stage:TaxBeheermenu a elmo:Part;
 				xhtml:link "/update/clearalldata";
 			];
 			elmo:data [
-				rdfs:label "Exporteren van specifieke dataset";
+				rdfs:label "Verwijder enkel concept";
 				elmo:index "2";
-				xhtml:link "/query/exportsubsetbegrippen";
+				xhtml:link "/update/clearsingleconcept";
 			];
 			elmo:data [
-				rdfs:label "Exporteren van alle data";
+				rdfs:label "Verwijder alle concepten";
 				elmo:index "3";
-				xhtml:link "/query/exporteren";
+				xhtml:link "/update/clearalleconcepten";
 			];
+			elmo:data [
+				rdfs:label "Exporteren van specifieke dataset";
+				elmo:index "4";
+				xhtml:link "/query/exportsubsetbegrippen";
+			];
+		#	elmo:data [
+		#		rdfs:label "Exporteren van alle data";
+		#		elmo:index "3";
+		#		xhtml:link "/query/exporteren";
+		#	];
 		];
 	]
 .
@@ -291,6 +301,78 @@ container:ttlupload a elmo:Container;
 	elmo:contains stage:TaxFooter;
 	elmo:replaces container:generiek;
 	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+						UNION
+						{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+					}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupload {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
 .
 
 # Updatecontainer Turtle
@@ -300,6 +382,71 @@ container:ttlupdate a elmo:Container;
     elmo:contains stage:TaxFooter;
     elmo:replaces container:generiek;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:ttlupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+					}
+				}
+			}
+		''';
+	];	
 .
 
 #PRODUCTIONS
@@ -354,6 +501,9 @@ stage:search_datasets a elmo:Part;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		prefix dct: <http://purl.org/dc/terms/>
+		
 		CONSTRUCT {
 			?dataset rdfs:label ?dataset_label
 		}
@@ -364,6 +514,9 @@ stage:search_datasets a elmo:Part;
 				FILTER NOT EXISTS {
 					?dataset prov:invalidatedAtTime ?time.
 				}
+			}
+			GRAPH doc:mastergraph {
+				?g dct:isVersionOf doc:mastergraph.
 			}
 		}
 		ORDER BY DESC(?dataset_label)
@@ -433,15 +586,9 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -485,10 +632,11 @@ stage:TaxGeneriekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+				)
 			}
 		}
 		
@@ -768,15 +916,9 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s skos:prefLabel ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -821,10 +963,11 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				SELECT ?s ?p ?o 
-				WHERE {
-					?s rdf:type skos:Concept.
-				}
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+				)
 			}
 		}
 		
@@ -1071,15 +1214,9 @@ stage:TaxGeneriekeUploadQuery a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel. 
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -1385,15 +1522,9 @@ stage:TaxSpecifiekeUploadQuery a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:generiek {
-				{
-					{ ?s skos:prefLabel ?spreflabel. }
-					UNION { ?s dct:title ?spreflabel. }
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?spreflabel.
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -1403,8 +1534,6 @@ stage:TaxSpecifiekeUploadQuery a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -1653,20 +1782,9 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:datasetupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
-				}
-				UNION {
-					?s dct:title ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
+				?s dct:title ?slabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -1974,6 +2092,91 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 #
 #
 #
+# CLEAR SINGLE CONCEPT
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle data over een enkel concept te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearsingleconcept a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:search_concepts;
+	elmo:queryForm stage:TaxSelectConceptForm;
+	elmo:contains stage:ClearSingleConceptScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:TaxSelectConceptForm a elmo:Form;
+	rdfs:label "Selecteer concept";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Selecteer concept"@nl;
+		elmo:valuesFrom stage:search_concepts;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+# PARTS
+#
+
+stage:search_concepts a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		CONSTRUCT {
+			?concept rdfs:label ?label
+		}
+		WHERE {
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+    			BIND( str(?concept) AS ?label )
+			}
+			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
+		}
+	''';
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van enkel concept
+stage:ClearSingleConceptScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder enkel concept";
+	elmo:query '''
+		DELETE {
+			GRAPH ?g {
+				<@CONCEPT@> ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				<@CONCEPT@> ?p ?o
+			}
+			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
+		}
+	'''
+.
+ 
+#
+#
+#
 # CLEAR ALL DATA
 #
 #
@@ -2015,6 +2218,58 @@ stage:ClearAllDataScene a elmo:Scene;
 		WHERE {
 			GRAPH ?g {
 				?s ?p ?o
+			}
+			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
+		}
+	'''
+.
+
+#
+#
+#
+# CLEAR ALLE CONCEPTEN
+#
+#
+#
+
+
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle concepten te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalleconcepten a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxDummyForm;
+	elmo:contains stage:ClearAllConceptsScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:TaxDummyForm a elmo:Form.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearAllConceptsScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder alle concepten";
+	elmo:query '''
+		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o ; rdf:type skos:Concept
 			}
 			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
 		}
@@ -2860,6 +3115,11 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "00";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to rdfs:comment;
 		elmo:index "02";
@@ -3066,10 +3326,11 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> skos:prefLabel ?spreflabel.
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
-			?s skos:inScheme ?dataset.
+			<@SUBJECT@> skos:inScheme ?dataset.
 			?dataset rdfs:label ?datasetlabel.
 		}
 		WHERE {
@@ -3081,10 +3342,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 					}
+					OPTIONAL {
+						<@SUBJECT@> skos:prefLabel ?spreflabel.
+						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
+					}
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
-					?s skos:inScheme ?dataset.
+					<@SUBJECT@> skos:inScheme ?dataset.
 				}
 				GRAPH ?dsg {
 					?dataset rdfs:label ?datasetlabel. 
@@ -3099,7 +3364,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
-					|| ?p = skos:inScheme
 					|| ?p = skoslex:actor
 					|| ?p = skoslex:agent
 					|| ?p = skoslex:object
@@ -3114,6 +3378,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:broadMatch
 					|| ?p = skos:narrowMatch
 					|| ?p = skos:altLabel
+					|| ?p = skos:inScheme
 				)
 				FILTER( substr("@GRAPH@",2) = "GRAPH@")
 			}
@@ -3126,6 +3391,10 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 					}
+					OPTIONAL {
+						<@SUBJECT@> skos:prefLabel ?spreflabel.
+						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
+					}
 				}
 				FILTER (
 					?p = rdfs:comment
@@ -3134,7 +3403,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
-					|| ?p = skos:inScheme
 					|| ?p = skoslex:actor
 					|| ?p = skoslex:agent
 					|| ?p = skoslex:object
@@ -3148,7 +3416,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:relatedMatch
 					|| ?p = skos:broadMatch
 					|| ?p = skos:narrowMatch
-					|| ?p = skos:altLabel					
+					|| ?p = skos:altLabel	
+					|| ?p = skos:inScheme
 				)
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}
@@ -3615,134 +3884,238 @@ stage:TaxHomoniemenTabel a elmo:Part;
 	elmo:index "2";
 	elmo:query stage:TaxHomoniemenQuery;
 	elmo:fragment [
+		rdfs:label "Concept";		
+		elmo:applies-to "concept";
+		elmo:index "1";
+	];
+	elmo:fragment [
+		rdfs:label "prefLabel";		
+		elmo:applies-to "preflabel";
+		elmo:index "2";
+	];
+	elmo:fragment [
 		rdfs:label "Populatie";		
-		elmo:applies-to "graph";
+		elmo:applies-to "dataset1";
+		elmo:index "3";
 	];
-		elmo:fragment [
-		rdfs:label "Begrip";		
-		elmo:applies-to "begrip";
+	elmo:fragment [
+		rdfs:label "Met status";		
+		elmo:applies-to "status1";
+		elmo:index "4";
 	];
-		elmo:fragment [
+	elmo:fragment [
 		rdfs:label "Komt ook voor in";		
-		elmo:applies-to "graph2";
+		elmo:applies-to "dataset2";
+		elmo:index "5";
+	];
+	elmo:fragment [
+		rdfs:label "Met status";		
+		elmo:applies-to "status2";
+		elmo:index "6";
 	];
 .
 
-#query geeft aan of een begrip in kader 1 ook voorkomt als exact hetzelfde begrip in kader 2
+#query geeft aan of een begrip in meerdere domeinen voorkomt
 stage:TaxHomoniemenQuery a elmo:query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
-		
-		SELECT ?graph ?graph_label
-			?begrip ?begrip_label
-			?graph2 ?graph2_label
+		PREFIX doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+		PREFIX prov: <http://www.w3.org/ns/prov#>
+		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+		PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		SELECT DISTINCT ?concept ?concept_label ?preflabel ?dataset1 ?dataset1_label ?status1 ?status1_label ?dataset2 ?dataset2_label ?status2 ?status2_label
 		WHERE {
-			GRAPH ?graph {
-			?begrip rdf:type skos:Concept.
-				OPTIONAL {
-					?begrip rdfs:label ?begrip_label.
-					FILTER (lang(?begrip_label)="" or lang(?begrip_label)="@LANGUAGE@")
-				}
-				OPTIONAL {
-					?graph rdfs:label ?graph_label
-					FILTER (lang(?graph_label)="" or lang(?graph_label)="@LANGUAGE@")
-				}
-			#	FILTER (?klasse=frames:Begrip or ?klasse=frames:Gebeurtenis)
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+				?concept rdfs:label ?concept_label.
+				?concept skos:prefLabel ?preflabel.
+				?concept kddef:status ?status1.
 				FILTER NOT EXISTS {
-					?graph prov:invalidatedAtTime ?time.
-                }
+					?concept prov:invalidatedAtTime ?c1time.
+				}
+				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
-			GRAPH ?graph2 {
-				?begrip rdf:type skos:Concept.
-				OPTIONAL {
-					?graph2 rdfs:label ?graph2_label
-					FILTER (lang(?graph2_label)="" or lang(?graph2_label)="@LANGUAGE@")
-				}
+			GRAPH ?g2 {
+				?concept2 rdf:type skos:Concept.
+				?concept2 skos:prefLabel ?preflabel.
+				?concept2 kddef:status ?status2.
 				FILTER NOT EXISTS {
-					?graph2 prov:invalidatedAtTime ?time.
-                }
+					?concept2 prov:invalidatedAtTime ?c2time.
+				}
+			}
+			GRAPH ?dsg {
+				?dataset1 rdfs:label ?dataset1_label. 
+				FILTER NOT EXISTS {
+					?dataset1 prov:invalidatedAtTime ?d1time.
+				}
+				?dataset2 rdfs:label ?dataset2_label. 
+				FILTER NOT EXISTS {
+					?dataset2 prov:invalidatedAtTime ?d2time.
+				}
+			}
+			OPTIONAL {
+				GRAPH container:statusupload {
+					?status1 rdfs:label ?status1_label.
+					?status2 rdfs:label ?status2_label.
+					FILTER (lang(?status1_label)="" || lang(?status1_label)="nl")
+					FILTER (lang(?status2_label)="" || lang(?status2_label)="nl")
+				}
 			}
 			GRAPH doc:mastergraph {
-				?graph rdfs:isDefinedBy ?graph.
-                ?graph2 rdfs:isDefinedBy ?graph2.
-            }
+				?concept rdfs:isDefinedBy ?g.
+				?concept2 rdfs:isDefinedBy ?g2. 
+				?dataset1 rdfs:isDefinedBy ?dsg.
+				?dataset2 rdfs:isDefinedBy ?dsg.
+				?concept skos:inScheme ?dataset1.
+				?concept2 skos:inScheme ?dataset2.
+			}
+			FILTER (?concept != ?concept2)
 		}
 	'''
 . 
 #
 #
 #
-# BEHEER HOMONIEMEN - 2
+# BEHEER Synoniemen
 #
 #
 #
 
 
-#Hoofdpagina Homoniemen - 2 Rapportage
+#Hoofdpagina Synoniemen Rapportage
 stage:TaxHomoniemen2 a elmo:Representation;
-	elmo:url-pattern "/query/homoniemen2$";
+	elmo:url-pattern "/query/synoniemen$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
-	elmo:contains stage:TaxHomoniemen2Tabel;
-	elmo:contains stage:TaxHomoniemen2Uitleg;
+	elmo:contains stage:TaxSynoniemenTabel;
+	elmo:contains stage:TaxSynoniemenUitleg;
 .
 
-stage:TaxHomoniemen2Uitleg a elmo:Part;
+stage:TaxSynoniemenUitleg a elmo:Part;
 	elmo:appearance elmo:HtmlAppearance;
 	elmo:index "1";
 	elmo:without-parameter "term";
 	elmo:data [
-		rdfs:label "Homoniemen2";
+		rdfs:label "Synoniemen";
 	]
 .
 
-# Weergave van homoniemen - 2
-stage:TaxHomoniemen2Tabel a elmo:Part;
+# Weergave van Synoniemen
+stage:TaxSynoniemenTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
-	elmo:query stage:TaxHomoniemen2Query;
+	elmo:query stage:TaxSynoniemenQuery;
 	elmo:fragment [
-		rdfs:label "Homoniem";						#de term die als homoniem voorkomt
-		elmo:applies-to "homoniem";
+		rdfs:label "Concept";			
+		elmo:applies-to "concept1";
 	];
 	elmo:fragment [
-		rdfs:label "Populatie";						#het begrippenkader van het begrip
-		elmo:applies-to "graph";
+		rdfs:label "met synoniem";			
+		elmo:applies-to "altlabel1";
 	];
 	elmo:fragment [
-		rdfs:label "Type";							#of het gaat om de begripsterm zelf, of een synoniem
-		elmo:applies-to "pt1";
+		rdfs:label "in dataset";			
+		elmo:applies-to "dataset1";
 	];
 	elmo:fragment [
-		rdfs:label "Begrip";						#de URI van het begrip waar ook nog een homoniem van bestaat
-		elmo:applies-to "begrip";
-	];
-	elmo:fragment [
-		rdfs:label "Status";						#de status van dit begrip
+		rdfs:label "met de status";			
 		elmo:applies-to "status1";
 	];
 	elmo:fragment [
-		rdfs:label "Komt ook voor in";				#het begrippenkader van het 'andere' begrip (homoniem)
-		elmo:applies-to "graph2";
+		rdfs:label "komt voor als concept";			
+		elmo:applies-to "concept2";
 	];
 	elmo:fragment [
-		rdfs:label "Als";							#of het gaat om de term dan wel het synoniem van dat 'andere' begrip
-		elmo:applies-to "pt2";
+		rdfs:label "met synoniem";			
+		elmo:applies-to "altlabel2";
 	];
 	elmo:fragment [
-		rdfs:label "Van begrip";					#de URI van het 'andere' begrip
-		elmo:applies-to "begrip2";
+		rdfs:label "in dataset";			
+		elmo:applies-to "dataset2";
 	];
 	elmo:fragment [
-		rdfs:label "Met status";					#de status van het 'andere' begrip
+		rdfs:label "met de status";			
 		elmo:applies-to "status2";
 	];
+	
 .
 
-stage:TaxHomoniemen2Query a elmo:query;
+stage:TaxSynoniemenQuery a elmo:query;
 	elmo:query '''
+	PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+	PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+	PREFIX doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
+	PREFIX prov: <http://www.w3.org/ns/prov#>
+	PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+	PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+	SELECT DISTINCT ?concept1 ?concept1_label  ?altlabel1 ?dataset1 ?dataset1_label ?status1 ?status1_label ?concept2 ?concept2_label ?altlabel2 ?dataset2 ?dataset2_label ?status2 ?status2_label
+	WHERE {
+		GRAPH ?g1 {
+			?concept1 rdf:type skos:Concept.
+			?concept1 rdfs:label ?concept1_label.
+			?concept1 skos:prefLabel ?preflabel1.
+			?concept1 kddef:status ?status1.
+			OPTIONAL {
+				?concept1 skos:altLabel ?altlabel1.
+				FILTER( LANG( ?altlabel1 ) = "" || LANGMATCHES( LANG( ?altlabel1 ), "nl" ) )
+			}
+			FILTER( LANG( ?concept1_label ) = "" || LANGMATCHES( LANG( ?concept1_label ), "nl" ) )
+			FILTER NOT EXISTS {
+				?concept1 prov:invalidatedAtTime ?c1time.
+			}
+		}
+		GRAPH ?g2 {
+			?concept2 rdf:type skos:Concept.
+			?concept2 rdfs:label ?concept2_label.
+			?concept2 skos:prefLabel ?preflabel2.
+			?concept2 kddef:status ?status2.
+			OPTIONAL {
+				?concept2 skos:altLabel ?altlabel2.
+				FILTER( LANG( ?altlabel2 ) = "" || LANGMATCHES( LANG( ?altlabel2 ), "nl" ) )
+			}
+			FILTER( LANG( ?concept2_label ) = "" || LANGMATCHES( LANG( ?concept2_label ), "nl" ) )
+			FILTER NOT EXISTS {
+				?concept2 prov:invalidatedAtTime ?c2time.
+			}
+		}
+		GRAPH ?dsg {
+			?dataset1 rdfs:label ?dataset1_label. 
+			FILTER NOT EXISTS {
+				?dataset1 prov:invalidatedAtTime ?d1time.
+			}
+			?dataset2 rdfs:label ?dataset2_label. 
+			FILTER NOT EXISTS {
+				?dataset2 prov:invalidatedAtTime ?d2time.
+			}
+		}
+		OPTIONAL {
+			GRAPH container:statusupload {
+				?status1 rdfs:label ?status1_label.
+				?status2 rdfs:label ?status2_label.
+				FILTER (lang(?status1_label)="" || lang(?status1_label)="nl")
+				FILTER (lang(?status2_label)="" || lang(?status2_label)="nl")
+			}
+		}
+		GRAPH doc:mastergraph {
+			?concept1 rdfs:isDefinedBy ?g1.
+			?concept2 rdfs:isDefinedBy ?g2.
+			?dataset1 rdfs:isDefinedBy ?dsg.
+			?dataset2 rdfs:isDefinedBy ?dsg.
+			?concept1 skos:inScheme ?dataset1.
+			?concept2 skos:inScheme ?dataset2.
+		}
+		FILTER (
+			?preflabel1 = ?preflabel2
+			|| ?preflabel1 = ?altlabel2
+			|| ?altlabel1 = ?preflabel2
+			|| ?altlabel1 = ?altlabel2
+		)
+		FILTER (?concept1 != ?concept2)
+	}	
+	ORDER BY ?concept1_label
 	'''
 . 
 #
@@ -4644,13 +5017,13 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 		CONSTRUCT {
-			?concept ?p ?o 
+			?concept ?p ?o .
+			?concept rdf:type skos:Concept .
 		}
 		WHERE {
 			GRAPH ?g {
 				?concept ?p ?o .
 				?concept kddef:status ?status.
-				?concept skos:inScheme <@DATASET@>.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -4660,7 +5033,8 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 				)
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+				?concept rdfs:isDefinedBy ?g.
+				?concept skos:inScheme <@DATASET@>.
 			}
 			OPTIONAL {
 				GRAPH ?og {
@@ -4882,6 +5256,7 @@ stage:TaxConceptenQuery a elmo:Query;
 						?concept rdfs:label ?clabel.
 				#		?concept skos:definition ?definition.
 						?concept rdfs:comment ?definition.
+						FILTER( LANG( ?clabel ) = "" || LANGMATCHES( LANG( ?clabel ), "nl" ) )
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
 					}
 				}
@@ -4923,7 +5298,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdf:type skos:Concept.
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
-					?concept skos:inScheme <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/@DATASET@>.
 					OPTIONAL {
 				#		?concept skos:definition ?uitleg
 						?concept rdfs:comment ?uitleg
@@ -4934,7 +5308,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdf:type skos:Concept.
 					?concept skos:altLabel ?concept_label.
 					?concept kddef:status ?status.
-					?concept skos:inScheme <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/@DATASET@>.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
 				#		?concept skos:definition ?definition.
@@ -4953,7 +5326,8 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 				FILTER( LANG( ?concept_label ) = "" || LANGMATCHES( LANG( ?concept_label ), "nl" ) )
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+				?concept rdfs:isDefinedBy ?g .
+				?concept skos:inScheme <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/@DATASET@>.
 			}
 		}
 		ORDER BY str(lcase(?concept_label))
@@ -4977,6 +5351,15 @@ stage:TaxDatasetOverzichtspagina rdf:type elmo:Representation;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxDatasetTabel;
+	elmo:contains stage:TaxDatasetsUitleg;
+.
+
+stage:TaxDatasetsUitleg a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:index "1";
+	elmo:data [
+		rdfs:label "Overzicht datasets";
+	];
 .
 
 # Datasettabel voor overzichtsweergave

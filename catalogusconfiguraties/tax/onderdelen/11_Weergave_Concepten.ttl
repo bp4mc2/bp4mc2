@@ -28,6 +28,11 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:appearance elmo:HiddenAppearance
 	];
 	elmo:fragment [
+		rdfs:label "Naam"@nl;
+		elmo:applies-to skos:prefLabel;
+		elmo:index "00";
+	];
+	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
 		elmo:applies-to rdfs:comment;
 		elmo:index "02";
@@ -234,10 +239,11 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			<@SUBJECT@> rdfs:label ?slabel.
+			<@SUBJECT@> skos:prefLabel ?spreflabel.
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
-			?s skos:inScheme ?dataset.
+			<@SUBJECT@> skos:inScheme ?dataset.
 			?dataset rdfs:label ?datasetlabel.
 		}
 		WHERE {
@@ -249,10 +255,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 					}
+					OPTIONAL {
+						<@SUBJECT@> skos:prefLabel ?spreflabel.
+						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
+					}
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
-					?s skos:inScheme ?dataset.
+					<@SUBJECT@> skos:inScheme ?dataset.
 				}
 				GRAPH ?dsg {
 					?dataset rdfs:label ?datasetlabel. 
@@ -267,7 +277,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
-					|| ?p = skos:inScheme
 					|| ?p = skoslex:actor
 					|| ?p = skoslex:agent
 					|| ?p = skoslex:object
@@ -282,6 +291,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:broadMatch
 					|| ?p = skos:narrowMatch
 					|| ?p = skos:altLabel
+					|| ?p = skos:inScheme
 				)
 				FILTER( substr("@GRAPH@",2) = "GRAPH@")
 			}
@@ -294,6 +304,10 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 					}
+					OPTIONAL {
+						<@SUBJECT@> skos:prefLabel ?spreflabel.
+						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
+					}
 				}
 				FILTER (
 					?p = rdfs:comment
@@ -302,7 +316,6 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
-					|| ?p = skos:inScheme
 					|| ?p = skoslex:actor
 					|| ?p = skoslex:agent
 					|| ?p = skoslex:object
@@ -316,7 +329,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:relatedMatch
 					|| ?p = skos:broadMatch
 					|| ?p = skos:narrowMatch
-					|| ?p = skos:altLabel					
+					|| ?p = skos:altLabel	
+					|| ?p = skos:inScheme
 				)
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}

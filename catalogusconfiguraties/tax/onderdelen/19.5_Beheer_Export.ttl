@@ -25,13 +25,13 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 		CONSTRUCT {
-			?concept ?p ?o 
+			?concept ?p ?o .
+			?concept rdf:type skos:Concept .
 		}
 		WHERE {
 			GRAPH ?g {
 				?concept ?p ?o .
 				?concept kddef:status ?status.
-				?concept skos:inScheme <@DATASET@>.
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -41,7 +41,8 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 				)
 			}
 			GRAPH doc:mastergraph {
-				?concept rdfs:isDefinedBy ?g
+				?concept rdfs:isDefinedBy ?g.
+				?concept skos:inScheme <@DATASET@>.
 			}
 			OPTIONAL {
 				GRAPH ?og {
