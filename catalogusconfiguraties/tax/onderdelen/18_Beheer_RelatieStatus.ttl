@@ -36,10 +36,12 @@ stage:TaxNietGevalideerdeLinksTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Type";									#het type van het object – vrijwel altijd zal dit 'concept' zijn
 		elmo:applies-to "klasse";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:fragment [
 		rdfs:label "Status Frame";							#de status van het object met de foute verwijzing
 		elmo:applies-to "status";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:fragment [
 		rdfs:label "Foutieve frame";						#een link naar het object met de foute verwijzing 
@@ -48,6 +50,7 @@ stage:TaxNietGevalideerdeLinksTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Referentie";							#de relatie van het object naar de foute verwijzing – dwz "predicate" in <subject – predicate – object>
 		elmo:applies-to "link";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:fragment [
 		rdfs:label "Niet-gevalideerde referentie";			#de niet-gevalideerde referentie, dwz 'object' in <subject – predicate – object> zonder gevalideerde/geverifieerde status
@@ -55,7 +58,8 @@ stage:TaxNietGevalideerdeLinksTabel a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Status referentie";						#de status van de referentie 
-		elmo:applies-to "ref_status";
+		elmo:applies-to "FR_status";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:query stage:TaxNietGevalideerdeLinksQuery
 .
