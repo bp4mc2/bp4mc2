@@ -19,141 +19,6 @@
 #	- Geeft een foutmelding als één of meerdere van de geuploade begrippen nog niet bestaan
 # 
 
-# Uploadcontainer Excel
-container:excelupload a elmo:Container;
-	elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:representation elmo:UploadRepresentation;
-	elmo:translator elmo:TableExcelTranslator;
-	rdfs:label "Upload concepten via Excel (.xls)";
-	elmo:replaces container:generiek;
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:excelupload {
-					{
-						?s rdf:type skos:Concept.
-						FILTER NOT EXISTS {
-							?s rdfs:label ?label.
-						}
-						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/concept/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						FILTER NOT EXISTS {
-							?s rdfs:label ?label.
-						}
-						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/collection/>
-						)
-					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
-	];
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:excelupload {
-					{
-						?s rdf:type skos:Concept.
-						FILTER NOT EXISTS {
-							?s skos:prefLabel ?label.
-						}
-						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/concept/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						FILTER NOT EXISTS {
-							?s skos:prefLabel ?label.
-						}
-						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/collection/>
-						)
-					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
-	];
-	elmo:query stage:DSOGeneriekeUploadScene;
-.
-
-# Uploadcontainer ttl
-container:ttlupload a elmo:Container;
-	elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload concepten via RDF (.xml) of Turtle (.ttl)";
-	elmo:replaces container:generiek;
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:ttlupload {
-					{
-						?s rdf:type skos:Concept.
-						FILTER NOT EXISTS {
-							?s rdfs:label ?label.
-						}
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						FILTER NOT EXISTS {
-							?s rdfs:label ?label.
-						}
-					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
-	];
-	elmo:assertion [
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dso/container/>
-			prefix skos: <http://www.w3.org/2004/02/skos/core#>
-			
-			ASK {
-				GRAPH container:ttlupload {
-					{
-						?s rdf:type skos:Concept.
-						FILTER NOT EXISTS {
-							?s skos:prefLabel ?label.
-						}
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						FILTER NOT EXISTS {
-							?s skos:prefLabel ?label.
-						}
-					}
-				}
-			}
-		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
-	];
-	elmo:query stage:DSOGeneriekeUploadScene;
-.
-
 # Updatecontainer Excel
 container:excelupdate a elmo:Container;
     elmo:contains stage:DSOBeheermenu;
@@ -189,6 +54,22 @@ container:excelupdate a elmo:Container;
 							?s != <http://localhost:8080/catalogus/dso/id/collection/>
 						)
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
 				}
 			}
 		''';
@@ -220,6 +101,22 @@ container:excelupdate a elmo:Container;
 							?s != <http://localhost:8080/catalogus/dso/id/collection/>
 						)
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
 				}
 			}
 		''';
@@ -236,7 +133,7 @@ container:ttlupdate a elmo:Container;
     elmo:representation elmo:UploadRepresentation;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
     elmo:replaces container:generiek;
-		elmo:assertion [
+	elmo:assertion [
 		elmo:assert-not '''
 			prefix container: <http://localhost:8080/catalogus/dso/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -256,10 +153,20 @@ container:ttlupdate a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 	];
 	elmo:assertion [
 		elmo:assert-not '''
@@ -281,10 +188,20 @@ container:ttlupdate a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
+					}
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -353,6 +270,16 @@ container:concepten-put-xml a elmo:Container;
 					UNION
 					{
 						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
@@ -363,6 +290,16 @@ container:concepten-put-xml a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -422,6 +359,16 @@ container:concepten-post-xml a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 					UNION 
 					{
 						?s rdf:type skos:Concept.
@@ -435,6 +382,16 @@ container:concepten-post-xml a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -497,6 +454,16 @@ container:concepten-put-json a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -521,6 +488,16 @@ container:concepten-put-json a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -581,6 +558,16 @@ container:concepten-post-json a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -605,6 +592,16 @@ container:concepten-post-json a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -667,6 +664,16 @@ container:concepten-put-jsonld a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -691,6 +698,16 @@ container:concepten-put-jsonld a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -749,6 +766,16 @@ container:concepten-post-jsonld a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -773,6 +800,16 @@ container:concepten-post-jsonld a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -833,6 +870,16 @@ container:concepten-put-ttl a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -857,6 +904,16 @@ container:concepten-put-ttl a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -915,6 +972,16 @@ container:concepten-post-ttl a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -939,6 +1006,16 @@ container:concepten-post-ttl a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -1007,6 +1084,16 @@ container:concepten-put-xls a elmo:Container;
 							?s != <http://localhost:8080/catalogus/dso/id/collection/>
 						)
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -1034,6 +1121,22 @@ container:concepten-put-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 						FILTER(
 							?s != <http://localhost:8080/catalogus/dso/id/collection/>
 						)
@@ -1102,6 +1205,22 @@ container:concepten-post-xls a elmo:Container;
 							?s != <http://localhost:8080/catalogus/dso/id/collection/>
 						)
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
 				}
 			}
 		''';
@@ -1129,6 +1248,22 @@ container:concepten-post-xls a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 						FILTER(
 							?s != <http://localhost:8080/catalogus/dso/id/collection/>
 						)
