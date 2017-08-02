@@ -19,6 +19,51 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:TaxDatasetUploadScene;
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dct: <http://purl.org/dc/terms/>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s dct:title ?title.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type skos:ConceptScheme.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type dcat:Dataset.
+					}
+				}
+			}
+		''';
+	];
 .
 
 #

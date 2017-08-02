@@ -293,11 +293,9 @@ container:ttlupdate a elmo:Container;
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
-					{
-						?s rdf:type skos:Concept.
-						FILTER NOT EXISTS {
-							?s skos:inScheme ?dataset.
-						}
+					?s rdf:type skos:Concept.
+					FILTER NOT EXISTS {
+						?s skos:inScheme ?dataset.
 					}
 				}
 			}
@@ -323,6 +321,16 @@ container:ttlupdate a elmo:Container;
 							?s rdfs:label ?label.
 						}
 					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+					}
 				}
 			}
 		''';
@@ -346,6 +354,16 @@ container:ttlupdate a elmo:Container;
 						FILTER NOT EXISTS {
 							?s skos:prefLabel ?label.
 						}
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
 					}
 				}
 			}
@@ -700,6 +718,115 @@ container:excelupdate a elmo:Container;
     rdfs:label "Upload een enkel Concept via Excel (.xls)";
     elmo:replaces container:generiek;
     elmo:query stage:TaxSpecifiekeUploadQuery;
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:excelupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:inScheme ?dataset.
+						}
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:excelupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s rdfs:label ?label.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/collection/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s rdfs:label ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s rdfs:label ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/tax/id/collection/>
+						)
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			ASK {
+				GRAPH container:excelupdate {
+					{
+						?s rdf:type skos:Concept.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							?s skos:prefLabel ?label.
+						}
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Concept.
+						?s skos:prefLabel ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+						)
+					}
+					UNION
+					{
+						?s rdf:type skos:Collection.
+						?s skos:prefLabel ""^^xsd:string.
+						FILTER(
+							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+						)
+					}
+				}
+			}
+		''';
+	];	
 .
 
 
@@ -958,6 +1085,51 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:TaxDatasetUploadScene;
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dct: <http://purl.org/dc/terms/>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s dct:title ?title.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type skos:ConceptScheme.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type dcat:Dataset.
+					}
+				}
+			}
+		''';
+	];
 .
 
 #
@@ -4597,12 +4769,13 @@ stage:TaxDatasetQuery a elmo:Query;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dct: <http://purl.org/dc/terms/>
 		
 		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
 		WHERE {
 			GRAPH ?g {
 				?dataset rdf:type skos:ConceptScheme.
-				?dataset rdfs:label ?dataset_label.
+				?dataset dct:title ?dataset_label.
 				?dataset rdfs:comment ?uitleg.
 				FILTER NOT EXISTS {
 					?dataset prov:invalidatedAtTime ?time.
