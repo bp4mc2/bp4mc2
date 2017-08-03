@@ -20,6 +20,7 @@
 ### Catalogus
 model:Catalogus rdf:type sh:NodeShape;
 	rdfs:label "Catalogus"@nl;
+	rdfs:comment "Een data catalogus is een beheerde verzameling van metadata over datasets"@nl;
 	sh:name "dcat:Catalog";
 	sh:targetClass dcat:Catalog;
 	sh:property model:catalogusTitel;
@@ -38,6 +39,7 @@ model:Catalogus rdf:type sh:NodeShape;
 .
 model:catalogusTitel rdf:type sh:PropertyShape;
 	rdfs:label "naam";
+	rdfs:comment "De naam die gegeven is aan de catalogus"@nl;
 	sh:name "dct:title";
 	sh:path dct:title;
 	sh:datatype xsd:string;
@@ -46,6 +48,7 @@ model:catalogusTitel rdf:type sh:PropertyShape;
 .
 model:catalogusBeschrijving rdf:type sh:PropertyShape;
 	rdfs:label "beschrijving";
+	rdfs:comment "Een vrije tekst beschrijving van de catalogus"@nl;
 	sh:name "dct:description";
 	sh:path dct:description;
 	sh:datatype xsd:string;
@@ -54,6 +57,7 @@ model:catalogusBeschrijving rdf:type sh:PropertyShape;
 .
 model:catalogusDatumVanUitgifte rdf:type sh:PropertyShape;
 	rdfs:label "publicatiedatum";
+	rdfs:comment "Datum van formele uitgifte van de catalogus"@nl;
 	sh:name "dct:issued";
 	sh:path dct:issued;
 	sh:datatype xsd:dateTime;
@@ -62,12 +66,14 @@ model:catalogusDatumVanUitgifte rdf:type sh:PropertyShape;
 .
 model:catalogusDatumVanWijziging rdf:type sh:PropertyShape;
 	rdfs:label "datum wijziging";
+	rdfs:comment "Meest recente datum waarop de catalogus is gewijzigd, geupdate of aangepast"@nl;
 	sh:name "dct:modified";
 	sh:path dct:modified;
 	sh:datatype xsd:dateTime;
 .
 model:catalogusTaal rdf:type sh:PropertyShape;
 	rdfs:label "taal";
+	rdfs:comment "De taal van de catalogus. Dit verwijst naar de taal die gebruikt wordt in de beschrijving van de tekstuele metadata als titels, beschrijvingen etc. van de datasets binnen de catalogus"@nl;
 	sh:name "dct:language";
 	sh:path dct:language;
 	sh:datatype xsd:string;
@@ -75,6 +81,7 @@ model:catalogusTaal rdf:type sh:PropertyShape;
 .
 model:catalogusLicentie rdf:type sh:PropertyShape;
 	rdfs:label "cataloguslicentie";
+	rdfs:comment "Dit verwijst naar het licentie document waaronder de Catalogus beschikbaar is gemaakt en niet de datasets"@nl;
 	sh:name "dct:license";
 	sh:path dct:license;
 	sh:datatype xsd:string;
@@ -83,6 +90,7 @@ model:catalogusLicentie rdf:type sh:PropertyShape;
 .
 model:catalogusRechten rdf:type sh:PropertyShape;
 	rdfs:label "catalogusrechten";
+	rdfs:comment "Beschrijft de rechten waaronder de catalogus kan worden gebruikt/herbruikt en niet de datasets"@nl;
 	sh:name "dct:rights";
 	sh:path dct:rights;
 	sh:datatype xsd:string;
@@ -91,6 +99,7 @@ model:catalogusRechten rdf:type sh:PropertyShape;
 .
 model:catalogusHomepage rdf:type sh:PropertyShape;
 	rdfs:label "homepage";
+	rdfs:comment "De homepage van de catalogus"@nl;
 	sh:name "foaf:homepage";
 	sh:path foaf:homepage;
 	sh:datatype xsd:string;
@@ -99,6 +108,7 @@ model:catalogusHomepage rdf:type sh:PropertyShape;
 .
 model:catalogusWerkingsgebied rdf:type sh:PropertyShape;
 	rdfs:label "werkingsgebied";
+	rdfs:comment "Het geografische gebied dat wordt afgedekt door de catalogus"@nl;
 	sh:name "dct:spatial";
 	sh:path dct:spatial;
 	sh:datatype xsd:string;
@@ -108,6 +118,7 @@ model:catalogusWerkingsgebied rdf:type sh:PropertyShape;
 .
 model:catalogusUitgevendeInstantie rdf:type sh:PropertyShape;
 	rdfs:label "uitgever";
+	rdfs:comment "De entiteit die verantwoordelijk is voor het beschikbaar stellen van de catalogus"@nl;
 	sh:name "foaf:Agent";
 	sh:class foaf:Agent;
 	sh:path dct:publisher;
@@ -116,6 +127,7 @@ model:catalogusUitgevendeInstantie rdf:type sh:PropertyShape;
 .
 model:catalogusRecord rdf:type sh:PropertyShape;
 	rdfs:label "catalogusrecord"@nl;
+	rdfs:comment "Een verwijzing naar een catalogus record dat onderdeel is van de catalogus";
 	sh:name "dcat:record";
 	sh:path dcat:record;
 	sh:datatype xsd:string;
@@ -123,6 +135,7 @@ model:catalogusRecord rdf:type sh:PropertyShape;
 .
 model:catalogusDataset rdf:type sh:PropertyShape;
 	rdfs:label "dataset"@nl;
+	rdfs:comment "een dataset is onderdeel van de catalogus";
 	sh:name "dcat:dataset";
 	sh:path dcat:dataset;
 	sh:datatype xsd:string;
@@ -130,6 +143,7 @@ model:catalogusDataset rdf:type sh:PropertyShape;
 .
 model:catalogusTaxonomy rdf:type sh:PropertyShape;
 	rdfs:label "taxonomie"@nl;
+	rdfs:comment "Het kennis organisatie systeem (KOS) data wordt gebruikt om de datasets van de catalogus te classificeren";
 	sh:name "dcat:themeTaxonomy";
 	sh:path dcat:themeTaxonomy;
 	sh:datatype xsd:string;
@@ -138,6 +152,7 @@ model:catalogusTaxonomy rdf:type sh:PropertyShape;
 ### Catalogus Record
 model:CatalogusRecord rdf:type sh:NodeShape;
 	rdfs:label "Catalogus Record"@nl;
+	rdfs:comment "Een record in de data catalogus die een enkele dataset beschrijft";
 	sh:name "dcat:CatalogRecord";
 	sh:targetClass dcat:CatalogRecord;
 	sh:property model:catalogusrecordType;
@@ -153,6 +168,8 @@ sh:catalogusrecordType rdf:type sh:PropertyShape;
 	sh:hasValue prov:Entity;
 .
 model:catalogusrecordTitel rdf:type sh:PropertyShape;
+	rdfs:label "Titel";
+	rdfs:comment "De naam van het catalogus record";
 	sh:name "dct:title";
 	sh:path dct:title;
 	sh:datatype xsd:string;
@@ -160,12 +177,14 @@ model:catalogusrecordTitel rdf:type sh:PropertyShape;
 	sh:maxCount 1;
 .
 model:catalogusrecordBeschrijving rdf:type sh:PropertyShape;
+	rdfs:comment "Een catalogus record bevat een beschrijving";
 	sh:name "dct:description";
 	sh:path dct:description;
 	sh:datatype xsd:string;
 	sh:maxCount 1;
 .
 model:catalogusrecordDatumVanUitgifte rdf:type sh:PropertyShape;
+	rdfs:comment "De officiele datum waarop de bijbehorende dataset in de catalogus is opgenomen";
 	sh:name "dct:issued";
 	sh:path dct:issued;
 	sh:datatype xsd:date;
@@ -173,6 +192,7 @@ model:catalogusrecordDatumVanUitgifte rdf:type sh:PropertyShape;
 	sh:maxCount 1;
 .
 model:catalogusrecordDatumVanWijziging rdf:type sh:PropertyShape;
+	rdfs:comment "De meest recente datum waarop de dataset behorende bij het catalog record is aangepast, geupdate of gewijzigd";
 	sh:name "dct:modified";
 	sh:path dct:modified;
 	sh:datatype xsd:date;
@@ -180,6 +200,7 @@ model:catalogusrecordDatumVanWijziging rdf:type sh:PropertyShape;
 	sh:maxCount 1;
 .
 model:catalogusrecordHoofdonderwerp rdf:type sh:PropertyShape;
+	rdfs:comment "Verbind het catalogus record met de dataset die geregistreerd wordt in het catalogus record";
 	sh:name "foaf:primaryTopic";
 	sh:path foaf:primaryTopic;
 	sh:datatype xsd:string;
@@ -190,6 +211,7 @@ model:catalogusrecordHoofdonderwerp rdf:type sh:PropertyShape;
 ### Dataset
 model:Dataset rdf:type sh:NodeShape;
 	rdfs:label "Dataset"@nl;
+	rdfs:comment "Een verzameling van data, beheerd door een enkele agent, en beschikbaar voor inzage of download in een of meerdere formats";
 	sh:name "dcat:Dataset";
 	sh:targetClass dcat:Dataset;
 	sh:property model:datasetTitel;
@@ -197,7 +219,6 @@ model:Dataset rdf:type sh:NodeShape;
 	sh:property model:datasetDatumVanUitgifte;
 	sh:property model:datasetTaal;
 	sh:property model:datasetInformatiemodel;
-	sh:property model:datasetDataset;
 	sh:property model:datasetDatasetversie;
 	sh:property model:datasetZoekterm;
 	sh:property model:datasetWerkingsgebied;
@@ -207,6 +228,7 @@ model:Dataset rdf:type sh:NodeShape;
 .
 model:datasetTitel rdf:type sh:PropertyShape;
 	rdfs:label "titel";
+	rdfs:comment "De naam van de Dataset";
 	sh:name "dct:title";
 	rdfs:comment "De dataset heeft een naam";
 	sh:path dct:title;
@@ -216,6 +238,7 @@ model:datasetTitel rdf:type sh:PropertyShape;
 .
 model:datasetBeschrijving rdf:type sh:PropertyShape;
 	rdfs:label "beschrijving";
+	rdfs:comment  "De beschrijving in vrije tekst van de Dataset";
 	sh:name "dct:description";
 	sh:path dct:description;
 	sh:datatype xsd:string;
@@ -224,6 +247,7 @@ model:datasetBeschrijving rdf:type sh:PropertyShape;
 .
 model:datasetDatumVanUitgifte rdf:type sh:PropertyShape;
 	rdfs:label "datum van publicatie";
+	rdfs:comment "De offiele datum van uitgifte van de Dataset";
 	sh:name "dct:issued";
 	rdfs:comment "De dataset is op enig moment gepubliceerd";
 	sh:path dct:issued;
@@ -233,6 +257,7 @@ model:datasetDatumVanUitgifte rdf:type sh:PropertyShape;
 .
 model:datasetTaal rdf:type sh:PropertyShape;
 	rdfs:label "taal";
+	rdfs:comment "De taal waarin de dataset is uitgedrukt";
 	sh:name "dct:language";
 	rdfs:comment "De taal waarin de dataset is  beschreven";
 	rdf:value "@nl";
@@ -241,28 +266,24 @@ model:datasetTaal rdf:type sh:PropertyShape;
 .
 model:datasetInformatiemodel rdf:type sh:PropertyShape;
 	sh:path wdrs:describedBy;
+	rdfs:comment "Het informatiemodel waarop de dataset gebaseerd is";
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 	sh:class foaf:Document;
 .
-model:datasetDataset rdf:type sh:PropertyShape;
-	sh:path dct:relation;
-	sh:datatype xsd:string;
-	sh:minCount 1;
-	sh:maxCount 1;
-	sh:class dcat:Dataset;
-.
 model:datasetDatasetversie rdf:type sh:PropertyShape;
+	rdfs:comment "Het versienummer van de Dataset";
 	sh:path rdfs:isVersionOf;
 	sh:datatype xsd:string;
-	sh:class dcat:Dataset;
 .
 model:datasetZoekterm rdf:type sh:PropertyShape;
+	rdfs:comment "De zoekterm waaronder de Dataset eenvoudig is terug te vinden";
 	sh:path dcat:keyword;
 	sh:datatype xsd:String;
 .
 model:datasetWerkingsgebied rdf:type sh:PropertyShape;
+	rdfs:comment "Het geografische gebied waar de Dataset geldig is";
 	sh:path dct:spatial;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -270,12 +291,14 @@ model:datasetWerkingsgebied rdf:type sh:PropertyShape;
 	sh:class dct:location;
 .
 model:datasetDistributie rdf:type sh:PropertyShape;
+	rdfs:comment "De distributie die behoort bij een Dataset";
 	sh:path dcat:distribution;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:class dcat:Distribution;
 .
 model:datasetGemaaktDoor rdf:type sh:PropertyShape;
+	rdfs:comment "De agent of instantie die de Dataset heeft samengesteld en aan de catalogus heeft toegevoegd";
 	sh:path prov:wasGeneratedBy;
 	sh:datatype xsd:string;
 	sh:minCount 1;
@@ -283,6 +306,7 @@ model:datasetGemaaktDoor rdf:type sh:PropertyShape;
 	sh:class prov:Agent;
 .
 model:datasetThema rdf:type sh:PropertyShape;
+	rdfs:comment "Het thema van een Dataset";
 	sh:path dcat:theme;
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
@@ -303,6 +327,7 @@ model:Datasetversie rdf:type sh:NodeShape;
 .
 model:Datasetversie_beschrijving rdf:type sh:PropertyShape;
 	rdfs:label "beschrijving";
+	rdfs:comment "De vrije tekst beschrijving van de datasetversie";
 	sh:name "dct:description";
 	rdf:value "<beschrijving>";
 	sh:path dct:description;
@@ -316,26 +341,31 @@ model:Datasetversie_informatiemodel rdf:type sh:PropertyShape;
 .
 model:Datasetversie_naam rdf:type sh:PropertyShape;
 	rdfs:label "naam";
+	rdfs:comment "De title van de datasetversie";
 	sh:name "dct:title";
 	sh:path dct:title;
 .
 model:Datasetversie_publicatiedatum rdf:type sh:PropertyShape;
 	rdfs:label "publicatiedatum";
+	rdfs:comment "De officiele datum waarop de datasetversie beschikbaar is gemaakt";
 	sh:name "dct:issued";
 	sh:path dct:issued;
 .
 model:Datasetversie_taal rdf:type sh:PropertyShape;
 	rdfs:label "taal";
+	rdfs:comment "De taal waarin de datasetversie is uitgedrukt";
 	sh:name "dct:language";
 	sh:path dct:language;
 .
 model:Datasetversie_distributie rdf:type sh:PropertyShape;
 	rdfs:label "Distributie";
+	rdfs:comment "De distributie die hoort bij een specifieke datasetversie";
 	sh:path dcat:distribution;
 	sh:class dcat:Distribution;
 .
 model:Datasetversie_versieVan rdf:type sh:PropertyShape;
 	rdfs:label "versie van";
+	rdfs:comment "De dataset versie is een zekere versie van een zekere Dataset";
 	sh:path dct:isVersionOf;
 	sh:valueShape model:Dataset;
 	sh:maxCount 1;
@@ -349,6 +379,7 @@ model:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
 ### Distributie
 model:distributie rdf:type sh:NodeShape;
 	rdfs:label "Distributie"@nl;
+	rdfs:comment "Is een specifieke weergave van een dataset, iedere dataset kan beschikbaar zijn in meerdere vormen, deze vormen kunnen verschillende data formats of toegangspaden weergeven. Een distributie staat gelijk aan een weergave";
 	sh:name "dcat:Distribution";
 	sh:targetClass dcat:Distribution;
 	sh:property model:distributieTitel;
@@ -361,43 +392,51 @@ model:distributie rdf:type sh:NodeShape;
 	sh:property model:distributieGemaaktDoor;
 .
 model:distributieTitel rdf:type sh:PropertyShape;
+	rdfs:comment "De titel van de Distributie";
 	sh:path dct:title;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:distributieBeschrijving rdf:type sh:PropertyShape;
+	rdfs:comment "De vrije tekst beschrijving van de Distributie";
 	sh:path dct:description;
 	sh:datatype xsd:string;
 	sh:maxCount 1;
 .
 model:distributieDatumVanUitgifte rdf:Type sh:PropertyShape;
+	rdfs:comment "De officiele datum van uitgifte van de Distributie";
 	sh:path dct:issued;
 	sh:datatype xsd:date;
 .
 model:distributieDatumVanWijziging rdf:type sh:PropertyShape;
+	rdfs:comment "De meest recente datum waarop de Distributie is aangepast, gewijzigd of bewerkt";
 	sh:path dct:modified;
 	sh:datatype xsd:date;
 .
 model:distributieLicentie rdf:type sh:PropertyShape;
+	rdfs:comment "De licentie waaronder de Distributie beschikbaar is gemaakt";
 	sh:path dct:license;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:distributieRechten rdf:type sh:PropertyShape;
+	rdfs:comment "De rechten die gelden op de beschikbaar gestelde Distributie";
 	sh:path dct:rights;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:distributieAccessURL rdf:type sh:PropertyShape;
+	rdfs:comment "De URL waarop de Distributie te benaderen is";
 	sh:path dcat:accessURL;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:distributieGemaaktDoor rdf:type sh:PropertyShape;
+	rdfs:comment "De Agent die de distributie heeft toegevoegd aan de Catalogus";
 	sh:path prov:wasGeneratedBy;
 	sh:datatype xsd:string;
 	sh:class prov:Entity;
@@ -405,18 +444,21 @@ model:distributieGemaaktDoor rdf:type sh:PropertyShape;
 ### Uitgevende instantie vertegenwoordiger
 model:UitgevendeInstantie rdf:type sh:NodeShape;
 	rdfs:label "Uitgevende Instantie Vertegenwoordiger"@nl;
+	rdfs:comment "Vertegenwoordiger van de uitgevende instantie van de Catalogus";
 	sh:targetClass foaf:Agent;
 	sh:name "foaf:Agent";
 	sh:property model:gepubliceerdDoor;
 	sh:property model:gepubliceerdNamens;
 .
 model:gepubliceerdDoor rdf:type sh:PropertyShape;
+	rdfs:Comment "De Agent die verantwoordelijk is voor de publicatie van gegevens";
 	sh:predicate foaf:Agent;
 	sh:datatype xsd:string;
 	sh:minCount 1;
 	sh:maxCount 1;
 .
 model:gepubliceerdNamens rdf:type sh:PropertyShape;
+	rdfs:comment "De organisatie namens welke de Agent de publicatie heeft verzorgd";
 	sh:predicate rdfs:range;
 	sh:datatype xsd:string;
 	sh:class overheid:Organisatie;
@@ -424,6 +466,7 @@ model:gepubliceerdNamens rdf:type sh:PropertyShape;
 
 ### Document
 model:Document rdf:type sh:NodeShape;
+	rdfs:comment "Document";
 	sh:targetClass dctype:Text;
 	rdfs:label "Document"@nl;
 	sh:name "dctype:Text";
@@ -431,6 +474,7 @@ model:Document rdf:type sh:NodeShape;
 .
 model:document_versieVan rdf:type sh:PropertyShape;
 	rdfs:label "versie van";
+	rdfs:comment "Versie nummer van een Document";
 	sh:path adms:isVersionOf;
 	sh:valueShape model:Datasetversie;
 	sh:minCount 1;
@@ -438,6 +482,7 @@ model:document_versieVan rdf:type sh:PropertyShape;
 ### Werkingsgebied
 model:werkingsgebied rdf:type sh:NodeShape;
 	rdfs:label "werkingsgebied"@nl;
+	rdfs:comment "Het aangewezen werkingsgebied";
 	sh:targetClass dct:Location;
 	sh:name "dct:Location";
 .

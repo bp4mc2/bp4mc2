@@ -33,17 +33,19 @@ stage:TaxMissingLinksUitleg a elmo:Part;
 stage:TaxMissingLinksTabel a elmo:Part;
 	elmo:appearance elmo:TableAppearance;
 	elmo:index "2";
-	elmo:fragment [
-		rdfs:label "Populatie";					#Graph waarin het subject zit dat de fout veroorzaakt. Praktisch gezien is dit het begrippenkader van het begrip met de fout
-		elmo:applies-to "graph";
-	];
+#	elmo:fragment [
+#		rdfs:label "Populatie";					#Graph waarin het subject zit dat de fout veroorzaakt. Praktisch gezien is dit het begrippenkader van het begrip met de fout
+#		elmo:applies-to "graph";
+#	];
 	elmo:fragment [
 		rdfs:label "Type";						#het type van het subject – vrijwel altijd zal dit 'begrip' zijn
 		elmo:applies-to "klasse";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:fragment [
 		rdfs:label "Status Frame";				#de status van het subject met de fout
 		elmo:applies-to "status";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:fragment [
 		rdfs:label "Foutieve frame";			#een link naar het foute subject – vrijwel altijd dus een link naar het begrip met de fout 
@@ -52,6 +54,7 @@ stage:TaxMissingLinksTabel a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Referentie";				#de relatie naar het foute object – dwz "predicate" in <subject – predicate –object>
 		elmo:applies-to "link";
+		elmo:appearance elmo:GlobalLink;
 	];
 	elmo:fragment [
 		rdfs:label "Ontbrekende referentie";	#de referentie die ontbreekt, dwz "object" in <subject – predicate – object>

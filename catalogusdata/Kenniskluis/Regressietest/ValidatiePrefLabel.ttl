@@ -1,0 +1,40 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix concept: <http://pdok-ld-gck.in.kadaster.nl/id/concept/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix thes: <http://purl.org/iso25964/skos-thes#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>.
+@prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>.
+@prefix collectie: <http://pdok-ld-gck.in.kadaster.nl/id/collectie/>.
+@prefix dataset: <http://pdok-ld-gck.in.kadaster.nl/id/dataset/>.
+
+concept:hond rdf:type skos:Concept ;
+	rdfs:label "hond"@nl ;
+	rdfs:label "dog"@en ;
+	kddef:status kdstat:Gevalideerd ;
+	kddef:validatie-annotatie "20170608 dit is een validatie annotatie" ;
+	rdfs:comment "Dit is een uitleg voor het concept hond" ;
+	skos:definition "Dit is een formele definitie voor het concept hond." ;
+	skos:scopeNote "Dit is een toelichting voor het concept hond." ;
+	dct:source "Dit is een bron voor het concept hond." ;
+	skos:comment "Dit is commentaar voor het concept hond." ; 
+	skoslex:actor concept:rendier ;
+	skoslex:agent concept:olifant ;
+	skoslex:object concept:mier ;
+	skos:member collectie:beesten ;
+	thes:broaderGeneric concept:dier ;
+	thes:narrowerGeneric concept:puppy ;
+	thes:broaderPartitive concept:dierenrijk ;
+	thes:narrowerPartitive concept:poten ;
+	skos:semanticRelation concept:rendier ;
+	skos:closeMatch concept:vos ;
+	skos:exactMatch concept:huisdier ;
+	skos:relatedMatch concept:kat ;
+	skos:broadMatch concept:puppy ;
+	skos:narrowMatch concept:dier ; 
+	skos:altLabel concept:puppy;
+.
+

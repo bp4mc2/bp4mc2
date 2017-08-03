@@ -172,18 +172,28 @@ stage:ShaclBeheermenu a elmo:Part;
 			rdfs:label "Upload";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Upload model";
+				rdfs:label "Upload model (XMI)";
 				elmo:index "2";
 				xhtml:link "container/umlmodelupload";
 			];
 			elmo:data [
-				rdfs:label "Sync geupload XMI-model (incl ST)";
+				rdfs:label "Upload model (XML)";
 				elmo:index "3";
+				xhtml:link "container/xmlmodelupload";
+			];
+			elmo:data [
+				rdfs:label "Upload model (ttl)";
+				elmo:index "4";
+				xhtml:link "container/shModelUpload";
+			];
+			elmo:data [
+				rdfs:label "Sync geupload XMI-model (incl ST)";
+				elmo:index "5";
 				xhtml:link "update/syncumlinclupload";
 			];
 			elmo:data [
 				rdfs:label "Sync geupload XMI-model (excl ST)";
-				elmo:index "5";
+				elmo:index "6";
 				xhtml:link "update/syncumlupload";
 			];
 		];
@@ -291,8 +301,31 @@ container:umlmodelupload a elmo:Container;
 	elmo:contains stage:ShaclBeheermenu;
 	elmo:translator elmo:XMI21Translator;
 	rdfs:label "Upload UML-model via XMI2.1";
+	elmo:replaces container:generiek;
 .
-
+container:xmlmodelupload a elmo:Container;	
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:replaces container:generiek;
+	rdfs:label "Upload UML-model via xml";
+.
+container:shModelUpload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:replaces container:ttlmodelupload;
+	rdfs:label "Upload Shacl shapes file";
+	elmo:query stage:ShaclShapeModelUploadScene;
+	elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "1";
+    ];
+.
 #
 # PRODUCTIONS
 #
@@ -316,6 +349,33 @@ updatestage:syncumlinclupload a elmo:Production;
 #
 # SCENES
 #
+
+# 
+# Uploadquery TTL-model
+stage:ShaclShapeModelUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://data.test.pdok.nl/catalogus/shacl/container/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+
+		INSERT {
+			GRAPH <http://data.test.pdok.nl/catalogus/shacl/def/@MODEL@> {
+				?s ?p ?o.
+			}
+		}
+		WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o.
+				FILTER NOT EXISTS {
+					?s rdf:type owl:Ontology.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:ttlmodelupload
+	''';
+.
 
 # Uploadquery UML-model exclusief stereotype
 stage:ShaclUMLUploadScene a elmo:Scene;
@@ -352,9 +412,9 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
+			?shape rdf:type sh:NodeShape.
 			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+			?shape sh:targetClass ?class.
 		}
 		WHERE {
 			SELECT
@@ -362,7 +422,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?label.
 					# ?c ea:stereotype ?stereotype.
@@ -376,9 +436,9 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 		}
 		WHERE {
@@ -390,7 +450,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					# ?c ea:stereotype ?stereotype.
@@ -409,9 +469,9 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 			?pc sh:class ?refclass.
 		}
@@ -425,7 +485,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					# ?c ea:stereotype ?stereotype.
@@ -449,7 +509,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?clabel.
 					# ?c ea:stereotype ?stereotype.
@@ -470,7 +530,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					# ?c ea:stereotype ?stereotype.
 					FILTER NOT EXISTS {
@@ -493,7 +553,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?sub uml:generalization ?gen.
 					?gen rdf:type uml:Generalization.
 					?gen uml:general ?c.
@@ -503,7 +563,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		CLEAR GRAPH container:umlmodelupload	
+		CLEAR GRAPH container:generiek	
 	''';
 .
 
@@ -542,9 +602,9 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
+			?shape rdf:type sh:NodeShape.
 			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+			?shape sh:targetClass ?class.
 		}
 		WHERE {
 			SELECT
@@ -552,7 +612,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?label.
 					?c ea:stereotype ?stereotype.
@@ -566,9 +626,9 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 		}
 		WHERE {
@@ -580,7 +640,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					?c ea:stereotype ?stereotype.
@@ -599,9 +659,9 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 			?pc sh:class ?refclass.
 		}
@@ -615,7 +675,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					?c ea:stereotype ?stereotype.
@@ -639,7 +699,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?clabel.
 					?c ea:stereotype ?stereotype.
@@ -660,7 +720,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c ea:stereotype ?stereotype.
 					FILTER NOT EXISTS {
@@ -683,7 +743,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?sub uml:generalization ?gen.
 					?gen rdf:type uml:Generalization.
 					?gen uml:general ?c.
@@ -693,7 +753,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 			}
 		}
 		
-		CLEAR GRAPH container:umlmodelupload	
+		CLEAR GRAPH container:generiek	
 	''';
 . 
 #
@@ -905,7 +965,7 @@ stage:VocabulairePagina	a	elmo:Representation;
 	elmo:contains stage:search_models;
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:queryForm stage:ShaclSelectModel;
-	elmo:query stage:VocabulaireQuery;
+	elmo:query stage:Modelquery;
 .
 
 #
@@ -965,9 +1025,9 @@ stage:VocabulaireQuery a elmo:Query;
 			?element rdfs:label ?label.
 			?element rdfs:comment ?def.
 			?element rdfs:subClassOf ?super.
-			?shape shacl:scopeClass ?element.
+			?shape shacl:targetClass ?element.
 			?shape shacl:property ?pc.
-			?pc shacl:predicate ?pred.
+			?pc shacl:path ?pred.
 			?pc shacl:class ?class.
 			?pc shacl:datatype ?datatype.
 			?pc shacl:in ?collection.
@@ -983,9 +1043,9 @@ stage:VocabulaireQuery a elmo:Query;
 				}
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
-					?shape shacl:scopeClass ?element.
+					?shape shacl:targetClass ?element.
 					?shape shacl:property ?pc.
-					?pc shacl:predicate ?pred.
+					?pc shacl:path ?pred.
 					OPTIONAL {?pc shacl:class ?class}
 					OPTIONAL {?pc shacl:datatype ?datatype}
 					OPTIONAL {?pc shacl:in ?collection}
@@ -994,6 +1054,57 @@ stage:VocabulaireQuery a elmo:Query;
 			}
 		}
 	'''
+.
+# Query voor Vocabulairepagina en model
+stage:Modelquery a elmo:Query;
+	elmo:query '''
+		prefix shacl: <http://www.w3.org/ns/shacl#>
+		construct {
+			?shape ?sp ?so.
+			?class rdf:type rdfs:Class.
+			?class rdfs:comment ?ccomment.
+			?subclass rdfs:subClassOf ?superclass.
+			?superclass rdf:type rdfs:Class.
+			?pc ?pcp ?pco.
+			?property rdf:type rdf:Property.
+			?property rdfs:comment ?pcomment.
+			?subproperty rdfs:subPropertyOf ?superproperty.
+			?superproperty rdf:type rdf:Property.
+		}
+		where {
+			graph <@MODEL@> {
+				?shape a shacl:NodeShape.
+				?shape ?sp ?so.
+				OPTIONAL {
+					?shape shacl:targetClass ?class.
+
+					OPTIONAL {
+						?class rdfs:subClassOf* ?subclass.
+						?subclass rdfs:subClassOf ?superclass.
+					}
+				}
+				OPTIONAL {
+					?shape rdfs:comment ?currentccomment.
+				}
+				BIND( IF( BOUND(?currentccomment), ?currentccomment, "") AS ?ccomment )	
+				OPTIONAL {
+					?shape shacl:property ?pc.
+					?pc ?pcp ?pco.
+					OPTIONAL {
+						?pc shacl:path ?property.
+						OPTIONAL {
+							?property rdfs:subPropertyOf* ?subproperty.
+							?subproperty rdfs:subPropertyOf ?superproperty
+						}
+					}
+				}
+				OPTIONAL {
+					?pc rdfs:comment ?currentpcomment.
+				}
+				BIND( IF( BOUND(?currentpcomment), ?currentpcomment, "") AS ?pcomment )	
+			}
+		}
+	''';
 .
  
 #
@@ -1071,9 +1182,9 @@ stage:ShaclDownloadyEd a elmo:Representation;
 				OPTIONAL {
 					select ?element ?pc ?class (concat(if(bound(?plabel),?plabel,strafter(str(?pred),"#"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
-						?shape shacl:scopeClass ?element.
+						?shape shacl:targetClass ?element.
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						?pc shacl:class ?class.
 						?class rdf:type owl:Class.
 						OPTIONAL {?pred rdfs:label ?plabel}
@@ -1085,9 +1196,9 @@ stage:ShaclDownloadyEd a elmo:Representation;
 				OPTIONAL {
 					select ?element (group_concat(concat(if(bound(?plabel),?plabel,strafter(str(?pred),"#"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",?maxc,"]");separator="\\n") as ?attribs)
 					where {
-						?shape shacl:scopeClass ?element.
+						?shape shacl:targetClass ?element.
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						OPTIONAL {?pred rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:datatype ?datatype}
 						OPTIONAL {?pc shacl:minCount ?minc}

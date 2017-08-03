@@ -43,8 +43,31 @@ container:umlmodelupload a elmo:Container;
 	elmo:contains stage:ShaclBeheermenu;
 	elmo:translator elmo:XMI21Translator;
 	rdfs:label "Upload UML-model via XMI2.1";
+	elmo:replaces container:generiek;
 .
-
+container:xmlmodelupload a elmo:Container;	
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:replaces container:generiek;
+	rdfs:label "Upload UML-model via xml";
+.
+container:shModelUpload a elmo:Container;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:ShaclHeader;
+	elmo:contains stage:ShaclFooter;
+	elmo:contains stage:ShaclBeheermenu;
+	elmo:replaces container:ttlmodelupload;
+	rdfs:label "Upload Shacl shapes file";
+	elmo:query stage:ShaclShapeModelUploadScene;
+	elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "1";
+    ];
+.
 #
 # PRODUCTIONS
 #
@@ -68,6 +91,33 @@ updatestage:syncumlinclupload a elmo:Production;
 #
 # SCENES
 #
+
+# 
+# Uploadquery TTL-model
+stage:ShaclShapeModelUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://localhost:8080/catalogus/shacl/container/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+
+		INSERT {
+			GRAPH <http://localhost:8080/catalogus/shacl/def/@MODEL@> {
+				?s ?p ?o.
+			}
+		}
+		WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o.
+				FILTER NOT EXISTS {
+					?s rdf:type owl:Ontology.
+				}
+			}
+		}
+		
+		CLEAR GRAPH container:ttlmodelupload
+	''';
+.
 
 # Uploadquery UML-model exclusief stereotype
 stage:ShaclUMLUploadScene a elmo:Scene;
@@ -104,9 +154,9 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
+			?shape rdf:type sh:NodeShape.
 			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+			?shape sh:targetClass ?class.
 		}
 		WHERE {
 			SELECT
@@ -114,7 +164,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?label.
 					# ?c ea:stereotype ?stereotype.
@@ -128,9 +178,9 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 		}
 		WHERE {
@@ -142,7 +192,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					# ?c ea:stereotype ?stereotype.
@@ -161,9 +211,9 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 			?pc sh:class ?refclass.
 		}
@@ -177,7 +227,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					# ?c ea:stereotype ?stereotype.
@@ -201,7 +251,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?clabel.
 					# ?c ea:stereotype ?stereotype.
@@ -222,7 +272,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					# ?c ea:stereotype ?stereotype.
 					FILTER NOT EXISTS {
@@ -245,7 +295,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?sub uml:generalization ?gen.
 					?gen rdf:type uml:Generalization.
 					?gen uml:general ?c.
@@ -255,7 +305,7 @@ stage:ShaclUMLUploadScene a elmo:Scene;
 			}
 		}
 		
-		CLEAR GRAPH container:umlmodelupload	
+		CLEAR GRAPH container:generiek	
 	''';
 .
 
@@ -294,9 +344,9 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?class rdf:type owl:Class.
 			?class rdfs:label ?label.
-			?shape rdf:type sh:Shape.
+			?shape rdf:type sh:NodeShape.
 			?shape rdfs:label ?label.
-			?shape sh:scopeClass ?class.
+			?shape sh:targetClass ?class.
 		}
 		WHERE {
 			SELECT
@@ -304,7 +354,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@/',sql:UCamelCase(?label))) AS ?shape)
 				?label
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?label.
 					?c ea:stereotype ?stereotype.
@@ -318,9 +368,9 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:DatatypeProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 		}
 		WHERE {
@@ -332,7 +382,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) AS ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					?c ea:stereotype ?stereotype.
@@ -351,9 +401,9 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 		INSERT INTO <@MODEL@> {
 			?property rdf:type owl:ObjectProperty.
 			?property rdfs:label ?alabel.
-			?pc rdf:type sh:PropertyConstraint.
+			?pc rdf:type sh:PropertyShape.
 			?shape sh:property ?pc.
-			?pc sh:predicate ?property.
+			?pc sh:path ?property.
 			?pc rdfs:label ?plabel.
 			?pc sh:class ?refclass.
 		}
@@ -367,7 +417,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(concat(?clabel,'.',?alabel) as ?plabel)
 				?clabel ?alabel
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c uml:ownedAttribute ?a.
 					?c ea:stereotype ?stereotype.
@@ -391,7 +441,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c rdfs:label ?clabel.
 					?c ea:stereotype ?stereotype.
@@ -412,7 +462,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:LCamelCase(?alabel))) as ?property)
 				(replace(?def,'-- .* --','') as ?comment)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?c rdf:type uml:Class.
 					?c ea:stereotype ?stereotype.
 					FILTER NOT EXISTS {
@@ -435,7 +485,7 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 				(iri(concat('@MODEL@#',sql:UCamelCase(?clabel))) as ?class)
 				(iri(concat('@MODEL@#',sql:UCamelCase(?sublabel))) as ?subclass)
 			WHERE {
-				GRAPH container:umlmodelupload {
+				GRAPH container:generiek {
 					?sub uml:generalization ?gen.
 					?gen rdf:type uml:Generalization.
 					?gen uml:general ?c.
@@ -445,6 +495,6 @@ stage:ShaclUMLInclUploadScene a elmo:Scene;
 			}
 		}
 		
-		CLEAR GRAPH container:umlmodelupload	
+		CLEAR GRAPH container:generiek	
 	''';
 .

@@ -19,6 +19,51 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:TaxDatasetUploadScene;
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dct: <http://purl.org/dc/terms/>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s dct:title ?title.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type skos:ConceptScheme.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupload {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type dcat:Dataset.
+					}
+				}
+			}
+		''';
+	];
 .
 
 #
@@ -85,20 +130,9 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:datasetupload {
-				{
-					?s skos:prefLabel ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
-				}
-				UNION {
-					?s skosxl:prefLabel/skosxl:literalForm ?slabel.
-				}
-				UNION {
-					?s dct:title ?slabel.
-					FILTER NOT EXISTS {
-						?s rdfs:label ?slabel.
-					}
+				?s dct:title ?slabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
 				}
 			}
 		}
@@ -157,62 +191,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 				}
             }
 		}
-		
-		INSERT {
-			GRAPH ?g {
-				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
-			}
-		}
-		WHERE {
-			GRAPH doc:mastergraph {
-				?s rdfs:isDefinedBy ?g.
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Dataset
-					|| ?type = dcat:Distribution
-				)
-			}
-			FILTER NOT EXISTS {
-				GRAPH container:datasetupload {
-					?s rdf:type ?type.
-					FILTER (
-						?type = dcat:Dataset
-						|| ?type = dcat:Distribution
-					)
-				}
-			}
-			FILTER NOT EXISTS {
-				GRAPH ?g {
-					?s prov:invalidatedAtTime ?time.
-				}
-			}
-		}
-		
-		DELETE {
-			GRAPH doc:mastergraph {
-				?s bp4mc2:signature ?sig.
-			}
-		}
-		WHERE {
-			GRAPH doc:mastergraph {
-				?s bp4mc2:signature ?sig.
-				?s rdf:type ?type.
-				FILTER (
-					?type = dcat:Dataset
-					|| ?type = dcat:Distribution
-				)
-			}
-			FILTER NOT EXISTS {
-				GRAPH container:datasetupload {
-					?s rdf:type ?type.
-					FILTER (
-						?type = dcat:Dataset
-						|| ?type = dcat:Distribution
-					)
-				}
-			}
-		}
-			
+					
 		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o

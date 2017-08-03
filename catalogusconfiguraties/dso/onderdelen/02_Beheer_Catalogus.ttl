@@ -10,14 +10,14 @@
 # CONTAINERS
 #
 
-# Uploadcontainer Catalogus
-container:catalogusupload a elmo:Container;
+# Updatecontainer Catalogus
+container:catalogusupdate a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
-	elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload catalogus-metadata via Turtle (.ttl)";
-	elmo:query stage:DSOCatalogusUploadScene;
+	elmo:representation elmo:UpdateRepresentation;
+	rdfs:label "Update catalogus-metadata via Turtle (.ttl)";
+	elmo:query stage:DSOCatalogusUpdateScene;
 .
 
 #
@@ -31,17 +31,15 @@ container:catalogusupload a elmo:Container;
 # - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
 # - Voeg een prov:Entity-triple toe aan de subjecten die dat moeten krijgen (Catalog)
 # - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
-# - Voeg voor de verwijderde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
-# - Verwijder de signature van de verwijderde concepten uit de mastergraph
 # - Update de aanpasdatum van de Catalogus, CatalogRecord en Dataset
 # - Voeg in de nieuwe GRAPH de concepten toe die een andere hash dan de hash in de mastergraph hebben (d.w.z., die gewijzigd zijn)
 # - Voeg voor de gewijzigde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
 # - Verwijder de concepten uit de mastergraph die voorkomen in de nieuwe GRAPH (d.w.z. gewijzigd zijn)
 # - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
-# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de uploadcontainers
+# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de updatecontainers
 
-# Uploadquery Catalogus
-stage:DSOCatalogusUploadScene a elmo:Scene;
+# Updatequery Catalogus
+stage:DSOCatalogusUpdateScene a elmo:Scene;
 	rdfs:label "Postquery inladen Catalogus";
 	elmo:index "1";
 	elmo:query '''
@@ -70,11 +68,11 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		CLEAR GRAPH versiongraph:version
 		
 		INSERT {
-			GRAPH container:catalogusupload {
+			GRAPH container:catalogusupdate {
 				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
-			GRAPH container:catalogusupload {
+			GRAPH container:catalogusupdate {
 				?s dct:title ?spreflabel.
 				FILTER NOT EXISTS {
 					?s rdfs:label ?slabel.
@@ -96,13 +94,13 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 			GRAPH versiongraph:version {
 				dataset:concepten rdfs:isDefinedBy versiongraph:version.
 				versiongraph:version rdfs:label "Catalogusinformatie - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
-				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version prov:wasGeneratedBy activity:Update.
 				versiongraph:version rdf:type prov:Entity.
 				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
-				activity:Upload rdf:type prov:Activity.
-				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
-				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+				activity:Update rdf:type prov:Activity.
+				activity:Update rdfs:label "Update catalogus @CURRENTMOMENT@".
+				activity:Update prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Update prov:wasAssociatedWith catalogus:tomcatUser.
 
 			}
 		}
@@ -118,25 +116,25 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		}
 		
 		INSERT {
-			GRAPH container:catalogusupload {
+			GRAPH container:catalogusupdate {
 				?s rdf:type prov:Entity.
 			}
 		}
 		WHERE {
-			GRAPH container:catalogusupload {
+			GRAPH container:catalogusupdate {
 				?s rdf:type dcat:Catalog.
 			}
 		}
 
 		INSERT {
-			GRAPH container:catalogusupload {
+			GRAPH container:catalogusupdate {
 				?s bp4mc2:signature ?sig.
 			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
 			WHERE {
-				GRAPH container:catalogusupload {
+				GRAPH container:catalogusupdate {
 					SELECT ?s ?p ?o
 					WHERE {
 						?s ?p ?o.
@@ -148,52 +146,12 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
 		}
 		
 		INSERT {
-			GRAPH ?g {
-				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
-			}
-		}
-		WHERE {
-			GRAPH doc:mastergraph {
-				?s rdfs:isDefinedBy ?g.
-				?s rdf:type dcat:Catalog.
-			}
-			FILTER NOT EXISTS {
-				GRAPH container:catalogusupload {
-					?s rdf:type dcat:Catalog.
-				}
-			}
-			FILTER NOT EXISTS {
-				GRAPH ?g {
-					?s prov:invalidatedAtTime ?time.
-				}
-			}
-		}
-		
-		DELETE {
-			GRAPH doc:mastergraph {
-				?s bp4mc2:signature ?sig.
-			}
-		}
-		WHERE {
-			GRAPH doc:mastergraph {
-				?s bp4mc2:signature ?sig.
-				?s rdf:type dcat:Catalog.
-
-			}
-			FILTER NOT EXISTS {
-				GRAPH container:catalogusupload {
-					?s rdf:type dcat:Catalog.
-				}
-			}
-		}
-			
-		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o
 			}
 		}
 		WHERE {
-			GRAPH container:catalogusupload {
+			GRAPH container:catalogusupdate {
 				?s rdf:type dcat:Catalog.
 			    ?s ?p ?o.
 			    ?s bp4mc2:signature ?sig
@@ -252,6 +210,6 @@ stage:DSOCatalogusUploadScene a elmo:Scene;
             }
 		}
 		
-		CLEAR GRAPH container:catalogusupload
+		CLEAR GRAPH container:catalogusupdate
 	''';
 .
