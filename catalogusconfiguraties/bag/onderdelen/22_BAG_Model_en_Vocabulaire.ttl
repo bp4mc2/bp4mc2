@@ -41,12 +41,12 @@ stage:BAGModelQuery a elmo:Query;
 		construct {
 			?shape ?sp ?so.
 			?class rdf:type rdfs:Class.
-			?class rdfs:comment "".
+			?class rdfs:comment ?ccomment.
 			?subclass rdfs:subClassOf ?superclass.
 			?superclass rdf:type rdfs:Class.
 			?pc ?pcp ?pco.
 			?property rdf:type rdf:Property.
-			?property rdfs:comment "".
+			?property rdfs:comment ?pcomment.
 			?subproperty rdfs:subPropertyOf ?superproperty.
 			?superproperty rdf:type rdf:Property.
 		}
@@ -56,14 +56,17 @@ stage:BAGModelQuery a elmo:Query;
 				?shape ?sp ?so.
 				OPTIONAL {
 					?shape shacl:targetClass ?class.
+					?shape rdfs:comment ?ccomment.
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
-						?subclass rdfs:subClassOf ?superclass
+						?subclass rdfs:subClassOf ?superclass.
+						?class rdfs:comment ?ccomment.
 					}
 				}
 				OPTIONAL {
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
+					?pc rdfs:comment ?pcomment.
 					OPTIONAL {
 						?pc shacl:path ?property.
 						OPTIONAL {

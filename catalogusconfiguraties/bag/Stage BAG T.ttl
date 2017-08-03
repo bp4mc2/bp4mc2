@@ -71,9 +71,9 @@ stage:BAGWelkomsttekst rdf:type elmo:Part;
 				<div style='width: 100%; display: table'>
 					<div style='position: relative; font-size:16px; left: middle'>
 						<p>Welkom bij de praktijkuitwerking voor de BAG</p>
-						<p>De praktijkuitwerking is bedoeld om bronhouders te ondersteunen bij objectafbakening (panden en verblijfsobjecten) in de dagelijkse praktijk, waarbij met name ook de â€˜grijzeâ€™ gebieden aan bod komen. </p>
+						<p>De praktijkuitwerking is bedoeld om bronhouders te ondersteunen bij objectafbakening (panden en verblijfsobjecten) in de dagelijkse praktijk, waarbij met name ook de grijze gebieden aan bod komen. </p>
 						<p>Daarnaast zal de praktijkuitwerking ook ondersteuning geven bij de functionele registratie van (wijziging van) objecten in de BAG en voor de toepassing van modelbesluiten (wanneer gebruik je welk brondocument? Wat mag je met een schriftelijke verklaring/procesverbaal?, Archivering van het brondocument valt buiten scope)</p>
-						<p>Kies in het linkervenster voor â€˜Pandâ€™ of â€˜Verblijfsobjectâ€™ en dan de gewenste vraag in de beslisboom voor de bijbehorende uitwerking.</p>
+						<p>Kies in het linkervenster voor Pand of Verblijfsobject en dan de gewenste vraag in de beslisboom voor de bijbehorende uitwerking.</p>
 					</div>
 				</div>
 			</div>
@@ -214,9 +214,14 @@ stage:BAGBeheermenu a elmo:Part;
 				elmo:index "3";
 				xhtml:link "/catalogus/bag/container/ttlupdate";
 			];
+			elmo:data [
+				rdfs:label "Upload begrippen via Excel";
+				elmo:index "4";
+				xhtml:link "/catalogus/bag/container/excelupdate";
+			];
 			elmo:data[
 				rdfs:label "Upload Vocabulaire";
-				elmo:index "4";
+				elmo:index "5";
 				xhtml:link "/catalogus/bag/container/Vocabulaire";
 			];
 		];
@@ -5009,12 +5014,12 @@ stage:BAGModelQuery a elmo:Query;
 		construct {
 			?shape ?sp ?so.
 			?class rdf:type rdfs:Class.
-			?class rdfs:comment "".
+			?class rdfs:comment ?ccomment.
 			?subclass rdfs:subClassOf ?superclass.
 			?superclass rdf:type rdfs:Class.
 			?pc ?pcp ?pco.
 			?property rdf:type rdf:Property.
-			?property rdfs:comment "".
+			?property rdfs:comment ?pcomment.
 			?subproperty rdfs:subPropertyOf ?superproperty.
 			?superproperty rdf:type rdf:Property.
 		}
@@ -5024,14 +5029,17 @@ stage:BAGModelQuery a elmo:Query;
 				?shape ?sp ?so.
 				OPTIONAL {
 					?shape shacl:targetClass ?class.
+					?shape rdfs:comment ?ccomment.
 					OPTIONAL {
 						?class rdfs:subClassOf* ?subclass.
-						?subclass rdfs:subClassOf ?superclass
+						?subclass rdfs:subClassOf ?superclass.
+						?class rdfs:comment ?ccomment.
 					}
 				}
 				OPTIONAL {
 					?shape shacl:property ?pc.
 					?pc ?pcp ?pco.
+					?pc rdfs:comment ?pcomment.
 					OPTIONAL {
 						?pc shacl:path ?property.
 						OPTIONAL {
@@ -5118,6 +5126,7 @@ stage:BAGSearch a elmo:Representation;
 	elmo:contains stage:BAGMenu;
 	elmo:contains stage:BAGHeader;
 	elmo:contains stage:BAGFooter;
+	elmo:contains stage:BAGTree;
 	elmo:query stage:BAGSearchQuery;
 .
 
@@ -5146,7 +5155,11 @@ stage:BAGSearchQuery a elmo:Query;
 					?collection rdfs:label ?collection_label}
 				UNION
 				{
+<<<<<<< HEAD
 					?concept rdf:type skos:Concept.	
+=======
+					?concept rdf:type skos:Concept.
+>>>>>>> 6a331460601bdd2403557316c63e304fb01a170d
 				}
 				UNION {
 					?concept rdf:type skos:Collection
