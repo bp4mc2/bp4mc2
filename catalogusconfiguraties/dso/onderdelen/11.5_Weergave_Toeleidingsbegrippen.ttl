@@ -1,0 +1,107 @@
+#
+#
+#
+# COLLECTIES
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+
+# Alfabetische weergave Toeleidingsbegrippen
+stage:DSOToeleidingsbegrippen a elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/toeleidingsbegrippen(|/|\\..+)$";
+	elmo:contains stage:DSOToeleidingsbegrippentabel;
+	elmo:contains stage:DSOIndexToeleidingsbegrippen;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOMenu;
+.
+
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+
+
+
+# Index voor op de alfabetische weergave collecties
+stage:DSOIndexToeleidingsbegrippen a elmo:Part;
+	elmo:appearance elmo:IndexAppearance;
+	elmo:data [
+		rdfs:label "0-9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|toon alles";
+		xhtml:link "";
+		rdf:value "%5B0-9%5D|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|";
+		elmo:name "term"
+	];
+	elmo:index "02";
+.
+
+
+# Toeleidingsbegriptabel voor op de alfabetische weergave concepten
+stage:DSOToeleidingsbegrippentabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:index "03";
+	
+	elmo:fragment [
+		elmo:applies-to "?Toeleidingsbegrip_label";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	
+	
+	elmo:fragment [
+		elmo:applies-to "?Concept";
+		elmo:appearance elmo:MarkdownAppearance;
+		#xhtml:link "query/lijst";
+	];
+	
+	elmo:fragment [
+		elmo:applies-to "?Toeleidingsbegrip";
+		elmo:appearance elmo:HiddenAppearance;
+		elmo:name "tlb";
+	];
+	elmo:fragment [
+		elmo:applies-to "?g";
+		elmo:appearance elmo:HiddenAppearance;
+		elmo:name "graph";
+	];
+	elmo:query stage:DSOToeleidingsbegrippenQuery;
+.
+
+#
+# QUERY
+#
+
+
+
+# Query voor ophalen collecties en aantal onderliggende concepten
+stage:DSOToeleidingsbegrippenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		
+		SELECT DISTINCT ?Toeleidingsbegrip ?Concept ?Concept_label
+		
+		WHERE {
+			GRAPH ?g {
+					 		
+				?s skos:closeMatch ?Concept.
+				?s rdfs:label ?Toeleidingsbegrip.
+				?Concept  rdfs:label ?Concept_label.	
+			}
+			
+			FILTER regex(?Toeleidingsbegrip, '^[^a-z0-9]*@TERM@', 'i').
+		}
+		
+	'''
+.
+
