@@ -46,7 +46,6 @@ stage:TaxSearchQuery a elmo:Query;
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
 					OPTIONAL {
-				#		?concept skos:definition ?uitleg
 						?concept rdfs:comment ?uitleg
 					}
 				}
@@ -57,7 +56,6 @@ stage:TaxSearchQuery a elmo:Query;
 					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-				#		?concept skos:definition ?definition.
 						?concept rdfs:comment ?definition.
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
 					}

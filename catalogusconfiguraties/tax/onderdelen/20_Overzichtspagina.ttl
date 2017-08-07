@@ -108,7 +108,6 @@ stage:TaxConceptenQuery a elmo:Query;
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
 					OPTIONAL {
-				#		?concept skos:definition ?uitleg
 						?concept rdfs:comment ?uitleg
 					}
 				}
@@ -119,7 +118,6 @@ stage:TaxConceptenQuery a elmo:Query;
 					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-				#		?concept skos:definition ?definition.
 						?concept rdfs:comment ?definition.
 						FILTER( LANG( ?clabel ) = "" || LANGMATCHES( LANG( ?clabel ), "nl" ) )
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
@@ -164,7 +162,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept rdfs:label ?concept_label.
 					?concept kddef:status ?status.
 					OPTIONAL {
-				#		?concept skos:definition ?uitleg
 						?concept rdfs:comment ?uitleg
 					}
 				}
@@ -175,7 +172,6 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 					?concept kddef:status ?status.
 					OPTIONAL {
 						?concept rdfs:label ?clabel.
-				#		?concept skos:definition ?definition.
 						?concept rdfs:comment ?definition.
 						BIND( CONCAT( "(Synoniem voor: ", ?clabel, ") ", ?definition ) AS ?uitleg )
 					}
