@@ -74,18 +74,18 @@ stage:search_models a elmo:Part;
 stage:VocabulaireQuery a elmo:Query;
 	elmo:query '''
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix dso: <http://www.w3.org/ns/dso#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
 		CONSTRUCT {
 			?element rdf:type ?type.
 			?element rdfs:label ?label.
 			?element rdfs:comment ?def.
 			?element rdfs:subClassOf ?super.
-			?shape dso:scopeClass ?element.
-			?shape dso:property ?pc.
-			?pc dso:predicate ?pred.
-			?pc dso:class ?class.
-			?pc dso:datatype ?datatype.
-			?pc dso:in ?collection.
+			?shape sh:targetClass ?element.
+			?shape sh:property ?pc.
+			?pc sh:path ?pred.
+			?pc sh:valueClass ?class.
+			?pc sh:datatype ?datatype.
+			?pc sh:in ?collection.
 		}
 		WHERE {
 			GRAPH <@MODEL@> {
@@ -98,14 +98,13 @@ stage:VocabulaireQuery a elmo:Query;
 				}
 				OPTIONAL {?element rdfs:subClassOf ?super}
 				OPTIONAL {
-					?shape dso:scopeClass ?element.
-					?shape dso:property ?pc.
-					?pc dso:predicate ?pred.
-					OPTIONAL {?pc dso:class ?class}
-					OPTIONAL {?pc dso:datatype ?datatype}
-					OPTIONAL {?pc dso:in ?collection}
+					?shape sh:targetClass ?element.
+					?shape sh:property ?pc.
+					?pc sh:path ?pred.
+					OPTIONAL {?pc sh:valueClass ?class}
+					OPTIONAL {?pc sh:datatype ?datatype}
+					OPTIONAL {?pc sh:in ?collection}
 				}
-				FILTER (?type = owl:Class || ?type = owl:DatatypeProperty || ?type = owl:ObjectProperty || ?type = owl:Ontology)
 			}
 		}
 	'''

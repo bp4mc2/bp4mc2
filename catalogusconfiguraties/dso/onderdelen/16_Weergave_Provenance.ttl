@@ -29,66 +29,6 @@ stage:WeergavePaginaAgent a elmo:Representation;
 	];
 .
 
-# Tabel met vorige versies
-stage:WeergaveVersiesActivity a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:index "90";
-	elmo:fragment [
-		elmo:applies-to "graph";
-		elmo:name "graph";
-		elmo:appearance elmo:HiddenAppearance;
-	];
-	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Andere versies";
-		xhtml:link "/catalogus/dso/query/versie"
-	];
-	elmo:fragment [
-		elmo:applies-to "actueeltot";
-		rdfs:label "Actueel tot";
-	];
-	elmo:fragment [
-		elmo:applies-to "slabel";
-		elmo:appearance elmo:HiddenAppearance
-	];
-	elmo:fragment [
-		elmo:applies-to "graphlabel";
-		rdfs:label "Datum versie"@nl;
-	];
-	
-	elmo:query stage:WeergaveVersiesActivityQuery;
-.
-
-stage:WeergaveVersiesAgent a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:index "90";
-	elmo:fragment [
-		elmo:applies-to "graph";
-		elmo:name "graph";
-		elmo:appearance elmo:HiddenAppearance;
-	];
-	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Andere versies";
-		xhtml:link "/catalogus/dso/query/versie"
-	];
-	elmo:fragment [
-		elmo:applies-to "actueeltot";
-		rdfs:label "Actueel tot";
-	];
-	elmo:fragment [
-		elmo:applies-to "slabel";
-		elmo:appearance elmo:HiddenAppearance
-	];
-	elmo:fragment [
-		elmo:applies-to "graphlabel";
-		rdfs:label "Datum versie"@nl;
-	];
-	
-	elmo:query stage:WeergaveVersiesAgentQuery;
-.
-
-
 # Algemene tabelweergave
 stage:WeergaveTabelActivity a elmo:Part;
 	elmo:index "01";
@@ -210,8 +150,8 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
-		
-		construct {
+
+		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
 			?o rdfs:label ?oelabel.
@@ -251,7 +191,7 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		
-		construct {
+		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
 			?o rdfs:label ?oelabel.
@@ -270,98 +210,5 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 				?o rdfs:label ?olabel.
 			}
 		}
-	'''
-.
-
-
-# Query voor weergave versies
-stage:WeergaveVersiesActivityQuery a elmo:Query;
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix container: <http://localhost:8080/catalogus/dso/container/>
-		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-
-		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
-		WHERE {
-			{
-				GRAPH ?graph {
-					<@SUBJECT@> rdf:type prov:Activity.
-					?graph prov:generatedAtTime ?concept_label.
-					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
-					}
-				}
-				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
-					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != ?actualGraph )
-				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
-			}
-			UNION {
-				GRAPH ?graph {
-					<@SUBJECT@> rdf:type prov:Activity.
-					?graph prov:generatedAtTime ?concept_label.
-					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
-					}
-				}
-				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != <@GRAPH@> )
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-			}
-		}
-		ORDER BY DESC(lcase(?concept_label))
-	'''
-.
-
-# Query voor weergave versies
-stage:WeergaveVersiesAgentQuery a elmo:Query;
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix container: <http://localhost:8080/catalogus/dso/container/>
-		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-
-		SELECT DISTINCT (<@SUBJECT@> as ?concept) ?concept_label ?graph ?actueeltot
-		WHERE {
-			{
-				GRAPH ?graph {
-					<@SUBJECT@> rdf:type prov:Agent.
-					?graph prov:generatedAtTime ?concept_label.
-					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
-					}
-				}
-				GRAPH doc:mastergraph {
-					<@SUBJECT@> rdfs:isDefinedBy ?actualGraph.
-					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != ?actualGraph )
-				FILTER( substr("@GRAPH@",2) = "GRAPH@" )
-			}
-			UNION {
-				GRAPH ?graph {
-					<@SUBJECT@> rdf:type prov:Agent.
-					?graph prov:generatedAtTime ?concept_label.
-					OPTIONAL {
-						<@SUBJECT@> prov:invalidatedAtTime ?actueeltot.
-					}
-				}
-				GRAPH doc:mastergraph {
-					?graph dc:isVersionOf doc:mastergraph
-				}	
-				FILTER( ?graph != <@GRAPH@> )
-				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
-			}
-		}
-		ORDER BY DESC(lcase(?concept_label))
 	'''
 .
