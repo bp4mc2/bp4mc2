@@ -287,15 +287,42 @@ container:ttlupdate a elmo:Container;
     elmo:replaces container:generiek;
     rdfs:label "Upload een enkel Concept via RDF (.xml) of Turtle (.ttl)";
 	elmo:assertion [
-		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		rdfs:label "De upload bevat geen concepten.";
 		elmo:assert '''
+			prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix doc: <http://pdok-ld-gck.so.kadaster.nl/concepten/doc/>
+			ASK {
+				GRAPH container:ttlupdate {
+					?s rdf:type skos:Concept.
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
+		elmo:assert-not '''
 			prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
 					?s rdf:type skos:Concept.
+					?s skos:inScheme ?dataset.
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen concepten zonder kddef:status bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://pdok-ld-gck.so.kadaster.nl/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
+			ASK {
+				GRAPH container:ttlupdate {
+					?s rdf:type skos:Concept.
 					FILTER NOT EXISTS {
-						?s skos:inScheme ?dataset.
+						?s kddef:status ?status.
 					}
 				}
 			}
