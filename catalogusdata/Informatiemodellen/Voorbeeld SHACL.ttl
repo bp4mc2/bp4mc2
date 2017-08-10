@@ -1,0 +1,42 @@
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix exs: <http://example.org/shacl/ns#> .
+@prefix ex: <http://example.org/ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: 			<http://www.w3.org/2002/07/owl#>.
+
+exs:Huwelijk a sh:NodeShape;
+	sh:targetClass ex:Huwelijk;
+	sh:property [
+		sh:path ex:lid;
+		sh:minCount 2;
+		sh:maxCount 2;
+		sh:node exs:Persoon
+	];
+	sh:property [
+		sh:path ex:datum;
+		sh:datatype xsd:date;
+		sh:minCount 1;
+		sh:maxCount 1
+	]
+.
+
+exs:Persoon a sh:NodeShape;
+	sh:targetClass ex:Persoon;
+	sh:property [
+		sh:path ex:naam;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1
+	]
+.
+
+ex:Huwelijk a owl:Class.
+ex:Persoon a owl:Class.
+
+ex:naam a owl:DatatypeProperty.
+ex:datum a owl:DatatypeProperty.
+
+ex:lid a owl:ObjectProperty.
