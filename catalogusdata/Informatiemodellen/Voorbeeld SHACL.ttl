@@ -1,42 +1,200 @@
-@prefix dash: <http://datashapes.org/dash#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix exs: <http://example.org/shacl/ns#> .
-@prefix ex: <http://example.org/ns#> .
+@prefix shape: <http://example.org/shape/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix owl: 			<http://www.w3.org/2002/07/owl#>.
+@prefix kkg: <http://bp4mc2.org/def/kkg/id/begrip> .
+@prefix uml: <http://bp4mc2.org/def/uml#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos:		<http://www.w3.org/2004/02/skos/core#>.
+@prefix dct:		<http://purl.org/dc/terms/>.
+@prefix prov:		<http://www.w3.org/ns/prov#>.
+@prefix ldqd:    	<http://www.w3.org/2016/05/ldqd#>. 
+@prefix xsi: 		<http://www.w3.org/2001/XMLSchema-instance>.
+@prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
-exs:Huwelijk a sh:NodeShape;
-	sh:targetClass ex:Huwelijk;
+# Shapes for OWL/RDFS elements
+shape:Class a sh:NodeShape;
+	sh:targetClass owl:Class;
 	sh:property [
-		sh:path ex:lid;
-		sh:minCount 2;
-		sh:maxCount 2;
-		sh:node exs:Persoon
+		sh:path uml:stereotype;
+		sh:in (
+			kkg:ObjectType
+			kkg:Gegevensgroeptype
+			kkg:Relatieklasse
+		);
+	];
+.
+
+shape:DatatypeProperty a sh:NodeShape;
+	sh:targetClass owl:DatatypeProperty;
+	sh:property [
+		sh:path uml:stereotype;
+		sh:in (
+			kkg:PrimitiefDatatype
+			kkg:DataElement
+			kkg:Union
+			kkg:UnionElement
+			kkg:ReferentieElement
+		)
+	];
+.
+
+shape:ObjectProperty a sh:NodeShape;
+	sh:targetClass owl:ObjectProperty;
+	sh:property [
+		sh:path uml:stereotype;
+		sh:in (
+			kkg:Attribuutsoort
+			kkg:Gegevensgroep
+			kkg:Relatiesoort
+		)
+	];
+.
+
+shape:Datatype a sh:NodeShape;
+	sh:targetClass rdfs:Datatype;
+	sh:property [
+		sh:path uml:stereotype;
+		sh:in (
+			kkg:GestructureerdDatatype
+			kkg:Referentielijst
+			kkg:Codelist
+		)
 	];
 	sh:property [
-		sh:path ex:datum;
-		sh:datatype xsd:date;
-		sh:minCount 1;
-		sh:maxCount 1
+		sh:path owl:oneOf;
 	]
 .
 
-exs:Persoon a sh:NodeShape;
-	sh:targetClass ex:Persoon;
+# Shapes for KKG elements ("stereotypes")
+shape:ObjectType a sh:NodeShape;
+	sh:targetNode kkg:ObjectType;
 	sh:property [
-		sh:path ex:naam;
-		sh:datatype xsd:string;
-		sh:minCount 1;
-		sh:maxCount 1
-	]
+		sh:path [
+			sh:inversePath uml:stereotype
+		];
+		sh:node shape:naam;
+		sh:node [
+			# Herkomst
+			sh:path dct:source;
+		];
+		sh:node [
+			# Definitie
+			sh:path skos:definition;
+		];
+		sh:node [
+			# Herkomst definitie
+			# sh:path ??;
+		];
+		sh:node [
+			# Datum opname
+			sh:path prov:generatedAtTime;
+		];
+		sh:node [
+			# Unieke aanduiding
+			sh:path skos:notation;
+		];
+		sh:node [
+			# Populatie
+			sh:path ldqd:completeness;
+		];
+		sh:node [
+			# Kwaliteit
+			sh:path ldqd:semanticAccuracy;
+		];
+		sh:node [
+			# Toelichting
+			sh:path skos:scopeNote;
+		];
+		sh:node [
+			# Indicatie abstract object
+			# sh:path ??;
+		];
+	];
 .
 
-ex:Huwelijk a owl:Class.
-ex:Persoon a owl:Class.
+shape:naam rdf:type sh:PropertyShape;
+	rdfs:label "naam";
+	sh:name "skos:prefLabel";
+	sh:path skos:prefLabel;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 1;
+.
 
-ex:naam a owl:DatatypeProperty.
-ex:datum a owl:DatatypeProperty.
-
-ex:lid a owl:ObjectProperty.
+shape:Attribuutsoort a sh:NodeShape;
+	sh:targetNode kkg:Attribuutsoort;
+	sh:property [
+		sh:path [
+			sh:inversePath uml:stereotype
+		];
+		sh:node [
+			# Naam
+			sh:path skos:prefLabel;
+		];
+		sh:node [
+			# Herkomst
+			sh:path dct:source;
+		];
+		sh:node [
+			# Definitie
+			sh:path skos:definition;
+		];
+		sh:node [
+			# Herkomst definitie
+			# sh:path ??;
+		];
+		sh:node [
+			# Datum opname
+			sh:path prov:generatedAtTime;
+		];
+		sh:node [
+			# Domein type
+			# sh:path ??;
+		];
+		sh:node [
+			# Domein lengte
+			# sh:path ??;
+		];
+		sh:node [
+			# Domein patroon
+			# sh:path ??;
+		];
+		sh:node [
+			# Domein formeel patroon
+			# sh:path ??;
+		];
+		sh:node [
+			# Indicatie materiële historie
+			# sh:path rdf:Property;
+		];
+		sh:node [
+			# Indicatie formele historie
+			# sh:path rdf:Property;
+		];
+		sh:node [
+			# Locatie
+			# sh:path ??;
+		];
+		sh:node [
+			# Kardinaliteit
+			sh:path owl:cardinality;
+		];
+		sh:node [
+			# Authentiek
+			sh:path ldqd:trustworthiness;
+		];
+		sh:node [
+			# Indicatie afleidbaar
+			sh:path prov:wasDerivedFrom
+		];
+		sh:node [
+			# Mogelijk geen waarde
+			sh:path xsi:nil;
+		];
+		sh:node [
+			# Identificerend
+			# sh:path ??;
+		];
+	];
+.
