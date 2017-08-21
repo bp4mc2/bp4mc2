@@ -17,6 +17,7 @@ Stereotypes worden vertaald naar een `owl:ObjectProperty` met de URI `uml:stereo
 Onderstaande tabel geeft alle KKG tagged values weer, inclusief de mapping naar een `rdf:Property` uit een standaard Linked Data vocabulaire. Indien er geen vocabulaire voorhanden is (bijvoorbeeld omdat de tagged value uniek is voor KKG), dan wordt verwezen naar de kkg vocabulaire dmv de namespace prefix `kkgtag`.
 
 | Tagged value type (key) | RDF property | Betekenis
+|-------------------------|--------------|-----------
 | Naam | skos:prefLabel |
 | Herkomst | dc:source |
 | Definitie | skos:definition |
