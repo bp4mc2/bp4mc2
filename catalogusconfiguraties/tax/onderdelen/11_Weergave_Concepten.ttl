@@ -259,6 +259,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> skos:prefLabel ?spreflabel.
 						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
 					}
+					FILTER NOT EXISTS {
+						<@SUBJECT@> prov:invalidatedAtTime ?stime.
+					}
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
@@ -308,6 +311,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						<@SUBJECT@> skos:prefLabel ?spreflabel.
 						FILTER( LANG( ?spreflabel ) = "" || LANGMATCHES( LANG( ?spreflabel ), "nl" ) )
 					}
+					FILTER NOT EXISTS {
+						<@SUBJECT@> prov:invalidatedAtTime ?stime.
+					}
 				}
 				FILTER (
 					?p = rdfs:comment
@@ -343,7 +349,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					?col skos:member <@SUBJECT@>.
 					?col rdfs:label ?col_label.
 					FILTER NOT EXISTS {
-						?col prov:invalidatedAtTime ?time.
+						?col prov:invalidatedAtTime ?ctime.
 					}
 				}
 				GRAPH doc:mastergraph {
@@ -355,6 +361,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					?o rdf:type ?otype.
 					OPTIONAL {
 						?o kddef:status ?ostatus.
+					}
+					FILTER NOT EXISTS {
+						?o prov:invalidatedAtTime ?otime.
 					}
 				}
 				GRAPH doc:mastergraph {

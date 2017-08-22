@@ -236,7 +236,7 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		
-		construct {
+		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
@@ -300,40 +300,6 @@ stage:WeergaveTabelShapesQuery a elmo:Query;
 						?col rdfs:label ?col_label.
 						FILTER NOT EXISTS {
 							?col prov:invalidatedAtTime ?time.
-						}
-					}
-				}
-			}
-			UNION {
-				GRAPH doc:mastergraph {
-					?s rdfs:isDefinedBy ?altSubjectGraph.
-				}
-				GRAPH ?altSubjectGraph {
-					{ ?s skoslex:affects <@SUBJECT@> }
-					UNION { ?s skoslex:classification <@SUBJECT@> }
-					UNION { ?s skoslex:refersTo <@SUBJECT@> }
-					FILTER NOT EXISTS {
-						?s prov:invalidatedAtTime ?time.
-					}
-				}
-				OPTIONAL {
-					GRAPH <http://localhost:8080/catalogus/tr/container/dmn> {
-						?s rdfs:label ?slabel.
-					}
-				}
-			}
-			UNION {
-				SERVICE <http://almere.pilod.nl/sparql> {
-					SERVICE <http://localhost:8080/catalogus/tr/sparql> {
-						<@SUBJECT@> ?p ?o.
-						FILTER (
-							?p != rdf:type
-							&& ?p != bp4mc2:signature
-							&& ?p != dct:type
-							&& ?p != skos:member
-						)				
-						OPTIONAL {
-							?o rdfs:label ?olabel.
 						}
 					}
 				}

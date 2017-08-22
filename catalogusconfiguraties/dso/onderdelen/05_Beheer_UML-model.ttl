@@ -54,7 +54,7 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 	elmo:query '''
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
 		prefix uml: <http://schema.omg.org/spec/UML/2.1.1#>
-		prefix sh: <http://www.w3.org/ns/dso#>
+		prefix sh: <http://www.w3.org/ns/shacl#>
 		prefix ea: <http://www.sparxsystems.com/extender/EA6.5#>
 		
 		CLEAR GRAPH <http://localhost:8080/catalogus/dso/def/@MODEL@>
@@ -70,9 +70,9 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			GRAPH <http://localhost:8080/catalogus/dso/def/@MODEL@> {
 				?class rdf:type owl:Class.
 				?class rdfs:label ?label.
-				?shape rdf:type sh:Shape.
+				?shape rdf:type sh:NodeShape.
 				?shape rdfs:label ?label.
-				?shape sh:scopeClass ?class.
+				?shape sh:targetClass ?class.
 			}
 		}
 		WHERE {
@@ -96,9 +96,9 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			GRAPH <http://localhost:8080/catalogus/dso/def/@MODEL@> {
 				?property rdf:type owl:DatatypeProperty.
 				?property rdfs:label ?alabel.
-				?pc rdf:type sh:PropertyConstraint.
+				?pc rdf:type sh:PropertyShape.
 				?shape sh:property ?pc.
-				?pc sh:predicate ?property.
+				?pc sh:path ?property.
 				?pc rdfs:label ?plabel.
 			}
 		}
@@ -131,11 +131,11 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			GRAPH <http://localhost:8080/catalogus/dso/def/@MODEL@> {
 				?property rdf:type owl:ObjectProperty.
 				?property rdfs:label ?alabel.
-				?pc rdf:type sh:PropertyConstraint.
+				?pc rdf:type sh:PropertyShape.
 				?shape sh:property ?pc.
-				?pc sh:predicate ?property.
+				?pc sh:path ?property.
 				?pc rdfs:label ?plabel.
-				?pc sh:class ?refclass.
+				?pc sh:valueClass ?refclass.
 			}
 		}
 		WHERE {
@@ -187,6 +187,7 @@ stage:DSOUMLInclUploadScene a elmo:Scene;
 			}}
 			FILTER (?comment!='')
 		}
+		
 		INSERT {
 			GRAPH <http://localhost:8080/catalogus/dso/def/@MODEL@> {
 				?property rdfs:comment ?comment
@@ -257,7 +258,7 @@ stage:DSOTTLUploadScene a elmo:Scene;
 				}
 			}
 		}
-		
+
 		CLEAR GRAPH container:ttlmodelupload
 	''';
 .

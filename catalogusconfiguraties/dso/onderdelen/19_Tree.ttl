@@ -57,13 +57,12 @@ stage:DSOTreeQuery a elmo:Query;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-		
+
 		CONSTRUCT {
 			?s rdfs:label ?sLabel.
 			?o rdfs:label ?oLabel.
 			?s thes:broaderGeneric ?o.
 			?s skos:member ?sCollection.
-			#?sCollection skos:inScheme ?scheme.
 			?sCollection rdfs:label ?sCollectionLabel.
 		}
 		WHERE {

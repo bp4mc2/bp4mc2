@@ -72,7 +72,7 @@ Een grenslijn is of een lijn (GML LineString), of een boog (GML ArcString).'''^^
 n4:brk rdf:type <http://www.w3.org/2002/07/owl#Ontology>;
     rdfs:label "Basisregistratie Kadaster vocabulaire"^^xsd:string
 .
-n2:Perceel shacl:scopeClass n3:Perceel;
+n2:Perceel shacl:targetClass n3:Perceel;
     shacl:property n2:Perceel_kadastraleGemeente;
     shacl:property n2:Perceel_sectie;
     shacl:property n2:Perceel_perceelnummer;
@@ -82,41 +82,41 @@ n2:Perceel shacl:scopeClass n3:Perceel;
     shacl:property n2:Perceel_perceelnummerRotatie;
     shacl:property n2:Perceel_plaatscoordinaten
 .
-n2:Perceel_kadastraleGemeente shacl:predicate n3:kadastraleGemeente;
-    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+n2:Perceel_kadastraleGemeente shacl:path n3:kadastraleGemeente;
+    shacl:valueClass <http://www.w3.org/2004/02/skos/core#Concept>;
     shacl:in <http://brk.basisregistraties.overheid.nl/id/collectie/KadastraleGemeente>
 .
-n2:Perceel_sectie shacl:predicate n3:sectie;
+n2:Perceel_sectie shacl:path n3:sectie;
     shacl:datatype xsd:string
 .
-n2:Perceel_perceelnummer shacl:predicate n3:perceelnummer;
+n2:Perceel_perceelnummer shacl:path n3:perceelnummer;
     shacl:datatype xsd:integer
 .
-n2:Perceel_begrenzingPerceel shacl:predicate n3:begrenzingPerceel;
-    shacl:class n1:Geometry
+n2:Perceel_begrenzingPerceel shacl:path n3:begrenzingPerceel;
+    shacl:valueClass n1:Geometry
 .
-n2:Perceel_kadastraleGrootte shacl:predicate n3:kadastraleGrootte;
+n2:Perceel_kadastraleGrootte shacl:path n3:kadastraleGrootte;
     shacl:datatype xsd:float
 .
-n2:Perceel_soortGrootte shacl:predicate n3:soortGrootte;
-    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+n2:Perceel_soortGrootte shacl:path n3:soortGrootte;
+    shacl:valueClass <http://www.w3.org/2004/02/skos/core#Concept>;
     shacl:in <http://brk.basisregistraties.overheid.nl/id/collectie/SoortGrootte>
 .
-n2:Perceel_perceelnummerRotatie shacl:predicate n3:perceelnummerRotatie;
-    shacl:class n3:perceelnummerRotatie;
+n2:Perceel_perceelnummerRotatie shacl:path n3:perceelnummerRotatie;
+    shacl:valueClass n3:perceelnummerRotatie;
     shacl:datatype xsd:float
 .
-n2:Perceel_plaatscoordinaten shacl:predicate n3:plaatscoordinaten;
-    shacl:class n1:Geometry
+n2:Perceel_plaatscoordinaten shacl:path n3:plaatscoordinaten;
+    shacl:valueClass n1:Geometry
 .
-n2:KadastraleGrens shacl:scopeClass n3:KadastraleGrens;
+n2:KadastraleGrens shacl:targetClass n3:KadastraleGrens;
     shacl:property n2:KadastraleGrens_typeGrens;
     shacl:property n2:KadastraleGrens_grenslijn
 .
-n2:KadastraleGrens_typeGrens shacl:predicate n3:typeGrens;
-    shacl:class <http://www.w3.org/2004/02/skos/core#Concept>;
+n2:KadastraleGrens_typeGrens shacl:path n3:typeGrens;
+    shacl:valueClass <http://www.w3.org/2004/02/skos/core#Concept>;
     shacl:in <http://brk.basisregistraties.overheid.nl/id/collectie/TypeGrens>
 .
-n2:KadastraleGrens_grenslijn shacl:predicate n3:grenslijn;
-    shacl:class n1:Geometry
+n2:KadastraleGrens_grenslijn shacl:path n3:grenslijn;
+    shacl:valueClass n1:Geometry
 .

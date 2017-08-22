@@ -1886,45 +1886,45 @@ n87:aanduidingCorrectief rdf:type <http://www.w3.org/2002/07/owl#DatatypePropert
     rdfs:isDefinedBy n88:bag;
     ns2:subject n85:AanduidingRecordCorrectie
 .
-n86:BAG-object rdf:type ns3:Shape;
+n86:BAG-object rdf:type ns3:NodeShape;
     ns3:property n86:BAG-object_identificatiecode;
     rdfs:comment "Abstract objecttype."@nl;
     ns3:targetClass n87:BAG-object
 .
-n86:AdresseerbaarObject rdf:type ns3:Shape;
+n86:AdresseerbaarObject rdf:type ns3:NodeShape;
     ns3:property n86:AdresseerbaarObject_hoofdadres;
     ns3:property n86:AdresseerbaarObject_nevenadres;
     rdfs:comment "Abstract objecttype."@nl;
     ns3:targetClass n87:AdresseerbaarObject
 .
-n86:Point rdf:type ns3:Shape;
-    ns3:class n79:Point
+n86:Point rdf:type ns3:NodeShape;
+    ns3:valueClass n79:Point
 .
-n86:Surface rdf:type ns3:Shape;
-    ns3:class n79:Surface
+n86:Surface rdf:type ns3:NodeShape;
+    ns3:valueClass n79:Surface
 .
-n86:MultiSurface rdf:type ns3:Shape;
-    ns3:class n79:MultiSurface
+n86:MultiSurface rdf:type ns3:NodeShape;
+    ns3:valueClass n79:MultiSurface
 .
-n86:Woonplaats rdf:type ns3:Shape;
+n86:Woonplaats rdf:type ns3:NodeShape;
     ns3:property n86:Woonplaats_naamWoonplaats;
     ns3:property n86:Woonplaats_status;
     ns3:property n86:Woonplaats_geometrieWoonplaats;
     ns3:targetClass n87:Woonplaats
 .
-n86:OpenbareRuimte rdf:type ns3:Shape;
+n86:OpenbareRuimte rdf:type ns3:NodeShape;
     ns3:property n86:OpenbareRuimte_naamOpenbareRuimte;
     ns3:property n86:OpenbareRuimte_status;
     ns3:property n86:OpenbareRuimte_bijbehorendeWoonplaats;
     ns3:targetClass n87:OpenbareRuimte
 .
-n86:Pand rdf:type ns3:Shape;
+n86:Pand rdf:type ns3:NodeShape;
     ns3:property n86:Pand_status;
     ns3:property n86:Pand_oorspronkelijkBouwjaar;
     ns3:property n86:Pand_geometriePand;
     ns3:targetClass n87:Pand
 .
-n86:Nummeraanduiding rdf:type ns3:Shape;
+n86:Nummeraanduiding rdf:type ns3:NodeShape;
     ns3:property n86:Nummeraanduiding_status;
     ns3:property n86:Nummeraanduiding_huisletter;
     ns3:property n86:Nummeraanduiding_huisnummer;
@@ -1934,24 +1934,24 @@ n86:Nummeraanduiding rdf:type ns3:Shape;
     ns3:property n86:Nummeraanduiding_bijbehorendeOpenbareRuimte;
     ns3:targetClass n87:Nummeraanduiding
 .
-n86:Ligplaats rdf:type ns3:Shape;
+n86:Ligplaats rdf:type ns3:NodeShape;
     ns3:property n86:Ligplaats_status;
     ns3:property n86:Ligplaats_geometrieLigplaats;
     ns3:targetClass n87:Ligplaats
 .
-n86:Standplaats rdf:type ns3:Shape;
+n86:Standplaats rdf:type ns3:NodeShape;
     ns3:property n86:Standplaats_status;
     ns3:property n86:Standplaats_geometrieStandplaats;
     ns3:targetClass n87:Standplaats
 .
-n86:Verblijfsobject rdf:type ns3:Shape;
+n86:Verblijfsobject rdf:type ns3:NodeShape;
     ns3:property n86:Verblijfsobject_status;
     ns3:property n86:Verblijfsobject_oppervlakte;
     ns3:property n86:Verblijfsobject_pandrelatering;
     ns3:property n86:Verblijfsobject_geometrieVerblijfsobject;
     ns3:targetClass n87:Verblijfsobject
 .
-n86:Voorkomen rdf:type ns3:Shape;
+n86:Voorkomen rdf:type ns3:NodeShape;
     ns3:property n86:Voorkomen_beginGeldigheid;
     ns3:property n86:Voorkomen_eindGeldigheid;
     ns3:property n86:Voorkomen_aanduidingInactief;
@@ -1961,44 +1961,44 @@ n86:Voorkomen rdf:type ns3:Shape;
     ns3:property n86:Voorkomen_bron;
     ns3:targetClass n87:Voorkomen
 .
-n86:Brondocument rdf:type ns3:Shape;
+n86:Brondocument rdf:type ns3:NodeShape;
     ns3:property n86:Brondocument_documentdatum;
     ns3:property n86:Brondocument_documentnummer;
     ns3:targetClass n87:Brondocument
 .
-n86:Geometry rdf:type ns3:Shape;
+n86:Geometry rdf:type ns3:NodeShape;
     ns3:property n86:Geometry_asWKT;
     ns3:property n86:Geometry_asWKT-RD;
     ns3:targetClass n80:Geometry
 .
-n86:BAG-object_identificatiecode rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:identificatiecode;
+n86:BAG-object_identificatiecode rdf:type ns3:PropertyShape;
+    ns3:path n87:identificatiecode;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
     ns3:minCount 1
 .
-n86:BAG-object_isDefinedBy rdf:type ns3:PropertyConstraint;
-    ns3:predicate rdfs:isDefinedBy;
-    ns3:class n87:Voorkomen;
+n86:BAG-object_isDefinedBy rdf:type ns3:PropertyShape;
+    ns3:path rdfs:isDefinedBy;
+    ns3:valueClass n87:Voorkomen;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:AdresseerbaarObject_hoofdadres rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:hoofdadres;
-    ns3:class n87:Nummeraanduiding;
+n86:AdresseerbaarObject_hoofdadres rdf:type ns3:PropertyShape;
+    ns3:path n87:hoofdadres;
+    ns3:valueClass n87:Nummeraanduiding;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:AdresseerbaarObject_nevenadres rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:nevenadres;
-    ns3:class n87:Nummeraanduiding;
+n86:AdresseerbaarObject_nevenadres rdf:type ns3:PropertyShape;
+    ns3:path n87:nevenadres;
+    ns3:valueClass n87:Nummeraanduiding;
     ns3:nodeKind ns3:IRI
 .
-n86:Woonplaats_naamWoonplaats rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:naamWoonplaats;
+n86:Woonplaats_naamWoonplaats rdf:type ns3:PropertyShape;
+    ns3:path n87:naamWoonplaats;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
@@ -2007,9 +2007,9 @@ n86:Woonplaats_naamWoonplaats rdf:type ns3:PropertyConstraint;
     ns3:maxLength 80;
     ns3:pattern "^[a-zA-Z0-9]+$"^^xsd:string
 .
-n86:Woonplaats_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:Woonplaats_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2022,8 +2022,8 @@ n86:Woonplaats_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Woonplaats_geometrieWoonplaats rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:geometrieWoonplaats;
+n86:Woonplaats_geometrieWoonplaats rdf:type ns3:PropertyShape;
+    ns3:path n87:geometrieWoonplaats;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2035,8 +2035,8 @@ n86:Woonplaats_geometrieWoonplaats rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:OpenbareRuimte_naamOpenbareRuimte rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:naamOpenbareRuimte;
+n86:OpenbareRuimte_naamOpenbareRuimte rdf:type ns3:PropertyShape;
+    ns3:path n87:naamOpenbareRuimte;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
@@ -2045,9 +2045,9 @@ n86:OpenbareRuimte_naamOpenbareRuimte rdf:type ns3:PropertyConstraint;
     ns3:maxLength 80;
     ns3:pattern "^[a-zA-Z0-9]+$"^^xsd:string
 .
-n86:OpenbareRuimte_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:OpenbareRuimte_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2060,16 +2060,16 @@ n86:OpenbareRuimte_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:OpenbareRuimte_bijbehorendeWoonplaats rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:bijbehorendeWoonplaats;
-    ns3:class n87:Woonplaats;
+n86:OpenbareRuimte_bijbehorendeWoonplaats rdf:type ns3:PropertyShape;
+    ns3:path n87:bijbehorendeWoonplaats;
+    ns3:valueClass n87:Woonplaats;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:Pand_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:Pand_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2082,23 +2082,23 @@ n86:Pand_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Pand_oorspronkelijkBouwjaar rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:oorspronkelijkBouwjaar;
+n86:Pand_oorspronkelijkBouwjaar rdf:type ns3:PropertyShape;
+    ns3:path n87:oorspronkelijkBouwjaar;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:integer;
     ns3:minCount 1
 .
-n86:Pand_geometriePand rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:geometriePand;
-    ns3:class n79:Surface;
+n86:Pand_geometriePand rdf:type ns3:PropertyShape;
+    ns3:path n87:geometriePand;
+    ns3:valueClass n79:Surface;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:Nummeraanduiding_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:Nummeraanduiding_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2111,8 +2111,8 @@ n86:Nummeraanduiding_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Nummeraanduiding_huisletter rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:huisletter;
+n86:Nummeraanduiding_huisletter rdf:type ns3:PropertyShape;
+    ns3:path n87:huisletter;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
@@ -2120,8 +2120,8 @@ n86:Nummeraanduiding_huisletter rdf:type ns3:PropertyConstraint;
     ns3:maxLength 1;
     ns3:pattern "^[a-zA-Z]+$"^^xsd:string
 .
-n86:Nummeraanduiding_huisnummer rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:huisnummer;
+n86:Nummeraanduiding_huisnummer rdf:type ns3:PropertyShape;
+    ns3:path n87:huisnummer;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:integer;
@@ -2130,8 +2130,8 @@ n86:Nummeraanduiding_huisnummer rdf:type ns3:PropertyConstraint;
     ns3:minInclusive 1;
     ns3:maxInclusive 99999
 .
-n86:Nummeraanduiding_huisnummertoevoeging rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:huisnummertoevoeging;
+n86:Nummeraanduiding_huisnummertoevoeging rdf:type ns3:PropertyShape;
+    ns3:path n87:huisnummertoevoeging;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
@@ -2139,8 +2139,8 @@ n86:Nummeraanduiding_huisnummertoevoeging rdf:type ns3:PropertyConstraint;
     ns3:maxLength 4;
     ns3:pattern "^[a-zA-Z0-9]+$"^^xsd:string
 .
-n86:Nummeraanduiding_postcode rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:postcode;
+n86:Nummeraanduiding_postcode rdf:type ns3:PropertyShape;
+    ns3:path n87:postcode;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
@@ -2148,22 +2148,22 @@ n86:Nummeraanduiding_postcode rdf:type ns3:PropertyConstraint;
     ns3:minInclusive 1;
     ns3:maxInclusive 99999
 .
-n86:Nummeraanduiding_bijbehorendeWoonplaats rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:bijbehorendeWoonplaats;
-    ns3:class n87:Woonplaats;
+n86:Nummeraanduiding_bijbehorendeWoonplaats rdf:type ns3:PropertyShape;
+    ns3:path n87:bijbehorendeWoonplaats;
+    ns3:valueClass n87:Woonplaats;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1
 .
-n86:Nummeraanduiding_bijbehorendeOpenbareRuimte rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:bijbehorendeOpenbareRuimte;
-    ns3:class n87:OpenbareRuimte;
+n86:Nummeraanduiding_bijbehorendeOpenbareRuimte rdf:type ns3:PropertyShape;
+    ns3:path n87:bijbehorendeOpenbareRuimte;
+    ns3:valueClass n87:OpenbareRuimte;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:Ligplaats_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:Ligplaats_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2176,16 +2176,16 @@ n86:Ligplaats_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Ligplaats_geometrieLigplaats rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:geometrieLigplaats;
-    ns3:class n79:Surface;
+n86:Ligplaats_geometrieLigplaats rdf:type ns3:PropertyShape;
+    ns3:path n87:geometrieLigplaats;
+    ns3:valueClass n79:Surface;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:Standplaats_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:Standplaats_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2198,16 +2198,16 @@ n86:Standplaats_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Standplaats_geometrieStandplaats rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:geometrieStandplaats;
-    ns3:class n79:Surface;
+n86:Standplaats_geometrieStandplaats rdf:type ns3:PropertyShape;
+    ns3:path n87:geometrieStandplaats;
+    ns3:valueClass n79:Surface;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1
 .
-n86:Verblijfsobject_status rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:status;
-    ns3:class ns1:Concept;
+n86:Verblijfsobject_status rdf:type ns3:PropertyShape;
+    ns3:path n87:status;
+    ns3:valueClass ns1:Concept;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2220,8 +2220,8 @@ n86:Verblijfsobject_status rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Verblijfsobject_oppervlakte rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:oppervlakte;
+n86:Verblijfsobject_oppervlakte rdf:type ns3:PropertyShape;
+    ns3:path n87:oppervlakte;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:integer;
@@ -2230,14 +2230,14 @@ n86:Verblijfsobject_oppervlakte rdf:type ns3:PropertyConstraint;
     ns3:minInclusive 0;
     ns3:maxInclusive 999999
 .
-n86:Verblijfsobject_pandrelatering rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:pandrelatering;
-    ns3:class n87:Pand;
+n86:Verblijfsobject_pandrelatering rdf:type ns3:PropertyShape;
+    ns3:path n87:pandrelatering;
+    ns3:valueClass n87:Pand;
     ns3:nodeKind ns3:IRI;
     ns3:minCount 1
 .
-n86:Verblijfsobject_geometrieVerblijfsobject rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:geometrieVerblijfsobject;
+n86:Verblijfsobject_geometrieVerblijfsobject rdf:type ns3:PropertyShape;
+    ns3:path n87:geometrieVerblijfsobject;
     ns3:nodeKind ns3:IRI;
     ns3:maxCount 1;
     ns3:minCount 1;
@@ -2249,77 +2249,77 @@ n86:Verblijfsobject_geometrieVerblijfsobject rdf:type ns3:PropertyConstraint;
         ]
     ]
 .
-n86:Voorkomen_beginGeldigheid rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:beginGeldigheid;
+n86:Voorkomen_beginGeldigheid rdf:type ns3:PropertyShape;
+    ns3:path n87:beginGeldigheid;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:dateTime;
     ns3:minCount 1
 .
-n86:Voorkomen_eindGeldigheid rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:eindGeldigheid;
+n86:Voorkomen_eindGeldigheid rdf:type ns3:PropertyShape;
+    ns3:path n87:eindGeldigheid;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:dateTime
 .
-n86:Voorkomen_aanduidingInactief rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:aanduidingInactief;
+n86:Voorkomen_aanduidingInactief rdf:type ns3:PropertyShape;
+    ns3:path n87:aanduidingInactief;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:boolean;
     ns3:minCount 1
 .
-n86:Voorkomen_aanduidingCorrectief rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:aanduidingCorrectief;
+n86:Voorkomen_aanduidingCorrectief rdf:type ns3:PropertyShape;
+    ns3:path n87:aanduidingCorrectief;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:boolean;
     ns3:minCount 1
 .
-n86:Voorkomen_geconstateerd rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:geconstateerd;
+n86:Voorkomen_geconstateerd rdf:type ns3:PropertyShape;
+    ns3:path n87:geconstateerd;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:boolean;
     ns3:minCount 1
 .
-n86:Voorkomen_inOnderzoek rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:inOnderzoek;
+n86:Voorkomen_inOnderzoek rdf:type ns3:PropertyShape;
+    ns3:path n87:inOnderzoek;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:boolean;
     ns3:minCount 1
 .
-n86:Voorkomen_bron rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:bron;
-    ns3:class n87:Brondocument;
+n86:Voorkomen_bron rdf:type ns3:PropertyShape;
+    ns3:path n87:bron;
+    ns3:valueClass n87:Brondocument;
     ns3:nodeKind ns3:IRI;
     ns3:minCount 1
 .
-n86:Brondocument_documentdatum rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:documentdatum;
+n86:Brondocument_documentdatum rdf:type ns3:PropertyShape;
+    ns3:path n87:documentdatum;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:date;
     ns3:minCount 1
 .
-n86:Brondocument_documentnummer rdf:type ns3:PropertyConstraint;
-    ns3:predicate n87:documentnummer;
+n86:Brondocument_documentnummer rdf:type ns3:PropertyShape;
+    ns3:path n87:documentnummer;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype xsd:string;
     ns3:minCount 1;
     ns3:maxLength 80
 .
-n86:Geometry_asWKT rdf:type ns3:PropertyConstraint;
-    ns3:predicate n80:asWKT;
+n86:Geometry_asWKT rdf:type ns3:PropertyShape;
+    ns3:path n80:asWKT;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:datatype n80:wktLiteral;
     ns3:minCount 1
 .
-n86:Geometry_asWKT-RD rdf:type ns3:PropertyConstraint;
-    ns3:predicate <http://data.pdok.nl/def/pdok#asWKT-RD>;
+n86:Geometry_asWKT-RD rdf:type ns3:PropertyShape;
+    ns3:path <http://data.pdok.nl/def/pdok#asWKT-RD>;
     ns3:nodeKind ns3:Literal;
     ns3:maxCount 1;
     ns3:minCount 1
