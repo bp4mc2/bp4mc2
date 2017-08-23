@@ -40,7 +40,7 @@ Onderstaande tabel geeft alle KKG tagged values weer, inclusief de mapping naar 
 | Bezit 						| ? 						|																								
 | Code 							| xsd:simpletype 			|																								
 | Datum opname 					| prov:generatedAtTime 		|																								
-| Definitie 					| skos:definition 			|																								
+| Definitie 					| skos:definition 			| De beschrijving van de betekenis van het objecttype zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie of informatiemodel.																								
 | Domein.FormeelPatroon 		| ? 						|																								
 | Domein.Lengte 				| ? 						|																								
 | Domein.Patroon 				| ? 						|																								
@@ -48,7 +48,7 @@ Onderstaande tabel geeft alle KKG tagged values weer, inclusief de mapping naar 
 | Formeel patroon 				| ? 						|																								
 | Gerelateerd objecttype 		| ? 						|																								
 | Heeft 						| kkg:Gegevensgroep 		|																								
-| Herkomst 						| skos:editorialNote 		|																								
+| Herkomst 						| skos:editorialNote 		| De registratie in wiens catalogus het objecttype is gespecificeerd (oftewel de registratie waar het objecttype deel van uitmaakt). Deze specificatie is toegevoegd omdat het wel duidelijk moet zijn in welke (basis)registratie of informatiemodel het objecttype voorkomt (indien van toepassing).																								
 | Herkomst definitie 			| dct:source 				| Voor objecttypen die deel uitmaken van een registratie is de definitie hieruit overgenomen. 	
 | Identificerend 				| ? 						|																								
 | Indicatie abstract object 	| ? 						|																								
@@ -56,18 +56,18 @@ Onderstaande tabel geeft alle KKG tagged values weer, inclusief de mapping naar 
 | Indicatie formele historie	| ? 						| Ja / Nee / Zie Groep 																			
 | Indicatie materiële historie 	| ? 						| Ja / Nee / Zie Groep 																			
 | Kardinaliteit 				| owl:cardinality 			|																								
-| Kwaliteit 					| ldqd:semanticAccuracy 	|																								
+| Kwaliteit 					| ldqd:semanticAccuracy 	| Voor objecttypen die deel uitmaken van een registratie betreft dit de waarborgen voor de juistheid van de in de registratie opgenomen objecten van het desbetreffende type.																								
 | Locatie 						| dcat:accessURL 			|																								
 | Mogelijk geen waarde 			| xsi:nil 					| Ja / Nee 																						
-| Naam 							| skos:prefLabel 			|																								
+| Naam 							| skos:prefLabel 			| De naam van het objecttype
 | Patroon 						| ? 						|																								
-| Populatie 					| ldqd:completeness 		|																								
+| Populatie 					| ldqd:completeness 		| Voor objecttypen die deel uitmaken van een (basis)registratie betreft dit de beschrijving van de exemplaren van het gedefinieerde objecttype die in de desbetreffende (basis)-registratie voorhanden zijn.																								
 | Specificatie formeel 			| ? 						|																								
 | Specificatie tekst 			| ? 						|																								
-| Toelichting 					| skos:scopeNote 			|																								
+| Toelichting 					| skos:scopeNote 			| Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de daarin opgenomen toelichting.																								
 | Type aggregatie 				| ? 						|																								
 | Uni-directioneel 				| rdf:object 				|																								
-| Unieke aanduiding 			| skos:notation 			|																								
+| Unieke aanduiding 			| skos:notation 			| Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de wijze waarop daarin voorkomende objecten (van dit type) uniek in de registratie worden aangeduid.																								
 | Verwijst naar 				| skoslex:refersTo 			|																								
 | Verwijst naar generieke 		| skos-thes:broaderGeneric 	|																								
 

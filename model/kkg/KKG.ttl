@@ -175,9 +175,9 @@ kkgshape:KKG rdf:type owl:Ontology;
 	rdfs:label "KKG";
 .
 
-kkgshape:Objecttype rdf:type sh:NodeShape;
-	rdfs:label "Objecttype";
-	sh:name "kkg:Objecttype";
+kkgshape:ObjectType rdf:type sh:NodeShape;
+	rdfs:label "ObjectType";
+	sh:name "ObjectType";
 	sh:targetNode kkg:ObjectType;
 	sh:property [
 		sh:path [
@@ -394,7 +394,13 @@ kkgshape:ComplexDatatype rdf:type sh:NodeShape;
 kkgshape:Enumeratie rdf:type sh:NodeShape;
 	rdfs:label "Enumeratie";
 	sh:name "Enumeratie";
-	sh:property kkgshape:waarde;
+	sh:targetNode kkg:Enumeratie;
+	sh:property [
+		sh:path [
+			sh:inversePath uml:stereotype;
+		];
+		sh:node kkgshape:waarde;
+	];
 .
 
 kkgshape:Referentielijst rdf:type sh:NodeShape;
@@ -465,6 +471,12 @@ kkgshape:DataElement rdf:type sh:NodeShape;
 kkgshape:Enumeratiewaarde rdf:type sh:NodeShape;
 	rdfs:label "Enumeratiewaarde";
 	sh:name "Enumeratiewaarde";
+	sh:targetNode kkg:Enumeratiewaarde;
+	sh:property [
+		sh:path [
+			sh:inversePath uml:stereotype;
+		];
+	]
 .
 
 kkgshape:ReferentieElement rdf:type sh:NodeShape;
@@ -513,7 +525,12 @@ kkgshape:UnionElement rdf:type sh:NodeShape;
 kkgshape:Constraint rdf:type sh:NodeShape;
 	rdfs:label "Constraint";
 	sh:name "Constraint";
-	sh:targetNode kkg:Constraint
+	sh:targetNode kkg:Constraint;
+	sh:property [
+		sh:path [
+			sh:inversePath uml:stereotype;
+		];
+	]
 .
 
 ### PROPERTY SHAPES - binnen shapes
