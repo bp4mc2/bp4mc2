@@ -48,9 +48,9 @@ stage:TaxMenu a elmo:Part;
 			rdfs:label "Concepten";
 			elmo:index "1";
 			elmo:data [
-			rdfs:label "Alle concepten";
-			elmo:index "1";
-			xhtml:link "/catalogus/tax/query/overzichtspagina?term=";
+				rdfs:label "Alle concepten";
+				elmo:index "1";
+				xhtml:link "/catalogus/tax/query/overzichtspagina?term=";
 			];
 			elmo:data [
 				rdfs:label "BRT";
@@ -83,11 +83,15 @@ stage:TaxMenu a elmo:Part;
 				xhtml:link "/catalogus/tax/query/overzichtspagina?term=&dataset=tax-begrippen";
 			];
 		];
-	#	elmo:data [
-	#		rdfs:label "BEHEER";
-	#		xhtml:link "/catalogus/tax/admin";
-	#		elmo:index: "2";
-	#	];
+		elmo:data [
+			rdfs:label "Informatiemodellen";
+			elmo:index "2";
+			elmo:data [
+				rdfs:label "BAG";
+				elmo:index "1";
+				xhtml:link "/catalogus/tax/query/vocabulary?model=http://localhost:8080/catalogus/tax/def/BAG";
+			];
+		];
 	];
 .
 
@@ -143,9 +147,18 @@ stage:TaxBeheermenu a elmo:Part;
 				xhtml:link "/catalogus/tax/update/syncttlupdate";
 			];
 		];
+		elmo:data[
+			rdfs:label "Upload modellen";
+			elmo:index "5";
+			elmo:data [
+				rdfs:label "Upload UML-model (Turtle)";
+				elmo:index "3";
+				xhtml:link "container/ttlmodelupload";
+			];
+		];
 		elmo:data [
 			rdfs:label "Rapportages";										#Koppeling naar alle rapportages
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [
 				rdfs:label "Relatiecontrole";								#triples waar <A skos:SemanticRelation B> wel bestaat, maar de omgekeerde relatie ontbreekt
 				elmo:index "2";
@@ -189,7 +202,7 @@ stage:TaxBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
-			elmo:index "6";
+			elmo:index "7";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";

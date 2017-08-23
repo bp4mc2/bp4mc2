@@ -96,9 +96,9 @@ stage:TaxMenu a elmo:Part;
 			rdfs:label "Concepten";
 			elmo:index "1";
 			elmo:data [
-			rdfs:label "Alle concepten";
-			elmo:index "1";
-			xhtml:link "/query/overzichtspagina?term=";
+				rdfs:label "Alle concepten";
+				elmo:index "1";
+				xhtml:link "/query/overzichtspagina?term=";
 			];
 			elmo:data [
 				rdfs:label "BRT";
@@ -131,11 +131,15 @@ stage:TaxMenu a elmo:Part;
 				xhtml:link "/query/overzichtspagina?term=&dataset=tax-begrippen";
 			];
 		];
-	#	elmo:data [
-	#		rdfs:label "BEHEER";
-	#		xhtml:link "/admin";
-	#		elmo:index: "2";
-	#	];
+		elmo:data [
+			rdfs:label "Informatiemodellen";
+			elmo:index "2";
+			elmo:data [
+				rdfs:label "BAG";
+				elmo:index "1";
+				xhtml:link "/query/vocabulary?model=http://pdok-ld-gck.in.kadaster.nl/def/BAG";
+			];
+		];
 	];
 .
 
@@ -191,9 +195,18 @@ stage:TaxBeheermenu a elmo:Part;
 				xhtml:link "/update/syncttlupdate";
 			];
 		];
+		elmo:data[
+			rdfs:label "Upload modellen";
+			elmo:index "5";
+			elmo:data [
+				rdfs:label "Upload UML-model (Turtle)";
+				elmo:index "3";
+				xhtml:link "container/ttlmodelupload";
+			];
+		];
 		elmo:data [
 			rdfs:label "Rapportages";										#Koppeling naar alle rapportages
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [
 				rdfs:label "Relatiecontrole";								#triples waar <A skos:SemanticRelation B> wel bestaat, maar de omgekeerde relatie ontbreekt
 				elmo:index "2";
@@ -237,7 +250,7 @@ stage:TaxBeheermenu a elmo:Part;
 		];
 		elmo:data [
 			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
-			elmo:index "6";
+			elmo:index "7";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -277,6 +290,63 @@ stage:TaxFooter a elmo:Part;
 	];
 .
  
+#
+#
+#
+# BEHEER UMLMODEL
+#
+#
+#
+
+#
+# CONTAINERS
+#
+
+# Uploadcontainer UML-model Turtle
+container:ttlmodelupload a elmo:Container;
+elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxBeheermenu;
+	rdfs:label "Upload UML-model via Turtle";
+	elmo:query stage:TaxTTLUploadScene;
+	elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "1";
+    ];
+.
+
+#
+# SCENES
+#
+
+
+# Uploadquery TTL-model
+stage:TaxTTLUploadScene a elmo:Scene;
+	rdfs:label "Postquery TTL-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://pdok-ld-gck.in.kadaster.nl/container/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+
+		INSERT {
+			GRAPH <http://pdok-ld-gck.in.kadaster.nl/def/@MODEL@> {
+				?s ?p ?o.
+			}
+		}
+		WHERE {
+			GRAPH container:ttlmodelupload {
+				?s ?p ?o.
+				FILTER NOT EXISTS {
+					?s rdf:type owl:Ontology.
+				}
+			}
+		}
+
+		CLEAR GRAPH container:ttlmodelupload
+	''';
+. 
 # CONTAINERS
 
 # Updatecontainer Turtle
@@ -1600,6 +1670,69 @@ container:statusupload a elmo:Container;
 	rdfs:label "Upload status via RDF (.xml) of Turtle (.ttl)";
 .
 
+ 
+#
+#
+#
+# ADD NEW MODEL
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om nieuw model toe te voegen
+updatestage:addnewmodel a elmo:Production;
+	elmo:contains stage:TaxBeheermenu;
+	elmo:contains stage:TaxFooter;
+	elmo:queryForm stage:TaxNameForm;
+	elmo:contains stage:AddNewModelScene;
+.
+
+#
+# FORMS
+#
+
+stage:TaxNameForm a elmo:Form;
+	rdfs:label "Voeg model toe";
+    elmo:fragment [
+        elmo:applies-to "name";
+        rdfs:label "Naam model"@nl;
+        rdfs:label "Model name"@en;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "1";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Voeg toe"@nl;
+        elmo:index "2";
+    ]
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:AddNewModelScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Naam toevoegen";
+	elmo:query '''
+		INSERT {
+			GRAPH ?graph {
+				?graph rdf:type owl:Ontology.
+				?graph rdfs:label ?label.
+			}
+		}
+		WHERE {
+			BIND( REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) AS ?label )
+			BIND( IRI( CONCAT( "http://pdok-ld-gck.in.kadaster.nl/def/", REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) ) ) AS ?graph )
+		}
+	'''
+.
  
 
 #
@@ -4160,6 +4293,117 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 		ORDER BY DESC(lcase(?concept_label))
 	'''
 . 
+#
+#
+#
+# MODEL EN VOCABULAIRE
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Vocabulairepagina
+stage:VocabulairePagina	a	elmo:Representation;
+	elmo:url-pattern "/query/vocabulary";
+	elmo:contains stage:TaxFooter;
+	elmo:contains stage:TaxMenu;
+	elmo:contains stage:search_models;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:TaxSelectModel;
+	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:TaxSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+	elmo:index "2";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
+.
+
+# PARTS
+
+# Zoeken van modellen
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://pdok-ld-gck.in.kadaster.nl/(?!stage)")
+            }
+            LIMIT 100
+        }
+		ORDER BY DESC(?label)
+    ''';
+.
+
+# QUERY'S
+
+# Query voor Vocabulairepagina
+stage:VocabulaireQuery a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			?shape sh:targetClass ?element.
+			?shape sh:property ?pc.
+			?pc sh:path ?pred.
+			?pc sh:valueClass ?class.
+			?pc sh:datatype ?datatype.
+			?pc sh:in ?collection.
+		}
+		WHERE {
+			GRAPH <@MODEL@> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
+				OPTIONAL {
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
+				}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					?shape sh:targetClass ?element.
+					?shape sh:property ?pc.
+					?pc sh:path ?pred.
+					OPTIONAL {?pc sh:valueClass ?class}
+					OPTIONAL {?pc sh:datatype ?datatype}
+					OPTIONAL {?pc sh:in ?collection}
+				}
+			}
+		}
+	'''
+.
+ 
 #
 #
 #

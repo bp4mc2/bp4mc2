@@ -10,49 +10,33 @@
 @prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
 
 ex:Persoon a owl:Class;
-	rdfs:label "Persoon";
-.
-
-ex:Huwelijk a owl:Class;
-	rdfs:label "Huwelijk";
-.
-
-exs:Persoon a sh:NodeShape;
-	sh:targetClass ex:Persoon;
 	uml:stereotype kkg:ObjectType;
-	sh:property exs:naam;
-	skos:prefLabel "blaat";
+	skos:prefLabel "Persoon";
 	skos:definition "Een mens van vlees en bloed";
 	prov:generatedAtTime "2017-08-11"^^xsd:datetime;
 .
 
+ex:Huwelijk a owl:Class;
+	uml:stereotype kkg:Relatieklasse;
+.
+
+exs:Persoon a sh:NodeShape;
+	sh:targetClass ex:Persoon;
+	sh:property [
+		sh:name "Naam";
+		sh:path ex:naam;
+		sh:minCount 1;
+		sh:maxCount 1;
+	]
+.
+
 exs:Huwelijk a sh:NodeShape;
 	sh:targetClass ex:Huwelijk;
-	uml:stereotype kkg:Relatieklasse;
-	sh:property exs:lid;
-.
-
-ex:naam a owl:DatatypeProperty;
-	rdfs:label "Naam";
-.
-
-exs:naam a sh:PropertyShape;
-	sh:name "Naam";
-	sh:path ex:naam;
-	sh:minCount 1;
-	sh:maxCount 1;
-	sh:nodeKind sh:Literal;
-.
-
-ex:lid a owl:ObjectProperty;
-	rdfs:label "Lid";
-.
-
-exs:lid a sh:PropertyShape;
-	sh:naam "Lid";
-	sh:path ex:lid;
-	sh:node exs:Persoon;
-	sh:minCount 2;
-	sh:maxCount 2;
-	sh:nodeKind sh:IRI;
+	sh:property [
+		sh:naam "Lid";
+		sh:path ex:lid;
+		sh:node exs:Persoon;
+		sh:minCount 2;
+		sh:maxCount 2;
+	]
 .

@@ -95,6 +95,9 @@ echo Creating ValidatieStatus file T...
 powershell -Command "$myFile = (gc 'ValidatieStatus local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.in.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('ValidatieStatus.ttl', $myFile)"
 echo Creating ValidatieConcept file T...
 powershell -Command "$myFile = (gc 'ValidatieConcept local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.in.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('ValidatieConcept.ttl', $myFile)"
+echo Creating UploadInformatiemodel file T...
+powershell -Command "$myFile = (gc 'UploadInformatiemodel local.ttl') -replace 'http://localhost:8080', 'http://pdok-ld-gck.in.kadaster.nl' -replace '/catalogus/tax(|/)$', '/(|/)$' -replace '/catalogus/tax', '' -replace '/catalogus', ''; [System.IO.File]::WriteAllLines('UploadInformatiemodel.ttl', $myFile)"
+
 
 echo Whoohoo! All done!
 pause
