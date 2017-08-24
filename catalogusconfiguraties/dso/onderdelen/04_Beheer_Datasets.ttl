@@ -18,6 +18,12 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:DSODatasetUploadScene;
+	elmo:fragment [
+		elmo:applies-to "model";
+		rdfs:label "Selecteer model"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
 .
 
 #
@@ -128,9 +134,19 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix wdrs: <https://www.w3.org/2007/05/powder-s#>
 			
 		
-		CLEAR GRAPH versiongraph:version
+		DELETE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
 		
 		INSERT {
 			GRAPH container:datasetupload {
@@ -150,8 +166,6 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -178,7 +192,45 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
-			
+		
+INSERT {
+			GRAPH container:datasetupload {
+				?s wdrs:describedby <@MODEL@>
+			}
+		}
+		WHERE {
+			GRAPH container:datasetupload {
+				?s rdf:type ?type.
+				FILTER (
+					?type = dcat:Dataset
+					|| ?type = dcat:Distribution
+				)
+			}
+		}
+		
+		INSERT {
+			GRAPH container:datasetupload {
+				?s bp4mc2:signature ?sig.
+			}
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:datasetupload {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = dcat:Dataset
+							|| ?type = dcat:Distribution
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
 		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o

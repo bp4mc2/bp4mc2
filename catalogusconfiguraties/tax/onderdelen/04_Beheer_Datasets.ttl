@@ -19,6 +19,12 @@ container:datasetupload a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
 	elmo:query stage:TaxDatasetUploadScene;
+	elmo:fragment [
+		elmo:applies-to "model";
+		rdfs:label "Selecteer model"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
 	elmo:assertion [
 		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
 		elmo:assert-not '''
@@ -110,6 +116,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix wdrs: <https://www.w3.org/2007/05/powder-s#>
 			
 		
 		DELETE {
@@ -166,6 +173,21 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 				catalogus:tomcatUser foaf:givenName "Tomcat User".
 				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
 				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
+		}
+		
+		INSERT {
+			GRAPH container:datasetupload {
+				?s wdrs:describedby <@MODEL@>
+			}
+		}
+		WHERE {
+			GRAPH container:datasetupload {
+				?s rdf:type ?type.
+				FILTER (
+					?type = dcat:Dataset
+					|| ?type = dcat:Distribution
+				)
 			}
 		}
 		
