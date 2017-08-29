@@ -390,19 +390,19 @@ stage:DSOBeheermenu a elmo:Part;
 			#	xhtml:link "/catalogus/dso/container/ttlupload";
 			# ];
 			elmo:data [
-				rdfs:label "Upload of update dataset (Excel)";
+				rdfs:label "Upload of update verzameling concepten (Excel)";
 				elmo:index "3";
 				xhtml:link "/catalogus/dso/container/excelupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload of update dataset (RDF of Turtle)";
+				rdfs:label "Upload of update verzameling concepten (RDF of Turtle)";
 				elmo:index "4";
 				xhtml:link "/catalogus/dso/container/ttlupdate";
 			];
 			elmo:data [
-				rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+				rdfs:label "Upload dataset beschrijving (RDF of Turtle)";
 				elmo:index "7";
-				xhtml:link "/catalogus/dso/container/datasetupload";
+				xhtml:link "/catalogus/dso/container/datasetupdate";
 			];
 		];
 		elmo:data [
@@ -517,13 +517,8 @@ stage:DSOBeheermenu a elmo:Part;
 			];
 			elmo:data [
 				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
-				elmo:index "5";
-				xhtml:link "/catalogus/dso/update/syncttlupload";
-			];
-			elmo:data [
-				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
 				elmo:index "6";
-				xhtml:link "/catalogus/dso/update/syncttlupdate";
+				xhtml:link "/catalogus/dso/update/syncDataset";
 			];
 		];
 		elmo:data [
@@ -1005,7 +1000,6 @@ container:ttlupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
-    elmo:query stage:DSOUploadScenePUT;
 .
 
 
@@ -2119,7 +2113,16 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix activity: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/concept/@CURRENTMOMENT@>
 			
 	
-		CLEAR GRAPH versiongraph:version
+		DELETE {
+			GRAPH versiongraph:version{
+				?s?p?o
+			}
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
+		}
 		
 		INSERT {
 			GRAPH container:generiek {
@@ -2128,6 +2131,9 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		} WHERE {
 			GRAPH container:generiek {
 				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s skos:prefLabel ?spreflabel.
+				}
 				FILTER NOT EXISTS {
 					?s rdfs:label ?slabel.
 				}
@@ -2167,6 +2173,19 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				concept:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
+		INSERT {
+			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+				}
+			}
+		WHERE {
+			GRAPH container:generiek {
+					?s rdf:type ?type.
+					FILTER (?type = skos:Concept
+							|| ?type = skos:Collection
+					)
+				}
+			}
 
 		INSERT {
 			GRAPH container:generiek {
@@ -2223,6 +2242,11 @@ stage:DSOUploadScenePUT a elmo:Scene;
 					?s bp4mc2:signature ?sig
 				}
 			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s skos:inScheme ?o.
+				}
+			}	
 		}
 		
 		INSERT {
@@ -2282,7 +2306,8 @@ stage:DSOUploadScenePUT a elmo:Scene;
 			GRAPH doc:mastergraph {
 				?s rdf:type ?type.
 				?s rdfs:isDefinedBy versiongraph:version.
-				?s bp4mc2:signature ?sig
+				?s bp4mc2:signature ?sig.
+				?s skos:inScheme <@DATASET@>.
 			}
 		}
 		WHERE {
@@ -2320,12 +2345,12 @@ stage:DSOUploadScenePUT a elmo:Scene;
 #
 
 # Uploadcontainer datasets
-container:datasetupload a elmo:Container;
+container:datasetupdate a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+	rdfs:label "Upload Dataset beschrijving (RDF of Turtle)";
 	elmo:query stage:DSODatasetUploadScene;
 	elmo:fragment [
 		elmo:applies-to "model";
@@ -2333,25 +2358,63 @@ container:datasetupload a elmo:Container;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "1";
 	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix dct: <http://purl.org/dc/terms/>
+			ASK {
+				GRAPH container:datasetupdate {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s dct:title ?title.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupdate {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type skos:ConceptScheme.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupdate {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type dcat:Dataset.
+					}
+				}
+			}
+		''';
+	];
 .
 
 #
 # PRODUCTIONS
 #
 
-updatestage:syncttlupload a elmo:Production;
+updatestage:syncDataset a elmo:Production;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:queryForm stage:DSOSelectDataset;
-	elmo:contains stage:DSOGeneriekeUploadScene;
-.
-updatestage:syncttlupdate a elmo:Production;
-	elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:queryForm stage:DSOSelectDataset;
-	elmo:contains stage:DSOSpecifiekeUploadScene;
+	elmo:contains stage:DSOUploadScenePUT;
 .
 
 #
@@ -2386,6 +2449,10 @@ stage:search_datasets a elmo:Part;
 	elmo:query '''
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix dct: <http://purl.org/dc/terms/>
+		
 		CONSTRUCT {
 			?dataset rdfs:label ?dataset_label
 		}
@@ -2393,6 +2460,12 @@ stage:search_datasets a elmo:Part;
 			GRAPH ?g {
 				?dataset rdf:type skos:ConceptScheme.
 				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?g dct:isVersionOf doc:mastergraph.
 			}
 		}
 		ORDER BY DESC(?dataset_label)
@@ -2458,11 +2531,11 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		}
 		
 		INSERT {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdfs:label ?spreflabel.
 				FILTER NOT EXISTS {
 					?s dct:title ?slabel.
@@ -2503,12 +2576,12 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		}
 		
 INSERT {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate{
 				?s wdrs:describedby <@MODEL@>
 			}
 		}
 		WHERE {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdf:type ?type.
 				FILTER (
 					?type = dcat:Dataset
@@ -2518,14 +2591,14 @@ INSERT {
 		}
 		
 		INSERT {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s bp4mc2:signature ?sig.
 			}
 		}
 		WHERE {
 			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
 			WHERE {
-				GRAPH container:datasetupload {
+				GRAPH container:datasetupdate {
 					SELECT ?s ?p ?o
 					WHERE {
 						?s ?p ?o.
@@ -2546,7 +2619,7 @@ INSERT {
 			}
 		}
 		WHERE {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdf:type ?type.
 			    ?s ?p ?o.
 			    ?s bp4mc2:signature ?sig
@@ -2627,7 +2700,7 @@ INSERT {
             }
 		}
 		
-		CLEAR GRAPH container:datasetupload
+		CLEAR GRAPH container:datasetupdate
 	''';
 .
  
