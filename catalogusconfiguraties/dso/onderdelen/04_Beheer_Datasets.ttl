@@ -11,32 +11,76 @@
 #
 
 # Uploadcontainer datasets
-container:datasetupload a elmo:Container;
+container:datasetupdate a elmo:Container;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload dataset-metadata via Turtle (.ttl)";
+	rdfs:label "Upload Dataset beschrijving (RDF of Turtle)";
 	elmo:query stage:DSODatasetUploadScene;
+	elmo:fragment [
+		elmo:applies-to "model";
+		rdfs:label "Selecteer model"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix dct: <http://purl.org/dc/terms/>
+			ASK {
+				GRAPH container:datasetupdate {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s dct:title ?title.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupdate {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type skos:ConceptScheme.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:datasetupdate {
+					?s rdf:type ?type.
+					FILTER NOT EXISTS {
+						?s rdf:type dcat:Dataset.
+					}
+				}
+			}
+		''';
+	];
 .
 
 #
 # PRODUCTIONS
 #
 
-updatestage:syncttlupload a elmo:Production;
+updatestage:syncDataset a elmo:Production;
 	elmo:contains stage:DSOBeheermenu;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:queryForm stage:DSOSelectDataset;
-	elmo:contains stage:DSOGeneriekeUploadScene;
-.
-updatestage:syncttlupdate a elmo:Production;
-	elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:queryForm stage:DSOSelectDataset;
-	elmo:contains stage:DSOSpecifiekeUploadScene;
+	elmo:contains stage:DSOUploadScenePUT;
 .
 
 #
@@ -71,6 +115,10 @@ stage:search_datasets a elmo:Part;
 	elmo:query '''
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix dct: <http://purl.org/dc/terms/>
+		
 		CONSTRUCT {
 			?dataset rdfs:label ?dataset_label
 		}
@@ -78,6 +126,12 @@ stage:search_datasets a elmo:Part;
 			GRAPH ?g {
 				?dataset rdf:type skos:ConceptScheme.
 				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?g dct:isVersionOf doc:mastergraph.
 			}
 		}
 		ORDER BY DESC(?dataset_label)
@@ -128,16 +182,26 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
 			
 		
-		CLEAR GRAPH versiongraph:version
+		DELETE {
+			GRAPH versiongraph:version {
+				?s?p?o
+			}
+		}
+		WHERE {
+            GRAPH versiongraph:version {
+                ?s?p?o
+            }
+		}
 		
 		INSERT {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdfs:label ?spreflabel.
 			}
 		} WHERE {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdfs:label ?spreflabel.
 				FILTER NOT EXISTS {
 					?s dct:title ?slabel.
@@ -150,8 +214,6 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
-				dataset:concepten rdf:type skos:ConceptScheme.
-				dataset:concepten rdfs:label "Conceptschema".
 			}
 		}
 		
@@ -178,14 +240,52 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
-			
+		
+INSERT {
+			GRAPH container:datasetupdate{
+				?s wdrs:describedby <@MODEL@>
+			}
+		}
+		WHERE {
+			GRAPH container:datasetupdate {
+				?s rdf:type ?type.
+				FILTER (
+					?type = dcat:Dataset
+					|| ?type = dcat:Distribution
+				)
+			}
+		}
+		
+		INSERT {
+			GRAPH container:datasetupdate {
+				?s bp4mc2:signature ?sig.
+			}
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:datasetupdate {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+						FILTER (
+							?type = dcat:Dataset
+							|| ?type = dcat:Distribution
+						)
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
 		INSERT {
 			GRAPH versiongraph:version {
 				?s ?p ?o
 			}
 		}
 		WHERE {
-			GRAPH container:datasetupload {
+			GRAPH container:datasetupdate {
 				?s rdf:type ?type.
 			    ?s ?p ?o.
 			    ?s bp4mc2:signature ?sig
@@ -266,6 +366,6 @@ stage:DSODatasetUploadScene a elmo:Scene;
             }
 		}
 		
-		CLEAR GRAPH container:datasetupload
+		CLEAR GRAPH container:datasetupdate
 	''';
 .
