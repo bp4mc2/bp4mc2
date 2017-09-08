@@ -45,6 +45,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 | Bezit 						| kkg:bezit						 	| ?							| ?																								
 
 | Code 							| xsd:simpletype 				 	| Enumeratie(waarden)		| De in een registratie of informatiemodel aan de enumeratiewaarde toegekend unieke code.																								
+																	| Attribuutsoort			|
 
 | Datum opname 					| prov:generatedAtTime 			 	| Objecttype				| De datum waarop <categorie> is opgenomen in het informatiemodel.																								
 																	| Attribuutsoort			| 
@@ -107,7 +108,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 																	| Generalisatie				| Het objecttype dat de generalisatie is van een (ander) objecttype.
 																	| Externe koppeling			| Het objecttype uit een extern informatiemodel waarmee een objecttype een logische verbinding heeft.
 
-| Heeft 						| kkg:Gegevensgroep 			 	| ?							| ?
+| Heeft 						| kkg:Gegevensgroep 			 	| Attribuutsoort							| ?
 
 | Herkomst 						| skos:editorialNote 			 	| Objecttype				| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar het objecttype deel van uitmaakt). Deze specificatie is toegevoegd omdat het wel duidelijk moet zijn in welke (basis)registratie of informatiemodel het objecttype voorkomt (indien van toepassing).																								
 																	| Attribuutsoort			| De registratie of het informatiemodel waaraan <categorie> ontleend is dan wel de eigen organisatie indien het door de eigen organisatie toegevoegd is.
@@ -128,7 +129,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 																	| Relatiesoort				| 
 																	| Relatierol				| 
 
-| Identificerend 				| kkg:identificeren				 	| Attribuutsoort			| Aanduiding dat attribuutsoort onderdeel uitmaakt van de unieke aanduiding van een object																								
+| Identificerend 				| kkg:identificerend			 	| Attribuutsoort			| Aanduiding dat attribuutsoort onderdeel uitmaakt van de unieke aanduiding van een object																								
 
 | Indicatie abstract object 	| kkg:indicatieAbstractObject	 	| Objecttype				| Conceptueel model: indicatie dat het objecttype een generalisatie is, waarvan een object als specialisatie altijd voorkomt in de hoedanigheid van een (en slechts één) van de specialisaties van het betreffende objecttype. 
 																								| Logisch model: Indicatie dat er geen instanties (objecten) voor het betreffende objecttype mogen voorkomen.
@@ -212,7 +213,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 
 | Unieke aanduiding 			| skos:notation 				 	| Objecttype				| Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de wijze waarop daarin voorkomende objecten (van dit type) uniek in de registratie worden aangeduid.																								
 
-| Verwijst naar 				| skoslex:refersTo 				 	|							|																								
+| Verwijst naar 				| skoslex:refersTo 				 	| Objecttype							|																								
 
 | Verwijst naar generieke 		| skos-thes:broaderGeneric 		 	|							|																								
 
