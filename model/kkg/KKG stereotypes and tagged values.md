@@ -44,7 +44,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 
 | Bezit 						| kkg:bezit						 	| ?							| ?																								
 
-| Code 							| xsd:simpletype 				 	| Enumeratie(waarden)		| De in een registratie of informatiemodel aan de enumeratiewaarde toegekende unieke code.																								
+| Code 							| kkg:code		 				 	| Enumeratie(waarden)		| De in een registratie of informatiemodel aan de enumeratiewaarde toegekende unieke code.																								
 																	| Attribuutsoort			|
 
 | Datum opname 					| prov:generatedAtTime 			 	| Objecttype				| De datum waarop <categorie> is opgenomen in het informatiemodel.																								
@@ -157,7 +157,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 
 | Kwaliteit 					| ldqd:semanticAccuracy 		 	| Objecttype				| Voor objecttypen die deel uitmaken van een registratie betreft dit de waarborgen voor de juistheid van de in de registratie opgenomen objecten van het desbetreffende type.																								
 
-| Locatie 						| ? cat:accessURL  				 	| Attribuutsoort			| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Dit is in principe een URI (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).																								
+| Locatie 						| ? kkg:locatie  				 	| Attribuutsoort			| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Dit is in principe een URI (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).																								
 																	| Codelist					| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Indien mogelijk is de verwijzing een URI of een URL (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).
 																	| Extern					| De verwijzing naar de locatie van het bijbehorende package (dit kan een geheel model zijn in één package). Indien mogelijk is de verwijzing een URI of een URL.
 																	| View						| De verwijzing naar de locatie van het bijbehorende informatiemodel waar de view over gaat. Indien mogelijk is de verwijzing een URI of een URL.
