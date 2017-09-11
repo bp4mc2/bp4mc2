@@ -44,7 +44,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 
 | Bezit 						| kkg:bezit						 	| ?							| ?																								
 
-| Code 							| xsd:simpletype 				 	| Enumeratie(waarden)		| De in een registratie of informatiemodel aan de enumeratiewaarde toegekend unieke code.																								
+| Code 							| kkg:code		 				 	| Enumeratie(waarden)		| De in een registratie of informatiemodel aan de enumeratiewaarde toegekende unieke code.																								
 																	| Attribuutsoort			|
 
 | Datum opname 					| prov:generatedAtTime 			 	| Objecttype				| De datum waarop <categorie> is opgenomen in het informatiemodel.																								
@@ -79,11 +79,12 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 																	| View						| 
 																	| Enumeratie(waarden}		| > De beschrijving van de betekenis van de enumeratie(waarde) zoals gespecificeerd in de catalogus van de desbetreffende registratie.
 
-| Domein.FormeelPatroon 		| kkg:domeinFormeelPatroon		 	| Attribuutsoort			| Zoals patroon, formeel vastgelegd (met een reguliere expressie), uitgedrukt in een formele taal die door de computer wordt herkend.
+| Domein.FormeelPatroon			| kkg:domeinFormeelPatroon		 	| Attribuutsoort			| Zoals patroon, formeel vastgelegd (met een reguliere expressie), uitgedrukt in een formele taal die door de computer wordt herkend.
 																	| Referentie element		| 
 																	| Datatype					| 
 																	| Data element				| 
-																	| Union element				| 
+																	| Union element				|
+																	| Gestructureerd datatype	|
 
 | Domein.Lengte 				| kkg:domeinLengte				 	| Attribuutsoort			| De aanduiding van de lengte van een gegeven. Getallen kunnen altijd positief of negatief zijn.
 																	| Referentie element		| 
@@ -96,19 +97,18 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 																	| Datatype					| 
 																	| Data element				| 
 																	| Union element				| 
+																	| Gestructureerd datatype	|
 
 | Domein.Type 					| kkg:domeinType				 	| Attribuutsoort			| Het type waarmee waarden van deze attribuutsoort worden vastgelegd. Dit is altijd conform een datatype uit dit metamodel (of een extensie ervan). Betreft het een waarde uit een dynamische waardentabel, dan wordt de naam van de desbetreffende referentielijst of codelist als type vermeld. Indien het een waarde uit een statische opsomming van waarden betreft, dan wordt de naam van de desbetreffende enumeratie als type vermeld.
 																	| Referentie element		| 
 																	| Data element				| 
 																	| Union element				| 
 
-| Formeel patroon 				| kkg:FormeelPatroon			 	| Gestructureerd datatype	| Zoals patroon, formeel vastgelegd (met een reguliere expressie), uitgedrukt in een formele taal die door de computer wordt herkend.																								
-
 | Gerelateerd objecttype 		| kkg:gerelateerdObjecttype		 	| Relatiesoort				| Het objecttype waarmee een objecttype een logisch verband heeft
-																	| Generalisatie				| Het objecttype dat de generalisatie is van een (ander) objecttype.
 																	| Externe koppeling			| Het objecttype uit een extern informatiemodel waarmee een objecttype een logische verbinding heeft.
-
-| Heeft 						| kkg:Gegevensgroep 			 	| Attribuutsoort							| ?
+								| thes:narrowerGeneric				| Generalisatie				| Het objecttype dat de generalisatie is van een (ander) objecttype.
+																	
+| Heeft 						| kkg:Gegevensgroep 			 	| Attribuutsoort			| ?
 
 | Herkomst 						| skos:editorialNote 			 	| Objecttype				| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar het objecttype deel van uitmaakt). Deze specificatie is toegevoegd omdat het wel duidelijk moet zijn in welke (basis)registratie of informatiemodel het objecttype voorkomt (indien van toepassing).																								
 																	| Attribuutsoort			| De registratie of het informatiemodel waaraan <categorie> ontleend is dan wel de eigen organisatie indien het door de eigen organisatie toegevoegd is.
@@ -147,7 +147,7 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 																	| Relatiesoort				| 
 																	| Relatierol				| 
 
-| Kardinaliteit 				| owl:cardinality 				 	| Attribuutsoort			| Deze indicatie geeft aan hoeveel keer waarden van deze attribuutsoort kunnen voorkomen bij een object van het betreffende objecttype, of bij het betreffende gegevensgroeptype. Indien een attribuutsoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van het attribuutsoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van hoe vaak een gegeven voorkomt bij het object moet rekening gehouden worden met de kardinaliteit van de gegevensgroep en met de kardinaliteit van de attribuutsoort.																								
+| Kardinaliteit 				| sh:minCount / sh:maxCount		 	| Attribuutsoort			| Deze indicatie geeft aan hoeveel keer waarden van deze attribuutsoort kunnen voorkomen bij een object van het betreffende objecttype, of bij het betreffende gegevensgroeptype. Indien een attribuutsoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van het attribuutsoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van hoe vaak een gegeven voorkomt bij het object moet rekening gehouden worden met de kardinaliteit van de gegevensgroep en met de kardinaliteit van de attribuutsoort.																								
 																	| Gegevensgroep				| Deze indicatie geeft aan hoeveel keer de gegevensgroep kan voorkomen bij een object van het betreffende objecttype. Indien een attribuutsoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van het attribuutsoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van hoe vaak een gegeven voorkomt bij het object moet rekening gehouden worden met de kardinaliteit van de gegevensgroep en met de kardinaliteit van de attribuutsoort.
 																	| Relatiesoort				| Deze indicatie geeft aan hoeveel keer waarden van deze relatiesoort (i.c. relaties) kunnen voorkomen bij een object van het betreffende objecttype. Indien een relatiesoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van de relatiesoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van de relatiesoort moet ook rekening gehouden worden met de kardinaliteit van het gegevensgroeptype.
 																	| Relatierol				| Deze indicatie geeft aan hoeveel keer waarden van deze relatierol kunnen voorkomen.
@@ -157,12 +157,12 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 
 | Kwaliteit 					| ldqd:semanticAccuracy 		 	| Objecttype				| Voor objecttypen die deel uitmaken van een registratie betreft dit de waarborgen voor de juistheid van de in de registratie opgenomen objecten van het desbetreffende type.																								
 
-| Locatie 						| dcat:accessURL 				 	| Attribuutsoort			| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Dit is in principe een URI (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).																								
+| Locatie 						| ? kkg:locatie  				 	| Attribuutsoort			| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Dit is in principe een URI (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).																								
 																	| Codelist					| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Indien mogelijk is de verwijzing een URI of een URL (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).
 																	| Extern					| De verwijzing naar de locatie van het bijbehorende package (dit kan een geheel model zijn in één package). Indien mogelijk is de verwijzing een URI of een URL.
 																	| View						| De verwijzing naar de locatie van het bijbehorende informatiemodel waar de view over gaat. Indien mogelijk is de verwijzing een URI of een URL.
 
-| Mogelijk geen waarde 			| xsi:nil 						 	| Attribuutsoort			| Aanduiding dat attribuutsoort geen waarde kan bevatten (de waarde zou er kunnen zijn, maar kan ook onbekend zijn, of bewust weggelaten). 																						
+| Mogelijk geen waarde 			| ? xsi:nil 					 	| Attribuutsoort			| Aanduiding dat attribuutsoort geen waarde kan bevatten (de waarde zou er kunnen zijn, maar kan ook onbekend zijn, of bewust weggelaten). 																						
 																	| Relatiesoort				| Aanduiding dat relatiesoort geen waarde met betekenis kan bevatten.
 																	| Relatierol				| Aanduiding dat relatierol geen waarde met betekenis kan bevatten.
 
@@ -188,8 +188,6 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 																	| Enumeratie(waarden)		| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie.
 																	| Constraint				| 
 
-| Patroon 						| kkg:patroon 					 	| Gestructureerd datatype	| De verzameling van waarden die gegevens van deze attribuutsoort kunnen hebben, dat wil zeggen het waardenbereik, uitgedrukt in een specifieke structuur.																								
-
 | Populatie 					| ldqd:completeness 			 	| Objecttype				| Voor objecttypen die deel uitmaken van een (basis)registratie betreft dit de beschrijving van de exemplaren van het gedefinieerde objecttype die in de desbetreffende (basis)-registratie voorhanden zijn.																								
 
 | Specificatie formeel 			| kkg:specificatieFormeel		 	| Constraint				| De beschrijving van de constraint in een formele specificatietaal, in OCL
@@ -208,14 +206,14 @@ Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in
 | Type aggregatie 				| kkg:typeAggregatie			 	| Relatiesoort				| Standaard betreft het geen aggregatie (None). Het type aggregatie mag ‘composite’ zijn. Dit wordt gedaan als er een afhankelijkheid is in die zin dat de target niet kan bestaan zonder de source: de target vervalt als de source vervalt.																								
 																	| Externe koppeling			| Aanduiding dat het een compositie relatie is. Waarde is altijd Composite.
 
-| Uni-directioneel 				| rdf:object 					 	| Relatiesoort				| Het gerelateerde objecttype (de target) waarvan het objecttype, die de eigenaar is van deze relatie (de source), kennis heeft. Alle relaties zijn altijd gericht van het objecttype (source) naar het gerelateerde objecttype (target).
+| Uni-directioneel 				| kkg:uniDirectioneel			 	| Relatiesoort				| Het gerelateerde objecttype (de target) waarvan het objecttype, die de eigenaar is van deze relatie (de source), kennis heeft. Alle relaties zijn altijd gericht van het objecttype (source) naar het gerelateerde objecttype (target).
 																	| Externe koppeling			| Het gerelateerde objecttpe uit een extern informatiemodel (de target) waarvan het objecttype die de eigenaar van deze relatie is (de source) kennis heeft. Het aggregation type van de source is altijd ‘composition’. Alle relaties zijn altijd gericht van het objecttype (source) naar het gerelateerde objecttype (target).
 
 | Unieke aanduiding 			| skos:notation 				 	| Objecttype				| Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de wijze waarop daarin voorkomende objecten (van dit type) uniek in de registratie worden aangeduid.																								
 
-| Verwijst naar 				| skoslex:refersTo 				 	| Objecttype							|																								
+| Verwijst naar 				| kkg:verwijstNaar 				 	| Objecttype				|																								
 
-| Verwijst naar generieke 		| skos-thes:broaderGeneric 		 	|							|																								
+| Verwijst naar generieke 		| ? rdfs:type 			 		 	|							|																								
 
 
 
