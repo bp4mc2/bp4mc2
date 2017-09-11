@@ -448,10 +448,10 @@ kkgshape:Relatieklasse rdf:ype kkgshape:Nodeshape;
 
 #Alternatief 1, relatiesoort is leidend
 
-kkgshape:Relatierol rdf:type sh:NodeShape;
+kkgshape:RelatierolAlt1 rdf:type sh:NodeShape;
 	rdfs:label "Relatierol";
 	sh:name "Relatierol";
-	sh:targetNode kkg:Relatierol;
+	sh:targetNode kkg:RelatierolAlt1;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -461,10 +461,10 @@ kkgshape:Relatierol rdf:type sh:NodeShape;
 	];
 .
 
-kkgshape:Relatiesoort rdf:type sh:NodeShape;
+kkgshape:RelatiesoortAlt1 rdf:type sh:NodeShape;
 	rdfs:label "Relatiesoort";
 	sh:name "Relatiesoort";
-	sh:targetNode kkg:Relatiesoort;
+	sh:targetNode kkg:RelatiesoortAlt1;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -490,10 +490,10 @@ kkgshape:Relatiesoort rdf:type sh:NodeShape;
 
 #Alternatief 2, relatierol is leidend
 
-kkgshape:Relatierol rdf:type sh:NodeShape;
+kkgshape:RelatierolAlt2 rdf:type sh:NodeShape;
 	rdfs:label "Relatierol";
 	sh:name "Relatierol";
-	sh:targetNode kkg:Relatierol;
+	sh:targetNode kkg:RelatierolAlt2;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -512,10 +512,10 @@ kkgshape:Relatierol rdf:type sh:NodeShape;
 	];
 .
 
-kkgshape:Relatiesoort rdf:type sh:NodeShape;
+kkgshape:RelatiesoortAlt2 rdf:type sh:NodeShape;
 	rdfs:label "Relatiesoort";
 	sh:name "Relatiesoort";
-	sh:targetNode kkg:Relatiesoort;
+	sh:targetNode kkg:RelatiesoortAlt2;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -567,6 +567,9 @@ kkgshape:authentiek rdf:type sh:NodeShape;
 		rdfs:label "authentiek";
 		sh:name "ldqd:trustworthiness";
 		sh:path ldqd:trustworthiness;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];
 .
 
@@ -574,8 +577,8 @@ kkgshape:code rdf:type sh:NodeShape;
 	sh:naam "code";
 	sh:property [
 		rdfs:label "code";
-		sh:name "xsd:simpletype";
-		sh:path xsd:simpletype;
+		sh:name "kkg:code";
+		sh:path kkg:code;
 		sh:datatype xsd:string;
 		sh:minCount 0;
 		sh:maxCount 1;
@@ -612,6 +615,9 @@ kkgshape:domeinFormeelPatroon rdf:type sh:NodeShape;
 		rdfs:label "domein formeel patroon";
 		sh:name "kkg:domeinFormeelPatroon";
 		sh:path kkg:domeinFormeelPatroon;
+		sh:node kkgshape:PrimitiefDatatype;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];
 .
 
@@ -621,6 +627,8 @@ kkgshape:domeinLengte rdf:type sh:NodeShape;
 		rdfs:label "domein lengte";
 		sh:name "kkg:domeinLengte"; 
 		sh:path kkg:domeinLengte;
+?		sh:datatype xsd:decimal;
+		sh:maxCount 1;
 	];   
 .
 
@@ -630,6 +638,9 @@ kkgshape:domeinPatroon rdf:type sh:NodeShape;
 		rdfs:label "domein patroon";
 		sh:name "kkg:domeinPatroon";
 		sh:path kkg:domeinPatroon;
+		sh:node kkgshape:PrimitiefDatatype;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];   
 .
 
@@ -639,15 +650,9 @@ kkgshape:domeinType rdf:type sh:NodeShape;
 		rdfs:label "domein type";
 		sh:name "kkg:domeinType"; 
 		sh:path kkg:domeinType;
-	];   
-.
-
-kkgshape:formeelPatroon rdf:type sh:NodeShape;
-	sh:naam "formeel patroon";
-	sh:property [
-		rdfs:label "formeel patroon";
-		sh:name 
-		sh:path
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -657,8 +662,9 @@ kkgshape:gerelateerdGegevensGroeptype rdf:type sh:NodeShape;
 		rdfs:label "gerelateerd gegevensgroeptype";
 		sh:name "gerelateerd gegevensgroeptype";
 		sh:node kkgshape:Gegevensgroeptype;
-		sh:name 
-		sh:path
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -668,6 +674,9 @@ kkgshape:gerelateerdObjecttype rdf:type sh:NodeShape;
 		rdfs:label "gerelateerd objecttype";
 		sh:name "gerelateerd objecttype";
 		sh:node kkgshape:Objecttype;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];
 .
 
@@ -678,6 +687,8 @@ kkgshape:herkomst rdf:type sh:NodeShape;
 		sh:name "dcterms:source";
 		sh:path dct:source;
 		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];
 .
 
@@ -687,6 +698,8 @@ kkgshape:herkomstDefinitie rdf:type sh:NodeShape;
 		rdfs:label "herkomst definitie";
 		sh:name "dcat:Dataset";
 		sh:path dcat:Dataset;
+		sh:datatype xsd:string;
+		sh:minCount 1;
 		sh:maxCount 1;
 	];
 .
@@ -695,8 +708,10 @@ kkgshape:identificerend rdf:type sh:NodeShape;
 	sh:naam "identificerend";
 	sh:property [
 		rdfs:label "identificerend";
-		sh:name 
-		sh:path
+		sh:name "kkg:identificerend"; 
+		sh:path kkg:identificerend;
+		sh:datatype xsd:string;
+		sh:maxCount 1;		
 	];   
 .
 
@@ -704,8 +719,11 @@ kkgshape:indicatieAbstractObject rdf:type sh:NodeShape;
 	sh:naam "indicatie abstract object";
 	sh:property [
 		rdfs:label "indicatie abstract object";
-		sh:name 
-		sh:path
+		sh:name "kkg:indicatieAbstractObject"; 
+		sh:path kkg:indicatieAbstractObject;
+		sh:datatype xsd:string; 
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -714,8 +732,10 @@ kkgshape:indicatieAfleidbaar rdf:type sh:NodeShape;
 	sh:property [
 		rdfs:label "indicatie afleidbaar";
 		sh:name "prov:wasDerivedFrom";
-		sh:name 
-		sh:path
+		sh:path prov:wasDerivedFrom;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -723,8 +743,11 @@ kkgshape:indicatieFormeleHistorie rdf:type sh:NodeShape;
 	sh:naam "indicatie formele historie";
 	sh:property [
 		rdfs:label "indicatie formele historie";
-		sh:name 
-		sh:path
+		sh:name "kkg:indicatieFormeleHistorie";		
+		sh:path kkg:indicatieFormeleHistorie;
+		sh:datatype xsd:datetime;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -732,8 +755,11 @@ kkgshape:indicatieMaterieleHistorie rdf:type sh:NodeShape;
 	sh:naam "indicatie materiele historie";
 	sh:property [
 		rdfs:label "indicatie materiele historie";
-		sh:name 
-		sh:path
+		sh:name "kkg:indicatieMaterieleHistorie";
+		sh:path kkg:indicatieMaterieleHistorie;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -743,6 +769,9 @@ kkgshape:kardinaliteit rdf:type sh:NodeShape;
 		rdfs:label "kardinaliteit";
 		sh:name "owl:cardinality";
 		sh:path owl:cardinality;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];
 .
 
@@ -752,6 +781,8 @@ kkgshape:kwaliteit rdf:type sh:NodeShape;
 		rdfs:label "kwaliteit";
 		sh:name "ldqd:semanticAccuracy";
 		sh:path ldqd:semanticAccuracy;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];
 .
 
@@ -759,19 +790,24 @@ kkgshape:locatie rdf:type sh:NodeShape;
 	sh:naam "locatie";
 	sh:property [
 		rdfs:label "locatie";
-		sh:name 
-		sh:path
+		sh:name "kkg:locatie";
+		sh:path kkg:locatie;
+?		sh:datatype xsd:anyURI;
+		sh:maxCount 1;
 	];   
 .
 
-kkgshape:mogelijkGeenWaarde rdf:type sh:NodeShape;
-	sh:naam "mogelijk geen waarde";
-	sh:property [
-		rdfs:label "mogelijk geen waarde";
-		sh:name "xsi:nil";
-		sh:path xsi:nil;
-	];
-.
+# kkgshape:mogelijkGeenWaarde rdf:type sh:NodeShape;
+#	sh:naam "mogelijk geen waarde";
+#	sh:property [
+#		rdfs:label "mogelijk geen waarde";
+#		sh:name "xsi:nil";
+#		sh:path xsi:nil;
+#		sh:datatype xsd:boolean;
+#		sh:minCount 1;
+#		sh:maxCount 1;
+#	];
+#.
 
 kkgshape:naam rdf:type sh:NodeShape;
 	sh:name "Naam";
@@ -789,17 +825,11 @@ kkgshape:objecttype rdf:type sh:NodeShape;
 	sh:naam "objecttype";
 	sh:property [
 		rdfs:label "objecttype";
-		sh:name 
-		sh:path
-	];   
-.
-
-kkgshape:patroon rdf:type sh:NodeShape;
-	sh:naam "patroon";
-	sh:property [
-		rdfs:label "patroon";
-		sh:name 
-		sh:path
+		sh:name "owl:Class";
+		sh:path owl:Class;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -809,6 +839,8 @@ kkgshape:populatie rdf:type sh:NodeShape;
 		rdfs:label "populatie";
 		sh:name "ldqd:completeness";
 		sh:path ldqd:completeness;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];
 .
 
@@ -818,6 +850,8 @@ kkgshape:toelichting rdf:type sh:NodeShape;
 		rdfs:label "toelichting";
 		sh:name "skos:scopeNote";
 		sh:path skos:scopeNote;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];
 .
 
@@ -825,8 +859,11 @@ kkgshape:typeAggregatie rdf:type sh:NodeShape;
 	sh:naam "type aggregatie";
 	sh:property [
 		rdfs:label "type aggregatie";
-		sh:name 
-		sh:path
+		sh:name "kkg:typeAggregatie";
+		sh:path kkg:typeAggregatie;
+?		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -834,8 +871,11 @@ kkgshape:uniDirectioneel rdf:type sh:NodeShape;
 	sh:naam "uni-directioneel";
 	sh:property [
 		rdfs:label "uni-directioneel";
-		sh:name 
-		sh:path
+		sh:name "kkg:uniDirectioneel";
+		sh:path kkg:uniDirectioneel;
+		sh:datatype xsd:boolean;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];   
 .
 
@@ -845,6 +885,9 @@ kkgshape:uniekeAanduiding rdf:type sh:NodeShape;
 		rdfs:label "unieke aanduiding";
 		sh:name "skos:notation";
 		sh:path skos:notation;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];
 .
 
