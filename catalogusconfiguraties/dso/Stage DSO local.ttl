@@ -838,7 +838,7 @@ container:excelupdate a elmo:Container;
 							?s rdfs:label ?label.
 						}
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -848,7 +848,7 @@ container:excelupdate a elmo:Container;
 							?s rdfs:label ?label.
 						}
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -856,7 +856,7 @@ container:excelupdate a elmo:Container;
 						?s rdf:type skos:Concept.
 						?s rdfs:label ""^^xsd:string.
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -864,7 +864,7 @@ container:excelupdate a elmo:Container;
 						?s rdf:type skos:Collection.
 						?s rdfs:label ""^^xsd:string.
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 				}
@@ -885,7 +885,7 @@ container:excelupdate a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -895,7 +895,7 @@ container:excelupdate a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -903,7 +903,7 @@ container:excelupdate a elmo:Container;
 						?s rdf:type skos:Concept.
 						?s skos:prefLabel ""^^xsd:string.
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -911,7 +911,7 @@ container:excelupdate a elmo:Container;
 						?s rdf:type skos:Collection.
 						?s skos:prefLabel ""^^xsd:string.
 						FILTER(
-							?s != <http://localhost:8080/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 				}
@@ -1472,7 +1472,7 @@ container:concepten-put-jsonld a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 	];
 	elmo:assertion [
 		elmo:assert-not '''
@@ -1507,7 +1507,7 @@ container:concepten-put-jsonld a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1574,7 +1574,7 @@ container:concepten-post-jsonld a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 	];
 	elmo:assertion [
 		elmo:assert-not '''
@@ -1609,7 +1609,7 @@ container:concepten-post-jsonld a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1678,7 +1678,7 @@ container:concepten-put-ttl a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 	];
 	elmo:assertion [
 		elmo:assert-not '''
@@ -1713,7 +1713,7 @@ container:concepten-put-ttl a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1780,7 +1780,7 @@ container:concepten-post-ttl a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 	];
 	elmo:assertion [
 		elmo:assert-not '''
@@ -1815,7 +1815,7 @@ container:concepten-post-ttl a elmo:Container;
 				}
 			}
 		''';
-		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 
@@ -2186,19 +2186,21 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				concept:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
+		
 		INSERT {
 			GRAPH container:generiek {
 				?s skos:inScheme <@DATASET@>.
-				}
 			}
+		}
 		WHERE {
 			GRAPH container:generiek {
-					?s rdf:type ?type.
-					FILTER (?type = skos:Concept
-							|| ?type = skos:Collection
-					)
-				}
+				?s rdf:type ?type.
+				FILTER (
+					?type = skos:Concept
+					|| ?type = skos:Collection
+				)
 			}
+		}
 
 		INSERT {
 			GRAPH container:generiek {
@@ -2237,6 +2239,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		WHERE {
 			GRAPH container:generiek {
 				?s rdf:type ?type.
+				?s skos:inScheme ?scheme.
 			    ?s ?p ?o.
 			    ?s bp4mc2:signature ?sig
 				FILTER (
@@ -2255,11 +2258,11 @@ stage:DSOUploadScenePUT a elmo:Scene;
 					?s bp4mc2:signature ?sig
 				}
 			}
-			FILTER NOT EXISTS {
-				GRAPH doc:mastergraph {
-					?s skos:inScheme ?o.
-				}
-			}	
+			#FILTER NOT EXISTS {
+			#	GRAPH doc:mastergraph {
+			#		?s skos:inScheme ?scheme.
+			#	}
+			#}	
 		}
 		
 		INSERT {
