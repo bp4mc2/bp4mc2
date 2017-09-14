@@ -36,183 +36,152 @@ Onderstaande tabel geeft alle KKG tagged values weer, inclusief de mapping naar 
 Lege value in betekenis betekend zelfde betekenis als bij zelfde tagged value in andere categorie. > voor betekenis staat voor afwijkende betekenis ten opzichte van andere categorie.
 
 | Tagged value type (key)		| RDF property 					 	| Categorie 				|Betekenis
-|-------------------------------|--------------------------------	|---------------------------|-------------------------------
+|-------------------------------|-----------------------------------|---------------------------|-------------------------------
 | Authentiek 					| ldqd:trustworthiness			 	| Attribuutsoort			| Aanduiding of het een authentiek gegeven betreft. 	
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| > Aanduiding of de attribuutsoort waarvan de relatiesoort is afgeleid, een authentiek gegeven (attribuutsoort) betreft.
-																	| Relatierol				| 
-
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| > Aanduiding of de attribuutsoort waarvan de relatiesoort is afgeleid, een authentiek gegeven (attribuutsoort) betreft.
+|								|									| Relatierol				| 
 | Bezit 						| kkg:bezit						 	| ?							| ?																								
-
 | Code 							| kkg:code		 				 	| Enumeratie(waarden)		| De in een registratie of informatiemodel aan de enumeratiewaarde toegekende unieke code.																								
-																	| Attribuutsoort			|
-
+|								|									| Attribuutsoort			|
 | Datum opname 					| prov:generatedAtTime 			 	| Objecttype				| De datum waarop <categorie> is opgenomen in het informatiemodel.																								
-																	| Attribuutsoort			| 
-																	| Gegevensgroep				| 
-																	| Gegevensgroeptype			| 
-																	| Relatiesoort				| 
-																	| Relatierol				| 
-																	| Externe koppeling			| 
-																	| Referentielijst			| 
-																	| Referentie element		| 
-																	| Datatype					| 
-																	| Codelist					| 
-																	| Gestructureerd datatype	| 
-																	| Union 					| 
-
+|								|									| Attribuutsoort			| 
+|								|									| Gegevensgroep				| 
+|								|									| Gegevensgroeptype			| 
+|								|									| Relatiesoort				| 
+|								|									| Relatierol				| 
+|								|									| Externe koppeling			| 
+|								|									| Referentielijst			| 
+|								|									| Referentie element		| 
+|								|									| Datatype					| 
+|								|									| Codelist					| 
+|								|									| Gestructureerd datatype	| 
+|								|									| Union 					| 
 | Definitie 					| skos:definition 				 	| Objecttype				| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie of informatiemodel.																								
-																	| Attribuutsoort			| De beschrijving van de betekenis van <categorie>.
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| > De beschrijving van de betekenis van <categorie>. Deze is verplicht als er geen source role respectievelijk target role is gespecificeerd.
-																	| Relatierol				| 
-																	| Relatieklasse				| 
-																	| Referentielijst			| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie.
-																	| Referentie element		| 
-																	| Codelist					| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Datatype					| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Gestructureerd datatype	| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Data element				| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Union						| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Union element				| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Extern					| > De beschrijving van de betekenis van het package, gezien vanuit het eigen informatiemodel.
-																	| View						| 
-																	| Enumeratie(waarden}		| > De beschrijving van de betekenis van de enumeratie(waarde) zoals gespecificeerd in de catalogus van de desbetreffende registratie.
-
+|								|									| Attribuutsoort			| De beschrijving van de betekenis van <categorie>.
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| > De beschrijving van de betekenis van <categorie>. Deze is verplicht als er geen source role respectievelijk target role is gespecificeerd.
+|								|									| Relatierol				| 
+|								|									| Relatieklasse				| 
+|								|									| Referentielijst			| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie.
+|								|									| Referentie element		| 
+|								|									| Codelist					| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Datatype					| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Gestructureerd datatype	| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Data element				| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Union						| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Union element				| > De beschrijving van de betekenis van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Extern					| > De beschrijving van de betekenis van het package, gezien vanuit het eigen informatiemodel.
+|								|									| View						| 
+|								|									| Enumeratie(waarden}		| > De beschrijving van de betekenis van de enumeratie(waarde) zoals gespecificeerd in de catalogus van de desbetreffende registratie.
 | Domein.FormeelPatroon			| kkg:domeinFormeelPatroon		 	| Attribuutsoort			| Zoals patroon, formeel vastgelegd (met een reguliere expressie), uitgedrukt in een formele taal die door de computer wordt herkend.
-																	| Referentie element		| 
-																	| Datatype					| 
-																	| Data element				| 
-																	| Union element				|
-																	| Gestructureerd datatype	|
-
+|								|									| Referentie element		| 
+|								|									| Datatype					| 
+|								|									| Data element				| 
+|								|									| Union element				|
+|								|									| Gestructureerd datatype	|
 | Domein.Lengte 				| kkg:domeinLengte				 	| Attribuutsoort			| De aanduiding van de lengte van een gegeven. Getallen kunnen altijd positief of negatief zijn.
-																	| Referentie element		| 
-																	| Datatype					| 
-																	| Data element				| 
-																	| Union element				| 
-
+|								|									| Referentie element		| 
+|								|									| Datatype					| 
+|								|									| Data element				| 
+|								|									| Union element				| 
 | Domein.Patroon 				| kkg:domeinPatroon				 	| Attribuutsoort			| De verzameling van waarden die gegevens van deze attribuutsoort kunnen hebben, oftewel het waardenbereik, uitgedrukt in een specifieke structuur.																								
-																	| Referentie element		| 
-																	| Datatype					| 
-																	| Data element				| 
-																	| Union element				| 
-																	| Gestructureerd datatype	|
-
+|								|									| Referentie element		| 
+|								|									| Datatype					| 
+|								|									| Data element				| 
+|								|									| Union element				| 
+|								|									| Gestructureerd datatype	|
 | Domein.Type 					| kkg:domeinType				 	| Attribuutsoort			| Het type waarmee waarden van deze attribuutsoort worden vastgelegd. Dit is altijd conform een datatype uit dit metamodel (of een extensie ervan). Betreft het een waarde uit een dynamische waardentabel, dan wordt de naam van de desbetreffende referentielijst of codelist als type vermeld. Indien het een waarde uit een statische opsomming van waarden betreft, dan wordt de naam van de desbetreffende enumeratie als type vermeld.
-																	| Referentie element		| 
-																	| Data element				| 
-																	| Union element				| 
-
+|								|									| Referentie element		| 
+|								|									| Data element				| 
+|								|									| Union element				| 
 | Gerelateerd objecttype 		| kkg:gerelateerdObjecttype		 	| Relatiesoort				| Het objecttype waarmee een objecttype een logisch verband heeft
-																	| Externe koppeling			| Het objecttype uit een extern informatiemodel waarmee een objecttype een logische verbinding heeft.
-								| thes:narrowerGeneric				| Generalisatie				| Het objecttype dat de generalisatie is van een (ander) objecttype.
-																	
+|								|									| Externe koppeling			| Het objecttype uit een extern informatiemodel waarmee een objecttype een logische verbinding heeft.
+|								| thes:narrowerGeneric				| Generalisatie				| Het objecttype dat de generalisatie is van een (ander) objecttype.
 | Heeft 						| kkg:Gegevensgroep 			 	| Attribuutsoort			| ?
-
 | Herkomst 						| skos:editorialNote 			 	| Objecttype				| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar het objecttype deel van uitmaakt). Deze specificatie is toegevoegd omdat het wel duidelijk moet zijn in welke (basis)registratie of informatiemodel het objecttype voorkomt (indien van toepassing).																								
-																	| Attribuutsoort			| De registratie of het informatiemodel waaraan <categorie> ontleend is dan wel de eigen organisatie indien het door de eigen organisatie toegevoegd is.
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| > De registratie of het informatiemodel waaraan <categorie> ontleend is, dan wel de eigen organisatie. Indien zelf toegevoegd, dan is de herkomst de eigen organisatie.
-																	| Relatierol				| 
-																	| Referentielijst			| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar de referentielijst deel van uitmaakt).
-																	| Codelist					| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar de lijst deel van uitmaakt).
-																	| Datatype					| 
-																	| Gestructureerd datatype	| 
-																	| Union						| 
-																	| Extern					| > De registratie of het informatiemodel waaraan het package ontleend is. Bij een view is de herkomst nooit de eigen organsiatie.
-																	| View						| > De registratie of het informatiemodel waaraan het package ontleend is. Bij een view is de herkomst nooit de eigen organsiatie.
-
+|								|									| Attribuutsoort			| De registratie of het informatiemodel waaraan <categorie> ontleend is dan wel de eigen organisatie indien het door de eigen organisatie toegevoegd is.
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| > De registratie of het informatiemodel waaraan <categorie> ontleend is, dan wel de eigen organisatie. Indien zelf toegevoegd, dan is de herkomst de eigen organisatie.
+|								|									| Relatierol				| 
+|								|									| Referentielijst			| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar de referentielijst deel van uitmaakt).
+|								|									| Codelist					| > De registratie in wiens catalogus <categorie> is gespecificeerd (oftewel de registratie waar de lijst deel van uitmaakt).
+|								|									| Datatype					| 
+|								|									| Gestructureerd datatype	| 
+|								|									| Union						| 
+|								|									| Extern					| > De registratie of het informatiemodel waaraan het package ontleend is. Bij een view is de herkomst nooit de eigen organsiatie.
+|								|									| View						| > De registratie of het informatiemodel waaraan het package ontleend is. Bij een view is de herkomst nooit de eigen organsiatie.
 | Herkomst definitie 			| dct:source 					 	| Objecttype				| > Voor objecttypen die deel uitmaken van een registratie is de definitie hieruit overgenomen. 	
-																	| Attribuutsoort			| De registratie of het informatiemodel waaruit de definitie is overgenomen dan wel een aanduiding die aangeeft uit welke bronnen de definitie is samengesteld.
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| 
-																	| Relatierol				| 
-
+|								|									| Attribuutsoort			| De registratie of het informatiemodel waaruit de definitie is overgenomen dan wel een aanduiding die aangeeft uit welke bronnen de definitie is samengesteld.
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| 
+|								|									| Relatierol				| 
 | Identificerend 				| kkg:identificerend			 	| Attribuutsoort			| Aanduiding dat attribuutsoort onderdeel uitmaakt van de unieke aanduiding van een object																								
-
 | Indicatie abstract object 	| kkg:indicatieAbstractObject	 	| Objecttype				| Conceptueel model: indicatie dat het objecttype een generalisatie is, waarvan een object als specialisatie altijd voorkomt in de hoedanigheid van een (en slechts één) van de specialisaties van het betreffende objecttype. 
-																								| Logisch model: Indicatie dat er geen instanties (objecten) voor het betreffende objecttype mogen voorkomen.
-
+|								|									|							| Logisch model: Indicatie dat er geen instanties (objecten) voor het betreffende objecttype mogen voorkomen.
 | Indicatie afleidbaar 			| prov:wasDerivedFrom 			 	| Attribuutsoort			| Aanduiding dat gegeven afleidbaar is uit andere attribuut- en/of relatiesoorten.																								
-																	| Relatiesoort				| 
-
+|								|									| Relatiesoort				| 
 | Indicatie formele historie	| kkg:indicatieFormeleHistorie	 	| Attribuutsoort			| Indicatie of de formele historie van <categorie> te bevragen is. Formele historie geeft aan wanneer in de administratie een verandering is verwerkt van de attribuutwaarde (wanneer was de verandering bekend en is deze verwerkt).
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| 
-																	| Relatierol				| 
-
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| 
+|								|									| Relatierol				| 
 | Indicatie materiële historie 	| kkg:indicatieMaterieleHistorie 	| Attribuutsoort			| Indicatie of de materiële historie van <categorie> te bevragen is. Materiële historie geeft aan wanneer een verandering is opgetreden in de werkelijkheid die heeft geleid tot verandering van de attribuutwaarde.
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| 
-																	| Relatierol				| 
-
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| 
+|								|									| Relatierol				| 
 | Kardinaliteit 				| sh:minCount / sh:maxCount		 	| Attribuutsoort			| Deze indicatie geeft aan hoeveel keer waarden van deze attribuutsoort kunnen voorkomen bij een object van het betreffende objecttype, of bij het betreffende gegevensgroeptype. Indien een attribuutsoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van het attribuutsoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van hoe vaak een gegeven voorkomt bij het object moet rekening gehouden worden met de kardinaliteit van de gegevensgroep en met de kardinaliteit van de attribuutsoort.																								
-																	| Gegevensgroep				| Deze indicatie geeft aan hoeveel keer de gegevensgroep kan voorkomen bij een object van het betreffende objecttype. Indien een attribuutsoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van het attribuutsoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van hoe vaak een gegeven voorkomt bij het object moet rekening gehouden worden met de kardinaliteit van de gegevensgroep en met de kardinaliteit van de attribuutsoort.
-																	| Relatiesoort				| Deze indicatie geeft aan hoeveel keer waarden van deze relatiesoort (i.c. relaties) kunnen voorkomen bij een object van het betreffende objecttype. Indien een relatiesoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van de relatiesoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van de relatiesoort moet ook rekening gehouden worden met de kardinaliteit van het gegevensgroeptype.
-																	| Relatierol				| Deze indicatie geeft aan hoeveel keer waarden van deze relatierol kunnen voorkomen.
-																	| Referentie element		| Deze indicatie geeft aan hoeveel keer waarden van dit referentie-element kunnen voorkomen bij een refentielijst van het betreffende type
-																	| Data element				| Deze indicatie geeft aan hoeveel keer waarden van dit data-element kunnen voorkomen bij een refentielijst van het betreffende type.
-																	| Union element				| Deze indicatie geeft aan hoeveel keer waarden van dit unionelement kunnen voorkomen bij een referentielijst van het betreffende type. De kardinaliteit van een unionelement is altijd 1.
-
+|								|									| Gegevensgroep				| Deze indicatie geeft aan hoeveel keer de gegevensgroep kan voorkomen bij een object van het betreffende objecttype. Indien een attribuutsoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van het attribuutsoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van hoe vaak een gegeven voorkomt bij het object moet rekening gehouden worden met de kardinaliteit van de gegevensgroep en met de kardinaliteit van de attribuutsoort.
+|								|									| Relatiesoort				| Deze indicatie geeft aan hoeveel keer waarden van deze relatiesoort (i.c. relaties) kunnen voorkomen bij een object van het betreffende objecttype. Indien een relatiesoort deel uit maakt van een gegevensgroeptype, dan wordt de kardinaliteit vermeld van de relatiesoort binnen het gegevensgroeptype. Voor de uiteindelijke kardinaliteit van de relatiesoort moet ook rekening gehouden worden met de kardinaliteit van het gegevensgroeptype.
+|								|									| Relatierol				| Deze indicatie geeft aan hoeveel keer waarden van deze relatierol kunnen voorkomen.
+|								|									| Referentie element		| Deze indicatie geeft aan hoeveel keer waarden van dit referentie-element kunnen voorkomen bij een refentielijst van het betreffende type
+|								|									| Data element				| Deze indicatie geeft aan hoeveel keer waarden van dit data-element kunnen voorkomen bij een refentielijst van het betreffende type.
+|								|									| Union element				| Deze indicatie geeft aan hoeveel keer waarden van dit unionelement kunnen voorkomen bij een referentielijst van het betreffende type. De kardinaliteit van een unionelement is altijd 1.
 | Kwaliteit 					| ldqd:semanticAccuracy 		 	| Objecttype				| Voor objecttypen die deel uitmaken van een registratie betreft dit de waarborgen voor de juistheid van de in de registratie opgenomen objecten van het desbetreffende type.																								
-
 | Locatie 						| ? kkg:locatie  				 	| Attribuutsoort			| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Dit is in principe een URI (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).																								
-																	| Codelist					| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Indien mogelijk is de verwijzing een URI of een URL (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).
-																	| Extern					| De verwijzing naar de locatie van het bijbehorende package (dit kan een geheel model zijn in één package). Indien mogelijk is de verwijzing een URI of een URL.
-																	| View						| De verwijzing naar de locatie van het bijbehorende informatiemodel waar de view over gaat. Indien mogelijk is de verwijzing een URI of een URL.
-
+|								|									| Codelist					| Als het type van het attribuutsoort een waardenlijst is, dan wordt hier de locatie waar deze te vinden is opgegeven. Indien mogelijk is de verwijzing een URI of een URL (als er geen URI is, dan kan dit een URL zijn, waar de waardenlijst op basis van de naam van de waardenlijst te vinden is).
+|								|									| Extern					| De verwijzing naar de locatie van het bijbehorende package (dit kan een geheel model zijn in één package). Indien mogelijk is de verwijzing een URI of een URL.
+|								|									| View						| De verwijzing naar de locatie van het bijbehorende informatiemodel waar de view over gaat. Indien mogelijk is de verwijzing een URI of een URL.
 | Mogelijk geen waarde 			| ? xsi:nil 					 	| Attribuutsoort			| Aanduiding dat attribuutsoort geen waarde kan bevatten (de waarde zou er kunnen zijn, maar kan ook onbekend zijn, of bewust weggelaten). 																						
-																	| Relatiesoort				| Aanduiding dat relatiesoort geen waarde met betekenis kan bevatten.
-																	| Relatierol				| Aanduiding dat relatierol geen waarde met betekenis kan bevatten.
-
+|								|									| Relatiesoort				| Aanduiding dat relatiesoort geen waarde met betekenis kan bevatten.
+|								|									| Relatierol				| Aanduiding dat relatierol geen waarde met betekenis kan bevatten.
 | Naam 							| skos:prefLabel 				 	| Objecttype				| De naam van <categorie>.
-																	| Attribuutsoort			| 
-																	| Gegevensgroep				| 
-																	| Gegevensgroeptype			| 
-																	| Relatiesoort				| 
-																	| Relatierol				| 
-																	| Generalisatie				| De naam van <categorie>. Standaard ‘is specialisatie van’.
-																	| Relatieklasse				| 
-																	| Externe koppeling			| De naam van <categorie>. Standaard ‘betreft’.
-																	| Referentielijst			| 
-																	| Referentie element		| 
-																	| Codelist					| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie dan wel, indien het een door de eigen organisatie toegevoegde lijst betreft, de door de eigen organisatie vastgestelde naam.
-																	| Datatype					| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Gestructureerd datatype	| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Data element				| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Union						| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Union element				| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
-																	| Extern					| > De naam van <categorie> zoals gespecificeerd door de externe instantie.
-																	| View						| 
-																	| Enumeratie(waarden)		| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie.
-																	| Constraint				| 
-
+|								|									| Attribuutsoort			| 
+|								|									| Gegevensgroep				| 
+|								|									| Gegevensgroeptype			| 
+|								|									| Relatiesoort				| 
+|								|									| Relatierol				| 
+|								|									| Generalisatie				| De naam van <categorie>. Standaard ‘is specialisatie van’.
+|								|									| Relatieklasse				| 
+|								|									| Externe koppeling			| De naam van <categorie>. Standaard ‘betreft’.
+|								|									| Referentielijst			| 
+|								|									| Referentie element		| 
+|								|									| Codelist					| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie dan wel, indien het een door de eigen organisatie toegevoegde lijst betreft, de door de eigen organisatie vastgestelde naam.
+|								|									| Datatype					| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Gestructureerd datatype	| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Data element				| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Union						| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Union element				| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende (basis)registratie.
+|								|									| Extern					| > De naam van <categorie> zoals gespecificeerd door de externe instantie.
+|								|									| View						| 
+|								|									| Enumeratie(waarden)		| > De naam van <categorie> zoals gespecificeerd in de catalogus van de desbetreffende registratie.
+|								|									| Constraint				| 
 | Populatie 					| ldqd:completeness 			 	| Objecttype				| Voor objecttypen die deel uitmaken van een (basis)registratie betreft dit de beschrijving van de exemplaren van het gedefinieerde objecttype die in de desbetreffende (basis)-registratie voorhanden zijn.																								
-
 | Specificatie formeel 			| kkg:specificatieFormeel		 	| Constraint				| De beschrijving van de constraint in een formele specificatietaal, in OCL
-
 | Specificatie tekst 			| kkg:specificatieTekst 		 	| Constraint				| De specificatie van de constraint in normale tekst.
-
 | Toelichting 					| skos:scopeNote 				 	| Objecttype				| > Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de daarin opgenomen toelichting.
-																	| Attribuutsoort			| Een inhoudelijke toelichting op <categorie>.
-																	| Gegevensgroep				| 
-																	| Relatiesoort				| 
-																	| Relatierol				| 
-																	| Referentielijst			| > Voor lijsten die deel uitmaken van een registratie betreft dit de daarin opgenomen toelichting.
-																	| Referentie element		| 
-																	| Codelist					| > Voor lijsten die deel uitmaken van een registratie betreft dit de daarin opgenomen toelichting.
-
+|								|									| Attribuutsoort			| Een inhoudelijke toelichting op <categorie>.
+|								|									| Gegevensgroep				| 
+|								|									| Relatiesoort				| 
+|								|									| Relatierol				| 
+|								|									| Referentielijst			| > Voor lijsten die deel uitmaken van een registratie betreft dit de daarin opgenomen toelichting.
+|								|									| Referentie element		| 
+|								|									| Codelist					| > Voor lijsten die deel uitmaken van een registratie betreft dit de daarin opgenomen toelichting.
 | Type aggregatie 				| kkg:typeAggregatie			 	| Relatiesoort				| Standaard betreft het geen aggregatie (None). Het type aggregatie mag ‘composite’ zijn. Dit wordt gedaan als er een afhankelijkheid is in die zin dat de target niet kan bestaan zonder de source: de target vervalt als de source vervalt.																								
-																	| Externe koppeling			| Aanduiding dat het een compositie relatie is. Waarde is altijd Composite.
-
+|								|									| Externe koppeling			| Aanduiding dat het een compositie relatie is. Waarde is altijd Composite.
 | Uni-directioneel 				| kkg:uniDirectioneel			 	| Relatiesoort				| Het gerelateerde objecttype (de target) waarvan het objecttype, die de eigenaar is van deze relatie (de source), kennis heeft. Alle relaties zijn altijd gericht van het objecttype (source) naar het gerelateerde objecttype (target).
-																	| Externe koppeling			| Het gerelateerde objecttpe uit een extern informatiemodel (de target) waarvan het objecttype die de eigenaar van deze relatie is (de source) kennis heeft. Het aggregation type van de source is altijd ‘composition’. Alle relaties zijn altijd gericht van het objecttype (source) naar het gerelateerde objecttype (target).
-
+|								|									| Externe koppeling			| Het gerelateerde objecttpe uit een extern informatiemodel (de target) waarvan het objecttype die de eigenaar van deze relatie is (de source) kennis heeft. Het aggregation type van de source is altijd ‘composition’. Alle relaties zijn altijd gericht van het objecttype (source) naar het gerelateerde objecttype (target).
 | Unieke aanduiding 			| skos:notation 				 	| Objecttype				| Voor objecttypen die deel uitmaken van een (basis)registratie of informatiemodel betreft dit de wijze waarop daarin voorkomende objecten (van dit type) uniek in de registratie worden aangeduid.																								
-
 | Verwijst naar 				| kkg:verwijstNaar 				 	| Objecttype				|																								
-
 | Verwijst naar generieke 		| ? rdfs:type 			 		 	|							|																								
 
 
