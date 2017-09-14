@@ -36,13 +36,13 @@ stage:Shape_content elmo:index "1";
 		prefix dcterms: <http://purl.org/dc/terms/>
 		construct {
 			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> shacl:scopeClass ?class.
+			<@SUBJECT@> shacl:targetClass ?class.
 			<@SUBJECT@> rdfs:comment ?comment.
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				<@SUBJECT@> rdfs:label ?slabel.
-				<@SUBJECT@> shacl:scopeClass ?class.
+				<@SUBJECT@> shacl:targetClass ?class.
 				OPTIONAL {
 					{
 						{?class rdfs:comment ?comment}
@@ -71,7 +71,7 @@ stage:Shape_properties a elmo:Represention;
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				<@SUBJECT@> shacl:property ?pc.
-				?pc shacl:predicate ?pred.
+				?pc shacl:path ?pred.
 				OPTIONAL {?pc shacl:class ?refclass}
 				OPTIONAL {
 					{
@@ -98,7 +98,7 @@ stage:Shape_model a elmo:Representation;
 			?class rdf:type rdfs:Class.
 			?class rdfs:subClassOf ?super.
 			?shape shacl:targetClass ?class.
-			?shape rdf:type shacl:Shape.
+			?shape rdf:type shacl:NodeShape.
 			?shape shacl:property ?pc.
 			?pc ?ppc ?opc.
 			?pclass rdf:type rdfs:Class.
@@ -106,7 +106,7 @@ stage:Shape_model a elmo:Representation;
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				<@SUBJECT@> shacl:scopeClass ?subject.
+				<@SUBJECT@> shacl:targetClass ?subject.
 				?subject rdfs:subClassOf* ?class.
 				OPTIONAL {
 					?class rdfs:label ?clabel
@@ -116,7 +116,7 @@ stage:Shape_model a elmo:Representation;
 					?class rdfs:subClassOf ?super.
 				}
 				OPTIONAL {
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 					?shape shacl:property ?pc.
 					?pc ?ppc ?opc.
 					OPTIONAL {

@@ -40,27 +40,27 @@ stage:ReqModelYedQuery a elmo:Query;
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape rdf:type shacl:Shape.
+					?shape rdf:type shacl:NodeShape.
 					OPTIONAL {
-						?shape shacl:scopeClass ?element
+						?shape shacl:targetClass ?element
 					}
 					OPTIONAL {?shape rdfs:label ?slabel}
 					OPTIONAL {
-						?shape shacl:scopeClass/rdfs:subClassOf ?super.
-						?sshape shacl:scopeClass ?super
+						?shape shacl:targetClass/rdfs:subClassOf ?super.
+						?sshape shacl:targetClass ?super
 					}
 					OPTIONAL {
 						?shape shacl:property ?pctype.
-						?pctype shacl:predicate rdf:type.
+						?pctype shacl:path rdf:type.
 						?pctype shacl:hasValue ?role.
-						?rshape shacl:scopeClass ?role.
+						?rshape shacl:targetClass ?role.
 					}
 				}
 				UNION {
 					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						?pc shacl:valueShape ?cshape.
 						OPTIONAL {?pc rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:minCount ?minc}
@@ -72,7 +72,7 @@ stage:ReqModelYedQuery a elmo:Query;
 					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						?pc shacl:class ?class.
 						?cshape shacl:scopeClass ?class.
 						OPTIONAL {?pc rdfs:label ?plabel}
@@ -85,7 +85,7 @@ stage:ReqModelYedQuery a elmo:Query;
 					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						OPTIONAL {?pc rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:datatype ?datatype}
 						OPTIONAL {?pc shacl:minCount ?minc}
@@ -94,7 +94,7 @@ stage:ReqModelYedQuery a elmo:Query;
 							?pc shacl:class ?class.
 						}
 						FILTER NOT EXISTS {
-							?pc shacl:predicate rdf:type.
+							?pc shacl:path rdf:type.
 						}
 					}
 					group by ?shape

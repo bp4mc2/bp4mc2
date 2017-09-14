@@ -919,7 +919,6 @@ container:excelupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
-    elmo:query stage:DSOUploadScenePUT;
 .
 
 # Updatecontainer Turtle
@@ -2107,6 +2106,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix loc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/>
 		prefix versiongraph: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix versionDataset: <http://data.ontwikkeling.pdok.nl/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
 		prefix usergraph: <http://data.ontwikkeling.pdok.nl/catalogus/dso/>
 		prefix dataset: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/dataset/>
 		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/concept/>
@@ -2121,6 +2121,16 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		WHERE {
 			GRAPH versiongraph:version {
 				?s?p?o
+			}
+		}
+		DELETE { 
+			GRAPH versionDataset:version {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH versionDataset:version {
+				?s ?p ?o
 			}
 		}
 		
@@ -2145,6 +2155,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
+				versionDataset:version dct:isVersionOf doc:mastergraph.
 				dataset:concepten rdf:type skos:ConceptScheme.
 				dataset:concepten rdfs:label "Conceptschema".
 			}
@@ -2153,10 +2164,12 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		INSERT {
 			GRAPH versiongraph:version {
 				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				dataset:Datasets rdfs:isDefinedBy versionDataset:version.
 				versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
 				versiongraph:version prov:wasGeneratedBy activity:Upload.
 				versiongraph:version rdf:type prov:Entity.
 				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				versionDataset:version dct:modified "@CURRENTMOMENT@".
 				activity:Upload rdf:type prov:Activity.
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
@@ -2546,14 +2559,14 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		INSERT {
 			GRAPH doc:mastergraph {
 				doc:mastergraph rdf:type void:Dataset.
-				doc:mastergraph rdfs:label "Concepten".
+				doc:mastergraph rdfs:label "Datasets".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
 			}
 		}
 		
 		INSERT {
 			GRAPH versiongraph:version {
-				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				dataset:Datasets rdfs:isDefinedBy versiongraph:version.
 				versiongraph:version rdfs:label "Datasets en distributies - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
 				versiongraph:version prov:wasGeneratedBy activity:Upload.
 				versiongraph:version rdf:type prov:Entity.
@@ -2575,9 +2588,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-INSERT {
+		INSERT {
 			GRAPH container:datasetupdate{
-				?s wdrs:describedby <@MODEL@>
+				?s wdrs:describedby <@MODEL@>.
+				?s dct:issued "@CURRENTMOMENT@".
 			}
 		}
 		WHERE {
@@ -2586,6 +2600,7 @@ INSERT {
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 		}
@@ -2606,6 +2621,7 @@ INSERT {
 						FILTER (
 							?type = dcat:Dataset
 							|| ?type = dcat:Distribution
+							|| ?type = dcat:Catalog
 						)
 					}
 					ORDER BY ?s ?p ?o
@@ -5779,6 +5795,7 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 			?o rdfs:label ?olabel.
 			<@IDSUBJECT@> prov:wasGeneratedBy ?a.
 			<@IDSUBJECT@> prov:generatedAtTime ?t.
+			<@IDSUBJECT@> dct:modified ?mt.
 			?a rdfs:label ?alabel.
 		}
 		WHERE {
