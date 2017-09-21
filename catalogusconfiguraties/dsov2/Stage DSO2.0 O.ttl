@@ -1,0 +1,674 @@
+#
+#
+#
+# PREFIXES
+#
+#
+#
+
+@prefix stage: 			  <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/stage#>.
+@prefix updatestage: 	<http://data.ontwikkeling.pdok.nl/catalogus/dsov2/update/>.
+@prefix elmo: 			  <http://bp4mc2.org/elmo/def#>.
+@prefix rdf: 		    	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 		  	<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xhtml: 	    	<http://www.w3.org/1999/xhtml/vocab#>.
+@prefix container: 		<http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>.
+@prefix skos: 			  <http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: 	  	<http://bp4mc2.org/skosax#>.
+@prefix skoslex: 	  	<http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: 		  	<http://purl.org/iso25964/skos-thes#>.
+@prefix dc: 		    	<http://purl.org/dc/elements/1.1/>.
+@prefix dct: 	    		<http://purl.org/dc/terms/>.
+@prefix dctype: 		  <http://purl.org/dc/dcmitype/>.
+@prefix geosparql: 		<http://www.opengis.net/ont/geosparql#>.
+@prefix sh: 		    	<http://www.w3.org/ns/shacl#>.
+@prefix owl: 		    	<http://www.w3.org/2002/07/owl#>.
+@prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>.
+@prefix prov: 	  		<http://www.w3.org/ns/prov#>.
+@prefix brt: 		     	<http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix vcard: 	  		<http://www.w3.org/2006/vcard/ns#>.
+@prefix xsd: 		    	<http://www.w3.org/2001/XMLSchema#>.
+@prefix iso: 		    	<http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix dcat: 	  		<http://www.w3.org/ns/dcat#>.
+@prefix adms: 	  		<http://www.w3.org/ns/adms#>.
+@prefix wdrs: 	  		<http://www.w3.org/2007/05/powder-s#>.
+@prefix yed: 	    		<http://bp4mc2.org/yed#>.
+@prefix sparql:       <http://www.w3.org/ns/sparql-service-description/>. 
+#
+#
+#
+# FRAMEWORK
+#
+#
+#
+
+#
+#
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+#
+#
+
+# Hoofdpagina beheer
+stage:DSOv2Beheerpagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dsov2/admin(|/)$";
+	elmo:contains stage:DSOv2Beheermenu;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "DSOv2";
+		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>"
+	]
+.
+
+
+#
+#
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+#
+#
+
+# Menubalk hoofdmenu
+stage:DSOv2Menu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+  elmo:data [
+    elmo:data [
+      rdfs:label "Home";
+      xhtml:link "/catalogus/dsov2";
+      elmo:index "1"
+    ];
+    elmo:data [
+      rdfs:label "Beheer";
+      xhtml:link "/catalogus/dsov2/admin";
+      elmo:index "2";
+    ];
+  ]
+.
+
+
+# Beheermenu
+stage:DSOv2Beheermenu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [
+			rdfs:label "Beheer";
+			xhtml:link "/catalogus/dsov2/admin";
+			elmo:index "0";
+		];
+		elmo:data [ 
+			rdfs:label "Home";
+			elmo:index "1";
+			xhtml:link "/catalogus/dsov2";
+		];
+		elmo:data [
+			rdfs:label "Concepten";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Voer nieuw concept op";
+				elmo:index "01";
+				xhtml:link "/catalogus/dsov2/container/concept-post-ttl";
+			];
+			elmo:data [
+				rdfs:label "Pas bestaand concept aan";
+				elmo:index "02";
+				xhtml:link "/catalogus/dsov2/container/concept-put-ttl";
+			];
+      elmo:data [
+				rdfs:label "Maak begrip bekend";
+				elmo:index "03";
+				xhtml:link "/catalogus/dsov2/update/concept-issue";
+			];
+      elmo:data [
+				rdfs:label "Laat begrip in werking treden";
+				elmo:index "04";
+				xhtml:link "/catalogus/dsov2/update/concept-enact";
+			];
+		];
+		elmo:data [
+			rdfs:label "Verwijderen";
+			elmo:index "5";
+			elmo:data [
+				rdfs:label "Verwijder alle data";
+				elmo:index "1";
+				xhtml:link "/catalogus/dsov2/update/clearalldata";
+			];
+			elmo:data [
+				rdfs:label "Verwijder enkel concept";
+				elmo:index "2";
+				xhtml:link "/catalogus/dsov2/update/clearsingleconcept";
+			];
+		];
+	]
+. 
+#
+#
+#
+# BEHEER CONCEPTEN
+#
+#
+#
+
+#
+# CONTAINERS
+#
+
+# Twee soorten containers:
+# POST
+# 	- Voegt Ã©Ã©n of meerdere nieuwe begrippen toe
+# 	- Geeft een foutmelding als Ã©Ã©n of meerdere van de geuploade begrippen al bestaan
+# PUT
+# 	- Update bestaande begrippen
+#	- Geeft een foutmelding als Ã©Ã©n of meerdere van de geuploade begrippen nog niet bestaan
+# 
+
+# Upload Turtle API ------------------------------------------------------------------------------------------------------------------------------
+
+# Container PUT Turtle Concepten
+container:concept-put-ttl a elmo:Container;
+  # Onderdelen
+  elmo:contains stage:DSOv2Beheermenu;
+  
+  # Weergave
+  elmo:representation elmo:UploadRepresentation;
+  rdfs:label "Update bestaand concept (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenPut;
+.
+
+# Container POST Turtle Concepten
+# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
+# Dit doen we pas na LDT2.0
+container:concept-post-ttl a elmo:Container;
+  # Onderdelen
+  elmo:contains stage:DSOv2Beheermenu;
+  
+  # Weergave
+  elmo:representation elmo:UploadRepresentation;
+  rdfs:label "Voeg nieuw concept toe (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenPost;
+.
+
+#
+# SCENES
+#
+
+stage:DSOv2ConceptenPost a elmo:Scene;
+	rdfs:label "Query voor verwerken POST";
+	elmo:index "2";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    
+    prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
+    
+    INSERT {
+      GRAPH transactie: {
+        transactie: rdf:type sparql:Graph;
+          rdfs:label "Eerste opname (Reserveren van het begrip in de Catalogus)";
+          prov:generatedAtTime "@CURRENTMOMENT@"^^xsd:dateTime.
+        
+        ?subject ?p ?o.
+        ?subject wdrs:describedBy ?doc.
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment.
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel;
+          ?p ?o.
+        
+        BIND( iri( concat( "http://regelgeving.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+        BIND( iri( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/",
+                            year( now () ), "-",
+                            month( now () ), "-",
+                            day( now () ), "T",
+                            hours( now() ), ":",
+                            minutes( now() ), ":",
+                            seconds( now() ),
+                            "/concept/",
+                            ?prefLabel ) ) AS ?doc )
+      }
+    }
+    
+		CLEAR GRAPH container:generiek
+	''';
+. 
+#
+#
+#
+# LIFECYCLE CONCEPTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle data over een enkel concept te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:concept-issue a elmo:Production;
+	elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:search-nonissued-concepts;
+	elmo:queryForm stage:DSOv2SelectNonIssuedConceptForm;
+	elmo:contains stage:IssueConceptScene;
+.
+
+stage:DSOv2SelectNonIssuedConceptForm a elmo:Form;
+	rdfs:label "Selecteer concept";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Selecteer concept"@nl;
+		elmo:valuesFrom stage:search-nonissued-concepts;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+# PARTS
+#
+
+stage:search-nonissued-concepts a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    
+		CONSTRUCT {
+			?concept rdfs:label ?label
+		}
+		WHERE {
+			GRAPH ?g {
+				?concept rdf:type skos:Concept;
+          wdrs:describedBy ?doc.
+          
+        ?doc adms:status adms-status:UnderDevelopment.
+    		BIND( str(?concept) AS ?label )
+			}
+      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER NOT EXISTS {
+        GRAPH ?docg {
+          {
+            ?newdoc prov:wasRevisionOf ?doc.
+          }
+          UNION
+          {
+            ?doc adms:status ?status.
+            FILTER( ?status != adms-status:UnderDevelopment )
+          }
+        }
+        FILTER regex( ?docg, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      }
+		}
+	''';
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:IssueConceptScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Maak begrip bekend";
+	elmo:query '''
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    prefix dcterms: <http://purl.org/dc/terms/>
+    
+    prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
+    
+    INSERT {
+      GRAPH transactie: {      
+        transactie: rdf:type sparql:Graph;
+          rdfs:label "Tweede opname (Bekendmaking van het begrip in de LVBB, en de registratie hiervan in de Catalogus)";
+          prov:generatedAtTime "@CURRENTMOMENT@"^^xsd:dateTime.
+
+        ?doc rdf:type prov:Entity;
+          adms:status skos-lex-status:Issued;
+          dcterms:issued "@CURRENTMOMENT@"^^xsd:date.
+      }
+    }
+    WHERE {
+      <@CONCEPT@> wdrs:describedBy ?doc.
+      FILTER NOT EXISTS {
+        ?newdoc prov:wasRevisionOf ?doc.
+      }
+    }
+	'''
+.
+ 
+#
+#
+#
+# CLEAR ALL DATA
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle gegevens te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearalldata a elmo:Production;
+	elmo:contains stage:DSOv2Beheermenu;
+	elmo:queryForm stage:DSOv2DummyForm;
+	elmo:contains stage:ClearAllDataScene;
+.
+
+# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
+stage:DSOv2DummyForm a elmo:Form.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearAllDataScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder alle data";
+	elmo:query '''
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+		DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+    
+    DELETE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				?s ?p ?o
+			}
+			FILTER regex( ?g, "http://data.ontwikkeling.pdok.nl/catalogus/dsov2/" )
+		}
+	'''
+.
+ 
+#
+#
+#
+# CLEAR ALL DATA
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Speciale pagina om alle data over een enkel concept te wissen
+# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
+updatestage:clearsingleconcept a elmo:Production;
+	elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:search_concepts;
+	elmo:queryForm stage:DSOv2SelectConceptForm;
+	elmo:contains stage:ClearSingleConceptScene;
+.
+
+stage:DSOv2SelectConceptForm a elmo:Form;
+	rdfs:label "Selecteer concept";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "concept";
+		rdfs:label "Selecteer concept"@nl;
+		elmo:valuesFrom stage:search_concepts;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+#
+# PARTS
+#
+
+stage:search_concepts a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		CONSTRUCT {
+			?concept rdfs:label ?label
+		}
+		WHERE {
+			GRAPH ?g {
+				?concept rdf:type skos:Concept.
+    		BIND( str(?concept) AS ?label )
+			}
+			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	''';
+.
+
+
+#
+# SCENES
+#
+
+# Scene gebruikt voor het verwijderen van alle data
+stage:ClearSingleConceptScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder enkel concept";
+	elmo:query '''
+		DELETE {
+			GRAPH ?g {
+				<@CONCEPT@> ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				<@CONCEPT@> ?p ?o
+			}
+      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	'''
+.
+ 
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:WeergavePaginaConcepten a elmo:Representation;
+  # Bereikbaarheid
+  elmo:uri-pattern "/id/concept/";
+  elmo:applies-to [
+		rdf:type skos:Concept
+	];
+  
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Data
+	elmo:query stage:WeergaveTabelConceptenQuery;
+.
+
+# Query voor WeergaveTabel
+stage:WeergaveTabelConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix dataset: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/dataset/>
+		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix tr: <http://data.ontwikkeling.pdok.nl/toepasbareregels/>
+		
+		construct {
+      ?graph prov:generatedAtTime ?time.
+			?graph ?p ?o.
+		}
+		where {
+      GRAPH ?graph {
+        ?graph prov:generatedAtTime ?time.
+        <@IDSUBJECT@> ?p ?o.
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	'''
+. 
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:WeergavePaginaConceptenMetadata a elmo:Representation;
+  # Bereikbaarheid
+  elmo:applies-to [
+		rdf:type prov:Entity
+	];
+  
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Data
+	elmo:query stage:WeergaveTabelConceptenMetadataQuery;
+.
+
+# Query voor WeergaveTabel
+stage:WeergaveTabelConceptenMetadataQuery a elmo:Query;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix thes: <http://purl.org/iso25964/skos-thes#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix dc: <http://purl.org/dc/terms/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix dataset: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/dataset/>
+		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
+		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix tr: <http://data.ontwikkeling.pdok.nl/toepasbareregels/>
+		
+		construct {
+      ?graph prov:generatedAtTime ?time.
+			?graph ?p ?o.
+		}
+		where {
+      GRAPH ?graph {
+        ?graph prov:generatedAtTime ?time.
+        <@SUBJECT@> ?p ?o.
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	'''
+. 
+#
+#
+#
+# OVERZICHTSPAGINA
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Overzichtspagina concepten
+stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
+  # Bereikbaarheid
+	elmo:url-pattern "/catalogus/dsov2(|/)$";
+  
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Weergave
+  elmo:appearance elmo:TableAppearance;
+  
+  # Data
+  elmo:query stage:DSOv2ConceptenQuery;
+.
+
+#
+# QUERY'S
+#
+
+# Query voor tonen alle concepten
+stage:DSOv2ConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/collection/>
+		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+      GRAPH ?graph {
+        ?concept rdf:type skos:Concept.
+        ?concept rdfs:label ?concept_label.
+        OPTIONAL {?concept skos:definition ?uitleg}
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.
+ 
