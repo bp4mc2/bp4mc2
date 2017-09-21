@@ -15,7 +15,8 @@
 updatestage:clearalldata a elmo:Production;
 	elmo:contains stage:DSOv2Beheermenu;
 	elmo:queryForm stage:DSOv2DummyForm;
-	elmo:contains stage:ClearAllDataScene;
+	elmo:contains stage:ClearTransactions;
+  elmo:contains stage:ClearContainers
 .
 
 # DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
@@ -27,11 +28,12 @@ stage:DSOv2DummyForm a elmo:Form.
 #
 
 # Scene gebruikt voor het verwijderen van alle data
-stage:ClearAllDataScene a elmo:Scene;
+stage:ClearTransactions a elmo:Scene;
 	elmo:index "1";
-	rdfs:label "Verwijder alle data";
+	rdfs:label "Verwijderen transacties";
 	elmo:query '''
 		prefix container: <http://localhost:8080/catalogus/dso/container/>
+    
 		DELETE {
 			GRAPH ?g {
 				?s ?p ?o
@@ -43,7 +45,13 @@ stage:ClearAllDataScene a elmo:Scene;
 			}
 			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
-    
+  '''
+.
+
+stage:ClearContainers a elmo:Scene;
+  elmo:index "2";
+  rdfs:label "Verwijderen containers";
+  elmo:query '''
     DELETE {
 			GRAPH ?g {
 				?s ?p ?o
