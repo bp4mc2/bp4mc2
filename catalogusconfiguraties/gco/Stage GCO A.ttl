@@ -106,7 +106,7 @@ stage:Class_model a elmo:Representation;
 			?class rdf:type rdfs:Class.
 			?class rdfs:subClassOf ?super.
 			?shape shacl:targetClass ?class.
-			?shape rdf:type shacl:Shape.
+			?shape rdf:type shacl:NodeShape.
 			?shape shacl:property ?pc.
 			?pc ?ppc ?opc.
 			?pclass rdf:type rdfs:Class.
@@ -123,7 +123,7 @@ stage:Class_model a elmo:Representation;
 					?class rdfs:subClassOf ?super.
 				}
 				OPTIONAL {
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 					?shape shacl:property ?pc.
 					?pc ?ppc ?opc.
 					OPTIONAL {
@@ -154,7 +154,7 @@ stage:ModelControle1 a elmo:Representation;
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				?item rdf:type ?type.
-				FILTER (?type = shacl:Shape || ?type = shacl:PropertyConstraint)
+				FILTER (?type = shacl:NodeShape || ?type = shacl:PropertyConstraint)
 				?item ?p ?o.
 				FILTER (IsIRI(?o) and ?p!=rdf:type)
 				FILTER NOT EXISTS {
@@ -1384,7 +1384,7 @@ stage:Reqdocument_doc a elmo:Part;
 		where {
 			graph <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape rdf:type shacl:Shape.
+					?shape rdf:type shacl:NodeShape.
 					OPTIONAL {?shape rdfs:label ?label}
 					OPTIONAL {?shape shacl:name ?name}
 					BIND (concat(?label," [",?name,"]") as ?shapelabel)
@@ -1392,13 +1392,13 @@ stage:Reqdocument_doc a elmo:Part;
 				UNION
 				{
 					?shape shacl:property ?pc.
-					?pc shacl:predicate ?property.
+					?pc shacl:path ?property.
 					OPTIONAL {?pc rdfs:label ?plabel}
 					OPTIONAL {?pc shacl:name ?pname}
 					OPTIONAL {
 						?pc shacl:class ?class.
 						OPTIONAL {
-							?refs shacl:scopeClass ?class.
+							?refs shacl:targetClass ?class.
 							?refs shacl:name ?classlabel
 						}
 					}
@@ -1409,13 +1409,13 @@ stage:Reqdocument_doc a elmo:Part;
 				UNION
 				{
 					?shape shacl:property ?pc.
-					?pc shacl:predicate ?property.
+					?pc shacl:path ?property.
 					?pc rdfs:comment ?requirement.
 					OPTIONAL {?pc rdfs:label ?plabel}
 					OPTIONAL {?pc shacl:name ?pname}
 					OPTIONAL {
 						?pc shacl:class ?class.
-						?refs shacl:scopeClass ?class.
+						?refs shacl:targetClass ?class.
 						?refs shacl:name ?refclass
 					}
 					BIND (concat(?plabel," [",?pname,"]") as ?reqlabel)
@@ -1466,27 +1466,27 @@ stage:ReqModelYedQuery a elmo:Query;
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape rdf:type shacl:Shape.
+					?shape rdf:type shacl:NodeShape.
 					OPTIONAL {
-						?shape shacl:scopeClass ?element
+						?shape shacl:targetClass ?element
 					}
 					OPTIONAL {?shape rdfs:label ?slabel}
 					OPTIONAL {
-						?shape shacl:scopeClass/rdfs:subClassOf ?super.
-						?sshape shacl:scopeClass ?super
+						?shape shacl:targetClass/rdfs:subClassOf ?super.
+						?sshape shacl:targetClass ?super
 					}
 					OPTIONAL {
 						?shape shacl:property ?pctype.
-						?pctype shacl:predicate rdf:type.
+						?pctype shacl:path rdf:type.
 						?pctype shacl:hasValue ?role.
-						?rshape shacl:scopeClass ?role.
+						?rshape shacl:targetClass ?role.
 					}
 				}
 				UNION {
 					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						?pc shacl:valueShape ?cshape.
 						OPTIONAL {?pc rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:minCount ?minc}
@@ -1498,7 +1498,7 @@ stage:ReqModelYedQuery a elmo:Query;
 					select ?shape ?pc ?cshape (concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]") as ?plabel)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						?pc shacl:class ?class.
 						?cshape shacl:scopeClass ?class.
 						OPTIONAL {?pc rdfs:label ?plabel}
@@ -1511,7 +1511,7 @@ stage:ReqModelYedQuery a elmo:Query;
 					select ?shape (group_concat(concat(if(bound(?plabel),?plabel,replace(str(?pred),".*(#|/)([A-Za-z0-9-_]+)$","$2"))," (",strafter(str(?datatype),"#"),") [",if(bound(?minc),?minc,"0"),",",if(bound(?maxc),?maxc,"n"),"]");separator="\\n") as ?attribs)
 					where {
 						?shape shacl:property ?pc.
-						?pc shacl:predicate ?pred.
+						?pc shacl:path ?pred.
 						OPTIONAL {?pc rdfs:label ?plabel}
 						OPTIONAL {?pc shacl:datatype ?datatype}
 						OPTIONAL {?pc shacl:minCount ?minc}
@@ -1520,7 +1520,7 @@ stage:ReqModelYedQuery a elmo:Query;
 							?pc shacl:class ?class.
 						}
 						FILTER NOT EXISTS {
-							?pc shacl:predicate rdf:type.
+							?pc shacl:path rdf:type.
 						}
 					}
 					group by ?shape
@@ -1567,7 +1567,7 @@ stage:Requirements	a	elmo:Representation;
 				graph <http://bp4mc2.org/id/dataset/requirements> {
 					{
 						BIND ("typed" as ?typed)
-						?req a shacl:PropertyConstraint.
+						?req a shacl:PropertyShape.
 						OPTIONAL {?req rdfs:label ?req_label}
 						OPTIONAL {?req rdfs:comment ?comment}
 						OPTIONAL {
@@ -1638,22 +1638,22 @@ elmo:query '''
 		select ?class ?class_label ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
 		where {
 			graph <http://bp4mc2.org/id/dataset/requirements> {
-				?req a shacl:PropertyConstraint.
+				?req a shacl:PropertyShape.
 				?req rdfs:label ?req_label.
 				OPTIONAL {
 					?shape shacl:property ?req.
 					?shape rdfs:label ?class_label.
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 				}
-				OPTIONAL {?req shacl:predicate ?pred}
+				OPTIONAL {?req shacl:path ?pred}
 				OPTIONAL {?req shacl:class ?refclass}
 				OPTIONAL {?req rdf:value ?toep}
 			}
 			OPTIONAL {
 				graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-					?shpe shacl:scopeClass ?class.
+					?shpe shacl:targetClass ?class.
 					?shpe shacl:property ?pc.
-					?pc shacl:predicate ?pred.
+					?pc shacl:path ?pred.
 					OPTIONAL {?pc shacl:class ?toclass}
 				}
 			}
@@ -1678,17 +1678,17 @@ stage:Requirements_Controle2 a elmo:Part;
 		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape rdf:type shacl:Shape.
+				?shape rdf:type shacl:NodeShape.
 				OPTIONAL {?shape rdfs:label ?shape_label}
-				?shape shacl:scopeClass ?class.
+				?shape shacl:targetClass ?class.
 				?shape shacl:property ?pc.
-				?pc shacl:predicate ?pred.
+				?pc shacl:path ?pred.
 			}
 			FILTER NOT EXISTS {
 				graph <http://bp4mc2.org/id/dataset/requirements> {
-					?req shacl:scopeClass ?class.
+					?req shacl:targetClass ?class.
 					?req shacl:property ?pcr.
-					?pcr shacl:predicate ?pred
+					?pcr shacl:path ?pred
 				}
 			}
 		}
@@ -1758,13 +1758,13 @@ stage:Shape_content elmo:index "1";
 		prefix dcterms: <http://purl.org/dc/terms/>
 		construct {
 			<@SUBJECT@> rdfs:label ?slabel.
-			<@SUBJECT@> shacl:scopeClass ?class.
+			<@SUBJECT@> shacl:targetClass ?class.
 			<@SUBJECT@> rdfs:comment ?comment.
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				<@SUBJECT@> rdfs:label ?slabel.
-				<@SUBJECT@> shacl:scopeClass ?class.
+				<@SUBJECT@> shacl:targetClass ?class.
 				OPTIONAL {
 					{
 						{?class rdfs:comment ?comment}
@@ -1793,7 +1793,7 @@ stage:Shape_properties a elmo:Represention;
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
 				<@SUBJECT@> shacl:property ?pc.
-				?pc shacl:predicate ?pred.
+				?pc shacl:path ?pred.
 				OPTIONAL {?pc shacl:class ?refclass}
 				OPTIONAL {
 					{
@@ -1820,7 +1820,7 @@ stage:Shape_model a elmo:Representation;
 			?class rdf:type rdfs:Class.
 			?class rdfs:subClassOf ?super.
 			?shape shacl:targetClass ?class.
-			?shape rdf:type shacl:Shape.
+			?shape rdf:type shacl:NodeShape.
 			?shape shacl:property ?pc.
 			?pc ?ppc ?opc.
 			?pclass rdf:type rdfs:Class.
@@ -1828,7 +1828,7 @@ stage:Shape_model a elmo:Representation;
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				<@SUBJECT@> shacl:scopeClass ?subject.
+				<@SUBJECT@> shacl:targetClass ?subject.
 				?subject rdfs:subClassOf* ?class.
 				OPTIONAL {
 					?class rdfs:label ?clabel
@@ -1838,7 +1838,7 @@ stage:Shape_model a elmo:Representation;
 					?class rdfs:subClassOf ?super.
 				}
 				OPTIONAL {
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 					?shape shacl:property ?pc.
 					?pc ?ppc ?opc.
 					OPTIONAL {

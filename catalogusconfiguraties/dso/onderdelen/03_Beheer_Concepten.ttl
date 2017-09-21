@@ -1261,6 +1261,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/dso/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix versionDataset: <http://localhost:8080/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
 		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
 		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
@@ -1275,6 +1276,16 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		WHERE {
 			GRAPH versiongraph:version {
 				?s?p?o
+			}
+		}
+		DELETE { 
+			GRAPH versionDataset:version {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH versionDataset:version {
+				?s ?p ?o
 			}
 		}
 		
@@ -1299,6 +1310,7 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				doc:mastergraph rdf:type void:Dataset.
 				doc:mastergraph rdfs:label "Concepten".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
+				versionDataset:version dct:isVersionOf doc:mastergraph.
 				dataset:concepten rdf:type skos:ConceptScheme.
 				dataset:concepten rdfs:label "Conceptschema".
 			}
@@ -1307,10 +1319,12 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		INSERT {
 			GRAPH versiongraph:version {
 				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				dataset:Datasets rdfs:isDefinedBy versionDataset:version.
 				versiongraph:version rdfs:label "Concepten - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
 				versiongraph:version prov:wasGeneratedBy activity:Upload.
 				versiongraph:version rdf:type prov:Entity.
 				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				versionDataset:version dct:modified "@CURRENTMOMENT@".
 				activity:Upload rdf:type prov:Activity.
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
