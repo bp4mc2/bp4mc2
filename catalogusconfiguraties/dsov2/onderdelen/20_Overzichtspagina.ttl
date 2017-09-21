@@ -1,0 +1,53 @@
+#
+#
+#
+# OVERZICHTSPAGINA
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Overzichtspagina concepten
+stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
+  # Bereikbaarheid
+	elmo:url-pattern "/catalogus/dsov2(|/)$";
+  
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Weergave
+  elmo:appearance elmo:TableAppearance;
+  
+  # Data
+  elmo:query stage:DSOv2ConceptenQuery;
+.
+
+#
+# QUERY'S
+#
+
+# Query voor tonen alle concepten
+stage:DSOv2ConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
+		prefix collection: <http://localhost:8080/catalogus/dsov2/id/collection/>
+		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+      GRAPH ?graph {
+        ?concept rdf:type skos:Concept.
+        ?concept rdfs:label ?concept_label.
+        OPTIONAL {?concept skos:definition ?uitleg}
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.
