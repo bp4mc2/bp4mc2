@@ -6,13 +6,13 @@
 #
 #
 
-@prefix stage: 			  <http://data.test.pdok.nl/catalogus/dsov2/stage#>.
-@prefix updatestage: 	<http://data.test.pdok.nl/catalogus/dsov2/update/>.
+@prefix stage: 			  <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/stage#>.
+@prefix updatestage: 	<http://data.ontwikkeling.pdok.nl/catalogus/dsov2/update/>.
 @prefix elmo: 			  <http://bp4mc2.org/elmo/def#>.
 @prefix rdf: 		    	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: 		  	<http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xhtml: 	    	<http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: 		<http://data.test.pdok.nl/catalogus/dsov2/container/>.
+@prefix container: 		<http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>.
 @prefix skos: 			  <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: 	  	<http://bp4mc2.org/skosax#>.
 @prefix skoslex: 	  	<http://bp4mc2.org/def/skos-lex/>.
@@ -212,7 +212,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
     prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     
-    prefix container: <http://data.test.pdok.nl/catalogus/dsov2/container/>
+    prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
 		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
     
     INSERT {
@@ -353,7 +353,7 @@ stage:IssueConceptScene a elmo:Scene;
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
     
-    prefix container: <http://data.test.pdok.nl/catalogus/dsov2/container/>
+    prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
 		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
     
     INSERT {
@@ -364,7 +364,9 @@ stage:IssueConceptScene a elmo:Scene;
 
         ?doc rdf:type prov:Entity;
           adms:status skos-lex-status:Issued;
-          dcterms:issued "@CURRENTMOMENT@"^^xsd:date.
+          dcterms:issued concat(  year( now() ), "-",
+                                  month( now() ), "-",
+                                  day( now() ) )^^xsd:date.
       }
     }
     WHERE {
@@ -409,7 +411,7 @@ stage:ClearAllDataScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijder alle data";
 	elmo:query '''
-		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
 		DELETE {
 			GRAPH ?g {
 				?s ?p ?o
@@ -431,7 +433,7 @@ stage:ClearAllDataScene a elmo:Scene;
 			GRAPH ?g {
 				?s ?p ?o
 			}
-			FILTER regex( ?g, "http://data.test.pdok.nl/catalogus/dsov2/" )
+			FILTER regex( ?g, "http://data.ontwikkeling.pdok.nl/catalogus/dsov2/" )
 		}
 	'''
 .
@@ -547,14 +549,14 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://data.test.pdok.nl/catalogus/dsov2/container/>
-		prefix doc: <http://data.test.pdok.nl/catalogus/dsov2/concepten/doc/>
-		prefix dataset: <http://data.test.pdok.nl/catalogus/dsov2/id/dataset/>
-		prefix concept: <http://data.test.pdok.nl/catalogus/dsov2/id/concept/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix dataset: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/dataset/>
+		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix tr: <http://data.test.pdok.nl/toepasbareregels/>
+		prefix tr: <http://data.ontwikkeling.pdok.nl/toepasbareregels/>
 		
 		construct {
       ?graph prov:generatedAtTime ?time.
@@ -596,14 +598,14 @@ stage:WeergaveTabelConceptenMetadataQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://data.test.pdok.nl/catalogus/dsov2/container/>
-		prefix doc: <http://data.test.pdok.nl/catalogus/dsov2/concepten/doc/>
-		prefix dataset: <http://data.test.pdok.nl/catalogus/dsov2/id/dataset/>
-		prefix concept: <http://data.test.pdok.nl/catalogus/dsov2/id/concept/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix dataset: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/dataset/>
+		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix tr: <http://data.test.pdok.nl/toepasbareregels/>
+		prefix tr: <http://data.ontwikkeling.pdok.nl/toepasbareregels/>
 		
 		construct {
       ?graph prov:generatedAtTime ?time.
@@ -654,10 +656,10 @@ stage:DSOv2ConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://data.test.pdok.nl/catalogus/dsov2/container/>
-		prefix doc: <http://data.test.pdok.nl/catalogus/dsov2/concepten/doc/>
-		prefix collection: <http://data.test.pdok.nl/catalogus/dsov2/id/collection/>
-		prefix concept: <http://data.test.pdok.nl/catalogus/dsov2/id/concept/>
+		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/collection/>
+		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
 		
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
