@@ -21,6 +21,20 @@
 
 # Upload Turtle API ------------------------------------------------------------------------------------------------------------------------------
 
+# Container POST Turtle Concepten
+container:concept-post-ttl a elmo:Container;
+  # Onderdelen
+  elmo:contains stage:DSOv2Beheermenu;
+  
+  # Weergave
+  elmo:representation elmo:UploadRepresentation;
+  rdfs:label "Voeg nieuw concept toe (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenPost;
+.
+
 # Container PUT Turtle Concepten
 container:concept-put-ttl a elmo:Container;
   # Onderdelen
@@ -35,29 +49,61 @@ container:concept-put-ttl a elmo:Container;
   elmo:query stage:DSOv2ConceptenPut;
 .
 
-# Container POST Turtle Concepten
-# Query zou nog vervangen kunnen worden door een vergelijkbare query die net iets eenvoudiger is
-# Dit doen we pas na LDT2.0
-container:concept-post-ttl a elmo:Container;
-  # Onderdelen
-  elmo:contains stage:DSOv2Beheermenu;
-  
-  # Weergave
-  elmo:representation elmo:UploadRepresentation;
-  rdfs:label "Voeg nieuw concept toe (.ttl)";
-  
-  # Data
-  elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenPost;
-.
-
 #
 # SCENES
 #
 
 stage:DSOv2ConceptenPost a elmo:Scene;
 	rdfs:label "Query voor verwerken POST";
-	elmo:index "2";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    
+    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+		
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sparql:Graph;
+          rdfs:label "Reserveren van het begrip in de Catalogus";
+          prov:generatedAtTime ?now
+        .
+        
+        ?subject ?p ?o;
+          wdrs:describedBy ?doc
+        .
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel;
+          ?p ?o
+        .
+      }
+      
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://regelgeving.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
+    
+		CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-post-ttl
+	''';
+.
+
+stage:DSOv2ConceptenPut a elmo:Scene;
+	rdfs:label "Query voor verwerken PUT";
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
@@ -72,37 +118,39 @@ stage:DSOv2ConceptenPost a elmo:Scene;
 		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
     
     INSERT {
-      GRAPH transactie: {
-        transactie: rdf:type sparql:Graph;
-          rdfs:label "Eerste opname (Reserveren van het begrip in de Catalogus)";
-          prov:generatedAtTime "@CURRENTMOMENT@"^^xsd:dateTime.
+      GRAPH ?transactie {
+        ?transactie rdf:type sparql:Graph;
+          rdfs:label "Aanpassing van het begrip door het bevoegde gezag";
+          prov:generatedAtTime ?now
+        .
         
-        ?subject ?p ?o.
-        ?subject wdrs:describedBy ?doc.
+        ?s ?p ?o;
+          wdrs:describedBy ?doc
+        .
         
         ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment.
+          adms:status adms-status:UnderDevelopment;
+          prov:wasRevisionOf ?prevDoc
+        .
       }
     }
     WHERE {
       GRAPH container:generiek {
-        ?s rdf:type skos:Concept;
-          skos:prefLabel ?prefLabel;
-          ?p ?o.
-        
-        BIND( iri( concat( "http://regelgeving.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
-        BIND( iri( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/",
-                            year( now () ), "-",
-                            month( now () ), "-",
-                            day( now () ), "T",
-                            hours( now() ), ":",
-                            minutes( now() ), ":",
-                            seconds( now() ),
-                            "/concept/",
-                            ?prefLabel ) ) AS ?doc )
+        ?s ?p ?o.
       }
+      GRAPH ?graph {
+        ?s wdrs:describedBy ?prevDoc;
+          skos:prefLabel ?prefLabel.
+      }
+      
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( now() AS ?now )
     }
     
-		CLEAR GRAPH container:generiek
-	''';
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-put-ttl
+  '''
 .
