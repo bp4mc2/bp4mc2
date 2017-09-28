@@ -49,6 +49,20 @@ container:concept-put-ttl a elmo:Container;
   elmo:query stage:DSOv2ConceptenPut;
 .
 
+# Container voor aanvullen concept
+container:concept-add-ttl a elmo:Container;
+  # Onderdelen
+  elmo:contains stage:DSOv2Beheermenu;
+  
+  # Weergave
+  elmo:representation elmo:UploadRepresentation;
+  rdfs:label "Vul bestaand concept aan (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenAdd;
+.
+
 #
 # SCENES
 #
@@ -130,7 +144,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         
         ?doc rdf:type prov:Entity;
           adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?prevDoc
+          prov:wasRevisionOf ?currentDoc
         .
       }
     }
@@ -138,9 +152,18 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       GRAPH container:generiek {
         ?s ?p ?o.
       }
-      GRAPH ?graph {
-        ?s wdrs:describedBy ?prevDoc;
+      GRAPH ?graph {       
+        ?s wdrs:describedBy ?currentDoc;
           skos:prefLabel ?prefLabel.
+        
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?s rdf:type skos:Concept.
+            FILTER( ?newerTime > ?graphTime )
+          }
+        }
       }
       
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
@@ -152,5 +175,99 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     
     CLEAR GRAPH container:generiek
     CLEAR GRAPH container:concept-put-ttl
+  '''
+.
+
+stage:DSOv2ConceptenAdd a elmo:Scene;
+	rdfs:label "Query voor verwerken aanvullen concept";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    
+    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sparql:Graph;
+          rdfs:label "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
+          prov:generatedAtTime ?now
+        .
+        
+        ?s ?p ?o;
+          wdrs:describedBy ?doc;
+          ?pred ?obj
+        .
+        
+        ?doc ?docP ?docO;
+          prov:wasRevisionOf ?currentDoc
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s ?p ?o.
+        
+        FILTER(
+          ?p != rdf:type
+          && ?p != rdfs:label
+          && ?p != skos:prefLabel
+          && ?p != skos:definition
+        )
+      }
+      GRAPH ?graph {
+        ?s wdrs:describedBy ?currentDoc;
+          skos:prefLabel ?prefLabel;
+          ?pred ?obj
+        .
+        FILTER(
+          ?pred != wdrs:describedBy
+        )
+          
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?s rdf:type skos:Concept;
+              wdrs:describedBy ?newerDoc.
+            FILTER( ?newerTime > ?graphTime )
+          }
+          GRAPH ?docNewerGraph {
+            ?newerDoc adms:status skos-lex-status:Enacted
+          }
+        }
+      }
+      GRAPH ?docGraph {
+        ?currentDoc adms:status skos-lex-status:Enacted;
+          ?docP ?docO.
+        FILTER (
+          ?docP != prov:wasRevisionOf
+        )
+        
+        ?docGraph prov:generatedAtTime ?docGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?thisDoc adms:status skos-lex-status:Enacted.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER( ?newerDocGraphTime > ?docGraphTime )
+          }
+        }
+      }
+      
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
+    
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-add-ttl
   '''
 .
