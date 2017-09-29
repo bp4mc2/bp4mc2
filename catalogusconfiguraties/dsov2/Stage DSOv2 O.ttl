@@ -116,13 +116,18 @@ stage:DSOv2Beheermenu a elmo:Part;
 				xhtml:link "/catalogus/dsov2/container/concept-put-ttl";
 			];
       elmo:data [
-				rdfs:label "Maak begrip bekend";
+				rdfs:label "Vul bestaand concept aan";
 				elmo:index "03";
+				xhtml:link "/catalogus/dsov2/container/concept-add-ttl";
+			];
+      elmo:data [
+				rdfs:label "Maak begrip bekend";
+				elmo:index "04";
 				xhtml:link "/catalogus/dsov2/update/concept-issue";
 			];
       elmo:data [
 				rdfs:label "Laat begrip in werking treden";
-				elmo:index "04";
+				elmo:index "05";
 				xhtml:link "/catalogus/dsov2/update/concept-enact";
 			];
 		];
@@ -191,6 +196,20 @@ container:concept-put-ttl a elmo:Container;
   # Data
   elmo:replaces container:generiek;
   elmo:query stage:DSOv2ConceptenPut;
+.
+
+# Container voor aanvullen concept
+container:concept-add-ttl a elmo:Container;
+  # Onderdelen
+  elmo:contains stage:DSOv2Beheermenu;
+  
+  # Weergave
+  elmo:representation elmo:UploadRepresentation;
+  rdfs:label "Vul bestaand concept aan (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenAdd;
 .
 
 #
@@ -274,7 +293,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         
         ?doc rdf:type prov:Entity;
           adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?prevDoc
+          prov:wasRevisionOf ?currentDoc
         .
       }
     }
@@ -282,9 +301,18 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       GRAPH container:generiek {
         ?s ?p ?o.
       }
-      GRAPH ?graph {
-        ?s wdrs:describedBy ?prevDoc;
+      GRAPH ?graph {       
+        ?s wdrs:describedBy ?currentDoc;
           skos:prefLabel ?prefLabel.
+        
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?s rdf:type skos:Concept.
+            FILTER( ?newerTime > ?graphTime )
+          }
+        }
       }
       
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
@@ -298,7 +326,100 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     CLEAR GRAPH container:concept-put-ttl
   '''
 .
- 
+
+stage:DSOv2ConceptenAdd a elmo:Scene;
+	rdfs:label "Query voor verwerken aanvullen concept";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    
+    prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
+		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sparql:Graph;
+          rdfs:label "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
+          prov:generatedAtTime ?now
+        .
+        
+        ?s ?p ?o;
+          wdrs:describedBy ?doc;
+          ?pred ?obj
+        .
+        
+        ?doc ?docP ?docO;
+          prov:wasRevisionOf ?currentDoc
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s ?p ?o.
+        
+        FILTER(
+          ?p != rdf:type
+          && ?p != rdfs:label
+          && ?p != skos:prefLabel
+          && ?p != skos:definition
+        )
+      }
+      GRAPH ?graph {
+        ?s wdrs:describedBy ?currentDoc;
+          skos:prefLabel ?prefLabel;
+          ?pred ?obj
+        .
+        FILTER(
+          ?pred != wdrs:describedBy
+        )
+          
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?s rdf:type skos:Concept;
+              wdrs:describedBy ?newerDoc.
+            FILTER( ?newerTime > ?graphTime )
+          }
+          GRAPH ?docNewerGraph {
+            ?newerDoc adms:status skos-lex-status:Enacted
+          }
+        }
+      }
+      GRAPH ?docGraph {
+        ?currentDoc adms:status skos-lex-status:Enacted;
+          ?docP ?docO.
+        FILTER (
+          ?docP != prov:wasRevisionOf
+        )
+        
+        ?docGraph prov:generatedAtTime ?docGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?thisDoc adms:status skos-lex-status:Enacted.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER( ?newerDocGraphTime > ?docGraphTime )
+          }
+        }
+      }
+      
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
+    
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-add-ttl
+  '''
+. 
 #
 #
 #
@@ -426,29 +547,69 @@ stage:search-concepts-nonenacted a elmo:Part;
 			?g rdfs:label ?label
 		}
 		WHERE {
-			GRAPH ?g {
-				?concept rdf:type skos:Concept;
-          wdrs:describedBy ?doc.
-      }
-      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-      GRAPH ?docGraph {
-        ?doc rdf:type prov:Entity;
-          adms:status ?status.
-        ?docGraph prov:generatedAtTime ?docGraphTime.
-        
-        FILTER NOT EXISTS {
-          GRAPH ?otherDocGraph {
-            ?doc rdf:type prov:Entity.
-            ?otherDocGraph prov:generatedAtTime ?otherDocGraphTime.
-            FILTER ( ?otherDocGraphTime > ?docGraphTime ) 
-            
+      {
+        GRAPH ?g {
+          ?concept rdf:type skos:Concept;
+            wdrs:describedBy ?doc.
+        }
+        FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+        GRAPH ?docGraph {
+          ?doc rdf:type prov:Entity;
+            adms:status adms-status:UnderDevelopment.
+
+          ?docGraph prov:generatedAtTime ?docGraphTime.       
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?doc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              FILTER ( ?newerDocGraphTime > ?docGraphTime )            
+            }
           }
         }
+        BIND( concat( str( ?concept ), " (Under development)" ) AS ?label )
+        FILTER NOT EXISTS {
+          GRAPH ?otherGraph {
+            ?concept rdf:type skos:Concept;
+              wdrs:describedBy ?otherDoc.
+          }
+          FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+          GRAPH ?otherDocGraph {
+            ?otherDoc rdf:type prov:Entity;
+              adms:status adms-status:UnderDevelopment.
+
+            ?otherDocGraph prov:generatedAtTime ?otherDocGraphTime.       
+            FILTER NOT EXISTS {
+              GRAPH ?newerOtherDocGraph {
+                ?otherDoc rdf:type prov:Entity.
+                ?newerOtherDocGraph prov:generatedAtTime ?newerOtherDocGraphTime.
+                FILTER ( ?newerOtherDocGraphTime > ?otherDocGraphTime )            
+              }
+            }
+          }
+          FILTER( ?otherDocGraphTime > ?docGraphTime )
+        }
       }
-      BIND( concat( str( ?concept ), " (", ?status, ")" ) AS ?label )
-      
-      FILTER NOT EXISTS {
-        ?doc adms:status skos-lex-status:Enacted.
+      UNION
+      {
+        GRAPH ?g {
+          ?concept rdf:type skos:Concept;
+            wdrs:describedBy ?doc.
+        }
+        FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+        GRAPH ?docGraph {
+          ?doc rdf:type prov:Entity;
+            adms:status skos-lex-status:Issued.
+
+          ?docGraph prov:generatedAtTime ?docGraphTime.       
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?doc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              FILTER ( ?newerDocGraphTime > ?docGraphTime )            
+            }
+          }
+        }
+        BIND( concat( str( ?concept ), " (Issued)" ) AS ?label )
       }
 		}
 	''';
@@ -482,12 +643,22 @@ stage:IssueConceptScene a elmo:Scene;
           prov:generatedAtTime ?now.
 
         ?doc rdf:type prov:Entity;
+          prov:wasRevisionOf ?prevDoc;
           adms:status skos-lex-status:Issued;
           dcterms:issued ?date.
       }
     }
     WHERE {
-      <@CONCEPT@> wdrs:describedBy ?doc.
+      GRAPH ?graph {
+        <@CONCEPT@> wdrs:describedBy ?doc.
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      OPTIONAL {
+        GRAPH ?docGraph {
+          ?doc prov:wasRevisionOf ?prevDoc.
+        }
+        FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      }
       FILTER NOT EXISTS {
         ?newdoc prov:wasRevisionOf ?doc.
       }
@@ -517,7 +688,7 @@ stage:DeprecatePreviousVersion a elmo:Scene;
     
     INSERT {
       GRAPH ?docGraph {
-        ?prevDoc dcterms:valid ?newIssuedDate.
+        ?prevDoc dcterms:valid ?newValidDate.
       }
     }
     WHERE {
@@ -532,7 +703,7 @@ stage:DeprecatePreviousVersion a elmo:Scene;
       }
       GRAPH ?docGraph {
         ?prevDoc dcterms:valid ?currentValidDate.
-        BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newIssuedDate )
+        BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newValidDate )
         FILTER regex( ?currentValidDate, ".*/$" )
       }
     }
@@ -896,9 +1067,18 @@ stage:DSOv2ConceptenQuery a elmo:Query;
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
       GRAPH ?graph {
-        ?concept rdf:type skos:Concept.
-        ?concept rdfs:label ?concept_label.
+        ?concept rdf:type skos:Concept;
+          rdfs:label ?concept_label.
         OPTIONAL {?concept skos:definition ?uitleg}
+        
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?concept rdf:type skos:Concept.
+            FILTER( ?newerTime > ?graphTime )
+          }
+        }
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
