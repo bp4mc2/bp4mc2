@@ -22,7 +22,7 @@
 
 # Shapes for shapes
 kkgshape:NodeShapeShape a sh:NodeShape;
-	sh:name "NodeShapeShape";
+	sh:name "sh:NodeShape";
 	sh:targetClass sh:NodeShape;
 	sh:property [
 		sh:path sh:targetClass; # targetClass should be the corresponding owl:Class for this UML Class
@@ -38,10 +38,14 @@ kkgshape:NodeShapeShape a sh:NodeShape;
 			kkg:Relatieklasse
 		);
 	];
+	sh:property [
+		sh:path sh:property;
+		sh:class sh:PropertyShape;
+	];
 .
 
 kkgshape:PropertyShapeShape a sh:NodeShape;
-	sh:name "PropertyShapeShape";
+	sh:name "sh:PropertyShape";
 	sh:targetClass sh:PropertyShape;
 	sh:property [
 		sh:name "PropertyShape_nodeKind";
@@ -58,6 +62,20 @@ kkgshape:PropertyShapeShape a sh:NodeShape;
 kkgshape:LiteralShape a sh:NodeShape;
 	sh:name "LiteralShape";
 	sh:targetNode sh:Literal;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue sh:PropertyShape;
+	];
+	sh:property [
+		sh:path sh:path;
+		sh:name "sh:path";
+		sh:class owl:DatatypeProperty;
+	];
+	sh:property [
+		sh:path sh:datatype;
+		sh:name "sh:datatype";
+		sh:class rdfs:Datatype;
+	];
 	sh:property [
 		sh:name "Literal_nodeKind";
 		sh:inversePath sh:nodeKind;
@@ -85,6 +103,15 @@ kkgshape:LiteralShape a sh:NodeShape;
 kkgshape:IRIShape a sh:NodeShape;
 	sh:name "IRIShape";
 	sh:targetNode sh:IRI;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue sh:PropertyShape;
+	];
+	sh:property [
+		sh:path sh:path;
+		sh:name "sh:path";
+		sh:class owl:ObjectProperty;
+	];
 	sh:property [
 		sh:name "IRI_nodeKind";
 		sh:inversePath sh:nodeKind;
@@ -137,7 +164,7 @@ kkgshape:Class a sh:NodeShape;
 .
 
 kkgshape:DatatypeProperty a sh:NodeShape;
-	sh:name "DatatypeProperty";
+	sh:name "owl:DatatypeProperty";
 	sh:targetClass owl:DatatypeProperty;
 	sh:property [
         sh:path rdfs:label; #label for the DatatypeProperty
@@ -147,7 +174,7 @@ kkgshape:DatatypeProperty a sh:NodeShape;
 .
 
 kkgshape:ObjectProperty a sh:NodeShape;
-	sh:name "ObjectProperty";
+	sh:name "owl:ObjectProperty";
 	sh:targetClass owl:ObjectProperty;
 	sh:property [
         sh:path rdfs:label; #label for the ObjectProperty
@@ -157,7 +184,7 @@ kkgshape:ObjectProperty a sh:NodeShape;
 .
 
 kkgshape:Datatype a sh:NodeShape;
-	sh:name "Datatype";
+	sh:name "rdfs:Datatype";
 	sh:targetClass rdfs:Datatype;
 	sh:property [
         sh:path rdfs:label; #label for the Datatype
@@ -177,7 +204,7 @@ kkgshape:KKG rdf:type owl:Ontology;
 
 kkgshape:Attribuutsoort rdf:type sh:NodeShape;
 	rdfs:label "Attribuutsoort";
-	sh:name "Attribuutsoort";
+	sh:name "«Attribuutsoort»";
 	sh:targetNode kkg:Attribuutsoort;
 	sh:property [
 		sh:path [
@@ -210,7 +237,7 @@ kkgshape:Attribuutsoort rdf:type sh:NodeShape;
 
 kkgshape:Codelijst rdf:type sh:NodeShape;
 	rdfs:label "Codelijst";
-	sh:name "Codelijst";
+	sh:name "«Codelijst»";
 	sh:targetNode kkg:Codelijst;
 	sh:property [
 		sh:path [
@@ -229,7 +256,7 @@ kkgshape:Codelijst rdf:type sh:NodeShape;
 
 kkgshape:GestructureerdDatatype rdf:type sh:NodeShape;
 	rdfs:label "Gestructureerd Datatype";
-	sh:name "Gestructureerd Datatype";
+	sh:name "«Gestructureerd Datatype»";
 	sh:targetNode kkg:GestructureerdDatatype;
 	sh:property [
 		sh:path [
@@ -249,7 +276,7 @@ kkgshape:GestructureerdDatatype rdf:type sh:NodeShape;
 
 kkgshape:Constraint rdf:type sh:NodeShape;
 	rdfs:label "Constraint";
-	sh:name "Constraint";
+	sh:name "«Constraint»";
 	sh:targetNode kkg:Constraint;
 	sh:property [
 		sh:path [
@@ -265,7 +292,7 @@ kkgshape:Constraint rdf:type sh:NodeShape;
 
 kkgshape:DataElement rdf:type sh:NodeShape;
 	rdfs:label "Data element";
-	sh:name "Data element";
+	sh:name "«Data element»";
 	sh:targetNode kkg:DataElement;
 	sh:property [
 		sh:path [
@@ -286,7 +313,7 @@ kkgshape:DataElement rdf:type sh:NodeShape;
 
 kkgshape:Enumeratie rdf:type sh:NodeShape;
 	rdfs:label "Enumeratie";
-	sh:name "Enumeratie";
+	sh:name "«Enumeratie»";
 	sh:targetNode kkg:Enumeratie;
 	sh:property [
 		sh:path [
@@ -301,7 +328,7 @@ kkgshape:Enumeratie rdf:type sh:NodeShape;
 
 kkgshape:Enumeratiewaarde rdf:type sh:NodeShape;
 	rdfs:label "Enumeratiewaarde";
-	sh:name "Enumeratiewaarde";
+	sh:name "«Enumeratiewaarde»";
 	sh:targetNode kkg:Enumeratiewaarde;
 	sh:property [
 		sh:path [
@@ -318,7 +345,7 @@ kkgshape:Enumeratiewaarde rdf:type sh:NodeShape;
 kkgshape:Gegevensgroep rdf:type sh:NodeShape;
 	rdfs:label "Gegevensgroep";
 	sh:targetNode kkg:Gegevensgroep;
-	sh:name "Gegevensgroep";
+	sh:name "«Gegevensgroep»";
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -341,7 +368,7 @@ kkgshape:Gegevensgroep rdf:type sh:NodeShape;
 
 kkgshape:Gegevensgroeptype rdf:type sh:NodeShape;
 	rdfs:label "Gegevensgroeptype";
-	sh:name "Gegevensgroeptype";
+	sh:name "«Gegevensgroeptype»";
 	sh:targetNode kkg:Gegevensgroeptype;
 	sh:property [
 		sh:path [
@@ -356,7 +383,7 @@ kkgshape:Gegevensgroeptype rdf:type sh:NodeShape;
 
 kkgshape:Generalisatie rdf:type sh:NodeShape;
 	rdfs:label "Generalisatie";
-	sh:name "Generalisatie";
+	sh:name "«Generalisatie»";
 	sh:targetNode kkg:Generalisatie;
 	sh:property [
 		sh:path [
@@ -372,7 +399,7 @@ kkgshape:Generalisatie rdf:type sh:NodeShape;
 
 kkgshape:ObjectType rdf:type sh:NodeShape;
 	rdfs:label "ObjectType";
-	sh:name "ObjectType";
+	sh:name "«ObjectType»";
 	sh:targetNode kkg:ObjectType;
 	sh:property [
 		sh:path [
@@ -398,7 +425,7 @@ kkgshape:ObjectType rdf:type sh:NodeShape;
 
 kkgshape:PrimitiefDatatype rdf:type sh:NodeShape;
 	rdfs:label "Primitief Datatype";
-	sh:name "Primitief Datatype";
+	sh:name "«Primitief Datatype»";
 	sh:targetNode kkg:PrimitiefDatatype;
 	sh:property [
 		sh:path [
@@ -419,7 +446,7 @@ kkgshape:PrimitiefDatatype rdf:type sh:NodeShape;
 
 kkgshape:ReferentieElement rdf:type sh:NodeShape;
 	rdfs:label "Referentie element";
-	sh:name "Referentie element";
+	sh:name "«Referentie element»";
 	sh:targetNode kkg:ReferentieElement;
 	sh:property [
 		sh:path [
@@ -442,7 +469,7 @@ kkgshape:ReferentieElement rdf:type sh:NodeShape;
 
 kkgshape:Referentielijst rdf:type sh:NodeShape;
 	rdfs:label "Referentielijst";
-	sh:name "Referentielijst";
+	sh:name "«Referentielijst»";
 	sh:targetNode kkg:Referentielijst;
 	sh:property [
 		sh:path [
@@ -461,7 +488,7 @@ kkgshape:Referentielijst rdf:type sh:NodeShape;
 
 kkgshape:Relatieklasse rdf:ype kkgshape:Nodeshape;
 	rdfs:label "Relatieklasse";
-	sh:name "Relatieklasse";
+	sh:name "«Relatieklasse»";
 	sh:targetNode kkg:Relatieklasse;
 	sh:property [
 		sh:path [
@@ -478,7 +505,7 @@ kkgshape:Relatieklasse rdf:ype kkgshape:Nodeshape;
 
 kkgshape:RelatierolAlt1 rdf:type sh:NodeShape;
 	rdfs:label "Relatierol";
-	sh:name "Relatierol";
+	sh:name "«Relatierol»";
 	sh:targetNode kkg:RelatierolAlt1;
 	sh:property [
 		sh:path [
@@ -493,7 +520,7 @@ kkgshape:RelatierolAlt1 rdf:type sh:NodeShape;
 
 kkgshape:RelatiesoortAlt1 rdf:type sh:NodeShape;
 	rdfs:label "Relatiesoort";
-	sh:name "Relatiesoort";
+	sh:name "«Relatiesoort»";
 	sh:targetNode kkg:RelatiesoortAlt1;
 	sh:property [
 		sh:path [
@@ -524,7 +551,7 @@ kkgshape:RelatiesoortAlt1 rdf:type sh:NodeShape;
 
 kkgshape:RelatierolAlt2 rdf:type sh:NodeShape;
 	rdfs:label "Relatierol";
-	sh:name "Relatierol";
+	sh:name "«Relatierol»";
 	sh:targetNode kkg:RelatierolAlt2;
 	sh:property [
 		sh:path [
@@ -548,7 +575,7 @@ kkgshape:RelatierolAlt2 rdf:type sh:NodeShape;
 
 kkgshape:RelatiesoortAlt2 rdf:type sh:NodeShape;
 	rdfs:label "Relatiesoort";
-	sh:name "Relatiesoort";
+	sh:name "«Relatiesoort»";
 	sh:targetNode kkg:RelatiesoortAlt2;
 	sh:property [
 		sh:path [
@@ -563,7 +590,7 @@ kkgshape:RelatiesoortAlt2 rdf:type sh:NodeShape;
 
 kkgshape:Union rdf:type sh:NodeShape;
 	rdfs:label "Union";
-	sh:name "Union";
+	sh:name "«Union»";
 	sh:targetNode kkg:Union;
 	sh:property [
 		sh:path [
@@ -581,7 +608,7 @@ kkgshape:Union rdf:type sh:NodeShape;
 
 kkgshape:UnionElement rdf:type sh:NodeShape;
 	rdfs:label "Union element";
-	sh:name "Union element";
+	sh:name "«Union element»";
 	sh:targetNode kkg:UnionElement;
 	sh:property [
 		sh:path [
