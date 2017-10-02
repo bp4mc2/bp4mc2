@@ -154,7 +154,7 @@ kkgshape:IRIShape a sh:NodeShape;
 
 # Shapes for OWL/RDFS elements
 kkgshape:Class a sh:NodeShape;
-	sh:name "Class";
+	sh:name "owl:Class";
     sh:targetClass owl:Class;
     sh:property [
         sh:path rdfs:label; #label for the Class
@@ -205,33 +205,38 @@ kkgshape:KKG rdf:type owl:Ontology;
 kkgshape:Attribuutsoort rdf:type sh:NodeShape;
 	rdfs:label "Attribuutsoort";
 	sh:name "«Attribuutsoort»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:DatatypeProperty;
+	];
+	sh:property kkgshape:authentiek;
+	sh:property kkgshape:code;
+	sh:property kkgshape:datumOpname;
+	sh:property kkgshape:definitie;
+	sh:property kkgshape:domeinFormeelPatroon;
+	sh:property kkgshape:domeinLengte;
+	sh:property kkgshape:domeinPatroon;
+	sh:property kkgshape:domeinType;
+	sh:property kkgshape:heeft;
+	sh:property kkgshape:herkomst;
+	sh:property kkgshape:herkomstDefinitie;
+	sh:property kkgshape:identificerend;
+	sh:property kkgshape:indicatieAfleidbaar;
+	sh:property kkgshape:indicatieFormeleHistorie;
+	sh:property kkgshape:indicatieMaterieleHistorie;
+	sh:property kkgshape:kardinaliteit;
+	sh:property kkgshape:locatie;
+	sh:property kkgshape:mogelijkGeenWaarde;
+	sh:property kkgshape:naam;
+	sh:property kkgshape:toelichting;
+.
+kkgshape:AttribuutsoortStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkg:Attribuutsoort;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
 		];
-		sh:node [
-			sh:property kkgshape:authentiek;
-			sh:property kkgshape:code;
-			sh:property kkgshape:datumOpname;
-			sh:property kkgshape:definitie;
-			sh:property kkgshape:domeinFormeelPatroon;
-			sh:property kkgshape:domeinLengte;
-			sh:property kkgshape:domeinPatroon;
-			sh:property kkgshape:domeinType;
-			sh:property kkgshape:heeft;
-			sh:property kkgshape:herkomst;
-			sh:property kkgshape:herkomstDefinitie;
-			sh:property kkgshape:identificerend;
-			sh:property kkgshape:indicatieAfleidbaar;
-			sh:property kkgshape:indicatieFormeleHistorie;
-			sh:property kkgshape:indicatieMaterieleHistorie;
-			sh:property kkgshape:kardinaliteit;
-			sh:property kkgshape:locatie;
-			sh:property kkgshape:mogelijkGeenWaarde;
-			sh:property kkgshape:naam;
-			sh:property kkgshape:toelichting;
-		];
+		sh:node kkgshape:Atribuutsoort;
 	]
 .
 
@@ -400,26 +405,33 @@ kkgshape:Generalisatie rdf:type sh:NodeShape;
 kkgshape:ObjectType rdf:type sh:NodeShape;
 	rdfs:label "ObjectType";
 	sh:name "«ObjectType»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:Class;
+	];
+	sh:property kkgshape:naam;
+	sh:property kkgshape:herkomst;
+	sh:property kkgshape:definitie;
+	sh:property kkgshape:herkomstDefinitie;
+	sh:property kkgshape:datumOpname;
+	sh:property kkgshape:uniekeAanduiding;
+	sh:property kkgshape:populatie;
+	sh:property kkgshape:kwaliteit;
+	sh:property kkgshape:toelichting;
+	sh:property kkgshape:indicatieAbstractObject;
+	sh:property kkgshape:verwijstNaar;
+	sh:property kkgshape:code;
+	sh:property kkgshape:constraint;
+.
+kkgshape:ObjectTypeStereotype rdf:type sh:NodeShape;
+	rdfs:label "ObjectType";
+	sh:name "«ObjectType»";
 	sh:targetNode kkg:ObjectType;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype
 		];
-		sh:node [
-			sh:property kkgshape:naam;
-			sh:property kkgshape:herkomst;
-			sh:property kkgshape:definitie;
-			sh:property kkgshape:herkomstDefinitie;
-			sh:property kkgshape:datumOpname;
-			sh:property kkgshape:uniekeAanduiding;
-			sh:property kkgshape:populatie;
-			sh:property kkgshape:kwaliteit;
-			sh:property kkgshape:toelichting;
-			sh:property kkgshape:indicatieAbstractObject;
-			sh:property kkgshape:verwijstNaar;
-			sh:property kkgshape:code;
-			sh:property kkgshape:constraint;
-		]
+		sh:node kkgshape:ObjectType;
 	]
 .
 
