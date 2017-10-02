@@ -333,6 +333,7 @@ stage:EnactConceptScene a elmo:Scene;
 
         ?doc ?p ?o;
           adms:status skos-lex-status:Enacted;
+          dcterms:issued ?issuedDate;
           dcterms:valid ?validDate.
       }
     }
@@ -342,11 +343,16 @@ stage:EnactConceptScene a elmo:Scene;
           ?p ?o.
         FILTER(
           ?p != adms:status
+          && ?p != dcterms:issued
         )
+        OPTIONAL {
+          ?doc dcterms:issued ?currentIssued.
+        }
       }
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( concat( year( now() ), "-", month( now() ), "-", day( now() ) , "/" ) AS ?validDate )
       BIND( now() AS ?now )
+      BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }
 	'''
 .
