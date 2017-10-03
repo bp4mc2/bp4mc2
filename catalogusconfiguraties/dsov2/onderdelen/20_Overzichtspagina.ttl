@@ -42,9 +42,18 @@ stage:DSOv2ConceptenQuery a elmo:Query;
 		SELECT ?concept ?concept_label ?uitleg
 		WHERE {
       GRAPH ?graph {
-        ?concept rdf:type skos:Concept.
-        ?concept rdfs:label ?concept_label.
+        ?concept rdf:type skos:Concept;
+          rdfs:label ?concept_label.
         OPTIONAL {?concept skos:definition ?uitleg}
+        
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?concept rdf:type skos:Concept.
+            FILTER( ?newerTime > ?graphTime )
+          }
+        }
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}

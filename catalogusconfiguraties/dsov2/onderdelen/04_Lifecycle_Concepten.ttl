@@ -90,21 +90,17 @@ stage:search-concepts-under-development a elmo:Part;
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
-			}
-      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-      FILTER NOT EXISTS {
-        GRAPH ?docg {
-          {
-            ?newdoc prov:wasRevisionOf ?doc.
-          }
-          UNION
-          {
-            ?doc adms:status ?status.
-            FILTER( ?status != adms-status:UnderDevelopment )
+
+        ?docGraph prov:generatedAtTime ?docGraphTime.       
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
           }
         }
-        FILTER regex( ?docg, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-      }
+			}
+      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	''';
 .
@@ -125,30 +121,30 @@ stage:search-concepts-nonenacted a elmo:Part;
 			?g rdfs:label ?label
 		}
 		WHERE {
-			GRAPH ?g {
-				?concept rdf:type skos:Concept;
+      GRAPH ?g {
+        ?concept rdf:type skos:Concept;
           wdrs:describedBy ?doc.
       }
       FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
         ?doc rdf:type prov:Entity;
           adms:status ?status.
-        ?docGraph prov:generatedAtTime ?docGraphTime.
         
+        FILTER(
+          ?status != skos-lex-status:Enacted 
+          && ?status != adms-status:Deprecated
+        )
+        
+        ?docGraph prov:generatedAtTime ?docGraphTime.       
         FILTER NOT EXISTS {
-          GRAPH ?otherDocGraph {
+          GRAPH ?newerDocGraph {
             ?doc rdf:type prov:Entity.
-            ?otherDocGraph prov:generatedAtTime ?otherDocGraphTime.
-            FILTER ( ?otherDocGraphTime > ?docGraphTime ) 
-            
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
           }
         }
       }
       BIND( concat( str( ?concept ), " (", ?status, ")" ) AS ?label )
-      
-      FILTER NOT EXISTS {
-        ?doc adms:status skos-lex-status:Enacted.
-      }
 		}
 	''';
 .
@@ -181,12 +177,22 @@ stage:IssueConceptScene a elmo:Scene;
           prov:generatedAtTime ?now.
 
         ?doc rdf:type prov:Entity;
+          prov:wasRevisionOf ?prevDoc;
           adms:status skos-lex-status:Issued;
           dcterms:issued ?date.
       }
     }
     WHERE {
-      <@CONCEPT@> wdrs:describedBy ?doc.
+      GRAPH ?graph {
+        <@CONCEPT@> wdrs:describedBy ?doc.
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      OPTIONAL {
+        GRAPH ?docGraph {
+          ?doc prov:wasRevisionOf ?prevDoc.
+        }
+        FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      }
       FILTER NOT EXISTS {
         ?newdoc prov:wasRevisionOf ?doc.
       }
@@ -216,7 +222,7 @@ stage:DeprecatePreviousVersion a elmo:Scene;
     
     INSERT {
       GRAPH ?docGraph {
-        ?prevDoc dcterms:valid ?newIssuedDate.
+        ?prevDoc dcterms:valid ?newValidDate.
       }
     }
     WHERE {
@@ -231,7 +237,7 @@ stage:DeprecatePreviousVersion a elmo:Scene;
       }
       GRAPH ?docGraph {
         ?prevDoc dcterms:valid ?currentValidDate.
-        BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newIssuedDate )
+        BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newValidDate )
         FILTER regex( ?currentValidDate, ".*/$" )
       }
     }
@@ -283,6 +289,7 @@ stage:EnactConceptScene a elmo:Scene;
 
         ?doc ?p ?o;
           adms:status skos-lex-status:Enacted;
+          dcterms:issued ?issuedDate;
           dcterms:valid ?validDate.
       }
     }
@@ -292,11 +299,16 @@ stage:EnactConceptScene a elmo:Scene;
           ?p ?o.
         FILTER(
           ?p != adms:status
+          && ?p != dcterms:issued
         )
+        OPTIONAL {
+          ?doc dcterms:issued ?currentIssued.
+        }
       }
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( concat( year( now() ), "-", month( now() ), "-", day( now() ) , "/" ) AS ?validDate )
       BIND( now() AS ?now )
+      BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }
 	'''
 .
