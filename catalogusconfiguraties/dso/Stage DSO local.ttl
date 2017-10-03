@@ -516,6 +516,11 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "/catalogus/dso/update/syncBegrippen";
 			];
 			elmo:data [
+				rdfs:label "Sync Users";
+				elmo:index "5";
+				xhtml:link "/catalogus/dso/update/syncUsers";
+			];
+			elmo:data [
 				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
 				elmo:index "6";
 				xhtml:link "/catalogus/dso/update/syncDataset";
@@ -2201,7 +2206,27 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				)
 			}
 		}
-
+		
+		INSERT {
+			GRAPH container:generiek {
+				?newURI ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type skos:Concept;
+				skos:prefLabel ?term;
+				?p ?o.
+			}
+		}
+		WHERE {
+			GRAPH concept:user {
+				concept: rdf:type prov:Agent;
+				skos:prefLabel ?local.
+			}
+		BIND ( URI(CONCAT("http://digitaalstelselomgevingswet.nl/catalogus/id/concept/", STRAFTER( ?local ),( STR( ?term ) ) ) ) as ?newURI )
+		}
+						
 		INSERT {
 			GRAPH container:generiek {
 				?s bp4mc2:signature ?sig.
@@ -7063,6 +7088,10 @@ updatestage:syncBegrippen a elmo:Production;
 	elmo:contains	stage:sync_clear_concepts;
 	elmo:contains	stage:sync_concepts;
 .
+updatestage:syncUsers a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:sync_users;
+.
 #----------------------------
 # Clearing
 #----------------------------
@@ -7085,6 +7114,11 @@ stage:sync_clear_concepts a elmo:Scene;
 	elmo:index "004";
 	rdfs:label "Opschonen begrippen";
 	elmo:query "clear graph <http://bp4mc2.org/id/dataset/concepts>";
+.
+stage:sync_clear_users a elmo:Scene;
+	elmo:inde "005";
+	rdfs:label "Opschonen gebruikers";
+	elmo:query "clear graph <http://gebruikers/id/dataset>";
 .
 #----------------------------------
 # Import van vocabulaires 
@@ -7413,6 +7447,27 @@ stage:sync_concepts a elmo:Scene;
 		where {
 			service <http://localhost:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-concepts.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+#----------------------------
+# Import van Users 
+#----------------------------
+stage:sync_users a elmo:Scene;
+	elmo:index "606";
+	rdfs:label "Gebruikers informatie ophalen";
+	elmo:query '''
+		insert {
+			GRAPH <http://gebruikers/id/dataset> {
+				?s?p?o
+			}
+		}
+		WHERE {
+			service <http://localhost:8080/catalogus/url> {
+				GRAPH <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/catalogusdata/Concepten/Demo/Gemeenten_DSO_local.ttl> {
 					?s?p?o
 				}
 			}
