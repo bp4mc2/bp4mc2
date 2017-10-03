@@ -143,6 +143,15 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       GRAPH ?udGraph {
         ?concept wdrs:describedBy ?udDoc.
         ?udDoc adms:status adms-status:UnderDevelopment.
+        
+        ?udGraph prov:generatedAtTime ?udGraphTime.       
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?udDoc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+          }
+        }
       }
       FILTER regex( ?udGraph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
     }

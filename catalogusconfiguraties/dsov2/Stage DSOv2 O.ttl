@@ -292,6 +292,15 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       GRAPH ?udGraph {
         ?concept wdrs:describedBy ?udDoc.
         ?udDoc adms:status adms-status:UnderDevelopment.
+        
+        ?udGraph prov:generatedAtTime ?udGraphTime.       
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?udDoc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+          }
+        }
       }
       FILTER regex( ?udGraph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
     }
@@ -540,21 +549,17 @@ stage:search-concepts-under-development a elmo:Part;
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
-			}
-      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-      FILTER NOT EXISTS {
-        GRAPH ?docg {
-          {
-            ?newdoc prov:wasRevisionOf ?doc.
-          }
-          UNION
-          {
-            ?doc adms:status ?status.
-            FILTER( ?status != adms-status:UnderDevelopment )
+
+        ?docGraph prov:generatedAtTime ?docGraphTime.       
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
           }
         }
-        FILTER regex( ?docg, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-      }
+			}
+      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	''';
 .
@@ -575,70 +580,30 @@ stage:search-concepts-nonenacted a elmo:Part;
 			?g rdfs:label ?label
 		}
 		WHERE {
-      {
-        GRAPH ?g {
-          ?concept rdf:type skos:Concept;
-            wdrs:describedBy ?doc.
-        }
-        FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-        GRAPH ?docGraph {
-          ?doc rdf:type prov:Entity;
-            adms:status adms-status:UnderDevelopment.
-
-          ?docGraph prov:generatedAtTime ?docGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?doc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER ( ?newerDocGraphTime > ?docGraphTime )            
-            }
-          }
-        }
-        BIND( concat( str( ?concept ), " (Under development)" ) AS ?label )
+      GRAPH ?g {
+        ?concept rdf:type skos:Concept;
+          wdrs:describedBy ?doc.
+      }
+      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc rdf:type prov:Entity;
+          adms:status ?status.
+        
+        FILTER(
+          ?status != skos-lex-status:Enacted 
+          && ?status != adms-status:Deprecated
+        )
+        
+        ?docGraph prov:generatedAtTime ?docGraphTime.       
         FILTER NOT EXISTS {
-          GRAPH ?otherGraph {
-            ?concept rdf:type skos:Concept;
-              wdrs:describedBy ?otherDoc.
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
           }
-          FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-          GRAPH ?otherDocGraph {
-            ?otherDoc rdf:type prov:Entity;
-              adms:status adms-status:UnderDevelopment.
-
-            ?otherDocGraph prov:generatedAtTime ?otherDocGraphTime.       
-            FILTER NOT EXISTS {
-              GRAPH ?newerOtherDocGraph {
-                ?otherDoc rdf:type prov:Entity.
-                ?newerOtherDocGraph prov:generatedAtTime ?newerOtherDocGraphTime.
-                FILTER ( ?newerOtherDocGraphTime > ?otherDocGraphTime )            
-              }
-            }
-          }
-          FILTER( ?otherDocGraphTime > ?docGraphTime )
         }
       }
-      UNION
-      {
-        GRAPH ?g {
-          ?concept rdf:type skos:Concept;
-            wdrs:describedBy ?doc.
-        }
-        FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-        GRAPH ?docGraph {
-          ?doc rdf:type prov:Entity;
-            adms:status skos-lex-status:Issued.
-
-          ?docGraph prov:generatedAtTime ?docGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?doc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER ( ?newerDocGraphTime > ?docGraphTime )            
-            }
-          }
-        }
-        BIND( concat( str( ?concept ), " (Issued)" ) AS ?label )
-      }
+      BIND( concat( str( ?concept ), " (", ?status, ")" ) AS ?label )
 		}
 	''';
 .
