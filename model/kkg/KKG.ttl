@@ -18,7 +18,8 @@
 @prefix uml:		<http://www.omg.org/spec/UML/20131001/>.
 
 @prefix kkgshape:	<http://localhost:8080/dso/shacl/def/model/>.
-@prefix kkg: 		<http://bp4mc2.org/def/kkg/id/begrip> .
+@prefix kkgbegrip:	<http://bp4mc2.org/kkg/id/begrip/> .
+@prefix kkg:		<http://bp4mc2.org/def/kkg#> .
 
 # Shapes for shapes
 kkgshape:NodeShapeShape a sh:NodeShape;
@@ -33,9 +34,9 @@ kkgshape:NodeShapeShape a sh:NodeShape;
 		sh:minCount 1;
 		sh:maxCount 1;
 		sh:in (
-			kkg:ObjectType
-			kkg:Gegevensgroeptype
-			kkg:Relatieklasse
+			kkgbegrip:ObjectType
+			kkgbegrip:Gegevensgroeptype
+			kkgbegrip:Relatieklasse
 		);
 	];
 	sh:property [
@@ -89,11 +90,11 @@ kkgshape:LiteralShape a sh:NodeShape;
 					sh:name "NodeKind_Node_stereotype";
 					sh:path uml:stereotype;
 					sh:in (
-						kkg:PrimitiefDatatype
-						kkg:DataElement
-						kkg:Union
-						kkg:UnionElement
-						kkg:ReferentieElement		
+						kkgbegrip:PrimitiefDatatype
+						kkgbegrip:DataElement
+						kkgbegrip:Union
+						kkgbegrip:UnionElement
+						kkgbegrip:ReferentieElement		
 					)
 			]
 		]
@@ -125,9 +126,9 @@ kkgshape:IRIShape a sh:NodeShape;
 				sh:name "IRI_NodeKind_Node_stereotype";
 				sh:path uml:stereotype;
 				sh:in (
-					kkg:Attribuutsoort
-					kkg:Gegevensgroep
-					kkg:Relatiesoort
+					kkgbegrip:Attribuutsoort
+					kkgbegrip:Gegevensgroep
+					kkgbegrip:Relatiesoort
 				)
 			]
 		]
@@ -142,9 +143,9 @@ kkgshape:IRIShape a sh:NodeShape;
 #	sh:property [
 #		sh:path uml:stereotype;
 #		sh:in (
-#			kkg:GestructureerdDatatype
-#			kkg:Referentielijst
-#			kkg:Codelijst
+#			kkgbegrip:GestructureerdDatatype
+#			kkgbegrip:Referentielijst
+#			kkgbegrip:Codelijst
 #		)
 #	];
 #	sh:property [
@@ -231,7 +232,7 @@ kkgshape:Attribuutsoort rdf:type sh:NodeShape;
 	sh:property kkgshape:toelichting;
 .
 kkgshape:AttribuutsoortStereotype rdf:type sh:NodeShape;
-	sh:targetNode kkg:Attribuutsoort;
+	sh:targetNode kkgbegrip:Attribuutsoort;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -243,7 +244,7 @@ kkgshape:AttribuutsoortStereotype rdf:type sh:NodeShape;
 kkgshape:Codelijst rdf:type sh:NodeShape;
 	rdfs:label "Codelijst";
 	sh:name "«Codelijst»";
-	sh:targetNode kkg:Codelijst;
+	sh:targetNode kkgbegrip:Codelijst;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -262,7 +263,7 @@ kkgshape:Codelijst rdf:type sh:NodeShape;
 kkgshape:GestructureerdDatatype rdf:type sh:NodeShape;
 	rdfs:label "Gestructureerd Datatype";
 	sh:name "«Gestructureerd Datatype»";
-	sh:targetNode kkg:GestructureerdDatatype;
+	sh:targetNode kkgbegrip:GestructureerdDatatype;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -282,7 +283,7 @@ kkgshape:GestructureerdDatatype rdf:type sh:NodeShape;
 kkgshape:Constraint rdf:type sh:NodeShape;
 	rdfs:label "Constraint";
 	sh:name "«Constraint»";
-	sh:targetNode kkg:Constraint;
+	sh:targetNode kkgbegrip:Constraint;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -298,7 +299,7 @@ kkgshape:Constraint rdf:type sh:NodeShape;
 kkgshape:DataElement rdf:type sh:NodeShape;
 	rdfs:label "Data element";
 	sh:name "«Data element»";
-	sh:targetNode kkg:DataElement;
+	sh:targetNode kkgbegrip:DataElement;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -319,7 +320,7 @@ kkgshape:DataElement rdf:type sh:NodeShape;
 kkgshape:Enumeratie rdf:type sh:NodeShape;
 	rdfs:label "Enumeratie";
 	sh:name "«Enumeratie»";
-	sh:targetNode kkg:Enumeratie;
+	sh:targetNode kkgbegrip:Enumeratie;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -334,7 +335,7 @@ kkgshape:Enumeratie rdf:type sh:NodeShape;
 kkgshape:Enumeratiewaarde rdf:type sh:NodeShape;
 	rdfs:label "Enumeratiewaarde";
 	sh:name "«Enumeratiewaarde»";
-	sh:targetNode kkg:Enumeratiewaarde;
+	sh:targetNode kkgbegrip:Enumeratiewaarde;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -349,7 +350,7 @@ kkgshape:Enumeratiewaarde rdf:type sh:NodeShape;
 
 kkgshape:Gegevensgroep rdf:type sh:NodeShape;
 	rdfs:label "Gegevensgroep";
-	sh:targetNode kkg:Gegevensgroep;
+	sh:targetNode kkgbegrip:Gegevensgroep;
 	sh:name "«Gegevensgroep»";
 	sh:property [
 		sh:path [
@@ -374,7 +375,7 @@ kkgshape:Gegevensgroep rdf:type sh:NodeShape;
 kkgshape:Gegevensgroeptype rdf:type sh:NodeShape;
 	rdfs:label "Gegevensgroeptype";
 	sh:name "«Gegevensgroeptype»";
-	sh:targetNode kkg:Gegevensgroeptype;
+	sh:targetNode kkgbegrip:Gegevensgroeptype;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -389,7 +390,7 @@ kkgshape:Gegevensgroeptype rdf:type sh:NodeShape;
 kkgshape:Generalisatie rdf:type sh:NodeShape;
 	rdfs:label "Generalisatie";
 	sh:name "«Generalisatie»";
-	sh:targetNode kkg:Generalisatie;
+	sh:targetNode kkgbegrip:Generalisatie;
 	sh:property [
 		sh:path [
 			sh:inversePath rdfs:subClassOf;
@@ -426,7 +427,7 @@ kkgshape:ObjectType rdf:type sh:NodeShape;
 kkgshape:ObjectTypeStereotype rdf:type sh:NodeShape;
 	rdfs:label "ObjectType";
 	sh:name "«ObjectType»";
-	sh:targetNode kkg:ObjectType;
+	sh:targetNode kkgbegrip:ObjectType;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype
@@ -438,7 +439,7 @@ kkgshape:ObjectTypeStereotype rdf:type sh:NodeShape;
 kkgshape:PrimitiefDatatype rdf:type sh:NodeShape;
 	rdfs:label "Primitief Datatype";
 	sh:name "«Primitief Datatype»";
-	sh:targetNode kkg:PrimitiefDatatype;
+	sh:targetNode kkgbegrip:PrimitiefDatatype;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -459,7 +460,7 @@ kkgshape:PrimitiefDatatype rdf:type sh:NodeShape;
 kkgshape:ReferentieElement rdf:type sh:NodeShape;
 	rdfs:label "Referentie element";
 	sh:name "«Referentie element»";
-	sh:targetNode kkg:ReferentieElement;
+	sh:targetNode kkgbegrip:ReferentieElement;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -482,7 +483,7 @@ kkgshape:ReferentieElement rdf:type sh:NodeShape;
 kkgshape:Referentielijst rdf:type sh:NodeShape;
 	rdfs:label "Referentielijst";
 	sh:name "«Referentielijst»";
-	sh:targetNode kkg:Referentielijst;
+	sh:targetNode kkgbegrip:Referentielijst;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -501,7 +502,7 @@ kkgshape:Referentielijst rdf:type sh:NodeShape;
 kkgshape:Relatieklasse rdf:ype kkgshape:Nodeshape;
 	rdfs:label "Relatieklasse";
 	sh:name "«Relatieklasse»";
-	sh:targetNode kkg:Relatieklasse;
+	sh:targetNode kkgbegrip:Relatieklasse;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -518,7 +519,7 @@ kkgshape:Relatieklasse rdf:ype kkgshape:Nodeshape;
 kkgshape:RelatierolAlt1 rdf:type sh:NodeShape;
 	rdfs:label "Relatierol";
 	sh:name "«Relatierol»";
-	sh:targetNode kkg:RelatierolAlt1;
+	sh:targetNode kkgbegrip:RelatierolAlt1;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -533,7 +534,7 @@ kkgshape:RelatierolAlt1 rdf:type sh:NodeShape;
 kkgshape:RelatiesoortAlt1 rdf:type sh:NodeShape;
 	rdfs:label "Relatiesoort";
 	sh:name "«Relatiesoort»";
-	sh:targetNode kkg:RelatiesoortAlt1;
+	sh:targetNode kkgbegrip:RelatiesoortAlt1;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -564,7 +565,7 @@ kkgshape:RelatiesoortAlt1 rdf:type sh:NodeShape;
 kkgshape:RelatierolAlt2 rdf:type sh:NodeShape;
 	rdfs:label "Relatierol";
 	sh:name "«Relatierol»";
-	sh:targetNode kkg:RelatierolAlt2;
+	sh:targetNode kkgbegrip:RelatierolAlt2;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -588,7 +589,7 @@ kkgshape:RelatierolAlt2 rdf:type sh:NodeShape;
 kkgshape:RelatiesoortAlt2 rdf:type sh:NodeShape;
 	rdfs:label "Relatiesoort";
 	sh:name "«Relatiesoort»";
-	sh:targetNode kkg:RelatiesoortAlt2;
+	sh:targetNode kkgbegrip:RelatiesoortAlt2;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -603,7 +604,7 @@ kkgshape:RelatiesoortAlt2 rdf:type sh:NodeShape;
 kkgshape:Union rdf:type sh:NodeShape;
 	rdfs:label "Union";
 	sh:name "«Union»";
-	sh:targetNode kkg:Union;
+	sh:targetNode kkgbegrip:Union;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
@@ -621,7 +622,7 @@ kkgshape:Union rdf:type sh:NodeShape;
 kkgshape:UnionElement rdf:type sh:NodeShape;
 	rdfs:label "Union element";
 	sh:name "«Union element»";
-	sh:targetNode kkg:UnionElement;
+	sh:targetNode kkgbegrip:UnionElement;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
