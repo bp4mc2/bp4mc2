@@ -481,8 +481,7 @@ updatestage:concept-enact a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
 	elmo:contains stage:search-concepts-nonenacted;
 	elmo:queryForm stage:DSOv2EnactConceptsForm;
-	elmo:contains stage:EnactConceptScene;
-  elmo:contains stage:DeprecatePreviousVersion
+	elmo:contains stage:EnactConceptScene
 .
 
 #
@@ -663,67 +662,6 @@ stage:IssueConceptScene a elmo:Scene;
 	'''
 .
 
-stage:DeprecatePreviousVersion a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Update geldigheidstermijn eventuele andere geldige versie";
-	elmo:query '''
-    prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-    prefix dcterms: <http://purl.org/dc/terms/>
-    
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    
-    INSERT {
-      GRAPH ?docGraph {
-        ?prevDoc dcterms:valid ?newValidDate.
-      }
-    }
-    WHERE {
-      GRAPH ?currentTransaction {
-        ?concept wdrs:describedBy ?doc.
-      }
-      GRAPH <@GRAPH@> {
-        ?doc rdf:type prov:Entity.
-      }
-      GRAPH ?previousTransaction {
-        ?concept wdrs:describedBy ?prevDoc.
-      }
-      GRAPH ?docGraph {
-        ?prevDoc dcterms:valid ?currentValidDate.
-        BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newValidDate )
-        FILTER regex( ?currentValidDate, ".*/$" )
-      }
-    }
-    
-    DELETE {
-      GRAPH ?docGraph {
-        ?prevDoc dcterms:valid ?date.
-      }
-    }
-    WHERE {
-      GRAPH ?currentTransaction {
-        ?concept wdrs:describedBy ?doc.
-      }
-      GRAPH <@GRAPH@> {
-        ?doc rdf:type prov:Entity.
-      }
-      GRAPH ?previousTransaction {
-        ?concept wdrs:describedBy ?prevDoc.
-      }
-      GRAPH ?docGraph {
-        ?prevDoc dcterms:valid ?date.
-        FILTER regex( ?date, ".*/$" )
-      }
-    }
-  '''
-.
-
 stage:EnactConceptScene a elmo:Scene;
 	elmo:index "3";
 	rdfs:label "Laat gekozen versie van concept in werking treden";
@@ -750,6 +688,9 @@ stage:EnactConceptScene a elmo:Scene;
           adms:status skos-lex-status:Enacted;
           dcterms:issued ?issuedDate;
           dcterms:valid ?validDate.
+        
+        ?prevDoc ?prevP ?prevO;
+          dcterms:valid ?newValidDate.
       }
     }
     WHERE {
@@ -764,6 +705,23 @@ stage:EnactConceptScene a elmo:Scene;
           ?doc dcterms:issued ?currentIssued.
         }
       }
+      
+      GRAPH ?currentTransaction {
+        ?concept wdrs:describedBy ?doc.
+      }
+      OPTIONAL {
+        GRAPH ?previousTransaction {
+          ?concept wdrs:describedBy ?prevDoc.
+        }
+        GRAPH ?docGraph {
+          ?prevDoc ?prevP ?prevO;
+            dcterms:valid ?currentValidDate.
+          BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newValidDate )
+          FILTER regex( ?currentValidDate, ".*/$" )
+          FILTER( ?prevP != dcterms:valid )
+        }
+      }
+      
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( concat( year( now() ), "-", month( now() ), "-", day( now() ) , "/" ) AS ?validDate )
       BIND( now() AS ?now )
