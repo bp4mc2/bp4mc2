@@ -85,7 +85,7 @@ stage:search-concepts-under-development a elmo:Part;
 		WHERE {
 			GRAPH ?g {
 				?concept rdf:type skos:Concept;
-          wdrs:describedBy ?doc.
+          wdrs:describedby ?doc.
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
@@ -122,7 +122,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		WHERE {
       GRAPH ?g {
         ?concept rdf:type skos:Concept;
-          wdrs:describedBy ?doc.
+          wdrs:describedby ?doc.
       }
       FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
@@ -193,7 +193,7 @@ stage:IssueConceptScene a elmo:Scene;
     }
     WHERE {
       GRAPH ?graph {
-        <@CONCEPT@> wdrs:describedBy ?doc.
+        <@CONCEPT@> wdrs:describedby ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       OPTIONAL {
@@ -259,23 +259,25 @@ stage:EnactConceptScene a elmo:Scene;
     WHERE {
       GRAPH <@GRAPH@> {
         ?doc rdf:type prov:Entity;
+          adms:status ?status;
           ?p ?o.
         FILTER(
           ?p != adms:status
           && ?p != dcterms:issued
           && ?p != prov:wasGeneratedBy
         )
+        FILTER( ?status != adms-status:Deprecated )
         OPTIONAL {
           ?doc dcterms:issued ?currentIssued.
         }
       }
       
       GRAPH ?currentTransaction {
-        ?concept wdrs:describedBy ?doc.
+        ?concept wdrs:describedby ?doc.
       }
       OPTIONAL {
         GRAPH ?previousTransaction {
-          ?concept wdrs:describedBy ?prevDoc.
+          ?concept wdrs:describedby ?prevDoc.
         }
         GRAPH ?docGraph {
           ?prevDoc ?prevP ?prevO;

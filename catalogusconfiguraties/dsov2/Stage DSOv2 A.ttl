@@ -244,7 +244,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
         .
         
         ?subject ?p ?o;
-          wdrs:describedBy ?doc
+          wdrs:describedby ?doc
         .
         
         ?doc rdf:type prov:Entity;
@@ -302,7 +302,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         .
         
         ?s ?p ?o;
-          wdrs:describedBy ?doc
+          wdrs:describedby ?doc
         .
         
         ?doc rdf:type prov:Entity;
@@ -327,7 +327,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         ?s ?p ?o.
       }
       GRAPH ?graph {       
-        ?s wdrs:describedBy ?currentDoc;
+        ?s wdrs:describedby ?currentDoc;
           skos:prefLabel ?prefLabel.
         
         ?graph prov:generatedAtTime ?graphTime.
@@ -343,7 +343,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       
       OPTIONAL {
         GRAPH ?udGraph {
-          ?s wdrs:describedBy ?udDoc.
+          ?s wdrs:describedby ?udDoc.
           ?udDoc ?docP ?docO;
             adms:status adms-status:UnderDevelopment.
           FILTER( ?docP != adms:status )
@@ -394,13 +394,20 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         .
         
         ?s ?p ?o;
-          wdrs:describedBy ?doc;
+          wdrs:describedby ?doc;
           ?pred ?obj
         .
         
-        ?doc ?docP ?docO;
+        ?doc adms:status skos-lex-status:Enacted;
           prov:wasRevisionOf ?currentDoc;
-          prov:wasGeneratedBy ?activity
+          prov:wasGeneratedBy ?activity;
+          ?docP ?docO
+        .
+        
+        ?currentDoc adms:status adms-status:Deprecated;
+          prov:wasRevisionOf ?currentDocRev;
+          prov:wasGeneratedBy ?activity;
+          ?docP ?docO
         .
         
         ?activity rdf:type prov:Activity;
@@ -422,12 +429,12 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         )
       }
       GRAPH ?graph {
-        ?s wdrs:describedBy ?currentDoc;
+        ?s wdrs:describedby ?currentDoc;
           skos:prefLabel ?prefLabel;
           ?pred ?obj
         .
         FILTER(
-          ?pred != wdrs:describedBy
+          ?pred != wdrs:describedby
         )
           
         ?graph prov:generatedAtTime ?graphTime.
@@ -435,7 +442,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
             ?s rdf:type skos:Concept;
-              wdrs:describedBy ?newerDoc.
+              wdrs:describedby ?newerDoc.
             FILTER( ?newerTime > ?graphTime )
           }
           GRAPH ?docNewerGraph {
@@ -443,12 +450,18 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           }
         }
       }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
         ?currentDoc adms:status skos-lex-status:Enacted;
-          ?docP ?docO.
+          ?docP ?docO
+        .
+        OPTIONAL {
+          ?currentDoc prov:wasRevisionOf ?currentDocRev.
+        }
         FILTER (
           ?docP != prov:wasRevisionOf
           && ?docP != prov:wasGeneratedBy
+          && ?docP != adms:status
         )
         
         ?docGraph prov:generatedAtTime ?docGraphTime.
@@ -460,8 +473,6 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           }
         }
       }
-      
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Aanpassing_", replace( now(), " ", "T" ) ) ) AS ?activity )
@@ -560,7 +571,7 @@ stage:search-concepts-under-development a elmo:Part;
 		WHERE {
 			GRAPH ?g {
 				?concept rdf:type skos:Concept;
-          wdrs:describedBy ?doc.
+          wdrs:describedby ?doc.
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
@@ -597,7 +608,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		WHERE {
       GRAPH ?g {
         ?concept rdf:type skos:Concept;
-          wdrs:describedBy ?doc.
+          wdrs:describedby ?doc.
       }
       FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
@@ -668,7 +679,7 @@ stage:IssueConceptScene a elmo:Scene;
     }
     WHERE {
       GRAPH ?graph {
-        <@CONCEPT@> wdrs:describedBy ?doc.
+        <@CONCEPT@> wdrs:describedby ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       OPTIONAL {
@@ -734,23 +745,25 @@ stage:EnactConceptScene a elmo:Scene;
     WHERE {
       GRAPH <@GRAPH@> {
         ?doc rdf:type prov:Entity;
+          adms:status ?status;
           ?p ?o.
         FILTER(
           ?p != adms:status
           && ?p != dcterms:issued
           && ?p != prov:wasGeneratedBy
         )
+        FILTER( ?status != adms-status:Deprecated )
         OPTIONAL {
           ?doc dcterms:issued ?currentIssued.
         }
       }
       
       GRAPH ?currentTransaction {
-        ?concept wdrs:describedBy ?doc.
+        ?concept wdrs:describedby ?doc.
       }
       OPTIONAL {
         GRAPH ?previousTransaction {
-          ?concept wdrs:describedBy ?prevDoc.
+          ?concept wdrs:describedby ?prevDoc.
         }
         GRAPH ?docGraph {
           ?prevDoc ?prevP ?prevO;
