@@ -132,43 +132,6 @@ stage:DSOv2ConceptenPut a elmo:Scene;
 		prefix transactie: <http://omgevingswet.overheid.nl/catalogus/id/transactie/@CURRENTMOMENT@>
     
     INSERT {
-      GRAPH ?udGraph {
-        ?udDoc adms:status adms-status:UnderDevelopment, adms-status:Deprecated.
-      }
-    }
-    WHERE {
-      GRAPH container:generiek {
-        ?concept rdf:type skos:Concept.
-      }
-      GRAPH ?udGraph {
-        ?concept wdrs:describedBy ?udDoc.
-        ?udDoc adms:status adms-status:UnderDevelopment.
-        
-        ?udGraph prov:generatedAtTime ?udGraphTime.       
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocGraph {
-            ?udDoc rdf:type prov:Entity.
-            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-            FILTER ( ?newerDocGraphTime > ?udGraphTime )            
-          }
-        }
-      }
-      FILTER regex( ?udGraph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-    }
-    
-    DELETE {
-      GRAPH ?udGraph {
-        ?udDoc adms:status adms-status:UnderDevelopment.
-      }
-    }
-    WHERE {
-      GRAPH ?udGraph {
-        ?udDoc adms:status adms-status:Deprecated.
-      }
-      FILTER regex( ?udGraph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-    }
-    
-    INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sparql:Graph;
           rdfs:label "Aanpassing van het begrip door het bevoegde gezag";
@@ -183,6 +146,9 @@ stage:DSOv2ConceptenPut a elmo:Scene;
           adms:status adms-status:UnderDevelopment;
           prov:wasRevisionOf ?currentDoc
         .
+        
+        ?udDoc ?docP ?docO;
+          adms:status adms-status:Deprecated.
       }
     }
     WHERE {
@@ -202,8 +168,26 @@ stage:DSOv2ConceptenPut a elmo:Scene;
           }
         }
       }
-      
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      
+      OPTIONAL {
+        GRAPH ?udGraph {
+          ?s wdrs:describedBy ?udDoc.
+          ?udDoc ?docP ?docO;
+            adms:status adms-status:UnderDevelopment.
+          FILTER( ?docP != adms:status )
+          
+          ?udGraph prov:generatedAtTime ?udGraphTime.       
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?udDoc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+            }
+          }
+        }
+        FILTER regex( ?udGraph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
