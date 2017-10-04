@@ -168,17 +168,27 @@ stage:IssueConceptScene a elmo:Scene;
     prefix dcterms: <http://purl.org/dc/terms/>
     
     prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
 		
     INSERT {
       GRAPH ?transactie {      
         ?transactie rdf:type sparql:Graph;
           rdfs:label "Bekendmaking van het begrip in de LVBB, en de registratie hiervan in de Catalogus";
-          prov:generatedAtTime ?now.
+          prov:generatedAtTime ?now
+        .
 
         ?doc rdf:type prov:Entity;
           prov:wasRevisionOf ?prevDoc;
           adms:status skos-lex-status:Issued;
-          dcterms:issued ?date.
+          dcterms:issued ?date;
+          prov:wasGeneratedBy ?activity
+        .
+        
+        ?activity rdf:type prov:Activity;
+          rdfs:label "Bekendmaking van het begrip";
+          prov:startedAtTime ?now;
+          prov:wasAssociatedWith user:TomcatUser
+        .
       }
     }
     WHERE {
@@ -198,6 +208,7 @@ stage:IssueConceptScene a elmo:Scene;
       
       BIND( strdt( concat(  year( now() ), "-", month( now() ), "-", day( now() ) ), xsd:date ) AS ?date )
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Bekendmaking_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( now() AS ?now )
     }
 	'''
@@ -218,20 +229,31 @@ stage:EnactConceptScene a elmo:Scene;
     prefix dcterms: <http://purl.org/dc/terms/>
     
     prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
 		
     INSERT {
       GRAPH ?transactie {      
         ?transactie rdf:type sparql:Graph;
-          rdfs:label "In werking treding van het begrip";
-          prov:generatedAtTime ?now.
+          rdfs:label "In werkingtreding van het begrip";
+          prov:generatedAtTime ?now
+        .
 
         ?doc ?p ?o;
           adms:status skos-lex-status:Enacted;
           dcterms:issued ?issuedDate;
-          dcterms:valid ?validDate.
+          dcterms:valid ?validDate;
+          prov:wasGeneratedBy ?activity
+        .
         
         ?prevDoc ?prevP ?prevO;
-          dcterms:valid ?newValidDate.
+          dcterms:valid ?newValidDate
+        .
+        
+        ?activity rdf:type prov:Activity;
+          rdfs:label "In werkingtreding van het begrip";
+          prov:startedAtTime ?now;
+          prov:wasAssociatedWith user:TomcatUser
+        .
       }
     }
     WHERE {
@@ -241,6 +263,7 @@ stage:EnactConceptScene a elmo:Scene;
         FILTER(
           ?p != adms:status
           && ?p != dcterms:issued
+          && ?p != prov:wasGeneratedBy
         )
         OPTIONAL {
           ?doc dcterms:issued ?currentIssued.
@@ -264,6 +287,7 @@ stage:EnactConceptScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/In_werkingtreding_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( concat( year( now() ), "-", month( now() ), "-", day( now() ) , "/" ) AS ?validDate )
       BIND( now() AS ?now )
       BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
