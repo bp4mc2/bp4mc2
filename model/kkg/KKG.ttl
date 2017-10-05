@@ -244,107 +244,139 @@ kkgshape:AttribuutsoortStereotype rdf:type sh:NodeShape;
 kkgshape:Codelijst rdf:type sh:NodeShape;
 	rdfs:label "Codelijst";
 	sh:name "«Codelijst»";
+	sh:property [
+			sh:path rdf:type;
+			sh:hasValue owl:DatatypeProperty;
+		];
+		sh:property kkgshape:datumOpname;
+		sh:property kkgshape:definitie;
+		sh:property kkgshape:herkomst;
+		sh:property kkgshape:locatie;
+		sh:property kkgshape:naam;
+		sh:property kkgshape:toelichting;
+.
+
+kkgshape:CodelijstStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkgbegrip:Codelijst;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
-		];
-		sh:node [
-			sh:property kkgshape:datumOpname;
-			sh:property kkgshape:definitie;
-			sh:property kkgshape:herkomst;
-			sh:property kkgshape:locatie;
-			sh:property kkgshape:naam;
-			sh:property kkgshape:toelichting;
+			];
+			sh:node kkgshape:Codelijst;
 		]
-	]
 .
 
 kkgshape:GestructureerdDatatype rdf:type sh:NodeShape;
 	rdfs:label "Gestructureerd Datatype";
 	sh:name "«Gestructureerd Datatype»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:DatatypeProperty;
+		];
+		sh:property kkgshape:dataElement;
+		sh:property kkgshape:naam;
+		sh:property kkgshape:herkomst;
+		sh:property kkgshape:definitie;
+		sh:property kkgshape:patroon;
+		sh:property kkgshape:formeelPatroon;
+		sh:property kkgshape:datumOpname;
+.
+
+kkgshape:GestructureerdDatatypeStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkgbegrip:GestructureerdDatatype;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
-		];
-		sh:node [
-			sh:property kkgshape:dataElement;
-			sh:property kkgshape:naam;
-			sh:property kkgshape:herkomst;
-			sh:property kkgshape:definitie;
-			sh:property kkgshape:patroon;
-			sh:property kkgshape:formeelPatroon;
-			sh:property kkgshape:datumOpname;
-		]
+			];
+		sh:node kkgshape:GestructureerdDatatype;
 	]
 .
-
+	
 kkgshape:Constraint rdf:type sh:NodeShape;
 	rdfs:label "Constraint";
 	sh:name "«Constraint»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:DatatypeProperty;
+		];
+		sh:property kkgshape:naam;
+		sh:property kkgshape:specificatieTekst;
+		sh:property kkgshape:specificatieFormeel;
+.
+kkgshape:ConstraintStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkgbegrip:Constraint;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
-		];
-		sh:node [
-			sh:property kkgshape:naam;
-			sh:property kkgshape:specificatieTekst;
-			sh:property kkgshape:specificatieFormeel;
-		]
+			];
+		sh:node kkgshape:Constraint;
 	]
 .
 
 kkgshape:DataElement rdf:type sh:NodeShape;
 	rdfs:label "Data element";
 	sh:name "«Data element»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:DatatypeProperty;
+		];
+		sh:property kkgshape:naam;
+		sh:property kkgshape:definitie;
+		sh:property kkgshape:domeinType;
+		sh:property kkgshape:domeinLengte;
+		sh:property kkgshape:domeinPatroon;
+		sh:property kkgshape:domeinFormeelPatroon;
+		sh:property kkgshape:kardinaliteit;
+		sh:property kkgshape:datatype;
+.
+kkgshape:DataElementStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkgbegrip:DataElement;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
-		];
-		sh:node [
-			sh:property kkgshape:naam;
-			sh:property kkgshape:definitie;
-			sh:property kkgshape:domeinType;
-			sh:property kkgshape:domeinLengte;
-			sh:property kkgshape:domeinPatroon;
-			sh:property kkgshape:domeinFormeelPatroon;
-			sh:property kkgshape:kardinaliteit;
-			sh:property kkgshape:datatype;
-		]
+			];
+		sh:node kkgshape:DataElement;
 	]
 .
 
 kkgshape:Enumeratie rdf:type sh:NodeShape;
 	rdfs:label "Enumeratie";
 	sh:name "«Enumeratie»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:DatatypeProperty;
+		];
+		sh:property kkgshape:naam;
+		sh:property kkgshape:definitie;
+.
+kkgshape:EnumeratieStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkgbegrip:Enumeratie;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
-		];
-		sh:node [
-			sh:property kkgshape:naam;
-			sh:property kkgshape:definitie;
-		]
-	];
+			];
+		sh:node kkgshape:Enumeratie;
+	]
 .
 
 kkgshape:Enumeratiewaarde rdf:type sh:NodeShape;
 	rdfs:label "Enumeratiewaarde";
 	sh:name "«Enumeratiewaarde»";
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue owl:DatatypeProperty;
+		];
+		sh:property kkgshape:naam;
+		sh:property kkgshape:definitie;
+		sh:property kkgshape:code;
+.
+kkgshape:EnumeratiewaardeStereotype rdf:type sh:NodeShape;
 	sh:targetNode kkgbegrip:Enumeratiewaarde;
 	sh:property [
 		sh:path [
 			sh:inversePath uml:stereotype;
-		];
-		sh:node [
-			sh:property kkgshape:naam;
-			sh:property kkgshape:definitie;
-			sh:property kkgshape:code;
-		]
+			];
+		sh:node kkgshape:Enumeratiewaarde;
 	]
 .
 
