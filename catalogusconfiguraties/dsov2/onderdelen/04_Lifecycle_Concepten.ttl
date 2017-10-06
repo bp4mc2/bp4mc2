@@ -22,7 +22,8 @@ updatestage:concept-enact a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
 	elmo:contains stage:search-concepts-nonenacted;
 	elmo:queryForm stage:DSOv2EnactConceptsForm;
-	elmo:contains stage:EnactConceptScene
+	elmo:contains stage:EnactConceptScene;
+	elmo:contains stage:werkingsregels;
 .
 
 #
@@ -57,10 +58,37 @@ stage:DSOv2EnactConceptsForm a elmo:Form;
 		elmo:index "1";
 	];
 	elmo:fragment [
-		elmo:appearance elmo:SubmitAppearance;
-		rdfs:label "Ga verder"@nl;
+		elmo:applies-to "werkingsregel";
+		rdfs:label "Werkingsregel:"@nl;
+		elmo:valuesFrom stage:werkingsregels;
+		rdf:value <urn:wr-ow>;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to "werkingsmoment";
+		elmo:valueDatatype xsd:Date;
+		rdfs:label "Werkingsmoment:"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		rdf:value elmo:Now;
 		elmo:index "3";
 	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "4";
+	];
+.
+stage:werkingsregels a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		construct {
+			<urn:wr-twk> rdfs:label "TWK Terugwerkende kracht".
+			<urn:wr-ow> rdfs:label "OW Onmiddelijke werking".
+			<urn:wr-uw> rdfs:label "UW Uitgestelde werking".
+		}
+		where {}
+	''';
 .
 
 #
@@ -282,7 +310,7 @@ stage:EnactConceptScene a elmo:Scene;
         GRAPH ?docGraph {
           ?prevDoc ?prevP ?prevO;
             dcterms:valid ?currentValidDate.
-          BIND( concat( ?currentValidDate, year( now() ), "-", month( now() ), "-", day( now() ) ) AS ?newValidDate )
+          BIND( concat( ?currentValidDate, "@WERKINGSMOMENT@" ) AS ?newValidDate )
           FILTER regex( ?currentValidDate, ".*/$" )
           FILTER( ?prevP != dcterms:valid )
         }
@@ -290,7 +318,7 @@ stage:EnactConceptScene a elmo:Scene;
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/In_werkingtreding_", replace( now(), " ", "T" ) ) ) AS ?activity )
-      BIND( concat( year( now() ), "-", month( now() ), "-", day( now() ) , "/" ) AS ?validDate )
+      BIND( concat( "@WERKINGSMOMENT@" , "/" ) AS ?validDate )
       BIND( now() AS ?now )
       BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }
