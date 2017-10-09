@@ -1398,6 +1398,8 @@ stage:DemoGraph a elmo:Part;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
 		prefix adms: <http://www.w3.org/ns/adms#>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
 		construct {
 			# Generiek
@@ -1429,7 +1431,10 @@ stage:DemoGraph a elmo:Part;
 					<@SUBJECT@> adms:status ?status.
 					OPTIONAL {<@SUBJECT@> prov:wasRevisionOf ?rev}
 					?gdoc prov:generatedAtTime ?doctijdstip.
-					BIND (concat(strafter(str(?status),'status/'),' (',?doctijdstip,')') as ?label)
+          BIND( IF( ?status = adms-status:UnderDevelopment, "Werkversie",
+                IF( ?status = slex-status:Issued, "Bekendgemaakt", 
+                IF( ?status = slex-status:Enacted, "In werking getreden", "Vervallen" ) ) ) AS ?statusstring )
+					BIND (concat(?statusstring,' (',?doctijdstip,')') as ?label)
 					BIND (iri(concat('@SUBJECT@','?graph=',str(?gdoc))) as ?metadata)
 				}
 			}
