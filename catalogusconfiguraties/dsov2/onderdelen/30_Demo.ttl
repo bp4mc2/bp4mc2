@@ -150,7 +150,6 @@ stage:DemoBegripVersies a elmo:Part;
 				<@SUBJECT@> skos:definition ?definitie.
 				?g prov:generatedAtTime ?tijdstip.
 				<@SUBJECT@> wdrs:describedby ?doc.
-#				<@SUBJECT@> wdrs:describedby ?doc1.
 				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
 			}
 			graph ?gdoc {
@@ -159,18 +158,19 @@ stage:DemoBegripVersies a elmo:Part;
 				?gdoc prov:generatedAtTime ?doctijdstip.
 				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
 			}
-#			graph ?latestdoc {
-#				?doc1 adms:status ?lateststatus.
-#				OPTIONAL {?doc1 dct:valid ?latestvalid}
-#				?latestdoc prov:generatedAtTime ?latestdoctijdstip.
-#			}
-#			FILTER NOT EXISTS {
-#				graph ?laterdoc {
-#					?laterdoc prov:generatedAtTime ?laterdoctijdstip.
-#					FILTER (?laterdoctijdstip > ?latestdoctijdstip)
-#				}
-#			}
-			FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      graph ?latestdoc {
+        ?doc adms:status ?lateststatus.
+        OPTIONAL {?doc dct:valid ?latestvalid}
+        ?latestdoc prov:generatedAtTime ?latestdoctijdstip.
+      }
+      FILTER NOT EXISTS {
+        graph ?laterdoc {
+          ?doc rdf:type prov:Entity.
+          ?laterdoc prov:generatedAtTime ?laterdoctijdstip.
+          FILTER (?laterdoctijdstip > ?latestdoctijdstip)
+        }
+      }
+      FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	''';
 .
