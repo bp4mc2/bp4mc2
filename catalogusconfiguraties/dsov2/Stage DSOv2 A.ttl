@@ -1333,10 +1333,20 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "1";
 	];
 	elmo:fragment [
+		elmo:applies-to adms:latestStatus; #Dit is eigenlijk niet goed, maar LDT kan niet onderscheid maken tussen hoofdlabel en nested label
+		rdfs:label "Actuele status:";
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to dct:latestValid;
+		rdfs:label "Actuele geldigheid:";
+		elmo:index "3";
+	];
+	elmo:fragment [
 		elmo:applies-to wdrs:describedby;
 		elmo:appearance elmo:NestedAppearance;
 		rdfs:label "Metadata:";
-		elmo:index "2";
+		elmo:index "4";
 	];
 	elmo:fragment [
 		elmo:applies-to adms:status;
@@ -1364,6 +1374,8 @@ stage:DemoBegripVersies a elmo:Part;
 			?doc rdfs:label ?titel.
 			?doc skos:definition ?definitie.
 			?doc wdrs:describedby ?metadata.
+			?doc adms:latestStatus ?lateststatus.
+			?doc dct:latestValid ?latestvalid.
 			?metadata adms:status ?status.
 			?metadata dct:valid ?valid.
 			?metadata prov:generatedAtTime ?doctijdstip.
@@ -1379,6 +1391,8 @@ stage:DemoBegripVersies a elmo:Part;
 				<@SUBJECT@> skos:definition ?definitie.
 				?g prov:generatedAtTime ?tijdstip.
 				<@SUBJECT@> wdrs:describedby ?doc.
+#				<@SUBJECT@> wdrs:describedby ?doc1.
+				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
 			}
 			graph ?gdoc {
 				?doc adms:status ?status.
@@ -1386,7 +1400,17 @@ stage:DemoBegripVersies a elmo:Part;
 				?gdoc prov:generatedAtTime ?doctijdstip.
 				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
 			}
-			BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
+#			graph ?latestdoc {
+#				?doc1 adms:status ?lateststatus.
+#				OPTIONAL {?doc1 dct:valid ?latestvalid}
+#				?latestdoc prov:generatedAtTime ?latestdoctijdstip.
+#			}
+#			FILTER NOT EXISTS {
+#				graph ?laterdoc {
+#					?laterdoc prov:generatedAtTime ?laterdoctijdstip.
+#					FILTER (?laterdoctijdstip > ?latestdoctijdstip)
+#				}
+#			}
 			FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	''';
