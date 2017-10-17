@@ -1171,26 +1171,11 @@ stage:kkg-model	a	elmo:Representation;
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		construct {
-			?nshape sh:targetClass ?nshape.
-			?nshape rdf:type owl:Class.
-			?nshape sh:name ?nlabel.
-			?nshape sh:property ?pshape.
-			?pshape sh:path ?pshape.
-			?pshape rdf:type rdf:Property.
-			?pshape sh:name ?plabel.
-			?pshape ?psp ?pso.
-			?pshape sh:class ?refshape
+			?s?p?o
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/kkg> {
-				?nshape rdf:type sh:NodeShape.
-				?nshape rdfs:label ?nlabel.
-				OPTIONAL {
-					?nshape sh:property ?pshape.
-					?pshape rdfs:label ?plabel.
-					?pshape ?psp ?pso
-					OPTIONAL {?pshape sh:node ?refshape}
-				}
+				?s?p?o
 			}
 		}
 	''';

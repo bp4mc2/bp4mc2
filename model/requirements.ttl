@@ -1,3 +1,7 @@
+# Nog aan te passen aan de hand van de discussie:
+# - wdrs:describedby overal gebruiken voor de relatie naar prov:Entity
+# - prov:Entity geen rollen onderkennen, gewoon direct verwijzen naar prov:Entity vanuit de objecten die historie nodig hebben
+
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -354,6 +358,7 @@ req:Datasetversie rdf:type sh:NodeShape;
 	sh:property req:Datasetversie_distributie;
 	sh:property req:Datasetversie_versieVan;
 	sh:property req:Datasetversie_werkingsgebied;
+	sh:property req:Datasetversie_gerelateerdAan;
     sh:targetClass dcat:Dataset;
 .
 req:Datasetversie_beschrijving rdf:type sh:PropertyShape;
@@ -368,7 +373,7 @@ req:Datasetversie_informatiemodel rdf:type sh:PropertyShape;
     rdfs:comment "Bij een dataset hoort een informatiemodel.";
     sh:class <http://www.w3.org/ns/adms#Asset>;
     rdf:value "kadaster.nl/schemas/imkad";
-    sh:path wdrs:describedBy;
+    sh:path wdrs:describedby;
 .
 req:Datasetversie_naam rdf:type sh:PropertyShape;
     rdfs:label "naam";
@@ -408,6 +413,12 @@ req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
     sh:class dcterms:Location;
     rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
     sh:path dcterms:spatial
+.
+req:Datasetversie_gerelateerdAan rdf:type sh:PropertyShape;
+	rdfs:label "gerelateerd aan";
+	rdfs:comment "Geeft de dataset aan waar deze dataset aan gerelateerd is (wordt gebruikt om aan te geven hoe een dataset is afgeleid uit 1 of meerdere andere datasets";
+	sh:path dcterms:relation;
+	sh:class dcat:Dataset;
 .
 
 #---------------------
