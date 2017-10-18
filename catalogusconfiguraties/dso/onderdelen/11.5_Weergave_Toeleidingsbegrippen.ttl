@@ -56,15 +56,15 @@ stage:DSOToeleidingsbegrippentabel a elmo:Part;
 # Query voor ophalen collecties en aantal onderliggende concepten
 stage:DSOToeleidingsbegrippenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix container: <http://localhost:8080/catalogus/dso/container/>
-		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
-		prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
-		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix container: 	<http://localhost:8080/catalogus/dso/container/>
+		prefix doc: 		<http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix collection: 	<http://localhost:8080/catalogus/dso/id/collection/>
+		prefix concept: 	<http://localhost:8080/catalogus/dso/id/concept/>
+		prefix dc: 			<http://purl.org/dc/terms/>
+		prefix dctype: 		<http://purl.org/dc/dcmitype/>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix owl: 		<http://www.w3.org/2002/07/owl#>
 		
 		SELECT DISTINCT ?Toeleidingsbegrip ?Concept ?Concept_label
 		
@@ -74,6 +74,10 @@ stage:DSOToeleidingsbegrippenQuery a elmo:Query;
 				?s skos:closeMatch ?Concept.
 				?s rdfs:label ?Toeleidingsbegrip.
 				?Concept  rdfs:label ?Concept_label.	
+				?Collectie skos:member ?s.
+				FILTER (
+					?Collectie = collection:Toeleidingsbegrippen
+				)
 			}
 			
 			FILTER regex(?Toeleidingsbegrip, '^[^a-z0-9]*@TERM@', 'i').
