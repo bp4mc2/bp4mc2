@@ -1,0 +1,549 @@
+@prefix rdf:		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
+@prefix owl:		<http://www.w3.org/2002/07/owl#>.
+@prefix sh:			<http://www.w3.org/ns/shacl#>.
+@prefix uml:		<http://www.omg.org/spec/UML/20131001/>.
+@prefix kkg: 		<http://bp4mc2.org/def/kkg/id/begrip>.
+
+@prefix samplebase: <http://localhost:8080/catalogus/dso/sbs#>. 
+@prefix sbs:		<http://localhost:8080/catalogus/dso/shacl/def/sbs/>.
+
+### NodeShapes
+
+sbs:ProducerShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Producer;
+	sh:property sbs:contractDateShape;
+	sh:property sbs:siteShape;
+	sh:property sbs:idShape;
+	sh:severity sh:Violation;
+.
+sbs:ExternalProducerShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:ExternalProducer;
+	sh:property sbs:postareaShape;
+	rdfs:subClassOf sbs:ProducerShape;
+	sh:severity sh:Violation;		
+.
+sbs:ClientShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Client;
+	sh:property sbs:idShape;
+	sh:property sbs:contractShape;
+	sh:severity sh:Violation;	
+.
+sbs:DealShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Deal;
+	sh:property sbs:festivityDayShape;
+	sh:property sbs:festivityMonthShape;
+	sh:property sbs:festivityYearShape;
+	sh:property sbs:signedAtShape;
+	sh:severity sh:Violation;	
+.
+sbs:ContractShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Contract;
+	sh:property sbs:idShape;
+	sh:severity sh:Violation;	
+.
+sbs:GoniometricShape rdf:type sh:NodeShape ;
+	sh:targetClass samplebase:Goniometric;
+	sh:property sbs:lineShape;
+	sh:property sbs:surfaceShape;
+	sh:severity sh:Violation;
+.
+sbs:ValueListShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:ValueList;
+	sh:property sbs:codeShape;
+	sh:property sbs:valueShape;
+	sh:severity sh:Violation;
+.
+sbs:BrickShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Brick;
+	sh:property sbs:colorShape;
+	sh:property sbs:cornersShape;
+	sh:property sbs:descriptionShape;
+	sh:property sbs:geoLocationShape;
+	sh:property sbs:inStockShape;
+	sh:property sbs:maxTemperatureShape;
+	sh:property sbs:measureShape;
+	sh:property sbs:netWeightShape;
+	sh:property sbs:sizeShape;
+	sh:property sbs:tagShape;
+	sh:property sbs:typeShape;
+	sh:property sbs:stockIdShape;
+	sh:property sbs:producedByShape;
+	sh:property sbs:primaryProducerShape;
+	sh:property sbs:baseOnDesignShape;
+	sh:property sbs:designBaseShape;
+	sh:severity sh:Violation;
+.
+
+sbs:BikeShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Bike;
+	sh:property sbs:colorShape;
+	sh:property sbs:netWeightShape;
+	sh:property sbs:ownerShape;
+	sh:property sbs:statusShape;
+	rdfs:subClassOf sbs:BikePropsShape; 
+	sh:severity sh:Violation;	
+.
+
+sbs:BikePropsShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:BikeProps;
+	sh:property sbs:idShape;
+	sh:severity sh:Violation;
+.
+
+sbs:BikernameShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Bikername;
+	sh:property sbs:firstNameShape;
+	sh:property sbs:lastNameShape;
+	sh:severity sh:Violation;
+.
+
+sbs:WeightShape rdf:type sh:NodeShape;
+	sh:targetClass samplebase:Weight;
+	sh:property sbs:amountShape;
+	sh:property sbs:unitShape;
+	sh:severity sh:Violation;
+.
+
+
+### PropertyShapes
+
+sbs:contractDateShape rdf:type sh:PropertyShape;
+	sh:path samplebase:contractDate;
+	sh:datatype xsd:Date;
+	sh:severity sh:Violation;
+.
+
+sbs:siteShape rdf:type sh:PropertyShape;
+	sh:path samplebase:site;
+	sh:datatype sh:IRI;
+	sh:severity sh:Violation;
+.
+
+sbs:idShape rdf:type sh:PropertyShape;
+	sh:path samplebase:id;
+	sh:datatype xsd:characterstring;
+	sh:severity sh:Violation;
+.
+
+sbs:postareaShape rdf:type sh:PropertyShape;
+	sh:path samplebase:postarea;
+	sh:datatype samplebase:postcode;
+	sh:severity sh:Violation;
+.
+
+sbs:festivityDayShape rdf:type sh:PropertyShape;
+	sh:path samplebase:FestivityDay;
+	sh:datatype xsd:date;
+	sh:severity sh:Violation;
+.
+
+sbs:festivityMonthShape rdf:type sh:PropertyShape;
+	sh:path samplebase:FestivityMonth;
+	sh:datatype xsd:month;
+	sh:severity sh:Violation;
+.
+
+sbs:festivityYear rdf:type sh:PropertyShape;
+	sh:path samplebase:FestivityYear;
+	sh:datatype xsd:year;
+	sh:severity sh:Violation;
+.
+
+sbs:signedAtShape rdf:type sh:PropertyShape;
+	sh:path samplebase:SignedAt;
+	sh:datatype xsd:datetime;
+	sh:severity sh:Violation;
+.
+sbs:lineShape rdf:type sh:PropertyShape;
+	sh:path samplebase:Line;
+	sh:datatype xsd:string;
+	sh:severity sh:Violation;
+.
+sbs:surfaceShape rdf:type sh:PropertyShape;
+	sh:path samplebase:Surface;
+	sh:datatype xsd:string;
+	sh:severity sh:Violation;
+.
+sbs:codeShape rdf:type sh:PropertyShape;
+	sh:path samplebase:code;
+	sh:datatype xsd:characterstring;
+	sh:severity sh:Violation;
+.
+sbs:valueShape rdf:type sh:PropertyShape;
+	sh:path samplebase:value;
+	sh:datatype xsd:characterstring;
+	sh:severity sh:Violation;
+.
+sbs:producedByShape rdf:type sh:PropertyShape;
+	sh:path samplebase:producedBy;
+	sh:class samplebase:Producer;
+	sh:severity sh:Violation;
+.
+sbs:primaryProducerShape rdf:type sh:PropertyShape;
+	sh:path samplebase:primaryProducer;
+	sh:class samplebase:Producer;
+	sh:severity sh:Violation;
+.
+sbs:baseOnDesignShape rdf:type sh:PropertyShape;
+	sh:path samplebase:baseOnDesign;
+	sh:class samplebase:Brick;
+	sh:severity sh:Violation;
+.
+sbs:designBaseShape rdf:type sh:PropertyShape;
+	sh:path samplebase:designBase;
+	sh:class samplebase:Brick;
+	sh:severity sh:Violation;
+.
+sbs:contractShape rdf:type sh:PropertyShape;
+	sh:path samplebase:contract;
+	sh:class samplebase:Contract;
+	sh:minCount 1;
+	sh:severity sh:Violation;
+.
+sbs:colorShape rdf:type sh:PropertyShape;
+	sh:path samplebase:color;
+	sh:datatype xsd:string;
+	sh:severity sh:Violation;
+.
+
+sbs:cornersShape rdf:type sh:PropertyShape;
+	sh:path samplebase:corners;
+	sh:datatype xsd:integer;
+	sh:severity sh:Violation;
+.
+
+sbs:descriptionShape rdf:type sh:PropertyShape;
+	sh:path samplebase:description;
+	sh:datatype xsd:string;
+	sh:maxCount 1;
+	sh:severity sh:Violation;
+.
+
+sbs:geoLocationShape rdf:type sh:PropertyShape;
+	sh:path samplebase:geoLocation;
+	sh:datatype samplebase:GM_Point;
+	sh:severity sh:Violation;
+.
+
+sbs:inStockShape rdf:type sh:PropertyShape;
+	sh:path samplebase:inStock;
+	sh:datatype xsd:boolean;
+	sh:severity sh:Violation;
+.
+
+sbs:maxTemperatureShape rdf:type sh:PropertyShape;
+	sh:path samplebase:maxTemperature;
+	sh:datatype xsd:real;
+	sh:severity sh:Violation;
+.
+
+sbs:measureShape rdf:type sh:PropertyShape;
+	sh:path samplebase:measure;
+	sh:datatype samplebase:Goniometric;
+	sh:severity sh:Violation;
+.
+
+sbs:netWeightShape rdf:type sh:PropertyShape;
+	sh:path samplebase:netWeight;
+	sh:datatype samplebase:Weight;
+	sh:maxCount 1;
+	sh:severity sh:Violation;
+.
+
+sbs:sizeShape rdf:type sh:PropertyShape;
+	sh:path samplebase:size;
+	sh:datatype samplebase:BrickSize;
+	sh:severity sh:Violation;
+.
+
+sbs:tagShape rdf:type sh:PropertyShape;
+	sh:path samplebase:tag;
+	sh:datatype samplebase:ProductionTag;
+	sh:severity sh:Violation;
+.
+
+sbs:typeShape rdf:type sh:PropertyShape;
+	sh:path samplebase:type;
+	sh:datatype samplebase:ValueList;
+	sh:severity sh:Violation;
+.
+
+sbs:stockIdShape rdf:type sh:PropertyShape;
+	sh:path samplebase:stockId;
+	sh:datatype xsd:string;
+	sh:minCount 1;
+	sh:maxCount 3;
+	sh:severity sh:Violation;
+.
+
+sbs:ownerShape rdf:type sh:PropertyShape;
+	sh:path samplebase:owner;
+	sh:class samplebase:BikerName;
+	sh:minCount 1;
+	sh:severity sh:Violation;
+.
+
+sbs:statusShape rdf:type sh:PropertyShape;
+	sh:path samplebase:status;
+	sh:datatype samplebase:Status;
+	sh:severity sh:Violation;
+.
+
+sbs:firstNameShape rdf:type sh:PropertyShape;
+	sh:path samplebase:firstName;
+	sh:datatype xsd:string;
+	sh:severity sh:Violation;
+.
+
+sbs:lastNameShape rdf:type sh:PropertyShape;
+	sh:path samplebase:lastName;
+	sh:datatype xsd:string;
+	sh:severity sh:Violation;
+.
+
+sbs:amountShape rdf:type sh:PropertyShape;
+	sh:path samplebase:amount;
+	sh:datatype xsd:real;
+	sh:severity sh:Violation;
+.
+
+sbs:unitShape rdf:type sh:PropertyShape;
+	sh:path samplebase:unit;
+	sh:datatype xsd:string;
+	sh:severity sh:Violation;
+.
+
+### Feauture Type
+
+samplebase:Brick rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+skos:prefLabel "Brick";
+skos:definition "Identifier  or geographic name of a specific geographic area, location, or other spatial object which defines the scope of an address";
+rdfs:comment "Source [UPU-S21]";
+.
+samplebase:Producer rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:ExternalProducer rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+rdfs:subClassOf samplebase:Producer;
+.
+samplebase:Client rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:Contract rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:BikeProps rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:Bike rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+rdfs:subClassOf kkg:BikeProps;
+.
+samplebase:Bikername rdf:type owl:Class;
+uml:stereotype kkg:gegevensgroeptype;
+.
+
+### Enumeration
+
+samplebase:Status rdf:type rdfs:Datatype;
+uml:stereotype kkg:enumeratie;
+.
+samplebase:BrickSize rdf:type rdfs:Datatype, owl:DatatypeProperty;
+uml:stereotype kkg:enumeratie;
+.
+samplebase:Line rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Primitief_datatype;
+.
+
+### Union
+
+samplebase:Goniometric rdf:type rdfs:Datatype, owl:DatatypeProperty;
+uml:stereotype kkg:datatype;
+.
+
+### Union elements
+
+samplebase:line rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:UnionElement;
+.
+samplebase:surface rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:UnionElement;
+.
+
+### Simple Type
+
+samplebase:Surface rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Primitief_datatype;
+.
+samplebase:Postcode rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Primitief_datatype;
+.
+
+### Complex Type
+
+samplebase:Weight rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:ComplexDatatype;
+.
+
+### DataElements
+
+samplebase:amount rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:DataElement;
+.
+samplebase:unit rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:DataElement;
+.
+
+### Reference List
+
+samplebase:ValueList rdf:type rdfs:Datatype, owl:DatatypeProperty;
+uml:stereotype kkg:Referentielijst;
+.
+
+### Reference elements
+
+samplebase:code rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:ReferentieElement;
+.
+samplebase:value rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:ReferentieElement;
+.
+
+### Codelist
+
+samplebase:ProductionTag rdf:type rdfs:Datatype;
+uml:stereotype kkg:Codelijst;
+.
+
+### AttributeType
+
+samplebase:color rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:corners rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:description rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:geoLocation rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:inStock rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:maxTemperature rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:measure rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:netWeight rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:size rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:tag rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:type rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:stockID rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:contractDate rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:site rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:id rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:postarea rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:FestivityDay rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:FestivityMonth rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:FestivityYear rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:SignedAt rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:in-progress rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:in-production rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:large rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+. 
+samplebase:medium rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:small rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:firstName rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:lastName rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:status rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+
+### AttributeGroup
+
+samplebase:owner rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Gegevensgroep;
+.
+
+### AttributeGroupType
+
+samplebase:Bikername rdf:type owl:Class;
+uml:stereotype kkg:GegevensgroepType;
+.
+
+### Association Type
+
+samplebase:baseOnDesign rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatiesoort;
+.
+samplebase:producedBy rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatiesoort;
+.
+samplebase:Identification rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatiesoort;
+.
+
+### Association Role
+
+samplebase:designBase rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatierol;
+.
+samplebase:primaryProducer rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatierol;
+.
+samplebase:contract rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatierol;
+.
+
+### Association Class
+
+samplebase:Deal rdf:type owl:Class, owl:ObjectProperty;
+uml:stereotype kkg:relatieklasse;
+.

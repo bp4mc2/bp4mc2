@@ -1,0 +1,244 @@
+@prefix rdf:		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd:		<http://www.w3.org/2001/XMLSchema#>.
+@prefix owl:		<http://www.w3.org/2002/07/owl#>.
+@prefix sh:			<http://www.w3.org/ns/shacl#>.
+@prefix uml:		<http://www.omg.org/spec/UML/20131001/>.
+@prefix kkg: 		<http://bp4mc2.org/def/kkg/id/begrip>.
+
+@prefix samplebase: <http://localhost:8080/catalogus/dso/sbs#>. 
+@prefix sbs:		<http://localhost:8080/catalogus/dso/shacl/def/sbs/>.
+
+
+### Feauture Type
+
+samplebase:Brick rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+skos:prefLabel "Brick";
+skos:definition "Identifier  or geographic name of a specific geographic area, location, or other spatial object which defines the scope of an address";
+rdfs:comment "Source [UPU-S21]";
+.
+samplebase:Producer rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:ExternalProducer rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+rdfs:subClassOf samplebase:Producer;
+.
+samplebase:Client rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:Contract rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:BikeProps rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+.
+samplebase:Bike rdf:type owl:Class;
+uml:stereotype kkg:objecttype;
+rdfs:subClassOf kkg:BikeProps;
+.
+samplebase:Bikername rdf:type owl:Class;
+uml:stereotype kkg:gegevensgroeptype;
+.
+
+### Enumeration
+
+samplebase:Status rdf:type rdfs:Datatype;
+uml:stereotype kkg:enumeratie;
+.
+samplebase:BrickSize rdf:type rdfs:Datatype, owl:DatatypeProperty;
+uml:stereotype kkg:enumeratie;
+.
+samplebase:Line rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Primitief_datatype;
+.
+
+### Union
+
+samplebase:Goniometric rdf:type rdfs:Datatype, owl:DatatypeProperty;
+uml:stereotype kkg:datatype;
+.
+
+### Union elements
+
+samplebase:line rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:UnionElement;
+.
+samplebase:surface rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:UnionElement;
+.
+
+### Simple Type
+
+samplebase:Surface rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Primitief_datatype;
+.
+samplebase:Postcode rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Primitief_datatype;
+.
+
+### Complex Type
+
+samplebase:Weight rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:ComplexDatatype;
+.
+
+### DataElements
+
+samplebase:amount rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:DataElement;
+.
+samplebase:unit rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:DataElement;
+.
+
+### Reference List
+
+samplebase:ValueList rdf:type rdfs:Datatype, owl:DatatypeProperty;
+uml:stereotype kkg:Referentielijst;
+.
+
+### Reference elements
+
+samplebase:code rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:ReferentieElement;
+.
+samplebase:value rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:ReferentieElement;
+.
+
+### Codelist
+
+samplebase:ProductionTag rdf:type rdfs:Datatype;
+uml:stereotype kkg:Codelijst;
+.
+
+### AttributeType
+
+samplebase:color rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:corners rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:description rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:geoLocation rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:inStock rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:maxTemperature rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:measure rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:netWeight rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:size rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:tag rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:type rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:stockID rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:contractDate rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:site rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:id rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:postarea rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:FestivityDay rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:FestivityMonth rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:FestivityYear rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:SignedAt rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:in-progress rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:in-production rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:large rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+. 
+samplebase:medium rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:small rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:firstName rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:lastName rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+samplebase:status rdf:type owl:DatatypeProperty;
+uml:stereotype kkg:Attribuutsoort;
+.
+
+### AttributeGroup
+
+samplebase:owner rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Gegevensgroep;
+.
+
+### AttributeGroupType
+
+samplebase:Bikername rdf:type owl:Class;
+uml:stereotype kkg:GegevensgroepType;
+.
+
+### Association Type
+
+samplebase:baseOnDesign rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatiesoort;
+.
+samplebase:producedBy rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatiesoort;
+.
+samplebase:Identification rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatiesoort;
+.
+
+### Association Role
+
+samplebase:designBase rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatierol;
+.
+samplebase:primaryProducer rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatierol;
+.
+samplebase:contract rdf:type owl:ObjectProperty;
+uml:stereotype kkg:Relatierol;
+.
+
+### Association Class
+
+samplebase:Deal rdf:type owl:Class, owl:ObjectProperty;
+uml:stereotype kkg:relatieklasse;
+.
