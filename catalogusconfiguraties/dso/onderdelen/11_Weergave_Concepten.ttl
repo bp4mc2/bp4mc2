@@ -238,6 +238,15 @@ stage:WeergaveGrafischConcepten a elmo:Part;
 		''';
 		elmo:index "2";
 	];
+	elmo:fragment [
+		elmo:applies-to "Toeleidingsbegrippen";
+		xhtml:stylesheet '''
+			fill: green;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
 	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
@@ -299,10 +308,10 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			<@IDSUBJECT@> rdfs:label ?concept_label.
 			<@IDSUBJECT@> elmo:style ?type.
 			?o rdfs:label ?olabel.
-			?o elmo:style ?otype.
+			?o elmo:style ?oelmostyle.
 			?s ?sp <@IDSUBJECT@>.
 			?s rdfs:label ?slabel.
-			?s elmo:style ?stype.
+			?s elmo:style ?selmostyle.
 			?act skoslex:object <@IDSUBJECT@>.
 			?act rdfs:label ?actlabel.
 			?act elmo:style ?act_type.
@@ -326,6 +335,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			skoslex:refersTo rdfs:label "Verwijst naar".
 			skoslex:classification rdfs:label "Classificatie".
 			skos:Collection elmo:name "Collectie".
+			<urn:toeleidingsbegrip> elmo:name "Toeleidingsbegrippen".
+			skos:closeMatch rdfs:label "Is ongeveer hetzelfde als".
 		}
 		WHERE {
 			{
@@ -373,6 +384,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 					OPTIONAL {
 						GRAPH ?og {
 							?o rdf:type ?otype.
+							OPTIONAL {?o skos:closeMatch ?echtbegrip}
+							BIND (if(bound(?echtbegrip),<urn:toeleidingsbegrip>,?otype) as ?oelmostyle)
 							?og prov:generatedAtTime ?oStartTime.
 							?o rdfs:label ?olabel.
 							OPTIONAL {
@@ -394,6 +407,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 						GRAPH ?altSubjectGraph {
 							?s ?sp <@IDSUBJECT@>.
 							?s rdf:type ?stype.
+							OPTIONAL {?s skos:closeMatch ?echtbegrip}
+							BIND (if(bound(?echtbegrip),<urn:toeleidingsbegrip>,?stype) as ?selmostyle)
 							?s rdfs:label ?slabel.
 							?altSubjectGraph prov:generatedAtTime ?altStartTime.
 							OPTIONAL {

@@ -1866,7 +1866,7 @@ container:concepten-put-xls a elmo:Container;
 							?s rdfs:label ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -1876,7 +1876,7 @@ container:concepten-put-xls a elmo:Container;
 							?s rdfs:label ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -1907,7 +1907,7 @@ container:concepten-put-xls a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -1917,23 +1917,7 @@ container:concepten-put-xls a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Concept.
-						?s skos:prefLabel ""^^xsd:string.
-						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						?s skos:prefLabel ""^^xsd:string.
-						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 				}
@@ -1987,7 +1971,7 @@ container:concepten-post-xls a elmo:Container;
 							?s rdfs:label ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -1997,23 +1981,7 @@ container:concepten-post-xls a elmo:Container;
 							?s rdfs:label ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Concept.
-						?s rdfs:label ""^^xsd:string.
-						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						?s rdfs:label ""^^xsd:string.
-						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 				}
@@ -2034,7 +2002,7 @@ container:concepten-post-xls a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
+							REGEX( str(?s), "/id/concept/[0-9a-zA-Z].*" )
 						)
 					}
 					UNION
@@ -2044,23 +2012,7 @@ container:concepten-post-xls a elmo:Container;
 							?s skos:prefLabel ?label.
 						}
 						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Concept.
-						?s skos:prefLabel ""^^xsd:string.
-						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/concept/>
-						)
-					}
-					UNION
-					{
-						?s rdf:type skos:Collection.
-						?s skos:prefLabel ""^^xsd:string.
-						FILTER(
-							?s != <http://data.test.pdok.nl/catalogus/dso/id/collection/>
+							REGEX( str(?s), "/id/collection/[0-9a-zA-Z].*" )
 						)
 					}
 				}
@@ -2258,11 +2210,6 @@ stage:DSOUploadScenePUT a elmo:Scene;
 					?s bp4mc2:signature ?sig
 				}
 			}
-			#FILTER NOT EXISTS {
-			#	GRAPH doc:mastergraph {
-			#		?s skos:inScheme ?scheme.
-			#	}
-			#}	
 		}
 		
 		INSERT {
@@ -3246,15 +3193,15 @@ stage:DSOToeleidingsbegrippentabel a elmo:Part;
 # Query voor ophalen collecties en aantal onderliggende concepten
 stage:DSOToeleidingsbegrippenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix container: <http://data.test.pdok.nl/catalogus/dso/container/>
-		prefix doc: <http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
-		prefix collection: <http://data.test.pdok.nl/catalogus/dso/id/collection/>
-		prefix concept: <http://data.test.pdok.nl/catalogus/dso/id/concept/>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix dctype: <http://purl.org/dc/dcmitype/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix prov: 		<http://www.w3.org/ns/prov#>
+		prefix container: 	<http://data.test.pdok.nl/catalogus/dso/container/>
+		prefix doc: 		<http://data.test.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix collection: 	<http://data.test.pdok.nl/catalogus/dso/id/collection/>
+		prefix concept: 	<http://data.test.pdok.nl/catalogus/dso/id/concept/>
+		prefix dc: 			<http://purl.org/dc/terms/>
+		prefix dctype: 		<http://purl.org/dc/dcmitype/>
+		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
+		prefix owl: 		<http://www.w3.org/2002/07/owl#>
 		
 		SELECT DISTINCT ?Toeleidingsbegrip ?Concept ?Concept_label
 		
@@ -3264,6 +3211,10 @@ stage:DSOToeleidingsbegrippenQuery a elmo:Query;
 				?s skos:closeMatch ?Concept.
 				?s rdfs:label ?Toeleidingsbegrip.
 				?Concept  rdfs:label ?Concept_label.	
+				?Collectie skos:member ?s.
+				FILTER (
+					?Collectie = collection:Toeleidingsbegrippen
+				)
 			}
 			
 			FILTER regex(?Toeleidingsbegrip, '^[^a-z0-9]*@TERM@', 'i').
@@ -3513,6 +3464,15 @@ stage:WeergaveGrafischConcepten a elmo:Part;
 		''';
 		elmo:index "2";
 	];
+	elmo:fragment [
+		elmo:applies-to "Toeleidingsbegrippen";
+		xhtml:stylesheet '''
+			fill: green;
+			fill-opacity: .3;
+			stroke #666;
+		''';
+		elmo:index "2";
+	];
 	elmo:query stage:WeergaveGrafischConceptenQuery;
 .
 
@@ -3574,10 +3534,10 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			<@IDSUBJECT@> rdfs:label ?concept_label.
 			<@IDSUBJECT@> elmo:style ?type.
 			?o rdfs:label ?olabel.
-			?o elmo:style ?otype.
+			?o elmo:style ?oelmostyle.
 			?s ?sp <@IDSUBJECT@>.
 			?s rdfs:label ?slabel.
-			?s elmo:style ?stype.
+			?s elmo:style ?selmostyle.
 			?act skoslex:object <@IDSUBJECT@>.
 			?act rdfs:label ?actlabel.
 			?act elmo:style ?act_type.
@@ -3601,6 +3561,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 			skoslex:refersTo rdfs:label "Verwijst naar".
 			skoslex:classification rdfs:label "Classificatie".
 			skos:Collection elmo:name "Collectie".
+			<urn:toeleidingsbegrip> elmo:name "Toeleidingsbegrippen".
+			skos:closeMatch rdfs:label "Is ongeveer hetzelfde als".
 		}
 		WHERE {
 			{
@@ -3648,6 +3610,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 					OPTIONAL {
 						GRAPH ?og {
 							?o rdf:type ?otype.
+							OPTIONAL {?o skos:closeMatch ?echtbegrip}
+							BIND (if(bound(?echtbegrip),<urn:toeleidingsbegrip>,?otype) as ?oelmostyle)
 							?og prov:generatedAtTime ?oStartTime.
 							?o rdfs:label ?olabel.
 							OPTIONAL {
@@ -3669,6 +3633,8 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 						GRAPH ?altSubjectGraph {
 							?s ?sp <@IDSUBJECT@>.
 							?s rdf:type ?stype.
+							OPTIONAL {?s skos:closeMatch ?echtbegrip}
+							BIND (if(bound(?echtbegrip),<urn:toeleidingsbegrip>,?stype) as ?selmostyle)
 							?s rdfs:label ?slabel.
 							?altSubjectGraph prov:generatedAtTime ?altStartTime.
 							OPTIONAL {

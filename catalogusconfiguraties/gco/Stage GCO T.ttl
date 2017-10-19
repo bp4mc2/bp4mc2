@@ -1,4 +1,4 @@
-﻿@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
@@ -1094,6 +1094,7 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "4"; rdfs:label "Alle imports"; html:link "update/sync-imports"];
 			elmo:data [ elmo:index "5"; rdfs:label "Begrippen"; html:link "update/sync-concepts"];
 			elmo:data [ elmo:index "6"; rdfs:label "DCAT profielen"; html:link "update/sync-dcat"];
+			elmo:data [ elmo:index "7"; rdfs:label "KKG"; html:link "update/sync-kkg"];
 		]
 	];
 .
@@ -1171,26 +1172,11 @@ stage:kkg-model	a	elmo:Representation;
 	elmo:query '''
 		prefix sh: <http://www.w3.org/ns/shacl#>
 		construct {
-			?nshape sh:targetClass ?nshape.
-			?nshape rdf:type owl:Class.
-			?nshape sh:name ?nlabel.
-			?nshape sh:property ?pshape.
-			?pshape sh:path ?pshape.
-			?pshape rdf:type rdf:Property.
-			?pshape sh:name ?plabel.
-			?pshape ?psp ?pso.
-			?pshape sh:class ?refshape
+			?s?p?o
 		}
 		where {
 			graph <http://bp4mc2.org/id/dataset/kkg> {
-				?nshape rdf:type sh:NodeShape.
-				?nshape rdfs:label ?nlabel.
-				OPTIONAL {
-					?nshape sh:property ?pshape.
-					?pshape rdfs:label ?plabel.
-					?pshape ?psp ?pso
-					OPTIONAL {?pshape sh:node ?refshape}
-				}
+				?s?p?o
 			}
 		}
 	''';
@@ -1891,9 +1877,11 @@ updatestage:sync-all a elmo:Production;
 	elmo:contains	stage:sync_clear_dcat_model;
 	elmo:contains	stage:sync_clear_dcat_ap_nl;
 	elmo:contains	stage:sync_clear_dcat_ap_eu;
+	elmo:contains	stage:sync_clear_kkg;
 	elmo:contains	stage:sync_models;
 	elmo:contains	stage:sync_models_datasets;
 #	elmo:contains	stage:sync_models_info;
+	elmo:contains	stage:sync_kkg;
 	elmo:contains	stage:sync_requirements;
 	elmo:contains	stage:sync_import_rdf;
 	elmo:contains	stage:sync_import_adms;
@@ -1926,6 +1914,13 @@ updatestage:sync-model a elmo:Production;
 	elmo:contains	stage:sync_models;
 	elmo:contains	stage:sync_models_datasets;
 #	elmo:contains	stage:sync_models_info;
+.
+
+#Alleen KKG
+updatestage:sync-kkg a elmo:Production;
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:sync_clear_kkg;
+	elmo:contains	stage:sync_kkg;
 .
 
 #Alleen requirements
@@ -2019,6 +2014,11 @@ stage:sync_clear_dcat_ap_eu a elmo:Scene;
 	rdfs:label "Opschonen DCAT AP-EU";
 	elmo:query "clear graph <http://bp4mc2.org/id/dataset/dcat-ap-eu>";
 .
+stage:sync_clear_kkg a elmo:Scene;
+	elmo:index "008";
+	rdfs:label "Opschonen KKG";
+	elmo:query "clear graph <http://bp4mc2.org/id/dataset/kkg>";
+.
 
 #----------------------------
 # Model
@@ -2066,6 +2066,26 @@ stage:sync_models_info a elmo:Scene;
 		where {
 			service <http://ldt:8080/catalogus/url> {
 				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/bp4mc2-informatiemodel.ttl> {
+					?s?p?o
+				}
+			}
+		}
+	''';
+.
+
+#----------------------------
+# Model
+#----------------------------
+stage:sync_kkg a elmo:Scene;
+	elmo:index "104";
+	rdfs:label "KKG metamodel ophalen";
+	elmo:query '''
+		insert into <http://bp4mc2.org/id/dataset/kkg> {
+			?s?p?o
+		}
+		where {
+			service <http://ldt:8080/catalogus/url> {
+				graph <https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/model/kkg/KKG.ttl> {
 					?s?p?o
 				}
 			}
