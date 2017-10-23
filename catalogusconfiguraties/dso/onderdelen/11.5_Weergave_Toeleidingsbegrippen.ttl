@@ -70,16 +70,20 @@ stage:DSOToeleidingsbegrippenQuery a elmo:Query;
 		
 		WHERE {
 			GRAPH ?g {
-					 		
 				?s skos:closeMatch ?Concept.
 				?s rdfs:label ?Toeleidingsbegrip.
-				?Concept  rdfs:label ?Concept_label.	
-				?Collectie skos:member ?s.
-				FILTER (
-					?Collectie = collection:Toeleidingsbegrippen
-				)
 			}
-			
+      GRAPH ?conceptGraph {
+        ?Concept  rdfs:label ?Concept_label.
+      }
+      GRAPH ?toeGraph {
+        collection:Toeleidingsbegrippen skos:member ?s.
+      }
+      GRAPH doc:mastergraph {
+        ?s rdfs:isDefinedBy ?g.
+        ?Concept rdfs:isDefinedBy ?conceptGraph.
+        collection:Toeleidingsbegrippen rdfs:isDefinedBy ?toeGraph.
+      }
 			FILTER regex(?Toeleidingsbegrip, '^[^a-z0-9]*@TERM@', 'i').
 		}
 		
