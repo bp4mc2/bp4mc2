@@ -3526,6 +3526,7 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
 		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
 		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>
+		prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
 		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
 		prefix tr: <http://data.acceptatie.pdok.nl/toepasbareregels/>
 	
@@ -3610,8 +3611,13 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 					OPTIONAL {
 						GRAPH ?og {
 							?o rdf:type ?otype.
-							OPTIONAL {?o skos:closeMatch ?echtbegrip}
-							BIND (if(bound(?echtbegrip),<urn:toeleidingsbegrip>,?otype) as ?oelmostyle)
+							OPTIONAL {
+								GRAPH ?toeGraph {
+									collection:Toeleidingsbegrippen skos:member ?o.
+									collection:Toeleidingsbegrippen rdfs:label ?toeLabel.
+								}
+							}
+							BIND (if(bound(?toeLabel),<urn:toeleidingsbegrip>,?otype) as ?oelmostyle)
 							?og prov:generatedAtTime ?oStartTime.
 							?o rdfs:label ?olabel.
 							OPTIONAL {
@@ -3633,8 +3639,13 @@ stage:WeergaveGrafischConceptenQuery a elmo:Query;
 						GRAPH ?altSubjectGraph {
 							?s ?sp <@IDSUBJECT@>.
 							?s rdf:type ?stype.
-							OPTIONAL {?s skos:closeMatch ?echtbegrip}
-							BIND (if(bound(?echtbegrip),<urn:toeleidingsbegrip>,?stype) as ?selmostyle)
+							OPTIONAL {
+								GRAPH ?toeGraph {
+									collection:Toeleidingsbegrippen skos:member ?s.
+									collection:Toeleidingsbegrippen rdfs:label ?toeLabel.
+								}
+							}
+							BIND (if(bound(?toeLabel),<urn:toeleidingsbegrip>,?stype) as ?selmostyle)
 							?s rdfs:label ?slabel.
 							?altSubjectGraph prov:generatedAtTime ?altStartTime.
 							OPTIONAL {
