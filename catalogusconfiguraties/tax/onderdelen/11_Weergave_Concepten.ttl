@@ -57,52 +57,52 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	elmo:fragment [
 		rdfs:label "Commentaar"@nl;
 		elmo:applies-to skos:comment;
-		elmo:index "06";
+		elmo:index "07";
 	];
 	elmo:fragment [
 		rdfs:label "Actor"@nl;
 		elmo:applies-to skoslex:actor;
-		elmo:index "07";
+		elmo:index "08";
 	];
 	elmo:fragment [
 		rdfs:label "Agent"@nl;
 		elmo:applies-to skoslex:agent;
-		elmo:index "08";
+		elmo:index "09";
 	];
 	elmo:fragment [
 		rdfs:label "Object"@nl;
 		elmo:applies-to skoslex:object;
-		elmo:index "09";
+		elmo:index "10";
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
 		elmo:applies-to skos:member;
-		elmo:index "10";
+		elmo:index "11";
 	];
 	elmo:fragment [ 
 		rdfs:label "Specialisatie van"@nl;
 		elmo:applies-to thes:broaderGeneric;
-		elmo:index "11";
+		elmo:index "12";
 	];
 	elmo:fragment [
 		rdfs:label "Generalisatie van"@nl;
 		elmo:applies-to thes:narrowerGeneric;
-		elmo:index "12";
+		elmo:index "13";
 	];
 	elmo:fragment [ 
 		rdfs:label "Onderdeel van"@nl;
 		elmo:applies-to thes:broaderPartitive;
-		elmo:index "13";
+		elmo:index "14";
 	];
 	elmo:fragment [
 		rdfs:label "Bestaat uit"@nl;
 		elmo:applies-to thes:narrowerPartitive;
-		elmo:index "14";
+		elmo:index "15";
 	];
 	elmo:fragment [
 		rdfs:label "Gerelateerd aan"@nl;
 		elmo:applies-to skos:semanticRelation;
-		elmo:index "15";
+		elmo:index "16";
 	];
 	
 	elmo:fragment [
@@ -139,6 +139,11 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
 		elmo:index "30";
+	];
+		elmo:fragment [
+		rdfs:label "Bronnen"@nl;
+		elmo:applies-to rdfs:literal;
+		elmo:index "06";
 	];
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
@@ -241,6 +246,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			<@SUBJECT@> ?p ?o.
 			<@SUBJECT@> rdfs:label ?slabel.
 			<@SUBJECT@> skos:prefLabel ?spreflabel.
+			<@SUBJECT@> dc:source ?source.
+			?source rdfs:label ?bronLabel.
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
 			?col rdfs:label ?col_label.
@@ -253,6 +260,23 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					<@SUBJECT@> ?p ?o.
 					<@SUBJECT@> rdf:type skos:Concept.
 					OPTIONAL {
+						<@SUBJECT@> dc:source ?bronURI.
+						GRAPH ?bronGraph {
+							?bronURI dct:source ?linksource;
+								rdfs:label ?bronLabel.
+						}
+						GRAPH doc:mastergraph {
+							?bronURI rdfs:isDefinedBy ?bronGraph.
+						}
+					}
+					OPTIONAL {
+						<@SUBJECT@> dc:source ?textsource;
+							rdfs:label ?bronLabel.
+					}
+					BIND(
+						IF( BOUND( ?linksource ), ?linksource, ?textsource ) AS ?source						
+					)
+					OPTIONAL {
 						<@SUBJECT@> rdfs:label ?slabel.
 						FILTER( LANG( ?slabel ) = "" || LANGMATCHES( LANG( ?slabel ), "nl" ) )
 					}
@@ -263,6 +287,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					FILTER NOT EXISTS {
 						<@SUBJECT@> prov:invalidatedAtTime ?stime.
 					}
+					FILTER( ?p != dc:source )
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
@@ -296,6 +321,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:narrowMatch
 					|| ?p = skos:altLabel
 					|| ?p = skos:inScheme
+					|| ?p = rdfs:literal
 				)
 				FILTER( substr("@GRAPH@",2) = "GRAPH@")
 			}
@@ -338,6 +364,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					|| ?p = skos:narrowMatch
 					|| ?p = skos:altLabel	
 					|| ?p = skos:inScheme
+					|| ?p = rdfs:literal
 				)
 				FILTER ( substr("@GRAPH@",2) != "GRAPH@" )
 			}

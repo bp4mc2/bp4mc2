@@ -320,29 +320,34 @@ req:Dataset rdf:type sh:NodeShape;
 .
 req:Dataset_name rdf:type sh:PropertyShape;
     rdfs:label "naam"@nl;
+    rdfs:label "name"@nen;
 	sh:name "dcterms:title";
     rdfs:comment "De dataset heeft een naam"@nl;
+    rdfs:comment "The dataset has a name"@en;
     rdf:value "'Omgevingswet','BAL','BRK', etc";
     sh:path dcterms:title
 .
 req:Dataset_dateIssued rdf:type sh:PropertyShape;
     rdfs:label "publicatiedatum"@nl;
+    rdfs:label "date issued"@en;
 	sh:name "dcterms:issued";
-    rdfs:comment "De dataset is op een bepaalde datum gepubliceerd";
-    rdf:value "1/10/2016";
+    rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus.";
+    rdf:value "1/10/2017";
     sh:path dcterms:issued
 .
-req:Dataset_taal rdf:type sh:PropertyShape;
-    rdfs:label "taal";
+req:Dataset_language rdf:type sh:PropertyShape;
+    rdfs:label "taal"@nl;
+    rdfs:label "language"@en;
 	sh:name "dcterms:language";
-    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
+    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)"@nl;
+    rdfs:comment "The language of the dataset"@en;
     rdf:value "@nl";
     sh:path dcterms:language
 .
 req:Dataset_description rdf:type sh:PropertyShape;
     rdfs:label "beschrijving"@nl;
 	sh:name "dcterms:description";
-    rdfs:comment "De dataset heeft een duidelijke beschrijving";
+    rdfs:comment "De dataset heeft een duidelijke beschrijving"@nl;
     rdf:value "<beschrijving>";
     sh:path dcterms:description
 .
