@@ -7,45 +7,91 @@ stage:WeergavePaginaConcepten a elmo:Representation;
   # Bereikbaarheid
   elmo:uri-pattern "/id/concept/";
   elmo:applies-to [
-		rdf:type skos:Concept
-	];
-  
+    rdf:type skos:Concept
+  ];
+    
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
-  
-  # Data
-	elmo:query stage:WeergaveTabelConceptenQuery;
+  elmo:contains stage:DSOv2ConceptQuery
 .
 
 # Query voor WeergaveTabel
-stage:WeergaveTabelConceptenQuery a elmo:Query;
-	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+stage:DSOv2ConceptQuery a elmo:Query;
+	elmo:query '''    
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dsov2/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
-		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix tr: <http://localhost:8080/toepasbareregels/>
 		
-		construct {
-      ?graph prov:generatedAtTime ?time.
-			?graph ?p ?o.
+		CONSTRUCT {
+      <@IDSUBJECT@> ?p ?o;
+        adms:status ?status;
+        dct:issued ?issued;
+        dct:valid ?valid;
+        prov:generatedAtTime ?time
+      .
 		}
-		where {
+		WHERE {
       GRAPH ?graph {
-        ?graph prov:generatedAtTime ?time.
-        <@IDSUBJECT@> ?p ?o.
-        FILTER( ?p != rdfs:label )
+        <@IDSUBJECT@> ?p ?o;
+          wdrs:describedby ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc adms:status ?status.
+        OPTIONAL {
+          ?doc dct:issued ?issued.
+        }
+        OPTIONAL {
+          ?doc dct:valid ?valid.
+        }
+        ?docGraph prov:generatedAtTime ?time.
+      }
+      
+      BIND(
+        IF( substr( "@BESCHIKBAAR@", 2 ) = "BESCHIKBAAR@",  now(), 
+                                                            strdt( "@BESCHIKBAAR@", xsd:dateTime )
+        ) AS ?requestedGenerated
+      )
+      BIND(
+        IF( substr( "@BEKEND@", 2 ) = "BEKEND@",  now(), 
+                                                  strdt( "@BEKEND@", xsd:dateTime )
+        ) AS ?requestedIssued
+      )
+      BIND(
+        IF( substr( "@INWERKING@", 2 ) = "INWERKING@",  now(), 
+                                                        strdt( "@INWERKING@", xsd:dateTime )
+        ) AS ?requestedEnacted
+      )
+      BIND(
+        IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
+        IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
+        IF( "@STATUS@" = "vervallen",     adms-status:Deprecated,
+                                          slex-status:Enacted
+        ) ) ) AS ?requestedStatus
+      )
+      
+      FILTER(
+        ?status = ?requestedStatus
+        && ?time <= ?requestedGenerated
+        && (
+          substr( "@BEKEND@", 2 = "BEKEND@" ) || ?issued <= ?requestedIssued
+        )
+      )    
+      
+      FILTER NOT EXISTS {
+        GRAPH ?newerDocGraph {
+          ?doc adms:status ?newerStatus.
+          ?newerDocGraph prov:generatedAtTime ?newerTime.
+          FILTER( ?newerTime > ?time )
+        }
+        FILTER(
+          ?newerTime <= ?requestedGenerated
+        )
+      }
+      
 		}
 	'''
 .

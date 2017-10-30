@@ -590,7 +590,7 @@ stage:search-concepts-under-development a elmo:Part;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     
 		CONSTRUCT {
@@ -627,7 +627,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     
 		CONSTRUCT {
@@ -644,7 +644,7 @@ stage:search-concepts-nonenacted a elmo:Part;
           adms:status ?status.
         
         FILTER(
-          ?status != skos-lex-status:Enacted 
+          ?status != slex-status:Enacted 
           && ?status != adms-status:Deprecated
         )
         
@@ -677,7 +677,7 @@ stage:IssueConceptScene a elmo:Scene;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
     
@@ -693,10 +693,13 @@ stage:IssueConceptScene a elmo:Scene;
 
         ?doc rdf:type prov:Entity;
           prov:wasRevisionOf ?prevDoc;
-          adms:status skos-lex-status:Issued;
+          adms:status slex-status:Issued;
           dcterms:issued ?date;
           prov:wasGeneratedBy ?activity
         .
+        
+        ?prevDoc ?prevP ?prevO;
+          adms:status adms-status:Deprecated.
         
         ?activity rdf:type prov:Activity;
           rdfs:label "Bekendmaking van het begrip";
@@ -707,17 +710,38 @@ stage:IssueConceptScene a elmo:Scene;
     }
     WHERE {
       GRAPH ?graph {
+        ?graph prov:generatedAtTime ?time.
         <@CONCEPT@> wdrs:describedby ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       OPTIONAL {
         GRAPH ?docGraph {
-          ?doc prov:wasRevisionOf ?prevDoc.
+          ?doc prov:wasRevisionOf ?revision.
         }
         FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       }
       FILTER NOT EXISTS {
         ?newdoc prov:wasRevisionOf ?doc.
+      }
+      OPTIONAL {
+        GRAPH ?prevGraph {
+          ?prevGraph prov:generatedAtTime ?prevTime. 
+          <@CONCEPT@> wdrs:describedby ?prevDoc.
+          FILTER( ?prevTime < ?time )
+        }
+        GRAPH ?prevDocGraph {
+          ?prevDocGraph prov:generatedAtTime ?prevDocTime.
+          ?prevDoc ?prevP ?prevO;
+            adms:status slex-status:Issued.
+          FILTER( ?prevP != adms:status )
+        }
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            ?prevDoc rdf:type prov:Entity.
+            FILTER( ?newerDocGraphTime > ?prevDocTime )
+          }
+        }
       }
       
       BIND( strdt( concat(  year( now() ), "-", month( now() ), "-", day( now() ) ), xsd:date ) AS ?date )
@@ -738,7 +762,7 @@ stage:EnactConceptScene a elmo:Scene;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
     
@@ -753,7 +777,7 @@ stage:EnactConceptScene a elmo:Scene;
         .
 
         ?doc ?p ?o;
-          adms:status skos-lex-status:Enacted;
+          adms:status slex-status:Enacted;
           dcterms:issued ?issuedDate;
           dcterms:valid ?validDate;
           prov:wasGeneratedBy ?activity
@@ -1021,68 +1045,112 @@ stage:WeergavePaginaConcepten a elmo:Representation;
   # Bereikbaarheid
   elmo:uri-pattern "/id/concept/";
   elmo:applies-to [
-		rdf:type skos:Concept
-	];
-  
+    rdf:type skos:Concept
+  ];
+    
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
-  
-  # Data
-	elmo:query stage:WeergaveTabelConceptenQuery;
+  elmo:contains stage:DSOv2ConceptQuery
 .
 
 # Query voor WeergaveTabel
-stage:WeergaveTabelConceptenQuery a elmo:Query;
-	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+stage:DSOv2ConceptQuery a elmo:Query;
+	elmo:query '''    
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dsov2/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
-		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix tr: <http://localhost:8080/toepasbareregels/>
 		
-		construct {
-      ?graph prov:generatedAtTime ?time.
-			?graph ?p ?o.
+		CONSTRUCT {
+      <@IDSUBJECT@> ?p ?o;
+        adms:status ?status;
+        dct:issued ?issued;
+        dct:valid ?valid;
+        prov:generatedAtTime ?time
+      .
 		}
-		where {
+		WHERE {
       GRAPH ?graph {
-        ?graph prov:generatedAtTime ?time.
-        <@IDSUBJECT@> ?p ?o.
-        FILTER( ?p != rdfs:label )
+        <@IDSUBJECT@> ?p ?o;
+          wdrs:describedby ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc adms:status ?status.
+        OPTIONAL {
+          ?doc dct:issued ?issued.
+        }
+        OPTIONAL {
+          ?doc dct:valid ?valid.
+        }
+        ?docGraph prov:generatedAtTime ?time.
+      }
+      
+      BIND(
+        IF( substr( "@BESCHIKBAAR@", 2 ) = "BESCHIKBAAR@",  now(), 
+                                                            strdt( "@BESCHIKBAAR@", xsd:dateTime )
+        ) AS ?requestedGenerated
+      )
+      BIND(
+        IF( substr( "@BEKEND@", 2 ) = "BEKEND@",  now(), 
+                                                  strdt( "@BEKEND@", xsd:dateTime )
+        ) AS ?requestedIssued
+      )
+      BIND(
+        IF( substr( "@INWERKING@", 2 ) = "INWERKING@",  now(), 
+                                                        strdt( "@INWERKING@", xsd:dateTime )
+        ) AS ?requestedEnacted
+      )
+      BIND(
+        IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
+        IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
+        IF( "@STATUS@" = "vervallen",     adms-status:Deprecated,
+                                          slex-status:Enacted
+        ) ) ) AS ?requestedStatus
+      )
+      
+      FILTER(
+        ?status = ?requestedStatus
+        && ?time <= ?requestedGenerated
+      )    
+      
+      FILTER NOT EXISTS {
+        GRAPH ?newerDocGraph {
+          ?doc adms:status ?newerStatus.
+          ?newerDocGraph prov:generatedAtTime ?newerTime.
+          FILTER( ?newerTime > ?time )
+        }
+        FILTER(
+          ?newerTime <= ?requestedGenerated
+        )
+      }
+      
 		}
 	'''
-. 
+.
+ 
 #
 # PAGINA'S (REPRESENTATIONS)
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConceptenMetadata a elmo:Representation;
+stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
   # Bereikbaarheid
   elmo:applies-to [
-		rdf:type prov:Entity
-	];
+    rdf:type prov:Entity
+  ];
   
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
   
   # Data
-	elmo:query stage:WeergaveTabelConceptenMetadataQuery;
+	elmo:query stage:TestWeergaveTabelConceptenMetadataQuery;
 .
 
 # Query voor WeergaveTabel
-stage:WeergaveTabelConceptenMetadataQuery a elmo:Query;
+stage:TestWeergaveTabelConceptenMetadataQuery a elmo:Query;
 	elmo:query '''
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix dct: <http://purl.org/dc/terms/>
@@ -1337,16 +1405,21 @@ stage:DemoBegripVersies a elmo:Part;
 		rdfs:label "Actuele status:";
 		elmo:index "2";
 	];
+  elmo:fragment [
+		elmo:applies-to dct:latestIssued;
+		rdfs:label "Actuele bekendmaking:";
+		elmo:index "3";
+	];
 	elmo:fragment [
 		elmo:applies-to dct:latestValid;
 		rdfs:label "Actuele geldigheid:";
-		elmo:index "3";
+		elmo:index "4";
 	];
 	elmo:fragment [
 		elmo:applies-to wdrs:describedby;
 		elmo:appearance elmo:NestedAppearance;
 		rdfs:label "Metadata:";
-		elmo:index "4";
+		elmo:index "5";
 	];
 	elmo:fragment [
 		elmo:applies-to adms:status;
@@ -1355,13 +1428,18 @@ stage:DemoBegripVersies a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to prov:generatedAtTime;
-		rdfs:label "Tijdstip";
+		rdfs:label "Tijdstip:";
 		elmo:index "2";
 	];
 	elmo:fragment [
-		elmo:applies-to dct:valid;
-		rdfs:label "Geldig van/tot";
+		elmo:applies-to dct:issued;
+		rdfs:label "Bekendgemaakt op:";
 		elmo:index "3";
+	];
+  elmo:fragment [
+		elmo:applies-to dct:valid;
+		rdfs:label "Geldig van/tot:";
+		elmo:index "4";
 	];
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
@@ -1376,8 +1454,10 @@ stage:DemoBegripVersies a elmo:Part;
 			?doc wdrs:describedby ?metadata.
 			?doc adms:latestStatus ?lateststatus.
 			?doc dct:latestValid ?latestvalid.
+			?doc dct:latestIssued ?latestissued.
 			?metadata adms:status ?status.
 			?metadata dct:valid ?valid.
+      ?metadata dct:issued ?issued.
 			?metadata prov:generatedAtTime ?doctijdstip.
 			adms-status:UnderDevelopment rdfs:label "Werkversie".
 			adms-status:Deprecated rdfs:label "Vervallen".
@@ -1396,12 +1476,14 @@ stage:DemoBegripVersies a elmo:Part;
 			graph ?gdoc {
 				?doc adms:status ?status.
 				OPTIONAL {?doc dct:valid ?valid}
+        OPTIONAL {?doc dct:issued ?issued}
 				?gdoc prov:generatedAtTime ?doctijdstip.
 				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
 			}
       graph ?latestdoc {
         ?doc adms:status ?lateststatus.
         OPTIONAL {?doc dct:valid ?latestvalid}
+        OPTIONAL {?doc dct:issued ?latestissued}
         ?latestdoc prov:generatedAtTime ?latestdoctijdstip.
       }
       FILTER NOT EXISTS {
@@ -1510,3 +1592,82 @@ container:begripaanpassen a elmo:Container;
   elmo:query stage:DSOv2ConceptenPut;
 .
  
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:TestWeergavePaginaConcepten a elmo:Representation;
+  # Bereikbaarheid
+  elmo:url-pattern "/query/testweergave-concept";
+    
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Data
+	elmo:query stage:TestWeergaveTabelConceptenQuery;
+.
+
+# Query voor WeergaveTabel
+stage:TestWeergaveTabelConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
+		prefix dct: <http://purl.org/dc/terms/>
+		
+		construct {
+      ?graph prov:generatedAtTime ?time.
+			?graph ?p ?o.
+		}
+		where {
+      GRAPH ?graph {
+        ?graph prov:generatedAtTime ?time.
+        <@IDSUBJECT@> ?p ?o.
+        FILTER( ?p != rdfs:label )
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	'''
+. 
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
+  # Bereikbaarheid
+  elmo:url-pattern "/query/testweergave-concept-metadata";
+  
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Data
+	elmo:query stage:TestWeergaveTabelConceptenMetadataQuery;
+.
+
+# Query voor WeergaveTabel
+stage:TestWeergaveTabelConceptenMetadataQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
+		prefix dct: <http://purl.org/dc/terms/>
+				
+		construct {
+      ?graph prov:generatedAtTime ?time.
+			?graph ?p ?o.
+		}
+		where {
+      GRAPH ?graph {
+        ?graph prov:generatedAtTime ?time.
+        <@SUBJECT@> ?p ?o.
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	'''
+. 

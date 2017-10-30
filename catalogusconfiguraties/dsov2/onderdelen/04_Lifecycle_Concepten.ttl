@@ -104,7 +104,7 @@ stage:search-concepts-under-development a elmo:Part;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     
 		CONSTRUCT {
@@ -141,7 +141,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     
 		CONSTRUCT {
@@ -158,7 +158,7 @@ stage:search-concepts-nonenacted a elmo:Part;
           adms:status ?status.
         
         FILTER(
-          ?status != skos-lex-status:Enacted 
+          ?status != slex-status:Enacted 
           && ?status != adms-status:Deprecated
         )
         
@@ -191,7 +191,7 @@ stage:IssueConceptScene a elmo:Scene;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
     
@@ -207,10 +207,13 @@ stage:IssueConceptScene a elmo:Scene;
 
         ?doc rdf:type prov:Entity;
           prov:wasRevisionOf ?prevDoc;
-          adms:status skos-lex-status:Issued;
+          adms:status slex-status:Issued;
           dcterms:issued ?date;
           prov:wasGeneratedBy ?activity
         .
+        
+        ?prevDoc ?prevP ?prevO;
+          adms:status adms-status:Deprecated.
         
         ?activity rdf:type prov:Activity;
           rdfs:label "Bekendmaking van het begrip";
@@ -221,17 +224,38 @@ stage:IssueConceptScene a elmo:Scene;
     }
     WHERE {
       GRAPH ?graph {
+        ?graph prov:generatedAtTime ?time.
         <@CONCEPT@> wdrs:describedby ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       OPTIONAL {
         GRAPH ?docGraph {
-          ?doc prov:wasRevisionOf ?prevDoc.
+          ?doc prov:wasRevisionOf ?revision.
         }
         FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       }
       FILTER NOT EXISTS {
         ?newdoc prov:wasRevisionOf ?doc.
+      }
+      OPTIONAL {
+        GRAPH ?prevGraph {
+          ?prevGraph prov:generatedAtTime ?prevTime. 
+          <@CONCEPT@> wdrs:describedby ?prevDoc.
+          FILTER( ?prevTime < ?time )
+        }
+        GRAPH ?prevDocGraph {
+          ?prevDocGraph prov:generatedAtTime ?prevDocTime.
+          ?prevDoc ?prevP ?prevO;
+            adms:status slex-status:Issued.
+          FILTER( ?prevP != adms:status )
+        }
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            ?prevDoc rdf:type prov:Entity.
+            FILTER( ?newerDocGraphTime > ?prevDocTime )
+          }
+        }
       }
       
       BIND( strdt( concat(  year( now() ), "-", month( now() ), "-", day( now() ) ), xsd:date ) AS ?date )
@@ -252,7 +276,7 @@ stage:EnactConceptScene a elmo:Scene;
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
     prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
     
@@ -267,7 +291,7 @@ stage:EnactConceptScene a elmo:Scene;
         .
 
         ?doc ?p ?o;
-          adms:status skos-lex-status:Enacted;
+          adms:status slex-status:Enacted;
           dcterms:issued ?issuedDate;
           dcterms:valid ?validDate;
           prov:wasGeneratedBy ?activity
