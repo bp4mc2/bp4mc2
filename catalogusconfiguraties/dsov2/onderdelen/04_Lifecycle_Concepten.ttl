@@ -279,10 +279,11 @@ stage:EnactConceptScene a elmo:Scene;
     prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
+    prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
     
     prefix container: <http://localhost:8080/catalogus/dsov2/container/>
     prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
-		
+    
     INSERT {
       GRAPH ?transactie {      
         ?transactie rdf:type sparql:Graph;
@@ -293,13 +294,17 @@ stage:EnactConceptScene a elmo:Scene;
         ?doc ?p ?o;
           adms:status slex-status:Enacted;
           dcterms:issued ?issuedDate;
-          dcterms:valid ?validDate;
+          dcterms:temporal ?period;
           prov:wasGeneratedBy ?activity
         .
         
+        ?period dcmiperiod:start "@WERKINGSMOMENT@".
+        
         ?prevDoc ?prevP ?prevO;
-          dcterms:valid ?newValidDate
-        .
+          dcterms:temporal ?prevTemporal.
+          
+        ?prevTemporal dcmiperiod:start ?prevStart;
+          dcmiperiod:end "@WERKINGSMOMENT@".
         
         ?activity rdf:type prov:Activity;
           rdfs:label "In werkingtreding van het begrip";
@@ -333,16 +338,29 @@ stage:EnactConceptScene a elmo:Scene;
         }
         GRAPH ?docGraph {
           ?prevDoc ?prevP ?prevO;
-            dcterms:valid ?currentValidDate.
-          BIND( concat( ?currentValidDate, "@WERKINGSMOMENT@" ) AS ?newValidDate )
-          FILTER regex( ?currentValidDate, ".*/$" )
-          FILTER( ?prevP != dcterms:valid )
+            dcterms:temporal ?prevTemporal.
+          ?prevTemporal dcmiperiod:start ?prevStart.
+          FILTER NOT EXISTS {
+            ?prevTemporal dcmiperiod:end ?end.
+          }
+          FILTER(
+            ?prevP != dcterms:temporal
+          )
+          
+          ?docGraph prov:generatedAtTime ?prevDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              ?prevDoc rdf:type prov:Entity.
+              FILTER( ?newerDocGraphTime > ?prevDocTime )
+            }
+          }
         }
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/In_werkingtreding_", replace( now(), " ", "T" ) ) ) AS ?activity )
-      BIND( concat( "@WERKINGSMOMENT@" , "/" ) AS ?validDate )
       BIND( now() AS ?now )
       BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }

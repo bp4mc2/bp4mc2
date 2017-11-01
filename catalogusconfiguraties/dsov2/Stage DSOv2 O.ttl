@@ -765,10 +765,11 @@ stage:EnactConceptScene a elmo:Scene;
     prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     prefix dcterms: <http://purl.org/dc/terms/>
+    prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
     
     prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
     prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
-		
+    
     INSERT {
       GRAPH ?transactie {      
         ?transactie rdf:type sparql:Graph;
@@ -779,13 +780,17 @@ stage:EnactConceptScene a elmo:Scene;
         ?doc ?p ?o;
           adms:status slex-status:Enacted;
           dcterms:issued ?issuedDate;
-          dcterms:valid ?validDate;
+          dcterms:temporal ?period;
           prov:wasGeneratedBy ?activity
         .
         
+        ?period dcmiperiod:start "@WERKINGSMOMENT@".
+        
         ?prevDoc ?prevP ?prevO;
-          dcterms:valid ?newValidDate
-        .
+          dcterms:temporal ?prevTemporal.
+          
+        ?prevTemporal dcmiperiod:start ?prevStart;
+          dcmiperiod:end "@WERKINGSMOMENT@".
         
         ?activity rdf:type prov:Activity;
           rdfs:label "In werkingtreding van het begrip";
@@ -819,16 +824,29 @@ stage:EnactConceptScene a elmo:Scene;
         }
         GRAPH ?docGraph {
           ?prevDoc ?prevP ?prevO;
-            dcterms:valid ?currentValidDate.
-          BIND( concat( ?currentValidDate, "@WERKINGSMOMENT@" ) AS ?newValidDate )
-          FILTER regex( ?currentValidDate, ".*/$" )
-          FILTER( ?prevP != dcterms:valid )
+            dcterms:temporal ?prevTemporal.
+          ?prevTemporal dcmiperiod:start ?prevStart.
+          FILTER NOT EXISTS {
+            ?prevTemporal dcmiperiod:end ?end.
+          }
+          FILTER(
+            ?prevP != dcterms:temporal
+          )
+          
+          ?docGraph prov:generatedAtTime ?prevDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              ?prevDoc rdf:type prov:Entity.
+              FILTER( ?newerDocGraphTime > ?prevDocTime )
+            }
+          }
         }
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/In_werkingtreding_", replace( now(), " ", "T" ) ) ) AS ?activity )
-      BIND( concat( "@WERKINGSMOMENT@" , "/" ) AS ?validDate )
       BIND( now() AS ?now )
       BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }
@@ -1062,12 +1080,16 @@ stage:DSOv2ConceptQuery a elmo:Query;
 		prefix adms-status: <http://purl.org/adms/status/>
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		
+		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    
 		CONSTRUCT {
       <@IDSUBJECT@> ?p ?o;
         adms:status ?status;
         dct:issued ?issued;
-        dct:valid ?valid;
+        dcmiperiod:start ?start;
+        dcmiperiod:end ?end;
+        dct:nowDate ?nowDate;
+        dct:startdt ?startdt;
         prov:generatedAtTime ?time
       .
 		}
@@ -1083,7 +1105,11 @@ stage:DSOv2ConceptQuery a elmo:Query;
           ?doc dct:issued ?issued.
         }
         OPTIONAL {
-          ?doc dct:valid ?valid.
+          ?doc dct:temporal ?temporal.
+          ?temporal dcmiperiod:start ?start.
+          OPTIONAL {
+            ?temporal dcmiperiod:end ?end.
+          }
         }
         ?docGraph prov:generatedAtTime ?time.
       }
@@ -1093,16 +1119,9 @@ stage:DSOv2ConceptQuery a elmo:Query;
                                                             strdt( "@BESCHIKBAAR@", xsd:dateTime )
         ) AS ?requestedGenerated
       )
-      BIND(
-        IF( substr( "@BEKEND@", 2 ) = "BEKEND@",  now(), 
-                                                  strdt( "@BEKEND@", xsd:dateTime )
-        ) AS ?requestedIssued
-      )
-      BIND(
-        IF( substr( "@INWERKING@", 2 ) = "INWERKING@",  now(), 
-                                                        strdt( "@INWERKING@", xsd:dateTime )
-        ) AS ?requestedEnacted
-      )
+      BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
+      BIND( strdt( "@STARTWERKING@", xsd:dateTime ) AS ?requestedStart )
+      BIND( strdt( "@EINDWERKING@", xsd:dateTime ) AS ?requestedEnd )
       BIND(
         IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
         IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
@@ -1114,7 +1133,29 @@ stage:DSOv2ConceptQuery a elmo:Query;
       FILTER(
         ?status = ?requestedStatus
         && ?time <= ?requestedGenerated
-      )    
+        && (
+          substr( "@BEKEND@", 2 ) = "BEKEND@"
+          || strdt( ?issued, xsd:date ) <= ?requestedIssued
+        )
+        && (
+          (
+            substr( "@STARTWERKING@", 2 ) = "STARTWERKING@"
+            && (
+              !BOUND( ?start )
+              || strdt( ?start, xsd:dateTime ) <= now()
+            )
+          )
+          || strdt( ?start, xsd:date ) >= ?requestedStart
+        )
+        && (
+          (
+            substr( "@EINDWERKING@", 2 ) = "EINDWERKING@"
+            && strdt( ?end, xsd:dateTime ) > strdt( strbefore( str( now() ), "T" ), xsd:dateTime )
+          )
+          || !BOUND( ?end )
+          || strdt( ?end, xsd:date ) > ?requestedEnd
+        )
+      )
       
       FILTER NOT EXISTS {
         GRAPH ?newerDocGraph {
@@ -1136,7 +1177,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
+stage:WeergavePaginaConceptenMetadata a elmo:Representation;
   # Bereikbaarheid
   elmo:applies-to [
     rdf:type prov:Entity
@@ -1146,35 +1187,37 @@ stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
   elmo:contains stage:DSOv2Menu;
   
   # Data
-	elmo:query stage:TestWeergaveTabelConceptenMetadataQuery;
+	elmo:query stage:WeergaveTabelConceptenMetadataQuery;
 .
 
 # Query voor WeergaveTabel
-stage:TestWeergaveTabelConceptenMetadataQuery a elmo:Query;
+stage:WeergaveTabelConceptenMetadataQuery a elmo:Query;
 	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/container/>
-		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/concepten/doc/>
-		prefix dataset: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/dataset/>
-		prefix concept: <http://data.ontwikkeling.pdok.nl/catalogus/dsov2/id/concept/>
-		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix tr: <http://data.ontwikkeling.pdok.nl/toepasbareregels/>
+		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
 		
 		construct {
-      ?graph prov:generatedAtTime ?time.
-			?graph ?p ?o.
+      ?graph prov:generatedAtTime ?time;
+        ?p ?o;
+        ?tempP ?tempO.
 		}
 		where {
       GRAPH ?graph {
         ?graph prov:generatedAtTime ?time.
         <@SUBJECT@> ?p ?o.
+        OPTIONAL {
+          <@SUBJECT@> dct:temporal ?temporal.
+          ?temporal ?tempP ?tempO.
+        }    
+        
+        FILTER(
+          ?p != dct:temporal
+        )
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
@@ -1600,6 +1643,7 @@ container:begripaanpassen a elmo:Container;
 stage:TestWeergavePaginaConcepten a elmo:Representation;
   # Bereikbaarheid
   elmo:url-pattern "/query/testweergave-concept";
+  elmo:layer elmo:TopLayer;
     
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
@@ -1640,6 +1684,7 @@ stage:TestWeergaveTabelConceptenQuery a elmo:Query;
 stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
   # Bereikbaarheid
   elmo:url-pattern "/query/testweergave-concept-metadata";
+  elmo:layer elmo:TopLayer;
   
   # Onderdelen
   elmo:contains stage:DSOv2Menu;

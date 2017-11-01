@@ -3,7 +3,7 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
+stage:WeergavePaginaConceptenMetadata a elmo:Representation;
   # Bereikbaarheid
   elmo:applies-to [
     rdf:type prov:Entity
@@ -13,35 +13,37 @@ stage:TestWeergavePaginaConceptenMetadata a elmo:Representation;
   elmo:contains stage:DSOv2Menu;
   
   # Data
-	elmo:query stage:TestWeergaveTabelConceptenMetadataQuery;
+	elmo:query stage:WeergaveTabelConceptenMetadataQuery;
 .
 
 # Query voor WeergaveTabel
-stage:TestWeergaveTabelConceptenMetadataQuery a elmo:Query;
+stage:WeergaveTabelConceptenMetadataQuery a elmo:Query;
 	elmo:query '''
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix thes: <http://purl.org/iso25964/skos-thes#>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix dc: <http://purl.org/dc/terms/>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
-		prefix dataset: <http://localhost:8080/catalogus/dsov2/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
-		prefix brt: <http://brt.basisregistraties.overheid.nl/id/dataset/>
-		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix tr: <http://localhost:8080/toepasbareregels/>
+		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
 		
 		construct {
-      ?graph prov:generatedAtTime ?time.
-			?graph ?p ?o.
+      ?graph prov:generatedAtTime ?time;
+        ?p ?o;
+        ?tempP ?tempO.
 		}
 		where {
       GRAPH ?graph {
         ?graph prov:generatedAtTime ?time.
         <@SUBJECT@> ?p ?o.
+        OPTIONAL {
+          <@SUBJECT@> dct:temporal ?temporal.
+          ?temporal ?tempP ?tempO.
+        }    
+        
+        FILTER(
+          ?p != dct:temporal
+        )
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}

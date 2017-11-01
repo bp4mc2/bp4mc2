@@ -24,12 +24,16 @@ stage:DSOv2ConceptQuery a elmo:Query;
 		prefix adms-status: <http://purl.org/adms/status/>
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		
+		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    
 		CONSTRUCT {
       <@IDSUBJECT@> ?p ?o;
         adms:status ?status;
         dct:issued ?issued;
-        dct:valid ?valid;
+        dcmiperiod:start ?start;
+        dcmiperiod:end ?end;
+        dct:nowDate ?nowDate;
+        dct:startdt ?startdt;
         prov:generatedAtTime ?time
       .
 		}
@@ -45,7 +49,11 @@ stage:DSOv2ConceptQuery a elmo:Query;
           ?doc dct:issued ?issued.
         }
         OPTIONAL {
-          ?doc dct:valid ?valid.
+          ?doc dct:temporal ?temporal.
+          ?temporal dcmiperiod:start ?start.
+          OPTIONAL {
+            ?temporal dcmiperiod:end ?end.
+          }
         }
         ?docGraph prov:generatedAtTime ?time.
       }
@@ -55,16 +63,9 @@ stage:DSOv2ConceptQuery a elmo:Query;
                                                             strdt( "@BESCHIKBAAR@", xsd:dateTime )
         ) AS ?requestedGenerated
       )
-      BIND(
-        IF( substr( "@BEKEND@", 2 ) = "BEKEND@",  now(), 
-                                                  strdt( "@BEKEND@", xsd:dateTime )
-        ) AS ?requestedIssued
-      )
-      BIND(
-        IF( substr( "@INWERKING@", 2 ) = "INWERKING@",  now(), 
-                                                        strdt( "@INWERKING@", xsd:dateTime )
-        ) AS ?requestedEnacted
-      )
+      BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
+      BIND( strdt( "@STARTWERKING@", xsd:dateTime ) AS ?requestedStart )
+      BIND( strdt( "@EINDWERKING@", xsd:dateTime ) AS ?requestedEnd )
       BIND(
         IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
         IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
@@ -77,9 +78,28 @@ stage:DSOv2ConceptQuery a elmo:Query;
         ?status = ?requestedStatus
         && ?time <= ?requestedGenerated
         && (
-          substr( "@BEKEND@", 2 = "BEKEND@" ) || ?issued <= ?requestedIssued
+          substr( "@BEKEND@", 2 ) = "BEKEND@"
+          || strdt( ?issued, xsd:date ) <= ?requestedIssued
         )
-      )    
+        && (
+          (
+            substr( "@STARTWERKING@", 2 ) = "STARTWERKING@"
+            && (
+              !BOUND( ?start )
+              || strdt( ?start, xsd:dateTime ) <= now()
+            )
+          )
+          || strdt( ?start, xsd:date ) >= ?requestedStart
+        )
+        && (
+          (
+            substr( "@EINDWERKING@", 2 ) = "EINDWERKING@"
+            && strdt( ?end, xsd:dateTime ) > strdt( strbefore( str( now() ), "T" ), xsd:dateTime )
+          )
+          || !BOUND( ?end )
+          || strdt( ?end, xsd:date ) > ?requestedEnd
+        )
+      )
       
       FILTER NOT EXISTS {
         GRAPH ?newerDocGraph {
