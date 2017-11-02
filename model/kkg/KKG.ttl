@@ -70,21 +70,7 @@ kkgshape:PropertyShapeShape a sh:NodeShape;
 
 kkgshape:LiteralShape a sh:NodeShape;
 	sh:name "LiteralShape";
-	sh:focusNode sh:Literal;
-	sh:property [
-		sh:path rdf:type;
-		sh:hasValue sh:PropertyShape;
-	];
-	sh:property [
-		sh:path sh:path;
-		sh:name "sh:path";
-		sh:class owl:DatatypeProperty;
-	];
-	sh:property [
-		sh:path sh:datatype;
-		sh:name "sh:datatype";
-		sh:class rdfs:Datatype;
-	];
+	sh:targetNode sh:Literal;
 	sh:property [
 		sh:name "Literal_nodeKind";
 		sh:inversePath sh:nodeKind;
@@ -98,6 +84,20 @@ kkgshape:Literal_NodeKind_Node a sh:NodeShape;
     sh:name "Literal_NodeKind_Node_path";
     sh:path sh:path; #path should be the corresponding property for this UML Attribute		
   ];
+  sh:property [
+		sh:path rdf:type;
+		sh:hasValue sh:PropertyShape;
+	];
+	sh:property [
+		sh:path sh:path;
+		sh:name "sh:path";
+		sh:class owl:DatatypeProperty;
+	];
+	sh:property [
+		sh:path sh:datatype;
+		sh:name "sh:datatype";
+		sh:class rdfs:Datatype;
+	];
   sh:property [
       sh:name "NodeKind_Node_stereotype";
       sh:path uml:stereotype;
@@ -113,16 +113,7 @@ kkgshape:Literal_NodeKind_Node a sh:NodeShape;
 
 kkgshape:IRIShape a sh:NodeShape;
 	sh:name "IRIShape";
-	sh:focusNode sh:IRI;
-	sh:property [
-		sh:path rdf:type;
-		sh:hasValue sh:PropertyShape;
-	];
-	sh:property [
-		sh:path sh:path;
-		sh:name "sh:path";
-		sh:class owl:ObjectProperty;
-	];
+	sh:targetNode sh:IRI;
 	sh:property [
 		sh:name "IRI_nodeKind";
 		sh:inversePath sh:nodeKind;
@@ -136,6 +127,15 @@ kkgshape:IRI_NodeKind_Node a sh:NodeShape;
     sh:name "IRI_NodeKind_Node_path";
     sh:path sh:path; #path should be the corresponding property for this UML Attribute		
   ];
+  sh:property [
+		sh:path rdf:type;
+		sh:hasValue sh:PropertyShape;
+	];
+	sh:property [
+		sh:path sh:path;
+		sh:name "sh:path";
+		sh:class owl:ObjectProperty;
+	];
   sh:property [
     sh:name "IRI_NodeKind_Node_stereotype";
     sh:path uml:stereotype;
