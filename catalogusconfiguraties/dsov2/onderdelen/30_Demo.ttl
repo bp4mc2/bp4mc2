@@ -96,16 +96,21 @@ stage:DemoBegripVersies a elmo:Part;
 		rdfs:label "Actuele status:";
 		elmo:index "2";
 	];
+  elmo:fragment [
+		elmo:applies-to dct:latestIssued;
+		rdfs:label "Actuele bekendmaking:";
+		elmo:index "3";
+	];
 	elmo:fragment [
 		elmo:applies-to dct:latestValid;
 		rdfs:label "Actuele geldigheid:";
-		elmo:index "3";
+		elmo:index "4";
 	];
 	elmo:fragment [
 		elmo:applies-to wdrs:describedby;
 		elmo:appearance elmo:NestedAppearance;
 		rdfs:label "Metadata:";
-		elmo:index "4";
+		elmo:index "5";
 	];
 	elmo:fragment [
 		elmo:applies-to adms:status;
@@ -114,13 +119,18 @@ stage:DemoBegripVersies a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to prov:generatedAtTime;
-		rdfs:label "Tijdstip";
+		rdfs:label "Tijdstip:";
 		elmo:index "2";
 	];
 	elmo:fragment [
-		elmo:applies-to dct:valid;
-		rdfs:label "Geldig van/tot";
+		elmo:applies-to dct:issued;
+		rdfs:label "Bekendgemaakt op:";
 		elmo:index "3";
+	];
+  elmo:fragment [
+		elmo:applies-to dct:valid;
+		rdfs:label "Geldig van/tot:";
+		elmo:index "4";
 	];
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
@@ -135,8 +145,10 @@ stage:DemoBegripVersies a elmo:Part;
 			?doc wdrs:describedby ?metadata.
 			?doc adms:latestStatus ?lateststatus.
 			?doc dct:latestValid ?latestvalid.
+			?doc dct:latestIssued ?latestissued.
 			?metadata adms:status ?status.
 			?metadata dct:valid ?valid.
+      ?metadata dct:issued ?issued.
 			?metadata prov:generatedAtTime ?doctijdstip.
 			adms-status:UnderDevelopment rdfs:label "Werkversie".
 			adms-status:Deprecated rdfs:label "Vervallen".
@@ -155,12 +167,14 @@ stage:DemoBegripVersies a elmo:Part;
 			graph ?gdoc {
 				?doc adms:status ?status.
 				OPTIONAL {?doc dct:valid ?valid}
+        OPTIONAL {?doc dct:issued ?issued}
 				?gdoc prov:generatedAtTime ?doctijdstip.
 				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
 			}
       graph ?latestdoc {
         ?doc adms:status ?lateststatus.
         OPTIONAL {?doc dct:valid ?latestvalid}
+        OPTIONAL {?doc dct:issued ?latestissued}
         ?latestdoc prov:generatedAtTime ?latestdoctijdstip.
       }
       FILTER NOT EXISTS {

@@ -3,47 +3,37 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConceptenMetadata a elmo:Representation;
+stage:TestWeergavePaginaConcepten a elmo:Representation;
   # Bereikbaarheid
-  elmo:applies-to [
-    rdf:type prov:Entity
-  ];
-  
+  elmo:url-pattern "/query/testweergave-concept";
+  elmo:layer elmo:TopLayer;
+    
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
   
   # Data
-	elmo:query stage:WeergaveTabelConceptenMetadataQuery;
+	elmo:query stage:TestWeergaveTabelConceptenQuery;
 .
 
 # Query voor WeergaveTabel
-stage:WeergaveTabelConceptenMetadataQuery a elmo:Query;
+stage:TestWeergaveTabelConceptenQuery a elmo:Query;
 	elmo:query '''
-    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
 		prefix adms: <http://www.w3.org/ns/adms#>
 		prefix adms-status: <http://purl.org/adms/status/>
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
 		
 		construct {
-      ?graph prov:generatedAtTime ?time;
-        ?p ?o;
-        ?tempP ?tempO.
+      ?graph prov:generatedAtTime ?time.
+			?graph ?p ?o.
 		}
 		where {
       GRAPH ?graph {
         ?graph prov:generatedAtTime ?time.
-        <@SUBJECT@> ?p ?o.
-        OPTIONAL {
-          <@SUBJECT@> dct:temporal ?temporal.
-          ?temporal ?tempP ?tempO.
-        }    
-        
-        FILTER(
-          ?p != dct:temporal
-        )
+        <@IDSUBJECT@> ?p ?o.
+        FILTER( ?p != rdfs:label )
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}

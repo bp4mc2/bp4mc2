@@ -306,41 +306,48 @@ req:Overheidsorganisatie rdf:type sh:NodeShape;
 
 #---------------------
 # Dataset
+# datum:23-10-2017 
+# door: Ingrid Thurlings
 #---------------------
 req:Dataset rdf:type sh:NodeShape;
     rdfs:label "Dataset";
 	sh:name "dcat:Dataset";
     sh:targetClass dcat:Dataset;
-    sh:property req:Dataset_naam;
-    sh:property req:Dataset_publicatiedatum;
-    sh:property req:Dataset_taal;
-    sh:property req:Dataset_beschrijving;
+    sh:property req:Dataset_name;
+    sh:property req:Dataset_dateIssued;
+    sh:property req:Dataset_language;
+    sh:property req:Dataset_description;
 .
-req:Dataset_naam rdf:type sh:PropertyShape;
-    rdfs:label "naam";
+req:Dataset_name rdf:type sh:PropertyShape;
+    rdfs:label "naam"@nl;
+    rdfs:label "name"@nen;
 	sh:name "dcterms:title";
-    rdfs:comment "De dataset heeft een naam";
+    rdfs:comment "De dataset heeft een naam"@nl;
+    rdfs:comment "The dataset has a name"@en;
     rdf:value "'Omgevingswet','BAL','BRK', etc";
     sh:path dcterms:title
 .
-req:Dataset_publicatiedatum rdf:type sh:PropertyShape;
-    rdfs:label "publicatiedatum";
+req:Dataset_dateIssued rdf:type sh:PropertyShape;
+    rdfs:label "publicatiedatum"@nl;
+    rdfs:label "date issued"@en;
 	sh:name "dcterms:issued";
-    rdfs:comment "De dataset is op enig moment gepubliceerd";
-    rdf:value "1/10/2016";
+    rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus.";
+    rdf:value "1/10/2017";
     sh:path dcterms:issued
 .
-req:Dataset_taal rdf:type sh:PropertyShape;
-    rdfs:label "taal";
+req:Dataset_language rdf:type sh:PropertyShape;
+    rdfs:label "taal"@nl;
+    rdfs:label "language"@en;
 	sh:name "dcterms:language";
-    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
+    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)"@nl;
+    rdfs:comment "The language of the dataset"@en;
     rdf:value "@nl";
     sh:path dcterms:language
 .
-req:Dataset_beschrijving rdf:type sh:PropertyShape;
-    rdfs:label "beschrijving";
+req:Dataset_description rdf:type sh:PropertyShape;
+    rdfs:label "beschrijving"@nl;
 	sh:name "dcterms:description";
-    rdfs:comment "De dataset heeft een duidelijke beschrijving";
+    rdfs:comment "De dataset heeft een duidelijke beschrijving"@nl;
     rdf:value "<beschrijving>";
     sh:path dcterms:description
 .
@@ -546,94 +553,114 @@ req:Datasetbeschrijving_datumWijziging rdf:type sh:PropertyShape;
 .
 
 #---------------------
-# Catalogus
+# Catalogus 
+# datum:23-10-2017 
+# door: Ingrid Thurlings
 #---------------------
 req:Catalogus rdf:type sh:NodeShape;
-    rdfs:label "Catalogus";
-    sh:property req:Catalogus_datumWijziging;
+    rdfs:label "Catalogus"@nl;
+	rdfs:label "Catalog"@en;
+    sh:property req:Catalogus_dateModified;
     sh:property req:Catalogus_homepage;
-    sh:property req:Catalogus_licentie;
-    sh:property req:Catalogus_publicatiedatum;
-    sh:property req:Catalogus_naam;
-    sh:property req:Catalogus_beschrijving;
-    sh:property req:Catalogus_rechten;
-    sh:property req:Catalogus_taal;
-    sh:property req:Catalogus_uitgever;
-    sh:property req:Catalogus_werkingsgebied;
-    sh:property req:Catalogus_omvat;
+    sh:property req:Catalogus_licence;
+    sh:property req:Catalogus_dateIssued;
+    sh:property req:Catalogus_name;
+    sh:property req:Catalogus_description;
+    sh:property req:Catalogus_rights;
+    sh:property req:Catalogus_language;
+#    sh:property req:Catalogus_uitgever;
+#    sh:property req:Catalogus_werkingsgebied;
+#    sh:property req:Catalogus_omvat;
     sh:targetClass dcat:Catalog
 .
-req:Catalogus_naam rdf:type sh:PropertyShape;
-    rdfs:label "naam";
+req:Catalogus_name rdf:type sh:PropertyShape;
+    rdfs:label "naam"@nl;
+	rdfs:label "name"@en;
 	sh:name "dcterms:title";
-    rdfs:comment "De catalogus heeft een naam";
+    rdfs:comment "De catalogus heeft een naam"@nl;
+	rdfs:comment "The catalog has a name"@en;
     rdf:value "Catalogus Omgevingswet";
     sh:path dcterms:title
 .
-req:Catalogus_beschrijving rdf:type sh:PropertyShape;
-    rdfs:label "beschrijving";
+req:Catalogus_description rdf:type sh:PropertyShape;
+    rdfs:label "beschrijving"@nl;
+    rdfs:label "description"@en;
 	sh:name "dcterms:description";
-    rdfs:comment "De catalogus heeft een duidelijke beschrijving";
-    rdf:value "<welkomsttekst>";
+    rdfs:comment "De catalogus heeft een duidelijke beschrijving"@nl;
+    rdfs:comment "The catalog has a clear description"@en;
+	rdf:value "<welkomsttekst>";
     sh:path dcterms:description
 .
-req:Catalogus_publicatiedatum rdf:type sh:PropertyShape;
-    rdfs:label "publicatiedatum";
+req:Catalogus_dateIssued rdf:type sh:PropertyShape;
+    rdfs:label "publicatiedatum"@nl;
+    rdfs:label "date issued"@en;
 	sh:name "dcterms:issued";
-    rdfs:comment "De catalogus is op enig moment life life gegaan";
+    rdfs:comment "De catalogus is op een bepaalde datum gepubliceerd"@nl;
+    rdfs:comment "The catalog is published on a set date"@en;
     rdf:value "1/10/2016";
     sh:path dcterms:issued
 .
-req:Catalogus_datumWijziging rdf:type sh:PropertyShape;
-    rdfs:label "datum wijziging";
-    rdfs:comment "Er wordt bijgehouden wanneer iets in de catalogus zelf is gewijzigd (een van de attributen in dit lijstje of een dataset die is toegevoegd)";
+req:Catalogus_dateModified rdf:type sh:PropertyShape;
+    rdfs:label "datum wijziging"@nl;
+    rdfs:label "date modified"@en;
+    rdfs:comment "De datum waarop iets in de catalogus zelf is veranderd, wordt bewaard, bijvoorbeeld een eigenschap van de catalogus of een nieuwe dataset"@nl;
+    rdfs:comment "The date when something in the catalog is changed, is saved, for example a catalog property or a new dataset"@en;
     rdf:value "1/10/2016";
     sh:path dcterms:modified
 .
 req:Catalogus_homepage rdf:type sh:PropertyShape;
     rdfs:label "homepage";
-    rdfs:comment "De url van de homepage is gelijk aan de uri van de catalogus omdat die dereferenceble is";
+#    rdfs:comment "De url van de homepage is gelijk aan de uri van de catalogus omdat die dereferenceble is";
+    rdfs:comment "De catalogus als portaal is vindbaar op een homepage."@nl;
+    rdfs:comment "The catalog as a portal is available on a homepage."@en;
     rdf:value "https://www.digitaalstelselomgevingswet.nl/catalogus";
     sh:path foaf:homepage
 .
-req:Catalogus_licentie rdf:type sh:PropertyShape;
-    rdfs:label "licentie";
-    rdfs:comment "De licentie op de catalogus zelf (dus niet die op de datasets of distributies)";
+req:Catalogus_licence rdf:type sh:PropertyShape;
+    rdfs:label "licentie"@nl;
+    rdfs:label "licence"@en;
+#    rdfs:comment "De licentie op de catalogus zelf (dus niet die op de datasets of distributies)";
+    rdfs:comment "Een licentie is van toepassing op de catalogus zelf. Dit kan een andere licentie zijn als de licentie voor distributies van datasets"@nl;
+    rdfs:comment "A licence is applicable to the catalog. This can be a different licence than the licence for the distribution of datasets"@en;
     rdf:value "uri-beerware";
     sh:path dcterms:license
 .
-req:Catalogus_rechten rdf:type sh:PropertyShape;
-    rdfs:label "rechten";
-    rdfs:comment "Een beschrijving van de rechten die gelden voor het de catalogus zelf (dus niet voor de datasets of distributies)";
+req:Catalogus_rights rdf:type sh:PropertyShape;
+    rdfs:label "rechten"@nl;
+    rdfs:label "rights"@en;
+    #rdfs:comment "Een beschrijving van de rechten die gelden voor de catalogus zelf (dus niet voor de datasets of distributies)";
+    rdfs:comment "Een beschrijving van de rechten die van toepassing is op de catalogus. Dit kunnen andere rechten zijn als die voor distributies van datasets"@nl;
+    rdfs:comment "A description of the rights that are applicable to the catalog. This can be different rights than those for distributions of datasets"@en;
     rdf:value "<tekst over de catalogus en de oorsprong van de verschillende datasets>";
     sh:path dcterms:rights
 .
-req:Catalogus_taal rdf:type sh:PropertyShape;
+req:Catalogus_language rdf:type sh:PropertyShape;
     rdfs:label "taal";
 	sh:name "dcterms:language";
-    rdfs:comment "De taal van de catalogus";
+    rdfs:comment "De taal waarin de catalogus is beschreven"@nl;
+    rdfs:comment "The language in which the catalog is described"@en;
     rdf:value "@nl";
     sh:path dcterms:language
 .
-req:Catalogus_uitgever rdf:type sh:PropertyShape;
-    rdfs:label "uitgever";
-    rdfs:comment "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de dataset";
-    sh:class foaf:Agent;
-    rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
-    sh:path dcterms:publisher
-.
-req:Catalogus_werkingsgebied rdf:type sh:PropertyShape;
-    rdfs:label "werkingsgebied";
-    rdfs:comment "Het gebied waarvoor de catalogus geldig is";
-    sh:class dcterms:Location;
-    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
-    sh:path dcterms:spatial
-.
-req:Catalogus_omvat a sh:PropertyShape;
-	rdfs:label "omvat";
-	sh:path dcat:record;
-	sh:class dcat:CatalogRecord;
-.
+#req:Catalogus_uitgever rdf:type sh:PropertyShape;
+#    rdfs:label "uitgever";
+#    rdfs:comment "Persoon of organisatie die verantwoordelijk is voor het technisch beheer en publicatie van de dataset";
+#    sh:class foaf:Agent;
+#    rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
+#    sh:path dcterms:publisher
+#.
+#req:Catalogus_werkingsgebied rdf:type sh:PropertyShape;
+#    rdfs:label "werkingsgebied";
+#    rdfs:comment "Het gebied waarvoor de catalogus geldig is";
+#    sh:class dcterms:Location;
+#    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+#    sh:path dcterms:spatial
+#.
+#req:Catalogus_omvat a sh:PropertyShape;
+#	rdfs:label "omvat";
+#	sh:path dcat:record;
+#	sh:class dcat:CatalogRecord;
+#.
 
 #---------------------
 # Werkingsgebied
