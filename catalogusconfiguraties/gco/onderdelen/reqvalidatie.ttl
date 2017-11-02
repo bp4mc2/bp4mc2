@@ -44,22 +44,22 @@ elmo:query '''
 		select ?class ?class_label ?req ?req_label ?pred ?refclass ?toep if(bound(?shpe),?shpe,"NOT-OK") as ?shape if(bound(?toclass),if(?toclass=?refclass,"OK","NOT-VALID"),"OK") as ?shape_label
 		where {
 			graph <http://bp4mc2.org/id/dataset/requirements> {
-				?req a shacl:PropertyConstraint.
+				?req a shacl:PropertyShape.
 				?req rdfs:label ?req_label.
 				OPTIONAL {
 					?shape shacl:property ?req.
 					?shape rdfs:label ?class_label.
-					?shape shacl:scopeClass ?class.
+					?shape shacl:targetClass ?class.
 				}
-				OPTIONAL {?req shacl:predicate ?pred}
+				OPTIONAL {?req shacl:path ?pred}
 				OPTIONAL {?req shacl:class ?refclass}
 				OPTIONAL {?req rdf:value ?toep}
 			}
 			OPTIONAL {
 				graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-					?shpe shacl:scopeClass ?class.
+					?shpe shacl:targetClass ?class.
 					?shpe shacl:property ?pc.
-					?pc shacl:predicate ?pred.
+					?pc shacl:path ?pred.
 					OPTIONAL {?pc shacl:class ?toclass}
 				}
 			}
@@ -84,17 +84,17 @@ stage:Requirements_Controle2 a elmo:Part;
 		select ?shape ?shape_label ?pred str(?pred) as ?pred_label
 		where {
 			graph <http://bp4mc2.org/id/dataset/bp4mc2> {
-				?shape rdf:type shacl:Shape.
+				?shape rdf:type shacl:NodeShape.
 				OPTIONAL {?shape rdfs:label ?shape_label}
-				?shape shacl:scopeClass ?class.
+				?shape shacl:targetClass ?class.
 				?shape shacl:property ?pc.
-				?pc shacl:predicate ?pred.
+				?pc shacl:path ?pred.
 			}
 			FILTER NOT EXISTS {
 				graph <http://bp4mc2.org/id/dataset/requirements> {
-					?req shacl:scopeClass ?class.
+					?req shacl:targetClass ?class.
 					?req shacl:property ?pcr.
-					?pcr shacl:predicate ?pred
+					?pcr shacl:path ?pred
 				}
 			}
 		}

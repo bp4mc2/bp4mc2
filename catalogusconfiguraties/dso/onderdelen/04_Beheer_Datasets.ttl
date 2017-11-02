@@ -212,14 +212,14 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		INSERT {
 			GRAPH doc:mastergraph {
 				doc:mastergraph rdf:type void:Dataset.
-				doc:mastergraph rdfs:label "Concepten".
+				doc:mastergraph rdfs:label "Datasets".
 				versiongraph:version dct:isVersionOf doc:mastergraph.
 			}
 		}
 		
 		INSERT {
 			GRAPH versiongraph:version {
-				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				dataset:Datasets rdfs:isDefinedBy versiongraph:version.
 				versiongraph:version rdfs:label "Datasets en distributies - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
 				versiongraph:version prov:wasGeneratedBy activity:Upload.
 				versiongraph:version rdf:type prov:Entity.
@@ -241,9 +241,10 @@ stage:DSODatasetUploadScene a elmo:Scene;
 			}
 		}
 		
-INSERT {
+		INSERT {
 			GRAPH container:datasetupdate{
-				?s wdrs:describedby <@MODEL@>
+				?s wdrs:describedby <@MODEL@>.
+				?s dct:issued "@CURRENTMOMENT@".
 			}
 		}
 		WHERE {
@@ -252,6 +253,7 @@ INSERT {
 				FILTER (
 					?type = dcat:Dataset
 					|| ?type = dcat:Distribution
+					|| ?type = dcat:Catalog
 				)
 			}
 		}
@@ -272,6 +274,7 @@ INSERT {
 						FILTER (
 							?type = dcat:Dataset
 							|| ?type = dcat:Distribution
+							|| ?type = dcat:Catalog
 						)
 					}
 					ORDER BY ?s ?p ?o

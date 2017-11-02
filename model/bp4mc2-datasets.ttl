@@ -143,13 +143,40 @@ model:catalogusDataset rdf:type sh:PropertyShape;
 .
 model:catalogusTaxonomy rdf:type sh:PropertyShape;
 	rdfs:label "taxonomie"@nl;
-	rdfs:comment "Het kennis organisatie systeem (KOS) data wordt gebruikt om de datasets van de catalogus te classificeren";
+	rdfs:comment "Het kennis organisatie systeem (KOS) dat wordt gebruikt om de datasets van de catalogus te classificeren";
 	sh:name "dcat:themeTaxonomy";
 	sh:path dcat:themeTaxonomy;
 	sh:datatype xsd:string;
 	sh:class skos:ConceptScheme;
 .
+
+### ConceptScheme 
+
+model:ConceptScheme rdf:type sh:NodeShape;
+	rdfs:label "ConceptScheme";
+	rdfs:comment "Het kennis organisatie systeem (KOS) dat wordt gebruikt om de Concepten in de catalogus te classificeren";
+	sh:name "skos:ConceptScheme";
+	sh:targetClass skos:ConceptScheme;
+.
+### Concept
+
+model:Concept rdf:type sh:NodeShape;
+	rdfs:label "Concept";
+	rdfs:comment "Het concept dat gebruikt wordt om het thema van een dataset uit te drukken";
+	sh:name "skos:Concept";
+	sh:targetClass skos:Concept;
+	sh:property model:conceptInSchema;
+.
+model:conceptInSchema rdf:type sh:PropertyShape;
+	rdfs:label "inScheme";
+	rdfs:Comment "De verwijzing naar het concept schema waarin het Concept gebruikt wordt";
+	sh:name "skos:inScheme";
+	sh:path skos:inScheme;
+	sh:node model:ConceptScheme;
+.
+
 ### Catalogus Record
+
 model:CatalogusRecord rdf:type sh:NodeShape;
 	rdfs:label "Catalogus Record"@nl;
 	rdfs:comment "Een record in de data catalogus die een enkele dataset beschrijft";
@@ -306,7 +333,9 @@ model:datasetGemaaktDoor rdf:type sh:PropertyShape;
 	sh:class prov:Agent;
 .
 model:datasetThema rdf:type sh:PropertyShape;
+	rdfs:label "Thema"@nl;
 	rdfs:comment "Het thema van een Dataset";
+	sh:name "dcat:theme";
 	sh:path dcat:theme;
 	sh:datatype xsd:string;
 	sh:class skos:Concept;
@@ -480,9 +509,28 @@ model:document_versieVan rdf:type sh:PropertyShape;
 	sh:minCount 1;
 .
 ### Werkingsgebied
+
 model:werkingsgebied rdf:type sh:NodeShape;
 	rdfs:label "werkingsgebied"@nl;
 	rdfs:comment "Het aangewezen werkingsgebied";
 	sh:targetClass dct:Location;
 	sh:name "dct:Location";
+.
+
+### Frequentie
+
+model:Frequentie rdf:type sh:NodeShape;
+	rdfs:label "Frequentie"@nl;
+	rdfs:comment "Het aantal maal per tijdseenheid dat een gebeurtenis optreedt.";
+	sh:name "dct:Frequency";
+	sh:targetClass dct:Frequency;
+.
+
+### Formaat
+
+model:Formaat rdf:type sh:NodeShape;
+	rdfs:label "Formaat"@nl;
+	rdfs:comment "Bestandformaat van een dataset.";
+	sh:name "dct:MediaTypeOrExtent";
+	sh:targetClass dct:MediaTypeOrExtent;
 .

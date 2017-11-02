@@ -1,0 +1,117 @@
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Weergavepagina inclusief versies en grafische weergave
+stage:WeergavePaginaConcepten a elmo:Representation;
+  # Bereikbaarheid
+  elmo:uri-pattern "/id/concept/";
+  elmo:applies-to [
+    rdf:type skos:Concept
+  ];
+    
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  elmo:contains stage:DSOv2ConceptQuery
+.
+
+# Query voor WeergaveTabel
+stage:DSOv2ConceptQuery a elmo:Query;
+	elmo:query '''    
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    
+		CONSTRUCT {
+      <@IDSUBJECT@> ?p ?o;
+        adms:status ?status;
+        dct:issued ?issued;
+        dcmiperiod:start ?start;
+        dcmiperiod:end ?end;
+        dct:nowDate ?nowDate;
+        dct:startdt ?startdt;
+        prov:generatedAtTime ?time
+      .
+		}
+		WHERE {
+      GRAPH ?graph {
+        <@IDSUBJECT@> ?p ?o;
+          wdrs:describedby ?doc.
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc adms:status ?status.
+        OPTIONAL {
+          ?doc dct:issued ?issued.
+        }
+        OPTIONAL {
+          ?doc dct:temporal ?temporal.
+          ?temporal dcmiperiod:start ?start.
+          OPTIONAL {
+            ?temporal dcmiperiod:end ?end.
+          }
+        }
+        ?docGraph prov:generatedAtTime ?time.
+      }
+      
+      BIND(
+        IF( substr( "@BESCHIKBAAR@", 2 ) = "BESCHIKBAAR@",  now(), 
+                                                            strdt( "@BESCHIKBAAR@", xsd:dateTime )
+        ) AS ?requestedGenerated
+      )
+      BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
+      BIND( strdt( "@STARTWERKING@", xsd:dateTime ) AS ?requestedStart )
+      BIND( strdt( "@EINDWERKING@", xsd:dateTime ) AS ?requestedEnd )
+      BIND(
+        IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
+        IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
+        IF( "@STATUS@" = "vervallen",     adms-status:Deprecated,
+                                          slex-status:Enacted
+        ) ) ) AS ?requestedStatus
+      )
+      
+      FILTER(
+        ?status = ?requestedStatus
+        && ?time <= ?requestedGenerated
+        && (
+          substr( "@BEKEND@", 2 ) = "BEKEND@"
+          || strdt( ?issued, xsd:date ) <= ?requestedIssued
+        )
+        && (
+          (
+            substr( "@STARTWERKING@", 2 ) = "STARTWERKING@"
+            && (
+              !BOUND( ?start )
+              || strdt( ?start, xsd:dateTime ) <= now()
+            )
+          )
+          || strdt( ?start, xsd:date ) >= ?requestedStart
+        )
+        && (
+          (
+            substr( "@EINDWERKING@", 2 ) = "EINDWERKING@"
+            && strdt( ?end, xsd:dateTime ) > strdt( strbefore( str( now() ), "T" ), xsd:dateTime )
+          )
+          || !BOUND( ?end )
+          || strdt( ?end, xsd:date ) > ?requestedEnd
+        )
+      )
+      
+      FILTER NOT EXISTS {
+        GRAPH ?newerDocGraph {
+          ?doc adms:status ?newerStatus.
+          ?newerDocGraph prov:generatedAtTime ?newerTime.
+          FILTER( ?newerTime > ?time )
+        }
+        FILTER(
+          ?newerTime <= ?requestedGenerated
+        )
+      }
+      
+		}
+	'''
+.

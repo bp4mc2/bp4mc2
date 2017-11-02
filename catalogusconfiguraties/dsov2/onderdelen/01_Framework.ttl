@@ -1,0 +1,118 @@
+#
+#
+#
+# FRAMEWORK
+#
+#
+#
+
+#
+#
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+#
+#
+
+# Hoofdpagina beheer
+stage:DSOv2Beheerpagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dsov2/admin(|/)$";
+	elmo:contains stage:DSOv2Beheermenu;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "DSOv2";
+		elmo:html "<div><p>U bent succesvol ingelogd op de beheerpagina.</p></div>"
+	]
+.
+
+
+#
+#
+#
+# HERBRUIKBARE PAGINA-ONDERDELEN (PARTS)
+#
+#
+#
+
+# Menubalk hoofdmenu
+stage:DSOv2Menu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+  elmo:data [
+    elmo:data [
+      rdfs:label "Home";
+      xhtml:link "/catalogus/dsov2";
+      elmo:index "1"
+    ];
+    elmo:data [
+      rdfs:label "Beheer";
+      xhtml:link "/catalogus/dsov2/admin";
+      elmo:index "2";
+    ];
+  ]
+.
+
+
+# Beheermenu
+stage:DSOv2Beheermenu a elmo:Part;
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [
+			rdfs:label "Beheer";
+			xhtml:link "/catalogus/dsov2/admin";
+			elmo:index "0";
+		];
+		elmo:data [ 
+			rdfs:label "Home";
+			elmo:index "1";
+			xhtml:link "/catalogus/dsov2";
+		];
+		elmo:data [
+			rdfs:label "Concepten";
+			elmo:index "3";
+			elmo:data [
+				rdfs:label "Voer nieuw concept op";
+				elmo:index "01";
+				xhtml:link "/catalogus/dsov2/container/concept-post-ttl";
+			];
+			elmo:data [
+				rdfs:label "Pas bestaand concept aan";
+				elmo:index "02";
+				xhtml:link "/catalogus/dsov2/container/concept-put-ttl";
+			];
+      elmo:data [
+				rdfs:label "Vul bestaand concept aan";
+				elmo:index "03";
+				xhtml:link "/catalogus/dsov2/container/concept-add-ttl";
+			];
+      elmo:data [
+				rdfs:label "Maak begrip bekend";
+				elmo:index "04";
+				xhtml:link "/catalogus/dsov2/update/concept-issue";
+			];
+      elmo:data [
+				rdfs:label "Laat begrip in werking treden";
+				elmo:index "05";
+				xhtml:link "/catalogus/dsov2/update/concept-enact";
+			];
+		];
+		elmo:data [
+			rdfs:label "Acties";
+			elmo:index "5";
+			elmo:data [
+				rdfs:label "Verwijder alle data";
+				elmo:index "1";
+				xhtml:link "/catalogus/dsov2/update/clearalldata";
+			];
+			elmo:data [
+				rdfs:label "Verwijder enkel concept";
+				elmo:index "2";
+				xhtml:link "/catalogus/dsov2/update/clearsingleconcept";
+			];
+      elmo:data [
+				rdfs:label "Voer TomcatUser op";
+				elmo:index "3";
+				xhtml:link "/catalogus/dsov2/update/insert-tomcatuser";
+			];
+		];
+	]
+.

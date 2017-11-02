@@ -33,7 +33,7 @@ stage:Reqdocument_doc a elmo:Part;
 		where {
 			graph <http://bp4mc2.org/id/dataset/requirements> {
 				{
-					?shape rdf:type shacl:Shape.
+					?shape rdf:type shacl:NodeShape.
 					OPTIONAL {?shape rdfs:label ?label}
 					OPTIONAL {?shape shacl:name ?name}
 					BIND (concat(?label," [",?name,"]") as ?shapelabel)
@@ -41,13 +41,13 @@ stage:Reqdocument_doc a elmo:Part;
 				UNION
 				{
 					?shape shacl:property ?pc.
-					?pc shacl:predicate ?property.
+					?pc shacl:path ?property.
 					OPTIONAL {?pc rdfs:label ?plabel}
 					OPTIONAL {?pc shacl:name ?pname}
 					OPTIONAL {
 						?pc shacl:class ?class.
 						OPTIONAL {
-							?refs shacl:scopeClass ?class.
+							?refs shacl:targetClass ?class.
 							?refs shacl:name ?classlabel
 						}
 					}
@@ -58,13 +58,13 @@ stage:Reqdocument_doc a elmo:Part;
 				UNION
 				{
 					?shape shacl:property ?pc.
-					?pc shacl:predicate ?property.
+					?pc shacl:path ?property.
 					?pc rdfs:comment ?requirement.
 					OPTIONAL {?pc rdfs:label ?plabel}
 					OPTIONAL {?pc shacl:name ?pname}
 					OPTIONAL {
 						?pc shacl:class ?class.
-						?refs shacl:scopeClass ?class.
+						?refs shacl:targetClass ?class.
 						?refs shacl:name ?refclass
 					}
 					BIND (concat(?plabel," [",?pname,"]") as ?reqlabel)
