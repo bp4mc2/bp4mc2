@@ -109,7 +109,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
       
       FILTER NOT EXISTS {
         GRAPH ?newerDocGraph {
-          ?doc adms:status ?newerStatus.
+          ?doc rdf:type prov:Entity.
           ?newerDocGraph prov:generatedAtTime ?newerTime.
           FILTER( ?newerTime > ?time )
         }
