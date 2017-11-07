@@ -429,75 +429,93 @@ req:Dataset_description rdf:type sh:PropertyShape;
 
 #---------------------
 # Datasetversie
+# Datum: 7-11-2017
+# Door: Ingrid Thurlings
 #---------------------
 req:Datasetversie rdf:type sh:NodeShape;
 	rdfs:label "Datasetversie";
-	sh:property req:Datasetversie_informatiemodel;
-	sh:property req:Datasetversie_naam;
-	sh:property req:Datasetversie_publicatiedatum;
-	sh:property req:Datasetversie_taal;
-	sh:property req:Datasetversie_beschrijving;
-	sh:property req:Datasetversie_distributie;
-	sh:property req:Datasetversie_versieVan;
-	sh:property req:Datasetversie_werkingsgebied;
-	sh:property req:Datasetversie_gerelateerdAan;
+#	sh:property req:Datasetversie_informatiemodel;
+#	sh:property req:Datasetversie_naam;
+#	sh:property req:Datasetversie_publicatiedatum;
+#	sh:property req:Datasetversie_taal;
+	sh:property req:Datasetversie_describedBy;
+	sh:property req:Datasetversie_distribution;
+	sh:property req:Datasetversie_versionOf;
+	sh:property req:Datasetversie_version;
+	sh:property req:Datasetversie_versionNotes;
+#	sh:property req:Datasetversie_werkingsgebied;
+	sh:property req:Datasetversie_isDerivedFrom;
 	sh:targetClass dcat:Dataset;
-
-req:Datasetversie_beschrijving rdf:type sh:PropertyShape;
-    rdfs:label "beschrijving";
-	sh:name "dcterms:description";
-    rdfs:comment "De dataset heeft een duidelijke beschrijving";
+.
+req:Datasetversie_version rdf:type sh:PropertyShape;
+	rdfs:label "versie"@nl;
+	sh:name "adms:version";
+	rdfs:comment "De versie van de dataset."@nl;
+	sh:path adms:version;
+.
+req:Datasetversie_versionNotes rdf:type sh:PropertyShape;
+	rdfs:label "versie notes"@nl;
+	sh:name "adms:versionNotes";
+	rdfs:comment "Een versie heeft release notes."@nl;
+	sh:path adms:versionNotes;
+.
+req:Datasetversie_describedBy rdf:type sh:PropertyShape;
+    rdfs:label "beschrijving"@nl;
+	sh:name "wdrs:describedBy";
+    rdfs:comment "De data in een dataset is beschreven in een informatiemodel."@nl;
     rdf:value "<beschrijving>";
-    sh:path dcterms:description
+    sh:path wdrs:describedBy
 .
-req:Datasetversie_informatiemodel rdf:type sh:PropertyShape;
-	rdfs:label "beschreven door";
-    rdfs:comment "Bij een dataset hoort een informatiemodel.";
-    sh:class <http://www.w3.org/ns/adms#Asset>;
-    rdf:value "kadaster.nl/schemas/imkad";
-    sh:path wdrs:describedby;
-.
-req:Datasetversie_naam rdf:type sh:PropertyShape;
-    rdfs:label "naam";
-	sh:name "dcterms:title";
-    rdfs:comment "De dataset heeft een naam";
-    rdf:value "'Omgevingswet','BAL','BRK', etc";
-    sh:path dcterms:title
-.
-req:Datasetversie_publicatiedatum rdf:type sh:PropertyShape;
-    rdfs:label "publicatiedatum";
-	sh:name "dcterms:issued";
-    rdfs:comment "De dataset is op enig moment gepubliceerd";
-    rdf:value "1/10/2016";
-    sh:path dcterms:issued
-.
-req:Datasetversie_taal rdf:type sh:PropertyShape;
-    rdfs:label "taal";
-	sh:name "dcterms:language";
-    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
-    rdf:value "@nl";
-    sh:path dcterms:language
-.
-req:Datasetversie_distributie a sh:PropertyShape;
-	rdfs:label "distributie";
+#req:Datasetversie_informatiemodel rdf:type sh:PropertyShape;
+#	rdfs:label "beschreven door";
+#    rdfs:comment "Bij een dataset hoort een informatiemodel.";
+#    sh:class <http://www.w3.org/ns/adms#Asset>;
+#    rdf:value "kadaster.nl/schemas/imkad";
+#    sh:path wdrs:describedby;
+#.
+#req:Datasetversie_naam rdf:type sh:PropertyShape;
+#    rdfs:label "naam";
+#	sh:name "dcterms:title";
+#    rdfs:comment "De dataset heeft een naam";
+#    rdf:value "'Omgevingswet','BAL','BRK', etc";
+#    sh:path dcterms:title
+#.
+#req:Datasetversie_publicatiedatum rdf:type sh:PropertyShape;
+#    rdfs:label "publicatiedatum";
+#	sh:name "dcterms:issued";
+#    rdfs:comment "De dataset is op enig moment gepubliceerd";
+#    rdf:value "1/10/2016";
+#    sh:path dcterms:issued
+#.
+#req:Datasetversie_taal rdf:type sh:PropertyShape;
+#    rdfs:label "taal";
+#	sh:name "dcterms:language";
+#    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
+#    rdf:value "@nl";
+#    sh:path dcterms:language
+#.
+req:Datasetversie_distribution a sh:PropertyShape;
+	rdfs:label "distributie"@nl;
 	sh:path dcat:distribution;
 	sh:class dcat:Distribution;
+	rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen."@nl;
 .
-req:Datasetversie_versieVan a sh:PropertyShape;
-	rdfs:label "versie van";
+req:Datasetversie_versionOf a sh:PropertyShape;
+	rdfs:label "versie van"@nl;
 	sh:path dcterms:isVersionOf;
+	rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset."@nl;
 	sh:node req:Dataset;
 	sh:maxCount 1;
 .
-req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
-    rdfs:label "werkingsgebied";
-    rdfs:comment "Het gebied waar de dataset over gaat";
-    sh:class dcterms:Location;
-    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
-    sh:path dcterms:spatial
-.
-req:Datasetversie_gerelateerdAan rdf:type sh:PropertyShape;
-	rdfs:label "gerelateerd aan";
+#req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
+#    rdfs:label "werkingsgebied";
+#    rdfs:comment "Het gebied waar de dataset over gaat";
+#    sh:class dcterms:Location;
+#    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+#    sh:path dcterms:spatial
+#.
+req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
+	rdfs:label "gerelateerd aan"@nl;
 	rdfs:comment "Geeft de dataset aan waar deze dataset aan gerelateerd is (wordt gebruikt om aan te geven hoe een dataset is afgeleid uit 1 of meerdere andere datasets";
 	sh:path dcterms:relation;
 	sh:class dcat:Dataset;
@@ -513,67 +531,71 @@ req:Informatieproduct a sh:NodeShape;
 
 #---------------------
 # Informatiemodel
+# Datum: 7-11-2017
+# Door: Ingrid Thurlings
 #---------------------
 req:Informatiemodel rdf:type sh:NodeShape;
     rdfs:label "Informatiemodel";
 	sh:name "adms:Asset";
     sh:targetClass adms:Asset;
-    sh:property req:Informatiemodel_naam;
-    sh:property req:Informatiemodel_beschrijving;
-    sh:property req:Informatiemodel_versie;
-    sh:property req:Informatiemodel_publicatiedatum;
-    sh:property req:Informatiemodel_releaseNotes;
-	sh:property req:Informatiemodel_betreft;
-	sh:property req:Informatiemodel_type;
-.
-req:Informatiemodel_naam rdf:type sh:PropertyShape;
-    rdfs:label "naam";
-	sh:name "dcterms:title";
+    sh:property req:Informatiemodel_name;
+#    sh:property req:Informatiemodel_beschrijving;
+#    sh:property req:Informatiemodel_versie;
+#    sh:property req:Informatiemodel_publicatiedatum;
+#    sh:property req:Informatiemodel_releaseNotes;
+#	sh:property req:Informatiemodel_betreft;
+#	sh:property req:Informatiemodel_type;
+#.
+#req:Informatiemodel_name rdf:type sh:PropertyShape;
+#    rdfs:label "naam"@nl;
+     rdfs:label "name"@en;
+	sh:name "rdfs:comment";
     rdfs:comment "Het informatiemodel heeft een naam";
     rdf:value "'IMKAD'";
-    sh:path dcterms:title
+    sh:path rdfs:comment
 .
-req:Informatiemodel_beschrijving rdf:type sh:PropertyShape;
-	rdfs:label "beschrijving";
-	sh:name "dcterms:description";
-    rdfs:comment "Het informatiemodel heeft een duidelijke beschrijving";
-    rdf:value "<beschrijving>";
-    sh:path dcterms:description;
-.
-req:Informatiemodel_versie rdf:type sh:PropertyShape;
-	rdfs:label "versie";
-	sh:name "adms:version";
-    rdfs:comment "Het informatiemodel heeft een versie";
-    rdf:value "2.1";
-    sh:path adms:version;
-.
-req:Informatiemodel_publicatiedatum rdf:type sh:PropertyShape;
-	rdfs:label "publicatiedatum";
-	sh:name "dcterms:issued";
-    rdfs:comment "Het informatiemodel is op enig moment gepubliceerd";
-    rdf:value "8/5/2012";
-    sh:path dcterms:issued;
-.
-req:Informatiemodel_releaseNotes rdf:type sh:PropertyShape;
-	rdfs:label "release notes";
-	sh:name "adms:versionNotes";
-    rdfs:comment "Een versie van een informatiemodel kent release notes";
-    rdf:value "<release notes>";
-    sh:path adms:versionNotes;
-.
-req:Informatiemodel_betreft a sh:PropertyShape;
-	rdfs:label "betreft";
-	sh:name "foaf:primaryTopic";
-	rdfs:comment "Een informatiemodel beschrijft welke informatie wordt vastgelegd over begrippen uit een begrippenkader";
-	sh:path foaf:primaryTopic;
-	sh:class skos:ConceptScheme;
-.
-req:Informatiemodel_type a sh:PropertyShape;
-	rdfs:label "rol van entiteit";
-	rdfs:comment "Een informatiemodel vervult de rol van entiteit";
-	sh:path rdf:type;
-	sh:hasValue prov:Entity;
-.
+#req:Informatiemodel_beschrijving rdf:type sh:PropertyShape;
+#	rdfs:label "beschrijving";
+#	sh:name "dcterms:description";
+#    rdfs:comment "Het informatiemodel heeft een duidelijke beschrijving";
+#    rdf:value "<beschrijving>";
+#    sh:path dcterms:description;
+#.
+#req:Informatiemodel_versie rdf:type sh:PropertyShape;
+#	rdfs:label "versie";
+#	sh:name "adms:version";
+#    rdfs:comment "Het informatiemodel heeft een versie";
+#    rdf:value "2.1";
+#    sh:path adms:version;
+#.
+#req:Informatiemodel_publicatiedatum rdf:type sh:PropertyShape;
+#	rdfs:label "publicatiedatum";
+#	sh:name "dcterms:issued";
+#    rdfs:comment "Het informatiemodel is op enig moment gepubliceerd";
+#    rdf:value "8/5/2012";
+#    sh:path dcterms:issued;
+#.
+#req:Informatiemodel_releaseNotes rdf:type sh:PropertyShape;
+#	rdfs:label "release notes";
+#	sh:name "adms:versionNotes";
+#    rdfs:comment "Een versie van een informatiemodel kent release notes";
+#    rdf:value "<release notes>";
+#    sh:path adms:versionNotes;
+#.
+#req:Informatiemodel_betreft a sh:PropertyShape;
+#	rdfs:label "betreft";
+#	sh:name "foaf:primaryTopic";
+#	rdfs:comment "Een informatiemodel beschrijft welke informatie wordt vastgelegd over begrippen uit een begrippenkader";
+#	sh:path foaf:primaryTopic;
+#	sh:class skos:ConceptScheme;
+#.
+#req:Informatiemodel_type a sh:PropertyShape;
+#	rdfs:label "rol van entiteit";
+#	rdfs:comment "Een informatiemodel vervult de rol van entiteit";
+#	sh:path rdf:type;
+#	sh:hasValue prov:Entity;
+#.
+
 
 #---------------------
 # Datasetbeschrijving
