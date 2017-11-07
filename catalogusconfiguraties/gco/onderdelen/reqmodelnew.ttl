@@ -1,0 +1,131 @@
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+stage:ReqModelConcepten a elmo:Representation;
+	elmo:url-pattern "/query/model/concepten";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dctype: <http://purl.org/dc/dcmitype/>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:targetclass ?type.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				?shape sh:targetClass ?type.
+				?shape sh:property ?prop.
+				?prop ?proppred ?propobj.
+				FILTER (?type = skos:Concept
+					||	?type = skos:ConceptScheme
+					||	?type = skos:Collection
+					||	?type = dctype:Text
+				)
+			}
+		}
+	''';
+.
+
+stage:ReqModelConceptenMeta a elmo:Representation;
+	elmo:url-pattern "/query/model/conceptenmeta";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dctype: <http://purl.org/dc/dcmitype/>
+		PREFIX prov: <http://www.w3.org/ns/prov#>
+		PREFIX dct: <http://purl.org/dc/terms/>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:targetclass ?type.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				?shape sh:targetClass ?type.
+				?shape sh:property ?prop.
+				?prop ?proppred ?propobj.
+				FILTER (?type = skos:Concept
+					||	?type = skos:ConceptScheme
+					||	?type = skos:Collection
+					||	?type = dctype:Text
+					||	?type = prov:Entity
+					||	?type = dct:Location
+				)
+			}
+		}
+	''';
+.
+
+stage:ReqModelGebeurtenissen a elmo:Representation;
+	elmo:url-pattern "/query/model/gebeurtenissen";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dctype: <http://purl.org/dc/dcmitype/>
+		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex/>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:targetclass ?type.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				?shape sh:targetClass ?type.
+				?shape sh:property ?prop.
+				?prop ?proppred ?propobj.
+				FILTER (?type = skos:Concept
+					||	?type = skos:ConceptScheme
+					||	?type = skos:Collection
+					||	?type = dctype:Text
+					||	?type = skoslex:Act
+					||	?type = skoslex:Actor
+					||	?type = skoslex:Agent
+					||	?type = skoslex:Object
+					||	?type = skoslex:Norm
+				)
+			}
+		}
+	''';
+.
+
+stage:ReqModelDatasets a elmo:Representation;
+	elmo:url-pattern "/query/model/datasets";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dcat: <http://www.w3.org/ns/dcat#>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:targetclass ?type.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				?shape sh:targetClass ?type.
+				?shape sh:property ?prop.
+				?prop ?proppred ?propobj.
+				FILTER (?type = dcat:Catalog
+					||	?type = dcat:Dataset
+					||	?type = dcat:Distribution
+				)
+			}
+		}
+	''';
+.
+
