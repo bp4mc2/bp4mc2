@@ -33,7 +33,8 @@
 @prefix adms: 	  		<http://www.w3.org/ns/adms#>.
 @prefix wdrs: 	  		<http://www.w3.org/2007/05/powder-s#>.
 @prefix yed: 	    		<http://bp4mc2.org/yed#>.
-@prefix sparql:       <http://www.w3.org/ns/sparql-service-description/>. 
+@prefix sparql:       <http://www.w3.org/ns/sparql-service-description/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>. 
 #
 #
 #
@@ -1088,7 +1089,6 @@ stage:DSOv2ConceptQuery a elmo:Query;
         dct:issued ?issued;
         dcmiperiod:start ?start;
         dcmiperiod:end ?end;
-        dct:nowDate ?nowDate;
         dct:startdt ?startdt;
         prov:generatedAtTime ?time
       .
@@ -1120,8 +1120,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
         ) AS ?requestedGenerated
       )
       BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
-      BIND( strdt( "@STARTWERKING@", xsd:dateTime ) AS ?requestedStart )
-      BIND( strdt( "@EINDWERKING@", xsd:dateTime ) AS ?requestedEnd )
+      BIND( strdt( "@INWERKING@", xsd:dateTime ) AS ?requestedEnacted )
       BIND(
         IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
         IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
@@ -1139,27 +1138,35 @@ stage:DSOv2ConceptQuery a elmo:Query;
         )
         && (
           (
-            substr( "@STARTWERKING@", 2 ) = "STARTWERKING@"
+            substr( "@INWERKING@", 2 ) = "INWERKING@"
             && (
               !BOUND( ?start )
-              || strdt( ?start, xsd:dateTime ) <= now()
+              ||
+              (
+                strdt( ?start, xsd:dateTime ) <= now()
+                &&
+                (
+                  !BOUND( ?end )
+                  || strdt( ?end, xsd:dateTime ) > now()
+                )
+              )
             )
           )
-          || strdt( ?start, xsd:date ) >= ?requestedStart
-        )
-        && (
+          || 
           (
-            substr( "@EINDWERKING@", 2 ) = "EINDWERKING@"
-            && strdt( ?end, xsd:dateTime ) > strdt( strbefore( str( now() ), "T" ), xsd:dateTime )
+            strdt( ?start, xsd:date ) <= ?requestedEnacted
+            && 
+            (
+              !BOUND( ?end )
+              || strdt( ?end, xsd:date ) > ?requestedEnacted
+            )
           )
-          || !BOUND( ?end )
-          || strdt( ?end, xsd:date ) > ?requestedEnd
         )
       )
       
       FILTER NOT EXISTS {
         GRAPH ?newerDocGraph {
-          ?doc adms:status ?newerStatus.
+          ?doc rdf:type prov:Entity.
           ?newerDocGraph prov:generatedAtTime ?newerTime.
           FILTER( ?newerTime > ?time )
         }
@@ -1396,6 +1403,8 @@ stage:DemoMenu a elmo:Part;
 	elmo:appearance elmo:NavbarSearchAppearance;
 	elmo:query '''
 		prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>
+    prefix elmo:  <http://bp4mc2.org/elmo/def#>
+    
 		construct {
 			<urn:menu> elmo:data <urn:menu1>,<urn:menu2>,<urn:menu3>,<urn:menu4>,<urn:menu5>.
 			<urn:menu1> elmo:index "1";
@@ -1454,15 +1463,20 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "3";
 	];
 	elmo:fragment [
-		elmo:applies-to dct:latestValid;
-		rdfs:label "Actuele geldigheid:";
+		elmo:applies-to dct:latestStart;
+		rdfs:label "Actuele startdatum geldigheid:";
 		elmo:index "4";
+	];
+  elmo:fragment [
+		elmo:applies-to dct:latestEnd;
+		rdfs:label "Actuele einddatum geldigheid:";
+		elmo:index "5";
 	];
 	elmo:fragment [
 		elmo:applies-to wdrs:describedby;
 		elmo:appearance elmo:NestedAppearance;
 		rdfs:label "Metadata:";
-		elmo:index "5";
+		elmo:index "6";
 	];
 	elmo:fragment [
 		elmo:applies-to adms:status;
@@ -1480,9 +1494,14 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "3";
 	];
   elmo:fragment [
-		elmo:applies-to dct:valid;
-		rdfs:label "Geldig van/tot:";
+		elmo:applies-to dcmiperiod:start;
+		rdfs:label "Geldig van:";
 		elmo:index "4";
+	];
+  elmo:fragment [
+		elmo:applies-to dcmiperiod:end;
+		rdfs:label "Geldig tot:";
+		elmo:index "5";
 	];
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
@@ -1491,16 +1510,20 @@ stage:DemoBegripVersies a elmo:Part;
 		prefix adms-status: <http://purl.org/adms/status/>
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
+    prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    
 		construct {
 			?doc rdfs:label ?titel.
 			?doc skos:definition ?definitie.
 			?doc wdrs:describedby ?metadata.
-			?doc adms:latestStatus ?lateststatus.
-			?doc dct:latestValid ?latestvalid.
-			?doc dct:latestIssued ?latestissued.
+			?doc adms:latestStatus ?latestStatus.
+			?doc dct:latestIssued ?latestIssued.
+			?doc dct:latestStart ?latestStart.
+			?doc dct:latestEnd ?latestEnd.
 			?metadata adms:status ?status.
-			?metadata dct:valid ?valid.
-      ?metadata dct:issued ?issued.
+			?metadata dct:issued ?issued.
+      ?metadata dcmiperiod:start ?start.
+      ?metadata dcmiperiod:end ?end.
 			?metadata prov:generatedAtTime ?doctijdstip.
 			adms-status:UnderDevelopment rdfs:label "Werkversie".
 			adms-status:Deprecated rdfs:label "Vervallen".
@@ -1511,22 +1534,24 @@ stage:DemoBegripVersies a elmo:Part;
 			graph ?g {
 				<@SUBJECT@> rdf:type skos:Concept.
 				<@SUBJECT@> rdfs:label ?label.
-				<@SUBJECT@> skos:definition ?definitie.
+        OPTIONAL { <@SUBJECT@> skos:definition ?definitie. }
 				?g prov:generatedAtTime ?tijdstip.
 				<@SUBJECT@> wdrs:describedby ?doc.
 				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
 			}
 			graph ?gdoc {
 				?doc adms:status ?status.
-				OPTIONAL {?doc dct:valid ?valid}
-        OPTIONAL {?doc dct:issued ?issued}
+				OPTIONAL {?doc dct:issued ?issued}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:start ?start}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:end ?end}
 				?gdoc prov:generatedAtTime ?doctijdstip.
 				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
 			}
       graph ?latestdoc {
-        ?doc adms:status ?lateststatus.
-        OPTIONAL {?doc dct:valid ?latestvalid}
-        OPTIONAL {?doc dct:issued ?latestissued}
+        ?doc adms:status ?latestStatus.
+        OPTIONAL {?doc dct:issued ?latestIssued}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:start ?latestStart}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:end ?latestEnd}
         ?latestdoc prov:generatedAtTime ?latestdoctijdstip.
       }
       FILTER NOT EXISTS {

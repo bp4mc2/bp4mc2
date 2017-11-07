@@ -32,7 +32,6 @@ stage:DSOv2ConceptQuery a elmo:Query;
         dct:issued ?issued;
         dcmiperiod:start ?start;
         dcmiperiod:end ?end;
-        dct:nowDate ?nowDate;
         dct:startdt ?startdt;
         prov:generatedAtTime ?time
       .
@@ -64,8 +63,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
         ) AS ?requestedGenerated
       )
       BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
-      BIND( strdt( "@STARTWERKING@", xsd:dateTime ) AS ?requestedStart )
-      BIND( strdt( "@EINDWERKING@", xsd:dateTime ) AS ?requestedEnd )
+      BIND( strdt( "@INWERKING@", xsd:dateTime ) AS ?requestedEnacted )
       BIND(
         IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
         IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
@@ -83,27 +81,35 @@ stage:DSOv2ConceptQuery a elmo:Query;
         )
         && (
           (
-            substr( "@STARTWERKING@", 2 ) = "STARTWERKING@"
+            substr( "@INWERKING@", 2 ) = "INWERKING@"
             && (
               !BOUND( ?start )
-              || strdt( ?start, xsd:dateTime ) <= now()
+              ||
+              (
+                strdt( ?start, xsd:dateTime ) <= now()
+                &&
+                (
+                  !BOUND( ?end )
+                  || strdt( ?end, xsd:dateTime ) > now()
+                )
+              )
             )
           )
-          || strdt( ?start, xsd:date ) >= ?requestedStart
-        )
-        && (
+          || 
           (
-            substr( "@EINDWERKING@", 2 ) = "EINDWERKING@"
-            && strdt( ?end, xsd:dateTime ) > strdt( strbefore( str( now() ), "T" ), xsd:dateTime )
+            strdt( ?start, xsd:date ) <= ?requestedEnacted
+            && 
+            (
+              !BOUND( ?end )
+              || strdt( ?end, xsd:date ) > ?requestedEnacted
+            )
           )
-          || !BOUND( ?end )
-          || strdt( ?end, xsd:date ) > ?requestedEnd
         )
       )
       
       FILTER NOT EXISTS {
         GRAPH ?newerDocGraph {
-          ?doc adms:status ?newerStatus.
+          ?doc rdf:type prov:Entity.
           ?newerDocGraph prov:generatedAtTime ?newerTime.
           FILTER( ?newerTime > ?time )
         }
