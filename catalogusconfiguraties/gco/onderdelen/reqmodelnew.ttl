@@ -4,6 +4,24 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
+stage:ReqModelTotaal a elmo:Representation;
+	elmo:url-pattern "/query/model/totaal";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dctype: <http://purl.org/dc/dcmitype/>
+		CONSTRUCT {
+			?s?p?o
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?s?p?o
+			}
+		}
+	''';
+.
+
 stage:ReqModelConcepten a elmo:Representation;
 	elmo:url-pattern "/query/model/concepten";
 	elmo:appearance elmo:VocabularyAppearance;

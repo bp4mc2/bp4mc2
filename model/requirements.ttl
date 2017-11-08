@@ -199,6 +199,7 @@ req:ExternConcept a sh:NodeShape;
 #-----------------
 req:ConceptMetadata a sh:NodeShape;
 	rdfs:label "Concept Metadata";
+	sh:name "ConceptMetadata";
 	sh:property req:ConceptMetadata_status;
 	sh:property req:ConceptMetadata_isGeneratedAtTime;
 	sh:property req:ConceptMetadata_isInvalidatedAtTime;
@@ -339,24 +340,24 @@ req:Handeling_object a sh:PropertyShape;
 #---------------------
 # Begrippenkader
 #---------------------
-#req:Begrippenkader a sh:NodeShape;
-#	rdfs:label "Begrippenkader";
-#	sh:name "skos:ConceptScheme";
-#	sh:property req:Begrippenkader_grondslag;
-#	sh:property req:Begrippenkader_type;
-#	sh:targetClass skos:ConceptScheme;
-#.
-#req:Begrippenkader_grondslag a sh:PropertyShape;
-#	rdfs:label "grondslag";
-#	sh:path req:Begrippenkader_grondslag;
-#	sh:class dctype:Text;
-#.
-#req:Begrippenkader_type a sh:PropertyShape;
-#	rdfs:label "rol van dataset";
-#	rdfs:comment "Een begrippenkader vervult de rol van dataset";
-#	sh:path rdf:type;
-#	sh:hasValue dcat:Dataset;
-#.
+req:Begrippenkader a sh:NodeShape;
+	rdfs:label "Begrippenkader";
+	sh:name "skos:ConceptScheme";
+	sh:property req:Begrippenkader_grondslag;
+	sh:property req:Begrippenkader_type;
+	sh:targetClass skos:ConceptScheme;
+.
+req:Begrippenkader_grondslag a sh:PropertyShape;
+	rdfs:label "grondslag";
+	sh:path req:Begrippenkader_grondslag;
+	sh:class dctype:Text;
+.
+req:Begrippenkader_type a sh:PropertyShape;
+	rdfs:label "rol van dataset";
+	rdfs:comment "Een begrippenkader vervult de rol van dataset";
+	sh:path rdf:type;
+	sh:hasValue dcat:Dataset;
+.
 
 #---------------------
 # Brondocument
