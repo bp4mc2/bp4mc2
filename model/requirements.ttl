@@ -207,7 +207,10 @@ req:ConceptMetadata a sh:NodeShape;
 	sh:property req:ConceptMetadata_isValidDuring;
 	sh:property req:ConceptMetadata_isIssued;
 	sh:property req:ConceptMetadata_isValidAt;
-	sh:property req:ConceptMetadata_type;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue prov:Entity;
+	];
 .
 req:ConceptMetadata_status a sh:PropertyShape;
 	rdfs:label "heeft status"@nl;
@@ -251,12 +254,12 @@ req:ConceptMetadata_isValidAt a sh:PropertyShape;
 	sh:path dcterms:spatial;
 	rdfs:comment "Een begrip is geldig op een bepaalde geografische locatie."@nl;
 .
-req:ConceptMetadata_type a sh:PropertyShape;
-	rdfs:label "rol van entiteit";
-	rdfs:comment "Een conceptbeschrijving vervult de rol van entiteit";
-	sh:path rdf:type;
-	sh:hasValue prov:Entity;	
-.
+#req:ConceptMetadata_type a sh:PropertyShape;
+#	rdfs:label "rol van entiteit";
+#	rdfs:comment "Een conceptbeschrijving vervult de rol van entiteit";
+#	sh:path rdf:type;
+#	sh:hasValue prov:Entity;	
+#.
 #---------------------
 # Conceptbeschrijving
 #---------------------
