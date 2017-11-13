@@ -52,6 +52,7 @@ req:Concept a sh:NodeShape;
 	sh:property req:Concept_consistsOf;
 	sh:property req:Concept_isRelatedTo;
 	sh:property req:Concept_isMember;
+	sh:property req:Concept_metadata;
 .
 req:Concept_domain a sh:PropertyShape;
 	rdfs:label "in"@nl;
@@ -223,10 +224,11 @@ req:ConceptMetadata a sh:NodeShape;
 	sh:property req:ConceptMetadata_status;
 	sh:property req:ConceptMetadata_isGeneratedAtTime;
 	sh:property req:ConceptMetadata_isInvalidatedAtTime;
-	sh:property req:ConceptMetadata_changeNote;
+#	sh:property req:ConceptMetadata_changeNote;
 	sh:property req:ConceptMetadata_isValidDuring;
 	sh:property req:ConceptMetadata_isIssued;
 	sh:property req:ConceptMetadata_isValidAt;
+	sh:property req:ConceptMetadata_location;
 	sh:property [
 		sh:path rdf:type;
 		sh:hasValue prov:Entity;
@@ -880,10 +882,12 @@ req:Catalogus_language rdf:type sh:PropertyShape;
 #---------------------
 # Werkingsgebied
 #---------------------
-#req:Werkingsgebied a sh:NodeShape;
-#	rdfs:label "Werkingsgebied";
-#	sh:targetClass dcterms:Location;
-#.
+req:Werkingsgebied a sh:NodeShape;
+	rdfs:label "Werkingsgebied";
+	sh:targetClass dcterms:Location;
+.
+
+
 
 #---------------------
 # Distributie

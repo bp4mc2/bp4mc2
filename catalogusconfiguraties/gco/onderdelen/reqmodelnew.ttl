@@ -5,7 +5,7 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
 stage:ReqModelTotaal a elmo:Representation;
-	elmo:url-pattern "/query/model/totaal";
+	elmo:url-pattern "/query/model/totaal$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
 	elmo:query '''
@@ -23,7 +23,7 @@ stage:ReqModelTotaal a elmo:Representation;
 .
 
 stage:ReqModelConcepten a elmo:Representation;
-	elmo:url-pattern "/query/model/concepten";
+	elmo:url-pattern "/query/model/concepten$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
 	elmo:query '''
@@ -52,7 +52,7 @@ stage:ReqModelConcepten a elmo:Representation;
 .
 
 stage:ReqModelConceptenMeta a elmo:Representation;
-	elmo:url-pattern "/query/model/conceptenmeta";
+	elmo:url-pattern "/query/model/conceptenmeta$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
 	elmo:query '''
@@ -98,7 +98,7 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 .
 
 stage:ReqModelGebeurtenissen a elmo:Representation;
-	elmo:url-pattern "/query/model/gebeurtenissen";
+	elmo:url-pattern "/query/model/gebeurtenissen$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
 	elmo:query '''
@@ -118,9 +118,9 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 				?shape sh:property ?prop.
 				?prop ?proppred ?propobj.
 				FILTER (?type = skos:Concept
-				#	||	?type = skos:ConceptScheme
-				#	||	?type = skos:Collection
-				#	||	?type = dctype:Text
+					||	?type = skos:ConceptScheme
+					||	?type = skos:Collection
+					||	?type = dctype:Text
 					||	?type = skoslex:Act
 					||	?type = skoslex:Actor
 					||	?type = skoslex:Agent
@@ -133,7 +133,7 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 .
 
 stage:ReqModelDatasets a elmo:Representation;
-	elmo:url-pattern "/query/model/datasets";
+	elmo:url-pattern "/query/model/datasets$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
 	elmo:query '''
@@ -160,3 +160,26 @@ stage:ReqModelDatasets a elmo:Representation;
 	''';
 .
 
+stage:ReqModelCatalogus a elmo:Representation;
+	elmo:url-pattern "/query/model/catalogus$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+.
+
+stage:ReqModelSamenhang a elmo:Representation;
+	elmo:url-pattern "/query/model/samenhang$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+.
+
+stage:ReqModelProvenance a elmo:Representation;
+	elmo:url-pattern "/query/model/provenance$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+.
+
+stage:ReqModelCatalogus a elmo:Representation;
+	elmo:url-pattern "/query/model/catalogus$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+.
