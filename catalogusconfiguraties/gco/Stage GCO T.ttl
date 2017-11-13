@@ -1054,6 +1054,9 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "3"; rdfs:label "Onderdeel: concepten metadata"; html:link "query/model/conceptenmeta"];
 			elmo:data [ elmo:index "4"; rdfs:label "Onderdeel: gebeurtenissen"; html:link "query/model/gebeurtenissen"];
 			elmo:data [ elmo:index "5"; rdfs:label "Onderdeel: datasets"; html:link "query/model/datasets"];
+			elmo:data [ elmo:index "6"; rdfs:label "Onderdeel: catalogus"; html:link "query/model/catalogus"];
+			elmo:data [ elmo:index "7"; rdfs:label "Onderdeel: samenhang dataset, conceptenschema, en informatiemodel"; html:link "query/model/samenhang"];
+			elmo:data [ elmo:index "8"; rdfs:label "Onderdeel: provenance"; html:link "query/model/provenance"];
 #			elmo:data [ elmo:index "2"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
 #			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
 			elmo:data [ elmo:index "9"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
@@ -1641,9 +1644,9 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 				?shape sh:property ?prop.
 				?prop ?proppred ?propobj.
 				FILTER (?type = skos:Concept
-					||	?type = skos:ConceptScheme
-					||	?type = skos:Collection
-					||	?type = dctype:Text
+				#	||	?type = skos:ConceptScheme
+				#	||	?type = skos:Collection
+				#	||	?type = dctype:Text
 					||	?type = skoslex:Act
 					||	?type = skoslex:Actor
 					||	?type = skoslex:Agent
