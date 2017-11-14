@@ -1054,8 +1054,8 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 			elmo:data [ elmo:index "3"; rdfs:label "Onderdeel: concepten metadata"; html:link "query/model/conceptenmeta"];
 			elmo:data [ elmo:index "4"; rdfs:label "Onderdeel: gebeurtenissen"; html:link "query/model/gebeurtenissen"];
 			elmo:data [ elmo:index "5"; rdfs:label "Onderdeel: datasets"; html:link "query/model/datasets"];
-			elmo:data [ elmo:index "6"; rdfs:label "Onderdeel: catalogus"; html:link "query/model/catalogus"];
-			elmo:data [ elmo:index "7"; rdfs:label "Onderdeel: samenhang dataset, conceptenschema, en informatiemodel"; html:link "query/model/samenhang"];
+#			elmo:data [ elmo:index "6"; rdfs:label "Onderdeel: catalogus"; html:link "query/model/catalogus"];
+#			elmo:data [ elmo:index "7"; rdfs:label "Onderdeel: samenhang dataset, conceptenschema, en informatiemodel"; html:link "query/model/samenhang"];
 			elmo:data [ elmo:index "8"; rdfs:label "Onderdeel: provenance"; html:link "query/model/provenance"];
 #			elmo:data [ elmo:index "2"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
 #			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
@@ -1631,6 +1631,7 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		PREFIX dctype: <http://purl.org/dc/dcmitype/>
 		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex/>
+		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
 		CONSTRUCT {
 			?shape ?shapepred ?shapeobj.
 			?shape sh:targetclass ?type.
@@ -1643,15 +1644,28 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 				?shape sh:targetClass ?type.
 				?shape sh:property ?prop.
 				?prop ?proppred ?propobj.
-				FILTER (?type = skos:Concept
-					||	?type = skos:ConceptScheme
-					||	?type = skos:Collection
-					||	?type = dctype:Text
+				FILTER (
+					?type = skos:Concept
+				#	||	?type = skos:ConceptScheme
+				#	||	?type = skos:Collection
+				#	||	?type = dctype:Text
 					||	?type = skoslex:Act
 					||	?type = skoslex:Actor
 					||	?type = skoslex:Agent
 					||	?type = skoslex:Object
 					||	?type = skoslex:Norm
+				)
+				FILTER(
+					?propobj != thes:broaderGeneric
+					&& ?propobj != thes:broaderPartitive
+					&& ?propobj != thes:narrowerGeneric
+					&& ?propobj != thes:narrowerPartitive
+					&& ?propobj != skos:semanticRelation
+					&& ?propobj != skos:closeMatch
+					&& ?propobj != skos:relatedMatch
+					&& ?propobj != skos:exactMatch
+					&& ?propobj != skos:broadMatch
+					&& ?propobj != skos:narrowMatch
 				)
 			}
 		}
@@ -1690,25 +1704,58 @@ stage:ReqModelCatalogus a elmo:Representation;
 	elmo:url-pattern "/query/model/catalogus$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
-.
-
-stage:ReqModelSamenhang a elmo:Representation;
-	elmo:url-pattern "/query/model/samenhang$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dcat: <http://www.w3.org/ns/dcat#>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:targetclass ?type.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				?shape sh:targetClass ?type.
+				?shape sh:property ?prop.
+				?prop ?proppred ?propobj.
+				FILTER (?type = dcat:Catalog
+					||	?type = dcat:Dataset
+					||	?type = dcat:Distribution
+				)
+			}
+		}
+	''';
 .
 
 stage:ReqModelProvenance a elmo:Representation;
 	elmo:url-pattern "/query/model/provenance$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX prov: <http://www.w3.org/ns/prov#>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:targetclass ?type.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				?shape sh:targetClass ?type.
+				?shape sh:property ?prop.
+				?prop ?proppred ?propobj.
+				FILTER (
+					?type = prov:Entity
+				)
+			}
+		}
+	''';
 .
 
-stage:ReqModelCatalogus a elmo:Representation;
-	elmo:url-pattern "/query/model/catalogus$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-.
+
  
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
