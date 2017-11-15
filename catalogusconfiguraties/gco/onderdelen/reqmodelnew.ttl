@@ -195,68 +195,14 @@ stage:ReqModelCatalogus a elmo:Representation;
 	elmo:url-pattern "/query/model/catalogus$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dcat: <http://www.w3.org/ns/dcat#>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:targetclass ?type.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				?shape sh:targetClass ?type.
-				?shape sh:property ?prop.
-				?prop ?proppred ?propobj.
-				FILTER (?type = dcat:Catalog
-					||	?type = dcat:Dataset
-					||	?type = dcat:Distribution
-				)
-			}
-		}
-	''';
+	
 .
 
 stage:ReqModelProvenance a elmo:Representation;
 	elmo:url-pattern "/query/model/provenance$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX prov: <http://www.w3.org/ns/prov#>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:targetclass ?type.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				{
-					{
-						?shape ?shapepred ?shapeobj.
-						?shape sh:targetClass ?type.
-						?shape sh:property ?prop.
-						?prop ?proppred ?propobj.
-					}
-					UNION
-					{
-						?typeprop sh:hasValue ?type.
-						?typeprop sh:path rdf:type.
-						?shape sh:property ?typeprop.
-						?shape ?shapepred ?shapeobj.
-						?shape sh:property ?prop.
-						?prop ?proppred ?propobj
-					}
-				}
-				FILTER (
-					?type = prov:Entity
-				)
-			}
-		}
-	''';
+	
 .
 
 
