@@ -61,19 +61,23 @@ req:Concept_domain a sh:PropertyShape;
 	sh:class skos:ConceptScheme;
 	rdfs:comment "Een begrip is gedefinieerd in een bepaald domein."@nl;
 .
+req:Concept_metadata s sh:PropertyShape;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:hasValue prov:Entity;
+.
 req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "grondslag"@nl;
 	sh:name "dcterms:source";
 	sh:path dcterms:source;
 	sh:class dctype:Text;
-	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
+#	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
 .
 req:Concept_dcsource a sh:PropertyShape;
 	rdfs:label "grondslag"@nl;
 	sh:name "dc:source";
 	sh:path dc:source;
 #	sh:class dctype:Text;
-	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
+#	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
 .
 req:Concept_label a sh:PropertyShape;
 	rdfs:label "label"@nl;
@@ -136,8 +140,8 @@ req:Concept_narrowlyMatches a sh:PropertyShape;
 	rdfs:label "lijkt op smaller"@nl;
 	sh:name "skos:narrowMatch";
 	sh:path skos:narrowMatch;
-#	sh:node req:ExternConcept;
-	sh:class skos:Concept;
+	sh:node req:ExternConcept;
+#	sh:class skos:Concept;
 	rdfs:comment "Een begrip is een generalisatie van een begrip in een ander domein."@nl;
 .
 req:Concept_seeAlso a sh:PropertyShape;
@@ -238,7 +242,7 @@ req:ConceptMetadata_status a sh:PropertyShape;
 	rdfs:label "heeft status"@nl;
 	sh:name "adms:status";
 	sh:path adms:status;
-	sh:class skos:Concept;
+#	sh:class skos:Concept;
 	rdfs:comment "Een versie van een begrip heeft een administratieve status."@nl;
 .
 req:ConceptMetadata_isGeneratedAtTime a sh:PropertyShape;
@@ -622,13 +626,13 @@ req:Datasetversie_versionOf a sh:PropertyShape;
 	sh:node req:Dataset;
 	sh:maxCount 1;
 .
-#req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
-#    rdfs:label "werkingsgebied";
-#    rdfs:comment "Het gebied waar de dataset over gaat";
-#    sh:class dcterms:Location;
-#    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
-#    sh:path dcterms:spatial
-#.
+req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
+    rdfs:label "werkingsgebied";
+    rdfs:comment "Het gebied waar de dataset over gaat";
+    sh:class dcterms:Location;
+    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+    sh:path dcterms:spatial
+.
 req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
 	rdfs:label "gerelateerd aan"@nl;
 	rdfs:comment "Geeft de dataset aan waar deze dataset aan gerelateerd is (wordt gebruikt om aan te geven hoe een dataset is afgeleid uit 1 of meerdere andere datasets";
