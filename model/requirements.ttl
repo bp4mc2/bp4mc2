@@ -63,7 +63,7 @@ req:Concept_domain a sh:PropertyShape;
 .
 req:Concept_metadata s sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
-	sh:class prov:Entity;
+	sh:node req:ConceptMetadata;
 .
 req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "grondslag"@nl;
@@ -233,11 +233,11 @@ req:ConceptMetadata a sh:NodeShape;
 	sh:property req:ConceptMetadata_isIssued;
 	sh:property req:ConceptMetadata_isValidAt;
 	sh:property req:ConceptMetadata_location;
-#	sh:property [
-#		sh:path rdf:type;
-#		sh:hasValue prov:Entity;
-#	];
-	sh:targetClass prov:Entity;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue prov:Entity;
+	];
+#	sh:targetClass prov:Entity;
 .
 req:ConceptMetadata_status a sh:PropertyShape;
 	rdfs:label "heeft status"@nl;
