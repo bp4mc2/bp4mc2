@@ -63,7 +63,7 @@ req:Concept_domain a sh:PropertyShape;
 .
 req:Concept_metadata s sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
-	sh:hasValue prov:Entity;
+	sh:class prov:Entity;
 .
 req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "grondslag"@nl;
@@ -180,7 +180,7 @@ req:Concept_generalisationOf a sh:PropertyShape;
 	sh:name "skosthes:narrowerGeneric";
 	sh:path skosthes:narrowerGeneric;
 	sh:class skos:Concept;
-	rdfs:comment "Een begrip is een generalisatie van een begrip met een bredere betekenis."@nl;
+	rdfs:comment "Een begrip is een generalisatie van een begrip met een engere of nauwere betekenis."@nl;
 .
 req:Concept_partOf a sh:PropertyShape;
 	rdfs:label "onderdeel van"@nl;
@@ -233,10 +233,11 @@ req:ConceptMetadata a sh:NodeShape;
 	sh:property req:ConceptMetadata_isIssued;
 	sh:property req:ConceptMetadata_isValidAt;
 	sh:property req:ConceptMetadata_location;
-	sh:property [
-		sh:path rdf:type;
-		sh:hasValue prov:Entity;
-	];
+#	sh:property [
+#		sh:path rdf:type;
+#		sh:hasValue prov:Entity;
+#	];
+	sh:targetClass prov:Entity;
 .
 req:ConceptMetadata_status a sh:PropertyShape;
 	rdfs:label "heeft status"@nl;
@@ -279,6 +280,7 @@ req:ConceptMetadata_isValidAt a sh:PropertyShape;
 	rdfs:label "is valid at"@en;
 	sh:name "dcterms:spatial";
 	sh:path dcterms:spatial;
+	sh:class dcterms:Location;
 	rdfs:comment "Een begrip is geldig op een bepaalde geografische locatie."@nl;
 .
 #req:ConceptMetadata_type a sh:PropertyShape;
@@ -889,6 +891,12 @@ req:Catalogus_language rdf:type sh:PropertyShape;
 req:Werkingsgebied a sh:NodeShape;
 	rdfs:label "Werkingsgebied";
 	sh:targetClass dcterms:Location;
+	sh:property req:Werkingsgebied_location;
+.
+req:Werkingsgebied_location a sh:PropertyShape;
+	rdfs:label "locatie";
+	sh:name "dcterms:Location";
+	sh:path dcterms:Location;
 .
 
 
