@@ -61,7 +61,7 @@ req:Concept_domain a sh:PropertyShape;
 	sh:class skos:ConceptScheme;
 	rdfs:comment "Een begrip is gedefinieerd in een bepaald domein."@nl;
 .
-req:Concept_metadata s sh:PropertyShape;
+req:Concept_metadata a sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
 	sh:node req:ConceptMetadata;
 .
@@ -213,8 +213,9 @@ req:Concept_isMember a sh:PropertyShape;
 # Extern concept
 #---------------------
 req:ExternConcept a sh:NodeShape;
-	sh:targetClass skos:Concept; 
-	rdfs:label "Extern concept";
+#   sh:targetClass skos:Concept; 
+  sh:name "Extern concept";
+    rdfs:label "Extern concept";
 .
 
 #-----------------
