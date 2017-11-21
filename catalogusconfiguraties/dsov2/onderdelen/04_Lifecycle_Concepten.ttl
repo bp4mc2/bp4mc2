@@ -23,7 +23,7 @@ updatestage:concept-enact a elmo:Production;
 	elmo:contains stage:search-concepts-nonenacted;
 	elmo:queryForm stage:DSOv2EnactConceptsForm;
 	elmo:contains stage:EnactConceptScene;
-	elmo:contains stage:werkingsregels;
+	elmo:contains stage:geldigheidsregels;
 .
 
 #
@@ -58,17 +58,17 @@ stage:DSOv2EnactConceptsForm a elmo:Form;
 		elmo:index "1";
 	];
 	elmo:fragment [
-		elmo:applies-to "werkingsregel";
-		rdfs:label "Werkingsregel:"@nl;
-		elmo:valuesFrom stage:werkingsregels;
+		elmo:applies-to "geldigheidsregel";
+		rdfs:label "Geldigheidsregel:"@nl;
+		elmo:valuesFrom stage:geldigheidsregels;
 		rdf:value <urn:wr-ow>;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "2";
 	];
 	elmo:fragment [
-		elmo:applies-to "werkingsmoment";
+		elmo:applies-to "geldigheid";
 		elmo:valueDatatype xsd:Date;
-		rdfs:label "Werkingsmoment:"@nl;
+		rdfs:label "Geldigheid:"@nl;
 		elmo:constraint elmo:MandatoryConstraint;
 		rdf:value elmo:Now;
 		elmo:index "3";
@@ -79,7 +79,7 @@ stage:DSOv2EnactConceptsForm a elmo:Form;
 		elmo:index "4";
 	];
 .
-stage:werkingsregels a elmo:Part;
+stage:geldigheidsregels a elmo:Part;
 	elmo:appearance elmo:HiddenAppearance;
 	elmo:query '''
 		construct {
@@ -158,8 +158,9 @@ stage:search-concepts-nonenacted a elmo:Part;
           adms:status ?status.
         
         FILTER(
-          ?status != slex-status:Enacted 
+          ?status != adms-status:Completed
           && ?status != adms-status:Deprecated
+          && ?status != adms-status:Withdrawn
         )
         
         ?docGraph prov:generatedAtTime ?docGraphTime.       
@@ -292,22 +293,22 @@ stage:EnactConceptScene a elmo:Scene;
         .
 
         ?doc ?p ?o;
-          adms:status slex-status:Enacted;
+          adms:status adms-status:Completed;
           dcterms:issued ?issuedDate;
           dcterms:temporal ?period;
           prov:wasGeneratedBy ?activity
         .
         
-        ?period dcmiperiod:start "@WERKINGSMOMENT@".
+        ?period dcmiperiod:start "@GELDIGHEID@".
         
         ?prevDoc ?prevP ?prevO;
           dcterms:temporal ?prevTemporal.
           
         ?prevTemporal dcmiperiod:start ?prevStart;
-          dcmiperiod:end "@WERKINGSMOMENT@".
+          dcmiperiod:end "@GELDIGHEID@".
         
         ?activity rdf:type prov:Activity;
-          rdfs:label "In werkingtreding van het begrip";
+          rdfs:label "Start van het gebruik van het begrip";
           prov:startedAtTime ?now;
           prov:wasAssociatedWith user:TomcatUser
         .
@@ -323,7 +324,10 @@ stage:EnactConceptScene a elmo:Scene;
           && ?p != dcterms:issued
           && ?p != prov:wasGeneratedBy
         )
-        FILTER( ?status != adms-status:Deprecated )
+        FILTER( 
+          ?status != adms-status:Deprecated
+          && ?status != adms-status:Withdrawn
+        )
         OPTIONAL {
           ?doc dcterms:issued ?currentIssued.
         }

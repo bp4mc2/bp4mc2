@@ -158,7 +158,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         .
         
         ?udDoc ?docP ?docO;
-          adms:status adms-status:Deprecated
+          adms:status adms-status:Withdrawn
         .
         
         ?activity rdf:type prov:Activity;
@@ -244,7 +244,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           ?pred ?obj
         .
         
-        ?doc adms:status skos-lex-status:Enacted;
+        ?doc adms:status adms-status:Completed;
           prov:wasRevisionOf ?currentDoc;
           prov:wasGeneratedBy ?activity;
           ?docP ?docO
@@ -292,13 +292,13 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
             FILTER( ?newerTime > ?graphTime )
           }
           GRAPH ?docNewerGraph {
-            ?newerDoc adms:status skos-lex-status:Enacted
+            ?newerDoc adms:status adms-status:Completed
           }
         }
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
-        ?currentDoc adms:status skos-lex-status:Enacted;
+        ?currentDoc adms:status adms-status:Completed;
           ?docP ?docO
         .
         OPTIONAL {
@@ -313,7 +313,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         ?docGraph prov:generatedAtTime ?docGraphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerDocGraph {
-            ?thisDoc adms:status skos-lex-status:Enacted.
+            ?thisDoc adms:status adms-status:Completed.
             ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
             FILTER( ?newerDocGraphTime > ?docGraphTime )
           }
