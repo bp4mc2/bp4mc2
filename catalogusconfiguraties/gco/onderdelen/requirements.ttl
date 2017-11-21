@@ -14,11 +14,15 @@ stage:Requirements	a	elmo:Representation;
 		rdfs:label "Onderwerp";
 	];
 	elmo:fragment [
-		elmo:applies-to "req";
-		rdfs:label "Onderdeel";
+		elmo:applies-to "comment";
+		rdfs:label "Requirement";
 	];
 	elmo:fragment [
-		elmo:applies-to "comment";
+		elmo:applies-to "req";
+		rdfs:label "Aanduiding";
+	];
+	elmo:fragment [
+		elmo:applies-to "vocabulair";
 		rdfs:label "Requirement";
 	];
 	elmo:fragment [
@@ -26,34 +30,26 @@ stage:Requirements	a	elmo:Representation;
 		rdfs:label "Voorbeeld";
 	];
 	elmo:query '''
-		prefix shacl: <http://www.w3.org/ns/shacl#>
-		select ?shape ?shape_label ?req ?req_label ?comment ?toep (if(?typed='typed','','!') as ?req_count)
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select ?shape ?shape_label ?shape_count ?comment ?req ?req_label ?vocab ?vocab_label ?toep
 		where {
-			select ?shape ?shape_label ?req ?req_label ?comment ?toep (max(?typed) as ?typed)
-			where {
-				graph <http://bp4mc2.org/id/dataset/requirements> {
-					{
-						BIND ("typed" as ?typed)
-						?req a shacl:PropertyShape.
-						OPTIONAL {?req rdfs:label ?req_label}
-						OPTIONAL {?req rdfs:comment ?comment}
-						OPTIONAL {
-							?shape shacl:property ?req.
-							?shape rdfs:label ?shape_label.
-						}
-						OPTIONAL {?req rdf:value ?toep}
-					}
-					UNION
-					{
-						?shape shacl:property ?req
-						OPTIONAL {?req rdfs:label ?req_label}
-						OPTIONAL {?req rdfs:comment ?comment}
-						OPTIONAL {?shape rdfs:label ?shape_label}
-						OPTIONAL {?req rdf:value ?toep}
-					}
+			graph <http://bp4mc2.org/id/dataset/requirements> {
+				?req a sh:PropertyShape.
+				OPTIONAL {
+					?req rdfs:label ?req_label
+					FILTER (lang(?req_label)="@LANGUAGE@" or lang(?req_label)="")
 				}
+				OPTIONAL {?req rdfs:comment ?comment}
+				OPTIONAL {?req sh:path ?vocab}
+				OPTIONAL {?req sh:name ?vocab_label}
+				OPTIONAL {
+					?shape sh:property ?req.
+					?shape rdfs:label ?shape_label.
+					FILTER (lang(?shape_label)="@LANGUAGE@" or lang(?shape_label)="")
+					OPTIONAL {?shape sh:name ?shape_count}
+				}
+				OPTIONAL {?req rdf:value ?toep}
 			}
-			group by ?shape ?shape_label ?req ?req_label ?comment ?toep
 		}
 		order by ?shape ?req
 	''';

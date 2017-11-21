@@ -5519,86 +5519,6 @@ stage:WeergaveVersiesCatalogQuery a elmo:Query;
 #
 #
 #
-# OVERZICHTSPAGINA DATASETS
-#
-#
-#
-
-
-# REPRESENTATIONS
-
-# Overzichtspagina Datasets
-stage:DSODatasetOverzichtspagina rdf:type elmo:Representation;
-	elmo:url-pattern "/catalogus/dso/query/overzichtdatasets(|/|\\..+)$";
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
-	elmo:contains stage:DSOMenu;
-	elmo:contains stage:DSODatasetTabel;
-.
-
-# Datasettabel voor overzichtsweergave
-stage:DSODatasetTabel a elmo:Part;
-	elmo:appearance elmo:TableAppearance;
-	elmo:fragment [
-		elmo:applies-to "uitleg";
-		elmo:appearance elmo:MarkdownAppearance;
-	];
-	elmo:query stage:DSODatasetQuery;
-.
-stage:GlossaryDatasets a elmo:Query;
-	elmo:query '''
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		
-		CONSTRUCT ?dataset ?dataset_label
-		WHERE {
-			GRAPH ?g {
-				?dataset rdf:type skos:ConceptScheme.
-				?dataset rdfs:label ?dataset_label.
-				FILTER NOT EXISTS {
-					?dataset prov:invalidatedAtTime ?time.
-				}
-			}
-			GRAPH doc:mastergraph {
-				?dataset rdfs:isDefinedBy ?g
-			}
-		}
-		ORDER BY (?dataset)
-	'''
-.
-# QUERY
-
-# query voor tonen alle datasets
-stage:DSODatasetQuery a elmo:Query;
-	elmo:query '''
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
-		prefix prov: <http://www.w3.org/ns/prov#>
-		
-		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
-		WHERE {
-			GRAPH ?g {
-				?dataset rdf:type skos:ConceptScheme.
-				?dataset rdfs:label ?dataset_label.
-				?dataset rdfs:comment ?uitleg.
-				FILTER NOT EXISTS {
-					?dataset prov:invalidatedAtTime ?time.
-				}
-			}
-			GRAPH doc:mastergraph {
-				?dataset rdfs:isDefinedBy ?g
-			}
-		}
-		ORDER BY (?dataset)
-	'''
-.
- 
-#
-#
-#
 # WEERGAVEPAGINA'S
 #
 #
@@ -6749,112 +6669,80 @@ stage:DSOConceptenQuery a elmo:Query;
 #
 #
 #
-# MODEL EN VOCABULAIRE
+# OVERZICHTSPAGINA DATASETS
 #
 #
 #
 
-#
-# PAGINA'S (REPRESENTATIONS)
-#
 
-# Vocabulairepagina
-stage:VocabulairePagina	a	elmo:Representation;
-	elmo:url-pattern "/catalogus/dso/query/vocabulary";
+# REPRESENTATIONS
+
+# Overzichtspagina Datasets
+stage:DSODatasetOverzichtspagina rdf:type elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/overzichtdatasets(|/|\\..+)$";
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:contains stage:DSOMenu;
-	elmo:contains stage:search_models;
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:queryForm stage:DSOSelectModel;
-	elmo:query stage:VocabulaireQuery;
+	elmo:contains stage:DSODatasetTabel;
 .
 
-#
-# FORMS
-#
-
-stage:DSOSelectModel a elmo:Form;
-	rdfs:label "Selecteer model";
-	elmo:index "2";
-    elmo:fragment [
-        elmo:applies-to "model";
-        rdfs:label "Selecteer model"@nl;
-        rdfs:label "Select model"@en;
-        elmo:valuesFrom stage:search_models;
-        elmo:constraint elmo:MandatoryConstraint;
-        elmo:index "2";
-    ];
-    elmo:fragment [
-        elmo:appearance elmo:SubmitAppearance;
-        rdfs:label "Ga verder"@nl;
-        elmo:index "3";
-    ]
+# Datasettabel voor overzichtsweergave
+stage:DSODatasetTabel a elmo:Part;
+	elmo:appearance elmo:TableAppearance;
+	elmo:fragment [
+		elmo:applies-to "uitleg";
+		elmo:appearance elmo:MarkdownAppearance;
+	];
+	elmo:query stage:DSODatasetQuery;
 .
-
-# PARTS
-
-# Zoeken van modellen
-stage:search_models a elmo:Part;
-    elmo:appearance elmo:HiddenAppearance;
-    elmo:query '''
-        CONSTRUCT {
-			?model rdfs:label ?label
-		}
-        WHERE {
-            SELECT *
-            WHERE {
-				GRAPH ?g {
-					?model a owl:Ontology.
-					?model rdfs:label ?label.
-				}
-				FILTER regex(?g, "^http://data.ontwikkeling.pdok.nl/catalogus/dso/(?!stage)")
-            }
-            LIMIT 100
-        }
-		ORDER BY DESC(?label)
-    ''';
-.
-
-# QUERY'S
-
-# Query voor Vocabulairepagina
-stage:VocabulaireQuery a elmo:Query;
+stage:GlossaryDatasets a elmo:Query;
 	elmo:query '''
-		prefix dct: <http://purl.org/dc/terms/>
-		prefix sh: <http://www.w3.org/ns/shacl#>
-		CONSTRUCT {
-			?element rdf:type ?type.
-			?element rdfs:label ?label.
-			?element rdfs:comment ?def.
-			?element rdfs:subClassOf ?super.
-			?shape sh:targetClass ?element.
-			?shape sh:property ?pc.
-			?pc sh:path ?pred.
-			?pc sh:valueClass ?class.
-			?pc sh:datatype ?datatype.
-			?pc sh:in ?collection.
-		}
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		CONSTRUCT ?dataset ?dataset_label
 		WHERE {
-			GRAPH <@MODEL@> {
-				?element rdf:type ?type.
-				OPTIONAL {?element rdfs:label ?label}
-				OPTIONAL {?element rdfs:comment ?def}
-				OPTIONAL {
-					?element dct:subject ?begrip.
-					?begrip skos:definition ?def.
-				}
-				OPTIONAL {?element rdfs:subClassOf ?super}
-				OPTIONAL {
-					?shape sh:targetClass ?element.
-					?shape sh:property ?pc.
-					?pc sh:path ?pred.
-					OPTIONAL {?pc sh:valueClass ?class}
-					OPTIONAL {?pc sh:datatype ?datatype}
-					OPTIONAL {?pc sh:in ?collection}
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
 				}
 			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
 		}
+		ORDER BY (?dataset)
+	'''
+.
+# QUERY
+
+# query voor tonen alle datasets
+stage:DSODatasetQuery a elmo:Query;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix doc: <http://data.ontwikkeling.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		
+		SELECT DISTINCT ?dataset ?dataset_label ?uitleg
+		WHERE {
+			GRAPH ?g {
+				?dataset rdf:type skos:ConceptScheme.
+				?dataset rdfs:label ?dataset_label.
+				?dataset rdfs:comment ?uitleg.
+				FILTER NOT EXISTS {
+					?dataset prov:invalidatedAtTime ?time.
+				}
+			}
+			GRAPH doc:mastergraph {
+				?dataset rdfs:isDefinedBy ?g
+			}
+		}
+		ORDER BY (?dataset)
 	'''
 .
  
@@ -8081,6 +7969,118 @@ stage:DSOClass_model a elmo:Representation;
 		}
 	'''
 .  
+#
+#
+#
+# MODEL EN VOCABULAIRE
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Vocabulairepagina
+stage:VocabulairePagina	a	elmo:Representation;
+	elmo:url-pattern "/catalogus/dso/query/vocabulary";
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOMenu;
+	elmo:contains stage:search_models;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:queryForm stage:DSOSelectModel;
+	elmo:query stage:VocabulaireQuery;
+.
+
+#
+# FORMS
+#
+
+stage:DSOSelectModel a elmo:Form;
+	rdfs:label "Selecteer model";
+	elmo:index "2";
+    elmo:fragment [
+        elmo:applies-to "model";
+        rdfs:label "Selecteer model"@nl;
+        rdfs:label "Select model"@en;
+        elmo:valuesFrom stage:search_models;
+        elmo:constraint elmo:MandatoryConstraint;
+        elmo:index "2";
+    ];
+    elmo:fragment [
+        elmo:appearance elmo:SubmitAppearance;
+        rdfs:label "Ga verder"@nl;
+        elmo:index "3";
+    ]
+.
+
+# PARTS
+
+# Zoeken van modellen
+stage:search_models a elmo:Part;
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:query '''
+        CONSTRUCT {
+			?model rdfs:label ?label
+		}
+        WHERE {
+            SELECT *
+            WHERE {
+				GRAPH ?g {
+					?model a owl:Ontology.
+					?model rdfs:label ?label.
+				}
+				FILTER regex(?g, "^http://data.ontwikkeling.pdok.nl/catalogus/dso/(?!stage)")
+            }
+            LIMIT 100
+        }
+		ORDER BY DESC(?label)
+    ''';
+.
+
+# QUERY'S
+
+# Query voor Vocabulairepagina
+stage:VocabulaireQuery a elmo:Query;
+	elmo:query '''
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?element rdf:type ?type.
+			?element rdfs:label ?label.
+			?element rdfs:comment ?def.
+			?element rdfs:subClassOf ?super.
+			?shape sh:targetClass ?element.
+			?shape sh:property ?pc.
+			?pc sh:path ?pred.
+			?pc sh:valueClass ?class.
+			?pc sh:datatype ?datatype.
+			?pc sh:in ?collection.
+		}
+		WHERE {
+			GRAPH <@MODEL@> {
+				?element rdf:type ?type.
+				OPTIONAL {?element rdfs:label ?label}
+				OPTIONAL {?element rdfs:comment ?def}
+				OPTIONAL {
+					?element dct:subject ?begrip.
+					?begrip skos:definition ?def.
+				}
+				OPTIONAL {?element rdfs:subClassOf ?super}
+				OPTIONAL {
+					?shape sh:targetClass ?element.
+					?shape sh:property ?pc.
+					?pc sh:path ?pred.
+					OPTIONAL {?pc sh:valueClass ?class}
+					OPTIONAL {?pc sh:datatype ?datatype}
+					OPTIONAL {?pc sh:in ?collection}
+				}
+			}
+		}
+	'''
+.
+ 
 #
 #
 #

@@ -19,6 +19,7 @@
 @prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
 @prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
 
 #---------------------
 # Concept
@@ -30,7 +31,8 @@ req:Concept a sh:NodeShape;
 	sh:name "skos:Concept";
 	sh:targetClass skos:Concept;
 	sh:property req:Concept_domain;
-	sh:property req:Concept_source;
+	sh:property req:Concept_dcsource;
+	sh:property req:Concept_dctsource;
 	sh:property req:Concept_label;
 	sh:property req:Concept_prefLabel;
 	sh:property req:Concept_synonym;
@@ -49,6 +51,8 @@ req:Concept a sh:NodeShape;
 	sh:property req:Concept_partOf;
 	sh:property req:Concept_consistsOf;
 	sh:property req:Concept_isRelatedTo;
+	sh:property req:Concept_isMember;
+	sh:property req:Concept_metadata;
 .
 req:Concept_domain a sh:PropertyShape;
 	rdfs:label "in"@nl;
@@ -57,12 +61,23 @@ req:Concept_domain a sh:PropertyShape;
 	sh:class skos:ConceptScheme;
 	rdfs:comment "Een begrip is gedefinieerd in een bepaald domein."@nl;
 .
-req:Concept_source a sh:PropertyShape;
+req:Concept_metadata a sh:PropertyShape;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:node req:ConceptMetadata;
+.
+req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "grondslag"@nl;
-	sh:name "dcterm:source";
+	sh:name "dcterms:source";
 	sh:path dcterms:source;
 	sh:class dctype:Text;
-	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
+#	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
+.
+req:Concept_dcsource a sh:PropertyShape;
+	rdfs:label "grondslag"@nl;
+	sh:name "dc:source";
+	sh:path dc:source;
+#	sh:class dctype:Text;
+#	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn of een bron die direct als ‘resource’ op het web vindbaar is."@nl;
 .
 req:Concept_label a sh:PropertyShape;
 	rdfs:label "label"@nl;
@@ -118,6 +133,7 @@ req:Concept_broadlyMatches a sh:PropertyShape;
 	sh:name "skos:broadMatch";
 	sh:path skos:broadMatch;
 	sh:node req:ExternConcept;
+#	sh:class skos:Concept;
 	rdfs:comment "Een begrip is een specialisatie van een begrip in een ander domein."@nl;
 .
 req:Concept_narrowlyMatches a sh:PropertyShape;
@@ -125,6 +141,7 @@ req:Concept_narrowlyMatches a sh:PropertyShape;
 	sh:name "skos:narrowMatch";
 	sh:path skos:narrowMatch;
 	sh:node req:ExternConcept;
+#	sh:class skos:Concept;
 	rdfs:comment "Een begrip is een generalisatie van een begrip in een ander domein."@nl;
 .
 req:Concept_seeAlso a sh:PropertyShape;
@@ -132,6 +149,7 @@ req:Concept_seeAlso a sh:PropertyShape;
 	sh:name "skos:relatedMatch";
 	sh:path skos:relatedMatch;
 	sh:node req:ExternConcept;
+#	sh:class skos:Concept;
 	rdfs:comment "Een begrip is gerelateerd aan een begrip in een ander domein."@nl;
 .
 req:Concept_closelyMatches a sh:PropertyShape;
@@ -140,12 +158,14 @@ req:Concept_closelyMatches a sh:PropertyShape;
 	sh:path skos:closeMatch;
 	rdfs:comment "Een begrip betekent bijna hetzelfde als een begrip in een ander domein."@nl;
 	sh:node req:ExternConcept;
+#	sh:class skos:Concept;
 .
 req:Concept_exactlyMatches a sh:PropertyShape;
 	rdfs:label "exact gelijk aan"@nl;
 	sh:name "skos:exactMatch";
 	sh:path skos:exactMatch;
 	sh:node req:ExternConcept;
+#	sh:class skos:Concept;
 	rdfs:comment "Een begrip betekent precies hetzelfde als een begrip in een ander domein.";
 .
 req:Concept_specialisationOf a sh:PropertyShape;
@@ -160,7 +180,7 @@ req:Concept_generalisationOf a sh:PropertyShape;
 	sh:name "skosthes:narrowerGeneric";
 	sh:path skosthes:narrowerGeneric;
 	sh:class skos:Concept;
-	rdfs:comment "Een begrip is een generalisatie van een begrip met een bredere betekenis."@nl;
+	rdfs:comment "Een begrip is een generalisatie van een begrip met een engere of nauwere betekenis."@nl;
 .
 req:Concept_partOf a sh:PropertyShape;
 	rdfs:label "onderdeel van"@nl;
@@ -183,13 +203,19 @@ req:Concept_isRelatedTo a sh:PropertyShape;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip is gerelateerd aan een ander begrip."@nl;
 .
+req:Concept_isMember a sh:PropertyShape;
+	rdfs:label "heeft lid";
+	sh:path skos:member;
+	sh:class skos:Collection;
+.
 
 #---------------------
 # Extern concept
 #---------------------
 req:ExternConcept a sh:NodeShape;
-#	sh:targetClass skos:Concept; (Niet meegenomen aangezien deze feitelijk buiten het model zit)
-	rdfs:label "Extern concept";
+#   sh:targetClass skos:Concept; 
+  sh:name "Extern concept";
+    rdfs:label "Extern concept";
 .
 
 #-----------------
@@ -199,18 +225,26 @@ req:ExternConcept a sh:NodeShape;
 #-----------------
 req:ConceptMetadata a sh:NodeShape;
 	rdfs:label "Concept Metadata";
+	sh:name "ConceptMetadata";
 	sh:property req:ConceptMetadata_status;
 	sh:property req:ConceptMetadata_isGeneratedAtTime;
 	sh:property req:ConceptMetadata_isInvalidatedAtTime;
-	sh:property req:ConceptMetadata_changeNote;
+#	sh:property req:ConceptMetadata_changeNote;
 	sh:property req:ConceptMetadata_isValidDuring;
 	sh:property req:ConceptMetadata_isIssued;
 	sh:property req:ConceptMetadata_isValidAt;
+	sh:property req:ConceptMetadata_location;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue prov:Entity;
+	];
+#	sh:targetClass prov:Entity;
 .
 req:ConceptMetadata_status a sh:PropertyShape;
 	rdfs:label "heeft status"@nl;
 	sh:name "adms:status";
 	sh:path adms:status;
+#	sh:class skos:Concept;
 	rdfs:comment "Een versie van een begrip heeft een administratieve status."@nl;
 .
 req:ConceptMetadata_isGeneratedAtTime a sh:PropertyShape;
@@ -247,41 +281,95 @@ req:ConceptMetadata_isValidAt a sh:PropertyShape;
 	rdfs:label "is valid at"@en;
 	sh:name "dcterms:spatial";
 	sh:path dcterms:spatial;
+	sh:class dcterms:Location;
 	rdfs:comment "Een begrip is geldig op een bepaalde geografische locatie."@nl;
 .
-	
+#req:ConceptMetadata_type a sh:PropertyShape;
+#	rdfs:label "rol van entiteit";
+#	rdfs:comment "Een conceptbeschrijving vervult de rol van entiteit";
+#	sh:path rdf:type;
+#	sh:hasValue prov:Entity;	
+#.
 #---------------------
 # Conceptbeschrijving
 #---------------------
-req:Conceptbeschrijving a sh:NodeShape;
-	rdfs:label "Conceptbeschrijving";
-	sh:property req:Conceptbeschrijving_betreft;
-	sh:property req:Conceptbeschrijving_type;
-.
-req:Conceptbeschrijving_betreft a sh:PropertyShape;
-	rdfs:label "betreft";
-	sh:name "foaf:primaryTopic";
-	sh:path foaf:primaryTopic;
-	sh:class skos:Concept;
-.
-req:Conceptbeschrijving_type a sh:PropertyShape;
-	rdfs:label "rol van entiteit";
-	rdfs:comment "Een conceptbeschrijving vervult de rol van entiteit";
-	sh:path rdf:type;
-	sh:hasValue prov:Entity;
-.
+#req:Conceptbeschrijving a sh:NodeShape;
+#	rdfs:label "Conceptbeschrijving";
+#	sh:property req:Conceptbeschrijving_betreft;
+#	sh:property req:Conceptbeschrijving_type;
+#.
+#req:Conceptbeschrijving_betreft a sh:PropertyShape;
+#	rdfs:label "betreft";
+#	sh:name "foaf:primaryTopic";
+#	sh:path foaf:primaryTopic;
+#	sh:class skos:Concept;
+#.
+
+
 
 #---------------------
 # Handeling/Gebeurtenis
 # Datum: 6-11-2017
 # Door: Ingrid Thurlings
 #---------------------
-req:Handeling a sh:NodeShape;
-	rdfs:label "Handeling";
+req:HandelingAct a sh:NodeShape;
+	rdfs:label "Handeling Act";
 	sh:targetClass skoslex:Act;
 	sh:name "skoslex:Act";
+	sh:property req:Handeling_subclass;
+	sh:property req:Handeling_name;
 	sh:property req:Handeling_actor;
+	sh:property req:Handeling_agent;
 	sh:property req:Handeling_object;
+	sh:property req:Handeling_refersTo;
+.
+req:HandelingActor a sh:NodeShape;
+	rdfs:label "Handeling Actor";
+	sh:targetClass skoslex:Actor;
+	sh:name "skoslex:Actor";
+	sh:property req:Handeling_name;
+	sh:property req:Handeling_subclass;
+.
+req:HandelingAgent a sh:NodeShape;
+	rdfs:label "Handeling Agent";
+	sh:targetClass skoslex:Agent;
+	sh:name "skoslex:Agent";
+	sh:property req:Handeling_subclassActor;
+	sh:property req:Handeling_name;
+.
+req:HandelingNorm a sh:NodeShape;
+	rdfs:label "Handeling Norm";
+	sh:targetClass skoslex:Norm;
+	sh:name "skoslex:Norm";
+	sh:property req:Handeling_subclass;
+	sh:property req:Handeling_name;
+	sh:property req:Handeling_affects;
+.
+req:HandelingObject a sh:NodeShape;
+	rdfs:label "Handeling Object";
+	sh:targetClass skoslex:Object;
+	sh:name "skoslex:Object";
+	sh:property req:Handeling_subclass;
+	sh:property req:Handeling_name;
+.
+
+req:Handeling_subclass a sh:PropertyShape;
+	rdfs:label "subclass";
+	sh:path rdfs:subClassOf;
+	sh:class skos:Concept;
+.
+req:Handeling_affects a sh:PropertyShape;
+	rdfs:label "affects";
+	sh:path skoslex:affects;
+	sh:class skoslex:Act;
+.
+req:Handeling_subclassActor a sh:PropertyShape;
+	rdfs:label "subclass";
+	sh:path rdfs:subClassOf;
+	sh:class skoslex:Actor;
+.
+req:Handeling_name a sh:PropertyShape;
+	sh:path rdfs:label;
 .
 req:Handeling_actor a sh:PropertyShape;
 	rdfs:label "actor";
@@ -297,6 +385,18 @@ req:Handeling_object a sh:PropertyShape;
 	sh:path skoslex:object;
 	sh:class skoslex:Object;
 .
+req:Handeling_agent a sh:PropertyShape;
+	rdfs:label "agent";
+	sh:name "skoslex:agent";
+	sh:path skoslex:agent;
+	sh:class skoslex:Agent;
+.
+req:Handeling_refersTo a sh:PropertyShape;
+	rdfs:label "refersTo";
+	sh:name "skoslex:refersTo";
+	sh:path skoslex:refersTo;
+	sh:class skoslex:Norm;
+.
 
 #---------------------
 # Collectie
@@ -306,33 +406,39 @@ req:Collectie a sh:NodeShape;
 	sh:targetClass skos:Collection;
 	sh:name "skos:Collection";
 	sh:property req:Collectie_heeftLid;
+	sh:property req:Collectie_name;
 .
-req:Collectie_heeftLid a sh:PropertyShape;
-	rdfs:label "heeft lid";
-	sh:path skos:member;
-	sh:class skos:Concept;
+#req:Collectie_heeftLid a sh:PropertyShape;
+#	rdfs:label "heeft lid";
+#	sh:path skos:member;
+#	sh:class skos:Concept;
+#.
+req:Collectie_name a sh:PropertyShape;
+	rdfs:label "label"@nl;
+	sh:name "rdfs:label";
+	sh:path rdfs:label;
 .
 
 #---------------------
 # Collectiebeschrijving
 #---------------------
-req:Collectiebeschrijving a sh:NodeShape;
-	rdfs:label "Collectiebeschrijving";
-	sh:property req:Collectiebeschrijving_betreft;
-	sh:property req:Collectiebeschrijving_type;
-.
-req:Collectiebeschrijving_betreft a sh:PropertyShape;
-	rdfs:label "betreft";
-	sh:name "foaf:primaryTopic";
-	sh:path foaf:primaryTopic;
-	sh:class skos:Collection;
-.
-req:Collectiebeschrijving_type a sh:PropertyShape;
-	rdfs:label "rol van entiteit";
-	rdfs:comment "Een collectiebeschrijving vervult de rol van entiteit";
-	sh:path rdf:type;
-	sh:hasValue prov:Entity;
-.
+#req:Collectiebeschrijving a sh:NodeShape;
+#	rdfs:label "Collectiebeschrijving";
+#	sh:property req:Collectiebeschrijving_betreft;
+#	sh:property req:Collectiebeschrijving_type;
+#.
+#req:Collectiebeschrijving_betreft a sh:PropertyShape;
+#	rdfs:label "betreft";
+#	sh:name "foaf:primaryTopic";
+#	sh:path foaf:primaryTopic;
+#	sh:class skos:Collection;
+#.
+#req:Collectiebeschrijving_type a sh:PropertyShape;
+#	rdfs:label "rol van entiteit";
+#	rdfs:comment "Een collectiebeschrijving vervult de rol van entiteit";
+#	sh:path rdf:type;
+#	sh:hasValue prov:Entity;
+#.
 
 #---------------------
 # Begrippenkader
@@ -343,11 +449,17 @@ req:Begrippenkader a sh:NodeShape;
 	sh:property req:Begrippenkader_grondslag;
 	sh:property req:Begrippenkader_type;
 	sh:targetClass skos:ConceptScheme;
+	sh:property req:Begrippenkader_hasTopConcept;
 .
-req:Begrippenkader_grondslag a sh:PropertyShape;
-	rdfs:label "grondslag";
-	sh:path req:Begrippenkader_grondslag;
-	sh:class dctype:Text;
+#req:Begrippenkader_grondslag a sh:PropertyShape;
+#	rdfs:label "grondslag";
+#	sh:path req:Begrippenkader_grondslag;
+#	sh:class dctype:Text;
+#.
+req:Begrippenkader_hasTopConcept a sh:PropertyShape;
+	rdfs:label "has top concept";
+	sh:path skos:hasTopConcept;
+	sh:class skos:Concept;
 .
 req:Begrippenkader_type a sh:PropertyShape;
 	rdfs:label "rol van dataset";
@@ -363,21 +475,26 @@ req:Brondocument a sh:NodeShape;
 	rdfs:label "Brondocument";
 	sh:targetClass dctype:Text;
 	sh:property req:Brondocument_versieVan;
+	sh:property req:Brondocument_bron;
 .
-req:Brondocument_versieVan a sh:PropertyShape;
-	rdfs:label "versie van";
-	sh:path dcterms:isVersionOf;
-	sh:node req:Datasetversie;
-	sh:maxCount 1;
+#req:Brondocument_versieVan a sh:PropertyShape;
+#	rdfs:label "versie van";
+#	sh:path dcterms:isVersionOf;
+#	sh:node req:Datasetversie;
+#	sh:maxCount 1;
+#.
+req:Brondocument_bron a sh:PropertyShape;
+	rdfs:label "bron";
+	sh:path dcterms:Text;
 .
 
 #---------------------
 # Overheidsorganisatie
 #---------------------
-req:Overheidsorganisatie rdf:type sh:NodeShape;
-    rdfs:label "Overheidsorganisatie";
-    sh:targetClass foaf:Agent
-.
+#req:Overheidsorganisatie rdf:type sh:NodeShape;
+#    rdfs:label "Overheidsorganisatie";
+#    sh:targetClass foaf:Agent
+#.
 
 #---------------------
 # Dataset
@@ -392,6 +509,11 @@ req:Dataset rdf:type sh:NodeShape;
     sh:property req:Dataset_dateIssued;
     sh:property req:Dataset_language;
     sh:property req:Dataset_description;
+	sh:property req:Datasetversie_version;
+	sh:property req:Datasetversie_versionNotes;	
+	sh:property req:Datasetversie_isDerivedFrom;
+	sh:property req:Datasetversie_distribution;
+	sh:property req:Datasetversie_versionOf;
 .
 req:Dataset_name rdf:type sh:PropertyShape;
     rdfs:label "naam"@nl;
@@ -432,21 +554,21 @@ req:Dataset_description rdf:type sh:PropertyShape;
 # Datum: 7-11-2017
 # Door: Ingrid Thurlings
 #---------------------
-req:Datasetversie rdf:type sh:NodeShape;
-	rdfs:label "Datasetversie";
+#req:Datasetversie rdf:type sh:NodeShape;
+#	rdfs:label "Datasetversie";
 #	sh:property req:Datasetversie_informatiemodel;
 #	sh:property req:Datasetversie_naam;
 #	sh:property req:Datasetversie_publicatiedatum;
 #	sh:property req:Datasetversie_taal;
-	sh:property req:Datasetversie_describedBy;
-	sh:property req:Datasetversie_distribution;
-	sh:property req:Datasetversie_versionOf;
-	sh:property req:Datasetversie_version;
-	sh:property req:Datasetversie_versionNotes;
+#	sh:property req:Datasetversie_describedBy;
+#	sh:property req:Datasetversie_distribution;
+#	sh:property req:Datasetversie_versionOf;
+#	sh:property req:Datasetversie_version;
+#	sh:property req:Datasetversie_versionNotes;
 #	sh:property req:Datasetversie_werkingsgebied;
-	sh:property req:Datasetversie_isDerivedFrom;
-	sh:targetClass dcat:Dataset;
-.
+#	sh:property req:Datasetversie_isDerivedFrom;
+#	sh:targetClass dcat:Dataset;
+#.
 req:Datasetversie_version rdf:type sh:PropertyShape;
 	rdfs:label "versie"@nl;
 	sh:name "adms:version";
@@ -459,13 +581,13 @@ req:Datasetversie_versionNotes rdf:type sh:PropertyShape;
 	rdfs:comment "Een versie heeft release notes."@nl;
 	sh:path adms:versionNotes;
 .
-req:Datasetversie_describedBy rdf:type sh:PropertyShape;
-    rdfs:label "beschrijving"@nl;
-	sh:name "wdrs:describedBy";
-    rdfs:comment "De data in een dataset is beschreven in een informatiemodel."@nl;
-    rdf:value "<beschrijving>";
-    sh:path wdrs:describedBy
-.
+#req:Datasetversie_describedBy rdf:type sh:PropertyShape;
+#    rdfs:label "beschrijving"@nl;
+#	sh:name "wdrs:describedBy";
+#    rdfs:comment "De data in een dataset is beschreven in een informatiemodel."@nl;
+#    rdf:value "<beschrijving>";
+#    sh:path wdrs:describedBy
+#.
 #req:Datasetversie_informatiemodel rdf:type sh:PropertyShape;
 #	rdfs:label "beschreven door";
 #    rdfs:comment "Bij een dataset hoort een informatiemodel.";
@@ -507,13 +629,13 @@ req:Datasetversie_versionOf a sh:PropertyShape;
 	sh:node req:Dataset;
 	sh:maxCount 1;
 .
-#req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
-#    rdfs:label "werkingsgebied";
-#    rdfs:comment "Het gebied waar de dataset over gaat";
-#    sh:class dcterms:Location;
-#    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
-#    sh:path dcterms:spatial
-#.
+req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
+    rdfs:label "werkingsgebied";
+    rdfs:comment "Het gebied waar de dataset over gaat";
+    sh:class dcterms:Location;
+    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+    sh:path dcterms:spatial
+.
 req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
 	rdfs:label "gerelateerd aan"@nl;
 	rdfs:comment "Geeft de dataset aan waar deze dataset aan gerelateerd is (wordt gebruikt om aan te geven hoe een dataset is afgeleid uit 1 of meerdere andere datasets";
@@ -524,10 +646,10 @@ req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
 #---------------------
 # Informatieproduct
 #---------------------
-req:Informatieproduct a sh:NodeShape;
-	rdfs:label "Informatieproduct";
-	sh:targetClass [rdfs:subClassOf dcat:Dataset];
-.
+#req:Informatieproduct a sh:NodeShape;
+#	rdfs:label "Informatieproduct";
+#	sh:targetClass [rdfs:subClassOf dcat:Dataset];
+#.
 
 #---------------------
 # Informatiemodel
@@ -600,54 +722,54 @@ req:Informatiemodel rdf:type sh:NodeShape;
 #---------------------
 # Datasetbeschrijving
 #---------------------
-req:Datasetbeschrijving a sh:NodeShape;
-	rdfs:label "Datasetbeschrijving";
-	sh:targetClass dcat:CatalogRecord;
-	sh:property req:Datasetbeschrijving_betreft;
-	sh:property req:Datasetbeschrijving_type;
-	sh:property req:Datasetbeschrijving_naam;
-	sh:property req:Datasetbeschrijving_beschrijving;
-	sh:property req:Datasetbeschrijving_publicatiedatum;
-	sh:property req:Datasetbeschrijving_datumWijziging;
-.
-req:Datasetbeschrijving_betreft a sh:PropertyShape;
-	rdfs:label "betreft";
-	sh:name "foaf:primaryTopic";
-	sh:path foaf:primaryTopic;
-	sh:class dcat:Dataset;
-.
-req:Datasetbeschrijving_type a sh:PropertyShape;
-	rdfs:label "rol van entiteit";
-	rdfs:comment "Een datasetbeschrijving vervult de rol van entiteit";
-	sh:path rdf:type;
-	sh:hasValue prov:Entity;
-.
-req:Datasetbeschrijving_naam rdf:type sh:PropertyShape;
-    rdfs:label "naam";
-	sh:name "dcterms:title";
-    rdfs:comment "Een datasetbeschrijving heeft een naam";
-    rdf:value "Catalogus Omgevingswet";
-    sh:path dcterms:title
-.
-req:Datasetbeschrijving_beschrijving rdf:type sh:PropertyShape;
-    rdfs:label "beschrijving";
-	sh:name "dcterms:description";
-    rdfs:comment "Een datasetbeschrijving heeft een duidelijke beschrijving";
-    rdf:value "<welkomsttekst>";
-    sh:path dcterms:description
-.
-req:Datasetbeschrijving_publicatiedatum rdf:type sh:PropertyShape;
-    rdfs:label "publicatiedatum";
-	sh:name "dcterms:issued";
-    rdfs:comment "De datasetbeschrijving kent een publicatiedatum";
-    rdf:value "1/10/2016";
-    sh:path dcterms:issued
-.
-req:Datasetbeschrijving_datumWijziging rdf:type sh:PropertyShape;
-    rdfs:label "datum wijziging";
-    rdf:value "1/10/2016";
-    sh:path dcterms:modified
-.
+#req:Datasetbeschrijving a sh:NodeShape;
+#	rdfs:label "Datasetbeschrijving";
+#	sh:targetClass dcat:CatalogRecord;
+#	sh:property req:Datasetbeschrijving_betreft;
+#	sh:property req:Datasetbeschrijving_type;
+#	sh:property req:Datasetbeschrijving_naam;
+#	sh:property req:Datasetbeschrijving_beschrijving;
+#	sh:property req:Datasetbeschrijving_publicatiedatum;
+#	sh:property req:Datasetbeschrijving_datumWijziging;
+#.
+#req:Datasetbeschrijving_betreft a sh:PropertyShape;
+#	rdfs:label "betreft";
+#	sh:name "foaf:primaryTopic";
+#	sh:path foaf:primaryTopic;
+#	sh:class dcat:Dataset;
+#.
+#req:Datasetbeschrijving_type a sh:PropertyShape;
+#	rdfs:label "rol van entiteit";
+#	rdfs:comment "Een datasetbeschrijving vervult de rol van entiteit";
+#	sh:path rdf:type;
+#	sh:hasValue prov:Entity;
+#.
+#req:Datasetbeschrijving_naam rdf:type sh:PropertyShape;
+#    rdfs:label "naam";
+#	sh:name "dcterms:title";
+#    rdfs:comment "Een datasetbeschrijving heeft een naam";
+#    rdf:value "Catalogus Omgevingswet";
+#    sh:path dcterms:title
+#.
+#req:Datasetbeschrijving_beschrijving rdf:type sh:PropertyShape;
+#    rdfs:label "beschrijving";
+#	sh:name "dcterms:description";
+#    rdfs:comment "Een datasetbeschrijving heeft een duidelijke beschrijving";
+#    rdf:value "<welkomsttekst>";
+#    sh:path dcterms:description
+#.
+#req:Datasetbeschrijving_publicatiedatum rdf:type sh:PropertyShape;
+#    rdfs:label "publicatiedatum";
+#	sh:name "dcterms:issued";
+#    rdfs:comment "De datasetbeschrijving kent een publicatiedatum";
+#    rdf:value "1/10/2016";
+#    sh:path dcterms:issued
+#.
+#req:Datasetbeschrijving_datumWijziging rdf:type sh:PropertyShape;
+#    rdfs:label "datum wijziging";
+#    rdf:value "1/10/2016";
+#    sh:path dcterms:modified
+#.
 
 #---------------------
 # Catalogus 
@@ -665,6 +787,7 @@ req:Catalogus rdf:type sh:NodeShape;
     sh:property req:Catalogus_description;
     sh:property req:Catalogus_rights;
     sh:property req:Catalogus_language;
+    sh:property req:Catalogus_dataset;
 #    sh:property req:Catalogus_uitgever;
 #    sh:property req:Catalogus_werkingsgebied;
 #    sh:property req:Catalogus_omvat;
@@ -678,6 +801,10 @@ req:Catalogus_name rdf:type sh:PropertyShape;
 	rdfs:comment "The catalog has a name"@en;
     rdf:value "Catalogus Omgevingswet";
     sh:path dcterms:title
+.
+req:Catalogus_dataset a sh:PropertyShape;
+	sh:path dcat:dataset;
+	sh:class dcat:Dataset;
 .
 req:Catalogus_description rdf:type sh:PropertyShape;
     rdfs:label "beschrijving"@nl;
@@ -765,7 +892,14 @@ req:Catalogus_language rdf:type sh:PropertyShape;
 req:Werkingsgebied a sh:NodeShape;
 	rdfs:label "Werkingsgebied";
 	sh:targetClass dcterms:Location;
+	sh:name "Werkingsgebied";
+	sh:property [
+		sh:name "dcterms:Location";
+		sh:path dcterms:Location;
+	]
 .
+
+
 
 #---------------------
 # Distributie
@@ -783,7 +917,7 @@ req:Distributie a sh:NodeShape;
 	sh:property req:Distributie_rights;
 	sh:property req:Distributie_accessURL;
 	sh:property req:Distributie_downloadURL;
-#.
+.
 req:Distributie_name rdf:type sh:PropertyShape;
 	rdfs:label "naam"@nl;
 	sh:name "dcterms:title";
@@ -843,152 +977,152 @@ req:Distributie_downloadURL rdf:type sh:PropertyShape;
 #---------------------
 # Organisatie
 #---------------------
-req:Agent a sh:NodeShape;
-	rdfs:label "Organisatie (herkomst)";
-	sh:targetClass prov:Agent;
-	sh:property req:Agent_handeltNamens;
-.
-req:Agent_handeltNamens rdf:type sh:PropertyShape;
-	rdfs:label "handelt namens";
-    rdfs:comment "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
-    sh:class prov:Agent;
-    rdf:value "overheid:Rijswaterstaat";
-    sh:path prov:actedOnBehalfOf;
-.
+#req:Agent a sh:NodeShape;
+#	rdfs:label "Organisatie (herkomst)";
+#	sh:targetClass prov:Agent;
+#	sh:property req:Agent_handeltNamens;
+#.
+#req:Agent_handeltNamens rdf:type sh:PropertyShape;
+#	rdfs:label "handelt namens";
+#    rdfs:comment "Een organisatie kan een activiteit namens een andere organisatie uitvoeren";
+#    sh:class prov:Agent;
+#    rdf:value "overheid:Rijswaterstaat";
+#    sh:path prov:actedOnBehalfOf;
+#.
 
 #---------------------
 # Activiteit
 #---------------------
-req:Activiteit a sh:NodeShape;
-	rdfs:label "Activiteit (herkomst)";
-	sh:targetClass prov:Activity;
-	sh:property req:Activiteit_tijdstip;
-	sh:property req:Activiteit_uitvoerder;
-.
-req:Activiteit_tijdstip rdf:type sh:PropertyShape;
-	rdfs:label "tijdstip";
-    rdfs:comment "Het moment van het vastleggen zelf (de audit trail) wordt vastgelegd";
-    rdf:value "1/10/2016";
-    sh:path prov:startedAtTime;
-.
-req:Activiteit_uitvoerder rdf:type sh:PropertyShape;
-	rdfs:label "uitvoerder";
-    rdfs:comment "Verwijzing naar de organisatie die de activiteit heeft uitgevoerd (de audit trail)";
-    rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
-    sh:path prov:wasAssociatedWith;
-    sh:class prov:Agent;
-.
+#req:Activiteit a sh:NodeShape;
+#	rdfs:label "Activiteit (herkomst)";
+#	sh:targetClass prov:Activity;
+#	sh:property req:Activiteit_tijdstip;
+#	sh:property req:Activiteit_uitvoerder;
+#.
+#req:Activiteit_tijdstip rdf:type sh:PropertyShape;
+#	rdfs:label "tijdstip";
+#    rdfs:comment "Het moment van het vastleggen zelf (de audit trail) wordt vastgelegd";
+#    rdf:value "1/10/2016";
+#    sh:path prov:startedAtTime;
+#.
+#req:Activiteit_uitvoerder rdf:type sh:PropertyShape;
+#	rdfs:label "uitvoerder";
+#    rdfs:comment "Verwijzing naar de organisatie die de activiteit heeft uitgevoerd (de audit trail)";
+#    rdf:value "overheid:Dienst_voor_het_kadaster_en_de_openbare_registers";
+#    sh:path prov:wasAssociatedWith;
+#    sh:class prov:Agent;
+#.
 
 #---------------------
 # Entiteit
 #---------------------
-req:Entiteit a sh:NodeShape;
-	rdfs:label "Entiteit";
-	sh:targetClass prov:Entity;
-	sh:property req:Entiteit_startmoment;
-	sh:property req:Entiteit_eindmoment;
-	sh:property req:Entiteit_versie;
-	sh:property req:Entiteit_handeling;
-	sh:property req:Entiteit_releaseNotes;
-.
-req:Entiteit_startmoment rdf:type sh:PropertyShape;
-	rdfs:label "startmoment";
-    rdfs:comment "Het begin van de formele historie (de publicatiedatum) wordt vastgelegd";
-    rdf:value "1/7/2017";
-    sh:path prov:generatedAtTime;
-.
-req:Entiteit_eindmoment rdf:type sh:PropertyShape;
-	rdfs:label "eindmoment";
-    rdfs:moment "Het einde van de formele historie (het moment van de publicatie van een nieuwe versie) wordt vastgelegd";
-    rdf:value "''";
-    sh:path prov:invalidatedAtTime;
-.
-req:Entiteit_versie rdf:type sh:PropertyShape;
-	rdfs:label "versie";
-	sh:name "adms:version";
-    rdfs:comment "Optioneel: het vastleggen van een versie";
-    rdf:value "..";
-    sh:path adms:version;
-.
-req:Entiteit_handeling rdf:type sh:PropertyShape;
-	rdfs:label "handeling";
-    rdfs:comment "Verwijzing naar de activiteit van het vastleggen/publiceren";
-    sh:class prov:Activity;
-    rdf:value "<de betreffende handeling>";
-    sh:path prov:wasGeneratedBy;
-.
-req:Entiteit_releaseNotes rdf:type sh:PropertyShape;
-	sh:name "adms:versionNotes";
-	rdfs:label "release notes";
-    rdfs:comment "Optioneel: het vastleggen van release notes bij een versie van een entiteit";
-    rdf:value "..";
-    sh:path adms:versionNotes;
-.
+#req:Entiteit a sh:NodeShape;
+#	rdfs:label "Entiteit";
+#	sh:targetClass prov:Entity;
+#	sh:property req:Entiteit_startmoment;
+#	sh:property req:Entiteit_eindmoment;
+#	sh:property req:Entiteit_versie;
+#	sh:property req:Entiteit_handeling;
+#	sh:property req:Entiteit_releaseNotes;
+#.
+#req:Entiteit_startmoment rdf:type sh:PropertyShape;
+#	rdfs:label "startmoment";
+#    rdfs:comment "Het begin van de formele historie (de publicatiedatum) wordt vastgelegd";
+#    rdf:value "1/7/2017";
+#    sh:path prov:generatedAtTime;
+#.
+#req:Entiteit_eindmoment rdf:type sh:PropertyShape;
+#	rdfs:label "eindmoment";
+#    rdfs:moment "Het einde van de formele historie (het moment van de publicatie van een nieuwe versie) wordt vastgelegd";
+#    rdf:value "''";
+#    sh:path prov:invalidatedAtTime;
+#.
+#req:Entiteit_versie rdf:type sh:PropertyShape;
+#	rdfs:label "versie";
+#	sh:name "adms:version";
+#    rdfs:comment "Optioneel: het vastleggen van een versie";
+#    rdf:value "..";
+#    sh:path adms:version;
+#.
+#req:Entiteit_handeling rdf:type sh:PropertyShape;
+#	rdfs:label "handeling";
+#    rdfs:comment "Verwijzing naar de activiteit van het vastleggen/publiceren";
+#    sh:class prov:Activity;
+#    rdf:value "<de betreffende handeling>";
+#    sh:path prov:wasGeneratedBy;
+#.
+#req:Entiteit_releaseNotes rdf:type sh:PropertyShape;
+#	sh:name "adms:versionNotes";
+#	rdfs:label "release notes";
+#    rdfs:comment "Optioneel: het vastleggen van release notes bij een versie van een entiteit";
+#    rdf:value "..";
+#    sh:path adms:versionNotes;
+#.
 
 #---------------------
 # Kwaliteitskenmerk
 #---------------------
-req:Kwaliteitskenmerk a sh:NodeShape;
-	rdfs:label "Kwaliteitskenmerk";
-    sh:targetClass dqv:Dimension
-.
-req:Kwaliteitskenmerk_categorie rdf:type sh:PropertyContraint;
-    rdfs:label "categorie";
-    rdf:value "iso:Completeness";
-    sh:path dqv:inCategory;
-.
+#req:Kwaliteitskenmerk a sh:NodeShape;
+#	rdfs:label "Kwaliteitskenmerk";
+#    sh:targetClass dqv:Dimension
+#.
+#req:Kwaliteitskenmerk_categorie rdf:type sh:PropertyContraint;
+#    rdfs:label "categorie";
+#    rdf:value "iso:Completeness";
+#    sh:path dqv:inCategory;
+#.
 
 #---------------------
 # Gegevensstructuur
 #---------------------
-req:Gegevensstructuur a sh:NodeShape;
-	rdfs:label "Gegevensstructuur";
-	sh:targetClass sh:NodeShape;
-	sh:name "shacl:Shape";
-	sh:property req:Gegevensstructuur_klasse;
-	sh:property req:Gegevensstructuur_regel;
-.
-req:Gegevensstructuur_klasse a sh:PropertyShape;
-	rdfs:label "klasse";
-	sh:name "shacl:targetClass";
-	sh:path sh:targetClass;
-	sh:class owl:Class;
-.
-req:Gegevensstructuur_regel a sh:PropertyShape;
-	rdfs:label "regel";
-	sh:name "shacl:property";
-	sh:path sh:property;
-	sh:class sh:PropertyShape;
-.
+#req:Gegevensstructuur a sh:NodeShape;
+#	rdfs:label "Gegevensstructuur";
+#	sh:targetClass sh:NodeShape;
+#	sh:name "shacl:Shape";
+#	sh:property req:Gegevensstructuur_klasse;
+#	sh:property req:Gegevensstructuur_regel;
+#.
+#req:Gegevensstructuur_klasse a sh:PropertyShape;
+#	rdfs:label "klasse";
+#	sh:name "shacl:targetClass";
+#	sh:path sh:targetClass;
+#	sh:class owl:Class;
+#.
+#req:Gegevensstructuur_regel a sh:PropertyShape;
+#	rdfs:label "regel";
+#	sh:name "shacl:property";
+#	sh:path sh:property;
+#	sh:class sh:PropertyShape;
+#.
 
 #---------------------
 # Gegevensconstraint
 #---------------------
-req:Gegevensconstraint a sh:NodeShape;
-	rdfs:label "Gegevensconstraint";
-	sh:targetClass sh:PropertyShape;
-	sh:name "shacl:PropertyConstraint";
-	sh:property req:Gegevensconstraint_eigenschap;
-	sh:property req:Gegevensconstraint_klasse;
-	sh:property req:Gegevensconstraint_datatype;
-.
-req:Gegevensconstraint_eigenschap a sh:PropertyShape;
-	rdfs:label "eigenschap";
-	sh:name "shacl:predicate";
-	sh:path sh:path;
-	sh:class rdf:Property;
-.
-req:Gegevensconstraint_klasse a sh:PropertyShape;
-	rdfs:label "gerelateerde klasse";
-	sh:name "shacl:class";
-	sh:path sh:class;
-	sh:class owl:Class;
-.
-req:Gegevensconstraint_datatype a sh:PropertyShape;
-	rdfs:label "datatype";
-	sh:name "shacl:datatype";
-	sh:path sh:datatype;
-.
+#req:Gegevensconstraint a sh:NodeShape;
+#	rdfs:label "Gegevensconstraint";
+#	sh:targetClass sh:PropertyShape;
+#	sh:name "shacl:PropertyConstraint";
+#	sh:property req:Gegevensconstraint_eigenschap;
+#	sh:property req:Gegevensconstraint_klasse;
+#	sh:property req:Gegevensconstraint_datatype;
+#.
+#req:Gegevensconstraint_eigenschap a sh:PropertyShape;
+#	rdfs:label "eigenschap";
+#	sh:name "shacl:predicate";
+#	sh:path sh:path;
+#	sh:class rdf:Property;
+#.
+#req:Gegevensconstraint_klasse a sh:PropertyShape;
+#	rdfs:label "gerelateerde klasse";
+#	sh:name "shacl:class";
+#	sh:path sh:class;
+#	sh:class owl:Class;
+#.
+#req:Gegevensconstraint_datatype a sh:PropertyShape;
+#	rdfs:label "datatype";
+#	sh:name "shacl:datatype";
+#	sh:path sh:datatype;
+#.
 
 #---------------------
 # Gegevensklasse
