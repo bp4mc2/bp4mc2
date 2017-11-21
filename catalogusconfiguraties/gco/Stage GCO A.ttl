@@ -1595,6 +1595,8 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 			?shape sh:targetclass ?type.
 			?shape sh:property ?prop.
 			?prop ?proppred ?propobj.
+			?member skos:inScheme ?scheme.
+			?member rdfs:label ?memberlabel
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
@@ -1608,6 +1610,7 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 					}
 					UNION
 					{
+						?shape sh:property ?typeprop.
 						?typeprop sh:hasValue ?type.
 						?typeprop sh:path rdf:type.
 						OPTIONAL {
@@ -1617,11 +1620,18 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 							?prop ?proppred ?propobj.
 						}
 					}
+					UNION
+					{
+						?shape sh:property ?memberprop.
+						?memberprop sh:hasValue ?scheme.
+						?memberprop sh:path skos:inScheme.
+					}
 				}
 				FILTER (
 					?shape = req:ConceptMetadata
 					|| ?shape = req:Concept
 					|| ?shape = req:Werkingsgebied
+					|| ?shape = req:ConceptStatus
 				)
 				FILTER(
 					?propobj != thes:broaderGeneric
@@ -1635,6 +1645,12 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 					&& ?propobj != skos:broadMatch
 					&& ?propobj != skos:narrowMatch
 				)
+			}
+			OPTIONAL {
+				GRAPH <http://bp4mc2.org/id/dataset/imports> {
+					?member skos:inScheme ?scheme.
+					?member skos:prefLabel ?memberlabel
+				}
 			}
 		}
 	''';
