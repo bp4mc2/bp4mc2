@@ -218,6 +218,53 @@ stage:ReqModelProvenance a elmo:Representation;
 	elmo:url-pattern "/query/model/provenance$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
+		elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dctype: <http://purl.org/dc/dcmitype/>
+		PREFIX req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>
+		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
+		PREFIX dcat: <http://www.w3.org/ns/dcat#>
+		PREFIX dct: <http://purl.org/dc/terms/>
+		CONSTRUCT {
+			?shape ?shapepred ?shapeobj.
+			?shape sh:property ?prop.
+			?prop ?proppred ?propobj.
+		}
+		WHERE {
+			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+				?shape ?shapepred ?shapeobj.
+				OPTIONAL {
+					?shape sh:property ?prop.
+					?prop ?proppred ?propobj.
+				}
+				FILTER (?shape = req:Concept
+				|| ?shape = req:Collectie
+				|| ?shape = req:Provenance
+				|| ?shape = req:Catalogus
+				|| ?shape = req:Dataset
+				|| ?shape = req:Distributie
+				|| ?shape = req:ConceptMetadata
+				)
+				FILTER(
+					?propobj != thes:broaderGeneric
+					&& ?propobj != thes:broaderPartitive
+					&& ?propobj != thes:narrowerGeneric
+					&& ?propobj != thes:narrowerPartitive
+					&& ?propobj != skos:semanticRelation
+					&& ?propobj != skos:closeMatch
+					&& ?propobj != skos:relatedMatch
+					&& ?propobj != skos:exactMatch
+					&& ?propobj != skos:broadMatch
+					&& ?propobj != skos:narrowMatch
+					&& ?propobj != skos:member
+					&& ?propobj != dcat:dataset
+					&& ?propobj != dcat:distribution
+					&& ?propobj != dct:relation
+					&& ?propobj != dct:isVersionOf
+				)
+			}
+		}
+	''';
 .
 
 
