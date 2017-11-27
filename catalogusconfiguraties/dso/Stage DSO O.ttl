@@ -919,6 +919,7 @@ container:excelupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+	
 .
 
 # Updatecontainer Turtle
@@ -1101,6 +1102,28 @@ container:concepten-put-xml a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met lege term bevatten.";
 	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-put-xml {
+						collection:Toeleidingsbegrippen skos:member ?s.
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1192,6 +1215,35 @@ container:concepten-post-xml a elmo:Container;
 			}
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met lege term bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-post-xml {
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							collection:Toeleidingsbegrippen skos:member ?s.
+						}
+						UNION
+						{
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1299,6 +1351,28 @@ container:concepten-put-json a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-put-json {
+						collection:Toeleidingsbegrippen skos:member ?s.
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1402,6 +1476,35 @@ container:concepten-post-json a elmo:Container;
 			}
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-post-json {
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							collection:Toeleidingsbegrippen skos:member ?s.
+						}
+						UNION
+						{
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1509,6 +1612,28 @@ container:concepten-put-jsonld a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-put-jsonld {
+						collection:Toeleidingsbegrippen skos:member ?s.
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1610,6 +1735,35 @@ container:concepten-post-jsonld a elmo:Container;
 			}
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-post-jsonld {
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							collection:Toeleidingsbegrippen skos:member ?s.
+						}
+						UNION
+						{
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -1715,6 +1869,29 @@ container:concepten-put-ttl a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-put-ttl {
+					{
+						collection:Toeleidingsbegrippen skos:member ?s.
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1816,6 +1993,36 @@ container:concepten-post-ttl a elmo:Container;
 			}
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-post-ttl {
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							collection:Toeleidingsbegrippen skos:member ?s.
+						}
+						UNION
+						{
+						collection:Toeleidingsbegrippen skos:member ?s.
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 
@@ -1925,6 +2132,35 @@ container:concepten-put-xls a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-put-xls {
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							collection:Toeleidingsbegrippen skos:member ?s.
+						}
+						UNION
+						{
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
+	];
     elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -2019,6 +2255,35 @@ container:concepten-post-xls a elmo:Container;
 			}
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
+	];
+	elmo:assertion [
+		elmo:assert-not '''
+			prefix container: <http://data.ontwikkeling.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			prefix collection: <http://data.ontwikkeling.pdok.nl/catalogus/dso/id/collection/>
+
+			ASK	{
+				GRAPH container:concepten-post-xls {
+					{
+						?s rdf:type skos:Collection.
+						FILTER NOT EXISTS {
+							collection:Toeleidingsbegrippen skos:member ?s.
+						}
+						UNION
+						{
+						?s rdf:type skos:Concept.
+						?s ?p ?o.
+						FILTER (?p != rdfs:label
+						||?p != skos:prefLabel
+						||?p != skos:closeMatch
+						||?p != rdf:type
+						)
+						}
+					}
+				}
+			}
+		''';
+		rdfs:label "Toeleidingsbegrippen mogen enkel concepten met een rdfs:label, skos:prefLabel of skos:closeMatch bevatten.";
 	];
     elmo:query stage:DSOUploadScenePUT;
 .
@@ -3272,7 +3537,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [
 		rdfs:label "Uitleg"@nl;
-		elmo:applies-to skos:comment;
+		elmo:applies-to rdfs:comment;
 		elmo:index "02";
 	];
 	elmo:fragment [
@@ -3286,126 +3551,132 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:scopeNote;
 		elmo:index "04";
 	];
+	elmo:fragment [
+		rdfs:label "Voorbeeld"@nl;
+		elmo:applies-to foaf:depiction;
+		elmo:index "05";
+		elmo:appearance elmo:ImageAppearance;
+	];
 	elmo:fragment [ 
 		rdfs:label "Bron"@nl;
 		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
-		elmo:index "05";
+		elmo:index "06";
 	];
 	elmo:fragment [
 		rdfs:label "Domein"@nl;
 		elmo:applies-to skos:inScheme;
-		elmo:index "06";
+		elmo:index "07";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is specialisatie van"@nl;
 		elmo:applies-to thes:broaderGeneric;
-		elmo:index "07";
+		elmo:index "08";
 	];
 	elmo:fragment [
 		rdfs:label "Is generalisatie van"@nl;
 		elmo:applies-to thes:narrowerGeneric;
-		elmo:index "08";
+		elmo:index "09";
 	];
 	elmo:fragment [ 
 		rdfs:label "Is onderdeel van"@nl;
 		elmo:applies-to thes:broaderPartitive;
-		elmo:index "09";
+		elmo:index "10";
 	];
 	elmo:fragment [
 		rdfs:label "Bestaat uit"@nl;
 		elmo:applies-to thes:narrowerPartitive;
-		elmo:index "10";
+		elmo:index "11";
 	];
 	elmo:fragment [
 		rdfs:label "Heeft betrekking op"@nl;
 		elmo:applies-to skos:semanticRelation;
-		elmo:index "11";
+		elmo:index "12";
 	];
 	elmo:fragment [
 		rdfs:label "Synoniemen"@nl;
 		elmo:applies-to skos:altLabel;
-		elmo:index "12";
+		elmo:index "13";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum versie"@nl;
 		elmo:applies-to prov:generatedAtTime;
-		elmo:index "13";
+		elmo:index "14";
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum versie"@nl;
 		elmo:applies-to prov:invalidatedAtTime;
-		elmo:index "14";
+		elmo:index "15";
 	];
 	elmo:fragment [
 		rdfs:label "Laatste activiteit"@nl;
 		elmo:applies-to prov:wasGeneratedBy;
-		elmo:index "15";
+		elmo:index "16";
 	];
 	elmo:fragment [
 		rdfs:label "Lid van"@nl;
 		elmo:applies-to skos:member;
-		elmo:index "16";
+		elmo:index "17";
 	];
 	elmo:fragment [
 		rdfs:label "Periode geldigheid"@nl;
 		elmo:applies-to dct:valid;
-		elmo:index "17";
+		elmo:index "18";
 	];
 	elmo:fragment [
 		rdfs:label "Is gerealiseerd in"@nl;
 		elmo:applies-to foaf:focus;
-		elmo:index "18";
+		elmo:index "19";
 	];
 	elmo:fragment [
 		rdfs:label "Is ongeveer hetzelfde als"@nl;
 		elmo:applies-to skos:closeMatch;
-		elmo:index "21";
+		elmo:index "20";
 	];
 	elmo:fragment [
 		rdfs:label "Is hetzelfde als"@nl;
 		elmo:applies-to skos:exactMatch;
-		elmo:index "22";
+		elmo:index "21";
 	];		
 	elmo:fragment [
 		rdfs:label "Zie ook (in ander schema)"@nl;
 		elmo:applies-to skos:relatedMatch;
-		elmo:index "23";
+		elmo:index "22";
 	];
 	elmo:fragment [
 		rdfs:label "Is breder dan (in ander schema)"@nl;
 		elmo:applies-to skos:broadMatch;
-		elmo:index "24";
+		elmo:index "23";
 	];
 	elmo:fragment [
 		rdfs:label "Is enger dan (in ander schema)"@nl;
 		elmo:applies-to skos:narrowMatch;
-		elmo:index "25";
+		elmo:index "24";
 	];
 	elmo:fragment [
 		rdfs:label "Regels die verwijzen naar dit concept"@nl;
 		elmo:applies-to skoslex:refersTo;
-		elmo:index "26";
+		elmo:index "25";
 	];
 	elmo:fragment [
 		rdfs:label "Startdatum"@nl;
 		elmo:applies-to prov:startedAtTime;
-		elmo:index "27";
+		elmo:index "26";
 	];
 	elmo:fragment [
 		rdfs:label "Einddatum"@nl;
 		elmo:applies-to prov:endedAtTime;
-		elmo:index "28";
+		elmo:index "27";
 	];
 	elmo:fragment [
 		rdfs:label "Uitgevoerd door"@nl;
 		elmo:applies-to prov:wasAssociatedWith;
-		elmo:index "29";
+		elmo:index "28";
 	];
 	elmo:fragment [
 		rdfs:label "Namens organisatie"@nl;
 		elmo:applies-to prov:actedOnBehalfOf;
-		elmo:index "32";
+		elmo:index "29";
 	];	
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
