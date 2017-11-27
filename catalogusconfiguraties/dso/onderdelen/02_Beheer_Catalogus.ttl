@@ -63,7 +63,7 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
-			
+		prefix vcard: <http://www.w3.org/2006/vcard/ns#>
 		
 		CLEAR GRAPH versiongraph:version
 		
@@ -138,7 +138,14 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 					SELECT ?s ?p ?o
 					WHERE {
 						?s ?p ?o.
-						?s rdf:type dcat:Catalog.
+						?s rdf:type ?type.
+            FILTER
+            (
+              ?type = dcat:Catalog
+              || ?type = dctype:Text
+              || ?type = foaf:Image
+              || ?type = vcard:Organization
+            )
 					}
 					ORDER BY ?s ?p ?o
 				}
@@ -152,9 +159,17 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH container:catalogusupdate {
-				?s rdf:type dcat:Catalog.
-			    ?s ?p ?o.
-			    ?s bp4mc2:signature ?sig
+				?s rdf:type ?type;
+			    ?p ?o;
+			    bp4mc2:signature ?sig
+        .
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
 			}
 			FILTER NOT EXISTS {
 				GRAPH doc:mastergraph {
@@ -173,7 +188,14 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 				?s rdfs:isDefinedBy ?g
 			}
 			GRAPH versiongraph:version {
-				?s rdf:type dcat:Catalog.
+				?s rdf:type ?type.
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
 			}
 			FILTER NOT EXISTS {
 				GRAPH ?g {
@@ -192,7 +214,14 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 				?s ?p ?o
 			}
 			GRAPH versiongraph:version {
-				?s rdf:type dcat:Catalog.
+				?s rdf:type ?type.
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
 			}
 		}
 
@@ -205,9 +234,16 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 		}
 		WHERE {
 			GRAPH versiongraph:version {
-			    ?s rdf:type dcat:Catalog.
-			    ?s bp4mc2:signature ?sig.
-            }
+        ?s rdf:type ?type.
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
+        ?s bp4mc2:signature ?sig.
+      }
 		}
 		
 		CLEAR GRAPH container:catalogusupdate

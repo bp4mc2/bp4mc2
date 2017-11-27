@@ -23,7 +23,6 @@
 @prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
-@prefix foaf: <http://xmlns.com/foaf/spec/>.
 
 loc:DigitaalStelselOmgevingswet a dcat:Catalog;
 	rdfs:label "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
@@ -33,22 +32,27 @@ loc:DigitaalStelselOmgevingswet a dcat:Catalog;
 	dct:modified ""^^xsd:date;
 	dct:language iso:nl;
 	dct:license loc:CatalogusLicense;
-	dct:rights loc:CatalogusProclaimer;	
+	dct:rights loc:CatalogusProclaimer;
+  dcat:contactPoint loc:CatalogusContact;
 	foaf:homepage "https://www.digitaalstelselomgevingswet.nl/catalogus";
 	dct:spatial loc:EEZNederland;
 	dcat:dataset loc:Omgevingswet;
 	dcat:dataset <http://brt.basisregistraties.overheid.nl/>;
 .
 
-loc:CatalogusLicense a dct:Text;
+loc:CatalogusLicense a dctype:Text;
   dct:description '''"THE BEER-WARE LICENSE" (Local application for the GCO Catalog version 1.0):  
-	This file was written by <Arjen.Santema@Kadaster.nl>,<Marco.Brattinga@ordina.nl>,<Wessel.Schollmeijer@ordina.nl>,<Lars.Wortel@capgemini.com>, and <Joost.Aafjes@kadaster.nl>.  
+	This file was written by the Kadaster Catalogus Team.  
 	As long as you retain this notice you can do whatever you want to do with this stuff. If we meet some day, and you think this stuff is worth it, you can buy us a beer in return.  
 	Arjen Santema  
 	Marco Brattinga  
 	Wessel Schollmeijer  
 	Lars Wortel  
-	Joost Aafjes''';
+	Joost Aafjes
+  Philipp Jurgensen
+  Ingrid Thurlings
+  Ad Reuijl
+  Barry van der Sluis'''^^rdf:html;
   foaf:depiction loc:CatalogusLicenseImage
 .
 
@@ -61,8 +65,14 @@ loc:CatalogusLicenseImage a foaf:Image;
   dct:source <http://data.test.pdok.nl/catalogus/images/beerthumbnail.png>
 .
 
-loc:CatalogusProclaimer a dct:Text;
+loc:CatalogusProclaimer a dctype:Text;
   dct:description "De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud."
+.
+
+loc:CatalogusContact a vcard:Organization;
+  vcard:note "Voor vragen over de Omgevingswet kunt u contact opnemen met het Informatiepunt Omgevingswet. U krijgt binnen 2 werkdagen een reactie.";
+  vcard:hasURL "http://aandeslagmetdeomgevingswet.nl/stel-uw-vraag/";
+  vcard:hasTelephone "088-79 70 790"
 .
 
 loc:EEZNederland a dct:Location;
@@ -104,7 +114,7 @@ loc:PDOKFrontend a dcat:Distribution;
 	dcat:downloadURL "http://data.test.pdok.nl/catalogus/dso";
 .
 
-loc:PDOKProclaimer a dct:Text;
+loc:PDOKProclaimer a dctype:Text;
   dct:description "Wilt u direct aan  de slag met BRK Levering? Raadpleeg dan de reference card bij 'Documenten'. Daarin vindt u de stappen die u moet zetten om met BRK Levering te kunnen starten. Eerste of Ã©Ã©nmalige levering tot 100.000 objecten, per object â‚¬1,16;tot 1.000.000 objecten, per object â‚¬0,98;bij meer dan 1.000.000 objecten, per object â‚¬0,73;Gebiedsuitbreiding van een bestaand abonnement, per object â‚¬1,16;Abonnementslevering, per jaar en per 1.000 objecten binnen abonnement â‚¬208,00;Extra (losse) levering van een bestand, per verstrekking â‚¬192,00;Tweede mutatie-abonnement, per jaar â‚¬192,00;Deze bedragen zijn vrij van btw;Dit product valt onder de budgetfinanciering BRK."
 .
 
