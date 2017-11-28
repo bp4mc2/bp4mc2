@@ -7040,7 +7040,9 @@ stage:DSODatasetQuery a elmo:Query;
 			GRAPH ?g {
 				?dataset rdf:type skos:ConceptScheme.
 				?dataset rdfs:label ?dataset_label.
-				?dataset rdfs:comment ?uitleg.
+        OPTIONAL {
+          ?dataset rdfs:comment ?uitleg.
+        }
 				FILTER NOT EXISTS {
 					?dataset prov:invalidatedAtTime ?time.
 				}
