@@ -31,19 +31,48 @@ loc:DigitaalStelselOmgevingswet a dcat:Catalog;
 	dct:issued "2016-07-16"^^xsd:date;
 	dct:modified ""^^xsd:date;
 	dct:language iso:nl;
-	dct:license '''"THE BEER-WARE LICENSE" (Local application for the GCO Catalog version 1.0):  
-	This file was written by <Arjen.Santema@Kadaster.nl>,<Marco.Brattinga@ordina.nl>,<Wessel.Schollmeijer@ordina.nl>,<Lars.Wortel@capgemini.com>, and <Joost.Aafjes@kadaster.nl>.  
+	dct:license loc:CatalogusLicense;
+	dct:rights loc:CatalogusProclaimer;
+  dcat:contactPoint loc:CatalogusContact;
+	foaf:homepage "https://www.digitaalstelselomgevingswet.nl/catalogus";
+	dct:spatial loc:EEZNederland;
+	dcat:dataset loc:Omgevingswet;
+	dcat:dataset <http://brt.basisregistraties.overheid.nl/>;
+.
+
+loc:CatalogusLicense a dctype:Text;
+  dct:description '''"THE BEER-WARE LICENSE" (Local application for the GCO Catalog version 1.0):  
+	This file was written by the Kadaster Catalogus Team.  
 	As long as you retain this notice you can do whatever you want to do with this stuff. If we meet some day, and you think this stuff is worth it, you can buy us a beer in return.  
 	Arjen Santema  
 	Marco Brattinga  
 	Wessel Schollmeijer  
 	Lars Wortel  
-	Joost Aafjes''';
-	dct:rights "De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud.";	
-	foaf:homepage "https://www.digitaalstelselomgevingswet.nl/catalogus";
-	dct:spatial loc:EEZNederland;
-	dcat:dataset loc:Omgevingswet;
-	dcat:dataset <http://brt.basisregistraties.overheid.nl/>;
+	Joost Aafjes
+  Philipp Jurgensen
+  Ingrid Thurlings
+  Ad Reuijl
+  Barry van der Sluis'''^^rdf:html;
+  foaf:depiction loc:CatalogusLicenseImage
+.
+
+loc:CatalogusLicenseImage a foaf:Image;
+  dct:source <http://localhost:8080/catalogus/images/beer.png>;
+  foaf:thumbnail loc:CatalogusLicenseThumbnail
+.
+
+loc:CatalogusLicenseImage a foaf:Image;
+  dct:source <http://localhost:8080/catalogus/images/beerthumbnail.png>
+.
+
+loc:CatalogusProclaimer a dctype:Text;
+  dct:description "De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud."
+.
+
+loc:CatalogusContact a vcard:Organization;
+  vcard:note "Voor vragen over de Omgevingswet kunt u contact opnemen met het Informatiepunt Omgevingswet. U krijgt binnen 2 werkdagen een reactie.";
+  vcard:hasURL "http://aandeslagmetdeomgevingswet.nl/stel-uw-vraag/";
+  vcard:hasTelephone "088-79 70 790"
 .
 
 loc:EEZNederland a dct:Location;
@@ -79,33 +108,22 @@ loc:PDOKFrontend a dcat:Distribution;
 	dct:title "Digitale Kadastrale Kaart Download Service";
 	dct:description "Het Kadaster is houder van de Basisregistratie Kadaster (BRK). Onderdeel van de BRK is de Digitale kadastrale kaart. Deze is beschikbaar als open data en nu via dit portaal ook als Linked Open Data (vooralsnog zonder de topografie).";
 	dct:issued "2016-07-16"^^xsd:date;
-	dct:license '''"THE BEER-WARE LICENSE" (Local application for the GCO Catalog version 1.0):  
-	This file was written by <Arjen.Santema@Kadaster.nl>,<Marco.Brattinga@ordina.nl>,<Wessel.Schollmeijer@ordina.nl>,<Lars.Wortel@capgemini.com>, <lennart.vanbergen@kadaster.nl> and <Joost.Aafjes@kadaster.nl>.  
-	As long as you retain this notice you can do whatever you want to do with this stuff. If we meet some day, and you think this stuff is worth it, you can buy us a beer in return.  
-	Arjen Santema  
-	Marco Brattinga  
-	Wessel Schollmeijer  
-	Lars Wortel
-	Lennart van Bergen
-	Joost Aafjes''';
-	dct:rights "Wilt u direct aan  de slag met BRK Levering? Raadpleeg dan de reference card bij 'Documenten'. Daarin vindt u de stappen die u moet zetten om met BRK Levering te kunnen starten. Eerste of éénmalige levering tot 100.000 objecten, per object €1,16;tot 1.000.000 objecten, per object €0,98;bij meer dan 1.000.000 objecten, per object €0,73;Gebiedsuitbreiding van een bestaand abonnement, per object €1,16;Abonnementslevering, per jaar en per 1.000 objecten binnen abonnement €208,00;Extra (losse) levering van een bestand, per verstrekking €192,00;Tweede mutatie-abonnement, per jaar €192,00;Deze bedragen zijn vrij van btw;Dit product valt onder de budgetfinanciering BRK.";	
+	dct:license loc:CatalogusLicense;
+	dct:rights 	loc:PDOKProclaimer;
 	dcat:accessURL "http://localhost:8080/catalogus/dso";
 	dcat:downloadURL "http://localhost:8080/catalogus/dso";
 .
+
+loc:PDOKProclaimer a dctype:Text;
+  dct:description "Wilt u direct aan  de slag met BRK Levering? Raadpleeg dan de reference card bij 'Documenten'. Daarin vindt u de stappen die u moet zetten om met BRK Levering te kunnen starten. Eerste of éénmalige levering tot 100.000 objecten, per object €1,16;tot 1.000.000 objecten, per object €0,98;bij meer dan 1.000.000 objecten, per object €0,73;Gebiedsuitbreiding van een bestaand abonnement, per object €1,16;Abonnementslevering, per jaar en per 1.000 objecten binnen abonnement €208,00;Extra (losse) levering van een bestand, per verstrekking €192,00;Tweede mutatie-abonnement, per jaar €192,00;Deze bedragen zijn vrij van btw;Dit product valt onder de budgetfinanciering BRK."
+.
+
 loc:PDOKSparql a dcat:Distribution;
 	dct:title "Digitale Kadastrale Kaart Sparql Endpoint";
 	dct:description "Het Kadaster is houder van de Basisregistratie Kadaster (BRK). Onderdeel van de BRK is de Digitale kadastrale kaart. Deze is beschikbaar als open data en nu via dit Sparql-endpoint ook als Linked Open Data (vooralsnog zonder de topografie).";
 	dct:issued "2016-07-16"^^xsd:date;
-	dct:license '''"THE BEER-WARE LICENSE" (Local application for the GCO Catalog version 1.0):  
-	This file was written by <Arjen.Santema@Kadaster.nl>,<Marco.Brattinga@ordina.nl>,<Wessel.Schollmeijer@ordina.nl>,<Lars.Wortel@capgemini.com>, <lennart.vanbergen@kadaster.nl> and <Joost.Aafjes@kadaster.nl>.  
-	As long as you retain this notice you can do whatever you want to do with this stuff. If we meet some day, and you think this stuff is worth it, you can buy us a beer in return.  
-	Arjen Santema  
-	Marco Brattinga  
-	Wessel Schollmeijer  
-	Lars Wortel
-	Lennart van Bergen
-	Joost Aafjes''';
-	dct:rights "Wilt u direct aan  de slag met BRK Levering? Raadpleeg dan de reference card bij 'Documenten'. Daarin vindt u de stappen die u moet zetten om met BRK Levering te kunnen starten. Eerste of éénmalige levering tot 100.000 objecten, per object €1,16;tot 1.000.000 objecten, per object €0,98;bij meer dan 1.000.000 objecten, per object €0,73;Gebiedsuitbreiding van een bestaand abonnement, per object €1,16;Abonnementslevering, per jaar en per 1.000 objecten binnen abonnement €208,00;Extra (losse) levering van een bestand, per verstrekking €192,00;Tweede mutatie-abonnement, per jaar €192,00;Deze bedragen zijn vrij van btw;Dit product valt onder de budgetfinanciering BRK.";
+	dct:license loc:CatalogusLicense;
+	dct:rights loc:PDOKProclaimer;
 	dcat:accessURL "http://localhost:8080/catalogus/dso/sparql";
 .
 <http://brt.basisregistraties.overheid.nl/> a dcat:Dataset;
