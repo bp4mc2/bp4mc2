@@ -3255,10 +3255,37 @@ updatestage:clearalldata a elmo:Production;
 	elmo:contains stage:DSOFooter;
 	elmo:queryForm stage:DSODummyForm;
 	elmo:contains stage:ClearAllDataScene;
+  elmo:contains stage:ja_nee
 .
 
 # DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
-stage:DSODummyForm a elmo:Form.
+stage:DSODummyForm a elmo:Form;
+	rdfs:label "Weet je zeker dat je alle data wilt verwijderen?!";
+	elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "zeker";
+      rdfs:label "Zeker weten"@nl;
+      elmo:valuesFrom stage:ja_nee;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "2";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "3";
+  ]
+.
+
+stage:ja_nee a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    CONSTRUCT {
+      <http://ja.nl> rdfs:label "Ja".
+      <http://nee.nl> rdfs:label "Nee".
+    }
+    WHERE {}
+  ''';
+.
 
 
 #
@@ -3282,6 +3309,7 @@ stage:ClearAllDataScene a elmo:Scene;
 			}
 			FILTER regex(?g, "^http://data.acceptatie.pdok.nl/catalogus/dso/(?!stage)")
 			FILTER( ?g != container:smw )
+      FILTER( "@ZEKER@" = "http://ja.nl" )
 		}
 	'''
 .
@@ -3714,6 +3742,12 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to prov:actedOnBehalfOf;
 		elmo:index "29";
 	];	
+  elmo:fragment [
+    rdfs:label "Voorbeeld"@nl;
+    elmo:applies-to skos:example;
+    elmo:index "05";
+    elmo:appearance elmo:ImageAppearance
+  ];
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
 
