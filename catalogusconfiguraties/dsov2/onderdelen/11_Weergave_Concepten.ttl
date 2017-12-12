@@ -12,7 +12,50 @@ stage:WeergavePaginaConcepten a elmo:Representation;
     
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
-  elmo:contains stage:DSOv2ConceptQuery
+  
+  # Weergave
+  elmo:contains stage:WeergavePaginaConceptenAppearance
+.
+
+stage:WeergavePaginaConceptenAppearance a elmo:Part;
+  elmo:appearance elmo:ContentAppearance;
+  elmo:fragment [
+    elmo:applies-to skos:definition;
+    rdfs:label "Definitie"@nl;
+    elmo:index "01"
+  ];
+  elmo:fragment [
+    elmo:applies-to adms:status;
+    rdfs:label "Status"@nl;
+    elmo:appearance elmo:GlobalLink;
+    elmo:index "02"
+  ];
+  elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:applies-to dct:issued;
+    rdfs:label "Bekendgemaakt op"@nl;
+    elmo:index "03"
+  ];
+  elmo:fragment [
+    elmo:applies-to dcmiperiod:start;
+    rdfs:label "Startdatum geldigheid"@nl;
+    elmo:index "04"
+  ];
+  elmo:fragment [
+    elmo:applies-to dcmiperiod:end;
+    rdfs:label "Einddatum geldigheid"@nl;
+    elmo:index "05"
+  ];
+  elmo:fragment [
+    elmo:applies-to prov:generatedAtTime;
+    rdfs:label "Beschikbaar op"@nl;
+    elmo:index "06"
+  ];
+  elmo:fragment [
+    elmo:applies-to rdfs:label;
+    elmo:appearance elmo:HiddenAppearance
+  ];
+  elmo:query stage:DSOv2ConceptQuery
 .
 
 # Query voor WeergaveTabel
@@ -32,14 +75,23 @@ stage:DSOv2ConceptQuery a elmo:Query;
         dct:issued ?issued;
         dcmiperiod:start ?start;
         dcmiperiod:end ?end;
-        dct:startdt ?startdt;
         prov:generatedAtTime ?time
       .
+      adms-status:Deprecated rdfs:label "Vervallen".
+      adms-status:Completed rdfs:label "Te gebruiken".
+      adms-status:Withdrawn rdfs:label "Teruggetrokken".
+      adms-status:UnderDevelopment rdfs:label "Werkversie".
+      slex-status:Issued rdfs:label "Bekendgemaakt".
 		}
 		WHERE {
       GRAPH ?graph {
         <@IDSUBJECT@> ?p ?o;
           wdrs:describedby ?doc.
+          
+        FILTER(
+          ?p = skos:definition
+          || ?p = rdfs:label
+        )
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
@@ -58,30 +110,31 @@ stage:DSOv2ConceptQuery a elmo:Query;
       }
       
       BIND(
-        IF( substr( "@BESCHIKBAAR@", 2 ) = "BESCHIKBAAR@",  now(), 
-                                                            strdt( "@BESCHIKBAAR@", xsd:dateTime )
+        IF( substr( "@BESCHIKBAAROP@", 2 ) = "BESCHIKBAAROP@",  now(), 
+                                                            strdt( "@BESCHIKBAAROP@", xsd:dateTime )
         ) AS ?requestedGenerated
       )
       BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
-      BIND( strdt( "@INWERKING@", xsd:dateTime ) AS ?requestedEnacted )
+      BIND( strdt( "@GELDIGOP@", xsd:dateTime ) AS ?requestedEnacted )
       BIND(
-        IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
-        IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
-        IF( "@STATUS@" = "vervallen",     adms-status:Deprecated,
-                                          slex-status:Enacted
-        ) ) ) AS ?requestedStatus
+        IF( LCASE( "@STATUS@" ) = "bekendgemaakt",   slex-status:Issued,
+        IF( LCASE( "@STATUS@" ) = "werkversie",      adms-status:UnderDevelopment,
+        IF( LCASE( "@STATUS@" ) = "teruggetrokken",  adms-status:Withdrawn,
+        IF( LCASE( "@STATUS@" ) = "vervallen",       adms-status:Deprecated,
+                                            adms-status:Completed
+        ) ) ) ) AS ?requestedStatus
       )
       
       FILTER(
-        ?status = ?requestedStatus
-        && ?time <= ?requestedGenerated
+        ?time <= ?requestedGenerated
+        && ?status = ?requestedStatus
         && (
           substr( "@BEKEND@", 2 ) = "BEKEND@"
           || strdt( ?issued, xsd:date ) <= ?requestedIssued
         )
         && (
           (
-            substr( "@INWERKING@", 2 ) = "INWERKING@"
+            substr( "@GELDIGOP@", 2 ) = "GELDIGOP@"
             && (
               !BOUND( ?start )
               ||

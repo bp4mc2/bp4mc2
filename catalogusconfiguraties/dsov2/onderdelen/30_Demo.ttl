@@ -63,7 +63,7 @@ stage:DemoMenu a elmo:Part;
 			<urn:menu5> elmo:index "5";
 						rdfs:label "Statusverandering";
 						elmo:data [elmo:index "1"; rdfs:label "Bekendmaken"; xhtml:link "update/bekendmaken"];
-						elmo:data [elmo:index "2"; rdfs:label "In werking treden"; xhtml:link "update/inwerkingtreden"].
+						elmo:data [elmo:index "2"; rdfs:label "Geldig maken"; xhtml:link "update/geldigmaken"].
 		}
 		where {
 			select (group_concat(?label; separator=',') as ?glabel) (group_concat(?link; separator=',') as ?glink)
@@ -99,6 +99,7 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "2";
 	];
   elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
 		elmo:applies-to dct:latestIssued;
 		rdfs:label "Actuele bekendmaking:";
 		elmo:index "3";
@@ -126,10 +127,11 @@ stage:DemoBegripVersies a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to prov:generatedAtTime;
-		rdfs:label "Tijdstip:";
+		rdfs:label "Beschikbaar op:";
 		elmo:index "2";
 	];
 	elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
 		elmo:applies-to dct:issued;
 		rdfs:label "Bekendgemaakt op:";
 		elmo:index "3";
@@ -168,8 +170,9 @@ stage:DemoBegripVersies a elmo:Part;
 			?metadata prov:generatedAtTime ?doctijdstip.
 			adms-status:UnderDevelopment rdfs:label "Werkversie".
 			adms-status:Deprecated rdfs:label "Vervallen".
+			adms-status:Withdrawn rdfs:label "Teruggetrokken".
 			slex-status:Issued rdfs:label "Bekendgemaakt".
-			slex-status:Enacted rdfs:label "In werking getreden".
+			adms-status:Completed rdfs:label "Te gebruiken".
 		}
 		where {
 			graph ?g {
@@ -249,7 +252,10 @@ stage:DemoGraph a elmo:Part;
 					?gdoc prov:generatedAtTime ?doctijdstip.
           BIND( IF( ?status = adms-status:UnderDevelopment, "Werkversie",
                 IF( ?status = slex-status:Issued, "Bekendgemaakt", 
-                IF( ?status = slex-status:Enacted, "In werking getreden", "Vervallen" ) ) ) AS ?statusstring )
+                IF( ?status = adms-status:Completed, "Te gebruiken",
+                IF( ?status = adms-status:Withdrawn, "Teruggetrokken",
+                IF( ?status = adms-status:Deprecated, "Vervallen"
+                , str( ?status ) ) ) ) ) ) AS ?statusstring )
 					BIND (concat(?statusstring,' (',?doctijdstip,')') as ?label)
 					BIND (iri(concat('@SUBJECT@','?graph=',str(?gdoc))) as ?metadata)
 				}
@@ -272,7 +278,7 @@ updatestage:bekendmaken a elmo:Production;
 	elmo:contains stage:IssueConceptScene;
 .
 
-updatestage:inwerkingtreden a elmo:Production;
+updatestage:geldigmaken a elmo:Production;
   elmo:contains stage:DemoMenu;
 	elmo:contains stage:search-concepts-nonenacted;
 	elmo:queryForm stage:DSOv2EnactConceptsForm;

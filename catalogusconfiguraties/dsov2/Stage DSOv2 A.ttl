@@ -127,7 +127,7 @@ stage:DSOv2Beheermenu a elmo:Part;
 				xhtml:link "/catalogus/dsov2/update/concept-issue";
 			];
       elmo:data [
-				rdfs:label "Laat begrip in werking treden";
+				rdfs:label "Maak begrip geldig";
 				elmo:index "05";
 				xhtml:link "/catalogus/dsov2/update/concept-enact";
 			];
@@ -313,7 +313,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         .
         
         ?udDoc ?docP ?docO;
-          adms:status adms-status:Deprecated
+          adms:status adms-status:Withdrawn
         .
         
         ?activity rdf:type prov:Activity;
@@ -399,7 +399,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           ?pred ?obj
         .
         
-        ?doc adms:status skos-lex-status:Enacted;
+        ?doc adms:status adms-status:Completed;
           prov:wasRevisionOf ?currentDoc;
           prov:wasGeneratedBy ?activity;
           ?docP ?docO
@@ -447,13 +447,13 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
             FILTER( ?newerTime > ?graphTime )
           }
           GRAPH ?docNewerGraph {
-            ?newerDoc adms:status skos-lex-status:Enacted
+            ?newerDoc adms:status adms-status:Completed
           }
         }
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
-        ?currentDoc adms:status skos-lex-status:Enacted;
+        ?currentDoc adms:status adms-status:Completed;
           ?docP ?docO
         .
         OPTIONAL {
@@ -468,7 +468,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         ?docGraph prov:generatedAtTime ?docGraphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerDocGraph {
-            ?thisDoc adms:status skos-lex-status:Enacted.
+            ?thisDoc adms:status adms-status:Completed.
             ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
             FILTER( ?newerDocGraphTime > ?docGraphTime )
           }
@@ -510,7 +510,7 @@ updatestage:concept-enact a elmo:Production;
 	elmo:contains stage:search-concepts-nonenacted;
 	elmo:queryForm stage:DSOv2EnactConceptsForm;
 	elmo:contains stage:EnactConceptScene;
-	elmo:contains stage:werkingsregels;
+	elmo:contains stage:geldigheidsregels;
 .
 
 #
@@ -545,17 +545,17 @@ stage:DSOv2EnactConceptsForm a elmo:Form;
 		elmo:index "1";
 	];
 	elmo:fragment [
-		elmo:applies-to "werkingsregel";
-		rdfs:label "Werkingsregel:"@nl;
-		elmo:valuesFrom stage:werkingsregels;
+		elmo:applies-to "geldigheidsregel";
+		rdfs:label "Geldigheidsregel:"@nl;
+		elmo:valuesFrom stage:geldigheidsregels;
 		rdf:value <urn:wr-ow>;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "2";
 	];
 	elmo:fragment [
-		elmo:applies-to "werkingsmoment";
+		elmo:applies-to "geldigheid";
 		elmo:valueDatatype xsd:Date;
-		rdfs:label "Werkingsmoment:"@nl;
+		rdfs:label "Geldigheid:"@nl;
 		elmo:constraint elmo:MandatoryConstraint;
 		rdf:value elmo:Now;
 		elmo:index "3";
@@ -566,7 +566,7 @@ stage:DSOv2EnactConceptsForm a elmo:Form;
 		elmo:index "4";
 	];
 .
-stage:werkingsregels a elmo:Part;
+stage:geldigheidsregels a elmo:Part;
 	elmo:appearance elmo:HiddenAppearance;
 	elmo:query '''
 		construct {
@@ -645,8 +645,9 @@ stage:search-concepts-nonenacted a elmo:Part;
           adms:status ?status.
         
         FILTER(
-          ?status != slex-status:Enacted 
+          ?status != adms-status:Completed
           && ?status != adms-status:Deprecated
+          && ?status != adms-status:Withdrawn
         )
         
         ?docGraph prov:generatedAtTime ?docGraphTime.       
@@ -779,22 +780,22 @@ stage:EnactConceptScene a elmo:Scene;
         .
 
         ?doc ?p ?o;
-          adms:status slex-status:Enacted;
+          adms:status adms-status:Completed;
           dcterms:issued ?issuedDate;
           dcterms:temporal ?period;
           prov:wasGeneratedBy ?activity
         .
         
-        ?period dcmiperiod:start "@WERKINGSMOMENT@".
+        ?period dcmiperiod:start "@GELDIGHEID@".
         
         ?prevDoc ?prevP ?prevO;
           dcterms:temporal ?prevTemporal.
           
         ?prevTemporal dcmiperiod:start ?prevStart;
-          dcmiperiod:end "@WERKINGSMOMENT@".
+          dcmiperiod:end "@GELDIGHEID@".
         
         ?activity rdf:type prov:Activity;
-          rdfs:label "In werkingtreding van het begrip";
+          rdfs:label "Start van het gebruik van het begrip";
           prov:startedAtTime ?now;
           prov:wasAssociatedWith user:TomcatUser
         .
@@ -810,7 +811,10 @@ stage:EnactConceptScene a elmo:Scene;
           && ?p != dcterms:issued
           && ?p != prov:wasGeneratedBy
         )
-        FILTER( ?status != adms-status:Deprecated )
+        FILTER( 
+          ?status != adms-status:Deprecated
+          && ?status != adms-status:Withdrawn
+        )
         OPTIONAL {
           ?doc dcterms:issued ?currentIssued.
         }
@@ -1069,7 +1073,50 @@ stage:WeergavePaginaConcepten a elmo:Representation;
     
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
-  elmo:contains stage:DSOv2ConceptQuery
+  
+  # Weergave
+  elmo:contains stage:WeergavePaginaConceptenAppearance
+.
+
+stage:WeergavePaginaConceptenAppearance a elmo:Part;
+  elmo:appearance elmo:ContentAppearance;
+  elmo:fragment [
+    elmo:applies-to skos:definition;
+    rdfs:label "Definitie"@nl;
+    elmo:index "01"
+  ];
+  elmo:fragment [
+    elmo:applies-to adms:status;
+    rdfs:label "Status"@nl;
+    elmo:appearance elmo:GlobalLink;
+    elmo:index "02"
+  ];
+  elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
+    elmo:applies-to dct:issued;
+    rdfs:label "Bekendgemaakt op"@nl;
+    elmo:index "03"
+  ];
+  elmo:fragment [
+    elmo:applies-to dcmiperiod:start;
+    rdfs:label "Startdatum geldigheid"@nl;
+    elmo:index "04"
+  ];
+  elmo:fragment [
+    elmo:applies-to dcmiperiod:end;
+    rdfs:label "Einddatum geldigheid"@nl;
+    elmo:index "05"
+  ];
+  elmo:fragment [
+    elmo:applies-to prov:generatedAtTime;
+    rdfs:label "Beschikbaar op"@nl;
+    elmo:index "06"
+  ];
+  elmo:fragment [
+    elmo:applies-to rdfs:label;
+    elmo:appearance elmo:HiddenAppearance
+  ];
+  elmo:query stage:DSOv2ConceptQuery
 .
 
 # Query voor WeergaveTabel
@@ -1089,14 +1136,23 @@ stage:DSOv2ConceptQuery a elmo:Query;
         dct:issued ?issued;
         dcmiperiod:start ?start;
         dcmiperiod:end ?end;
-        dct:startdt ?startdt;
         prov:generatedAtTime ?time
       .
+      adms-status:Deprecated rdfs:label "Vervallen".
+      adms-status:Completed rdfs:label "Te gebruiken".
+      adms-status:Withdrawn rdfs:label "Teruggetrokken".
+      adms-status:UnderDevelopment rdfs:label "Werkversie".
+      slex-status:Issued rdfs:label "Bekendgemaakt".
 		}
 		WHERE {
       GRAPH ?graph {
         <@IDSUBJECT@> ?p ?o;
           wdrs:describedby ?doc.
+          
+        FILTER(
+          ?p = skos:definition
+          || ?p = rdfs:label
+        )
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
@@ -1115,30 +1171,31 @@ stage:DSOv2ConceptQuery a elmo:Query;
       }
       
       BIND(
-        IF( substr( "@BESCHIKBAAR@", 2 ) = "BESCHIKBAAR@",  now(), 
-                                                            strdt( "@BESCHIKBAAR@", xsd:dateTime )
+        IF( substr( "@BESCHIKBAAROP@", 2 ) = "BESCHIKBAAROP@",  now(), 
+                                                            strdt( "@BESCHIKBAAROP@", xsd:dateTime )
         ) AS ?requestedGenerated
       )
       BIND( strdt( "@BEKEND@", xsd:date ) AS ?requestedIssued )
-      BIND( strdt( "@INWERKING@", xsd:dateTime ) AS ?requestedEnacted )
+      BIND( strdt( "@GELDIGOP@", xsd:dateTime ) AS ?requestedEnacted )
       BIND(
-        IF( "@STATUS@" = "bekendgemaakt", slex-status:Issued,
-        IF( "@STATUS@" = "werkversie",    adms-status:UnderDevelopment,
-        IF( "@STATUS@" = "vervallen",     adms-status:Deprecated,
-                                          slex-status:Enacted
-        ) ) ) AS ?requestedStatus
+        IF( LCASE( "@STATUS@" ) = "bekendgemaakt",   slex-status:Issued,
+        IF( LCASE( "@STATUS@" ) = "werkversie",      adms-status:UnderDevelopment,
+        IF( LCASE( "@STATUS@" ) = "teruggetrokken",  adms-status:Withdrawn,
+        IF( LCASE( "@STATUS@" ) = "vervallen",       adms-status:Deprecated,
+                                            adms-status:Completed
+        ) ) ) ) AS ?requestedStatus
       )
       
       FILTER(
-        ?status = ?requestedStatus
-        && ?time <= ?requestedGenerated
+        ?time <= ?requestedGenerated
+        && ?status = ?requestedStatus
         && (
           substr( "@BEKEND@", 2 ) = "BEKEND@"
           || strdt( ?issued, xsd:date ) <= ?requestedIssued
         )
         && (
           (
-            substr( "@INWERKING@", 2 ) = "INWERKING@"
+            substr( "@GELDIGOP@", 2 ) = "GELDIGOP@"
             && (
               !BOUND( ?start )
               ||
@@ -1422,7 +1479,7 @@ stage:DemoMenu a elmo:Part;
 			<urn:menu5> elmo:index "5";
 						rdfs:label "Statusverandering";
 						elmo:data [elmo:index "1"; rdfs:label "Bekendmaken"; xhtml:link "update/bekendmaken"];
-						elmo:data [elmo:index "2"; rdfs:label "In werking treden"; xhtml:link "update/inwerkingtreden"].
+						elmo:data [elmo:index "2"; rdfs:label "Geldig maken"; xhtml:link "update/geldigmaken"].
 		}
 		where {
 			select (group_concat(?label; separator=',') as ?glabel) (group_concat(?link; separator=',') as ?glink)
@@ -1458,6 +1515,7 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "2";
 	];
   elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
 		elmo:applies-to dct:latestIssued;
 		rdfs:label "Actuele bekendmaking:";
 		elmo:index "3";
@@ -1485,10 +1543,11 @@ stage:DemoBegripVersies a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to prov:generatedAtTime;
-		rdfs:label "Tijdstip:";
+		rdfs:label "Beschikbaar op:";
 		elmo:index "2";
 	];
 	elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
 		elmo:applies-to dct:issued;
 		rdfs:label "Bekendgemaakt op:";
 		elmo:index "3";
@@ -1527,8 +1586,9 @@ stage:DemoBegripVersies a elmo:Part;
 			?metadata prov:generatedAtTime ?doctijdstip.
 			adms-status:UnderDevelopment rdfs:label "Werkversie".
 			adms-status:Deprecated rdfs:label "Vervallen".
+			adms-status:Withdrawn rdfs:label "Teruggetrokken".
 			slex-status:Issued rdfs:label "Bekendgemaakt".
-			slex-status:Enacted rdfs:label "In werking getreden".
+			adms-status:Completed rdfs:label "Te gebruiken".
 		}
 		where {
 			graph ?g {
@@ -1608,7 +1668,10 @@ stage:DemoGraph a elmo:Part;
 					?gdoc prov:generatedAtTime ?doctijdstip.
           BIND( IF( ?status = adms-status:UnderDevelopment, "Werkversie",
                 IF( ?status = slex-status:Issued, "Bekendgemaakt", 
-                IF( ?status = slex-status:Enacted, "In werking getreden", "Vervallen" ) ) ) AS ?statusstring )
+                IF( ?status = adms-status:Completed, "Te gebruiken",
+                IF( ?status = adms-status:Withdrawn, "Teruggetrokken",
+                IF( ?status = adms-status:Deprecated, "Vervallen"
+                , str( ?status ) ) ) ) ) ) AS ?statusstring )
 					BIND (concat(?statusstring,' (',?doctijdstip,')') as ?label)
 					BIND (iri(concat('@SUBJECT@','?graph=',str(?gdoc))) as ?metadata)
 				}
@@ -1631,7 +1694,7 @@ updatestage:bekendmaken a elmo:Production;
 	elmo:contains stage:IssueConceptScene;
 .
 
-updatestage:inwerkingtreden a elmo:Production;
+updatestage:geldigmaken a elmo:Production;
   elmo:contains stage:DemoMenu;
 	elmo:contains stage:search-concepts-nonenacted;
 	elmo:queryForm stage:DSOv2EnactConceptsForm;
