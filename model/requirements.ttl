@@ -219,8 +219,12 @@ req:Concept_isMember a sh:PropertyShape;
 #---------------------
 req:ExternConcept a sh:NodeShape;
 #   sh:targetClass skos:Concept; 
-  sh:name "Extern concept";
+  sh:name "skos:Concept (extern)";
     rdfs:label "Extern concept";
+    sh:property [
+      sh:path rdfs:label;
+      sh:name "rdfs:label";
+    ];
 .
 
 #---------------------
@@ -525,6 +529,7 @@ req:Begrippenkader_type a sh:PropertyShape;
 # Brondocument
 #---------------------
 req:Brondocument a sh:NodeShape;
+  sh:name "dctype:Text (brondocument)";
 	rdfs:label "Brondocument";
 	sh:targetClass dctype:Text;
 	sh:property req:Brondocument_versieVan;
