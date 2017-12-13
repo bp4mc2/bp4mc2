@@ -639,8 +639,8 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/catalogus/doc/@CURRENTMOMENT@>
 		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix catalogus: <http://localhost:8080/catalogus/dso/id/catalogus/>
-		prefix activity: <http://localhost:8080/catalogus/dso/id/catalogus/@CURRENTMOMENT@>
+		prefix agent: <http://localhost:8080/catalogus/dso/id/agent/>
+		prefix activity: <http://localhost:8080/catalogus/dso/id/activity/@CURRENTMOMENT@>
 		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
@@ -681,18 +681,18 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 				activity:Update rdf:type prov:Activity.
 				activity:Update rdfs:label "Update catalogus @CURRENTMOMENT@".
 				activity:Update prov:startedAtTime "@CURRENTMOMENT@".
-				activity:Update prov:wasAssociatedWith catalogus:tomcatUser.
+				activity:Update prov:wasAssociatedWith agent:tomcatUser.
 
 			}
 		}
 		
 		INSERT {
 			GRAPH usergraph:agents {
-				catalogus:tomcatUser rdf:type prov:Agent.
-				catalogus:tomcatUser rdfs:label "Tomcat User".
-				catalogus:tomcatUser foaf:givenName "Tomcat User".
-				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".	
+				agent:tomcatUser rdf:type prov:Agent.
+				agent:tomcatUser rdfs:label "Tomcat User".
+				agent:tomcatUser foaf:givenName "Tomcat User".
+				agent:tomcatUser foaf:mbox "tomcat@user.org".
+				agent:tomcatUser prov:actedOnBehalfOf "Apache".	
 			}
 		}
 		
@@ -2362,8 +2362,8 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix versionDataset: <http://localhost:8080/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
 		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix concept: <http://localhost:8080/catalogus/dso/id/concept/>
-		prefix activity: <http://localhost:8080/catalogus/dso/id/concept/@CURRENTMOMENT@>
+		prefix agent: <http://localhost:8080/catalogus/dso/id/agent/>
+		prefix activity: <http://localhost:8080/catalogus/dso/id/activity/@CURRENTMOMENT@>
 			
 	
 		DELETE {
@@ -2426,17 +2426,17 @@ stage:DSOUploadScenePUT a elmo:Scene;
 				activity:Upload rdf:type prov:Activity.
 				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-				activity:Upload prov:wasAssociatedWith concept:tomcatUser.
+				activity:Upload prov:wasAssociatedWith agent:tomcatUser.
 			}
 		}
 		
 		INSERT {
 			GRAPH usergraph:agents {
-				concept:tomcatUser rdf:type prov:Agent.
-				concept:tomcatUser rdfs:label "Tomcat User".
-				concept:tomcatUser foaf:givenName "Tomcat User".
-				concept:tomcatUser foaf:mbox "tomcat@user.org".
-				concept:tomcatUser prov:actedOnBehalfOf "Apache".
+				agent:tomcatUser rdf:type prov:Agent.
+				agent:tomcatUser rdfs:label "Tomcat User".
+				agent:tomcatUser foaf:givenName "Tomcat User".
+				agent:tomcatUser foaf:mbox "tomcat@user.org".
+				agent:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
 		
@@ -2775,8 +2775,8 @@ stage:DSODatasetUploadScene a elmo:Scene;
 		prefix versiongraph: <http://localhost:8080/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
 		prefix usergraph: <http://localhost:8080/catalogus/dso/>
 		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix catalogus: <http://localhost:8080/catalogus/dso/id/dataset/>
-		prefix activity: <http://localhost:8080/catalogus/dso/id/dataset/@CURRENTMOMENT@>
+		prefix agent: <http://localhost:8080/catalogus/dso/id/agent/>
+		prefix activity: <http://localhost:8080/catalogus/dso/id/activity/@CURRENTMOMENT@>
 		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
 		prefix dcat: <http://www.w3.org/ns/dcat#>
@@ -2825,17 +2825,17 @@ stage:DSODatasetUploadScene a elmo:Scene;
 				activity:Upload rdf:type prov:Activity.
 				activity:Upload rdfs:label "Upload catalogus @CURRENTMOMENT@".
 				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
-				activity:Upload prov:wasAssociatedWith catalogus:tomcatUser.
+				activity:Upload prov:wasAssociatedWith agent:tomcatUser.
 			}
 		}
 		
 		INSERT {
 			GRAPH usergraph:agents {
-				catalogus:tomcatUser rdf:type prov:Agent.
-				catalogus:tomcatUser rdfs:label "Tomcat User".
-				catalogus:tomcatUser foaf:givenName "Tomcat User".
-				catalogus:tomcatUser foaf:mbox "tomcat@user.org".
-				catalogus:tomcatUser prov:actedOnBehalfOf "Apache".
+				agent:tomcatUser rdf:type prov:Agent.
+				agent:tomcatUser rdfs:label "Tomcat User".
+				agent:tomcatUser foaf:givenName "Tomcat User".
+				agent:tomcatUser foaf:mbox "tomcat@user.org".
+				agent:tomcatUser prov:actedOnBehalfOf "Apache".
 			}
 		}
 		
