@@ -1,19 +1,28 @@
-@prefix rdf:            <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs:           <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml:          <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix skos:           <http://www.w3.org/2004/02/skos/core#>.
-@prefix skosax:         <http://bp4mc2.org/skosax#>.
-@prefix skoslex:        <http://bp4mc2.org/def/skos-lex/>.
-@prefix thes:           <http://purl.org/iso25964/skos-thes#>.
-@prefix dc:             <http://purl.org/dc/elements/1.1/>.
-@prefix dct:            <http://purl.org/dc/terms/>.
-@prefix dctype:         <http://purl.org/dc/dcmitype/>.
-@prefix prov:           <http://www.w3.org/ns/prov#>.
+@prefix owl: 		<http://www.w3.org/2002/07/owl#>.
+@prefix dso: 		<http://content.acc.omgevingswet.overheid.nl/id/concept/>.
+@prefix collection: <http://content.acc.omgevingswet.overheid.nl/id/collection/>.
+@prefix dataset: 	<http://content.acc.omgevingswet.overheid.nl/id/dataset/>.
+@prefix brt: 		<http://brt.basisregistraties.overheid.nl/id/begrip/>.
+@prefix rdf: 		<http://www.w3.org/1999/02/022-rdf-syntax-ns#>.
+@prefix rdfs: 		<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: 		<http://www.w3.org/2004/02/skos/core#>.
+@prefix skosax: 	<http://bp4mc2.org/skosax#>.
+@prefix skoslex:	<http://bp4mc2.org/def/skos-lex/>.
+@prefix thes: 		<http://purl.org/iso25964/skos-thes#>.
+@prefix dc: 		<http://purl.org/dc/elements/1.1>.
+@prefix dcterms: 	<http://purl.org/dc/terms/>.
+@prefix dctypes: 	<http://purl.org/dc/dcmitype/>.
+@prefix dcmiterms: 	<http://dublincore.org/documents/dcmi-terms/>.
+@prefix geosparql: 	<http://www.opengis.net/ont/geosparql#>.
+@prefix prov:		<http://www.w3.org/ns/prov#>.
+@prefix elmo: 		<http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: 		<http://www.w3.org/1999/xhtml/vocab#>.
+@prefix sh: 		<http://www.w3.org/ns/shacl#>.
+@prefix foaf: 		<http://xmlns.com/foaf/0.1/>.
+@prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix github:		<https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/catalogusdata/Concepten/Demo/IHW/Afbeeldingen/>.
 
-@prefix dso:			<http://data.acceptatie.pdok.nl/catalogus/dso/id/concept/>.
-@prefix github:			<https://raw.githubusercontent.com/bp4mc2/bp4mc2/master/catalogusdata/Concepten/Demo/IHW/Afbeeldingen/>.
-
-<http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/Water> rdf:type skos:Collection;
+<http://content.acc.omgevingswet.overheid.nl/id/collection/Water> rdf:type skos:Collection;
 	rdfs:label "UIVO-W Begrippenlijst voor publicatie in DSO";
 	skos:prefLabel "CollectieWater";
 	skos:member dso:Aanlegplaats;
@@ -69,7 +78,7 @@
 	skos:member dso:GewoonOnderhoud;
 	skos:member dso:Graven;
 	skos:member dso:Grensprofiel;
-		skos:member dso:Grondverzet;
+	skos:member dso:Grondverzet;
 	skos:member dso:Grondwater;
 	skos:member dso:Grondwaterlichaam;
 	skos:member dso:Grondwaterlichaam;
@@ -198,406 +207,398 @@
 	skos:member dso:Zomerkade;
 	skos:member dso:Zorgplicht;
 	skos:member dso:ZwaarwegendMaatschappelijkBelang;
-	dct:valid "2017-12-04";
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Aanlegplaats rdf:type skos:Concept;
 	rdfs:label "aanlegplaats";
 	skos:prefLabel "Aanlegplaats";
 	skos:definition '''een plek gelegen in een vaarweg, bedoeld voor aanmeren van schepen of vaartuigen, niet zijnde woonschepen, voor een bepaalde periode ''';
 	rdfs:comment "plek waar je voor bepaalde tijd een vaartuig kunt aanmeren";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Aanvoeren rdf:type skos:Concept;
 	rdfs:label "aanvoeren";
 	skos:prefLabel "Aanvoeren";
 	skos:definition '''het door middel van een werk of langs natuurlijke weg naar een oppervlaktewater halen of laten stromen van water uit een ander oppervlaktewater ''';
 	rdfs:comment "water van het ene naar het andere oppervlaktewater halen of laten stromen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Afvoeren rdf:type skos:Concept;
 	rdfs:label "afvoeren";
 	skos:prefLabel "Afvoeren";
 	skos:definition '''het door middel van een werk of langs natuurlijke weg brengen of laten stromen van water uit een oppervlaktewater naar een ander oppervlaktewater ''';
 	rdfs:comment "water van het ene naar het andere oppervlaktewater wegbrengen of laten wegstromen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:AlgemeneRegel rdf:type skos:Concept;
 	rdfs:label "algemene regel";
 	skos:prefLabel "AlgemeneRegel";
 	skos:definition '''door de overheid opgelegde regelgeving met betrekking tot een bepaalde bedrijfstak ''';
 	rdfs:comment "regel die bepaalt wat zonder vergunning is toegestaan";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:AlternatieveWaterberging rdf:type skos:Concept;
 	rdfs:label "alternatieve waterberging";
 	skos:prefLabel "AlternatieveWaterberging";
 	skos:definition '''berging van water buiten een oppervlaktewaterlichaam of bergingsgebied ''';
 	rdfs:comment "voorziening die extra water kan opnemen, als zowel oppervlaktewater als bergingsgebied dreigt te overstromen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Baggeren rdf:type skos:Concept;
 	rdfs:label "baggeren";
 	skos:prefLabel "Baggeren";
 	skos:definition '''het verwijderen van de sliblaag op de vaste waterbodem ''';
 	rdfs:comment "slib van de bodem weghalen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Banket rdf:type skos:Concept;
 	rdfs:label "banket";
 	skos:prefLabel "Banket";
 	skos:definition '''kunstmatige strandverhoging nabij de duinvoet die wordt gebruikt als standplaats voor strandpaviljoens op recreatiestranden ''';
 	rdfs:comment "deel van het strand vlak bij de duinen, dat hoger is gemaakt zodat strandpaviljoens er kunnen staan";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Basisrioleringsplan rdf:type skos:Concept;
 	rdfs:label "basisrioleringsplan";
 	skos:prefLabel "Basisrioleringsplan";
 	skos:definition '''een plan waarin op gedetailleerde wijze wordt aangegeven hoe de inzameling en afvoer van afvalwater en neerslag binnen een gebied dient te gebeuren ''';
 	rdfs:comment "een plan waarin staat hoe de gemeente afvalwater en neerslag inzamelt en afvoert";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:BebouwdeKom rdf:type skos:Concept;
 	rdfs:label "bebouwde kom";
 	skos:prefLabel "BebouwdeKom";
 	skos:definition '''een door de overheid bepaald gebied van een gemeente waar veel bebouwing is ''';
 	rdfs:comment "gebied waar veel bebouwing is ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Bebouwingscontour rdf:type skos:Concept;
 	rdfs:label "bebouwingscontour";
 	skos:prefLabel "Bebouwingscontour";
 	skos:definition '''het gebied waarbinnen het in beginsel is toegestaan te bouwen ''';	
 	rdfs:comment "gebied waar je in principe mag bouwen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:BeheerVanWatersystemen rdf:type skos:Concept;
 	rdfs:label "beheer van watersystemen";
 	skos:prefLabel "BeheerVanWatersystemen";
 	skos:definition '''samenstel van aan watersystemen verbonden taken, gericht op het voorkomen en waar nodig beperken van overstromingen, wateroverlast en waterschaarste, in samenhang met het beschermen en verbeteren van de chemische en ecologische kwaliteit van die watersystemen en de vervulling van de op grond van deze wet aan die watersystemen toegekende maatschappelijke functies ''';
 	rdfs:comment "taken die tot doel hebben dat zo min mogelijk overstromingen, wateroverlast en waterschaarste ontstaan en dat de waterkwaliteit in de watersystemen goed is";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Beheerregister rdf:type skos:Concept;
 	rdfs:label "beheerregister";
 	skos:prefLabel "Beheerregister";
 	skos:definition '''registratie die de feitelijke toestand van waterstaatswerken weergeeft ''';
 	rdfs:comment "document waarin het waterschap de ligging, afmetingen, constructie en staat van onderhoud van waterstaatswerken bijhoudt ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Beleidsregel rdf:type skos:Concept;
 	rdfs:label "beleidsregel";
 	skos:prefLabel "Beleidsregel";
 	skos:definition '''een bij besluit vastgestelde algemene regel, niet zijnde een algemeen verbindend voorschrift, omtrent de afweging van belangen de vaststelling van feiten of de uitleg van wettelijke voorschriften bij het gebruik van een bevoegdheid van een bestuursorgaan ''';
 	rdfs:comment "een bij besluit vastgestelde algemene regel, niet zijnde een algemeen verbindend voorschrift, omtrent de afweging van belangen, de vaststelling van feiten of de uitleg van wettelijke voorschriften bij het gebruik van een bevoegdheid van een bestuursorgaan";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Beplanting rdf:type skos:Concept;
 	rdfs:label "beplanting";
 	skos:prefLabel "Beplanting";
 	skos:definition '''gewassen, vaste planten en struiken ''';	
 	rdfs:comment "alles waarmee de grond beplant is";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Beregening rdf:type skos:Concept;
 	rdfs:label "beregening";
 	skos:prefLabel "Beregening";
 	skos:definition '''het besproeien van gewassen met water ''';
 	rdfs:comment "gewassen met water besproeien ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:BergenVanWater rdf:type skos:Concept;
 	rdfs:label "bergen van water ";
 	skos:prefLabel "BergenVanWater";
 	skos:definition '''het vermogen om water tijdens een neerslagperiode (ordegrootte: tot enkele dagen) te bergen/op te slaan boven het vastgestelde waterpeil en onder het maaiveld zonder dat dit tot wateroverlast leidt; de geborgen hoeveelheid water wordt uiteindelijk volledig uitgemalen ''';
 	rdfs:comment "water tijdens een neerslagperiode opslaan in open water of in de grond, zonder dat dit tot wateroverlast leidt";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:BergendVermogen rdf:type skos:Concept;
 	rdfs:label "bergend vermogen";
 	skos:prefLabel "BergendVermogen";
 	skos:definition '''de hoeveelheid oppervlaktewater die maximaal in een oppervlaktewaterlichaam of bergingsgebied kan worden geborgen ''';
 	rdfs:comment "maximale hoeveelheid water die een oppervlaktewater of bergingsgebied kan bergen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:BergingRekeningCourant rdf:type skos:Concept;
 	rdfs:label "berging rekening courant";
 	skos:prefLabel "BergingRekeningCourant";
 	skos:definition '''het verschil tussen de hoeveelheden gegraven en gedempt water  ''';	
 	rdfs:comment "het verschil tussen de hoeveelheden gegraven en gedempt water";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Bergingsgebied rdf:type skos:Concept;
 	rdfs:label "bergingsgebied";
 	skos:prefLabel "Bergingsgebied";
 	skos:definition '''een krachtens de Wet ruimtelijke ordening voor waterstaatkundige doeleinden bestemd gebied, niet zijnde een oppervlaktewaterlichaam of onderdeel daarvan, dat dient ter verruiming van de bergingscapaciteit van een of meer watersystemen en ook als bergingsgebied op de legger is opgenomen ''';
 	rdfs:comment "gebied dat extra water kan opnemen, als het watersysteem dreigt te overstromen ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Bergingsgebied rdf:type skos:Concept;
 	rdfs:label "bergingsgebied";
 	skos:prefLabel "Bergingsgebied";
 	skos:definition '''krachtens de Wet ruimtelijke ordening voor waterstaatkundige doeleinden bestemd gebied, niet zijnde een oppervlaktewaterlichaam of onderdeel daarvan, dat dient ter verruiming van de bergingscapaciteit van een of meer watersystemen en ook als bergingsgebied op de legger van de watersystemen is opgenomen ''';	
 	rdfs:comment "gebied dat extra water kan opnemen, als het watersysteem dreigt te overstromen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Beweiding rdf:type skos:Concept;
 	rdfs:label "beweiding";
 	skos:prefLabel "Beweiding";
 	skos:definition '''het houden en/of laten grazen van vee in een weiland ''';	
 	rdfs:comment "vee houden in een weiland";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Binnenberm rdf:type skos:Concept;
 	rdfs:label "binnenberm";
 	skos:prefLabel "Binnenberm";
 	skos:definition '''een verbreding aan de binnendijkse zijde van de dijk om het dijklichaam extra steun te bieden en/of om zandmeevoerende wellen te voorkomen ''';	
 	rdfs:comment "berm aan de landzijde van de dijk om te voorkomen dat de dijk verzwakt";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Boezemgebied rdf:type skos:Concept;
 	rdfs:label "boezemgebied";
 	skos:prefLabel "Boezemgebied";
 	skos:definition '''gebied dat ligt tussen boezemkeringen en afwatert op de boezem ''';
 	rdfs:comment "gebied waarvan water naar een boezem wordt afgevoerd";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Boezemkade rdf:type skos:Concept;
 	rdfs:label "boezemkade ";
 	skos:prefLabel "Boezemkade";
 	skos:definition '''een als zodanig in de legger opgenomen regionale kering gelegen langs een boezem ''';
 	rdfs:comment "een waterkering langs een boezem ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Boezempeil rdf:type skos:Concept;
 	rdfs:label "boezempeil";
 	skos:prefLabel "Boezempeil";
 	skos:definition '''het in een peilbesluit vastgelegde streefpeil van een boezem ten opzichte van het Normaal Amsterdams Peil, afgekort NAP ''';
 	rdfs:comment "zo hoog moet het boezemwater staan ten opzichte van NAP (Normaal Amsterdams Peil)";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Boothuis rdf:type skos:Concept;
 	rdfs:label "boothuis";
 	skos:prefLabel "Boothuis";
 	skos:definition '''overdekte steiger in de vorm van een schuur, voor de stalling van kleine vaartuigen ''';
 	rdfs:comment "overdekte steiger voor de stalling van kleine vaartuigen  ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Bouwwerk rdf:type skos:Concept;
 	rdfs:label "bouwwerk";
 	skos:prefLabel "Bouwwerk";
 	skos:definition '''constructie van enige omvang van hout, steen, metaal of ander materiaal, die op de plaats van bestemming hetzij direct of indirect met de grond verbonden is, hetzij direct of indirect steun vindt in of op de grond, bedoeld om ter plaatse te functioneren, met inbegrip van de daarvan deel uitmakende bouwwerkgebonden installaties ''';
 	rdfs:comment "constructie van hout, steen of ander materiaal, inclusief de installaties die daarbij horen ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Brandblusvoorziening rdf:type skos:Concept;
 	rdfs:label "brandblusvoorziening";
 	skos:prefLabel "Brandblusvoorziening";
 	skos:definition '''een noodvoorziening waarmee grondwater uit de bodem of oppervlaktewater kan worden onttrokken om als bluswater te worden gebruikt ''';
 	rdfs:comment "pomp waarmee de brandweer bluswater uit de grond of uit oppervlaktewater haalt ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Bronbemaling rdf:type skos:Concept;
 	rdfs:label "bronbemaling";
 	skos:prefLabel "Bronbemaling";
 	skos:definition '''het uit de bodem of bouwputten onttrekken van grondwater door middel van een pomp ''';
 	rdfs:comment "grondwater pompen uit de grond of uit bouwputten";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Brug rdf:type skos:Concept;
 	rdfs:label "brug";
 	skos:prefLabel "Brug";
 	skos:definition '''een doorgang voor voetgangers, dieren en voertuigen over bijvoorbeeld (spoor)wegen en watergangen ''';
 	rdfs:comment "bouwwerk voor voetgangers en voertuigen over water of over obstakels ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:BuitengewoonOnderhoud rdf:type skos:Concept;
 	rdfs:label "buitengewoon onderhoud";
 	skos:prefLabel "BuitengewoonOnderhoud";
 	skos:definition '''ingrijpende werkzaamheden om de vorm en/of de functie van een constructie te herstellen ''';
 	rdfs:comment "ingrijpende werkzaamheden om vorm of functie van een bouwwerk te herstellen of onderhouden";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Buitentalud rdf:type skos:Concept;
 	rdfs:label "buitentalud";
 	skos:prefLabel "Buitentalud";
 	skos:definition '''hellend vlak van het dijklichaam aan de waterkerende zijde ''';	
 	rdfs:comment "schuine kant van de dijk aan de waterzijde";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Compartimenteringskering rdf:type skos:Concept;
 	rdfs:label "compartimenteringskering";
 	skos:prefLabel "Compartimenteringskering";
 	skos:definition '''waterkering die als zodanig geen directe waterkerende functie heeft, tenzij in geval van doorbraak of overstroming van andere waterkering ''';	
 	rdfs:comment "waterkering die alleen water tegenhoudt, wanneer een andere waterkering doorbreekt of overstroomt";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Coupure rdf:type skos:Concept;
 	rdfs:label "coupure";
 	skos:prefLabel "Coupure";
 	skos:definition '''een afsluitbare doorgang in een waterkering ''';
 	rdfs:comment "doorgang in een waterkering die we kunnen afsluiten";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Cunet rdf:type skos:Concept;
 	rdfs:label "cunet";
 	skos:prefLabel "Cunet";
-	skos:definition '''een uitgegraven sleuf in de bovenste grondlaagÿ ''';
+	skos:definition '''een uitgegraven sleuf in de bovenste grondlaag''';
 	rdfs:comment "lange, smalle uitgraving in bovenste grondlaag";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Dam rdf:type skos:Concept;
 	rdfs:label "dam";
 	skos:prefLabel "Dam";
 	skos:definition '''een wal in een watergang die het water tegenhoudt ''';
 	rdfs:comment "verhoging van aarde in een watergang die water tegenhoudt";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Damwand rdf:type skos:Concept;
 	rdfs:label "damwand";
 	skos:prefLabel "Damwand";
 	skos:definition '''verticale constructiedelen die in een opeenvolgende rij in de grond staan ''';
 	rdfs:comment "verticale platen naast elkaar in de grond om grond of water tegen te houden";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Dempen rdf:type skos:Concept;
 	rdfs:label "dempen";
 	skos:prefLabel "Dempen";
 	skos:definition '''het geheel of gedeeltelijk dichtmaken van een oppervlaktewaterlichaam met grond ''';
 	rdfs:comment "sloot dicht maken";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";	
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]	
 .
 dso:Drainage rdf:type skos:Concept;
 	rdfs:label "drainage";
 	skos:prefLabel "Drainage";
-	skos:definition '''afvoer van water over en door de grond om de grondwaterstand kunstmatig te be‹nvloeden ''';
+	skos:definition '''afvoer van water over en door de grond om de grondwaterstand kunstmatig te beïnvloeden ''';
 	rdfs:comment "waterafvoer om grondwaterstand te verlagen of te verhogen";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";	
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]	
 .
 dso:Drooglegging rdf:type skos:Concept;
 	rdfs:label "drooglegging";
 	skos:prefLabel "Drooglegging";
 	skos:definition '''het hoogteverschil tussen de waterspiegel in een waterloop en het grondoppervlak ''';
 	rdfs:comment "hoogteverschil tussen water en maaiveld";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Duiker rdf:type skos:Concept;
 	rdfs:label "duiker";
 	skos:prefLabel "Duiker";
 	skos:definition '''een buis die watergangen door een dam heen met elkaar verbindt ''';	
 	rdfs:comment "koker die watergangen door de grond heen met elkaar verbindt";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Duinvoet rdf:type skos:Concept;
 	rdfs:label "duinvoet";
 	skos:prefLabel "Duinvoet";
 	skos:definition '''de benedenrand van het duin die de overgang vormt van het duinbeloop naar het strand ''';
 	rdfs:comment "onderste rand van het duin en overgang naar het strand";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:ErkendeMaatregel rdf:type skos:Concept;
 	rdfs:label "erkende maatregel";
 	skos:prefLabel "ErkendeMaatregel";
 	skos:definition '''een activiteit die, of werk dat, onder de gestelde voorwaarden voldoet aan de zorgplicht en niet vergunningplichtig is ''';
 	rdfs:comment "maatregel die het dagelijks bestuur van een waterschap heeft vastgesteld en waarmee iemand voldoet aan de zorgplicht";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Evenement rdf:type skos:Concept;
 	rdfs:label "evenement";
 	skos:prefLabel "Evenement";
 	skos:definition '''een kortdurende activiteit die bedoeld is voor een groot publiek ''';
 	rdfs:comment "een tijdelijke activiteit voor een groot publiek  ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:FreatischWater rdf:type skos:Concept;
 	rdfs:label "freatisch water ";
 	skos:prefLabel "FreatischWater";
 	skos:definition '''het water in de bodem dat als eerste wordt aangetroffen bij graaf- of boorwerkzaamheden ''';
 	rdfs:comment "water dat je het eerst aantreft als je gaat graven of boren";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:FunctioneelProfiel rdf:type skos:Concept;
 	rdfs:label "functioneel profiel";
 	skos:prefLabel "FunctioneelProfiel";
-	skos:definition '''de minimaal noodzakelijke afmetingen om aan de waterstaatkundige functies te kunnen voldoen, zowel waterkwantiteit als ecologische) waterkwaliteit en ? indien van toepassing, vaarwegfunctie ''';
+	skos:definition '''de minimaal noodzakelijke afmetingen om aan de waterstaatkundige functies te kunnen voldoen, zowel waterkwantiteit als (ecologische) waterkwaliteit en - indien van toepassing, vaarwegfunctie ''';
 	rdfs:comment "minimale afmetingen van het water, zodat kanalen, rivieren of sloten voldoende water kunnen bergen en doorvoeren ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
-.
-dso:FunctioneelProfielVanOppervlaktewaterlichaam rdf:type skos:Concept;
-	rdfs:label "functioneel profiel van oppervlaktewaterlichaam";
-	skos:prefLabel "FunctioneelProfielVanOppervlaktewaterlichaam";
-	skos:definition '''de minimaal noodzakelijke afmetingen om aan de waterstaatkundige functies te kunnen voldoen, zowel waterkwantiteit als (ecologische) waterkwaliteit en - indien van toepassing - vaarwegfunctie ''';
-	rdfs:comment "minimumeisen voor oppervlakte, hoeveelheid en kwaliteit van het water, zodat het kan voldoen aan waterstaatkundige functies Diny: Voorstel: minimumeiseen voor de afmetingen van het oppervlaktewaterlichaam, zodat het kan voldoen aan de waterstaatkundige functies";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:GemeentelijkRioleringsplan rdf:type skos:Concept;
 	rdfs:label "gemeentelijk rioleringsplan";
 	skos:prefLabel "GemeentelijkRioleringsplan";
 	skos:definition '''een document van een gemeente over het beheer van de riolering en het beheer van grondwater en hemelwater ''';
 	rdfs:comment "plan van een gemeente voor het beheer van de buizen die afvalwater en regenwater afvoeren ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:GeslotenSeizoen rdf:type skos:Concept;
 	rdfs:label "gesloten seizoen";
 	skos:prefLabel "GeslotenSeizoen";
 	skos:definition '''de periode waarin geen, of beperkt, werkzaamheden aan waterkeringen mogen worden uitgevoerd  ''';
 	rdfs:comment "periode waarin het, vanwege het weer, niet toegestaan is aan een waterkering te werken";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:GestuurdeBoring rdf:type skos:Concept;
 	rdfs:label "gestuurde boring";
 	skos:prefLabel "GestuurdeBoring";
 	skos:definition '''een sleufloze boortechniek om obstakels zoals bijvoorbeeld wegen, watergangen en waterkeringen ondergronds te passeren ''';
 	rdfs:comment "boortechniek om oppervlaktewater en waterkeringen ondergronds te passeren, zonder dat er een greppel gemaakt hoeft te worden";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
+	skos:inScheme dataset:Water;
 	dct:valid "2017-12-04"
 .
 dso:GewoonOnderhoud rdf:type skos:Concept;
@@ -605,32 +606,32 @@ dso:GewoonOnderhoud rdf:type skos:Concept;
 	skos:prefLabel "GewoonOnderhoud";
 	skos:definition '''activiteiten zoals maaien, snoeien, repareren en vuil verwijderen ''';
 	rdfs:comment "kleine werkzaamheden om vorm of functie van een waterstaatswerk  te herstellen of onderhouden ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Graven rdf:type skos:Concept;
 	rdfs:label "graven";
 	skos:prefLabel "Graven";
 	skos:definition '''het wijzigen of vergroten van het profiel van een bestaand oppervlaktewaterlichaam of het nieuw graven van een oppervlaktewaterlichaam ''';
 	rdfs:comment "afmetingen van een oppervlaktewater vergroten of een nieuw oppervlaktewater graven";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Grensprofiel rdf:type skos:Concept;
 	rdfs:label "grensprofiel";
 	skos:prefLabel "Grensprofiel";
 	skos:definition '''het deel van het duin dat na een maatgevende storm minimaal aanwezig moet zijn om de veiligheid te kunnen waarborgen ''';
 	rdfs:comment "hoogte en breedte die een duin na een storm minimaal moet hebben om nog een veilige waterkering te zijn  ";
-	skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-	dct:valid "2017-12-04";
+	skos:inScheme dataset:Water;
+	dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Grondverzet rdf:type skos:Concept;
 rdfs:label "grondverzet";
 skos:prefLabel "Grondverzet";
 skos:definition '''het verplaatsen van grond ''';
 rdfs:comment "grond van de ene naar de andere plek brengen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Grondwater rdf:type skos:Concept;
@@ -638,17 +639,8 @@ rdfs:label "grondwater ";
 skos:prefLabel "Grondwater";
 skos:definition '''water dat vrij onder het aardoppervlak voorkomt, met de daarin aanwezige stoffen  ''';
 rdfs:comment "water onder het grondoppervlak";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
-
-.
-dso:Grondwaterlichaam rdf:type skos:Concept;
-rdfs:label "grondwaterlichaam";
-skos:prefLabel "Grondwaterlichaam";
-skos:definition '''samenhangende grondwatermassa  ''';
-rdfs:comment "grondwater dat bij elkaar hoort";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Grondwaterlichaam rdf:type skos:Concept;
@@ -656,8 +648,8 @@ rdfs:label "grondwaterlichaam";
 skos:prefLabel "Grondwaterlichaam";
 skos:definition '''samenhangende hoeveelheid grondwater ''';
 rdfs:comment "grondwater dat bij elkaar hoort";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Grondwateronttrekking rdf:type skos:Concept;
@@ -665,8 +657,8 @@ rdfs:label "grondwateronttrekking";
 skos:prefLabel "Grondwateronttrekking";
 skos:definition '''het onttrekken van grondwater uit de bodem ''';
 rdfs:comment "grondwater uit de grond halen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Grondwatersanering rdf:type skos:Concept;
@@ -674,8 +666,8 @@ rdfs:label "grondwatersanering";
 skos:prefLabel "Grondwatersanering";
 skos:definition '''het verwijderen van verontreinigende componenten uit een grondwaterlichaam door middel van onttrekking (en zuivering) van verontreinigd grondwater ''';
 rdfs:comment "grondwater zuiveren door het uit de grond te halen en verontreiniging te verwijderen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Grondwaterstand rdf:type skos:Concept;
@@ -683,8 +675,8 @@ rdfs:label "grondwaterstand";
 skos:prefLabel "Grondwaterstand";
 skos:definition '''de hoogte van een punt waar het grondwater een drukhoogte gelijk nul heeft (de absolute waterdruk is dan gelijk aan de druk van de atmosfeer) ten opzichte van een referentieniveau ''';
 rdfs:comment "hoogte van het grondwater ten opzichte van het maaiveld";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Grondwaterstanddiepte rdf:type skos:Concept;
@@ -692,8 +684,8 @@ rdfs:label "grondwaterstanddiepte";
 skos:prefLabel "Grondwaterstanddiepte";
 skos:definition '''de hoogte van het freatisch water ten opzichte van een referentiepeil ''';	
 rdfs:comment "hoogte van het grondwater ten opzichte van het maaiveld";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Hekwerk rdf:type skos:Concept;
@@ -701,8 +693,8 @@ rdfs:label "hekwerk";
 skos:prefLabel "Hekwerk";
 skos:definition '''afscheiding met vrij doorzicht ''';
 rdfs:comment "afscheiding waar je doorheen kan kijken ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Hoofdwatergang rdf:type skos:Concept;
@@ -710,17 +702,17 @@ rdfs:label "hoofdwatergang";
 skos:prefLabel "Hoofdwatergang";
 skos:definition '''synoniem van primair water ''';
 rdfs:comment "synoniem van primair water";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Infiltratiewerk rdf:type skos:Concept;
 rdfs:label "infiltratiewerk";
 skos:prefLabel "Infiltratiewerk";
-skos:definition '''een werk bestaande uit ‚‚n of meer winmiddelen, bestemd voor het onttrekken van grondwater of voor het infiltreren van water in de bodem ''';	
+skos:definition '''een werk bestaande uit één of meer winmiddelen, bestemd voor het onttrekken van grondwater of voor het infiltreren van water in de bodem ''';	
 rdfs:comment "bouwwerk van winmiddelen om grondwater uit de grond te halen of om water te infiltreren in de grond";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:InfiltrerenVanWater rdf:type skos:Concept;
@@ -728,8 +720,8 @@ rdfs:label "infiltreren van water";
 skos:prefLabel "InfiltrerenVanWater";
 skos:definition '''in de bodem brengen van water, ter aanvulling van het grondwater, in samenhang met het onttrekken van grondwater ''';
 rdfs:comment "water in de grond brengen om het er later weer uit te halen, bijvoorbeeld om te gebruiken in de tuinbouw";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Initiatiefnemer rdf:type skos:Concept;
@@ -737,8 +729,8 @@ rdfs:label "initiatiefnemer";
 skos:prefLabel "Initiatiefnemer";
 skos:definition '''degene die een handeling gaat of laat uitvoeren ''';
 rdfs:comment "persoon of organisatie die iets wil gaan doen of laten doen ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Inlaatduiker rdf:type skos:Concept;
@@ -746,8 +738,8 @@ rdfs:label "inlaatduiker";
 skos:prefLabel "Inlaatduiker";
 skos:definition '''een duiker met een afsluitklep voor het binnenlaten van hoger gelegen water in een lager gelegen gebied ''';
 rdfs:comment "ondergrondse koker met afsluitklep die hoger gelegen water verbindt met lager gelegen gebied ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Insteek rdf:type skos:Concept;
@@ -755,8 +747,8 @@ rdfs:label "insteek";
 skos:prefLabel "Insteek";
 skos:definition '''snijlijn van het talud van een oppervlaktewaterlichaam met het maaiveld ''';
 rdfs:comment "overgang van het horizontale maaiveld naar de schuine oeverhelling";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Inundatiegebied rdf:type skos:Concept;
@@ -764,17 +756,17 @@ rdfs:label "inundatiegebied";
 skos:prefLabel "Inundatiegebied";
 skos:definition '''een doorgaans laag gelegen bergingsgebied, dat gecontroleerd onder water gezet kan worden ''';
 rdfs:comment "gebied dat het waterschap onder water kan zetten om bij wateroverlast de waterberging te vergroten";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kabel rdf:type skos:Concept;
 rdfs:label "kabel";
 skos:prefLabel "Kabel";
-skos:definition '''een geheel van geleiders welke voorzien zijn van ‚‚n ommanteling en bestemd is voor transport van energie of data ''';
+skos:definition '''een geheel van geleiders welke voorzien zijn van één ommanteling en bestemd is voor transport van energie of data ''';
 rdfs:comment "bundel draden voor transport van energie of elektronische informatie";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:KadastraalEigenaar rdf:type skos:Concept;
@@ -782,8 +774,8 @@ rdfs:label "kadastraal eigenaar";
 skos:prefLabel "KadastraalEigenaar";
 skos:definition '''degene die in het kadaster is geregistreerd als eigenaar van het perceel ''';
 rdfs:comment "persoon die volgens het kadaster eigenaar is van de grond";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:KleinMeubilair rdf:type skos:Concept;
@@ -791,8 +783,8 @@ rdfs:label "klein meubilair";
 skos:prefLabel "KleinMeubilair";
 skos:definition '''straatmeubilair van geringe omvang ''';
 rdfs:comment "objecten van geringe omvang, zoals prullenbakken";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:KleinOnderhoudWegen rdf:type skos:Concept;
@@ -800,8 +792,8 @@ rdfs:label "klein onderhoud wegen";
 skos:prefLabel "KleinOnderhoudWegen";
 skos:definition '''vervangen van verharding van een weg waarbij de fundering niet wordt aangepast ''';
 rdfs:comment "verharding van een weg vervangen zonder de fundering aan te passen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kruin rdf:type skos:Concept;
@@ -809,8 +801,8 @@ rdfs:label "kruin";
 skos:prefLabel "Kruin";
 skos:definition '''het hoogst gelegen deel van een waterkering ''';
 rdfs:comment "bovenkant van de waterkering";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kruinbreedte rdf:type skos:Concept;
@@ -818,8 +810,8 @@ rdfs:label "kruinbreedte";
 skos:prefLabel "Kruinbreedte";
 skos:definition '''breedte van de bovenkant van de waterkering       ''';
 rdfs:comment "breedte van de bovenkant van de waterkering      ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kruinhoogte rdf:type skos:Concept;
@@ -827,8 +819,8 @@ rdfs:label "kruinhoogte";
 skos:prefLabel "Kruinhoogte";
 skos:definition '''de hoogte van de top van de waterkering, gemeten ten opzichte van Normaal Amsterdams Peil ''';
 rdfs:comment "hoogte van de waterkering ten opzichte van N.A.P. (Normaal Amsterdams Peil)";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kunstwerk rdf:type skos:Concept;
@@ -836,8 +828,8 @@ rdfs:label "kunstwerk";
 skos:prefLabel "Kunstwerk";
 skos:definition '''een civieltechnische constructie voor de infrastructuur van wegen, water, spoorbanen, waterkeringen en/of leidingen, waarvoor andere materialen dan aarde en zand zijn gebruikt ''';
 rdfs:comment "bouwwerk voor infrastructuur, zoals wegen, waterwegen, spoorbanen, waterkeringen en leidingen ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kwel rdf:type skos:Concept;
@@ -845,8 +837,8 @@ rdfs:label "kwel";
 skos:prefLabel "Kwel";
 skos:definition '''water dat door een drukverschil vanuit de bodem omhoog komt ''';
 rdfs:comment "grondwater dat omhoog komt door hogere druk in de grond";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Kwelgebied rdf:type skos:Concept;
@@ -854,8 +846,8 @@ rdfs:label "kwelgebied";
 skos:prefLabel "Kwelgebied";
 skos:definition '''gebied waar kwel voorkomt ''';
 rdfs:comment "gebied waar grondwater omhoog komt door hogere druk in de grond";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Laagwaterlijn rdf:type skos:Concept;
@@ -863,8 +855,8 @@ rdfs:label "laagwaterlijn";
 skos:prefLabel "Laagwaterlijn";
 skos:definition '''de lijn op het strand die de grens van eb aangeeft ''';
 rdfs:comment "lijn op het strand waar het water de laatste keer het laagst heeft gestaan";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Legger rdf:type skos:Concept;
@@ -872,8 +864,8 @@ rdfs:label "legger";
 skos:prefLabel "Legger";
 skos:definition '''legger als bedoeld in artikel 2.39 van de Omgevingswet ''';	
 rdfs:comment "lijst van waterstaatswerken waarin het waterschap per waterstaatwerk vastlegt wat de minimumeisen en onderhoudsverplichtingen zijn";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:LeggerprofielWater rdf:type skos:Concept;
@@ -881,8 +873,8 @@ rdfs:label "leggerprofiel water";
 skos:prefLabel "LeggerprofielWater";
 skos:definition '''het minimum in stand te houden profiel voor de toegekende functie van het water ''';
 rdfs:comment "minimumeisen aan de afmetingen van het water en de waterbodem, zoals het waterschap die heeft vastgelegd in de legger";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:LeggerprofielWaterkering rdf:type skos:Concept;
@@ -890,8 +882,8 @@ rdfs:label "leggerprofiel waterkering";
 skos:prefLabel "LeggerprofielWaterkering";
 skos:definition '''het minimum in stand te houden profiel voor de toegekende functie van de waterkering ''';
 rdfs:comment "minimumeisen aan de afmetingen van de waterkeringen, zoals het waterschap die heeft vastgelegd in de legger";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Leiding rdf:type skos:Concept;
@@ -899,8 +891,8 @@ rdfs:label "leiding";
 skos:prefLabel "Leiding";
 skos:definition '''een buis waardoor een gas of een vloeistof wordt getransporteerd ''';
 rdfs:comment "buis waardoor gas of vloeistof stroomt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:LichteConstructie rdf:type skos:Concept;
@@ -908,8 +900,8 @@ rdfs:label "lichte constructie";
 skos:prefLabel "LichteConstructie";
 skos:definition '''een bouwwerk zonder zware fundering, gemaakt van materialen met een laag soortelijk gewicht, zoals hout of kunststof ''';
 rdfs:comment "bouwwerk van lichte materialen zoals hout of kunststof, zonder zware fundering  ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Lozen rdf:type skos:Concept;
@@ -917,8 +909,8 @@ rdfs:label "lozen";
 skos:prefLabel "Lozen";
 skos:definition '''het kunstmatig brengen van stoffen, warmte of water in een oppervlaktewaterlichaam ''';
 rdfs:comment "stoffen, warmte of water in een oppervlaktewater brengen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Lozen rdf:type skos:Concept;
@@ -926,8 +918,8 @@ rdfs:label "lozen";
 skos:prefLabel "Lozen";
 skos:definition '''het kunstmatig brengen van stoffen, warmte of water in een oppervlaktewaterlichaam ''';
 rdfs:comment "stoffen, warmte of water in een oppervlaktewater brengen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Lozingsvoorziening rdf:type skos:Concept;
@@ -935,8 +927,8 @@ rdfs:label "lozingsvoorziening";
 skos:prefLabel "Lozingsvoorziening";
 skos:definition '''een constructie om water in een oppervlaktewaterlichaam te laten stromen ''';
 rdfs:comment "bouwwerk om water in oppervlaktewater te laten stromen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Maaisel rdf:type skos:Concept;
@@ -944,8 +936,8 @@ rdfs:label "maaisel";
 skos:prefLabel "Maaisel";
 skos:definition '''het gewas dat door afknippen is verwijderd van de levende plant ''';
 rdfs:comment "afgeknipt gras of ander gewas";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Maaiveldhoogte rdf:type skos:Concept;
@@ -953,8 +945,8 @@ rdfs:label "maaiveldhoogte";
 skos:prefLabel "Maaiveldhoogte";
 skos:definition '''hoogteligging van het grondoppervlak in een gebied, met uitzondering van taluds en bermen of andere (kunstmatige) verhogingen dan wel verlagingen ''';
 rdfs:comment "hoogte van het grondoppervlak ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Maatwerkvoorschrift rdf:type skos:Concept;
@@ -962,8 +954,8 @@ rdfs:label "maatwerkvoorschrift";
 skos:prefLabel "Maatwerkvoorschrift";
 skos:definition '''een beschikking van het dagelijks bestuur van een waterschap, waarmee een afwijking van of aanvulling op de voorwaarden uit een algemene regel wordt vastgelegd ''';
 rdfs:comment "voorschrift waarin het bestuur van een waterschap afwijkt van een algemene regel";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Meanderzone rdf:type skos:Concept;
@@ -971,8 +963,8 @@ rdfs:label "meanderzone";
 skos:prefLabel "Meanderzone";
 skos:definition '''het grondgebied waarbinnen wateren door natuurlijke verplaatsing hun bedding kunnen verleggen ''';
 rdfs:comment "gebied waarin een rivier of beek door natuurlijke stroming zijn loop iets kan verleggen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Meerpaal rdf:type skos:Concept;
@@ -980,8 +972,8 @@ rdfs:label "meerpaal";
 skos:prefLabel "Meerpaal";
 skos:definition '''een paal in het water, die meestal gebruikt wordt voor het aanmeren van vaartuigen ''';
 rdfs:comment "paal in het water waaraan je vaartuigen kunt vastmaken";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Meldplicht rdf:type skos:Concept;
@@ -989,8 +981,8 @@ rdfs:label "meldplicht";
 skos:prefLabel "Meldplicht";
 skos:definition '''de eis om (een voornemen tot) het uitvoeren van een bepaalde activiteit aan het waterschap door te geven ''';
 rdfs:comment "eis om een plan, voordat je het gaat uitvoeren, te melden bij het waterschap ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:NatuurvriendelijkeOever rdf:type skos:Concept;
@@ -998,8 +990,8 @@ rdfs:label "natuurvriendelijke oever";
 skos:prefLabel "NatuurvriendelijkeOever";
 skos:definition '''een oever die zo is aangelegd, dat landschappelijke en ecologische functies worden versterkt, naast de gewaarborgde afvoercapaciteit van de watergang; de oever draagt zo ook bij aan de vervulling van maatschappelijke functies van watersystemen ''';
 rdfs:comment "oever met een ondiep stuk water erlangs, waar planten goed kunnen groeien en bescherming bieden aan insecten, kikkers, watervogels en vissen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Oever rdf:type skos:Concept;
@@ -1007,8 +999,8 @@ rdfs:label "oever";
 skos:prefLabel "Oever";
 skos:definition '''het grondgebied of de constructie die de overgang van water naar land vormgeeft ''';
 rdfs:comment "grond of bouwwerk dat overgang van water naar land vormt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Oeverbescherming rdf:type skos:Concept;
@@ -1016,8 +1008,8 @@ rdfs:label "oeverbescherming";
 skos:prefLabel "Oeverbescherming";
 skos:definition '''materiaal ter plaatse van de oever dat beschemt tegen afkalving ''';
 rdfs:comment "materiaal dat ervoor zorgt dat de oever niet afbrokkelt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Oeverherstel rdf:type skos:Concept;
@@ -1025,8 +1017,8 @@ rdfs:label "oeverherstel";
 skos:prefLabel "Oeverherstel";
 skos:definition '''het herstel van afkalving van de oever, door de oeverlijn terug te brengen conform het leggerprofiel water ''';
 rdfs:comment "oever herstellen door de oeverlijn te maken zoals die vastgesteld is in de Legger";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Oeverlijn rdf:type skos:Concept;
@@ -1034,8 +1026,8 @@ rdfs:label "oeverlijn";
 skos:prefLabel "Oeverlijn";
 skos:definition '''de scheidingslijn tussen water en land ''';
 rdfs:comment "grens tussen water en land";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:OmgevingsvergunningDieDeWaterbeheerderAlsOntheffingVanDeKeurVerleendeVoorDeInwerkingtredingVanDeWaterwet rdf:type skos:Concept;
@@ -1043,8 +1035,8 @@ rdfs:label "omgevingsvergunning, die de waterbeheerder als ontheffing van de keu
 skos:prefLabel "Omgevingsvergunning,DieDeWaterbeheerderAlsOntheffingVanDeKeurVerleendeVoorDeInwerkingtredingVanDeWaterwet";
 skos:definition '''omgevingsvergunning als bedoeld in afdeling 51 ''';
 rdfs:comment "toestemming om bepaalde activiteiten uit te voeren in je leefomgeving";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onderbemaling rdf:type skos:Concept;
@@ -1052,8 +1044,8 @@ rdfs:label "onderbemaling";
 skos:prefLabel "Onderbemaling";
 skos:definition '''het plaatselijk lager houden van het waterpeil, dan het waterpeil dat het waterschap voor het betreffende peilgebied heeft vastgesteld of hanteert ''';
 rdfs:comment "waterpeil lager houden dan het waterschap voor dat peilgebied heeft vastgesteld ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onderhoudsplicht rdf:type skos:Concept;
@@ -1061,8 +1053,8 @@ rdfs:label "onderhoudsplicht";
 skos:prefLabel "Onderhoudsplicht";
 skos:definition '''de verantwoordelijkheid om ervoor te zorgen dat een object in goede staat is ''';	
 rdfs:comment "verantwoordelijkheid om ervoor te zorgen dat een object in goede staat is";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onderhoudsplichtige rdf:type skos:Concept;
@@ -1070,8 +1062,8 @@ rdfs:label "onderhoudsplichtige";
 skos:prefLabel "Onderhoudsplichtige";
 skos:definition '''de natuurlijke persoon, rechtspersoon of instelling die verantwoordelijk is voor het in goede staat zijn van een object ''';
 rdfs:comment "de persoon of instelling die verantwoordelijk is voor het onderhoud van een object";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onderhoudsstrook rdf:type skos:Concept;
@@ -1079,8 +1071,8 @@ rdfs:label "onderhoudsstrook";
 skos:prefLabel "Onderhoudsstrook";
 skos:definition '''een pad of strook grond gelegen langs een watergang of op of langs een waterkering, van waaraf het onderhoud kan worden uitgevoerd ''';
 rdfs:comment "strook grond langs een watergang of waterkering, vanwaar het waterschap onderhoud kan doen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:OndersteunendKunstwerk rdf:type skos:Concept;
@@ -1088,8 +1080,8 @@ rdfs:label "ondersteunend kunstwerk";
 skos:prefLabel "OndersteunendKunstwerk";
 skos:definition '''kunstwerken die van belang zijn voor de taakuitoefening van het waterschap, voor de waterkering of voor het functioneren van de waterhuishouding ''';
 rdfs:comment "bouwwerk dat helpt bij waterkering of waterbeheer";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Ontgrondingskuil rdf:type skos:Concept;
@@ -1097,8 +1089,8 @@ rdfs:label "ontgrondingskuil";
 skos:prefLabel "Ontgrondingskuil";
 skos:definition '''het gat dat in het maaiveld ontstaat door het omvallen van een object, of door een lekkende leiding ''';
 rdfs:comment "gat in het maaiveld doordat een boom is omgevallen of doordat een leiding lekt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onttrekken rdf:type skos:Concept;
@@ -1106,8 +1098,8 @@ rdfs:label "onttrekken";
 skos:prefLabel "Onttrekken";
 skos:definition '''het kunstmatig halen van water uit een oppervlaktewaterlichaam of uit het grondwater ''';
 rdfs:comment "water uit oppervlaktewater of uit de grond halen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onttrekkingsgebied rdf:type skos:Concept;
@@ -1115,8 +1107,8 @@ rdfs:label "onttrekkingsgebied";
 skos:prefLabel "Onttrekkingsgebied";
 skos:definition '''gebied waar de onttrekking van grondwater invloed heeft ''';
 rdfs:comment "omgeving waarbinnen merkbaar is wanneer grondwater uit de grond gehaald wordt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Onttrekkingsinrichting rdf:type skos:Concept;
@@ -1124,8 +1116,8 @@ rdfs:label "onttrekkingsinrichting";
 skos:prefLabel "Onttrekkingsinrichting";
 skos:definition '''installatie waarmee grondwater aan de bodem onttrokken wordt ''';
 rdfs:comment "installatie waarmee het waterschap grondwater uit de bodem haalt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:OpenbareWeg rdf:type skos:Concept;
@@ -1133,8 +1125,8 @@ rdfs:label "openbare weg";
 skos:prefLabel "OpenbareWeg";
 skos:definition '''een openbare weg zoals bepaald in Artikel 4 van de Wegenwet ''';
 rdfs:comment "weg die voor iedereen toegankelijk is en wordt onderhouden door overheid of waterschap";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Opmaling rdf:type skos:Concept;
@@ -1142,8 +1134,8 @@ rdfs:label "opmaling";
 skos:prefLabel "Opmaling";
 skos:definition '''het plaatselijk hoger houden van het waterpeil, dan het waterpeil dat het waterschap voor het betreffende peilgebied heeft vastgesteld of hanteert ''';
 rdfs:comment "waterpeil hoger houden dan het waterschap voor dat gebied heeft vastgesteld";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:OppervlakDoorstroomprofiel rdf:type skos:Concept;
@@ -1151,8 +1143,8 @@ rdfs:label "oppervlak doorstroomprofiel";
 skos:prefLabel "OppervlakDoorstroomprofiel";
 skos:definition '''de grootte van de onder de waterspiegel gelegen dwarsdoorsnede van een watergang ''';
 rdfs:comment "combinatie van breedte en diepte van kanaal, rivier of sloot onder de waterspiegel ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:OverigeWatergang rdf:type skos:Concept;
@@ -1160,8 +1152,8 @@ rdfs:label "overige watergang";
 skos:prefLabel "OverigeWatergang";
 skos:definition '''oppervlaktewaterlichaam dat behoort tot de categorie secundaire en tertiaire wateren ''';
 rdfs:comment "watergang die geen hoofdwatergang is";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:OverigeWaterkering rdf:type skos:Concept;
@@ -1169,8 +1161,8 @@ rdfs:label "overige waterkering";
 skos:prefLabel "OverigeWaterkering";
 skos:definition '''alle waterkeringen (of waterkerende hoogten) die niet als primaire of regionale waterkering zijn aangemerkt ''';
 rdfs:comment "alle waterkeringen die geen primaire of regionale waterkering zijn zoals zomerkades";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Peilafwijking rdf:type skos:Concept;
@@ -1178,8 +1170,8 @@ rdfs:label "peilafwijking";
 skos:prefLabel "Peilafwijking";
 skos:definition '''een ontheffing die van toepassing is voor een afgebakend gedeelte van een oppervlaktewater, waarvoor een van het vigerende peilbesluit afwijkende waterstand wordt nagestreefd ''';
 rdfs:comment "afwijking van de waterhoogte waar het waterschap naar streeft";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Peilbesluit rdf:type skos:Concept;
@@ -1187,17 +1179,17 @@ rdfs:label "peilbesluit";
 skos:prefLabel "Peilbesluit";
 skos:definition '''bestuurlijk besluit met betrekking tot de te handhaven waterhoogte in waterlopen ''';
 rdfs:comment "besluit van een waterschap over de hoogte van het oppervlaktewater ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Peilgebied rdf:type skos:Concept;
 rdfs:label "peilgebied";
 skos:prefLabel "Peilgebied";
-skos:definition '''een cluster van afwateringsgebieden waarin ‚‚n en hetzelfde peil wordt nagestreefd ''';
+skos:definition '''een cluster van afwateringsgebieden waarin één en hetzelfde peil wordt nagestreefd ''';
 rdfs:comment "gebied waar het water overal even hoog moet staan ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:PeilregulerendKunstwerk rdf:type skos:Concept;
@@ -1205,8 +1197,8 @@ rdfs:label "peilregulerend kunstwerk";
 skos:prefLabel "PeilregulerendKunstwerk";
 skos:definition '''kunstwerk voor het regelen van het waterpeil ''';
 rdfs:comment "bouwwerk dat het waterpeil regelt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Perceelaansluiting rdf:type skos:Concept;
@@ -1214,8 +1206,8 @@ rdfs:label "perceelaansluiting";
 skos:prefLabel "Perceelaansluiting";
 skos:definition '''de buis waarmee een gebouw is (of wordt) aangesloten op de riolering ''';
 rdfs:comment "buis waarmee een stuk grond is aangesloten op de riolering  ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:PlaatsgebondenDrijvendObject rdf:type skos:Concept;
@@ -1223,8 +1215,8 @@ rdfs:label "plaatsgebonden drijvend object";
 skos:prefLabel "PlaatsgebondenDrijvendObject";
 skos:definition '''een constructie zelfstandig blijft drijven en gebonden is aan een vaste ligplaats, zoals woonboten en dergelijke ''';
 rdfs:comment "object dat zelf drijft en gebonden is aan een vaste ligplaats, zoals een woonboot";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Pompcapaciteit rdf:type skos:Concept;
@@ -1232,8 +1224,8 @@ rdfs:label "pompcapaciteit";
 skos:prefLabel "Pompcapaciteit";
 skos:definition '''de volume-productie van een pomp per tijdseenheid ''';
 rdfs:comment "aantal liters dat een pomp kan verwerken per minuut (of andere tijdseenheid)";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:PrimairWater rdf:type skos:Concept;
@@ -1241,8 +1233,8 @@ rdfs:label "primair water";
 skos:prefLabel "PrimairWater";
 skos:definition '''een watergang die - of een watergebied dat - belangrijk is voor de aanvoer en afvoer van water en voor de waterberging ''';
 rdfs:comment "water dat belangrijk is voor de aan- en afvoer van water en waterberging";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:PrimaireWaterkering rdf:type skos:Concept;
@@ -1250,8 +1242,8 @@ rdfs:label "primaire waterkering";
 skos:prefLabel "PrimaireWaterkering";
 skos:definition '''een waterkering, die beveiliging biedt tegen overstroming door buitenwater in de zin van de Wet op de Waterkering (IJssel- of Markermeer, Noordzee en de grote rivieren en kanalen) doordat deze ofwel behoort tot het stelsel dat een dijkringgebied -al dan niet met hoge gronden - omsluit, ofwel voor een dijkringgebied is gelegen ''';
 rdfs:comment "alles dat is aangelegd om de zee en al het water dat in verbinding staat met de zee (zoals de grote rivieren Rijn, Maas, IJssel, het IJsselmeer en het Markermeer) tegen te houden en ons beschermt tegen overstroming daarvan";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:ProfielVanDeVrijeRuimte rdf:type skos:Concept;
@@ -1259,16 +1251,16 @@ rdfs:label "profiel van de vrije ruimte";
 skos:prefLabel "ProfielVanDeVrijeRuimte";
 skos:definition '''de vrij te houden ruimte boven, onder en naast een waterstaatwerk (of toekomstig waterstaatswerk), die naar het oordeel van de beheerder nodig is voor toekomstige verbeteringen ''';
 rdfs:comment "ruimte die we vrijhouden naast, boven en onder een waterstaatswerk, zodat we dat in de toekomst kunnen verbeteren als dat nodig is";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-foaf:depiction github:VrijeRuimte.png;
+skos:inScheme dataset:Water;
+skos:example github:VrijeRuimte.png;
 .
 dso:ProfielVanOppervlaktewaterlichaam rdf:type skos:Concept;
 rdfs:label "profiel van oppervlaktewaterlichaam";
 skos:prefLabel "ProfielVanOppervlaktewaterlichaam";
 skos:definition '''breedte, diepte en hellingshoek talud van het oppervlaktewaterlichaam ''';
 rdfs:comment "combinatie van breedte en diepte";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:ProvinciaalMilieubeschermingsgebied rdf:type skos:Concept;
@@ -1276,8 +1268,8 @@ rdfs:label "provinciaal milieubeschermingsgebied";
 skos:prefLabel "ProvinciaalMilieubeschermingsgebied";
 skos:definition '''een door de provincie aangewezen gebied, waarmee de drinkwaterwinning wordt beschermd ''';	
 rdfs:comment "gebied dat door provincie is aangewezen als beschermd gebied";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Referentiepeil rdf:type skos:Concept;
@@ -1285,8 +1277,8 @@ rdfs:label "referentiepeil";
 skos:prefLabel "Referentiepeil";
 skos:definition '''de (in het peilbesluit) vastgestelde na te streven laagste waterstand ''';
 rdfs:comment "laagste waterstand, lager dan dit staat het water bij voorkeur niet";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:RegionaleWaterkering rdf:type skos:Concept;
@@ -1294,8 +1286,8 @@ rdfs:label "regionale waterkering";
 skos:prefLabel "RegionaleWaterkering";
 skos:definition '''een per provinciale verordening aangewezen waterkering  ''';
 rdfs:comment "alles wat is aangelegd om binnenwater tegen te houden en ons beschermt tegen overstroming daarvan";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Retourbemaling rdf:type skos:Concept;
@@ -1303,8 +1295,8 @@ rdfs:label "retourbemaling";
 skos:prefLabel "Retourbemaling";
 skos:definition '''het in de bodem terugbrengen van onttrokken grondwater ''';	
 rdfs:comment "grondwater dat eerder is opgepompt terugbrengen in de grond";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Riooloverstort rdf:type skos:Concept;
@@ -1312,8 +1304,8 @@ rdfs:label "riooloverstort";
 skos:prefLabel "Riooloverstort";
 skos:definition '''een kunstwerk waarmee rioolwater op het oppervlaktewater wordt geloosd, zodra het riool door te grote neerslaghoeveelheden niet al het rioolwater kan verwerken ''';
 rdfs:comment "bouwwerk waar, bij zware regen, het teveel aan afvalwater overheen stroomt naar het oppervlaktewater   ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:RisicovolleWerken rdf:type skos:Concept;
@@ -1321,8 +1313,8 @@ rdfs:label "risicovolle werken";
 skos:prefLabel "RisicovolleWerken";
 skos:definition '''activiteiten die een negatieve invloed kunnen hebben op de stabiliteit en de werking van waterkeringen ''';
 rdfs:comment "activiteiten die nadelig kunnen zijn voor waterkeringen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:ScheidendeLaag rdf:type skos:Concept;
@@ -1330,8 +1322,8 @@ rdfs:label "scheidende laag";
 skos:prefLabel "ScheidendeLaag";
 skos:definition '''bodemlaag tussen twee watervoerende pakketten waar grondwater moeilijk of niet doorheen stroomt ''';
 rdfs:comment "bodemlaag tussen twee watervoerende lagen in, waar grondwater niet of nauwelijks doorheen stroomt      ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Schip rdf:type skos:Concept;
@@ -1339,8 +1331,8 @@ rdfs:label "schip";
 skos:prefLabel "Schip";
 skos:definition '''elk vaartuig dat dient als vervoermiddel over het water ''';
 rdfs:comment "elk vervoermiddel over water";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Schouw rdf:type skos:Concept;
@@ -1348,8 +1340,8 @@ rdfs:label "schouw";
 skos:prefLabel "Schouw";
 skos:definition '''periodiek toezicht op het naleven van de onderhoudsplicht ''';
 rdfs:comment "periodiek toezicht op het onderhoud van watergangen, oevers en waterstaatswerken  ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Schouwsloot rdf:type skos:Concept;
@@ -1357,8 +1349,8 @@ rdfs:label "schouwsloot";
 skos:prefLabel "Schouwsloot";
 skos:definition '''sloot die niet door het waterschap wordt onderhouden maar wel van belang is voor de afwatering in een klein gebied ''';
 rdfs:comment "sloot die niet door het waterschap wordt onderhouden, maar wel van belang is voor afvoer van water ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Schutting rdf:type skos:Concept;
@@ -1366,16 +1358,16 @@ rdfs:label "schutting";
 skos:prefLabel "Schutting";
 skos:definition '''afscheiding zonder vrij doorzicht ''';
 rdfs:comment "afscheiding waar je niet doorheen kunt kijken ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:SecundairWater rdf:type skos:Concept;
 rdfs:label "secundair water";
 skos:prefLabel "SecundairWater";
 skos:definition '''water dat een functie heeft in de wateraanvoer, waterafvoer en waterberging van percelen, met uitzondering van primair water''';	rdfs:comment "wateren die een functie hebben in de aan- en afvoer van water en waterberging, maar die niet zo belangrijk zijn als primair water";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:StedelijkGebied rdf:type skos:Concept;
@@ -1383,8 +1375,8 @@ rdfs:label "stedelijk gebied";
 skos:prefLabel "StedelijkGebied";
 skos:definition '''dicht bebouwd gebied; het kan gaan om woongebieden en bedrijventerreinen of een mengvorm daarvan ''';
 rdfs:comment "dicht bebouwd gebied, zoals een woongebied of bedrijventerrein";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Steiger rdf:type skos:Concept;
@@ -1392,8 +1384,8 @@ rdfs:label "steiger";
 skos:prefLabel "Steiger";
 skos:definition '''een constructie in het water, bestaande uit palen en een beloopbaar gedeelte dat toegankelijk is vanaf de oever ''';
 rdfs:comment "bouwwerk op palen in het water, waar je vanaf de oever op kunt lopen    ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Stijghoogte rdf:type skos:Concept;
@@ -1401,8 +1393,8 @@ rdfs:label "stijghoogte ";
 skos:prefLabel "Stijghoogte";
 skos:definition '''de stand van het grondwater in een watervoerend pakket ten opzichte van een referentieniveau, gemeten in een verticaal geplaatste buis in open verbinding met de atmosfeer en met open ondereinde in dat watervoerende pakket ''';
 rdfs:comment "peil van het grondwater, zoals gemeten in een peilbuis, dat stijgt of daalt door de druk van het grondwater in diepere grondlagen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Straatmeubilair rdf:type skos:Concept;
@@ -1410,8 +1402,8 @@ rdfs:label "straatmeubilair";
 skos:prefLabel "Straatmeubilair";
 skos:definition '''objecten in een straat zoals straatverlichting, verkeersborden en zitbanken ''';
 rdfs:comment "objecten in een straat zoals straatverlichting, verkeersborden, zitbanken en prullenbakken ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Strand rdf:type skos:Concept;
@@ -1419,8 +1411,8 @@ rdfs:label "strand";
 skos:prefLabel "Strand";
 skos:definition '''gedeelte van de kuststrook tussen de laagwaterlijn en de duinvoet ''';
 rdfs:comment "gedeelte van de kust tussen laagwaterlijn en duinen ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Talud rdf:type skos:Concept;
@@ -1428,8 +1420,8 @@ rdfs:label "talud";
 skos:prefLabel "Talud";
 skos:definition '''een onder helling gelegen vlak ''';
 rdfs:comment "schuine zijkant van bijvoorbeeld een dijk";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:TechnischBeheerregister rdf:type skos:Concept;
@@ -1437,8 +1429,8 @@ rdfs:label "technisch beheerregister";
 skos:prefLabel "TechnischBeheerregister";
 skos:definition '''registratie waarin de  voor de functie van het waterstaatswerk kenmerkende gegevens van de constructie en de feitelijke toestand nader zijn omschreven ''';
 rdfs:comment "document of registratiesysteem waarin het waterschap de ligging, afmetingen, constructie en staat van onderhoud van waterstaatswerken bijhoudt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Teenlijn rdf:type skos:Concept;
@@ -1446,8 +1438,8 @@ rdfs:label "teenlijn";
 skos:prefLabel "Teenlijn";
 skos:definition '''lijn van de onderrand van het dijklichaam; de binnenteenlijn ligt aan de binnendijkse zijde, de buitenteenlijn aan de buitendijkse zijde ''';
 rdfs:comment "onderste rand van de dijk";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:TertiarWater rdf:type skos:Concept;
@@ -1455,8 +1447,8 @@ rdfs:label "tertiar water";
 skos:prefLabel "TertiarWater";
 skos:definition '''water dat een functie heeft in de waterberging en dient voor de aan- en afvoer van water van percelen; tertiair water staat direct of indirect in verbinding met secundair of primair water ''';
 rdfs:comment "water dat minder belangrijk is in de aan- en afvoer van water en waterberging dan primaire en secundaire wateren";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Uitlaat rdf:type skos:Concept;
@@ -1464,26 +1456,25 @@ rdfs:label "uitlaat";
 skos:prefLabel "Uitlaat";
 skos:definition '''opening waardoor water stroomt of onttrokken wordt aan een reservoir of oppervlaktewaterlichaam ''';	
 rdfs:comment "opening waar water uit stroomt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Uitstroomvoorziening rdf:type skos:Concept;
 rdfs:label "uitstroomvoorziening";
 skos:prefLabel "Uitstroomvoorziening";
 skos:definition '''een voorziening ter bescherming van de watergang bij een uitstroomopening van bijvoorbeeld een hemelwaterafvoer of een drainagebuis ''';	
-rdfs:comment "een voorziening ? vaak een pijp of betonnen bak met een gat erin ? voor de afvoer van regenwater of grondwater zonder dat de watergang schade oploopt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
-
+rdfs:comment "een voorziening - vaak een pijp of betonnen bak met een gat erin - voor de afvoer van regenwater of grondwater zonder dat de watergang schade oploopt";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 .
 dso:Uitweg rdf:type skos:Concept;
 rdfs:label "uitweg";
 skos:prefLabel "Uitweg";
 skos:definition '''een constructie ter ontsluiting van een kadastraal perceel  ''';
 rdfs:comment "weg waarlangs je een stuk grond betreedt of verlaat ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Vaarweg rdf:type skos:Concept;
@@ -1491,8 +1482,8 @@ rdfs:label "vaarweg";
 skos:prefLabel "Vaarweg";
 skos:definition '''elk voor het openbaar scheepvaartverkeer openstaand water ''';
 rdfs:comment "water waar schepen mogen varen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Vee rdf:type skos:Concept;
@@ -1500,8 +1491,8 @@ rdfs:label "vee";
 skos:prefLabel "Vee";
 skos:definition '''alle tamme dieren die gehouden worden, met uitzondering van kleine huisdieren ''';
 rdfs:comment "tamme dieren die agrari‰rs houden, behalve huisdieren";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Veedrenking rdf:type skos:Concept;
@@ -1509,8 +1500,8 @@ rdfs:label "veedrenking";
 skos:prefLabel "Veedrenking";
 skos:definition '''het laten drinken van vee ''';
 rdfs:comment "vee laten drinken";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Veedrenkput rdf:type skos:Concept;
@@ -1518,8 +1509,8 @@ rdfs:label "veedrenkput";
 skos:prefLabel "Veedrenkput";
 skos:definition '''een ondergrondse bron met water dat gebruikt wordt om vee te laten drinken ''';
 rdfs:comment "ondergrondse waterbron die gebruikt wordt om vee te laten drinken   ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Veiligheidszone rdf:type skos:Concept;
@@ -1527,8 +1518,8 @@ rdfs:label "veiligheidszone";
 skos:prefLabel "Veiligheidszone";
 skos:definition '''een terreinstrook naast het waterstaatswerk waarbinnen een lekkage van de leiding de stabiliteit van het werk in gevaar kan brengen ''';
 rdfs:comment "strook grond naast een waterstaatswerk waar lekkende leidingen het waterstaatswerk onstabiel zouden kunnen maken";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:VerenigdeVergadering rdf:type skos:Concept;
@@ -1536,8 +1527,8 @@ rdfs:label "Verenigde Vergadering";
 skos:prefLabel "VerenigdeVergadering";
 skos:definition '''het algemeen bestuurÿvan een waterschap ''';	
 rdfs:comment "algemeen bestuur van een waterschap";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Vergunningplicht rdf:type skos:Concept;
@@ -1545,8 +1536,8 @@ rdfs:label "vergunningplicht";
 skos:prefLabel "Vergunningplicht";
 skos:definition '''de eis om voorafgaand aanÿeen bepaalde activiteit een vergunning te hebben ''';
 rdfs:comment "eis om een vergunning te hebben voordat je iets doet of bouwt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:VerhardOppervlak rdf:type skos:Concept;
@@ -1554,8 +1545,8 @@ rdfs:label "verhard oppervlak";
 skos:prefLabel "VerhardOppervlak";
 skos:definition '''de verharding als gevolg waarvan neerslag niet of zeer beperkt in de bodem kan infiltreren ''';	
 rdfs:comment "bedekking van de grond waardoor neerslag er niet of nauwelijks in kan wegstromen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:VerheeldeWaterkering rdf:type skos:Concept;
@@ -1563,8 +1554,8 @@ rdfs:label "verheelde waterkering";
 skos:prefLabel "VerheeldeWaterkering";
 skos:definition '''waterkering waarvan de hoogte van de achterliggende gronden op natuurlijke wijze op gelijke hoogte of hoger dan de kruin van de waterkering is gelegen ''';
 rdfs:comment "waterkering waarbij de grond die erachter ligt minstens zo hoog is als de waterkering";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Verlanding rdf:type skos:Concept;
@@ -1572,8 +1563,8 @@ rdfs:label "verlanding";
 skos:prefLabel "Verlanding";
 skos:definition '''een proces waarbij een ondiepe watergang  in land verandert ''';
 rdfs:comment "verandering van een watergang in land";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Verval rdf:type skos:Concept;
@@ -1581,8 +1572,8 @@ rdfs:label "verval";
 skos:prefLabel "Verval";
 skos:definition '''verschil in waterhoogte tussen twee punten van een oppervlaktewaterlichaam op een bepaald tijdstip ''';
 rdfs:comment "erschil in waterhoogte tussen twee punten van bijvoorbeeld een rivier of kanaal";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Vlonder rdf:type skos:Concept;
@@ -1590,8 +1581,8 @@ rdfs:label "vlonder";
 skos:prefLabel "Vlonder";
 skos:definition '''een constructie langs de oever van een watergang die niet over het water steekt ''';
 rdfs:comment "bouwwerk langs de waterkant die niet over het water steekt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Waterdiepte rdf:type skos:Concept;
@@ -1599,8 +1590,8 @@ rdfs:label "waterdiepte";
 skos:prefLabel "Waterdiepte";
 skos:definition '''verticale afstand tussen waterspiegel en waterbodem ''';
 rdfs:comment "afstand tussen waterspiegel en bodem      ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:WaterhuishoudkundigeFunctie rdf:type skos:Concept;
@@ -1608,8 +1599,8 @@ rdfs:label "waterhuishoudkundige functie";
 skos:prefLabel "WaterhuishoudkundigeFunctie";
 skos:definition '''de functie die de provincie of het waterschap aan een waterstaatswerk heeft toegekend ''';
 rdfs:comment "doel van een waterstaatswerk zoals provincie of waterschap dat heeft vastgesteld";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Waterkering rdf:type skos:Concept;
@@ -1617,8 +1608,8 @@ rdfs:label "waterkering";
 skos:prefLabel "Waterkering";
 skos:definition '''kunstmatige hoogte, natuurlijke hoogte of gedeelte daarvan, of hoge gronden met ondersteunende kunstwerken, die een waterkerende of mede een waterkerende functie hebben ''';
 rdfs:comment "hoogte in het landschap die water kan tegenhouden";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Wateropgave rdf:type skos:Concept;
@@ -1626,8 +1617,8 @@ rdfs:label "wateropgave";
 skos:prefLabel "Wateropgave";
 skos:definition '''een beschrijving van de maatregelen die nodig zijn om het watersysteem op orde te brengen en te houden, ter voorkoming van wateroverlast of watertekort ''';
 rdfs:comment "maatregelen om watersystemen op orde te houden en zo wateroverlast of watertekort te voorkomen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Wateroverlast rdf:type skos:Concept;
@@ -1635,8 +1626,8 @@ rdfs:label "wateroverlast";
 skos:prefLabel "Wateroverlast";
 skos:definition '''verzamelterm voor schade, ongemak en ontreddering door hoge waterstanden ten gevolge van overvloedige neerslag en/of onvoldoende ontwatering ''';
 rdfs:comment "ongemak dat je kunt hebben bij een overstroming of wanneer het heel hard regent of hagelt en het water niet meer kan wegstromen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Waterschaarste rdf:type skos:Concept;
@@ -1644,8 +1635,8 @@ rdfs:label "waterschaarste";
 skos:prefLabel "Waterschaarste";
 skos:definition '''situatie waarin er niet genoeg water aanwezig is om (gebruiks)functies optimaal te bedienen ''';
 rdfs:comment "situatie waarin er niet genoeg water is om te varen of in de waterbehoefte te voorzien voor bijv. landbouw";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Waterschapsverordening rdf:type skos:Concept;
@@ -1653,8 +1644,8 @@ rdfs:label "waterschapsverordening";
 skos:prefLabel "Waterschapsverordening";
 skos:definition '''de verordening van het waterschap, bedoeld in artikel 2.5 van de Omgevingswet, waarin regels over de fysieke leefomgeving worden opgenomen ''';
 rdfs:comment "regels van het waterschap voor de leefomgeving";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Waterspiegel rdf:type skos:Concept;
@@ -1662,8 +1653,8 @@ rdfs:label "waterspiegel";
 skos:prefLabel "Waterspiegel";
 skos:definition '''het grensvlak tussen water en lucht ''';
 rdfs:comment "bovenkant van het wateroppervlak";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Waterstaatswerk rdf:type skos:Concept;
@@ -1671,17 +1662,17 @@ rdfs:label "waterstaatswerk";
 skos:prefLabel "Waterstaatswerk";
 skos:definition '''oppervlaktewaterlichaam, bergingsgebied, waterkering of ondersteunend kunstwerk ''';
 rdfs:comment "oppervlaktewater, bergingsgebieden, waterkeringen of ondersteunende bouwwerken";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Watersysteem rdf:type skos:Concept;
 rdfs:label "watersysteem";
 skos:prefLabel "Watersysteem";
-skos:definition '''een samenhangend geheel van ‚‚n of meer oppervlaktewaterlichamen en grondwaterlichamen, met bijbehorende bergingsgebieden, waterkeringen en ondersteunende kunstwerken ''';
+skos:definition '''een samenhangend geheel van één of meer oppervlaktewaterlichamen en grondwaterlichamen, met bijbehorende bergingsgebieden, waterkeringen en ondersteunende kunstwerken ''';
 rdfs:comment "oppervlaktewater en grondwater dat bij elkaar hoort, met bijbehorende bergingsgebieden, waterkeringen en ondersteunende kunstwerken ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:WatervoerendeLaag rdf:type skos:Concept;
@@ -1689,8 +1680,8 @@ rdfs:label "watervoerende laag";
 skos:prefLabel "WatervoerendeLaag";
 skos:definition '''een of meer ondergrondse rotslagen of andere geologische lagen die voldoende poreus en doorlatend zijn voor een belangrijke grondwaterstroming of de onttrekking van aanzienlijke hoeveelheden grondwater ''';
 rdfs:comment "bodemlaag die water kan doorlaten";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Weg rdf:type skos:Concept;
@@ -1698,8 +1689,8 @@ rdfs:label "weg";
 skos:prefLabel "Weg";
 skos:definition '''weg met inbegrip van de daarin gelegen kunstwerken en wat verder naar zijn aard daartoe behoort ''';
 rdfs:comment "weg met alles wat daarbij hoort, zoals vangrail en berm";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Wegenlegger rdf:type skos:Concept;
@@ -1707,8 +1698,8 @@ rdfs:label "wegenlegger";
 skos:prefLabel "Wegenlegger";
 skos:definition '''legger zoals bedoeld in Artikel 27 van de Wegenwet ''';
 rdfs:comment "lijst van wegen buiten de bebouwde kom en toegangswegen naar stations";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Wegzijging rdf:type skos:Concept;
@@ -1716,8 +1707,8 @@ rdfs:label "wegzijging";
 skos:prefLabel "Wegzijging";
 skos:definition '''neerwaartse stroming van (grond-)water door een slecht doorlatende laag ''';
 rdfs:comment "naar beneden zakkend (grond)water, door een grondlaag waar water slecht doorheen kan stromen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Werken rdf:type skos:Concept;
@@ -1725,8 +1716,8 @@ rdfs:label "werken";
 skos:prefLabel "Werken";
 skos:definition '''alle door menselijk toedoen ontstane of gemaakte constructies of inrichtingen, inclusief bouwwerken, en restanten daarvan ''';
 rdfs:comment "alle constructies die door mensen zijn gemaakt of ontstaan";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Wet rdf:type skos:Concept;
@@ -1734,8 +1725,8 @@ rdfs:label "wet";
 skos:prefLabel "Wet";
 skos:definition '''de Omgevingswet ''';
 rdfs:comment "Omgevingswet ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Winmiddel rdf:type skos:Concept;
@@ -1743,8 +1734,8 @@ rdfs:label "winmiddel";
 skos:prefLabel "Winmiddel";
 skos:definition '''een middel om grondwater, in afwijking van het natuurlijke stromingspatroon, in meer of mindere mate geforceerd te doen toestromen ''';
 rdfs:comment "een voorwerp dat zorgt dat grondwater gewonnen kan worden, bijvoorbeeld een pomp of een buis ";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Zeereep rdf:type skos:Concept;
@@ -1752,8 +1743,8 @@ rdfs:label "zeereep";
 skos:prefLabel "Zeereep";
 skos:definition '''duinenrij onmiddellijk langs het strand ''';
 rdfs:comment "duinenrij die grenst aan het strand";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Zomerkade rdf:type skos:Concept;
@@ -1761,8 +1752,8 @@ rdfs:label "zomerkade";
 skos:prefLabel "Zomerkade";
 skos:definition '''kade gelegen tussen een rivier en een regionale kering die het buitendijkse gebied behoedt tegen al te frequent onderlopen vanuit de rivier ''';
 rdfs:comment "kade tussen rivier en regionale kering, waardoor het buitendijkse gebied niet al te vaak onderloopt";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:Zorgplicht rdf:type skos:Concept;
@@ -1770,8 +1761,8 @@ rdfs:label "zorgplicht";
 skos:prefLabel "Zorgplicht";
 skos:definition '''de eis om bij een bepaalde activiteit voldoende aandacht te hebben voor het watersysteem en maatregelen te nemen om het watersysteem goed te laten functioneren ''';
 rdfs:comment "verantwoordelijkheid om goed voor een watersysteem te zorgen";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .
 dso:ZwaarwegendMaatschappelijkBelang rdf:type skos:Concept;
@@ -1779,7 +1770,7 @@ rdfs:label "zwaarwegend maatschappelijk belang";
 skos:prefLabel "ZwaarwegendMaatschappelijkBelang";
 skos:definition '''de overweging dat het algemeen belang om een activiteit toe te staan, groter is dan het formele, specifieke belang om de activiteit te verbieden ''';
 rdfs:comment "overweging dat het goed is voor de maatschappij om een bepaalde activiteit toe te staan";
-skos:inScheme <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/Water>;
-dct:valid "2017-12-04";
+skos:inScheme dataset:Water;
+dcterms:temporal [dcmiperiod:start "2017-12-05";]
 
 .

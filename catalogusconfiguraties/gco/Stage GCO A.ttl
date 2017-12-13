@@ -1538,11 +1538,19 @@ stage:ReqModelTotaal a elmo:Representation;
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		PREFIX dctype: <http://purl.org/dc/dcmitype/>
 		CONSTRUCT {
-			?s?p?o
+			?s ?p ?o.
+			?member skos:inScheme ?scheme.
+			?member rdfs:label ?memberlabel
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 				?s?p?o
+			}
+			OPTIONAL {
+				GRAPH <http://bp4mc2.org/id/dataset/imports> {
+					?member skos:inScheme ?scheme.
+					?member skos:prefLabel ?memberlabel
+				}
 			}
 		}
 	''';
