@@ -1529,6 +1529,7 @@ stage:ReqModelYedQuery a elmo:Query;
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 
 stage:ReqModelTotaal a elmo:Representation;
 	elmo:url-pattern "/query/model/totaal$";
@@ -1555,6 +1556,46 @@ stage:ReqModelTotaal a elmo:Representation;
 		}
 	''';
 .
+
+stage:ReqFModelConcepten a elmo:Representation;
+  elmo:url-pattern "/query/fmodel/concepten$";
+  elmo:appearance elmo:VocabularyAppearance;
+  elmo:contains stage:Menu;
+  elmo:query '''
+    CONSTRUCT {
+      ?shape ?shapepred ?shapeobj.
+      ?shape sh:property ?prop.
+      ?prop ?proppred ?propobj.
+    }
+    WHERE {
+      {
+        GRAPH <@STAGE@> {
+          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape ?shapepred ?shapeobj.
+          ?shape sh:property ?prop.
+          ?prop ?proppred ?propobj
+          FILTER NOT EXISTS {?prop sh:node ?refshape}
+        }
+      }
+      UNION
+      {
+        GRAPH <@STAGE@> {
+          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape.
+          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?refshape.
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape sh:property ?prop.
+          ?prop ?proppred ?propobj.
+          ?prop sh:node ?refshape
+        }
+      }
+    }
+  ''';
+.
+<urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument.
+  
 
 stage:ReqModelConcepten a elmo:Representation;
 	elmo:url-pattern "/query/model/concepten$";

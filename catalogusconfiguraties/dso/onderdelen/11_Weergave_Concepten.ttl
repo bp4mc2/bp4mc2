@@ -616,6 +616,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			<@IDSUBJECT@> skoslex:refersTo ?act.
 			?act rdfs:label ?actlabel.
 			<@IDSUBJECT@> skos:closeMatch ?toe_label.
+      
+      <@IDSUBJECT@> ?pTemporal ?oTemporal.
 			
 		}
 		WHERE {
@@ -625,6 +627,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						GRAPH ?g {
 							<@IDSUBJECT@> ?p ?o.
 							<@IDSUBJECT@> rdf:type skos:Concept.
+              OPTIONAL {
+                <@IDSUBJECT@> dc:temporal [ ?pTemporal ?oTemporal ].
+              }
 							?g prov:wasGeneratedBy ?a.
 							?g prov:generatedAtTime ?sStartTime.
 							
@@ -646,6 +651,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 								&& ?p != bp4mc2:signature
 								&& ?p != dct:type
 								&& ?p != skos:member
+                && ?p != dc:temporal
 							)
 						}
 					}
@@ -716,6 +722,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						OPTIONAL {
 							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
 						}
+            OPTIONAL {
+              <@IDSUBJECT@> dc:temporal [ ?pTemporal ?oTemporal ].
+            }
 					}
 					FILTER (
 						?p != rdf:type
@@ -723,6 +732,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						&& ?p != dct:type
 						&& ?p != skos:member
 						&& ?p != dct:title
+            && ?p != dc:temporal
 					)
 					OPTIONAL {
 						GRAPH ?og {
