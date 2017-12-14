@@ -1,5 +1,7 @@
-@prefix catalogus: 		<http://tst.omgevingswet.overheid.nl/id/catalogus/>.
+@prefix catalog: 		  <http://tst.omgevingswet.overheid.nl/id/catalog/>.
+@prefix image: 		    <http://tst.omgevingswet.overheid.nl/id/image/>.
 @prefix dataset: 	  	<http://tst.omgevingswet.overheid.nl/id/dataset/>.
+@prefix organization: <http://tst.omgevingswet.overheid.nl/id/organization/>.
 @prefix text: 	  	  <http://tst.omgevingswet.overheid.nl/id/text/>.
 @prefix elmo: 		  	<http://bp4mc2.org/elmo/def#>.
 @prefix rdf: 		      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -10,9 +12,10 @@
 @prefix iso:          <http://id.loc.gov/vocabulary/iso639-1/>.
 @prefix foaf:         <http://xmlns.com/foaf/0.1/>.
 @prefix dctype:       <http://purl.org/dc/dcmitype/>.
+@prefix vcard:        <http://www.w3.org/2006/vcard/ns#>.
 
 
-catalogus:DigitaalStelselOmgevingswet a dcat:Catalog;
+catalog:DigitaalStelselOmgevingswet a dcat:Catalog;
 	rdfs:label "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
 	dct:title "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
 	dct:description "De Catalogus voor de Omgevingswet is een centrale ingang tot het stelsel, waarin wetgeving, begrippen, regels, informatiemodellen, datasets, producten en services met elkaar worden verbonden. De catalogus is daarmee een centrale plek waar de verschillende gebruikersgroepen van het stelsel kunnen zien waar het stelsel uit bestaat, wat begrippen betekenen en hoe de verschillende elementen van het stelsel aan elkaar zijn gerelateerd.";
@@ -27,8 +30,18 @@ text:CatalogusLicense a dctype:Text;
   foaf:depiction catalogus:CatalogusLicenseImage
 .
 
-catalogus:CatalogusLicenseImage a foaf:Image;
+image:CatalogusLicenseImage a foaf:Image;
   dct:source <http://localhost:8080/catalogus/images/licence.png>;
+.
+
+text:CatalogusProclaimer a dctype:Text;
+  dct:description "De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud."
+.
+
+organization:CatalogusContact a vcard:Organization;
+  vcard:note "Voor vragen over de Omgevingswet kunt u contact opnemen met het Informatiepunt Omgevingswet. U krijgt binnen 2 werkdagen een reactie.";
+  vcard:hasURL "http://aandeslagmetdeomgevingswet.nl/stel-uw-vraag/";
+  vcard:hasTelephone "088-79 70 790"
 .
 
 
