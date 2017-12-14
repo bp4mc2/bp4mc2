@@ -1532,27 +1532,8 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix agent: <http://localhost:8080/catalogus/dso/id/agent/>
 		prefix activity: <http://localhost:8080/catalogus/dso/id/activity/@CURRENTMOMENT@>
 			
-	
-		DELETE {
-			GRAPH versiongraph:version{
-				?s?p?o
-			}
-		}
-		WHERE {
-			GRAPH versiongraph:version {
-				?s?p?o
-			}
-		}
-		DELETE { 
-			GRAPH versionDataset:version {
-				?s ?p ?o
-			}
-		}
-		WHERE {
-			GRAPH versionDataset:version {
-				?s ?p ?o
-			}
-		}
+		CLEAR	GRAPH versiongraph:version
+		CLEAR GRAPH versionDataset:version
 		
 		INSERT {
 			GRAPH container:generiek {
@@ -1653,15 +1634,19 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		
 		INSERT {
 			GRAPH versiongraph:version {
-				?s ?p ?o
+				?s ?p ?o;
+          dct:temporal [ ?pT ?pO ]
+        .
 			}
 		}
 		WHERE {
 			GRAPH container:generiek {
-				?s rdf:type ?type.
-				?s skos:inScheme ?scheme.
-			    ?s ?p ?o.
-			    ?s bp4mc2:signature ?sig
+				?s rdf:type ?type;
+          skos:inScheme ?scheme;
+          ?p ?o;
+          bp4mc2:signature ?sig;
+          dct:temporal [ ?pT ?pO ]
+        .
 				FILTER (
 					?type = skos:Concept
 					|| ?type = skos:Collection
@@ -1672,6 +1657,9 @@ stage:DSOUploadScenePUT a elmo:Scene;
 					|| ?type = owl:Class
 					|| ?type = dctype:Text
 				)
+        FILTER (
+          ?p != dct:temporal
+        )
 			}
 			FILTER NOT EXISTS {
 				GRAPH doc:mastergraph {

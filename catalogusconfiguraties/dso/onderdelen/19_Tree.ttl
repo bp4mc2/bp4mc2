@@ -64,6 +64,10 @@ stage:DSOTreeQuery a elmo:Query;
 			?s thes:broaderGeneric ?o.
 			?s skos:member ?sCollection.
 			?sCollection rdfs:label ?sCollectionLabel.
+      ?sCollection skos:inScheme ?cDataset.
+      ?cDataset rdfs:label ?cDatasetLabel.
+      ?s skos:inScheme ?sDataset.
+      ?sDataset rdfs:label ?sDatasetLabel.
 		}
 		WHERE {
 			{
@@ -136,7 +140,7 @@ stage:DSOTreeQuery a elmo:Query;
 					}
 					UNION
 					{
-						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
+						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel, ?subjectDataset AS ?sDataset
 						WHERE {
 							GRAPH ?subjectGraph {
 								?subject rdf:type skos:Concept.
@@ -157,9 +161,6 @@ stage:DSOTreeQuery a elmo:Query;
 								GRAPH ?objectGraph {
 									?object rdf:type skos:Concept.
 									?object rdfs:label ?objectLabel.
-									FILTER NOT EXISTS {
-										?object prov:invalidatedAtTime ?objectTime.
-									}
 								}
 								GRAPH doc:mastergraph {
 									?object rdfs:isDefinedBy ?objectGraph.
@@ -169,56 +170,120 @@ stage:DSOTreeQuery a elmo:Query;
 					}
 				}
 			}
+      OPTIONAL {
+        GRAPH ?sGraph {
+          ?s skos:inScheme ?sDataset.
+          FILTER NOT EXISTS {
+            ?s prov:invalidatedAtTime ?sTime.
+          }
+          FILTER NOT EXISTS {
+            GRAPH ?sdCollectionGraph {
+              ?sdCollection skos:member ?s.
+              FILTER NOT EXISTS {
+                ?sdCollection prov:invalidatedAtTime ?sdTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?sdCollection rdfs:isDefinedBy ?sdCollectionGraph.
+            }
+          }
+        }
+        GRAPH doc:mastergraph {
+          ?s rdfs:isDefinedBy ?sGraph.
+        }
+        FILTER NOT EXISTS {
+          {
+            GRAPH ?sParentGraph {
+              ?s ?sParentPredicate ?sParent.
+              FILTER(
+                ?sParentPredicate = thes:broaderGeneric ||
+                ?sParentPredicate = thes:broaderPartitive
+              )
+              FILTER NOT EXISTS {
+                ?s prov:invalidatedAtTime ?sParentTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?s rdfs:isDefinedBy ?sParentGraph.
+            }
+          }
+          UNION
+          {
+            GRAPH ?sChildGraph {
+              ?sChild ?sChildPredicate ?s.
+              FILTER(
+                ?sChildPredicate = thes:narrowerGeneric ||
+                ?sChildPredicate = thes:narrowerPartitive
+              )
+              FILTER NOT EXISTS {
+                ?sChild prov:invalidatedAtTime ?sChildTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?sChild rdfs:isDefinedBy ?sChildGraph.
+            }
+          }
+        }
+      }
 			OPTIONAL {
-				GRAPH ?sCollectionGraph {
-					?sCollection skos:member ?s.
-					?sCollection rdfs:label ?sCollectionLabel.
-					OPTIONAL {
-						?sCollection skos:inScheme ?scheme.
-					}
-					FILTER NOT EXISTS {
-						?sCollection prov:invalidatedAtTime ?sCollectionTime.
-					}
-					FILTER NOT EXISTS {
-						{
-							GRAPH ?sParentGraph {
-								?s ?sParentPredicate ?sParent.
-								FILTER(
-									?sParentPredicate = thes:broaderGeneric ||
-									?sParentPredicate = thes:broaderPartitive
-								)
-								FILTER NOT EXISTS {
-									?s prov:invalidatedAtTime ?sParentTime.
-								}
-							}
-							GRAPH ?sCollectionGraph {
-								?sCollection skos:member ?sParent.
-							}
-							GRAPH doc:mastergraph {
-								?s rdfs:isDefinedBy ?sParentGraph.
-							}
-						}
-						UNION
-						{
-							GRAPH ?sChildGraph {
-								?sChild ?sChildPredicate ?s.
-								FILTER(
-									?sChildPredicate = thes:narrowerGeneric ||
-									?sChildPredicate = thes:narrowerPartitive
-								)
-								FILTER NOT EXISTS {
-									?sChild prov:invalidatedAtTime ?sChildTime.
-								}
-							}
-							GRAPH ?sCollectionGraph {
-								?sCollection skos:member ?sChild.
-							}
-							GRAPH doc:mastergraph {
-								?sChild rdfs:isDefinedBy ?sChildGraph.
-							}
-						}
-					}
-				}
+        GRAPH ?sCollectionGraph {
+          ?sCollection skos:member ?s.
+          ?sCollection rdfs:label ?sCollectionLabel.
+          OPTIONAL {
+            ?sCollection skos:inScheme ?cDataset.
+            GRAPH ?cDatasetGraph {
+              ?cDataset rdfs:label ?cDatasetLabel.
+              FILTER NOT EXISTS {
+                ?cDataset prov:invalidatedAtTime ?cDatasetTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?cDataset rdfs:isDefinedBy ?cDatasetGraph.
+            }
+          }
+          FILTER NOT EXISTS {
+            ?sCollection prov:invalidatedAtTime ?sCollectionTime.
+          }
+        }
+        FILTER NOT EXISTS {
+          {
+            GRAPH ?sParentGraph {
+              ?s ?sParentPredicate ?sParent.
+              FILTER(
+                ?sParentPredicate = thes:broaderGeneric ||
+                ?sParentPredicate = thes:broaderPartitive
+              )
+              FILTER NOT EXISTS {
+                ?s prov:invalidatedAtTime ?sParentTime.
+              }
+            }
+            GRAPH ?sCollectionGraph {
+              ?sCollection skos:member ?sParent.
+            }
+            GRAPH doc:mastergraph {
+              ?s rdfs:isDefinedBy ?sParentGraph.
+            }
+          }
+          UNION
+          {
+            GRAPH ?sChildGraph {
+              ?sChild ?sChildPredicate ?s.
+              FILTER(
+                ?sChildPredicate = thes:narrowerGeneric ||
+                ?sChildPredicate = thes:narrowerPartitive
+              )
+              FILTER NOT EXISTS {
+                ?sChild prov:invalidatedAtTime ?sChildTime.
+              }
+            }
+            GRAPH ?sCollectionGraph {
+              ?sCollection skos:member ?sChild.
+            }
+            GRAPH doc:mastergraph {
+              ?sChild rdfs:isDefinedBy ?sChildGraph.
+            }
+          }
+        }
 				GRAPH doc:mastergraph {
 					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
 				}

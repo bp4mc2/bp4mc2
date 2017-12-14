@@ -2365,27 +2365,8 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		prefix agent: <http://data.test.pdok.nl/catalogus/dso/id/agent/>
 		prefix activity: <http://data.test.pdok.nl/catalogus/dso/id/activity/@CURRENTMOMENT@>
 			
-	
-		DELETE {
-			GRAPH versiongraph:version{
-				?s?p?o
-			}
-		}
-		WHERE {
-			GRAPH versiongraph:version {
-				?s?p?o
-			}
-		}
-		DELETE { 
-			GRAPH versionDataset:version {
-				?s ?p ?o
-			}
-		}
-		WHERE {
-			GRAPH versionDataset:version {
-				?s ?p ?o
-			}
-		}
+		CLEAR	GRAPH versiongraph:version
+		CLEAR GRAPH versionDataset:version
 		
 		INSERT {
 			GRAPH container:generiek {
@@ -2486,15 +2467,19 @@ stage:DSOUploadScenePUT a elmo:Scene;
 		
 		INSERT {
 			GRAPH versiongraph:version {
-				?s ?p ?o
+				?s ?p ?o;
+          dct:temporal [ ?pT ?pO ]
+        .
 			}
 		}
 		WHERE {
 			GRAPH container:generiek {
-				?s rdf:type ?type.
-				?s skos:inScheme ?scheme.
-			    ?s ?p ?o.
-			    ?s bp4mc2:signature ?sig
+				?s rdf:type ?type;
+          skos:inScheme ?scheme;
+          ?p ?o;
+          bp4mc2:signature ?sig;
+          dct:temporal [ ?pT ?pO ]
+        .
 				FILTER (
 					?type = skos:Concept
 					|| ?type = skos:Collection
@@ -2505,6 +2490,9 @@ stage:DSOUploadScenePUT a elmo:Scene;
 					|| ?type = owl:Class
 					|| ?type = dctype:Text
 				)
+        FILTER (
+          ?p != dct:temporal
+        )
 			}
 			FILTER NOT EXISTS {
 				GRAPH doc:mastergraph {
@@ -4175,6 +4163,8 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 			<@IDSUBJECT@> skoslex:refersTo ?act.
 			?act rdfs:label ?actlabel.
 			<@IDSUBJECT@> skos:closeMatch ?toe_label.
+      
+      <@IDSUBJECT@> ?pTemporal ?oTemporal.
 			
 		}
 		WHERE {
@@ -4184,6 +4174,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						GRAPH ?g {
 							<@IDSUBJECT@> ?p ?o.
 							<@IDSUBJECT@> rdf:type skos:Concept.
+              OPTIONAL {
+                <@IDSUBJECT@> dc:temporal [ ?pTemporal ?oTemporal ].
+              }
 							?g prov:wasGeneratedBy ?a.
 							?g prov:generatedAtTime ?sStartTime.
 							
@@ -4205,6 +4198,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 								&& ?p != bp4mc2:signature
 								&& ?p != dct:type
 								&& ?p != skos:member
+                && ?p != dc:temporal
 							)
 						}
 					}
@@ -4275,6 +4269,9 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						OPTIONAL {
 							<@IDSUBJECT@> prov:invalidatedAtTime ?sEndTime.
 						}
+            OPTIONAL {
+              <@IDSUBJECT@> dc:temporal [ ?pTemporal ?oTemporal ].
+            }
 					}
 					FILTER (
 						?p != rdf:type
@@ -4282,6 +4279,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						&& ?p != dct:type
 						&& ?p != skos:member
 						&& ?p != dct:title
+            && ?p != dc:temporal
 					)
 					OPTIONAL {
 						GRAPH ?og {
@@ -6730,6 +6728,10 @@ stage:DSOTreeQuery a elmo:Query;
 			?s thes:broaderGeneric ?o.
 			?s skos:member ?sCollection.
 			?sCollection rdfs:label ?sCollectionLabel.
+      ?sCollection skos:inScheme ?cDataset.
+      ?cDataset rdfs:label ?cDatasetLabel.
+      ?s skos:inScheme ?sDataset.
+      ?sDataset rdfs:label ?sDatasetLabel.
 		}
 		WHERE {
 			{
@@ -6802,7 +6804,7 @@ stage:DSOTreeQuery a elmo:Query;
 					}
 					UNION
 					{
-						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel
+						SELECT DISTINCT ?subject AS ?s, ?subjectLabel AS ?sLabel, ?subjectDataset AS ?sDataset
 						WHERE {
 							GRAPH ?subjectGraph {
 								?subject rdf:type skos:Concept.
@@ -6823,9 +6825,6 @@ stage:DSOTreeQuery a elmo:Query;
 								GRAPH ?objectGraph {
 									?object rdf:type skos:Concept.
 									?object rdfs:label ?objectLabel.
-									FILTER NOT EXISTS {
-										?object prov:invalidatedAtTime ?objectTime.
-									}
 								}
 								GRAPH doc:mastergraph {
 									?object rdfs:isDefinedBy ?objectGraph.
@@ -6835,56 +6834,120 @@ stage:DSOTreeQuery a elmo:Query;
 					}
 				}
 			}
+      OPTIONAL {
+        GRAPH ?sGraph {
+          ?s skos:inScheme ?sDataset.
+          FILTER NOT EXISTS {
+            ?s prov:invalidatedAtTime ?sTime.
+          }
+          FILTER NOT EXISTS {
+            GRAPH ?sdCollectionGraph {
+              ?sdCollection skos:member ?s.
+              FILTER NOT EXISTS {
+                ?sdCollection prov:invalidatedAtTime ?sdTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?sdCollection rdfs:isDefinedBy ?sdCollectionGraph.
+            }
+          }
+        }
+        GRAPH doc:mastergraph {
+          ?s rdfs:isDefinedBy ?sGraph.
+        }
+        FILTER NOT EXISTS {
+          {
+            GRAPH ?sParentGraph {
+              ?s ?sParentPredicate ?sParent.
+              FILTER(
+                ?sParentPredicate = thes:broaderGeneric ||
+                ?sParentPredicate = thes:broaderPartitive
+              )
+              FILTER NOT EXISTS {
+                ?s prov:invalidatedAtTime ?sParentTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?s rdfs:isDefinedBy ?sParentGraph.
+            }
+          }
+          UNION
+          {
+            GRAPH ?sChildGraph {
+              ?sChild ?sChildPredicate ?s.
+              FILTER(
+                ?sChildPredicate = thes:narrowerGeneric ||
+                ?sChildPredicate = thes:narrowerPartitive
+              )
+              FILTER NOT EXISTS {
+                ?sChild prov:invalidatedAtTime ?sChildTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?sChild rdfs:isDefinedBy ?sChildGraph.
+            }
+          }
+        }
+      }
 			OPTIONAL {
-				GRAPH ?sCollectionGraph {
-					?sCollection skos:member ?s.
-					?sCollection rdfs:label ?sCollectionLabel.
-					OPTIONAL {
-						?sCollection skos:inScheme ?scheme.
-					}
-					FILTER NOT EXISTS {
-						?sCollection prov:invalidatedAtTime ?sCollectionTime.
-					}
-					FILTER NOT EXISTS {
-						{
-							GRAPH ?sParentGraph {
-								?s ?sParentPredicate ?sParent.
-								FILTER(
-									?sParentPredicate = thes:broaderGeneric ||
-									?sParentPredicate = thes:broaderPartitive
-								)
-								FILTER NOT EXISTS {
-									?s prov:invalidatedAtTime ?sParentTime.
-								}
-							}
-							GRAPH ?sCollectionGraph {
-								?sCollection skos:member ?sParent.
-							}
-							GRAPH doc:mastergraph {
-								?s rdfs:isDefinedBy ?sParentGraph.
-							}
-						}
-						UNION
-						{
-							GRAPH ?sChildGraph {
-								?sChild ?sChildPredicate ?s.
-								FILTER(
-									?sChildPredicate = thes:narrowerGeneric ||
-									?sChildPredicate = thes:narrowerPartitive
-								)
-								FILTER NOT EXISTS {
-									?sChild prov:invalidatedAtTime ?sChildTime.
-								}
-							}
-							GRAPH ?sCollectionGraph {
-								?sCollection skos:member ?sChild.
-							}
-							GRAPH doc:mastergraph {
-								?sChild rdfs:isDefinedBy ?sChildGraph.
-							}
-						}
-					}
-				}
+        GRAPH ?sCollectionGraph {
+          ?sCollection skos:member ?s.
+          ?sCollection rdfs:label ?sCollectionLabel.
+          OPTIONAL {
+            ?sCollection skos:inScheme ?cDataset.
+            GRAPH ?cDatasetGraph {
+              ?cDataset rdfs:label ?cDatasetLabel.
+              FILTER NOT EXISTS {
+                ?cDataset prov:invalidatedAtTime ?cDatasetTime.
+              }
+            }
+            GRAPH doc:mastergraph {
+              ?cDataset rdfs:isDefinedBy ?cDatasetGraph.
+            }
+          }
+          FILTER NOT EXISTS {
+            ?sCollection prov:invalidatedAtTime ?sCollectionTime.
+          }
+        }
+        FILTER NOT EXISTS {
+          {
+            GRAPH ?sParentGraph {
+              ?s ?sParentPredicate ?sParent.
+              FILTER(
+                ?sParentPredicate = thes:broaderGeneric ||
+                ?sParentPredicate = thes:broaderPartitive
+              )
+              FILTER NOT EXISTS {
+                ?s prov:invalidatedAtTime ?sParentTime.
+              }
+            }
+            GRAPH ?sCollectionGraph {
+              ?sCollection skos:member ?sParent.
+            }
+            GRAPH doc:mastergraph {
+              ?s rdfs:isDefinedBy ?sParentGraph.
+            }
+          }
+          UNION
+          {
+            GRAPH ?sChildGraph {
+              ?sChild ?sChildPredicate ?s.
+              FILTER(
+                ?sChildPredicate = thes:narrowerGeneric ||
+                ?sChildPredicate = thes:narrowerPartitive
+              )
+              FILTER NOT EXISTS {
+                ?sChild prov:invalidatedAtTime ?sChildTime.
+              }
+            }
+            GRAPH ?sCollectionGraph {
+              ?sCollection skos:member ?sChild.
+            }
+            GRAPH doc:mastergraph {
+              ?sChild rdfs:isDefinedBy ?sChildGraph.
+            }
+          }
+        }
 				GRAPH doc:mastergraph {
 					?sCollection rdfs:isDefinedBy ?sCollectionGraph.
 				}
