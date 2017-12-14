@@ -1,22 +1,40 @@
-@prefix catalogus: 		<https://tst.omgevingswet.overheid.nl/id/catalogus/>.
-@prefix dataset: 	  	<https://tst.omgevingswet.overheid.nl/id/dataset/>.
+@prefix catalogus: 		<http://tst.omgevingswet.overheid.nl/id/catalogus/>.
+@prefix dataset: 	  	<http://tst.omgevingswet.overheid.nl/id/dataset/>.
+@prefix text: 	  	  <http://tst.omgevingswet.overheid.nl/id/text/>.
 @prefix elmo: 		  	<http://bp4mc2.org/elmo/def#>.
-@prefix rdf: 		    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdf: 		      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: 		  	<http://www.w3.org/2000/01/rdf-schema#>.
 @prefix skos: 		  	<http://www.w3.org/2004/02/skos/core#>.
 @prefix dcat: 		  	<http://www.w3.org/ns/dcat#>.
-@prefix dct: 		    <http://purl.org/dc/terms/>.
+@prefix dct: 		      <http://purl.org/dc/terms/>.
+@prefix iso:          <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix foaf:         <http://xmlns.com/foaf/0.1/>.
+@prefix dctype:       <http://purl.org/dc/dcmitype/>.
 
-catalogus:DSO rdf:type dcat:Catalog;
-    dcat:Dataset dataset:Wetgeving, dataset:Regelgeving, dataset:Water;
-    dct:modified "2017-12-12"^^xsd:date;
-    dct:description "Digitaal Stelsel Omgevingswet";
-    dct:license "?";
-    dct:issued "2017-12-12"^^xsd:date;
-    foaf:homepage "http://catalogus.test.kadaster.nl/catalogus-omgevingswet/";
-    dct:title "DSO";
-    dct:rights "?";
-    dct:language "nl";
+
+catalogus:DigitaalStelselOmgevingswet a dcat:Catalog;
+	rdfs:label "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
+	dct:title "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
+	dct:description "De Catalogus voor de Omgevingswet is een centrale ingang tot het stelsel, waarin wetgeving, begrippen, regels, informatiemodellen, datasets, producten en services met elkaar worden verbonden. De catalogus is daarmee een centrale plek waar de verschillende gebruikersgroepen van het stelsel kunnen zien waar het stelsel uit bestaat, wat begrippen betekenen en hoe de verschillende elementen van het stelsel aan elkaar zijn gerelateerd.";
+	dct:license loc:CatalogusLicense;
+	dct:rights loc:CatalogusProclaimer;
+  dcat:contactPoint loc:CatalogusContact;
+	dcat:dataset loc:Omgevingswet;
 .
-  
-  
+
+text:CatalogusLicense a dctype:Text;
+  dct:description '''"Tenzij anders vermeld is de inhoud van de catalogus Omgevingswet gelicenseerd onder een <a href='http://creativecommons.org/licenses/by/4.0/deed.nl'>Creative Commons Naamsvermelding 4.0 licentie (CC-BY 4.0)</a>" (Local application for the GCO Catalog version 1.0).'''^^rdf:html;
+  foaf:depiction catalogus:CatalogusLicenseImage
+.
+
+catalogus:CatalogusLicenseImage a foaf:Image;
+  dct:source <http://localhost:8080/catalogus/images/licence.png>;
+.
+
+
+
+
+
+
+
+
