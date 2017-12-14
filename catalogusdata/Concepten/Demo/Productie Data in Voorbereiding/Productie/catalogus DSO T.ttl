@@ -1,0 +1,55 @@
+@prefix catalog: 		  <http://omgevingswet.overheid.nl/id/catalog/>.
+@prefix image: 		    <http://omgevingswet.overheid.nl/id/image/>.
+@prefix content: 	  	<http://content.omgevingswet.overheid.nl/id/dataset/>.
+@prefix wetgeving: 	  <http://wetgeving.omgevingswet.overheid.nl/id/dataset/>.
+@prefix regelgeving: 	<http://regelgeving.omgevingswet.overheid.nl/id/dataset/>.
+@prefix organization: <http://omgevingswet.overheid.nl/id/organization/>.
+@prefix text: 	  	  <http://omgevingswet.overheid.nl/id/text/>.
+@prefix elmo: 		  	<http://bp4mc2.org/elmo/def#>.
+@prefix rdf: 		      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: 		  	<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: 		  	<http://www.w3.org/2004/02/skos/core#>.
+@prefix dcat: 		  	<http://www.w3.org/ns/dcat#>.
+@prefix dct: 		      <http://purl.org/dc/terms/>.
+@prefix iso:          <http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix foaf:         <http://xmlns.com/foaf/0.1/>.
+@prefix dctype:       <http://purl.org/dc/dcmitype/>.
+@prefix vcard:        <http://www.w3.org/2006/vcard/ns#>.
+
+
+catalog:DigitaalStelselOmgevingswet a dcat:Catalog;
+	rdfs:label "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
+	dct:title "Testversie Gegevenscatalogus Digitaal Stelsel Omgevingswet";
+	dct:description "De Catalogus voor de Omgevingswet is een centrale ingang tot het stelsel, waarin wetgeving, begrippen, regels, informatiemodellen, datasets, producten en services met elkaar worden verbonden. De catalogus is daarmee een centrale plek waar de verschillende gebruikersgroepen van het stelsel kunnen zien waar het stelsel uit bestaat, wat begrippen betekenen en hoe de verschillende elementen van het stelsel aan elkaar zijn gerelateerd.";
+	dct:license loc:CatalogusLicense;
+	dct:rights loc:CatalogusProclaimer;
+  dcat:contactPoint loc:CatalogusContact;
+	dcat:dataset content:Water, wetgeving:Wetgeving, regelgeving:Regelgeving;
+.
+
+text:CatalogusLicense a dctype:Text;
+  dct:description '''"Tenzij anders vermeld is de inhoud van de catalogus Omgevingswet gelicenseerd onder een <a href='http://creativecommons.org/licenses/by/4.0/deed.nl'>Creative Commons Naamsvermelding 4.0 licentie (CC-BY 4.0)</a>" (Local application for the GCO Catalog version 1.0).'''^^rdf:html;
+  foaf:depiction catalogus:CatalogusLicenseImage
+.
+
+image:CatalogusLicenseImage a foaf:Image;
+  dct:source <http://localhost:8080/catalogus/images/licence.png>;
+.
+
+text:CatalogusProclaimer a dctype:Text;
+  dct:description "De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud."
+.
+
+organization:CatalogusContact a vcard:Organization;
+  vcard:note "Voor vragen over de Omgevingswet kunt u contact opnemen met het Informatiepunt Omgevingswet. U krijgt binnen 2 werkdagen een reactie.";
+  vcard:hasURL "http://aandeslagmetdeomgevingswet.nl/stel-uw-vraag/";
+  vcard:hasTelephone "088-79 70 790"
+.
+
+
+
+
+
+
+
+
