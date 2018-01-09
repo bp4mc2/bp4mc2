@@ -252,6 +252,7 @@ req:Provenance a sh:NodeShape;
 	sh:targetClass prov:Bundle;
 	sh:property req:Provenance_generatedAtTime;
 	sh:property req:Provenance_changeNote;
+	sh:property req:Provenance_attributedTo;
 .
 req:Provenance_generatedAtTime a sh:PropertyShape;
 	rdfs:label "generated at time";
@@ -263,6 +264,51 @@ req:Provenance_changeNote a sh:PropertyShape;
 	sh:path skos:changeNote;
 	sh:name "skos:changeNote";
 .
+req:Provenance_attributedTo a sh:PropertyShape;
+	rdfs:label "was attributed to";
+	sh:name "prov:wasAttributedTo";
+	sh:path prov:wasAttributedTo;
+	sh:node req:ProvenancePerson;
+.
+
+req:ProvenancePerson a sh:NodeShape;
+	rdfs:label "ProvenancePerson";
+	sh:name "prov:Person/prov:SoftwareAgent";
+	sh:targetClass prov:Person;
+	sh:property req:ProvenancePerson_Agent;
+	sh:property req:ProvenancePerson_OnBehalfOf;
+.
+req:ProvenancePerson_Agent a sh:PropertyShape;
+	rdfs:label "Agent";
+	sh:name "prov:Agent";
+	sh:path prov:Agent;
+.
+req:ProvenancePerson_OnBehalfOf a sh:PropertyShape;
+	rdfs:label "acted on behalf of";
+	sh:name "prov:actedOnBehalfOf";
+	sh:path prov:actedOnBehalfOf;
+	sh:node req:ProvenanceOrganisation;
+.
+
+req:ProvenanceOrganisation a sh:NodeShape;
+	rdfs:label "Organisation";
+	sh:name "prov:Organisation";
+	sh:targetClass prov:Organisation;
+	sh:property req:ProvenanceOrganisation_Agent;
+	sh:property req:ProvenanceOrganisation_OnBehalfOf;
+.
+req:ProvenanceOrganisation_Agent a sh:PropertyShape;
+	rdfs:label "Agent";
+	sh:name "prov:Agent";
+	sh:path prov:Agent;
+.
+req:ProvenanceOrganisation_OnBehalfOf a sh:PropertyShape;
+	rdfs:label "acted on behalf of";
+	sh:name "prov:actedOnBehalfOf";
+	sh:path prov:actedOnBehalfOf;
+	sh:class prov:Organisation;
+.
+	
 	
 #-----------------
 # Concept Metadata
@@ -321,6 +367,7 @@ req:ConceptMetadata_isValidDuring a sh:PropertyShape;
 	rdfs:label "is geldig in";
 	sh:name "dcterms:temporal";
 	sh:path dcterms:temporal;
+	sh:node req:ConceptMetadata_Temporal;
 	rdfs:comment "Een begrip is formeel/juridische geldig gedurende een periode.";
 .
 req:ConceptMetadata_isIssued a sh:PropertyShape;
@@ -357,7 +404,11 @@ req:ConceptMetadata_isIssued a sh:PropertyShape;
 #	sh:class skos:Concept;
 #.
 
-
+req:ConceptMetadata_Temporal a sh:NodeShape;
+	rdfs:label "Temporal";
+	sh:property req:Temporal_Start;
+	sh:property req:Temporal_End;
+.
 
 #---------------------
 # Handeling/Gebeurtenis
