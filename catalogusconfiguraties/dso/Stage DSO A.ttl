@@ -404,6 +404,11 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "7";
 				xhtml:link "/catalogus/dso/container/datasetupdate";
 			];
+      elmo:data [
+				rdfs:label "Voeg een toeleidingsbegrip toe (RDF of Turtle)";
+				elmo:index "8";
+				xhtml:link "/catalogus/dso/container/addToeleiding";
+			];
 		];
 		elmo:data [
 			rdfs:label "API's concepten";
@@ -486,6 +491,11 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "2";
 				xhtml:link "/catalogus/dso/update/clearsingleconcept";
 			];
+      elmo:data [
+				rdfs:label "Verwijder een toeleidingsbegrip";
+				elmo:index "3";
+				xhtml:link "/catalogus/dso/update/clearToeleiding";
+			];
 			elmo:data [
 				rdfs:label "Voeg nieuw model toe";
 				elmo:index "4";
@@ -516,9 +526,14 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "/catalogus/dso/update/syncBegrippen";
 			];
 			elmo:data [
-				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
+				rdfs:label "Sync geuploade concepten naar dataset";
 				elmo:index "6";
 				xhtml:link "/catalogus/dso/update/syncDataset";
+			];
+      elmo:data [
+				rdfs:label "Sync toeleidingsbegrippen naar dataset";
+				elmo:index "7";
+				xhtml:link "/catalogus/dso/update/syncToeleiding";
 			];
 		];
 		elmo:data [
@@ -831,6 +846,506 @@ stage:DSOCatalogusUpdateScene a elmo:Scene;
 	''';
 .
  
+# Beheer Toeleidingsbegrippen
+
+# Containers
+container:addToeleiding a elmo:Container;
+  elmo:contains stage:DSOBeheermenu;
+  elmo:contains stage:DSOHeader;
+  elmo:contains stage:DSOFooter;
+  elmo:representation elmo:UploadRepresentation;
+  rdfs:label "Voeg een toeleidingsbegrip toe (.ttl)";
+  elmo:replaces container:generiek;
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:addToeleiding {
+          {
+            ?s rdf:type skos:Concept.
+            FILTER NOT EXISTS {
+              ?s skos:closeMatch ?match.
+            }
+          }
+          UNION
+          {
+            ?s rdf:type skos:Concept.
+            FILTER NOT EXISTS {
+              ?s rdfs:label ?label.
+            }
+          }
+          UNION
+          {
+            ?s rdf:type skos:Concept.
+            FILTER NOT EXISTS {
+              ?s skos:prefLabel ?prefLabel.
+            }
+          }
+        }
+      }
+    ''';
+    rdfs:label "Elk toeleidingsbegrip moet een skos:closeMatch, rdfs:label en skos:prefLabel bevatten.";
+  ];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:generiek {
+          {
+            ?s rdf:type skos:Concept;
+              ?p ?o
+            .
+            FILTER(
+              ?p != skos:closeMatch
+              && ?p != rdfs:label
+              && ?p != skos:prefLabel
+              && ?p != rdf:type
+            )
+          }
+        }
+      }
+    ''';
+    rdfs:label "Een toeleidingsbegrip mag geen andere eigenschappen bevatten dan een skos:closeMatch, een rdfs:label en een skos:prefLabel.";
+  ];
+.
+
+# Productions
+updatestage:syncToeleiding a elmo:Production;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectDataset;
+	elmo:contains stage:DSOAddToeleiding;
+.
+
+updatestage:clearToeleiding a elmo:Production;
+  elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:DSOSelectToeleiding;
+	elmo:contains stage:ClearToeleidingsbegripScene;
+.
+
+# Forms
+stage:DSOSelectToeleiding a elmo:Form;
+	rdfs:label "Selecteer het te verwijderen toeleidingsbegrip";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "toeleiding";
+		rdfs:label "Selecteer toeleidingsbegrip"@nl;
+		elmo:valuesFrom stage:search_toeleiding;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "2";
+	];
+.
+
+# Parts
+stage:search_toeleiding a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix dct: <http://purl.org/dc/terms/>
+    prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+		
+		CONSTRUCT {
+			?toeleiding rdfs:label ?toeleiding_label
+		}
+		WHERE {
+			GRAPH ?g {
+				?toeleiding rdf:type skos:Concept.
+				?toeleiding rdfs:label ?toeleiding_label.
+				FILTER NOT EXISTS {
+					?toeleiding prov:invalidatedAtTime ?time.
+				}
+			}
+      GRAPH ?tg {
+        collection:Toeleidingsbegrippen rdf:type skos:Collection;
+          skos:member ?toeleiding
+        .
+      }
+			GRAPH doc:mastergraph {
+				?toeleiding rdfs:isDefinedBy ?g.
+        collection:Toeleidingsbegrippen rdfs:isDefinedBy ?tg.
+			}
+		}
+		ORDER BY DESC(?toeleiding_label)
+	''';
+.
+
+# Scenes
+stage:DSOAddToeleiding a elmo:Scene;
+	rdfs:label "Postquery inladen gegevens";
+	elmo:index "2";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix loc: <http://data.acceptatie.pdok.nl/catalogus/dso/id/>
+		prefix versiongraph: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix versionDataset: <http://data.acceptatie.pdok.nl/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://data.acceptatie.pdok.nl/catalogus/dso/>
+		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
+		prefix agent: <http://data.acceptatie.pdok.nl/catalogus/dso/id/agent/>
+		prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+		prefix activity: <http://data.acceptatie.pdok.nl/catalogus/dso/id/activity/@CURRENTMOMENT@>
+			
+		CLEAR	GRAPH versiongraph:version
+		CLEAR GRAPH versionDataset:version
+
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				versionDataset:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				dataset:Datasets rdfs:isDefinedBy versionDataset:version.
+				versiongraph:version rdfs:label "Toeleidingsbegrippen - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				versionDataset:version dct:modified "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith agent:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
+				agent:tomcatUser rdf:type prov:Agent.
+				agent:tomcatUser rdfs:label "Tomcat User".
+				agent:tomcatUser foaf:givenName "Tomcat User".
+				agent:tomcatUser foaf:mbox "tomcat@user.org".
+				agent:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
+		}
+		
+		INSERT {
+			GRAPH container:generiek {
+				?s skos:inScheme <@DATASET@>.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type skos:Concept.
+			}
+		}
+
+		INSERT {
+			GRAPH container:generiek {
+				?s bp4mc2:signature ?sig.
+			}
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:generiek {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o;
+              rdf:type skos:Concept
+            .
+					}
+					ORDER BY ?s ?p ?o
+				}
+      }
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o.
+			}
+		}
+		WHERE {
+			GRAPH container:generiek {
+				?s rdf:type skos:Concept;
+          skos:inScheme ?scheme;
+          ?p ?o;
+          bp4mc2:signature ?sig
+        .
+			}
+		}
+    
+    INSERT {
+      GRAPH versiongraph:version {
+        collection:Toeleidingsbegrippen a skos:Collection;
+          rdfs:label "Toeleidingsbegrippen";
+          skos:member ?s
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept.
+      }
+    }
+    
+    INSERT {
+      GRAPH versiongraph:version {
+        collection:Toeleidingsbegrippen ?p ?o.
+      }
+    }
+    WHERE {
+      GRAPH ?tg {
+        collection:Toeleidingsbegrippen ?p ?o.
+        FILTER NOT EXISTS {
+          collection:Toeleidingsbegrippen prov:invalidatedAtTime ?tTime.
+        }
+      }
+      GRAPH doc:mastergraph {
+        collection:Toeleidingsbegrippen rdfs:isDefinedBy ?tg.
+      }
+    }
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type skos:Concept.
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+    
+    INSERT {
+			GRAPH ?g {
+				collection:Toeleidingsbegrippen prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				collection:Toeleidingsbegrippen rdfs:isDefinedBy ?g
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					collection:Toeleidingsbegrippen prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type skos:Concept.
+			}
+		}
+    
+    DELETE {
+      GRAPH doc:mastergraph {
+        collection:Toeleidingsbegrippen ?p ?o.
+      }
+    }
+    WHERE {
+      GRAPH doc:mastergraph {
+        collection:Toeleidingsbegrippen ?p ?o.
+      }
+    }
+
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type skos:Concept;
+          rdfs:isDefinedBy versiongraph:version;
+          bp4mc2:signature ?sig;
+          skos:inScheme <@DATASET@>
+        .
+			}
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+        ?s rdf:type skos:Concept;
+          bp4mc2:signature ?sig
+        .
+      }
+		}
+    
+    INSERT {
+			GRAPH doc:mastergraph {
+				collection:Toeleidingsbegrippen rdf:type skos:Collection;
+          rdfs:isDefinedBy versiongraph:version
+        .
+			}
+		}
+		
+		CLEAR GRAPH container:generiek		
+		CLEAR GRAPH container:excelupdate		
+		CLEAR GRAPH container:ttlupdate
+	''';
+.
+
+stage:ClearToeleidingsbegripScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder toeleidingsbegrip";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/>
+		prefix loc: <http://data.acceptatie.pdok.nl/catalogus/dso/id/>
+		prefix versiongraph: <http://data.acceptatie.pdok.nl/catalogus/dso/concepten/doc/@CURRENTMOMENT@>
+		prefix versionDataset: <http://data.acceptatie.pdok.nl/catalogus/dso/datasets/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://data.acceptatie.pdok.nl/catalogus/dso/>
+		prefix dataset: <http://data.acceptatie.pdok.nl/catalogus/dso/id/dataset/>
+		prefix agent: <http://data.acceptatie.pdok.nl/catalogus/dso/id/agent/>
+		prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+		prefix activity: <http://data.acceptatie.pdok.nl/catalogus/dso/id/activity/@CURRENTMOMENT@>
+			
+		CLEAR	GRAPH versiongraph:version
+		CLEAR GRAPH versionDataset:version
+    
+		DELETE {
+			GRAPH ?g {
+				<@TOELEIDING@> ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				<@TOELEIDING@> ?p ?o
+			}
+			FILTER regex(?g, "^http://data.acceptatie.pdok.nl/catalogus/dso/(?!stage)")
+		}    
+    
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				versionDataset:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				dataset:Datasets rdfs:isDefinedBy versionDataset:version.
+				versiongraph:version rdfs:label "Toeleidingsbegrippen - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Upload.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				versionDataset:version dct:modified "@CURRENTMOMENT@".
+				activity:Upload rdf:type prov:Activity.
+				activity:Upload rdfs:label "Upload dataset @CURRENTMOMENT@".
+				activity:Upload prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Upload prov:wasAssociatedWith agent:tomcatUser.
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
+				agent:tomcatUser rdf:type prov:Agent.
+				agent:tomcatUser rdfs:label "Tomcat User".
+				agent:tomcatUser foaf:givenName "Tomcat User".
+				agent:tomcatUser foaf:mbox "tomcat@user.org".
+				agent:tomcatUser prov:actedOnBehalfOf "Apache".
+			}
+		}
+
+    INSERT {
+      GRAPH versiongraph:version {
+        collection:Toeleidingsbegrippen ?p ?o.
+      }
+    }
+    WHERE {
+      GRAPH ?tg {
+        collection:Toeleidingsbegrippen ?p ?o.
+        FILTER NOT EXISTS {
+          collection:Toeleidingsbegrippen prov:invalidatedAtTime ?tTime.
+        }
+        FILTER( ?o != <@TOELEIDING@> )
+        
+      }
+      GRAPH doc:mastergraph {
+        collection:Toeleidingsbegrippen rdfs:isDefinedBy ?tg.
+      }
+    }
+    
+    INSERT {
+			GRAPH ?g {
+				collection:Toeleidingsbegrippen prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				collection:Toeleidingsbegrippen rdfs:isDefinedBy ?g
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					collection:Toeleidingsbegrippen prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+    
+    DELETE {
+      GRAPH doc:mastergraph {
+        collection:Toeleidingsbegrippen ?p ?o.
+      }
+    }
+    WHERE {
+      GRAPH doc:mastergraph {
+        collection:Toeleidingsbegrippen ?p ?o.
+      }
+    }
+    
+    INSERT {
+			GRAPH doc:mastergraph {
+				collection:Toeleidingsbegrippen rdf:type skos:Collection;
+          rdfs:isDefinedBy versiongraph:version
+        .
+			}
+		}
+	'''
+. 
 #
 #
 #
@@ -955,7 +1470,20 @@ container:excelupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
-	
+	elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ]
 .
 
 # Updatecontainer Turtle
@@ -1036,6 +1564,20 @@ container:ttlupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ]
 .
 
 
@@ -1138,6 +1680,20 @@ container:concepten-put-xml a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met lege term bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1230,6 +1786,20 @@ container:concepten-post-xml a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met lege term bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1336,6 +1906,20 @@ container:concepten-put-json a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1440,6 +2024,20 @@ container:concepten-post-json a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1546,6 +2144,20 @@ container:concepten-put-jsonld a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1648,6 +2260,20 @@ container:concepten-post-jsonld a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1752,6 +2378,20 @@ container:concepten-put-ttl a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1854,6 +2494,20 @@ container:concepten-post-ttl a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 	
@@ -1961,6 +2615,20 @@ container:concepten-put-xls a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -2056,6 +2724,20 @@ container:concepten-post-xls a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 

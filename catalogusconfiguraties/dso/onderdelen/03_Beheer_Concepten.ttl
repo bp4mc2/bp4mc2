@@ -122,7 +122,20 @@ container:excelupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
-	
+	elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ]
 .
 
 # Updatecontainer Turtle
@@ -203,6 +216,20 @@ container:ttlupdate a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ]
 .
 
 
@@ -305,6 +332,20 @@ container:concepten-put-xml a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met lege term bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -397,6 +438,20 @@ container:concepten-post-xml a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met lege term bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -503,6 +558,20 @@ container:concepten-put-json a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -607,6 +676,20 @@ container:concepten-post-json a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -713,6 +796,20 @@ container:concepten-put-jsonld a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
   elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -815,6 +912,20 @@ container:concepten-post-jsonld a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -919,6 +1030,20 @@ container:concepten-put-ttl a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1021,6 +1146,20 @@ container:concepten-post-ttl a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 	
@@ -1128,6 +1267,20 @@ container:concepten-put-xls a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
@@ -1223,6 +1376,20 @@ container:concepten-post-xls a elmo:Container;
 		''';
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 	];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+      prefix collection: <http://localhost:8080/catalogus/dso/id/collection/>
+			
+			ASK {
+				GRAPH container:generiek {
+          collection:Toeleidingsbegrippen ?p ?o.
+        }
+      }
+    ''';
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
+  ];
 	elmo:query stage:DSOUploadScenePUT;
 .
 
