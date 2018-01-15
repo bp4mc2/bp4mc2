@@ -911,6 +911,22 @@ container:addToeleiding a elmo:Container;
     ''';
     rdfs:label "Een toeleidingsbegrip mag geen andere eigenschappen bevatten dan een skos:closeMatch, een rdfs:label en een skos:prefLabel.";
   ];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:generiek {
+          {
+            ?s rdf:type ?type.
+            FILTER( ?type != skos:Concept )
+          }
+        }
+      }
+    ''';
+    rdfs:label "Een toeleidingsbegrip mag enkel skos:Concept als type hebben."
+  ]
 .
 
 # Productions
@@ -1482,7 +1498,7 @@ container:excelupdate a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ]
 .
 
@@ -1576,7 +1592,7 @@ container:ttlupdate a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ]
 .
 
@@ -1692,7 +1708,7 @@ container:concepten-put-xml a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
   elmo:query stage:DSOUploadScenePUT;
 .
@@ -1798,7 +1814,7 @@ container:concepten-post-xml a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
   elmo:query stage:DSOUploadScenePUT;
 .
@@ -1918,7 +1934,7 @@ container:concepten-put-json a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
   elmo:query stage:DSOUploadScenePUT;
 .
@@ -2036,7 +2052,7 @@ container:concepten-post-json a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
   elmo:query stage:DSOUploadScenePUT;
 .
@@ -2156,7 +2172,7 @@ container:concepten-put-jsonld a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
   elmo:query stage:DSOUploadScenePUT;
 .
@@ -2272,7 +2288,7 @@ container:concepten-post-jsonld a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
 	elmo:query stage:DSOUploadScenePUT;
 .
@@ -2390,7 +2406,7 @@ container:concepten-put-ttl a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
 	elmo:query stage:DSOUploadScenePUT;
 .
@@ -2506,7 +2522,7 @@ container:concepten-post-ttl a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
 	elmo:query stage:DSOUploadScenePUT;
 .
@@ -2627,7 +2643,7 @@ container:concepten-put-xls a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
 	elmo:query stage:DSOUploadScenePUT;
 .
@@ -2736,7 +2752,7 @@ container:concepten-post-xls a elmo:Container;
         }
       }
     ''';
-    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de verzameling van toeleidingsbegrippen."
+    rdfs:label "De upload mag geen wijzigingen aanbrengen aan de collectie van toeleidingsbegrippen."
   ];
 	elmo:query stage:DSOUploadScenePUT;
 .

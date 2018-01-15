@@ -63,6 +63,22 @@ container:addToeleiding a elmo:Container;
     ''';
     rdfs:label "Een toeleidingsbegrip mag geen andere eigenschappen bevatten dan een skos:closeMatch, een rdfs:label en een skos:prefLabel.";
   ];
+  elmo:assertion [
+    elmo:assert-not '''
+      prefix container: <http://localhost:8080/catalogus/dso/container/>
+			prefix skos: <http://www.w3.org/2004/02/skos/core#>
+			
+			ASK {
+				GRAPH container:generiek {
+          {
+            ?s rdf:type ?type.
+            FILTER( ?type != skos:Concept )
+          }
+        }
+      }
+    ''';
+    rdfs:label "Een toeleidingsbegrip mag enkel skos:Concept als type hebben."
+  ]
 .
 
 # Productions
