@@ -1646,6 +1646,11 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 	elmo:contains stage:Menu;
 	elmo:query '''
 	PREFIX sh: <http://www.w3.org/ns/shacl#>
+	PREFIX dctype: <http://purl.org/dc/dcmitype/>
+	PREFIX prov: <http://www.w3.org/ns/prov#>
+	PREFIX dct: <http://purl.org/dc/terms/>
+	PREFIX thes: <http://purl.org/iso25964/skos-thes#>
+	prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>
 	CONSTRUCT { 
 		?shape ?shapepred ?shapeobj.
 		?shape sh:targetclass ?type.
@@ -1655,9 +1660,6 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 		?member rdfs:label ?memberlabel
 	}
 	WHERE {
-		GRAPH <@STAGE@> {
-			<urn:ReqModelConceptenMetaShapes> rdfs:seeAlso ?shape
-		}
 		GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 			{
 				{
@@ -1686,6 +1688,24 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 					?memberprop sh:path skos:inScheme.
 				}
 			}
+			FILTER (
+				?shape = req:ConceptMetadata
+				|| ?shape = req:Concept
+				|| ?shape = req:Werkingsgebied
+				|| ?shape = req:ConceptStatus
+			)
+			FILTER(
+				?propobj != thes:broaderGeneric
+				&& ?propobj != thes:broaderPartitive
+				&& ?propobj != thes:narrowerGeneric
+				&& ?propobj != thes:narrowerPartitive
+				&& ?propobj != skos:semanticRelation
+				&& ?propobj != skos:closeMatch
+				&& ?propobj != skos:relatedMatch
+				&& ?propobj != skos:exactMatch
+				&& ?propobj != skos:broadMatch
+				&& ?propobj != skos:narrowMatch
+			)
 		}
 		OPTIONAL {
 			GRAPH <http://bp4mc2.org/id/dataset/imports> {
@@ -1694,12 +1714,8 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 			}
 		}
 	}
-''';
+	''';
 .
-
-<urn:ReqModelConceptenMetaShapes> rdfs:seeAlso req:ConceptMetadata, req:Concept, req:Werkingsgebied, req:ConceptStatus
-.
-
 
 stage:ReqModelGebeurtenissen a elmo:Representation;
 	elmo:url-pattern "/query/model/gebeurtenissen$";
@@ -1816,7 +1832,9 @@ stage:ReqModelProvenance a elmo:Representation;
 				|| ?shape = req:Catalogus
 				|| ?shape = req:Dataset
 				|| ?shape = req:Distributie
-				|| ?shape = req:ConceptMetadata
+				|| ?shape = req:Metadata
+        || ?shape = req:CatalogGraph
+        || ?shape = req:Metadata_Temporal
 				)
 				FILTER(
 					?propobj != thes:broaderGeneric

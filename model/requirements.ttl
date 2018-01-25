@@ -17,6 +17,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 
 req:Concept a sh:NodeShape;
 	rdfs:label "Concept shape"@en;
@@ -56,7 +57,7 @@ req:Concept_domain a sh:PropertyShape;
 .
 req:Concept_metadata a sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
-	sh:node req:ConceptMetadata;
+	sh:class prov:Entity;
 .
 req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "has source";
@@ -87,7 +88,7 @@ req:Concept_prefLabel a sh:PropertyShape;
 req:Concept_synonym a sh:PropertyShape;
 	rdfs:label "alternatieve aanduiding";
 	sh:name "skos:altLabel";
-	rdfs:comment "Een begrip kan een synoniem hebben.";
+	rdfs:comment "Een begrip kan een synoniem hebben."; # [MB] Beter zou zijn: "Een begrip kan met een synoniem worden aangeduid."
 	sh:path skos:altLabel;
 .
 req:Concept_definition a sh:PropertyShape;
@@ -99,7 +100,7 @@ req:Concept_definition a sh:PropertyShape;
 req:Concept_comment a sh:PropertyShape;
 	rdfs:label "uitleg";
 	sh:name "rdfs:comment";
-	rdfs:comment "Een begrip heeft een uitleg in ‘klare taal’.";
+	rdfs:comment "Een begrip heeft een uitleg in 'klare taal'.";
 	sh:path rdfs:comment;
 .
 req:Concept_scopeNote a sh:PropertyShape;
@@ -178,11 +179,6 @@ req:Concept_isRelatedTo a sh:PropertyShape;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip is gerelateerd aan een ander begrip.";
 .
-req:Concept_isMember a sh:PropertyShape;
-	rdfs:label "heeft lid";
-	sh:path skos:member;
-	sh:class skos:Collection;
-.
 
 #---------------------
 # Extern concept
@@ -207,32 +203,32 @@ req:ConceptStatus a sh:NodeShape;
 		sh:minCount 1;
 		sh:maxCount 1;
 	];
-  .
-
-#-----------------
-# Provenance
-# Datum: 22-11-2017
-# Door: Ingrid Thurlings
-#-----------------
-req:Provenance a sh:NodeShape;
-	rdfs:label "Provenance";
-	sh:name "prov:Bundle";
-	sh:targetClass prov:Bundle;
-	sh:property req:Provenance_generatedAtTime;
-	sh:property req:Provenance_changeNote;
-	sh:property req:Provenance_attributedTo;
 .
-req:Provenance_generatedAtTime a sh:PropertyShape;
+
+req:CatalogGraph a sh:NodeShape;
+	rdfs:label "Catalog graph";
+  rdfs:comment "De catalogus graph omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dwz: een prov:Bundle";
+	sh:name "sd:Graph";
+	sh:targetClass sd:Graph;
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue prov:Entity;
+  ];
+	sh:property req:CatalogGraph_generatedAtTime;
+	sh:property req:CatalogGraph_changeNote;
+	sh:property req:CatalogGraph_attributedTo;
+.
+req:CatalogGraph_generatedAtTime a sh:PropertyShape;
 	rdfs:label "generated at time";
 	sh:path prov:generatedAtTime;
 	sh:name "prov:generatedAtTime";
 .
-req:Provenance_changeNote a sh:PropertyShape;
+req:CatalogGraph_changeNote a sh:PropertyShape;
 	rdfs:label "change note";
 	sh:path skos:changeNote;
 	sh:name "skos:changeNote";
 .
-req:Provenance_attributedTo a sh:PropertyShape;
+req:CatalogGraph_attributedTo a sh:PropertyShape;
 	rdfs:label "was attributed to";
 	sh:name "prov:wasAttributedTo";
 	sh:path prov:wasAttributedTo;
@@ -276,76 +272,50 @@ req:ProvenanceOrganisation_OnBehalfOf a sh:PropertyShape;
 	sh:path prov:actedOnBehalfOf;
 	sh:class prov:Organisation;
 .
-	
-	
-#-----------------
-# Concept Metadata
-# Datum: 1-11-2017
-# Door: Ingrid Thurlings
-#-----------------
-req:ConceptMetadata a sh:NodeShape;
-	rdfs:label "Concept Metadata";
+
+#---------------------
+# Metadata
+#---------------------
+
+req:Metadata a sh:NodeShape;
+	rdfs:label "Metadata";
 	sh:name "prov:Entity";
-	sh:property req:ConceptMetadata_status;
-	sh:property req:ConceptMetadata_GeneratedAtTime;
-	sh:property req:ConceptMetadata_InvalidatedAtTime;
-	sh:property req:ConceptMetadata_isValidDuring;
-	sh:property req:ConceptMetadata_isIssued;
-	sh:property req:ConceptMetadata_location;
-	sh:property req:ConceptMetadata_provenance;
-	sh:property [
-		sh:path rdf:type;
-		sh:hasValue prov:Entity;
-	];
+  sh:targetClass prov:Entity;
+	sh:property req:Metadata_status;
+	sh:property req:Metadata_GeneratedAtTime;
+	sh:property req:Metadata_InvalidatedAtTime;
+	sh:property req:Metadata_isValidDuring;
+	sh:property req:Metadata_isIssued;
+	sh:property req:Metadata_location;
 .
-req:ConceptMetadata_provenance a sh:PropertyShape;
-	sh:path foaf:Topic;
-	sh:node req:Provenance;
-.
-req:ConceptMetadata_status a sh:PropertyShape;
+req:Metadata_status a sh:PropertyShape;
 	rdfs:label "heeft status";
 	sh:name "adms:status";
 	sh:path adms:status;
 	sh:node req:ConceptStatus;
-	rdfs:comment "Een versie van een begrip heeft een administratieve status.";
+	rdfs:comment "Een versie heeft een administratieve status.";
 .
-req:ConceptMetadata_GeneratedAtTime a sh:PropertyShape;
-	rdfs:label "generated at time";
-	sh:name "prov:generatedAtTime";
-	sh:path prov:generatedAtTime;
-	rdfs:comment "Een versie van een begrip is op een bepaald moment vastgelegd.";
-.
-req:ConceptMetadata_InvalidatedAtTime a sh:PropertyShape;
-	rdfs:label "invalidated at time";
-	sh:name "prov:invalidatedAtTime";
-	sh:path prov:invalidatedAtTime;
-	rdfs:comment "Een versie van een begrip is op een bepaald moment vervangen door een nieuwe versie of het begrip is vervallen.";
-.
-req:ConceptMetadata_changeNote a sh:PropertyShape;
+req:Metadata_changeNote a sh:PropertyShape;
 	rdfs:label "has change note";
 	sh:name "skos:changeNote";
 	sh:path skos:changeNote;
-	rdfs:comment "Een versie van een begrip is gemaakt met een bepaalde reden.";
+	rdfs:comment "Een versie is gemaakt met een bepaalde reden.";
 .
-req:ConceptMetadata_isValidDuring a sh:PropertyShape;
+req:Metadata_isValidDuring a sh:PropertyShape;
 	rdfs:label "is geldig in";
 	sh:name "dcterms:temporal";
 	sh:path dcterms:temporal;
-	sh:node req:ConceptMetadata_Temporal;
-	rdfs:comment "Een begrip is formeel/juridische geldig gedurende een periode.";
+	sh:node req:Metadata_Temporal;
+	rdfs:comment "Een versie is formeel/juridische geldig gedurende een periode.";
 .
-req:ConceptMetadata_isIssued a sh:PropertyShape;
+req:Metadata_isIssued a sh:PropertyShape;
 	rdfs:label "is issued";
 	sh:name "dcterms:issued";
 	sh:path dcterms:issued;
-	rdfs:comment "Een begrip is formeel bekend gemaakt op een bepaald moment.";
+	rdfs:comment "Een versie is formeel bekend gemaakt op een bepaald moment.";
 .
 
-#---------------------
-# Conceptbeschrijving
-#---------------------
-
-req:ConceptMetadata_Temporal a sh:NodeShape;
+req:Metadata_Temporal a sh:NodeShape;
 	rdfs:label "Temporal";
 	sh:property req:Temporal_Start;
 	sh:property req:Temporal_End;
@@ -474,8 +444,8 @@ req:Collectie_name a sh:PropertyShape;
 	sh:path rdfs:label;
 .
 req:Collectie_provenance a sh:PropertyShape;
-	sh:path foaf:Topic;
-	sh:node req:Provenance;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:class prov:Entity;
 .
 
 #---------------------
@@ -552,8 +522,8 @@ req:Dataset rdf:type sh:NodeShape;
 	sh:property req:Datasetversie_provenance;
 .
 req:Datasetversie_provenance a sh:PropertyShape;
-	sh:path foaf:Topic;
-	sh:node req:Provenance;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:class prov:Entity;
 .
 req:Dataset_name rdf:type sh:PropertyShape;
     rdfs:label "naam";
@@ -672,8 +642,8 @@ req:Catalogus rdf:type sh:NodeShape;
     sh:targetClass dcat:Catalog
 .
 req:Catalogus_provenance a sh:PropertyShape;
-	sh:path foaf:Topic;
-	sh:node req:Provenance;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:class prov:Entity;
 .
 req:Catalogus_name rdf:type sh:PropertyShape;
     rdfs:label "naam";
@@ -754,8 +724,8 @@ req:Distributie a sh:NodeShape;
 	sh:property req:Distributie_provenance;
 .
 req:Distributie_provenance a sh:PropertyShape;
-	sh:path foaf:Topic;
-	sh:node req:Provenance;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:class prov:Entity;
 .
 req:Distributie_name rdf:type sh:PropertyShape;
 	rdfs:label "naam";
