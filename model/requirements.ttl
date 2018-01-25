@@ -183,7 +183,11 @@ req:Concept_isRelatedTo a sh:PropertyShape;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip is gerelateerd aan een ander begrip.";
 .
-
+req:Concept_isMember a sh:PropertyShape;
+	rdfs:label "heeft lid";
+	sh:path skos:member;
+	sh:class skos:Collection;
+.
 
 #---------------------
 # Extern concept
@@ -321,6 +325,12 @@ req:ConceptMetadata_InvalidatedAtTime a sh:PropertyShape;
 	sh:name "prov:invalidatedAtTime";
 	sh:path prov:invalidatedAtTime;
 	rdfs:comment "Een versie van een begrip is op een bepaald moment vervangen door een nieuwe versie of het begrip is vervallen.";
+.
+req:ConceptMetadata_changeNote a sh:PropertyShape;
+	rdfs:label "has change note";
+	sh:name "skos:changeNote";
+	sh:path skos:changeNote;
+	rdfs:comment "Een versie van een begrip is gemaakt met een bepaalde reden.";
 .
 req:ConceptMetadata_isValidDuring a sh:PropertyShape;
 	rdfs:label "is geldig in";
@@ -606,6 +616,13 @@ req:Datasetversie_versionOf a sh:PropertyShape;
 	rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset.";
 	sh:node req:Dataset;
 	sh:maxCount 1;
+.
+req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
+    rdfs:label "werkingsgebied";
+    rdfs:comment "Het gebied waar de dataset over gaat";
+    sh:class dcterms:Location;
+    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+    sh:path dcterms:spatial
 .
 req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
 	rdfs:label "gerelateerd aan";
