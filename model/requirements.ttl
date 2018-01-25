@@ -12,13 +12,30 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix dctype: <http://purl.org/dc/dcmitype/>.
 @prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
-@prefix skoslex: <http://bp4mc2.org/def/skos-lex/>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
 @prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 
+#---------------------
+# IMPORT
+#---------------------
+
+#Overgenomen uit skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#---------------------
+# CONCEPTEN
+#---------------------
+
+#---------------------
+# Concept
+#---------------------
 req:Concept a sh:NodeShape;
 	rdfs:label "Concept shape"@en;
 	sh:name "skos:Concept";
@@ -35,7 +52,6 @@ req:Concept a sh:NodeShape;
 	sh:property req:Concept_dctsource;
 	sh:property req:Concept_domain;
 	sh:property req:Concept_metadata;
-	sh:property req:Concept_seeAlso;
   # References to other concepts
 	sh:property req:Concept_consistsOf;
 	sh:property req:Concept_generalisationOf;
@@ -43,6 +59,7 @@ req:Concept a sh:NodeShape;
 	sh:property req:Concept_partOf;
 	sh:property req:Concept_specialisationOf;
   # References to other concepts in other concept schemes
+	sh:property req:Concept_seeAlso;
 	sh:property req:Concept_broadlyMatches;
 	sh:property req:Concept_closelyMatches;
 	sh:property req:Concept_exactlyMatches;
@@ -193,18 +210,66 @@ req:ExternConcept a sh:NodeShape;
 .
 
 #---------------------
-# Conceptstatus
+# Collectie
 #---------------------
-req:ConceptStatus a sh:NodeShape;
-	sh:name "Concept Status";
-	sh:property [
-		sh:path skos:inScheme;
-		sh:hasValue <http://purl.org/adms/status/1.0>;
-		sh:minCount 1;
-		sh:maxCount 1;
-	];
+req:Collectie a sh:NodeShape;
+	rdfs:label "Collectie";
+	sh:targetClass skos:Collection;
+	sh:name "skos:Collection";
+	sh:property req:Collectie_heeftLid;
+	sh:property req:Collectie_name;
+	sh:property req:Collectie_provenance;
+.
+req:Collectie_heeftLid a sh:PropertyShape;
+	rdfs:label "heeft lid";
+	sh:path skos:member;
+	sh:class skos:Concept;
+.
+req:Collectie_name a sh:PropertyShape;
+	rdfs:label "label";
+	sh:name "rdfs:label";
+	sh:path rdfs:label;
+.
+req:Collectie_provenance a sh:PropertyShape;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:class prov:Entity;
 .
 
+#---------------------
+# Begrippenkader
+#---------------------
+req:Begrippenkader a sh:NodeShape;
+	rdfs:label "Begrippenkader";
+	sh:name "skos:ConceptScheme";
+	sh:targetClass skos:ConceptScheme;
+	sh:property req:Begrippenkader_grondslag;
+	sh:property req:Begrippenkader_type;
+	sh:property req:Begrippenkader_hasTopConcept;
+.
+#req:Begrippenkader_grondslag a sh:PropertyShape;
+#	rdfs:label "grondslag";
+#	sh:path req:Begrippenkader_grondslag;
+#	sh:class dctype:Text;
+#.
+req:Begrippenkader_hasTopConcept a sh:PropertyShape;
+	rdfs:label "has top concept";
+	sh:path skos:hasTopConcept;
+	sh:class skos:Concept;
+.
+req:Begrippenkader_type a sh:PropertyShape;
+	rdfs:label "rol van dataset";
+	rdfs:comment "Een begrippenkader vervult de rol van dataset";
+	sh:path rdf:type;
+	sh:hasValue dcat:Dataset;
+.
+
+#---------------------
+# VERSIEBEHEER / PROVENANCE
+#---------------------
+
+#---------------------
+# CatalogGraph
+#---------------------
 req:CatalogGraph a sh:NodeShape;
 	rdfs:label "Catalog graph";
   rdfs:comment "De catalogus graph omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dwz: een prov:Bundle";
@@ -331,16 +396,27 @@ req:Temporal_End a sh:PropertyShape;
 	sh:path dcmiperiod:end;
 .
 
+req:Status a sh:NodeShape;
+	sh:name "Status waardelijst";
+	sh:property [
+		sh:path skos:inScheme;
+		sh:hasValue <http://purl.org/adms/status/1.0>;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
 #---------------------
-# Handeling/Gebeurtenis
-# Datum: 6-11-2017
-# Door: Ingrid Thurlings
+# SKOS Lex (legal skos)
+#---------------------
+
+#---------------------
+# Act, Object, Actor, Agent
 #---------------------
 req:HandelingAct a sh:NodeShape;
 	rdfs:label "Handeling Act";
 	sh:targetClass skoslex:Act;
 	sh:name "skoslex:Act";
-	sh:property req:Handeling_subclass;
 	sh:property req:Handeling_name;
 	sh:property req:Handeling_actor;
 	sh:property req:Handeling_agent;
@@ -352,46 +428,20 @@ req:HandelingActor a sh:NodeShape;
 	sh:targetClass skoslex:Actor;
 	sh:name "skoslex:Actor";
 	sh:property req:Handeling_name;
-	sh:property req:Handeling_subclass;
 .
 req:HandelingAgent a sh:NodeShape;
 	rdfs:label "Handeling Agent";
 	sh:targetClass skoslex:Agent;
 	sh:name "skoslex:Agent";
-	sh:property req:Handeling_subclassActor;
 	sh:property req:Handeling_name;
-.
-req:HandelingNorm a sh:NodeShape;
-	rdfs:label "Handeling Norm";
-	sh:targetClass skoslex:Norm;
-	sh:name "skoslex:Norm";
-	sh:property req:Handeling_subclass;
-	sh:property req:Handeling_name;
-	sh:property req:Handeling_affects;
 .
 req:HandelingObject a sh:NodeShape;
 	rdfs:label "Handeling Object";
 	sh:targetClass skoslex:Object;
 	sh:name "skoslex:Object";
-	sh:property req:Handeling_subclass;
 	sh:property req:Handeling_name;
 .
 
-req:Handeling_subclass a sh:PropertyShape;
-	rdfs:label "subclass";
-	sh:path rdfs:subClassOf;
-	sh:class skos:Concept;
-.
-req:Handeling_affects a sh:PropertyShape;
-	rdfs:label "affects";
-	sh:path skoslex:affects;
-	sh:class skoslex:Act;
-.
-req:Handeling_subclassActor a sh:PropertyShape;
-	rdfs:label "subclass";
-	sh:path rdfs:subClassOf;
-	sh:class skoslex:Actor;
-.
 req:Handeling_name a sh:PropertyShape;
 	sh:path rdfs:label;
 .
@@ -423,57 +473,19 @@ req:Handeling_refersTo a sh:PropertyShape;
 .
 
 #---------------------
-# Collectie
+# Norm
 #---------------------
-req:Collectie a sh:NodeShape;
-	rdfs:label "Collectie";
-	sh:targetClass skos:Collection;
-	sh:name "skos:Collection";
-	sh:property req:Collectie_heeftLid;
-	sh:property req:Collectie_name;
-	sh:property req:Collectie_provenance;
+req:HandelingNorm a sh:NodeShape;
+	rdfs:label "Handeling Norm";
+	sh:targetClass skoslex:Norm;
+	sh:name "skoslex:Norm";
+	sh:property req:Handeling_name;
+	sh:property req:Handeling_affects;
 .
-req:Collectie_heeftLid a sh:PropertyShape;
-	rdfs:label "heeft lid";
-	sh:path skos:member;
-	sh:class skos:Concept;
-.
-req:Collectie_name a sh:PropertyShape;
-	rdfs:label "label";
-	sh:name "rdfs:label";
-	sh:path rdfs:label;
-.
-req:Collectie_provenance a sh:PropertyShape;
-	sh:path foaf:isPrimaryTopicOf;
-	sh:class prov:Entity;
-.
-
-#---------------------
-# Begrippenkader
-#---------------------
-req:Begrippenkader a sh:NodeShape;
-	rdfs:label "Begrippenkader";
-	sh:name "skos:ConceptScheme";
-	sh:property req:Begrippenkader_grondslag;
-	sh:property req:Begrippenkader_type;
-	sh:targetClass skos:ConceptScheme;
-	sh:property req:Begrippenkader_hasTopConcept;
-.
-#req:Begrippenkader_grondslag a sh:PropertyShape;
-#	rdfs:label "grondslag";
-#	sh:path req:Begrippenkader_grondslag;
-#	sh:class dctype:Text;
-#.
-req:Begrippenkader_hasTopConcept a sh:PropertyShape;
-	rdfs:label "has top concept";
-	sh:path skos:hasTopConcept;
-	sh:class skos:Concept;
-.
-req:Begrippenkader_type a sh:PropertyShape;
-	rdfs:label "rol van dataset";
-	rdfs:comment "Een begrippenkader vervult de rol van dataset";
-	sh:path rdf:type;
-	sh:hasValue dcat:Dataset;
+req:Handeling_affects a sh:PropertyShape;
+	rdfs:label "affects";
+	sh:path skoslex:affects;
+	sh:class skoslex:Act;
 .
 
 #---------------------
@@ -502,9 +514,11 @@ req:Brondocument_bron a sh:PropertyShape;
 .
 
 #---------------------
+# CONCEPTEN
+#---------------------
+
+#---------------------
 # Dataset
-# datum:23-10-2017 
-# door: Ingrid Thurlings
 #---------------------
 req:Dataset rdf:type sh:NodeShape;
     rdfs:label "Dataset";

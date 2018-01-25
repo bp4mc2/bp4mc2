@@ -198,13 +198,15 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		PREFIX dctype: <http://purl.org/dc/dcmitype/>
-		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex/>
+		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex#>
 		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
 		CONSTRUCT {
 			?shape ?shapepred ?shapeobj.
 			?shape sh:targetclass ?type.
 			?shape sh:property ?prop.
 			?prop ?proppred ?propobj.
+      ?type rdfs:subClassOf ?ptype.
+      ?type rdf:type rdfs:Class. #Bug, type is needed
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
@@ -212,6 +214,9 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 				?shape sh:targetClass ?type.
 				?shape sh:property ?prop.
 				?prop ?proppred ?propobj.
+        OPTIONAL {
+          ?type rdfs:subClassOf ?ptype.
+        }
 				FILTER (
 					?type = skos:Concept
 				#	||	?type = skos:ConceptScheme
@@ -309,6 +314,7 @@ stage:ReqModelProvenance a elmo:Representation;
 				|| ?shape = req:Metadata
         || ?shape = req:CatalogGraph
         || ?shape = req:Metadata_Temporal
+        || ?shape = req:Status
 				)
 				FILTER(
 					?propobj != thes:broaderGeneric
