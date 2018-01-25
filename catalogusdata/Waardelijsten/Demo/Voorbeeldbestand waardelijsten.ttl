@@ -1,0 +1,82 @@
+@prefix rdf: 		        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:		        <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos:		        <http://www.w3.org/2004/02/skos/core#>.
+@prefix dcat:		        <http://www.w3.org/ns/dcat#>.
+
+@prefix sh: 		        <http://www.w3.org/ns/shacl#>.
+@prefix shxl:           <http://bp4mc2.org/def/sh-xl#>.
+
+@prefix concept:        <http://localhost:8080/catalogus/dso/id/concept/>.
+@prefix collection:     <http://localhost:8080/catalogus/dso/id/collection/>.
+@prefix country:        <http://localhost:8080/catalogus/dso/id/country/>.
+@prefix scheme:         <http://localhost:8080/catalogus/dso/id/dataset/>.
+
+@prefix class:          <http://localhost:8080/catalogus/dso/def/mymodel#>.
+@prefix wl:             <http://localhost:8080/catalogus/dso/def/mymodel/>.
+
+# ------------------------- #
+#                           #
+# Declaraties waardelijsten #
+#                           #
+# ------------------------- #
+
+# Deze declaraties komen in het informatiemodel terecht en vallen daarmee buiten het historiemodel.
+
+# Classificerend
+wl:BuildingStatusValueList a sh:NodeShape;
+	rdfs:label "The list of building statuses"@en;
+  shxl:stereotype shxl:ValueList;
+	sh:property [
+		sh:path [ sh:inversePath skos:member ];
+		sh:hasValue collection:BuildingStatuses
+	]
+.
+
+# Categoriserend
+wl:MunicipalitiesValueList a sh:NodeShape;
+	rdfs:label "The list of Dutch municipalities"@en;
+	sh:property [
+		sh:path skos:inScheme;
+		sh:hasValue scheme:Municipalities
+	]
+.
+
+# Refererend
+wl:Countries a sh:NodeShape;
+	rdfs:label "The list of countries"@en;
+  shxl:stereotype shxl:Valuelist;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue class:Country
+	]
+.
+class:Country a rdfs:Class.
+
+# ------------------------- #
+#                           #
+# Waarden uit waardelijsten #
+#                           #
+# ------------------------- #
+
+# Deze waarden komen in de Catalogus zelf terecht en worden onderdeel van het historiemodel.
+
+# Classificerend
+collection:BuildingStatuses a skos:Collection;
+  skos:member concept:Demolished;
+	skos:member concept:InUse
+.
+concept:Demolished a skos:Concept.
+concept:InUse a skos:Concept.
+
+# Categoriserend
+scheme:Municipalities a skos:ConceptScheme, dcat:Dataset.
+concept:Amsterdam a skosConcept;
+  skos:inScheme scheme:Municipalities
+.
+concept:Apeldoorn a skosConcept;
+  skos:inScheme scheme:Municipalities
+.
+
+# Refererend
+country:Netherlands a class:Country.
+country:Belgium a class:Country.
