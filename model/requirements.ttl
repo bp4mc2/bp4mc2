@@ -18,36 +18,34 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
 
-#---------------------
-# Concept
-# Datum: 1-11-2017
-# Door: Ingrid Thurlings
-#---------------------
 req:Concept a sh:NodeShape;
-	rdfs:label "Concept";
+	rdfs:label "Concept shape"@en;
 	sh:name "skos:Concept";
 	sh:targetClass skos:Concept;
-	sh:property req:Concept_domain;
+  # Datatype properties
+	sh:property req:Concept_comment;
 	sh:property req:Concept_dcsource;
-	sh:property req:Concept_dctsource;
+	sh:property req:Concept_definition;
 	sh:property req:Concept_label;
 	sh:property req:Concept_prefLabel;
-	sh:property req:Concept_synonym;
-	sh:property req:Concept_definition;
 	sh:property req:Concept_scopeNote;
-	sh:property req:Concept_comment;
-	sh:property req:Concept_broadlyMatches;
-	sh:property req:Concept_narrowlyMatches;
+	sh:property req:Concept_synonym;
+  # Object properties
+	sh:property req:Concept_dctsource;
+	sh:property req:Concept_domain;
+	sh:property req:Concept_metadata;
 	sh:property req:Concept_seeAlso;
+  # References to other concepts
+	sh:property req:Concept_consistsOf;
+	sh:property req:Concept_generalisationOf;
+	sh:property req:Concept_isRelatedTo;
+	sh:property req:Concept_partOf;
+	sh:property req:Concept_specialisationOf;
+  # References to other concepts in other concept schemes
+	sh:property req:Concept_broadlyMatches;
 	sh:property req:Concept_closelyMatches;
 	sh:property req:Concept_exactlyMatches;
-	sh:property req:Concept_specialisationOf;
-	sh:property req:Concept_generalisationOf;
-	sh:property req:Concept_partOf;
-	sh:property req:Concept_consistsOf;
-	sh:property req:Concept_isRelatedTo;
-	sh:property req:Concept_metadata;
-	sh:property req:Concept_provenance;
+	sh:property req:Concept_narrowlyMatches;
 .
 req:Concept_domain a sh:PropertyShape;
 	rdfs:label "in";
@@ -60,16 +58,13 @@ req:Concept_metadata a sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
 	sh:node req:ConceptMetadata;
 .
-req:Concept_provenance a sh:PropertyShape;
-	sh:path foaf:Topic;
-	sh:node req:Provenance;
-.
 req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "has source";
 	sh:name "dcterms:source";
 	sh:path dcterms:source;
 	sh:class dctype:Text;
 	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als ‘resource’ op het web vindbaar is.";
+  # [MB]: Wellicht handig om gebruik te maken van FRBR ontologie?
 .
 req:Concept_dcsource a sh:PropertyShape;
 	rdfs:label "source";
@@ -514,6 +509,9 @@ req:Begrippenkader_type a sh:PropertyShape;
 #---------------------
 # Brondocument
 #---------------------
+# [MB] Moet brondocument niet meer eigenschappen hebben? Bijvoorbeeld een label?
+# [MB] Moeten we niet iets hebben om onderscheid te maken tussen de identificatie van het brondocument en de website?
+#      Dat is bijvoorbeeld nodig voor wetgeving: de juriconnect identificatie is iets anders dan de webpagina.
 req:Brondocument a sh:NodeShape;
   sh:name "dctype:Text (brondocument)";
 	rdfs:label "Brondocument";
@@ -521,6 +519,7 @@ req:Brondocument a sh:NodeShape;
 	sh:property req:Brondocument_versieVan;
 	sh:property req:Brondocument_bron;
 .
+# [MB] versie-van is uitgecomment, maar hierboven staat het nog wel
 #req:Brondocument_versieVan a sh:PropertyShape;
 #	rdfs:label "versie van";
 #	sh:path dcterms:isVersionOf;
@@ -529,7 +528,7 @@ req:Brondocument a sh:NodeShape;
 #.
 req:Brondocument_bron a sh:PropertyShape;
 	rdfs:label "bron";
-	sh:path dcterms:Text;
+	sh:path dcterms:Text; # [MB] Dit kan niet kloppen: dit is geen property maar een class. Wat wordt hier bedoeld?
 .
 
 #---------------------
