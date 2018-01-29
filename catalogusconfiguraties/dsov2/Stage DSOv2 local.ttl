@@ -6,35 +6,36 @@
 #
 #
 
-@prefix stage: 			  <http://localhost:8080/catalogus/dsov2/stage#>.
-@prefix updatestage: 	<http://localhost:8080/catalogus/dsov2/update/>.
+@prefix adms: 	  		<http://www.w3.org/ns/adms#>.
+@prefix brt: 		     	<http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix container: 		<http://localhost:8080/catalogus/dsov2/container/>.
+@prefix dc: 		    	<http://purl.org/dc/elements/1.1/>.
+@prefix dcat: 	  		<http://www.w3.org/ns/dcat#>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix dct: 	    		<http://purl.org/dc/terms/>.
+@prefix dctype: 		  <http://purl.org/dc/dcmitype/>.
 @prefix elmo: 			  <http://bp4mc2.org/elmo/def#>.
+@prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>.
+@prefix geosparql: 		<http://www.opengis.net/ont/geosparql#>.
+@prefix iso: 		    	<http://id.loc.gov/vocabulary/iso639-1/>.
+@prefix owl: 		    	<http://www.w3.org/2002/07/owl#>.
+@prefix prov: 	  		<http://www.w3.org/ns/prov#>.
 @prefix rdf: 		    	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: 		  	<http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xhtml: 	    	<http://www.w3.org/1999/xhtml/vocab#>.
-@prefix container: 		<http://localhost:8080/catalogus/dsov2/container/>.
+@prefix sd:           <http://www.w3.org/ns/sparql-service-description/>.
+@prefix sh: 		    	<http://www.w3.org/ns/shacl#>.
 @prefix skos: 			  <http://www.w3.org/2004/02/skos/core#>.
 @prefix skosax: 	  	<http://bp4mc2.org/skosax#>.
 @prefix skoslex: 	  	<http://bp4mc2.org/def/skos-lex/>.
+@prefix stage: 			  <http://localhost:8080/catalogus/dsov2/stage#>.
 @prefix thes: 		  	<http://purl.org/iso25964/skos-thes#>.
-@prefix dc: 		    	<http://purl.org/dc/elements/1.1/>.
-@prefix dct: 	    		<http://purl.org/dc/terms/>.
-@prefix dctype: 		  <http://purl.org/dc/dcmitype/>.
-@prefix geosparql: 		<http://www.opengis.net/ont/geosparql#>.
-@prefix sh: 		    	<http://www.w3.org/ns/shacl#>.
-@prefix owl: 		    	<http://www.w3.org/2002/07/owl#>.
-@prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>.
-@prefix prov: 	  		<http://www.w3.org/ns/prov#>.
-@prefix brt: 		     	<http://brt.basisregistraties.overheid.nl/id/dataset/>.
+@prefix updatestage: 	<http://localhost:8080/catalogus/dsov2/update/>.
 @prefix vcard: 	  		<http://www.w3.org/2006/vcard/ns#>.
+@prefix xhtml: 	    	<http://www.w3.org/1999/xhtml/vocab#>.
 @prefix xsd: 		    	<http://www.w3.org/2001/XMLSchema#>.
-@prefix iso: 		    	<http://id.loc.gov/vocabulary/iso639-1/>.
-@prefix dcat: 	  		<http://www.w3.org/ns/dcat#>.
-@prefix adms: 	  		<http://www.w3.org/ns/adms#>.
 @prefix wdrs: 	  		<http://www.w3.org/2007/05/powder-s#>.
 @prefix yed: 	    		<http://bp4mc2.org/yed#>.
-@prefix sparql:       <http://www.w3.org/ns/sparql-service-description/>.
-@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>. 
+ 
 #
 #
 #
@@ -225,38 +226,33 @@ container:concept-add-ttl a elmo:Container;
 stage:DSOv2ConceptenPost a elmo:Scene;
 	rdfs:label "Query voor verwerken POST";
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
     
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "Reserveren van het begrip in de Catalogus";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "Reserveren van het begrip in de Catalogus";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
         
         ?subject ?p ?o;
-          wdrs:describedby ?doc
+          foaf:isPrimaryTopicOf ?doc
         .
         
         ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment;
-          prov:wasGeneratedBy ?activity
-        .
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Opvoeren nieuw begrip";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
+          adms:status adms-status:UnderDevelopment
         .
       }
     }
@@ -283,43 +279,38 @@ stage:DSOv2ConceptenPost a elmo:Scene;
 stage:DSOv2ConceptenPut a elmo:Scene;
 	rdfs:label "Query voor verwerken PUT";
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "Aanpassing van het begrip door het bevoegde gezag";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "Aanpassing van het begrip door het bevoegde gezag";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
         
         ?s ?p ?o;
-          wdrs:describedby ?doc
+          foaf:isPrimaryTopicOf ?doc
         .
         
         ?doc rdf:type prov:Entity;
           adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?currentDoc;
-          prov:wasGeneratedBy ?activity
+          prov:wasRevisionOf ?currentDoc
         .
         
         ?udDoc ?docP ?docO;
           adms:status adms-status:Withdrawn
-        .
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Aanpassen bestaand begrip (binnen besluit)";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
         .
       }
     }
@@ -328,8 +319,9 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         ?s ?p ?o.
       }
       GRAPH ?graph {       
-        ?s wdrs:describedby ?currentDoc;
-          skos:prefLabel ?prefLabel.
+        ?s foaf:isPrimaryTopicOf ?currentDoc;
+          skos:prefLabel ?prefLabel
+        .
         
         ?graph prov:generatedAtTime ?graphTime.
         FILTER NOT EXISTS {
@@ -344,9 +336,10 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       
       OPTIONAL {
         GRAPH ?udGraph {
-          ?s wdrs:describedby ?udDoc.
+          ?s foaf:isPrimaryTopicOf ?udDoc.
           ?udDoc ?docP ?docO;
-            adms:status adms-status:UnderDevelopment.
+            adms:status adms-status:UnderDevelopment
+          .
           FILTER( ?docP != adms:status )
           
           ?udGraph prov:generatedAtTime ?udGraphTime.       
@@ -367,41 +360,42 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       BIND( now() AS ?now )
     }
     
-    CLEAR GRAPH container:generiek
-    CLEAR GRAPH container:concept-put-ttl
+    #CLEAR GRAPH container:generiek
+    #CLEAR GRAPH container:concept-put-ttl
   '''
 .
 
 stage:DSOv2ConceptenAdd a elmo:Scene;
 	rdfs:label "Query voor verwerken aanvullen concept";
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
         
         ?s ?p ?o;
-          wdrs:describedby ?doc;
+          foaf:isPrimaryTopicOf ?doc;
           ?pred ?obj
         .
         
         ?doc adms:status adms-status:Completed;
           prov:wasRevisionOf ?currentDoc;
-          prov:wasGeneratedBy ?activity;
           ?docP ?docO
         .
         
@@ -409,12 +403,6 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           prov:wasRevisionOf ?currentDocRev;
           prov:wasGeneratedBy ?activity;
           ?docP ?docO
-        .
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Aanpassen bestaand begrip (buiten besluit)";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
         .
       }
     }
@@ -430,12 +418,12 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         )
       }
       GRAPH ?graph {
-        ?s wdrs:describedby ?currentDoc;
+        ?s foaf:isPrimaryTopicOf ?currentDoc;
           skos:prefLabel ?prefLabel;
           ?pred ?obj
         .
         FILTER(
-          ?pred != wdrs:describedby
+          ?pred != foaf:isPrimaryTopicOf
         )
           
         ?graph prov:generatedAtTime ?graphTime.
@@ -443,7 +431,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
             ?s rdf:type skos:Concept;
-              wdrs:describedby ?newerDoc.
+              foaf:isPrimaryTopicOf ?newerDoc.
             FILTER( ?newerTime > ?graphTime )
           }
           GRAPH ?docNewerGraph {
@@ -589,7 +577,7 @@ stage:search-concepts-under-development a elmo:Part;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
+		prefix sd: <http://www.w3.org/ns/sparql-service-description>
     prefix adms-status: <http://purl.org/adms/status/>
     prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
@@ -600,7 +588,7 @@ stage:search-concepts-under-development a elmo:Part;
 		WHERE {
 			GRAPH ?g {
 				?concept rdf:type skos:Concept;
-          wdrs:describedby ?doc.
+          foaf:isPrimaryTopicOf ?doc.
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
@@ -626,7 +614,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description>
+		prefix sd: <http://www.w3.org/ns/sparql-service-description>
     prefix adms-status: <http://purl.org/adms/status/>
     prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
@@ -637,7 +625,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		WHERE {
       GRAPH ?g {
         ?concept rdf:type skos:Concept;
-          wdrs:describedby ?doc.
+          foaf:isPrimaryTopicOf ?doc.
       }
       FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       GRAPH ?docGraph {
@@ -677,7 +665,7 @@ stage:IssueConceptScene a elmo:Scene;
 		prefix skos: <http://www.w3.org/2004/02/skos/core#>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+		prefix sd: <http://www.w3.org/ns/sparql-service-description/>
     prefix adms-status: <http://purl.org/adms/status/>
     prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
@@ -688,7 +676,7 @@ stage:IssueConceptScene a elmo:Scene;
 		
     INSERT {
       GRAPH ?transactie {      
-        ?transactie rdf:type sparql:Graph;
+        ?transactie rdf:type sd:Graph;
           rdfs:label "Bekendmaking van het begrip in de LVBB, en de registratie hiervan in de Catalogus";
           prov:generatedAtTime ?now
         .
@@ -713,7 +701,7 @@ stage:IssueConceptScene a elmo:Scene;
     WHERE {
       GRAPH ?graph {
         ?graph prov:generatedAtTime ?time.
-        <@CONCEPT@> wdrs:describedby ?doc.
+        <@CONCEPT@> foaf:isPrimaryTopicOf ?doc.
       }
       FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
       OPTIONAL {
@@ -728,7 +716,7 @@ stage:IssueConceptScene a elmo:Scene;
       OPTIONAL {
         GRAPH ?prevGraph {
           ?prevGraph prov:generatedAtTime ?prevTime. 
-          <@CONCEPT@> wdrs:describedby ?prevDoc.
+          <@CONCEPT@> foaf:isPrimaryTopicOf ?prevDoc.
           FILTER( ?prevTime < ?time )
         }
         GRAPH ?prevDocGraph {
@@ -758,46 +746,42 @@ stage:EnactConceptScene a elmo:Scene;
 	elmo:index "3";
 	rdfs:label "Laat gekozen versie van concept in werking treden";
 	elmo:query '''
-    prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-    prefix dcterms: <http://purl.org/dc/terms/>
-    prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:         <http://purl.org/dc/terms/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix slex-status:     <http://bp4mc2.org/skos-lex/status/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
     
     INSERT {
       GRAPH ?transactie {      
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "In werkingtreding van het begrip";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "In werkingtreding van het begrip";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
 
         ?doc ?p ?o;
           adms:status adms-status:Completed;
           dcterms:issued ?issuedDate;
-          dcterms:temporal ?period;
-          prov:wasGeneratedBy ?activity
+          dcterms:temporal ?period
         .
         
         ?period dcmiperiod:start "@GELDIGHEID@".
         
         ?prevDoc ?prevP ?prevO;
-          dcterms:temporal ?prevTemporal.
+          dcterms:temporal ?prevTemporal
+        .
           
         ?prevTemporal dcmiperiod:start ?prevStart;
-          dcmiperiod:end "@GELDIGHEID@".
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Start van het gebruik van het begrip";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
+          dcmiperiod:end "@GELDIGHEID@"
         .
       }
     }
@@ -805,7 +789,8 @@ stage:EnactConceptScene a elmo:Scene;
       GRAPH <@GRAPH@> {
         ?doc rdf:type prov:Entity;
           adms:status ?status;
-          ?p ?o.
+          ?p ?o
+        .
         FILTER(
           ?p != adms:status
           && ?p != dcterms:issued
@@ -821,22 +806,21 @@ stage:EnactConceptScene a elmo:Scene;
       }
       
       GRAPH ?currentTransaction {
-        ?concept wdrs:describedby ?doc.
+        ?concept foaf:isPrimaryTopicOf ?doc.
       }
       OPTIONAL {
         GRAPH ?previousTransaction {
-          ?concept wdrs:describedby ?prevDoc.
+          ?concept foaf:isPrimaryTopicOf ?prevDoc.
         }
         GRAPH ?docGraph {
           ?prevDoc ?prevP ?prevO;
-            dcterms:temporal ?prevTemporal.
+            dcterms:temporal ?prevTemporal
+          .
           ?prevTemporal dcmiperiod:start ?prevStart.
           FILTER NOT EXISTS {
             ?prevTemporal dcmiperiod:end ?end.
           }
-          FILTER(
-            ?prevP != dcterms:temporal
-          )
+          FILTER( ?prevP != dcterms:temporal )
           
           ?docGraph prov:generatedAtTime ?prevDocTime.
           FILTER NOT EXISTS {
@@ -1129,6 +1113,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     
 		CONSTRUCT {
       <@IDSUBJECT@> ?p ?o;
@@ -1147,7 +1132,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
 		WHERE {
       GRAPH ?graph {
         <@IDSUBJECT@> ?p ?o;
-          wdrs:describedby ?doc.
+          foaf:isPrimaryTopicOf ?doc.
           
         FILTER(
           ?p = skos:definition
@@ -1531,7 +1516,7 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "5";
 	];
 	elmo:fragment [
-		elmo:applies-to wdrs:describedby;
+		elmo:applies-to foaf:isPrimaryTopicOf;
 		elmo:appearance elmo:NestedAppearance;
 		rdfs:label "Metadata:";
 		elmo:index "6";
@@ -1570,11 +1555,12 @@ stage:DemoBegripVersies a elmo:Part;
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
     prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     
 		construct {
 			?doc rdfs:label ?titel.
 			?doc skos:definition ?definitie.
-			?doc wdrs:describedby ?metadata.
+			?doc foaf:isPrimaryTopicOf ?metadata.
 			?doc adms:latestStatus ?latestStatus.
 			?doc dct:latestIssued ?latestIssued.
 			?doc dct:latestStart ?latestStart.
@@ -1596,7 +1582,7 @@ stage:DemoBegripVersies a elmo:Part;
 				<@SUBJECT@> rdfs:label ?label.
         OPTIONAL { <@SUBJECT@> skos:definition ?definitie. }
 				?g prov:generatedAtTime ?tijdstip.
-				<@SUBJECT@> wdrs:describedby ?doc.
+				<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
 				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
 			}
 			graph ?gdoc {
@@ -1643,20 +1629,20 @@ stage:DemoGraph a elmo:Part;
 			<@SUBJECT@> dct:hasVersion ?doc.
 			?doc rdfs:label ?doctitel.
 			# Doc
-			<@SUBJECT@> wdrs:describedby ?metadata.
+			<@SUBJECT@> foaf:isPrimaryTopicOf ?metadata.
 			<@SUBJECT@> prov:wasRevisionOf ?rev.
 			?metadata rdfs:label ?label.
 			# Meta
 			prov:wasRevisionOf rdfs:label "revisie van".
 			dct:hasVersion rdfs:label "versie".
-			wdrs:describedby rdfs:label "metadata".
+			foaf:isPrimaryTopicOf rdfs:label "metadata".
 		}
 		where {
 			{
 				graph ?g {
 					<@SUBJECT@> rdf:type skos:Concept.
 					<@SUBJECT@> rdfs:label ?label.
-					<@SUBJECT@> wdrs:describedby ?doc.
+					<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
 					BIND (strbefore(strafter(str(?doc),'doc/'),'/concept') as ?doctitel)
 				}
 			}
@@ -1751,12 +1737,13 @@ stage:TestWeergaveTabelConceptenQuery a elmo:Query;
 		prefix dct: <http://purl.org/dc/terms/>
 		
 		construct {
-      ?graph prov:generatedAtTime ?time.
-			?graph ?p ?o.
+      ?graph ?graphP ?graphO;
+        ?p ?o
+      .
 		}
 		where {
       GRAPH ?graph {
-        ?graph prov:generatedAtTime ?time.
+        ?graph ?graphP ?graphO.
         <@IDSUBJECT@> ?p ?o.
         FILTER( ?p != rdfs:label )
       }

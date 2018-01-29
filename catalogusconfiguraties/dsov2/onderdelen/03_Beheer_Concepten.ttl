@@ -70,38 +70,33 @@ container:concept-add-ttl a elmo:Container;
 stage:DSOv2ConceptenPost a elmo:Scene;
 	rdfs:label "Query voor verwerken POST";
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
     
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "Reserveren van het begrip in de Catalogus";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "Reserveren van het begrip in de Catalogus";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
         
         ?subject ?p ?o;
-          wdrs:describedby ?doc
+          foaf:isPrimaryTopicOf ?doc
         .
         
         ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment;
-          prov:wasGeneratedBy ?activity
-        .
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Opvoeren nieuw begrip";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
+          adms:status adms-status:UnderDevelopment
         .
       }
     }
@@ -128,43 +123,38 @@ stage:DSOv2ConceptenPost a elmo:Scene;
 stage:DSOv2ConceptenPut a elmo:Scene;
 	rdfs:label "Query voor verwerken PUT";
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "Aanpassing van het begrip door het bevoegde gezag";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "Aanpassing van het begrip door het bevoegde gezag";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
         
         ?s ?p ?o;
-          wdrs:describedby ?doc
+          foaf:isPrimaryTopicOf ?doc
         .
         
         ?doc rdf:type prov:Entity;
           adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?currentDoc;
-          prov:wasGeneratedBy ?activity
+          prov:wasRevisionOf ?currentDoc
         .
         
         ?udDoc ?docP ?docO;
           adms:status adms-status:Withdrawn
-        .
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Aanpassen bestaand begrip (binnen besluit)";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
         .
       }
     }
@@ -173,8 +163,9 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         ?s ?p ?o.
       }
       GRAPH ?graph {       
-        ?s wdrs:describedby ?currentDoc;
-          skos:prefLabel ?prefLabel.
+        ?s foaf:isPrimaryTopicOf ?currentDoc;
+          skos:prefLabel ?prefLabel
+        .
         
         ?graph prov:generatedAtTime ?graphTime.
         FILTER NOT EXISTS {
@@ -189,9 +180,10 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       
       OPTIONAL {
         GRAPH ?udGraph {
-          ?s wdrs:describedby ?udDoc.
+          ?s foaf:isPrimaryTopicOf ?udDoc.
           ?udDoc ?docP ?docO;
-            adms:status adms-status:UnderDevelopment.
+            adms:status adms-status:UnderDevelopment
+          .
           FILTER( ?docP != adms:status )
           
           ?udGraph prov:generatedAtTime ?udGraphTime.       
@@ -212,41 +204,42 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       BIND( now() AS ?now )
     }
     
-    CLEAR GRAPH container:generiek
-    CLEAR GRAPH container:concept-put-ttl
+    #CLEAR GRAPH container:generiek
+    #CLEAR GRAPH container:concept-put-ttl
   '''
 .
 
 stage:DSOv2ConceptenAdd a elmo:Scene;
 	rdfs:label "Query voor verwerken aanvullen concept";
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sparql:Graph;
-          rdfs:label "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
-          prov:generatedAtTime ?now
+        ?transactie rdf:type sd:Graph;
+          skos:changeNote "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
         .
         
         ?s ?p ?o;
-          wdrs:describedby ?doc;
+          foaf:isPrimaryTopicOf ?doc;
           ?pred ?obj
         .
         
         ?doc adms:status adms-status:Completed;
           prov:wasRevisionOf ?currentDoc;
-          prov:wasGeneratedBy ?activity;
           ?docP ?docO
         .
         
@@ -254,12 +247,6 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           prov:wasRevisionOf ?currentDocRev;
           prov:wasGeneratedBy ?activity;
           ?docP ?docO
-        .
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Aanpassen bestaand begrip (buiten besluit)";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
         .
       }
     }
@@ -275,12 +262,12 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         )
       }
       GRAPH ?graph {
-        ?s wdrs:describedby ?currentDoc;
+        ?s foaf:isPrimaryTopicOf ?currentDoc;
           skos:prefLabel ?prefLabel;
           ?pred ?obj
         .
         FILTER(
-          ?pred != wdrs:describedby
+          ?pred != foaf:isPrimaryTopicOf
         )
           
         ?graph prov:generatedAtTime ?graphTime.
@@ -288,7 +275,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
             ?s rdf:type skos:Concept;
-              wdrs:describedby ?newerDoc.
+              foaf:isPrimaryTopicOf ?newerDoc.
             FILTER( ?newerTime > ?graphTime )
           }
           GRAPH ?docNewerGraph {

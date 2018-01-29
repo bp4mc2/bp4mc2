@@ -115,7 +115,7 @@ stage:DemoBegripVersies a elmo:Part;
 		elmo:index "5";
 	];
 	elmo:fragment [
-		elmo:applies-to wdrs:describedby;
+		elmo:applies-to foaf:isPrimaryTopicOf;
 		elmo:appearance elmo:NestedAppearance;
 		rdfs:label "Metadata:";
 		elmo:index "6";
@@ -154,11 +154,12 @@ stage:DemoBegripVersies a elmo:Part;
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
     prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     
 		construct {
 			?doc rdfs:label ?titel.
 			?doc skos:definition ?definitie.
-			?doc wdrs:describedby ?metadata.
+			?doc foaf:isPrimaryTopicOf ?metadata.
 			?doc adms:latestStatus ?latestStatus.
 			?doc dct:latestIssued ?latestIssued.
 			?doc dct:latestStart ?latestStart.
@@ -180,7 +181,7 @@ stage:DemoBegripVersies a elmo:Part;
 				<@SUBJECT@> rdfs:label ?label.
         OPTIONAL { <@SUBJECT@> skos:definition ?definitie. }
 				?g prov:generatedAtTime ?tijdstip.
-				<@SUBJECT@> wdrs:describedby ?doc.
+				<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
 				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
 			}
 			graph ?gdoc {
@@ -227,20 +228,20 @@ stage:DemoGraph a elmo:Part;
 			<@SUBJECT@> dct:hasVersion ?doc.
 			?doc rdfs:label ?doctitel.
 			# Doc
-			<@SUBJECT@> wdrs:describedby ?metadata.
+			<@SUBJECT@> foaf:isPrimaryTopicOf ?metadata.
 			<@SUBJECT@> prov:wasRevisionOf ?rev.
 			?metadata rdfs:label ?label.
 			# Meta
 			prov:wasRevisionOf rdfs:label "revisie van".
 			dct:hasVersion rdfs:label "versie".
-			wdrs:describedby rdfs:label "metadata".
+			foaf:isPrimaryTopicOf rdfs:label "metadata".
 		}
 		where {
 			{
 				graph ?g {
 					<@SUBJECT@> rdf:type skos:Concept.
 					<@SUBJECT@> rdfs:label ?label.
-					<@SUBJECT@> wdrs:describedby ?doc.
+					<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
 					BIND (strbefore(strafter(str(?doc),'doc/'),'/concept') as ?doctitel)
 				}
 			}
