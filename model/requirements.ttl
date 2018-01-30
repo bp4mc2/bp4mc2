@@ -105,7 +105,7 @@ req:Concept_prefLabel a sh:PropertyShape;
 req:Concept_synonym a sh:PropertyShape;
 	rdfs:label "alternatieve aanduiding";
 	sh:name "skos:altLabel";
-	rdfs:comment "Een begrip kan een synoniem hebben."; # [MB] Beter zou zijn: "Een begrip kan met een synoniem worden aangeduid."
+	rdfs:comment "EEen begrip kan met een synoniem worden aangeduid."; 
 	sh:path skos:altLabel;
 .
 req:Concept_definition a sh:PropertyShape;
@@ -242,15 +242,9 @@ req:Begrippenkader a sh:NodeShape;
 	rdfs:label "Begrippenkader";
 	sh:name "skos:ConceptScheme";
 	sh:targetClass skos:ConceptScheme;
-	sh:property req:Begrippenkader_grondslag;
 	sh:property req:Begrippenkader_type;
 	sh:property req:Begrippenkader_hasTopConcept;
 .
-#req:Begrippenkader_grondslag a sh:PropertyShape;
-#	rdfs:label "grondslag";
-#	sh:path req:Begrippenkader_grondslag;
-#	sh:class dctype:Text;
-#.
 req:Begrippenkader_hasTopConcept a sh:PropertyShape;
 	rdfs:label "has top concept";
 	sh:path skos:hasTopConcept;
@@ -371,7 +365,7 @@ req:Metadata_isValidDuring a sh:PropertyShape;
 	sh:name "dcterms:temporal";
 	sh:path dcterms:temporal;
 	sh:node req:Metadata_Temporal;
-	rdfs:comment "Een versie is formeel/juridische geldig gedurende een periode.";
+	rdfs:comment "Een versie is formeel/juridisch geldig gedurende een periode.";
 .
 req:Metadata_isIssued a sh:PropertyShape;
 	rdfs:label "is issued";
@@ -493,7 +487,7 @@ req:Handeling_affects a sh:PropertyShape;
 #---------------------
 # [MB] Moet brondocument niet meer eigenschappen hebben? Bijvoorbeeld een label?
 # [MB] Moeten we niet iets hebben om onderscheid te maken tussen de identificatie van het brondocument en de website?
-#      Dat is bijvoorbeeld nodig voor wetgeving: de juriconnect identificatie is iets anders dan de webpagina.
+# [MB] Dat is bijvoorbeeld nodig voor wetgeving: de juriconnect identificatie is iets anders dan de webpagina.
 req:Brondocument a sh:NodeShape;
   sh:name "dctype:Text (brondocument)";
 	rdfs:label "Brondocument";
