@@ -522,17 +522,8 @@ req:Dataset rdf:type sh:NodeShape;
     sh:property req:Dataset_dateIssued;
     sh:property req:Dataset_language;
     sh:property req:Dataset_description;
-	sh:property req:Datasetversie_version; # [MB] Hier wordt gesproken over dataset en datasetversie: ik mis dit onderscheid: ik zou dus twee shapes verwachten, 1 met dataset en 1 met datasetversie
-	sh:property req:Datasetversie_versionNotes;	
-	sh:property req:Datasetversie_isDerivedFrom;
-	sh:property req:Datasetversie_distribution;
-	sh:property req:Datasetversie_versionOf;
-	sh:property req:Datasetversie_provenance;
 .
-req:Datasetversie_provenance a sh:PropertyShape;
-	sh:path foaf:isPrimaryTopicOf;
-	sh:class prov:Entity;
-.
+
 req:Dataset_name rdf:type sh:PropertyShape;
     rdfs:label "naam";
     rdfs:label "name"@nen;
@@ -569,6 +560,22 @@ req:Dataset_description rdf:type sh:PropertyShape;
 # Door: Ingrid Thurlings
 #---------------------
 
+req:Datasetversie rdf:type sh:NodeShape;
+    rdfs:label "Dataset";
+	sh:name "dcat:Dataset";
+    sh:targetClass dcat:Dataset;
+	sh:property req:Datasetversie_version; # [MB] Hier wordt gesproken over dataset en datasetversie: ik mis dit onderscheid: ik zou dus twee shapes verwachten, 1 met dataset en 1 met datasetversie
+	sh:property req:Datasetversie_versionNotes;	
+	sh:property req:Datasetversie_isDerivedFrom;
+	sh:property req:Datasetversie_distribution;
+	sh:property req:Datasetversie_versionOf;
+	sh:property req:Datasetversie_provenance;
+.
+
+req:Datasetversie_provenance a sh:PropertyShape;
+	sh:path foaf:isPrimaryTopicOf;
+	sh:class prov:Entity;
+.
 req:Datasetversie_version rdf:type sh:PropertyShape;
 	rdfs:label "versie";
 	sh:name "adms:version";
