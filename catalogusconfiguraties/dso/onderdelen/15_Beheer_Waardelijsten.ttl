@@ -1,7 +1,7 @@
 #
 #
 #
-# BEHEER UMLMODEL
+# BEHEER WAARDELIJSTEN
 #
 #
 #
@@ -68,7 +68,7 @@ stage:InformationModelsList a elmo:Part;
           rdfs:label ?model_label
         .
       }
-      FILTER regex(?g, "^http://localhost:8080/catalogus/dso/def/")
+      FILTER regex(?g, "^http://catalogus.test.kadaster.nl/def/")
     }
   ''';
 .
@@ -87,10 +87,16 @@ stage:TypeWaardelijstenList a elmo:Part;
   ''';
 .
 
+#
+# SCENES
+#
+
+# Scenes voor het creëren van een waardelijst
 stage:CreateClassificerendScene a elmo:Scene;
   rdfs:label "Creëren classificerende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
@@ -99,8 +105,9 @@ stage:CreateClassificerendScene a elmo:Scene;
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
 
     INSERT {
-      GRAPH <http://localhost:8080/catalogus/dso/def/Waardelijsten> {
+      GRAPH def:Waardelijsten {
         ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
           shxl:stereotype shxl:ValueList;
           sh:property [
             sh:path [ sh:inversePath skos:member ];
@@ -111,7 +118,7 @@ stage:CreateClassificerendScene a elmo:Scene;
     }
     WHERE {
       BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
-      BIND( IRI("http://localhost:8080/catalogus/dso/id/collection/@NAME@") AS ?collection )  
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/collection/@NAME@") AS ?collection )  
       FILTER( <@TYPE@> = bp4mc2:Classificerend )
     }
   '''
@@ -121,6 +128,7 @@ stage:CreateCategoriserendScene a elmo:Scene;
   rdfs:label "Creëren categoriserende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
@@ -129,8 +137,9 @@ stage:CreateCategoriserendScene a elmo:Scene;
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
 
     INSERT {
-      GRAPH <http://localhost:8080/catalogus/dso/def/Waardelijsten> {
+      GRAPH def:Waardelijsten {
         ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
           shxl:stereotype shxl:ValueList;
           sh:property [
             sh:path skos:inScheme;
@@ -141,7 +150,7 @@ stage:CreateCategoriserendScene a elmo:Scene;
     }
     WHERE {
       BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
-      BIND( IRI("http://localhost:8080/catalogus/dso/id/dataset/@NAME@") AS ?scheme )  
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/dataset/@NAME@") AS ?scheme )  
       FILTER( <@TYPE@> = bp4mc2:Categoriserend )
     }
   '''
@@ -151,6 +160,7 @@ stage:CreateRefererendScene a elmo:Scene;
   rdfs:label "Creëren refererende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
@@ -159,8 +169,9 @@ stage:CreateRefererendScene a elmo:Scene;
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
 
     INSERT {
-      GRAPH <http://localhost:8080/catalogus/dso/def/Waardelijsten> {
+      GRAPH def:Waardelijsten {
         ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
           shxl:stereotype shxl:Valuelist;
           sh:property [
             sh:path rdf:type;

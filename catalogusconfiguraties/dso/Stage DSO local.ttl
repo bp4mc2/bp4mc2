@@ -464,7 +464,7 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "/catalogus/dso/container/concepten-put-jsonld";
 			];
 		];
-		elmo:data[
+		elmo:data [
 			rdfs:label "Upload modellen";
 			elmo:index "4";
 			elmo:data [
@@ -478,9 +478,43 @@ stage:DSOBeheermenu a elmo:Part;
 				xhtml:link "container/ttlmodelupload";
 			];
 		];
+    elmo:data [
+      rdfs:label "Waardelijsten";
+      elmo:index "5";
+      elmo:data [
+				rdfs:label "Maak een waardelijst aan";
+				elmo:index "1";
+				xhtml:link "update/createwaardelijst";
+			];
+      elmo:data [
+				rdfs:label "Upload nieuwe waarden voor waardelijst";
+				elmo:index "2";
+				xhtml:link "container/waarden-post";
+			];
+      elmo:data [
+				rdfs:label "Sync nieuwe waarden naar waardelijst";
+				elmo:index "3";
+				xhtml:link "update/syncwaarden";
+			];
+      elmo:data [
+				rdfs:label "Pas waarden in waardelijst aan";
+				elmo:index "4";
+				xhtml:link "container/waarden-put";
+			];
+      elmo:data [
+				rdfs:label "Verwijder waarde uit waardelijst";
+				elmo:index "5";
+				xhtml:link "container/waarden-delete";
+			];
+      elmo:data [
+				rdfs:label "Maak versie van waardelijst geldig";
+				elmo:index "6";
+				xhtml:link "update/waardelijst-geldigmaken";
+			];
+    ];
 		elmo:data [
 			rdfs:label "Acties";
-			elmo:index "5";
+			elmo:index "6";
 			elmo:data [
 				rdfs:label "Verwijder alle data";
 				elmo:index "1";
@@ -501,15 +535,10 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "4";
 				xhtml:link "update/addnewmodel";
 			];
-      elmo:data [
-				rdfs:label "Maak een waardelijst aan";
-				elmo:index "5";
-				xhtml:link "update/createwaardelijst";
-			];
 		];
 		elmo:data [
 			rdfs:label "Sync";
-			elmo:index "6";
+			elmo:index "7";
 			elmo:data [
 				rdfs:label "Sync Model";
 				elmo:index "1";
@@ -4175,7 +4204,7 @@ stage:DSOTTLUploadScene a elmo:Scene;
 #
 #
 #
-# BEHEER UMLMODEL
+# BEHEER WAARDELIJSTEN
 #
 #
 #
@@ -4197,7 +4226,6 @@ updatestage:createwaardelijst a elmo:Production;
   elmo:contains stage:TypeWaardelijstenList;
 .
 
-# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
 stage:CreateWaardelijstForm a elmo:Form;
 	rdfs:label "Maak waardelijst aan";
   elmo:index "2";
@@ -4243,7 +4271,7 @@ stage:InformationModelsList a elmo:Part;
           rdfs:label ?model_label
         .
       }
-      FILTER regex(?g, "^http://localhost:8080/catalogus/dso/def/")
+      FILTER regex(?g, "^http://catalogus.test.kadaster.nl/def/")
     }
   ''';
 .
@@ -4262,10 +4290,16 @@ stage:TypeWaardelijstenList a elmo:Part;
   ''';
 .
 
+#
+# SCENES
+#
+
+# Scenes voor het creëren van een waardelijst
 stage:CreateClassificerendScene a elmo:Scene;
   rdfs:label "Creëren classificerende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
@@ -4274,8 +4308,9 @@ stage:CreateClassificerendScene a elmo:Scene;
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
 
     INSERT {
-      GRAPH <http://localhost:8080/catalogus/dso/def/Waardelijsten> {
+      GRAPH def:Waardelijsten {
         ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
           shxl:stereotype shxl:ValueList;
           sh:property [
             sh:path [ sh:inversePath skos:member ];
@@ -4286,7 +4321,7 @@ stage:CreateClassificerendScene a elmo:Scene;
     }
     WHERE {
       BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
-      BIND( IRI("http://localhost:8080/catalogus/dso/id/collection/@NAME@") AS ?collection )  
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/collection/@NAME@") AS ?collection )  
       FILTER( <@TYPE@> = bp4mc2:Classificerend )
     }
   '''
@@ -4296,6 +4331,7 @@ stage:CreateCategoriserendScene a elmo:Scene;
   rdfs:label "Creëren categoriserende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
@@ -4304,8 +4340,9 @@ stage:CreateCategoriserendScene a elmo:Scene;
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
 
     INSERT {
-      GRAPH <http://localhost:8080/catalogus/dso/def/Waardelijsten> {
+      GRAPH def:Waardelijsten {
         ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
           shxl:stereotype shxl:ValueList;
           sh:property [
             sh:path skos:inScheme;
@@ -4316,7 +4353,7 @@ stage:CreateCategoriserendScene a elmo:Scene;
     }
     WHERE {
       BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
-      BIND( IRI("http://localhost:8080/catalogus/dso/id/dataset/@NAME@") AS ?scheme )  
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/dataset/@NAME@") AS ?scheme )  
       FILTER( <@TYPE@> = bp4mc2:Categoriserend )
     }
   '''
@@ -4326,6 +4363,7 @@ stage:CreateRefererendScene a elmo:Scene;
   rdfs:label "Creëren refererende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
@@ -4334,8 +4372,9 @@ stage:CreateRefererendScene a elmo:Scene;
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
 
     INSERT {
-      GRAPH <http://localhost:8080/catalogus/dso/def/Waardelijsten> {
+      GRAPH def:Waardelijsten {
         ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
           shxl:stereotype shxl:Valuelist;
           sh:property [
             sh:path rdf:type;
@@ -4352,6 +4391,363 @@ stage:CreateRefererendScene a elmo:Scene;
     }
   '''
 .
+ 
+#
+#
+#
+# BEHEER WAARDELIJSTEN
+#
+#
+#
+
+#
+# CONTAINERS
+#
+
+# Uploadcontainer voor waarden in waardelijst
+container:waarden-post a elmo:Container;
+  rdfs:label "Upload waarden om toe te voegen aan waardelijst";
+  elmo:representation elmo:UploadRepresentation;
+  elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:replaces container:generiek
+.
+
+container:waarden-put a elmo:Container;
+  rdfs:label "Upload om waarden in een waardelijst aan te passen";
+  elmo:representation elmo:UploadRepresentation;
+  elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:replaces container:generiek;
+  elmo:contains stage:PutWaardenClassificerendScene;
+  elmo:contains stage:PutWaardenCategoriserendScene;
+  elmo:contains stage:PutWaardenRefererendScene
+.
+
+#
+# PRODUCTIONS
+#
+
+# Sync van waarden naar waardelijst
+updatestage:syncwaarden a elmo:Production;
+  elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:PostWaardenForm;
+	elmo:contains stage:PostWaardenClassificerendScene;
+	elmo:contains stage:UpdateCollectionScene;
+	elmo:contains stage:PostWaardenCategoriserendScene;
+	elmo:contains stage:PostWaardenRefererendScene;
+  elmo:contains stage:GarbageCollectionScene;
+  elmo:contains stage:WaardelijstenList;
+.
+
+stage:PostWaardenForm a elmo:Form;
+	rdfs:label "Sync waarden naar waardelijst";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "waardelijst";
+      rdfs:label "Selecteer de waardelijst"@nl;
+      elmo:valuesFrom stage:WaardelijstenList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+stage:WaardelijstenList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdfs: 		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+        
+    CONSTRUCT {
+      ?waardelijst rdfs:label ?waardelijst_label
+    }
+    WHERE {
+      GRAPH def:Waardelijsten {
+        ?waardelijst rdf:type sh:NodeShape;
+          rdfs:label ?waardelijst_label
+        .
+      }
+    }
+  ''';
+.
+
+#
+# SCENES
+#
+
+# Scenes voor het toevoegen van waarden aan een waardelijst
+stage:PostWaardenClassificerendScene a elmo:Scene;
+  rdfs:label "Toevoegen waarden aan classificerende waardelijst";
+  elmo:index "1";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://localhost:8080/catalogus/dso/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Opslaan waarden voor classificerende waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+        
+        ?subject ?p ?o;
+          foaf:isPrimaryTopicOf ?doc
+        .
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel;
+          ?p ?o
+        .
+      }
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> rdf:type sh:NodeShape;
+          rdfs:label ?name;
+          sh:property [
+            sh:path [ sh:inversePath skos:member ];
+            sh:hasValue ?collection
+          ]
+        .
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      # TODO: checken of onderstaande URI klopt!
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/collection/", ?name ) ) AS ?collection )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/collection/", ?name ) ) AS ?collectiondoc )
+      BIND( now() AS ?now )
+    }
+  '''
+.
+
+stage:UpdateCollectionScene a elmo:Scene;
+  rdfs:label "Updaten collectie van classificerende waardelijst";
+  elmo:index "2";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://localhost:8080/catalogus/dso/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Toevoegen waarden aan classificerende waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+        
+        ?collection rdf:type skos:Collection;
+          rdfs:label ?name;
+          skos:prefLabel ?name;
+          skos:member ?subject;
+          skos:member ?member;
+          foaf:isPrimaryTopicOf ?doc
+        .
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment;
+          prov:wasRevisionOf ?currentDoc
+        .
+        
+        ?udDoc ?docP ?docO;
+          adms:status adms-status:Withdrawn
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel
+        .
+      }
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> rdf:type sh:NodeShape;
+          rdfs:label ?name;
+          sh:property [
+            sh:path [ sh:inversePath skos:member ];
+            sh:hasValue ?collection
+          ]
+        .
+      }
+      OPTIONAL {
+        GRAPH ?graph {       
+          ?collection foaf:isPrimaryTopicOf ?currentDoc;
+            skos:member ?member
+          .
+          ?graph prov:generatedAtTime ?graphTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerGraph {
+              ?newerGraph prov:generatedAtTime ?newerTime.
+              ?collection rdf:type skos:Collection.
+              FILTER( ?newerTime > ?graphTime )
+            }
+          }
+        }
+        FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      }
+      OPTIONAL {
+        GRAPH ?udGraph {
+          ?collection foaf:isPrimaryTopicOf ?udDoc.
+          ?udDoc ?docP ?docO;
+            adms:status adms-status:UnderDevelopment
+          .
+          FILTER( ?docP != adms:status )
+          
+          ?udGraph prov:generatedAtTime ?udGraphTime.       
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?udDoc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+            }
+          }
+        }
+        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      # TODO: checken of onderstaande URI klopt!
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/collection/", ?name ) ) AS ?collection )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/collection/", ?name ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
+  '''
+.
+
+stage:PostWaardenCategoriserendScene a elmo:Scene;
+  rdfs:label "Toevoegen waarden aan categoriserende waardelijst";
+  elmo:index "3";
+  elmo:query '''
+  
+  '''
+.
+
+stage:PostWaardenRefererendScene a elmo:Scene;
+  rdfs:label "Toevoegen waarden aan refererende waardelijst";
+  elmo:index "4";
+  elmo:query '''
+  
+  '''
+.
+
+# Scenes voor het wijzigen van waarden in een waardelijst
+stage:PutWaardenClassificerendScene a elmo:Scene;
+  rdfs:label "Wijzigen waarden in classificerende waardelijst";
+  elmo:index "1";
+  elmo:query '''
+  
+  '''
+.
+
+stage:PutWaardenCategoriserendScene a elmo:Scene;
+  rdfs:label "Wijzigen waarden in categoriserende waardelijst";
+  elmo:index "2";
+  elmo:query '''
+  
+  '''
+.
+
+stage:PutWaardenRefererendScene a elmo:Scene;
+  rdfs:label "Wijzigen waarden in refererende waardelijst";
+  elmo:index "3";
+  elmo:query '''
+  
+  '''
+.
+
+stage:GarbageCollectionScene a elmo:Scene;
+  rdfs:label "Opruimen tijdelijks graphs";
+  elmo:index "9";
+  elmo:query '''
+    prefix container:       <http://localhost:8080/catalogus/dso/container/>
+    
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-post-ttl
+  '''
+.
+ 
+#
+#
+#
+# BEHEER WAARDELIJSTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Sync van waarden naar waardelijst
+updatestage:waardelijst-geldigmaken a elmo:Production;
+  elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:WaardelijstGeldigMakenForm
+.
+
+stage:WaardelijstGeldigMakenForm a elmo:Form;
+	rdfs:label "Sync waarden naar waardelijst";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "waardelijst";
+      rdfs:label "Selecteer de waardelijst"@nl;
+      elmo:valuesFrom stage:WaardelijstenList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+#
+# SCENES
+#
  
 #
 #
