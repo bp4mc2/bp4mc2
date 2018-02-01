@@ -1943,9 +1943,14 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [ 
 		rdfs:label "Bronnen"@nl;
-		elmo:applies-to dc:source;
+		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
 		elmo:index "05";
+	];
+  elmo:fragment [
+		rdfs:label "Bronnen"@nl;
+		elmo:applies-to dc:source;
+		elmo:index "06";
 	];
 	elmo:fragment [
 		rdfs:label "Commentaar"@nl;
@@ -2033,11 +2038,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:inScheme;
 		elmo:index "30";
 	];
-		elmo:fragment [
-		rdfs:label "Bronnen"@nl;
-		elmo:applies-to rdfs:literal;
-		elmo:index "06";
-	];
+
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
 
@@ -3856,7 +3857,7 @@ updatestage:TaxExportConcepten a elmo:Production;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
 	elmo:queryForm stage:TaxSelectDataset;
-#	elmo:contains stage:ExportSubsetBegrippenQueryScene;
+	elmo:contains stage:ExportSubsetBegrippenQueryScene;
 .
 
 stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
@@ -3874,14 +3875,21 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-		CONSTRUCT {
-			?concept ?p ?o .
-			?concept rdf:type skos:Concept .
-		}
+    prefix dct: <http://purl.org/dc/terms/>
+    prefix dc: <http://purl.org/dc/elements/1.1/>
+    
+    CONSTRUCT {
+			?concept ?p ?o.
+      ?o dct:source ?osource;
+         rdfs:label ?olabel.
+ 		}
 		WHERE {
 			GRAPH ?g {
-				?concept ?p ?o .
+				?concept ?p ?o.
 				?concept kddef:status ?status.
+        # OPTIONAL {
+          # ?concept dc:source/dct:source ?source.
+        # }
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -3889,6 +3897,7 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 					?status = kdstat:Gevalideerd ||
 					?status = kdstat:Geverifieerd
 				)
+        #FILTER( ?p != dc:source )
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g.
@@ -3897,7 +3906,9 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 			OPTIONAL {
 				GRAPH ?og {
 					?o rdf:type ?otype.
-					?o kddef:status ?ostatus.
+					OPTIONAL {?o kddef:status ?ostatus.}
+          OPTIONAL {?o dct:source ?osource.}
+          OPTIONAL {?o rdfs:label ?olabel.}
 				}
 				GRAPH doc:mastergraph {
 					?o rdfs:isDefinedBy ?og.
@@ -3914,11 +3925,14 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 						|| ?ostatus = kdstat:Geverifieerd
 					)
 				)
+        || !BOUND(?ostatus)
 			)
 		}
 	'''
+    
 .
 
+# in plaats van het filter een 2 uitzonderingen, eentje voor je rdf:type en eentje voor dc:source
  
 #
 #
