@@ -14,18 +14,18 @@
 container:waarden-post a elmo:Container;
   rdfs:label "Upload waarden om toe te voegen aan waardelijst";
   elmo:representation elmo:UploadRepresentation;
-  elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
 	elmo:replaces container:generiek
 .
 
 container:waarden-put a elmo:Container;
   rdfs:label "Upload om waarden in een waardelijst aan te passen";
   elmo:representation elmo:UploadRepresentation;
-  elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
 	elmo:replaces container:generiek;
   elmo:contains stage:PutWaardenScene;
   elmo:contains stage:GarbageCollectionScene
@@ -37,9 +37,9 @@ container:waarden-put a elmo:Container;
 
 # Sync van waarden naar waardelijst
 updatestage:syncwaarden a elmo:Production;
-  elmo:contains stage:DSOBeheermenu;
-	elmo:contains stage:DSOHeader;
-	elmo:contains stage:DSOFooter;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
 	elmo:queryForm stage:PostWaardenForm;
 	elmo:contains stage:PostWaardenClassificerendScene;
 	elmo:contains stage:UpdateCollectionScene;
@@ -106,7 +106,7 @@ stage:PostWaardenClassificerendScene a elmo:Scene;
 		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
 		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container:       <http://localhost:8080/catalogus/dso/container/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
     prefix def:             <http://catalogus.test.kadaster.nl/def/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
@@ -168,7 +168,7 @@ stage:UpdateCollectionScene a elmo:Scene;
 		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
 		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    prefix container:       <http://localhost:8080/catalogus/dso/container/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
     prefix def:             <http://catalogus.test.kadaster.nl/def/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
@@ -288,7 +288,7 @@ stage:GarbageCollectionScene a elmo:Scene;
   rdfs:label "Opruimen tijdelijks graphs";
   elmo:index "9";
   elmo:query '''
-    prefix container:       <http://localhost:8080/catalogus/dso/container/>
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
     
     CLEAR GRAPH container:generiek
     CLEAR GRAPH container:waarden-post
