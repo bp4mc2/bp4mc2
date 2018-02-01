@@ -34,12 +34,12 @@ wl:BuildingStatusValueList a sh:NodeShape;
 .
 
 # Categoriserend
-wl:MunicipalityValueList a sh:NodeShape;
-	rdfs:label "The list of Dutch municipalities"@en;
+wl:ConceptStatusValueList a sh:NodeShape;
+	rdfs:label "The list of concept statuses"@en;
   shxl:stereotype shxl:Valuelist;
 	sh:property [
 		sh:path skos:inScheme;
-		sh:hasValue scheme:Municipality
+		sh:hasValue scheme:ConceptStatus
 	]
 .
 
@@ -64,6 +64,8 @@ class:Country a rdfs:Class.
 
 # Classificerend
 collection:BuildingStatus a skos:Collection;
+  rdfs:label "BuildingStatus";
+  skos:prefLabel "BuildingStatus";
   skos:member concept:Demolished;
 	skos:member concept:InUse
 .
@@ -77,16 +79,17 @@ concept:InUse a skos:Concept;
 .
 
 # Categoriserend
-scheme:Municipality a skos:ConceptScheme, dcat:Dataset.
-concept:Amsterdam a skosConcept;
-  rdfs:label "Amsterdam";
-  skos:prefLabel "Amsterdam";
-  skos:inScheme scheme:Municipalities
+scheme:ConceptStatus a skos:ConceptScheme, dcat:Dataset
 .
-concept:Apeldoorn a skosConcept;
-  rdfs:label "Apeldoorn";
-  skos:prefLabel "Apeldoorn";
-  skos:inScheme scheme:Municipalities
+concept:UnderDevelopment a skos:Concept;
+  rdfs:label "UnderDevelopment";
+  skos:prefLabel "UnderDevelopment";
+  skos:inScheme scheme:ConceptStatus
+.
+concept:Completed a skos:Concept;
+  rdfs:label "Completed";
+  skos:prefLabel "Completed";
+  skos:inScheme scheme:ConceptStatus
 .
 
 # Refererend

@@ -133,6 +133,40 @@ stage:DSOv2Beheermenu a elmo:Part;
 				xhtml:link "/catalogus/dsov2/update/concept-enact";
 			];
 		];
+    elmo:data [
+      rdfs:label "Waardelijsten";
+      elmo:index "3";
+      elmo:data [
+				rdfs:label "Maak een waardelijst aan";
+				elmo:index "1";
+				xhtml:link "update/createwaardelijst";
+			];
+      elmo:data [
+				rdfs:label "Upload nieuwe waarden voor waardelijst";
+				elmo:index "2";
+				xhtml:link "container/waarden-post";
+			];
+      elmo:data [
+				rdfs:label "Sync nieuwe waarden naar waardelijst";
+				elmo:index "3";
+				xhtml:link "update/syncwaarden";
+			];
+      elmo:data [
+				rdfs:label "Pas waarden in waardelijst aan";
+				elmo:index "4";
+				xhtml:link "container/waarden-put";
+			];
+      elmo:data [
+				rdfs:label "Verwijder waarde uit waardelijst";
+				elmo:index "5";
+				xhtml:link "container/waarden-delete";
+			];
+      elmo:data [
+				rdfs:label "Maak versie van waardelijst geldig";
+				elmo:index "6";
+				xhtml:link "update/waardelijst-geldigmaken";
+			];
+    ];
 		elmo:data [
 			rdfs:label "Acties";
 			elmo:index "5";
@@ -154,6 +188,316 @@ stage:DSOv2Beheermenu a elmo:Part;
 		];
 	]
 . 
+#
+#
+#
+# DEMO
+# Specifiek gedeelte voor demonstratiedoeleinden, nicely displayed
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Overzichtspagina concepten
+stage:Demo a elmo:Representation;
+  # Bereikbaarheid
+	elmo:url-pattern "/query/demo$";
+  
+  # Onderdelen
+  elmo:contains stage:DemoMenu;
+  
+  # Data
+  elmo:contains stage:DemoAlleBegrippen;
+.
+
+stage:DemoBegrip a elmo:Representation;
+	elmo:url-pattern "/query/demobegrip$";
+	elmo:layer elmo:TopLayer;
+	elmo:contains stage:DemoMenu;
+	elmo:contains stage:DemoBegripVersies;
+	elmo:contains stage:DemoGraph;
+.
+
+stage:DemoMenuTerug a elmo:Part;
+	elmo:index "~";
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:data [
+		elmo:data [rdfs:label "Terug naar demo"; xhtml:link "query/demo"]
+	];
+.
+	
+stage:DemoMenu a elmo:Part;
+	elmo:index "~";
+	elmo:appearance elmo:NavbarSearchAppearance;
+	elmo:query '''
+		prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>
+    prefix elmo:  <http://bp4mc2.org/elmo/def#>
+    
+		construct {
+			<urn:menu> elmo:data <urn:menu1>,<urn:menu2>,<urn:menu3>,<urn:menu4>,<urn:menu5>.
+			<urn:menu1> elmo:index "1";
+						rdfs:label ?glabel;
+						xhtml:link ?glink.
+			<urn:menu2> elmo:index "2";
+						rdfs:label "Start demo";
+						xhtml:link "update/startdemo".
+			<urn:menu3> elmo:index "3";
+						rdfs:label "Begrip opvoeren";
+						xhtml:link "container/nieuwbegrip".
+			<urn:menu4> elmo:index "4";
+						rdfs:label "Begrip aanpassen";
+						xhtml:link "container/begripaanpassen".
+			<urn:menu5> elmo:index "5";
+						rdfs:label "Statusverandering";
+						elmo:data [elmo:index "1"; rdfs:label "Bekendmaken"; xhtml:link "update/bekendmaken"];
+						elmo:data [elmo:index "2"; rdfs:label "Geldig maken"; xhtml:link "update/geldigmaken"].
+		}
+		where {
+			select (group_concat(?label; separator=',') as ?glabel) (group_concat(?link; separator=',') as ?glink)
+			where {
+				select distinct ?label ?link
+				where {
+					graph ?g {
+						?begrip rdf:type skos:Concept.
+						?begrip rdfs:label ?label.
+						BIND (concat('query/demobegrip?subject=',str(?begrip)) as ?link)
+					}
+					FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+				}
+			}
+		}
+	''';
+.
+
+stage:DemoBegripVersies a elmo:Part;
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to skos:definition;
+		rdfs:label "Definitie:";
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:applies-to adms:latestStatus; #Dit is eigenlijk niet goed, maar LDT kan niet onderscheid maken tussen hoofdlabel en nested label
+		rdfs:label "Actuele status:";
+		elmo:index "2";
+	];
+  elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
+		elmo:applies-to dct:latestIssued;
+		rdfs:label "Actuele bekendmaking:";
+		elmo:index "3";
+	];
+	elmo:fragment [
+		elmo:applies-to dct:latestStart;
+		rdfs:label "Actuele startdatum geldigheid:";
+		elmo:index "4";
+	];
+  elmo:fragment [
+		elmo:applies-to dct:latestEnd;
+		rdfs:label "Actuele einddatum geldigheid:";
+		elmo:index "5";
+	];
+	elmo:fragment [
+		elmo:applies-to foaf:isPrimaryTopicOf;
+		elmo:appearance elmo:NestedAppearance;
+		rdfs:label "Metadata:";
+		elmo:index "6";
+	];
+	elmo:fragment [
+		elmo:applies-to adms:status;
+		rdfs:label "Status:";
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:applies-to prov:generatedAtTime;
+		rdfs:label "Beschikbaar op:";
+		elmo:index "2";
+	];
+	elmo:fragment [
+    elmo:appearance elmo:HiddenAppearance;
+		elmo:applies-to dct:issued;
+		rdfs:label "Bekendgemaakt op:";
+		elmo:index "3";
+	];
+  elmo:fragment [
+		elmo:applies-to dcmiperiod:start;
+		rdfs:label "Geldig van:";
+		elmo:index "4";
+	];
+  elmo:fragment [
+		elmo:applies-to dcmiperiod:end;
+		rdfs:label "Geldig tot:";
+		elmo:index "5";
+	];
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix adms-status: <http://purl.org/adms/status/>
+		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
+		prefix dct: <http://purl.org/dc/terms/>
+    prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
+    
+		construct {
+			?doc rdfs:label ?titel.
+			?doc skos:definition ?definitie.
+			?doc foaf:isPrimaryTopicOf ?metadata.
+			?doc adms:latestStatus ?latestStatus.
+			?doc dct:latestIssued ?latestIssued.
+			?doc dct:latestStart ?latestStart.
+			?doc dct:latestEnd ?latestEnd.
+			?metadata adms:status ?status.
+			?metadata dct:issued ?issued.
+      ?metadata dcmiperiod:start ?start.
+      ?metadata dcmiperiod:end ?end.
+			?metadata prov:generatedAtTime ?doctijdstip.
+			adms-status:UnderDevelopment rdfs:label "Werkversie".
+			adms-status:Deprecated rdfs:label "Vervallen".
+			adms-status:Withdrawn rdfs:label "Teruggetrokken".
+			slex-status:Issued rdfs:label "Bekendgemaakt".
+			adms-status:Completed rdfs:label "Te gebruiken".
+		}
+		where {
+			graph ?g {
+				<@SUBJECT@> rdf:type skos:Concept.
+				<@SUBJECT@> rdfs:label ?label.
+        OPTIONAL { <@SUBJECT@> skos:definition ?definitie. }
+				?g prov:generatedAtTime ?tijdstip.
+				<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
+				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
+			}
+			graph ?gdoc {
+				?doc adms:status ?status.
+				OPTIONAL {?doc dct:issued ?issued}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:start ?start}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:end ?end}
+				?gdoc prov:generatedAtTime ?doctijdstip.
+				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
+			}
+      graph ?latestdoc {
+        ?doc adms:status ?latestStatus.
+        OPTIONAL {?doc dct:issued ?latestIssued}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:start ?latestStart}
+        OPTIONAL {?doc dct:temporal/dcmiperiod:end ?latestEnd}
+        ?latestdoc prov:generatedAtTime ?latestdoctijdstip.
+      }
+      FILTER NOT EXISTS {
+        graph ?laterdoc {
+          ?doc rdf:type prov:Entity.
+          ?laterdoc prov:generatedAtTime ?laterdoctijdstip.
+          FILTER (?laterdoctijdstip > ?latestdoctijdstip)
+        }
+      }
+      FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	''';
+.
+
+stage:DemoGraph a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:GraphAppearance;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+		prefix adms: <http://www.w3.org/ns/adms#>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
+		prefix dct: <http://purl.org/dc/terms/>
+		construct {
+			# Generiek
+			<@SUBJECT@> rdfs:label ?label.
+			# Begrip
+			<@SUBJECT@> dct:hasVersion ?doc.
+			?doc rdfs:label ?doctitel.
+			# Doc
+			<@SUBJECT@> foaf:isPrimaryTopicOf ?metadata.
+			<@SUBJECT@> prov:wasRevisionOf ?rev.
+			?metadata rdfs:label ?label.
+			# Meta
+			prov:wasRevisionOf rdfs:label "revisie van".
+			dct:hasVersion rdfs:label "versie".
+			foaf:isPrimaryTopicOf rdfs:label "metadata".
+		}
+		where {
+			{
+				graph ?g {
+					<@SUBJECT@> rdf:type skos:Concept.
+					<@SUBJECT@> rdfs:label ?label.
+					<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
+					BIND (strbefore(strafter(str(?doc),'doc/'),'/concept') as ?doctitel)
+				}
+			}
+			UNION
+			{
+				graph ?gdoc {
+					<@SUBJECT@> adms:status ?status.
+					OPTIONAL {<@SUBJECT@> prov:wasRevisionOf ?rev}
+					?gdoc prov:generatedAtTime ?doctijdstip.
+          BIND( IF( ?status = adms-status:UnderDevelopment, "Werkversie",
+                IF( ?status = slex-status:Issued, "Bekendgemaakt", 
+                IF( ?status = adms-status:Completed, "Te gebruiken",
+                IF( ?status = adms-status:Withdrawn, "Teruggetrokken",
+                IF( ?status = adms-status:Deprecated, "Vervallen"
+                , str( ?status ) ) ) ) ) ) AS ?statusstring )
+					BIND (concat(?statusstring,' (',?doctijdstip,')') as ?label)
+					BIND (iri(concat('@SUBJECT@','?graph=',str(?gdoc))) as ?metadata)
+				}
+			}
+		}
+	''';
+.
+
+#
+# Productions
+#
+updatestage:startdemo a elmo:Production;
+	elmo:contains stage:DemoMenu;
+	elmo:contains stage:ClearTransactions;
+.
+updatestage:bekendmaken a elmo:Production;
+	elmo:contains stage:DemoMenu;
+	elmo:contains stage:search-concepts-under-development;
+	elmo:queryForm stage:DSOv2IssueConceptsForm;
+	elmo:contains stage:IssueConceptScene;
+.
+
+updatestage:geldigmaken a elmo:Production;
+  elmo:contains stage:DemoMenu;
+	elmo:contains stage:search-concepts-nonenacted;
+	elmo:queryForm stage:DSOv2EnactConceptsForm;
+	elmo:contains stage:EnactConceptScene;
+	elmo:contains stage:werkingsregels;
+.
+
+
+#
+# Containers
+#
+container:nieuwbegrip a elmo:Container;
+  elmo:contains stage:DemoMenuTerug;
+  rdfs:label "Voeg nieuw concept toe (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenPost;
+.
+container:begripaanpassen a elmo:Container;
+  elmo:contains stage:DemoMenuTerug;
+  rdfs:label "Update bestaand concept (.ttl)";
+  
+  # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2ConceptenPut;
+.
+ 
 #
 #
 #
@@ -241,7 +585,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
     
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "Reserveren van het begrip in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -265,7 +609,6 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Opvoering_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( iri( concat( "http://regelgeving.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
@@ -294,7 +637,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "Aanpassing van het begrip door het bevoegde gezag";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -355,13 +698,12 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Aanpassing_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
-    #CLEAR GRAPH container:generiek
-    #CLEAR GRAPH container:concept-put-ttl
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-put-ttl
   '''
 .
 
@@ -383,7 +725,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -464,7 +806,6 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Aanpassing_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
@@ -473,6 +814,495 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
     CLEAR GRAPH container:concept-add-ttl
   '''
 . 
+#
+#
+#
+# BEHEER WAARDELIJSTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Aanmaken waardelijst
+updatestage:createwaardelijst a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:queryForm stage:CreateWaardelijstForm;
+	elmo:contains stage:CreateClassificerendScene;
+	elmo:contains stage:CreateCategoriserendScene;
+	elmo:contains stage:CreateRefererendScene;
+  elmo:contains stage:InformationModelsList;
+  elmo:contains stage:TypeWaardelijstenList;
+.
+
+stage:CreateWaardelijstForm a elmo:Form;
+	rdfs:label "Maak waardelijst aan";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "name";
+      rdfs:label "Naam van de waardelijst"@nl;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "1";
+  ];
+  elmo:fragment [
+      elmo:applies-to "type";
+      rdfs:label "Selecteer het type van de waardelijst"@nl;
+      elmo:valuesFrom stage:TypeWaardelijstenList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:applies-to "model";
+      rdfs:label "Selecteer het informatiemodel horende bij de waardelijst"@nl;
+      elmo:valuesFrom stage:InformationModelsList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+stage:InformationModelsList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix owl: 			<http://www.w3.org/2002/07/owl#>
+    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
+    
+    CONSTRUCT {
+      ?model rdfs:label ?model_label
+    }
+    WHERE {
+      GRAPH ?g {
+        ?model rdf:type owl:Ontology;
+          rdfs:label ?model_label
+        .
+      }
+      FILTER regex(?g, "^http://catalogus.test.kadaster.nl/def/")
+    }
+  ''';
+.
+
+stage:TypeWaardelijstenList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+    
+    CONSTRUCT {
+      bp4mc2:Classificerend rdfs:label "Classificerend".
+      bp4mc2:Categoriserend rdfs:label "Categoriserend".
+      bp4mc2:Refererend rdfs:label "Refererend".
+    }
+    WHERE {}
+  ''';
+.
+
+#
+# SCENES
+#
+
+# Scenes voor het creÃ«ren van een waardelijst
+stage:CreateClassificerendScene a elmo:Scene;
+  rdfs:label "CreÃ«ren classificerende waardelijst";
+  elmo:query '''
+    prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos:		<http://www.w3.org/2004/02/skos/core#>
+    
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+    prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
+
+    INSERT {
+      GRAPH def:Waardelijsten {
+        ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
+          shxl:stereotype shxl:ValueList;
+          sh:property [
+            sh:path [ sh:inversePath skos:member ];
+            sh:hasValue ?collection
+          ]
+        .
+      }
+    }
+    WHERE {
+      BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/collection/@NAME@") AS ?collection )  
+      FILTER( <@TYPE@> = bp4mc2:Classificerend )
+    }
+  '''
+.
+
+stage:CreateCategoriserendScene a elmo:Scene;
+  rdfs:label "CreÃ«ren categoriserende waardelijst";
+  elmo:query '''
+    prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos:		<http://www.w3.org/2004/02/skos/core#>
+    
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+    prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
+
+    INSERT {
+      GRAPH def:Waardelijsten {
+        ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
+          shxl:stereotype shxl:ValueList;
+          sh:property [
+            sh:path skos:inScheme;
+            sh:hasValue ?scheme
+          ]
+        .
+      }
+    }
+    WHERE {
+      BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/dataset/@NAME@") AS ?scheme )  
+      FILTER( <@TYPE@> = bp4mc2:Categoriserend )
+    }
+  '''
+.
+
+stage:CreateRefererendScene a elmo:Scene;
+  rdfs:label "CreÃ«ren refererende waardelijst";
+  elmo:query '''
+    prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos:		<http://www.w3.org/2004/02/skos/core#>
+    
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+    prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
+
+    INSERT {
+      GRAPH def:Waardelijsten {
+        ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
+          shxl:stereotype shxl:Valuelist;
+          sh:property [
+            sh:path rdf:type;
+            sh:hasValue ?class
+          ]
+        .
+        ?class a rdfs:Class.
+      }
+    }
+    WHERE {
+      BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
+      BIND( IRI("@MODEL@#@NAME@") AS ?class ) 
+      FILTER( <@TYPE@> = bp4mc2:Refererend )
+    }
+  '''
+.
+ 
+#
+#
+#
+# BEHEER WAARDELIJSTEN
+#
+#
+#
+
+#
+# CONTAINERS
+#
+
+# Uploadcontainer voor waarden in waardelijst
+container:waarden-post a elmo:Container;
+  rdfs:label "Upload waarden om toe te voegen aan waardelijst";
+  elmo:representation elmo:UploadRepresentation;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:replaces container:generiek
+.
+
+container:waarden-put a elmo:Container;
+  rdfs:label "Upload om waarden in een waardelijst aan te passen";
+  elmo:representation elmo:UploadRepresentation;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:replaces container:generiek;
+  elmo:contains stage:PutWaardenScene;
+  elmo:contains stage:GarbageCollectionScene
+.
+
+#
+# PRODUCTIONS
+#
+
+# Sync van waarden naar waardelijst
+updatestage:syncwaarden a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:queryForm stage:PostWaardenForm;
+	elmo:contains stage:PostWaardenClassificerendScene;
+	elmo:contains stage:UpdateCollectionScene;
+	elmo:contains stage:PostWaardenCategoriserendScene;
+	elmo:contains stage:PostWaardenRefererendScene;
+  elmo:contains stage:GarbageCollectionScene;
+  elmo:contains stage:WaardelijstenList;
+.
+
+stage:PostWaardenForm a elmo:Form;
+	rdfs:label "Sync waarden naar waardelijst";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "waardelijst";
+      rdfs:label "Selecteer de waardelijst"@nl;
+      elmo:valuesFrom stage:WaardelijstenList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+stage:WaardelijstenList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdfs: 		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+        
+    CONSTRUCT {
+      ?waardelijst rdfs:label ?waardelijst_label
+    }
+    WHERE {
+      GRAPH def:Waardelijsten {
+        ?waardelijst rdf:type sh:NodeShape;
+          rdfs:label ?waardelijst_label
+        .
+      }
+    }
+  ''';
+.
+
+#
+# SCENES
+#
+
+# Scenes voor het toevoegen van waarden aan een waardelijst
+stage:PostWaardenClassificerendScene a elmo:Scene;
+  rdfs:label "Toevoegen waarden aan classificerende waardelijst";
+  elmo:index "1";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Opslaan waarden voor classificerende waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+        
+        ?subject ?p ?o;
+          foaf:isPrimaryTopicOf ?doc
+        .
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel;
+          ?p ?o
+        .
+      }
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> rdf:type sh:NodeShape;
+          rdfs:label ?name;
+          sh:property [
+            sh:path [ sh:inversePath skos:member ];
+            sh:hasValue ?collection
+          ]
+        .
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      # TODO: checken of onderstaande URI klopt!
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
+  '''
+.
+
+stage:UpdateCollectionScene a elmo:Scene;
+  rdfs:label "Updaten collectie van classificerende waardelijst";
+  elmo:index "2";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Toevoegen waarden aan classificerende waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+        
+        ?collection rdf:type skos:Collection;
+          rdfs:label ?name;
+          skos:prefLabel ?name;
+          skos:member ?subject;
+          skos:member ?member;
+          foaf:isPrimaryTopicOf ?doc
+        .
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment;
+          prov:wasRevisionOf ?currentDoc
+        .
+        
+        ?udDoc ?docP ?docO;
+          adms:status adms-status:Withdrawn
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel
+        .
+      }
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> rdf:type sh:NodeShape;
+          rdfs:label ?name;
+          sh:property [
+            sh:path [ sh:inversePath skos:member ];
+            sh:hasValue ?collection
+          ]
+        .
+      }
+      OPTIONAL {
+        GRAPH ?graph {       
+          ?collection foaf:isPrimaryTopicOf ?currentDoc;
+            skos:member ?member
+          .
+          ?graph prov:generatedAtTime ?graphTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerGraph {
+              ?newerGraph prov:generatedAtTime ?newerTime.
+              ?collection rdf:type skos:Collection.
+              FILTER( ?newerTime > ?graphTime )
+            }
+          }
+        }
+        FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      }
+      OPTIONAL {
+        GRAPH ?udGraph {
+          ?collection foaf:isPrimaryTopicOf ?udDoc.
+          ?udDoc ?docP ?docO;
+            adms:status adms-status:UnderDevelopment
+          .
+          FILTER( ?docP != adms:status )
+          
+          ?udGraph prov:generatedAtTime ?udGraphTime.       
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?udDoc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+            }
+          }
+        }
+        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      # TODO: checken of onderstaande URI klopt!
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/collection/", ?name ) ) AS ?collection )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/collection/", ?name ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
+  '''
+.
+
+stage:PostWaardenCategoriserendScene a elmo:Scene;
+  rdfs:label "Toevoegen waarden aan categoriserende waardelijst";
+  elmo:index "3";
+  elmo:query '''
+  
+  '''
+.
+
+stage:PostWaardenRefererendScene a elmo:Scene;
+  rdfs:label "Toevoegen waarden aan refererende waardelijst";
+  elmo:index "4";
+  elmo:query '''
+  
+  '''
+.
+
+# Scene voor het wijzigen van waarden in een waardelijst
+stage:PutWaardenScene a elmo:Scene;
+  rdfs:label "Wijzigen waarden in waardelijst";
+  elmo:index "1";
+  elmo:query '''
+  
+  '''
+.
+
+stage:GarbageCollectionScene a elmo:Scene;
+  rdfs:label "Opruimen tijdelijks graphs";
+  elmo:index "9";
+  elmo:query '''
+    prefix container:       <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
+    
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:waarden-post
+    CLEAR GRAPH container:waarden-put
+  '''
+.
+ 
 #
 #
 #
@@ -676,7 +1506,7 @@ stage:IssueConceptScene a elmo:Scene;
 		
     INSERT {
       GRAPH ?transactie {      
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           rdfs:label "Bekendmaking van het begrip in de LVBB, en de registratie hiervan in de Catalogus";
           prov:generatedAtTime ?now
         .
@@ -762,7 +1592,7 @@ stage:EnactConceptScene a elmo:Scene;
     
     INSERT {
       GRAPH ?transactie {      
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "In werkingtreding van het begrip";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -844,7 +1674,7 @@ stage:EnactConceptScene a elmo:Scene;
 #
 #
 #
-# LIFECYCLE CONCEPTEN
+# BEHEER WAARDELIJSTEN
 #
 #
 #
@@ -853,45 +1683,35 @@ stage:EnactConceptScene a elmo:Scene;
 # PRODUCTIONS
 #
 
-# Production om concept te selecteren en vervolgens bekend te maken
-updatestage:insert-tomcatuser a elmo:Production;
-	elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:InsertTomcatUserScene;
+# Sync van waarden naar waardelijst
+updatestage:waardelijst-geldigmaken a elmo:Production;
+  elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:queryForm stage:WaardelijstGeldigMakenForm
+.
+
+stage:WaardelijstGeldigMakenForm a elmo:Form;
+	rdfs:label "Sync waarden naar waardelijst";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "waardelijst";
+      rdfs:label "Selecteer de waardelijst"@nl;
+      elmo:valuesFrom stage:WaardelijstenList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
 .
 
 #
 # SCENES
 #
-
-stage:InsertTomcatUserScene a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Maak begrip bekend";
-	elmo:query '''
-    prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-    prefix dcterms: <http://purl.org/dc/terms/>
-    
-    prefix catalogus: <http://omgevingswet.overheid.nl/catalogus/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
-		
-    INSERT {
-      GRAPH catalogus:users {
-        user:TomcatUser rdf:type prov:Agent;
-          rdfs:label "Tomcat User";
-          foaf:givenName "Tomcat User";
-          foaf:mbox "tomcat@user.org";
-          prov:actedOnBehalfOf "Apache"
-        .
-      }
-    }
-	'''
-. 
+ 
 #
 #
 #
@@ -960,6 +1780,57 @@ stage:ClearContainers a elmo:Scene;
 	'''
 .
  
+#
+#
+#
+# LIFECYCLE CONCEPTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Production om concept te selecteren en vervolgens bekend te maken
+updatestage:insert-tomcatuser a elmo:Production;
+	elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:InsertTomcatUserScene;
+.
+
+#
+# SCENES
+#
+
+stage:InsertTomcatUserScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Maak begrip bekend";
+	elmo:query '''
+    prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sparql: <http://www.w3.org/ns/sparql-service-description/>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    prefix dcterms: <http://purl.org/dc/terms/>
+    
+    prefix catalogus: <http://omgevingswet.overheid.nl/catalogus/>
+    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+		
+    INSERT {
+      GRAPH catalogus:users {
+        user:TomcatUser rdf:type prov:Agent;
+          rdfs:label "Tomcat User";
+          foaf:givenName "Tomcat User";
+          foaf:mbox "tomcat@user.org";
+          prov:actedOnBehalfOf "Apache"
+        .
+      }
+    }
+	'''
+. 
 #
 #
 #
@@ -1337,379 +2208,6 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 	'''
 . 
 #
-#
-#
-# OVERZICHTSPAGINA
-#
-#
-#
-
-#
-# PAGINA'S (REPRESENTATIONS)
-#
-
-# Overzichtspagina concepten
-stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
-  # Bereikbaarheid
-	elmo:url-pattern "/catalogus/dsov2(|/)$";
-  
-  # Onderdelen
-  elmo:contains stage:DSOv2Menu;
-  
-  # Weergave
-  elmo:appearance elmo:TableAppearance;
-  
-  # Data
-  elmo:query stage:DSOv2ConceptenQuery;
-.
-
-#
-# QUERY'S
-#
-
-# Query voor tonen alle concepten
-stage:DSOv2ConceptenQuery a elmo:Query;
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
-		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dsov2/concepten/doc/>
-		prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dsov2/id/collection/>
-		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dsov2/id/concept/>
-		
-		SELECT ?concept ?concept_label ?uitleg
-		WHERE {
-      GRAPH ?graph {
-        ?concept rdf:type skos:Concept;
-          rdfs:label ?concept_label.
-        OPTIONAL {?concept skos:definition ?uitleg}
-        
-        ?graph prov:generatedAtTime ?graphTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerGraph {
-            ?newerGraph prov:generatedAtTime ?newerTime.
-            ?concept rdf:type skos:Concept.
-            FILTER( ?newerTime > ?graphTime )
-          }
-        }
-      }
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-		}
-		ORDER BY lcase(?concept_label)
-	'''
-.
- 
-#
-#
-#
-# DEMO
-# Specifiek gedeelte voor demonstratiedoeleinden, nicely displayed
-#
-#
-#
-
-#
-# PAGINA'S (REPRESENTATIONS)
-#
-
-# Overzichtspagina concepten
-stage:Demo a elmo:Representation;
-  # Bereikbaarheid
-	elmo:url-pattern "/query/demo$";
-  
-  # Onderdelen
-  elmo:contains stage:DemoMenu;
-  
-  # Data
-  elmo:contains stage:DemoAlleBegrippen;
-.
-
-stage:DemoBegrip a elmo:Representation;
-	elmo:url-pattern "/query/demobegrip$";
-	elmo:layer elmo:TopLayer;
-	elmo:contains stage:DemoMenu;
-	elmo:contains stage:DemoBegripVersies;
-	elmo:contains stage:DemoGraph;
-.
-
-stage:DemoMenuTerug a elmo:Part;
-	elmo:index "~";
-	elmo:appearance elmo:NavbarSearchAppearance;
-	elmo:data [
-		elmo:data [rdfs:label "Terug naar demo"; xhtml:link "query/demo"]
-	];
-.
-	
-stage:DemoMenu a elmo:Part;
-	elmo:index "~";
-	elmo:appearance elmo:NavbarSearchAppearance;
-	elmo:query '''
-		prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>
-    prefix elmo:  <http://bp4mc2.org/elmo/def#>
-    
-		construct {
-			<urn:menu> elmo:data <urn:menu1>,<urn:menu2>,<urn:menu3>,<urn:menu4>,<urn:menu5>.
-			<urn:menu1> elmo:index "1";
-						rdfs:label ?glabel;
-						xhtml:link ?glink.
-			<urn:menu2> elmo:index "2";
-						rdfs:label "Start demo";
-						xhtml:link "update/startdemo".
-			<urn:menu3> elmo:index "3";
-						rdfs:label "Begrip opvoeren";
-						xhtml:link "container/nieuwbegrip".
-			<urn:menu4> elmo:index "4";
-						rdfs:label "Begrip aanpassen";
-						xhtml:link "container/begripaanpassen".
-			<urn:menu5> elmo:index "5";
-						rdfs:label "Statusverandering";
-						elmo:data [elmo:index "1"; rdfs:label "Bekendmaken"; xhtml:link "update/bekendmaken"];
-						elmo:data [elmo:index "2"; rdfs:label "Geldig maken"; xhtml:link "update/geldigmaken"].
-		}
-		where {
-			select (group_concat(?label; separator=',') as ?glabel) (group_concat(?link; separator=',') as ?glink)
-			where {
-				select distinct ?label ?link
-				where {
-					graph ?g {
-						?begrip rdf:type skos:Concept.
-						?begrip rdfs:label ?label.
-						BIND (concat('query/demobegrip?subject=',str(?begrip)) as ?link)
-					}
-					FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-				}
-			}
-		}
-	''';
-.
-
-stage:DemoBegripVersies a elmo:Part;
-	elmo:index "1";
-	elmo:fragment [
-		elmo:applies-to rdfs:label;
-		elmo:appearance elmo:HiddenAppearance;
-	];
-	elmo:fragment [
-		elmo:applies-to skos:definition;
-		rdfs:label "Definitie:";
-		elmo:index "1";
-	];
-	elmo:fragment [
-		elmo:applies-to adms:latestStatus; #Dit is eigenlijk niet goed, maar LDT kan niet onderscheid maken tussen hoofdlabel en nested label
-		rdfs:label "Actuele status:";
-		elmo:index "2";
-	];
-  elmo:fragment [
-    elmo:appearance elmo:HiddenAppearance;
-		elmo:applies-to dct:latestIssued;
-		rdfs:label "Actuele bekendmaking:";
-		elmo:index "3";
-	];
-	elmo:fragment [
-		elmo:applies-to dct:latestStart;
-		rdfs:label "Actuele startdatum geldigheid:";
-		elmo:index "4";
-	];
-  elmo:fragment [
-		elmo:applies-to dct:latestEnd;
-		rdfs:label "Actuele einddatum geldigheid:";
-		elmo:index "5";
-	];
-	elmo:fragment [
-		elmo:applies-to foaf:isPrimaryTopicOf;
-		elmo:appearance elmo:NestedAppearance;
-		rdfs:label "Metadata:";
-		elmo:index "6";
-	];
-	elmo:fragment [
-		elmo:applies-to adms:status;
-		rdfs:label "Status:";
-		elmo:index "1";
-	];
-	elmo:fragment [
-		elmo:applies-to prov:generatedAtTime;
-		rdfs:label "Beschikbaar op:";
-		elmo:index "2";
-	];
-	elmo:fragment [
-    elmo:appearance elmo:HiddenAppearance;
-		elmo:applies-to dct:issued;
-		rdfs:label "Bekendgemaakt op:";
-		elmo:index "3";
-	];
-  elmo:fragment [
-		elmo:applies-to dcmiperiod:start;
-		rdfs:label "Geldig van:";
-		elmo:index "4";
-	];
-  elmo:fragment [
-		elmo:applies-to dcmiperiod:end;
-		rdfs:label "Geldig tot:";
-		elmo:index "5";
-	];
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix adms-status: <http://purl.org/adms/status/>
-		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
-		prefix dct: <http://purl.org/dc/terms/>
-    prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
-    
-		construct {
-			?doc rdfs:label ?titel.
-			?doc skos:definition ?definitie.
-			?doc foaf:isPrimaryTopicOf ?metadata.
-			?doc adms:latestStatus ?latestStatus.
-			?doc dct:latestIssued ?latestIssued.
-			?doc dct:latestStart ?latestStart.
-			?doc dct:latestEnd ?latestEnd.
-			?metadata adms:status ?status.
-			?metadata dct:issued ?issued.
-      ?metadata dcmiperiod:start ?start.
-      ?metadata dcmiperiod:end ?end.
-			?metadata prov:generatedAtTime ?doctijdstip.
-			adms-status:UnderDevelopment rdfs:label "Werkversie".
-			adms-status:Deprecated rdfs:label "Vervallen".
-			adms-status:Withdrawn rdfs:label "Teruggetrokken".
-			slex-status:Issued rdfs:label "Bekendgemaakt".
-			adms-status:Completed rdfs:label "Te gebruiken".
-		}
-		where {
-			graph ?g {
-				<@SUBJECT@> rdf:type skos:Concept.
-				<@SUBJECT@> rdfs:label ?label.
-        OPTIONAL { <@SUBJECT@> skos:definition ?definitie. }
-				?g prov:generatedAtTime ?tijdstip.
-				<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
-				BIND (concat(?label,' (geregistreerd op ',?tijdstip,')') as ?titel)
-			}
-			graph ?gdoc {
-				?doc adms:status ?status.
-				OPTIONAL {?doc dct:issued ?issued}
-        OPTIONAL {?doc dct:temporal/dcmiperiod:start ?start}
-        OPTIONAL {?doc dct:temporal/dcmiperiod:end ?end}
-				?gdoc prov:generatedAtTime ?doctijdstip.
-				BIND (iri(concat(str(?doc),'?graph=',str(?gdoc))) as ?metadata)
-			}
-      graph ?latestdoc {
-        ?doc adms:status ?latestStatus.
-        OPTIONAL {?doc dct:issued ?latestIssued}
-        OPTIONAL {?doc dct:temporal/dcmiperiod:start ?latestStart}
-        OPTIONAL {?doc dct:temporal/dcmiperiod:end ?latestEnd}
-        ?latestdoc prov:generatedAtTime ?latestdoctijdstip.
-      }
-      FILTER NOT EXISTS {
-        graph ?laterdoc {
-          ?doc rdf:type prov:Entity.
-          ?laterdoc prov:generatedAtTime ?laterdoctijdstip.
-          FILTER (?laterdoctijdstip > ?latestdoctijdstip)
-        }
-      }
-      FILTER regex( ?g, "^http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
-		}
-	''';
-.
-
-stage:DemoGraph a elmo:Part;
-	elmo:index "2";
-	elmo:appearance elmo:GraphAppearance;
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-		prefix adms: <http://www.w3.org/ns/adms#>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
-		prefix dct: <http://purl.org/dc/terms/>
-		construct {
-			# Generiek
-			<@SUBJECT@> rdfs:label ?label.
-			# Begrip
-			<@SUBJECT@> dct:hasVersion ?doc.
-			?doc rdfs:label ?doctitel.
-			# Doc
-			<@SUBJECT@> foaf:isPrimaryTopicOf ?metadata.
-			<@SUBJECT@> prov:wasRevisionOf ?rev.
-			?metadata rdfs:label ?label.
-			# Meta
-			prov:wasRevisionOf rdfs:label "revisie van".
-			dct:hasVersion rdfs:label "versie".
-			foaf:isPrimaryTopicOf rdfs:label "metadata".
-		}
-		where {
-			{
-				graph ?g {
-					<@SUBJECT@> rdf:type skos:Concept.
-					<@SUBJECT@> rdfs:label ?label.
-					<@SUBJECT@> foaf:isPrimaryTopicOf ?doc.
-					BIND (strbefore(strafter(str(?doc),'doc/'),'/concept') as ?doctitel)
-				}
-			}
-			UNION
-			{
-				graph ?gdoc {
-					<@SUBJECT@> adms:status ?status.
-					OPTIONAL {<@SUBJECT@> prov:wasRevisionOf ?rev}
-					?gdoc prov:generatedAtTime ?doctijdstip.
-          BIND( IF( ?status = adms-status:UnderDevelopment, "Werkversie",
-                IF( ?status = slex-status:Issued, "Bekendgemaakt", 
-                IF( ?status = adms-status:Completed, "Te gebruiken",
-                IF( ?status = adms-status:Withdrawn, "Teruggetrokken",
-                IF( ?status = adms-status:Deprecated, "Vervallen"
-                , str( ?status ) ) ) ) ) ) AS ?statusstring )
-					BIND (concat(?statusstring,' (',?doctijdstip,')') as ?label)
-					BIND (iri(concat('@SUBJECT@','?graph=',str(?gdoc))) as ?metadata)
-				}
-			}
-		}
-	''';
-.
-
-#
-# Productions
-#
-updatestage:startdemo a elmo:Production;
-	elmo:contains stage:DemoMenu;
-	elmo:contains stage:ClearTransactions;
-.
-updatestage:bekendmaken a elmo:Production;
-	elmo:contains stage:DemoMenu;
-	elmo:contains stage:search-concepts-under-development;
-	elmo:queryForm stage:DSOv2IssueConceptsForm;
-	elmo:contains stage:IssueConceptScene;
-.
-
-updatestage:geldigmaken a elmo:Production;
-  elmo:contains stage:DemoMenu;
-	elmo:contains stage:search-concepts-nonenacted;
-	elmo:queryForm stage:DSOv2EnactConceptsForm;
-	elmo:contains stage:EnactConceptScene;
-	elmo:contains stage:werkingsregels;
-.
-
-
-#
-# Containers
-#
-container:nieuwbegrip a elmo:Container;
-  elmo:contains stage:DemoMenuTerug;
-  rdfs:label "Voeg nieuw concept toe (.ttl)";
-  
-  # Data
-  elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenPost;
-.
-container:begripaanpassen a elmo:Container;
-  elmo:contains stage:DemoMenuTerug;
-  rdfs:label "Update bestaand concept (.ttl)";
-  
-  # Data
-  elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenPut;
-.
- 
-#
 # PAGINA'S (REPRESENTATIONS)
 #
 
@@ -1791,3 +2289,66 @@ stage:TestWeergaveTabelConceptenMetadataQuery a elmo:Query;
 		}
 	'''
 . 
+#
+#
+#
+# OVERZICHTSPAGINA
+#
+#
+#
+
+#
+# PAGINA'S (REPRESENTATIONS)
+#
+
+# Overzichtspagina concepten
+stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
+  # Bereikbaarheid
+	elmo:url-pattern "/catalogus/dsov2(|/)$";
+  
+  # Onderdelen
+  elmo:contains stage:DSOv2Menu;
+  
+  # Weergave
+  elmo:appearance elmo:TableAppearance;
+  
+  # Data
+  elmo:query stage:DSOv2ConceptenQuery;
+.
+
+#
+# QUERY'S
+#
+
+# Query voor tonen alle concepten
+stage:DSOv2ConceptenQuery a elmo:Query;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
+		prefix doc: <http://data.acceptatie.pdok.nl/catalogus/dsov2/concepten/doc/>
+		prefix collection: <http://data.acceptatie.pdok.nl/catalogus/dsov2/id/collection/>
+		prefix concept: <http://data.acceptatie.pdok.nl/catalogus/dsov2/id/concept/>
+		
+		SELECT ?concept ?concept_label ?uitleg
+		WHERE {
+      GRAPH ?graph {
+        ?concept rdf:type skos:Concept;
+          rdfs:label ?concept_label.
+        OPTIONAL {?concept skos:definition ?uitleg}
+        
+        ?graph prov:generatedAtTime ?graphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            ?concept rdf:type skos:Concept.
+            FILTER( ?newerTime > ?graphTime )
+          }
+        }
+      }
+      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+		ORDER BY lcase(?concept_label)
+	'''
+.
+ 

@@ -85,7 +85,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
     
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "Reserveren van het begrip in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -109,7 +109,6 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Opvoering_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( iri( concat( "http://regelgeving.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
@@ -138,7 +137,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "Aanpassing van het begrip door het bevoegde gezag";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -199,13 +198,12 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Aanpassing_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
-    #CLEAR GRAPH container:generiek
-    #CLEAR GRAPH container:concept-put-ttl
+    CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:concept-put-ttl
   '''
 .
 
@@ -227,7 +225,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
 		
     INSERT {
       GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph;
+        ?transactie rdf:type sd:Graph, prov:Entity;
           skos:changeNote "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -308,7 +306,6 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
       }
       
       BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Aanpassing_", replace( now(), " ", "T" ) ) ) AS ?activity )
       BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
