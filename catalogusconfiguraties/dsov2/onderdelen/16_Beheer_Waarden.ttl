@@ -27,9 +27,8 @@ container:waarden-put a elmo:Container;
 	elmo:contains stage:DSOHeader;
 	elmo:contains stage:DSOFooter;
 	elmo:replaces container:generiek;
-  elmo:contains stage:PutWaardenClassificerendScene;
-  elmo:contains stage:PutWaardenCategoriserendScene;
-  elmo:contains stage:PutWaardenRefererendScene
+  elmo:contains stage:PutWaardenScene;
+  elmo:contains stage:GarbageCollectionScene
 .
 
 #
@@ -276,26 +275,10 @@ stage:PostWaardenRefererendScene a elmo:Scene;
   '''
 .
 
-# Scenes voor het wijzigen van waarden in een waardelijst
-stage:PutWaardenClassificerendScene a elmo:Scene;
-  rdfs:label "Wijzigen waarden in classificerende waardelijst";
+# Scene voor het wijzigen van waarden in een waardelijst
+stage:PutWaardenScene a elmo:Scene;
+  rdfs:label "Wijzigen waarden in waardelijst";
   elmo:index "1";
-  elmo:query '''
-  
-  '''
-.
-
-stage:PutWaardenCategoriserendScene a elmo:Scene;
-  rdfs:label "Wijzigen waarden in categoriserende waardelijst";
-  elmo:index "2";
-  elmo:query '''
-  
-  '''
-.
-
-stage:PutWaardenRefererendScene a elmo:Scene;
-  rdfs:label "Wijzigen waarden in refererende waardelijst";
-  elmo:index "3";
   elmo:query '''
   
   '''
@@ -308,6 +291,7 @@ stage:GarbageCollectionScene a elmo:Scene;
     prefix container:       <http://localhost:8080/catalogus/dso/container/>
     
     CLEAR GRAPH container:generiek
-    CLEAR GRAPH container:concept-post-ttl
+    CLEAR GRAPH container:waarden-post
+    CLEAR GRAPH container:waarden-put
   '''
 .
