@@ -18,6 +18,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
 
 #---------------------
 # IMPORT
@@ -28,6 +29,10 @@ skoslex:Act rdfs:subClassOf skos:Concept.
 skoslex:Object rdfs:subClassOf skos:Concept.
 skoslex:Actor rdfs:subClassOf skos:Concept.
 skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#Overgenomen uit frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
 
 #---------------------
 # CONCEPTEN
@@ -80,9 +85,8 @@ req:Concept_dctsource a sh:PropertyShape;
 	rdfs:label "has source";
 	sh:name "dcterms:source";
 	sh:path dcterms:source;
-	sh:class dctype:Text;
 	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als ‘resource’ op het web vindbaar is.";
-  # [MB]: Wellicht handig om gebruik te maken van FRBR ontologie?
+  sh:node [ sh:xone (req:Bron req:Brondocument)]
 .
 req:Concept_dcsource a sh:PropertyShape;
 	rdfs:label "source";
@@ -483,28 +487,52 @@ req:Handeling_affects a sh:PropertyShape;
 .
 
 #---------------------
-# Brondocument
+# Bron
 #---------------------
-# [MB] Moet brondocument niet meer eigenschappen hebben? Bijvoorbeeld een label?
-# [MB] Moeten we niet iets hebben om onderscheid te maken tussen de identificatie van het brondocument en de website?
-# [MB] Dat is bijvoorbeeld nodig voor wetgeving: de juriconnect identificatie is iets anders dan de webpagina.
-req:Brondocument a sh:NodeShape;
-  sh:name "dctype:Text (brondocument)";
-	rdfs:label "Brondocument";
-	sh:targetClass dctype:Text;
-	sh:property req:Brondocument_versieVan;
-	sh:property req:Brondocument_bron;
+req:Bron a sh:NodeShape;
+  sh:name "frbr:Endeavour (bron)";
+	rdfs:label "Bron";
+  rdfs:comment "Een identificeerbare bron die gebruikt is voor informatie die in de Catalogus wordt ontsloten.";
+  sh:targetClass frbr:Endeavour;
+  sh:property req:Bron_label;
+	sh:property req:Bron_isHetOnderwerpVan;
 .
-# [MB] versie-van is uitgecomment, maar hierboven staat het nog wel
-#req:Brondocument_versieVan a sh:PropertyShape;
-#	rdfs:label "versie van";
-#	sh:path dcterms:isVersionOf;
-#	sh:node req:Datasetversie;
-#	sh:maxCount 1;
-#.
-req:Brondocument_bron a sh:PropertyShape;
-	rdfs:label "bron";
-	sh:path dcterms:Text; # [MB] Dit kan niet kloppen: dit is geen property maar een class. Wat wordt hier bedoeld?
+req:WerkAlsBron a sh:NodeShape;
+  sh:name "frbr:Work (bron)";
+  rdfs:label "Work";
+  rdfs:comment "Een identificeerbare bron, zonder dat expliciet wordt verwezen naar een specifieke versie (bv: 'Artikel 1 Grondwet')";
+  sh:targetClass frbr:Work;
+.
+req:ExpressieAlsBron a sh:NodeShape;
+  sh:name "frbr:Expression (bronversie)";
+  rdfs:label "Expression";
+  rdfs:comment "Een identificeerbare concrete versie van een bron.";
+  sh:targetClass frbr:Expression;
+.
+req:Bron_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  rdfs:comment "Een bron heeft een voor mensen leesbaar label";
+  sh:path rdfs:label;
+  sh:minCount 1;
+.
+req:Bron_isHetOnderwerpVan a sh:PropertyShape;
+  sh:name "foaf:isPrimaryTopicOf";
+  rdfs:comment "Een bron is het onderwerp van een brondocument";
+  sh:path foaf:isPrimaryTopicOf;
+  sh:node req:Brondocument;
+  sh:maxCount 1;
+.
+req:Brondocument a sh:NodeShape;
+  sh:name "foaf:Document (brondocument)";
+  rdfs:label "Document";
+  rdfs:comment "Een brondocument dat vindbaar is op het internet";
+  sh:property req:Brondocument_label
+.
+req:Brondocument_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  rdfs:comment "Een brondocument heeft een voor mensen leesbaar label";
+  sh:path rdfs:label;
+  sh:minCount 1;
 .
 
 #---------------------
