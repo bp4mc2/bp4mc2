@@ -1273,7 +1273,62 @@ stage:PostWaardenCategoriserendScene a elmo:Scene;
   rdfs:label "Toevoegen waarden aan categoriserende waardelijst";
   elmo:index "3";
   elmo:query '''
-  
+    prefix adms:            <http://www.w3.org/ns/adms#>
+	prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		<http://purl.org/dc/terms/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+	prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		        <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+	prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+	prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://data.test.pdok.nl/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Opslaan waarden voor categoriserende waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+        
+        ?subject ?p ?o;
+          foaf:isPrimaryTopicOf ?doc;
+		  skos:inScheme <@WAARDELIJST@>
+        .
+        
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment
+        .
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type skos:Concept;
+          skos:prefLabel ?prefLabel;
+          ?p ?o
+        .
+      }
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> rdf:type sh:NodeShape;
+          rdfs:label ?name;
+          sh:property [
+            sh:path skos:inScheme;
+            sh:hasValue ?scheme
+          ]
+        .
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      # TODO: checken of onderstaande URI klopt!
+      BIND( iri( concat( "http://content.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( now() AS ?now )
+    }
   '''
 .
 
