@@ -127,7 +127,7 @@ stage:search-concepts-under-development a elmo:Part;
           }
         }
 			}
-      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
 		}
 	''';
 .
@@ -152,7 +152,7 @@ stage:search-concepts-nonenacted a elmo:Part;
         ?concept rdf:type skos:Concept;
           foaf:isPrimaryTopicOf ?doc.
       }
-      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
         ?doc rdf:type prov:Entity;
           adms:status ?status.
@@ -197,7 +197,7 @@ stage:IssueConceptScene a elmo:Scene;
     prefix dcterms: <http://purl.org/dc/terms/>
     
     prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user: <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix user: <http://catalogus.test.kadaster.nl/users/>
 		
     INSERT {
       GRAPH ?transactie {      
@@ -228,12 +228,12 @@ stage:IssueConceptScene a elmo:Scene;
         ?graph prov:generatedAtTime ?time.
         <@CONCEPT@> foaf:isPrimaryTopicOf ?doc.
       }
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       OPTIONAL {
         GRAPH ?docGraph {
           ?doc prov:wasRevisionOf ?revision.
         }
-        FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+        FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       }
       FILTER NOT EXISTS {
         ?newdoc prov:wasRevisionOf ?doc.
@@ -260,8 +260,7 @@ stage:IssueConceptScene a elmo:Scene;
       }
       
       BIND( strdt( concat(  year( now() ), "-", month( now() ), "-", day( now() ) ), xsd:date ) AS ?date )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/Bekendmaking_", replace( now(), " ", "T" ) ) ) AS ?activity )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( now() AS ?now )
     }
 	'''
@@ -283,7 +282,7 @@ stage:EnactConceptScene a elmo:Scene;
 		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
 		
     prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     INSERT {
       GRAPH ?transactie {      
@@ -358,9 +357,8 @@ stage:EnactConceptScene a elmo:Scene;
         }
       }
       
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/activiteit/In_werkingtreding_", replace( now(), " ", "T" ) ) ) AS ?activity )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
       BIND( now() AS ?now )
       BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }

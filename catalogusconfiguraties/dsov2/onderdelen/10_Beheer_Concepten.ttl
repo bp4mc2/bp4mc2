@@ -81,7 +81,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
 		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
     prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     INSERT {
       GRAPH ?transactie {
@@ -108,9 +108,9 @@ stage:DSOv2ConceptenPost a elmo:Scene;
         .
       }
       
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://regelgeving.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
-      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
@@ -133,12 +133,12 @@ stage:DSOv2ConceptenPut a elmo:Scene;
 		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
     prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
 		
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanpassing van het begrip door het bevoegde gezag";
+          skos:changeNote "Aanpassing aan waarden in een waardelijst";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
@@ -159,7 +159,9 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     }
     WHERE {
       GRAPH container:generiek {
-        ?s ?p ?o.
+        ?s ?p ?o;
+          rdf:type ?type
+        .
       }
       GRAPH ?graph {       
         ?s foaf:isPrimaryTopicOf ?currentDoc;
@@ -170,12 +172,12 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
-            ?s rdf:type skos:Concept.
+            ?s rdf:type ?type.
             FILTER( ?newerTime > ?graphTime )
           }
         }
       }
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       
       OPTIONAL {
         GRAPH ?udGraph {
@@ -194,11 +196,12 @@ stage:DSOv2ConceptenPut a elmo:Scene;
             }
           }
         }
-        FILTER regex( ?udGraph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       }
       
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
@@ -221,7 +224,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
 		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
     prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user:            <http://omgevingswet.overheid.nl/catalogus/users/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
 		
     INSERT {
       GRAPH ?transactie {
@@ -281,7 +284,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
           }
         }
       }
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
         ?currentDoc adms:status adms-status:Completed;
           ?docP ?docO
@@ -305,8 +308,8 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         }
       }
       
-      BIND( iri( concat( "http://omgevingswet.overheid.nl/catalogus/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri ( concat(  "http://regelgeving.omgevingswet.overheid.nl/doc/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
