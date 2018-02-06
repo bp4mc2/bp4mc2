@@ -3,20 +3,20 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:TestWeergavePaginaConcepten a elmo:Representation;
+stage:TestWeergaveMetadata a elmo:Representation;
   # Bereikbaarheid
-  elmo:url-pattern "/query/testweergave-concept";
+  elmo:url-pattern "/query/testweergave-metadata";
   elmo:layer elmo:TopLayer;
-    
+  
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
   
   # Data
-	elmo:query stage:TestWeergaveTabelConceptenQuery;
+	elmo:query stage:TestWeergaveMetadataQuery;
 .
 
 # Query voor WeergaveTabel
-stage:TestWeergaveTabelConceptenQuery a elmo:Query;
+stage:TestWeergaveMetadataQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
@@ -24,17 +24,15 @@ stage:TestWeergaveTabelConceptenQuery a elmo:Query;
 		prefix adms-status: <http://purl.org/adms/status/>
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
-		
+				
 		construct {
-      ?graph ?graphP ?graphO;
-        ?p ?o
-      .
+      ?graph prov:generatedAtTime ?time.
+			?graph ?p ?o.
 		}
 		where {
       GRAPH ?graph {
-        ?graph ?graphP ?graphO.
-        <@IDSUBJECT@> ?p ?o.
-        FILTER( ?p != rdfs:label )
+        ?graph prov:generatedAtTime ?time.
+        <@SUBJECT@> ?p ?o.
       }
       FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
 		}

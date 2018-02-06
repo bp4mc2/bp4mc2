@@ -1,0 +1,275 @@
+#
+#
+#
+# BEHEER WAARDELIJSTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Geldig maken van waardelijst
+updatestage:waardelijst-geldigmaken a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:queryForm stage:WaardelijstGeldigMakenForm;
+  elmo:contains stage:ClassificerendeWaardelijstGeldigMakenScene;
+  elmo:contains stage:CategoriserendeWaardelijstGeldigMakenScene;
+  elmo:contains stage:RefererendeWaardelijstGeldigMakenScene
+.
+
+stage:WaardelijstGeldigMakenForm a elmo:Form;
+	rdfs:label "Geldig maken waardelijst";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "waardelijst";
+      rdfs:label "Selecteer de waardelijst"@nl;
+      elmo:valuesFrom stage:WaardelijstenNonCompletedList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "2";
+  ];
+  elmo:fragment [
+		elmo:applies-to "geldigheid";
+		elmo:valueDatatype xsd:Date;
+		rdfs:label "Geldigheid:"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		rdf:value elmo:Now;
+		elmo:index "3";
+	];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+# Voor nu kan je alle waardelijsten selecteren
+# TODO: enkel waardelijsten selecteren die een UnderDevelopment-status hebben
+stage:WaardelijstenNonCompletedList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdfs: 		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+        
+    CONSTRUCT {
+      ?waardelijst rdfs:label ?waardelijst_label
+    }
+    WHERE {
+      GRAPH def:Waardelijsten {
+        ?waardelijst rdf:type sh:NodeShape;
+          rdfs:label ?waardelijst_label
+        .
+      }
+    }
+  ''';
+.
+
+#
+# SCENES
+#
+
+stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
+  rdfs:label "Classificerende waardelijst";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {      
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "In werkingtreding van de waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+
+        ?period dcmiperiod:start "@GELDIGHEID@".
+        
+        ?collectionDoc ?collectionP ?collectionO;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?period
+        .
+        
+        ?prevCollectionDoc ?prevCollectionP ?prevCollectionO;
+          dcterms:temporal ?prevCollectionTemporal
+        .
+          
+        ?prevCollectionTemporal dcmiperiod:start ?prevCollectionStart;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+        
+        ?conceptDoc ?conceptP ?conceptO;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?period
+        .
+        
+        ?prevConceptDoc ?prevConceptP ?prevConceptO;
+          dcterms:temporal ?prevConceptTemporal
+        .
+          
+        ?prevConceptTemporal dcmiperiod:start ?prevConceptStart;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+      }
+    }
+    WHERE {
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> sh:property [ sh:hasValue ?collection ].
+      }
+      GRAPH ?collectionGraph {
+        ?collection skos:member ?concept;
+          foaf:isPrimaryTopicOf ?collectionDoc
+        .
+        
+        ?collectionGraph prov:generatedAtTime ?collectionGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerCollectionGraph {
+            ?collection rdf:type skos:Collection.
+            ?newerCollectionGraph prov:generatedAtTime ?newerCollectionGraphTime.
+            FILTER( ?newerCollectionGraphTime > ?collectionGraphTime )
+          }
+        }
+      }
+      GRAPH ?collectionDocGraph {
+        ?collectionDoc ?collectionP ?collectionO;
+          adms:status ?collectionStatus
+        .
+        FILTER(
+          ?collectionP != adms:status
+          && ?collectionP != prov:wasGeneratedBy
+        )
+        FILTER( 
+          ?collectionStatus != adms-status:Deprecated
+          && ?collectionStatus != adms-status:Withdrawn
+        )
+        
+        ?collectionDocGraph prov:generatedAtTime ?collectionDocTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerCollectionDocGraph {
+            ?collectionDoc rdf:type prov:Entity.
+            ?newerCollectionDocGraph prov:generatedAtTime ?newerCollectionDocTime.
+            FILTER( ?newerCollectionDocTime > ?collectionDocTime )
+          }
+        }
+      }
+      
+      OPTIONAL {
+        GRAPH ?previousCollectionGraph {
+          ?collection foaf:isPrimaryTopicOf ?prevCollectionDoc.
+        }
+        GRAPH ?prevCollectionDocGraph {
+          ?prevCollectionDoc ?prevCollectionP ?prevCollectionO;
+            dcterms:temporal ?prevCollectionTemporal
+          .
+          ?prevCollectionTemporal dcmiperiod:start ?prevCollectionStart.
+          FILTER NOT EXISTS {
+            ?prevCollectionTemporal dcmiperiod:end ?prevCollectionEnd.
+          }
+          FILTER( ?prevCollectionP != dcterms:temporal )
+          
+          ?prevCollectionDocGraph prov:generatedAtTime ?prevCollectionDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerPrevCollectionDocGraph {
+              ?newerPrevCollectionDocGraph prov:generatedAtTime ?newerPrevCollectionDocTime.
+              ?prevCollectionDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevCollectionDocTime > ?prevCollectionDocTime )
+            }
+          }
+        }
+      }
+      
+      GRAPH ?conceptGraph {
+        ?concept foaf:isPrimaryTopicOf ?conceptDoc.
+        
+        ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerConceptGraph {
+            ?concept rdf:type skos:Concept.
+            ?newerConceptGraph prov:generatedAtTime ?newerConceptGraphTime.
+            FILTER( ?newerConceptGraphTime > ?conceptGraphTime )
+          }
+        }
+      }
+      GRAPH ?conceptDocGraph {
+        ?conceptDoc ?conceptP ?conceptO;
+          adms:status ?conceptStatus
+        .
+        FILTER(
+          ?conceptP != adms:status
+          && ?conceptP != prov:wasGeneratedBy
+        )
+        FILTER( 
+          ?conceptStatus != adms-status:Deprecated
+          && ?conceptStatus != adms-status:Withdrawn
+        )
+        ?conceptDocGraph prov:generatedAtTime ?conceptDocTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerConceptDocGraph {
+            ?conceptDoc rdf:type prov:Entity.
+            ?newerConceptDocGraph prov:generatedAtTime ?newerConceptDocTime.
+            FILTER( ?newerConceptDocTime > ?conceptDocTime )
+          }
+        }
+      }
+      
+      OPTIONAL {
+        GRAPH ?previousConceptGraph {
+          ?concept foaf:isPrimaryTopicOf ?prevConceptDoc.
+        }
+        GRAPH ?prevConceptDocGraph {
+          ?prevConceptDoc ?prevConceptP ?prevConceptO;
+            dcterms:temporal ?prevConceptTemporal
+          .
+          ?prevConceptTemporal dcmiperiod:start ?prevConceptStart.
+          FILTER NOT EXISTS {
+            ?prevConceptTemporal dcmiperiod:end ?prevConceptEnd.
+          }
+          FILTER( ?prevConceptP != dcterms:temporal )
+          
+          ?prevConceptDocGraph prov:generatedAtTime ?prevConceptDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerPrevConceptDocGraph {
+              ?newerPrevConceptDocGraph prov:generatedAtTime ?newerPrevConceptDocTime.
+              ?prevConceptDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevConceptDocTime > ?prevConceptDocTime )
+            }
+          }
+        }
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( now() AS ?now )
+    }
+  '''
+.
+
+stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
+  rdfs:label "Categoriserende waardelijst";
+  elmo:query '''
+  
+  '''
+.
+
+stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
+  rdfs:label "Refererende waardelijst";
+  elmo:query '''
+  
+  '''
+.
