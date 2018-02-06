@@ -112,8 +112,7 @@ stage:search-concepts-under-development a elmo:Part;
 		}
 		WHERE {
 			GRAPH ?g {
-				?concept rdf:type skos:Concept;
-          foaf:isPrimaryTopicOf ?doc.
+				?concept foaf:isPrimaryTopicOf ?doc.
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
@@ -149,8 +148,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		}
 		WHERE {
       GRAPH ?g {
-        ?concept rdf:type skos:Concept;
-          foaf:isPrimaryTopicOf ?doc.
+        ?concept foaf:isPrimaryTopicOf ?doc.
       }
       FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
@@ -209,17 +207,11 @@ stage:IssueConceptScene a elmo:Scene;
         ?doc rdf:type prov:Entity;
           prov:wasRevisionOf ?prevDoc;
           adms:status slex-status:Issued;
-          dcterms:issued ?date;
-          prov:wasGeneratedBy ?activity
+          dcterms:issued ?date
         .
         
         ?prevDoc ?prevP ?prevO;
-          adms:status adms-status:Deprecated.
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Bekendmaking van het begrip";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
+          adms:status adms-status:Deprecated
         .
       }
     }

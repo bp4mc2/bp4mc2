@@ -570,15 +570,15 @@ container:concept-add-ttl a elmo:Container;
 stage:DSOv2ConceptenPost a elmo:Scene;
 	rdfs:label "Query voor verwerken POST";
 	elmo:query '''
-		prefix adms:            <http://www.w3.org/ns/adms#>
-		prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		<http://purl.org/dc/terms/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     prefix prov:            <http://www.w3.org/ns/prov#>
-		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
     prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
     prefix container:       <http://data.test.pdok.nl/catalogus/dsov2/container/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
@@ -614,7 +614,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       BIND( now() AS ?now )
     }
     
-		CLEAR GRAPH container:generiek
+    CLEAR GRAPH container:generiek
     CLEAR GRAPH container:concept-post-ttl
 	''';
 .
@@ -622,15 +622,15 @@ stage:DSOv2ConceptenPost a elmo:Scene;
 stage:DSOv2ConceptenPut a elmo:Scene;
 	rdfs:label "Query voor verwerken PUT";
 	elmo:query '''
-		prefix adms:            <http://www.w3.org/ns/adms#>
-		prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		<http://purl.org/dc/terms/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     prefix prov:            <http://www.w3.org/ns/prov#>
-		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
     prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
     prefix container:       <http://data.test.pdok.nl/catalogus/dsov2/container/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
@@ -713,15 +713,15 @@ stage:DSOv2ConceptenPut a elmo:Scene;
 stage:DSOv2ConceptenAdd a elmo:Scene;
 	rdfs:label "Query voor verwerken aanvullen concept";
 	elmo:query '''
-		prefix adms:            <http://www.w3.org/ns/adms#>
-		prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:    		<http://purl.org/dc/terms/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     prefix prov:            <http://www.w3.org/ns/prov#>
-		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
     prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-		prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
     prefix container:       <http://data.test.pdok.nl/catalogus/dsov2/container/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
@@ -1470,8 +1470,7 @@ stage:search-concepts-under-development a elmo:Part;
 		}
 		WHERE {
 			GRAPH ?g {
-				?concept rdf:type skos:Concept;
-          foaf:isPrimaryTopicOf ?doc.
+				?concept foaf:isPrimaryTopicOf ?doc.
           
         ?doc adms:status adms-status:UnderDevelopment.
     		BIND( str(?concept) AS ?label )
@@ -1507,8 +1506,7 @@ stage:search-concepts-nonenacted a elmo:Part;
 		}
 		WHERE {
       GRAPH ?g {
-        ?concept rdf:type skos:Concept;
-          foaf:isPrimaryTopicOf ?doc.
+        ?concept foaf:isPrimaryTopicOf ?doc.
       }
       FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
@@ -1567,17 +1565,11 @@ stage:IssueConceptScene a elmo:Scene;
         ?doc rdf:type prov:Entity;
           prov:wasRevisionOf ?prevDoc;
           adms:status slex-status:Issued;
-          dcterms:issued ?date;
-          prov:wasGeneratedBy ?activity
+          dcterms:issued ?date
         .
         
         ?prevDoc ?prevP ?prevO;
-          adms:status adms-status:Deprecated.
-        
-        ?activity rdf:type prov:Activity;
-          rdfs:label "Bekendmaking van het begrip";
-          prov:startedAtTime ?now;
-          prov:wasAssociatedWith user:TomcatUser
+          adms:status adms-status:Deprecated
         .
       }
     }
