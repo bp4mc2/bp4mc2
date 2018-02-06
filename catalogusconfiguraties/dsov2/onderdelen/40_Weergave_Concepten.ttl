@@ -88,13 +88,8 @@ stage:DSOv2ConceptQuery a elmo:Query;
       GRAPH ?graph {
         <@IDSUBJECT@> ?p ?o;
           foaf:isPrimaryTopicOf ?doc.
-          
-        FILTER(
-          ?p = skos:definition
-          || ?p = rdfs:label
-        )
       }
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
         ?doc adms:status ?status.
         OPTIONAL {

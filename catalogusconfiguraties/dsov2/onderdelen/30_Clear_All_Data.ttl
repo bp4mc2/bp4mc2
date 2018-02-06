@@ -32,7 +32,7 @@ stage:ClearTransactions a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijderen transacties";
 	elmo:query '''
-		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
     
 		DELETE {
 			GRAPH ?g {
@@ -43,7 +43,7 @@ stage:ClearTransactions a elmo:Scene;
 			GRAPH ?g {
 				?s ?p ?o
 			}
-			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+			FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
 		}
   '''
 .
