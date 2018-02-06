@@ -51,7 +51,7 @@ stage:DSOv2EnactConceptsForm a elmo:Form;
 	rdfs:label "Selecteer concept";
 	elmo:index "1";
 	elmo:fragment [
-		elmo:applies-to "graph";
+		elmo:applies-to "doc";
 		rdfs:label "Selecteer concept"@nl;
 		elmo:valuesFrom stage:search-concepts-nonenacted;
 		elmo:constraint elmo:MandatoryConstraint;
@@ -144,7 +144,7 @@ stage:search-concepts-nonenacted a elmo:Part;
     prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
     
 		CONSTRUCT {
-			?g rdfs:label ?label
+			?doc rdfs:label ?label
 		}
 		WHERE {
       GRAPH ?g {
@@ -284,7 +284,7 @@ stage:EnactConceptScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?doc ?p ?o;
+        <@DOC@> ?p ?o;
           adms:status adms-status:Completed;
           dcterms:issued ?issuedDate;
           dcterms:temporal ?period
@@ -302,8 +302,8 @@ stage:EnactConceptScene a elmo:Scene;
       }
     }
     WHERE {
-      GRAPH <@GRAPH@> {
-        ?doc rdf:type prov:Entity;
+      GRAPH ?docGraph {
+        <@DOC@> rdf:type prov:Entity;
           adms:status ?status;
           ?p ?o
         .
@@ -312,23 +312,28 @@ stage:EnactConceptScene a elmo:Scene;
           && ?p != dcterms:issued
           && ?p != prov:wasGeneratedBy
         )
-        FILTER( 
-          ?status != adms-status:Deprecated
-          && ?status != adms-status:Withdrawn
-        )
         OPTIONAL {
-          ?doc dcterms:issued ?currentIssued.
+          <@DOC@> dcterms:issued ?currentIssued.
         }
+        
+        ?docGraph prov:generatedAtTime ?docTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              <@DOC@> rdf:type prov:Entity.
+              FILTER( ?newerDocTime > ?docTime )
+            }
+          }
       }
       
       GRAPH ?currentTransaction {
-        ?concept foaf:isPrimaryTopicOf ?doc.
+        ?concept foaf:isPrimaryTopicOf <@DOC@>.
       }
       OPTIONAL {
         GRAPH ?previousTransaction {
           ?concept foaf:isPrimaryTopicOf ?prevDoc.
         }
-        GRAPH ?docGraph {
+        GRAPH ?prevDocGraph {
           ?prevDoc ?prevP ?prevO;
             dcterms:temporal ?prevTemporal
           .
@@ -338,12 +343,12 @@ stage:EnactConceptScene a elmo:Scene;
           }
           FILTER( ?prevP != dcterms:temporal )
           
-          ?docGraph prov:generatedAtTime ?prevDocTime.
+          ?prevDocGraph prov:generatedAtTime ?prevDocTime.
           FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            GRAPH ?newerPrevDocGraph {
+              ?newerPrevDocGraph prov:generatedAtTime ?newerPrevDocTime.
               ?prevDoc rdf:type prov:Entity.
-              FILTER( ?newerDocGraphTime > ?prevDocTime )
+              FILTER( ?newerPrevDocTime > ?prevDocTime )
             }
           }
         }

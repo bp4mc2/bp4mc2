@@ -138,13 +138,14 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanpassing aan waarden in een waardelijst";
+          skos:changeNote "Aanpassen van een begrip in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
         
         ?s ?p ?o;
-          foaf:isPrimaryTopicOf ?doc
+          foaf:isPrimaryTopicOf ?doc;
+          skos:inScheme ?scheme
         .
         
         ?doc rdf:type prov:Entity;
@@ -162,11 +163,15 @@ stage:DSOv2ConceptenPut a elmo:Scene;
         ?s ?p ?o;
           rdf:type ?type
         .
+        FILTER( ?p != skos:inScheme )
       }
       GRAPH ?graph {       
         ?s foaf:isPrimaryTopicOf ?currentDoc;
           skos:prefLabel ?prefLabel
         .
+        OPTIONAL {
+          ?s skos:inScheme ?scheme.
+        }
         
         ?graph prov:generatedAtTime ?graphTime.
         FILTER NOT EXISTS {
