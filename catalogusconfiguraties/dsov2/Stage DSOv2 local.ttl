@@ -1740,7 +1740,8 @@ updatestage:waardelijst-geldigmaken a elmo:Production;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
 	elmo:queryForm stage:WaardelijstGeldigMakenForm;
-  elmo:contains stage:ClassificerendeWaardelijstGeldigMakenScene;
+  elmo:contains stage:ClassificerendeWaardelijstCollectionGeldigMakenScene;
+  elmo:contains stage:ClassificerendeWaardelijstConceptsGeldigMakenScene;
   elmo:contains stage:CategoriserendeWaardelijstGeldigMakenScene;
   elmo:contains stage:RefererendeWaardelijstGeldigMakenScene
 .
@@ -1796,8 +1797,8 @@ stage:WaardelijstenNonCompletedList a elmo:Part;
 # SCENES
 #
 
-stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
-  rdfs:label "Classificerende waardelijst";
+stage:ClassificerendeWaardelijstCollectionGeldigMakenScene a elmo:Scene;
+  rdfs:label "Classificerende waardelijst - updaten Collection";
   elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -1837,19 +1838,6 @@ stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
         ?prevCollectionTemporal dcmiperiod:start ?prevCollectionStart;
           dcmiperiod:end "@GELDIGHEID@"
         .
-        
-        ?conceptDoc ?conceptP ?conceptO;
-          adms:status adms-status:Completed;
-          dcterms:temporal ?period
-        .
-        
-        ?prevConceptDoc ?prevConceptP ?prevConceptO;
-          dcterms:temporal ?prevConceptTemporal
-        .
-          
-        ?prevConceptTemporal dcmiperiod:start ?prevConceptStart;
-          dcmiperiod:end "@GELDIGHEID@"
-        .
       }
     }
     WHERE {
@@ -1857,9 +1845,7 @@ stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
         <@WAARDELIJST@> sh:property [ sh:hasValue ?collection ].
       }
       GRAPH ?collectionGraph {
-        ?collection skos:member ?concept;
-          foaf:isPrimaryTopicOf ?collectionDoc
-        .
+        ?collection foaf:isPrimaryTopicOf ?collectionDoc.
         
         ?collectionGraph prov:generatedAtTime ?collectionGraphTime.
         FILTER NOT EXISTS {
@@ -1881,6 +1867,7 @@ stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
         FILTER( 
           ?collectionStatus != adms-status:Deprecated
           && ?collectionStatus != adms-status:Withdrawn
+          && ?collectionStatus != adms-status:Completed
         )
         
         ?collectionDocGraph prov:generatedAtTime ?collectionDocTime.
@@ -1918,6 +1905,73 @@ stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
         }
       }
       
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( now() AS ?now )
+    }
+  '''
+.
+
+stage:ClassificerendeWaardelijstConceptsGeldigMakenScene a elmo:Scene;
+  rdfs:label "Classificerende waardelijst - updaten Concepts";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {      
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "In werkingtreding van de waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+
+        ?period dcmiperiod:start "@GELDIGHEID@".
+        
+        ?conceptDoc ?conceptP ?conceptO;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?period
+        .
+        
+        ?prevConceptDoc ?prevConceptP ?prevConceptO;
+          dcterms:temporal ?prevConceptTemporal
+        .
+          
+        ?prevConceptTemporal dcmiperiod:start ?prevConceptStart;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+      }
+    }
+    WHERE {
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> sh:property [ sh:hasValue ?collection ].
+      }
+      GRAPH ?collectionGraph {
+        ?collection skos:member ?concept.
+        
+        ?collectionGraph prov:generatedAtTime ?collectionGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerCollectionGraph {
+            ?collection rdf:type skos:Collection.
+            ?newerCollectionGraph prov:generatedAtTime ?newerCollectionGraphTime.
+            FILTER( ?newerCollectionGraphTime > ?collectionGraphTime )
+          }
+        }
+      }
+      
       GRAPH ?conceptGraph {
         ?concept foaf:isPrimaryTopicOf ?conceptDoc.
         
@@ -1941,6 +1995,7 @@ stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
         FILTER( 
           ?conceptStatus != adms-status:Deprecated
           && ?conceptStatus != adms-status:Withdrawn
+          && ?conceptStatus != adms-status:Completed
         )
         ?conceptDocGraph prov:generatedAtTime ?conceptDocTime.
         FILTER NOT EXISTS {
@@ -1976,7 +2031,6 @@ stage:ClassificerendeWaardelijstGeldigMakenScene a elmo:Scene;
           }
         }
       }
-
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
