@@ -300,15 +300,16 @@ req:CatalogGraph_attributedTo a sh:PropertyShape;
 
 req:ProvenancePerson a sh:NodeShape;
 	rdfs:label "ProvenancePerson";
-	sh:name "prov:Person/prov:SoftwareAgent";
+	sh:name "prov:Person";
 	sh:targetClass prov:Person;
+	rdfs:subClassOf prov:Agent;
 	sh:property req:ProvenancePerson_Agent;
 	sh:property req:ProvenancePerson_OnBehalfOf;
 .
 req:ProvenancePerson_Agent a sh:PropertyShape;
 	rdfs:label "Agent";
-	sh:name "prov:Agent";
-	sh:path prov:Agent;
+	sh:name "prov:agent";
+	sh:path prov:agent;
 .
 req:ProvenancePerson_OnBehalfOf a sh:PropertyShape;
 	rdfs:label "acted on behalf of";
@@ -316,7 +317,25 @@ req:ProvenancePerson_OnBehalfOf a sh:PropertyShape;
 	sh:path prov:actedOnBehalfOf;
 	sh:node req:ProvenanceOrganisation;
 .
-
+req:ProvenanceSoftwareAgent a sh:NodeShape;
+	rdfs:label "ProvenanceSoftwareAgent";
+	sh:name "prov:SoftwareAgent";
+	sh:targetClass prov:SoftwareAgent;
+	rdfs:subClassOf prov:Agent;
+	sh:property req:ProvenanceSoftwareAgent_Agent;
+	sh:property req:ProvenanceSoftwareAgent_OnBehalfOf;
+.
+req:ProvenanceSoftwareAgent_Agent a sh:PropertyShape;
+	rdfs:label "Agent";
+	sh:name "prov:agent";
+	sh:path prov:agent;
+.
+req:ProvenanceSoftwareAgent_OnBehalfOf a sh:PropertyShape;
+	rdfs:label "acted on behalf of";
+	sh:name "prov:actedOnBehalfOf";
+	sh:path prov:actedOnBehalfOf;
+	sh:node req:ProvenanceOrganisation;
+.
 req:ProvenanceOrganisation a sh:NodeShape;
 	rdfs:label "Organisation";
 	sh:name "prov:Organisation";
@@ -326,8 +345,8 @@ req:ProvenanceOrganisation a sh:NodeShape;
 .
 req:ProvenanceOrganisation_Agent a sh:PropertyShape;
 	rdfs:label "Agent";
-	sh:name "prov:Agent";
-	sh:path prov:Agent;
+	sh:name "prov:agent";
+	sh:path prov:agent;
 .
 req:ProvenanceOrganisation_OnBehalfOf a sh:PropertyShape;
 	rdfs:label "acted on behalf of";
