@@ -1,0 +1,102 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+
+#
+# Tonen van de pagina
+#
+stage:ReqDocument	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqdocument(|.md)$";
+  elmo:index "0";
+  elmo:contains stage:ReqDocument_prefixes;
+  elmo:contains stage:ReqDocument_conceptenschema;
+  elmo:query '''
+    construct {
+      <urn:document> elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        <urn:document> elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
+
+<urn:document> elmo:data (
+'''Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
+
+Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
+'''
+[elmo:contains stage:ReqDocument_prefixes]
+'''Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
+[html:img "begrippenkader.png"]
+'''Concept schema’s, collecties en concepten krijgt een uri volgens het patroon:
+-	`http://{domain}/id/ConceptScheme}/{rdfs:label}` voor concepten schema’s
+-	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
+-	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten'''
+[elmo:contains stage:ReqDocument_conceptenschema]
+)
+.
+
+stage:ReqDocument_prefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query '''
+    select ?prefix (str(?ontology) as ?uri)
+    where {
+      graph <@STAGE@> {
+        ?ontology a owl:Ontology.
+        ?ontology elmo:prefix ?prefix
+      }
+    }
+  ''';
+.
+
+stage:ReqDocument_conceptenschema a elmo:Part;
+  elmo:index "1";
+  elmo:fragment [
+    elmo:applies-to "label";
+    rdfs:label "aanduiding"
+  ];
+  elmo:fragment [
+    elmo:applies-to "requirement";
+    rdfs:label "Requirement";
+  ];
+  elmo:query stage:ReqDocumentQuery_requirements;
+  rdfs:seeAlso req:Begrippenkader
+.
+
+stage:ReqDocumentQuery_requirements a elmo:Query;
+  elmo:query '''
+    select ?requirement ?label
+    where {
+      GRAPH <@STAGE@> {
+        <@REPRESENTATION@> rdfs:seeAlso ?nodeshape
+      }
+      GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+        ?nodeshape sh:property ?pshape.
+        ?pshape rdfs:label ?label.
+        ?pshape rdfs:comment ?requirement
+      }
+    }
+  '''
+.
+
+<http://www.w3.org/2004/02/skos/core#> a owl:Ontology;
+  elmo:prefix "skos"
+.
+<http://www.w3.org/2000/01/rdf-schema#> a owl:Ontology;
+  elmo:prefix "rdfs"
+.

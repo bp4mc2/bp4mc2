@@ -1049,18 +1049,18 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 		elmo:data [
 			elmo:index "3";
 			rdfs:label "Requirements";
-			elmo:data [ elmo:index "1"; rdfs:label "Lijst"; html:link "query/requirements"];
-			elmo:data [ elmo:index "2"; rdfs:label "Onderdeel: concepten"; html:link "query/model/concepten"];
-			elmo:data [ elmo:index "3"; rdfs:label "Onderdeel: concepten metadata"; html:link "query/model/conceptenmeta"];
-			elmo:data [ elmo:index "4"; rdfs:label "Onderdeel: gebeurtenissen"; html:link "query/model/gebeurtenissen"];
-			elmo:data [ elmo:index "5"; rdfs:label "Onderdeel: datasets"; html:link "query/model/datasets"];
-#			elmo:data [ elmo:index "6"; rdfs:label "Onderdeel: catalogus"; html:link "query/model/catalogus"];
-#			elmo:data [ elmo:index "7"; rdfs:label "Onderdeel: samenhang dataset, conceptenschema, en informatiemodel"; html:link "query/model/samenhang"];
-			elmo:data [ elmo:index "8"; rdfs:label "Onderdeel: provenance"; html:link "query/model/provenance"];
-#			elmo:data [ elmo:index "2"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
-#			elmo:data [ elmo:index "3"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
-			elmo:data [ elmo:index "9"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
-#			elmo:data [ elmo:index "5"; rdfs:label "Document"; html:link "query/reqdocument"];
+			elmo:data [ elmo:index "01"; rdfs:label "Lijst"; html:link "query/requirements"];
+			elmo:data [ elmo:index "02"; rdfs:label "Onderdeel: concepten"; html:link "query/model/concepten"];
+			elmo:data [ elmo:index "03"; rdfs:label "Onderdeel: concepten metadata"; html:link "query/model/conceptenmeta"];
+			elmo:data [ elmo:index "04"; rdfs:label "Onderdeel: gebeurtenissen"; html:link "query/model/gebeurtenissen"];
+			elmo:data [ elmo:index "05"; rdfs:label "Onderdeel: datasets"; html:link "query/model/datasets"];
+#			elmo:data [ elmo:index "06"; rdfs:label "Onderdeel: catalogus"; html:link "query/model/catalogus"];
+#			elmo:data [ elmo:index "07"; rdfs:label "Onderdeel: samenhang dataset, conceptenschema, en informatiemodel"; html:link "query/model/samenhang"];
+			elmo:data [ elmo:index "08"; rdfs:label "Onderdeel: provenance"; html:link "query/model/provenance"];
+#			elmo:data [ elmo:index "02"; rdfs:label "Validatie"; html:link "query/reqvalidatie"];
+#			elmo:data [ elmo:index "03"; rdfs:label "Model (export)"; html:link "query/reqmodel.yed"];
+			elmo:data [ elmo:index "09"; rdfs:label "Visualisatie"; html:link "query/reqvisualisatie"];
+			elmo:data [ elmo:index "10"; rdfs:label "Document"; html:link "query/reqdocument"];
 		];
 		elmo:data [
 			elmo:index "4";
@@ -1351,7 +1351,7 @@ stage:ModelYed a elmo:Representation;
 @prefix stage: <http://data.ontwikkeling.pdok.nl/catalogus/gco/stage#>.
 
 stage:Reqdocument	a	elmo:Representation;
-	elmo:url-pattern	"/query/reqdocument$";
+#	elmo:url-pattern	"/query/reqdocument$";
 	elmo:contains	stage:Menu;
 	elmo:contains	stage:Reqdocument_doc;
 .
@@ -1416,6 +1416,58 @@ stage:Reqdocument_doc a elmo:Part;
 			}
 		}
 	''';
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.ontwikkeling.pdok.nl/catalogus/gco/stage#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+stage:ReqDocument	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqdocument(|.md)$";
+  elmo:contains stage:ReqDocument_h1;
+  elmo:contains stage:ReqDocument_prefixes;
+  elmo:contains stage:ReqDocument_h2;
+.
+stage:ReqDocument_h1 a elmo:Part;
+  elmo:appearance elmo:MarkdownAppearance;
+  elmo:index "001";
+  elmo:data [
+    rdfs:label "Model";
+    elmo:md '''Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
+
+Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
+    '''
+  ];
+.
+stage:ReqDocument_prefixes a elmo:Part;
+  elmo:index "002";
+  elmo:query '''
+    select ?prefix (str(?ontology) as ?uri)
+    where {
+      graph <@STAGE@> {
+        ?ontology a owl:Ontology.
+        ?ontology elmo:prefix ?prefix
+      }
+    }
+  ''';
+.
+stage:ReqDocument_h2 a elmo:Part;
+  elmo:appearance elmo:MarkdownAppearance;
+  elmo:index "003";
+  elmo:data [
+    elmo:md '''Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
+  ];
+.
+
+<http://www.w3.org/2004/02/skos/core#> a owl:Ontology;
+  elmo:prefix "skos"
+.
+<http://www.w3.org/2000/01/rdf-schema#> a owl:Ontology;
+  elmo:prefix "rdfs"
 . 
 @prefix stage: <http://data.ontwikkeling.pdok.nl/catalogus/gco/stage#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
