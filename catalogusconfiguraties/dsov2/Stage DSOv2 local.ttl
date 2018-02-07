@@ -166,23 +166,28 @@ stage:DSOv2Beheermenu a elmo:Part;
 			rdfs:label "Acties";
 			elmo:index "5";
 			elmo:data [
-				rdfs:label "Verwijder alle data";
+				rdfs:label "Verwijder alle data behalve waardelijsten";
 				elmo:index "1";
 				xhtml:link "/catalogus/dsov2/update/clearalldata";
 			];
 			elmo:data [
-				rdfs:label "Verwijder enkel concept";
+				rdfs:label "Verwijder alle waardelijsten";
 				elmo:index "2";
 				xhtml:link "/catalogus/dsov2/update/clearsingleconcept";
 			];
-     elmo:data [
-				rdfs:label "Voer TomcatUser op";
+      elmo:data [
+				rdfs:label "Verwijder enkel concept";
 				elmo:index "3";
+				xhtml:link "/catalogus/dsov2/update/clearsingleconcept";
+			];
+      elmo:data [
+				rdfs:label "Voer TomcatUser op";
+				elmo:index "4";
 				xhtml:link "/catalogus/dsov2/update/insert-tomcatuser";
 			];
       elmo:data [
 				rdfs:label "Voeg nieuw model toe";
-				elmo:index "4";
+				elmo:index "5";
 				xhtml:link "update/addnewmodel";
 			];
 		];
@@ -2218,8 +2223,130 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
   rdfs:label "Refererende waardelijst";
   elmo:query '''
   
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {      
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "In werkingtreding van de waardelijst";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+
+        ?period dcmiperiod:start "@GELDIGHEID@".
+        
+        ?conceptDoc ?conceptP ?conceptO;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?period
+        .
+        
+        ?prevConceptDoc ?prevConceptP ?prevConceptO;
+          dcterms:temporal ?prevConceptTemporal
+        .
+          
+        ?prevConceptTemporal dcmiperiod:start ?prevConceptStart;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+      }
+    }
+    WHERE {
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> sh:property [ sh:hasValue ?class ].
+      }
+      GRAPH ?classGraph {
+        ?class skos:member ?concept.
+        
+        ?classGraph prov:generatedAtTime ?classGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerClassGraph {
+            ?class rdf:type rdfs:Class.
+            ?newerCollectionGraph prov:generatedAtTime ?newerCollectionGraphTime.
+            FILTER( ?newerClassGraphTime > ?classGraphTime )
+          }
+        }
+      }
+      
+      GRAPH ?classGraph {
+        ?concept foaf:isPrimaryTopicOf ?conceptDoc.
+        
+        ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerConceptGraph {
+            ?concept rdf:type skos:Concept.
+            ?newerConceptGraph prov:generatedAtTime ?newerConceptGraphTime.
+            FILTER( ?newerConceptGraphTime > ?conceptGraphTime )
+          }
+        }
+      }
+      GRAPH ?conceptDocGraph {
+        ?conceptDoc ?conceptP ?conceptO;
+          adms:status ?conceptStatus
+        .
+        FILTER(
+          ?conceptP != adms:status
+          && ?conceptP != prov:wasGeneratedBy
+        )
+        FILTER( 
+          ?conceptStatus != adms-status:Deprecated
+          && ?conceptStatus != adms-status:Withdrawn
+          && ?conceptStatus != adms-status:Completed
+        )
+        ?conceptDocGraph prov:generatedAtTime ?conceptDocTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerConceptDocGraph {
+            ?conceptDoc rdf:type prov:Entity.
+            ?newerConceptDocGraph prov:generatedAtTime ?newerConceptDocTime.
+            FILTER( ?newerConceptDocTime > ?conceptDocTime )
+          }
+        }
+      }
+      
+      OPTIONAL {
+        GRAPH ?previousConceptGraph {
+          ?concept foaf:isPrimaryTopicOf ?prevConceptDoc.
+        }
+        GRAPH ?prevConceptDocGraph {
+          ?prevConceptDoc ?prevConceptP ?prevConceptO;
+            dcterms:temporal ?prevConceptTemporal
+          .
+          ?prevConceptTemporal dcmiperiod:start ?prevConceptStart.
+          FILTER NOT EXISTS {
+            ?prevConceptTemporal dcmiperiod:end ?prevConceptEnd.
+          }
+          FILTER( ?prevConceptP != dcterms:temporal )
+          
+          ?prevConceptDocGraph prov:generatedAtTime ?prevConceptDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerPrevConceptDocGraph {
+              ?newerPrevConceptDocGraph prov:generatedAtTime ?newerPrevConceptDocTime.
+              ?prevConceptDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevConceptDocTime > ?prevConceptDocTime )
+            }
+          }
+        }
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( now() AS ?now )
+    }
   '''
-. 
+.
+   
 #
 #
 #
@@ -2238,8 +2365,13 @@ updatestage:clearalldata a elmo:Production;
 	elmo:contains stage:DSOv2Beheermenu;
 	elmo:queryForm stage:DSOv2DummyForm;
 	elmo:contains stage:ClearTransactions;
-  elmo:contains stage:ClearContainers;
-  elmo:contains stage:ClearWaardelijsten;
+  elmo:contains stage:ClearContainers
+.
+
+updatestage:clearwaardelijsten a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+  elmo:queryForm stage:DSOv2DummyForm;
+  elmo:contains stage:ClearWaardelijsten
 .
 
 # DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
