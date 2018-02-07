@@ -16,7 +16,8 @@ updatestage:clearalldata a elmo:Production;
 	elmo:contains stage:DSOv2Beheermenu;
 	elmo:queryForm stage:DSOv2DummyForm;
 	elmo:contains stage:ClearTransactions;
-  elmo:contains stage:ClearContainers
+  elmo:contains stage:ClearContainers;
+  elmo:contains stage:ClearWaardelijsten;
 .
 
 # DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
@@ -63,5 +64,14 @@ stage:ClearContainers a elmo:Scene;
 			}
 			FILTER regex( ?g, "http://localhost:8080/catalogus/dsov2/" )
 		}
+	'''
+.
+
+stage:ClearWaardelijsten a elmo:Scene;
+  elmo:index "2";
+  rdfs:label "Verwijderen waardelijsten";
+  elmo:query '''
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    CLEAR GRAPH def:Waardelijsten
 	'''
 .
