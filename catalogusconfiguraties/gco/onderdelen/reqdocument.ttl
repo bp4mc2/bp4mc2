@@ -16,6 +16,7 @@ stage:ReqDocument	a	elmo:Representation;
   elmo:index "0";
   elmo:contains stage:ReqDocument_prefixes;
   elmo:contains stage:ReqDocument_conceptenschema;
+  elmo:contains stage:ReqDocument_collectie;
   elmo:query '''
     construct {
       <urn:document> elmo:data ?data.
@@ -36,7 +37,8 @@ stage:ReqDocument	a	elmo:Representation;
 .
 
 <urn:document> elmo:data (
-'''Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
+'''# Modelleringswijze
+Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
 
 Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
 '''
@@ -48,6 +50,7 @@ Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
 -	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
 -	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten'''
 [elmo:contains stage:ReqDocument_conceptenschema]
+[elmo:contains stage:ReqDocument_collectie]
 )
 .
 
@@ -66,39 +69,29 @@ stage:ReqDocument_prefixes a elmo:Part;
 
 stage:ReqDocument_conceptenschema a elmo:Part;
   elmo:index "1";
-  elmo:fragment [
-    elmo:applies-to "label";
-    rdfs:label "aanduiding"
-  ];
-  elmo:fragment [
-    elmo:applies-to "requirement";
-    rdfs:label "Requirement";
-  ];
-  elmo:fragment [
-    elmo:applies-to "name";
-    rdfs:label "vocabulair"
-  ];
-  elmo:fragment [
-    elmo:applies-to "example";
-    rdfs:label "Voorbeeld"
-  ];
   elmo:query stage:ReqDocumentQuery_requirements;
   rdfs:seeAlso req:Begrippenkader
 .
 
+stage:ReqDocument_collectie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  rdfs:seeAlso req:Collectie
+.
+
 stage:ReqDocumentQuery_requirements a elmo:Query;
   elmo:query '''
-    select ?requirement ?label ?name
+    select ?requirement ?aanduiding ?vocabulair ?voorbeeld
     where {
       GRAPH <@STAGE@> {
         <@REPRESENTATION@> rdfs:seeAlso ?nodeshape
       }
       GRAPH <http://bp4mc2.org/id/dataset/requirements> {
         ?nodeshape sh:property ?pshape.
-        ?pshape rdfs:label ?label.
+        ?pshape rdfs:label ?aanduiding.
         ?pshape rdfs:comment ?requirement.
-        ?pshape sh:name ?name.
-        ?pshape skos:example ?example
+        ?pshape sh:name ?vocabulair.
+        ?pshape skos:example ?voorbeeld
       }
     }
   '''

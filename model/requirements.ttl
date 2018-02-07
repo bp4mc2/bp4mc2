@@ -220,9 +220,17 @@ req:Collectie a sh:NodeShape;
 	rdfs:label "Collectie";
 	sh:targetClass skos:Collection;
 	sh:name "skos:Collection";
+  sh:property req:Collectie_label;
 	sh:property req:Collectie_heeftLid;
 	sh:property req:Collectie_name;
 	sh:property req:Collectie_provenance;
+.
+req:Collectie_label a sh:PropertyShape;
+	rdfs:label "has label";
+	sh:path rdfs:label;
+  sh:name "rdfs:label";
+  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
+  skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'"
 .
 req:Collectie_heeftLid a sh:PropertyShape;
 	rdfs:label "heeft lid";
