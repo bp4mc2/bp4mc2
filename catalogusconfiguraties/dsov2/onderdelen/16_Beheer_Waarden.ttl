@@ -146,7 +146,7 @@ stage:PostWaardenClassificerendScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tstomgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
@@ -251,8 +251,8 @@ stage:UpdateCollectionScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tstomgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
-      BIND( iri( concat( "http://content.tstomgevingswet.overheid.nl/id/collection/", ?name ) ) AS ?collection )
+      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/collection/", ?name ) ) AS ?collection )
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-collection-", ?name ) ) AS ?doc )
       BIND( now() AS ?now )
     }
@@ -315,7 +315,7 @@ stage:PostWaardenCategoriserendScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tstomgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
@@ -380,7 +380,7 @@ stage:PostWaardenRefererendScene a elmo:Scene;
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       # TODO: checken of onderstaande URI klopt!
       BIND( lcase( replace( replace( str( ?class ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( iri( concat( "http://content.tstomgevingswet.overheid.nl/id/", ?typename, "/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/", ?typename, "/", ?prefLabel ) ) AS ?subject )
       BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }  

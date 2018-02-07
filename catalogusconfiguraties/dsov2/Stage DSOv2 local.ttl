@@ -952,11 +952,11 @@ stage:CreateCategoriserendScene a elmo:Scene;
   rdfs:label "Creëren categoriserende waardelijst";
   elmo:query '''
     prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix dcat:    <http://www.w3.org/ns/dcat#>
     prefix def:     <http://catalogus.test.kadaster.nl/def/>
     prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
     prefix skos:		<http://www.w3.org/2004/02/skos/core#>
-    prefix dcat:    <http://www.w3.org/ns/dcat#>
     
     prefix sh: 		  <http://www.w3.org/ns/shacl#>
     prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
@@ -1166,7 +1166,7 @@ stage:PostWaardenClassificerendScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tstomgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
+      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
