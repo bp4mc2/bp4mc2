@@ -9,6 +9,189 @@
 @prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 
 #
+# Configuratie statements
+#
+stage:include a owl:ObjectProperty;
+  rdfs:label "include";
+  rdfs:comment "Include the resource in the table"
+.
+stage:exclude a owl:ObjectProperty;
+  rdfs:label "excludeReference";
+  rdfs:comment "Exclude the refered resource from the table"
+.
+stage:exclude a owl:ObjectProperty;
+  rdfs:label "includeReference";
+  rdfs:comment "Include (only) the refered resource in the table"
+.
+
+#
+# De inhoud van het document
+#
+<urn:document> elmo:data (
+'''# Modelleringswijze
+Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
+
+Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
+'''
+[elmo:contains stage:ReqDocument_prefixes]
+'''## Begrippenkader
+Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
+[html:img "begrippenkader.png"]
+'''Concept schema’s, collecties en concepten krijgt een uri volgens het patroon:
+-	`http://{domain}/id/ConceptScheme}/{rdfs:label}` voor concepten schema’s
+-	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
+-	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten
+### Concepten schema'''
+[elmo:contains stage:ReqDocument_conceptenschema]
+"### Collectie"
+[elmo:contains stage:ReqDocument_collectie]
+"### Concept"
+[elmo:contains stage:ReqDocument_concept]
+"Bovenstaande relaties gelden altijd binnen een domein (concept schema). Begrippen uit een domein kunnen worden gekoppeld aan begrippen uit andere domeinen."
+[elmo:contains stage:ReqDocument_externConcept]
+'''## Meta-eigenschappen
+Naast deze eigenschappen die direct betrekking hebben op het begrip zelf, kent de beschrijving van het begrip ook nog enkele specifieke meta-elementen. Deze meta-elementen zeggen iets over de beschrijving van het begrip zelf, zoals de status van deze beschrijving.
+- Een conceptenschema kan een standaard zijn, zoals bijvoorbeeld het waterschap lexicon (Aquolex). 
+    - De standaard gaat over 1 domein, bijvoorbeeld het aquo domein. Dit wordt vertaald naar een concept schema.
+    - Begrippen kunnen worden georganiseerd in collecties, die bijvoorbeeld waardenlijsten representeren. Een voorbeeld uit het aquo domein is de waardenlijst met waterkeringstypen.
+    - Begrippen in dit domein worde bijgehouden door de beheerder van de standaard, bijvoorbeeld het Informatie Huis Water.
+    - In de standaard doorloopt een begrip verschillende administratieve stadia (statussen). Uiteindelijk wordt het formeel gepubliceerd als onderdeel van de standaard (issued).
+    - Deze statussen zijn relevant voor begrippen, niet voor het schema en voor collecties.
+- Een begrip uit deze standaard kan door een bevoegd gezag in regelgeving wordt opgenomen, bijvoorbeeld in een waterschapsverordening.
+    - Regelgeving gaat over wat mag en niet mag in een bepaald bestuurlijk gebied. Dit gebied is geografisch is afgebakend.
+    - Regelgeving wordt opgesteld door een bevoegd gezag, bijvoorbeeld een waterschap.
+    - In regelgeving doorloopt de toepassing van een begrip eveneens verschillende statussen. Uiteindelijk wordt het begrip geldig (valid) in het betreffende bestuurlijke gebied (Location) en wordt deze toepassing formeel gepubliceerd (issued) in bijvoorbeeld een waterschapsverordening.
+- Op deze wijze wordt een door een standaarden beheerder centraal beheerd begrip via regelgeving juridisch geldig in een of meer bestuurlijke gebieden.
+- In het geval van een begrippenmodel van een (basis)registratie vallen regelgeving en standaard samen. Er is 1 beheerder, namelijk de beheerder van de (basis)registratie, die vaak in wet- of regelgeving is aangewezen als een soort van bevoegd gezag voor deze registratie.'''
+[html:img "metadata.png"]
+[elmo:contains stage:ReqDocument_metadata]
+'''## Gebeurtenissen
+### Uitgangspunten
+Gebeurtenissen zijn net als begrippen 'concepten'. Ze hebben dezelfde kenmerken als begrippen, die objecten aanduiden, maar hebben ook nog enkele andere kenmerken. 
+- Gebeurtenissen worden in wet- en regelgeving beschreven als mogelijke (rechts)handelingen die kunnen plaatsvinden in een bepaald domein. Een voorbeeld is het exploiteren van een jachthaven in het domein van het Besluit Activiteiten Leefomgeving (BAL). 
+- In een registratie maken gebeurtenissen de dynamiek van een registratie zichtbaar. Om te begrijpen wat er is veranderd in een registratie helpt het om te zien wat er is gebeurd. Een voorbeeld is het overdragen van een onroerend goed, waarvan het resultaat wordt vastgelegd in de BRK.
+Omdat het begrippenkader is gebaseerd op een institutionele bron gaat het daarbij nog steeds om institutionele gebeurtenissen, bijvoorbeeld rechtshandelingen. Deze hebben altijd een aanleiding in de natuurlijke werkelijkheid. Institutionele gebeurtenissen zijn, zoals in de denkwijze aangegeven, onderdeel van de institutionele werkelijkheid en kennen daarmee vaak een of meerdere actoren, bijvoorbeeld de verkoper en de koper bij de overdracht van een huis. En niet iedereen is bevoegd om een institutionele gebeurtenis vast te leggen. Dat gebeurt door een beëdigd ambtenaar of door een notaris. Dit wordt een ‘agent’ (in de Engelse betekenis van het woord) genoemd. Tot slot zijn er de regels ofwel normen waaraan voldaan moet zijn voordat het feit kan plaatsvinden, de voorwaarde en de regels waaraan het resultaat van de gebeurtenis voldoet, de eindsituatie.
+
+### Model
+Om gebeurtenissen c.q. rechtshandelingen te kunnen beschrijven worden begrippen getypeerd als activiteit (act), actor, agent, norm en object. De samenhang tussen deze begrippen is weergegeven in onderstaande figuur. In juridische termen wordt een actor ook wel een normadressaat genoemd.'''
+[html:img "gebeurtenissen.png"]
+[elmo:contains stage:ReqDocument_gebeurtenissen]
+'''## Waardelijsten
+'''
+)
+.
+
+#
+# Statische data
+#
+<http://www.w3.org/2004/02/skos/core#> a owl:Ontology;
+  elmo:prefix "skos"
+.
+<http://www.w3.org/2000/01/rdf-schema#> a owl:Ontology;
+  elmo:prefix "rdfs"
+.
+
+#
+# Tabellen (definities)
+#
+stage:ReqDocument_conceptenschema a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Begrippenkader
+.
+stage:ReqDocument_collectie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Collectie
+.
+stage:ReqDocument_concept a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Concept;
+  stage:excludeReference req:ExternConcept
+.
+stage:ReqDocument_externConcept a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Concept;
+  stage:includeReference req:ExternConcept
+.
+stage:ReqDocument_metadata a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Metadata;
+.
+stage:ReqDocument_gebeurtenissen a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:HandelingAct
+.
+
+#
+# Queries om data op te halen voor tabellen
+#
+stage:ReqDocument_prefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query '''
+    select ?prefix (str(?ontology) as ?uri)
+    where {
+      graph <@STAGE@> {
+        ?ontology a owl:Ontology.
+        ?ontology elmo:prefix ?prefix
+      }
+    }
+  ''';
+.
+stage:ReqDocumentQuery_requirements a elmo:Query;
+  elmo:query '''
+    prefix stage: <http://localhost:8080/catalogus/gco/stage#>
+    select ?requirement ?aanduiding ?vocabulair ?voorbeeld
+    where {
+      GRAPH <@STAGE@> {
+        <@REPRESENTATION@> stage:include ?nodeshape
+      }
+      GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+        ?nodeshape sh:property ?pshape.
+        ?pshape rdfs:label ?aanduiding.
+        ?pshape sh:name ?vocabulair.
+        OPTIONAL {?pshape rdfs:comment ?requirement}
+        OPTIONAL {?pshape skos:example ?voorbeeld}
+      }
+      FILTER NOT EXISTS {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> stage:excludeReference ?refshape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?pshape sh:node ?refshape
+        }
+      }
+      FILTER EXISTS {
+        {
+          GRAPH <@STAGE@> {
+            <@REPRESENTATION@> stage:includeReference ?refshape
+          }
+          GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+            ?pshape sh:node ?refshape
+          }
+        }
+        UNION
+        {
+          GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+            ?nodeshape sh:property ?shape.
+          }
+          FILTER NOT EXISTS {
+            GRAPH <@STAGE@> {
+              <@REPRESENTATION@> stage:includeReference ?refshape
+            }
+          }
+        }
+      }
+    }
+    order by ?aanduiding ?vocabulair
+  '''
+.
+
+#
 # Tonen van de pagina
 #
 stage:ReqDocument	a	elmo:Representation;
@@ -17,6 +200,10 @@ stage:ReqDocument	a	elmo:Representation;
   elmo:contains stage:ReqDocument_prefixes;
   elmo:contains stage:ReqDocument_conceptenschema;
   elmo:contains stage:ReqDocument_collectie;
+  elmo:contains stage:ReqDocument_concept;
+  elmo:contains stage:ReqDocument_externConcept;
+  elmo:contains stage:ReqDocument_metadata;
+  elmo:contains stage:ReqDocument_gebeurtenissen;
   elmo:query '''
     construct {
       <urn:document> elmo:data ?data.
@@ -34,72 +221,4 @@ stage:ReqDocument	a	elmo:Representation;
       }
     }
   '''
-.
-
-<urn:document> elmo:data (
-'''# Modelleringswijze
-Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
-
-Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
-'''
-[elmo:contains stage:ReqDocument_prefixes]
-'''Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
-[html:img "begrippenkader.png"]
-'''Concept schema’s, collecties en concepten krijgt een uri volgens het patroon:
--	`http://{domain}/id/ConceptScheme}/{rdfs:label}` voor concepten schema’s
--	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
--	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten'''
-[elmo:contains stage:ReqDocument_conceptenschema]
-[elmo:contains stage:ReqDocument_collectie]
-)
-.
-
-stage:ReqDocument_prefixes a elmo:Part;
-  elmo:index "1";
-  elmo:query '''
-    select ?prefix (str(?ontology) as ?uri)
-    where {
-      graph <@STAGE@> {
-        ?ontology a owl:Ontology.
-        ?ontology elmo:prefix ?prefix
-      }
-    }
-  ''';
-.
-
-stage:ReqDocument_conceptenschema a elmo:Part;
-  elmo:index "1";
-  elmo:query stage:ReqDocumentQuery_requirements;
-  rdfs:seeAlso req:Begrippenkader
-.
-
-stage:ReqDocument_collectie a elmo:Part;
-  elmo:index "1";
-  elmo:query stage:ReqDocumentQuery_requirements;
-  rdfs:seeAlso req:Collectie
-.
-
-stage:ReqDocumentQuery_requirements a elmo:Query;
-  elmo:query '''
-    select ?requirement ?aanduiding ?vocabulair ?voorbeeld
-    where {
-      GRAPH <@STAGE@> {
-        <@REPRESENTATION@> rdfs:seeAlso ?nodeshape
-      }
-      GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-        ?nodeshape sh:property ?pshape.
-        ?pshape rdfs:label ?aanduiding.
-        ?pshape rdfs:comment ?requirement.
-        ?pshape sh:name ?vocabulair.
-        ?pshape skos:example ?voorbeeld
-      }
-    }
-  '''
-.
-
-<http://www.w3.org/2004/02/skos/core#> a owl:Ontology;
-  elmo:prefix "skos"
-.
-<http://www.w3.org/2000/01/rdf-schema#> a owl:Ontology;
-  elmo:prefix "rdfs"
 .

@@ -71,11 +71,12 @@ req:Concept a sh:NodeShape;
 	sh:property req:Concept_narrowlyMatches;
 .
 req:Concept_domain a sh:PropertyShape;
-	rdfs:label "in";
+	rdfs:label "has a domain";
 	sh:name "skos:inScheme";
 	sh:path skos:inScheme;
 	sh:class skos:ConceptScheme;
-	rdfs:comment "Een begrip is gedefinieerd in een bepaald domein.";
+	rdfs:comment "Een begrip is gedefinieerd in een bepaald domein";
+  skos:example "Basisregistratie Adressen en Gebouwen (BAG)"
 .
 req:Concept_metadata a sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
@@ -86,49 +87,60 @@ req:Concept_dctsource a sh:PropertyShape;
 	sh:name "dcterms:source";
 	sh:path dcterms:source;
 	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als ‘resource’ op het web vindbaar is.";
-  sh:node [ sh:xone (req:Bron req:Brondocument)]
+  sh:node [ sh:xone (req:Bron req:Brondocument)];
+  skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"
 .
 req:Concept_dcsource a sh:PropertyShape;
-	rdfs:label "source";
+	rdfs:label "has source";
 	sh:name "dc:source";
 	sh:path dc:source;
 	rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn.";
+  skos:example "Europees verdrag voor de rechten van de mens"
 .
 req:Concept_label a sh:PropertyShape;
-	rdfs:label "label";
+	rdfs:label "has label";
 	sh:name "rdfs:label";
-	rdfs:comment "Een concept heeft een voor mensen leesbaar label,";
+	rdfs:comment "Een begrip heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
 	sh:path rdfs:label;
+  skos:example "Perceel"
 .
 req:Concept_prefLabel a sh:PropertyShape;
-	rdfs:label "naam";
+	rdfs:label "has preferred label";
 	sh:name "skos:prefLabel";
-	rdfs:comment "Een concept heeft een naam, dit is de voorkeursterm waarmee naar dit concept wordt verwezen";
+	rdfs:comment "Een begrip heeft een voor mensen leesbare naam die in documentatie kan worden gebruikt. Dit label kan meertalig zijn, aangegeven door @nl of @en";
 	sh:path skos:prefLabel;
+  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
 .
 req:Concept_synonym a sh:PropertyShape;
-	rdfs:label "alternatieve aanduiding";
+#	rdfs:label "alternatieve aanduiding";
+  rdfs:label "has synonym";
 	sh:name "skos:altLabel";
-	rdfs:comment "EEen begrip kan met een synoniem worden aangeduid."; 
+	rdfs:comment "Een begrip kan een synoniem hebben"; 
 	sh:path skos:altLabel;
+  skos:example "KadastraalPerceel"
 .
 req:Concept_definition a sh:PropertyShape;
-	rdfs:label "definitie";
+	rdfs:label "has formal definition";
 	sh:name "skos:definition";
 	rdfs:comment "Een begrip heeft een formele definitie. Deze wordt waar mogelijk overgenomen uit een officiële publicatie.";
 	sh:path skos:definition;
+  skos:example "Een perceel is een begrensd deel van het Nederlands grondgebied dat kadastraal geïdentificeerd is en met kadastrale grenzen begrensd is."
 .
 req:Concept_comment a sh:PropertyShape;
-	rdfs:label "uitleg";
+#	rdfs:label "uitleg"@nl;
+  rdfs:label "has comment";
 	sh:name "rdfs:comment";
 	rdfs:comment "Een begrip heeft een uitleg in 'klare taal'.";
 	sh:path rdfs:comment;
+  skos:example "Een perceel is een stuk grond waarvan het Kadaster de grenzen heeft gemeten en dat bij het Kadaster een eigen nummer heeft."
 .
 req:Concept_scopeNote a sh:PropertyShape;
-	rdfs:label "toelichting";
+#	rdfs:label "toelichting";
+  rdfs:label "has scope note";
 	sh:name "skos:scopeNote";
 	rdfs:comment "Een begrip kan nader worden toegelicht.";
 	sh:path skos:scopeNote;
+  skos:example '''Een perceel is een (2D) vlakvormig ruimtelijk object dat "opdelend" van structuur is. Dit betekent dat Nederland altijd naadloos en volledig is bedekt met perceelsvlakken, die elkaar niet mogen overlappen.'''
 .
 req:Concept_broadlyMatches a sh:PropertyShape;
 	rdfs:label "lijkt op breder";
@@ -222,7 +234,6 @@ req:Collectie a sh:NodeShape;
 	sh:name "skos:Collection";
   sh:property req:Collectie_label;
 	sh:property req:Collectie_heeftLid;
-	sh:property req:Collectie_name;
 	sh:property req:Collectie_provenance;
 .
 req:Collectie_label a sh:PropertyShape;
@@ -236,11 +247,6 @@ req:Collectie_heeftLid a sh:PropertyShape;
 	rdfs:label "heeft lid";
 	sh:path skos:member;
 	sh:class skos:Concept;
-.
-req:Collectie_name a sh:PropertyShape;
-	rdfs:label "label";
-	sh:name "rdfs:label";
-	sh:path rdfs:label;
 .
 req:Collectie_provenance a sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
