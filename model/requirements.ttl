@@ -247,12 +247,23 @@ req:Begrippenkader a sh:NodeShape;
 	sh:name "skos:ConceptScheme";
 	sh:targetClass skos:ConceptScheme;
 	sh:property req:Begrippenkader_type;
+	sh:property req:Begrippenkader_label;
 	sh:property req:Begrippenkader_hasTopConcept;
+.
+req:Begrippenkader_label a sh:PropertyShape;
+	rdfs:label "has label";
+	sh:path rdfs:label;
+  sh:name "rdfs:label";
+  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
+  skos:example "Het schema dat het domein regelgeving in het DSO beschrijft heeft als label 'Regelgeving'."
 .
 req:Begrippenkader_hasTopConcept a sh:PropertyShape;
 	rdfs:label "has top concept";
 	sh:path skos:hasTopConcept;
+  sh:name "skos:hasTopConcept";
 	sh:class skos:Concept;
+  rdfs:comment "Een concepten schema heeft 1 begrip dat het schema zelf aanduidt.";
+  skos:example "Het schema met als label ‘Regelgeving’ heeft als topconcept 'Regelgeving'."
 .
 req:Begrippenkader_type a sh:PropertyShape;
 	rdfs:label "rol van dataset";

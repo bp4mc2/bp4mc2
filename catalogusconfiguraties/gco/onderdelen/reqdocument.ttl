@@ -74,13 +74,21 @@ stage:ReqDocument_conceptenschema a elmo:Part;
     elmo:applies-to "requirement";
     rdfs:label "Requirement";
   ];
+  elmo:fragment [
+    elmo:applies-to "name";
+    rdfs:label "vocabulair"
+  ];
+  elmo:fragment [
+    elmo:applies-to "example";
+    rdfs:label "Voorbeeld"
+  ];
   elmo:query stage:ReqDocumentQuery_requirements;
   rdfs:seeAlso req:Begrippenkader
 .
 
 stage:ReqDocumentQuery_requirements a elmo:Query;
   elmo:query '''
-    select ?requirement ?label
+    select ?requirement ?label ?name
     where {
       GRAPH <@STAGE@> {
         <@REPRESENTATION@> rdfs:seeAlso ?nodeshape
@@ -88,7 +96,9 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
       GRAPH <http://bp4mc2.org/id/dataset/requirements> {
         ?nodeshape sh:property ?pshape.
         ?pshape rdfs:label ?label.
-        ?pshape rdfs:comment ?requirement
+        ?pshape rdfs:comment ?requirement.
+        ?pshape sh:name ?name.
+        ?pshape skos:example ?example
       }
     }
   '''
