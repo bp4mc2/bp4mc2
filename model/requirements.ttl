@@ -148,6 +148,7 @@ req:Concept_broadlyMatches a sh:PropertyShape;
 	sh:path skos:broadMatch;
 	sh:node req:ExternConcept;
 	rdfs:comment "Een begrip is een specialisatie van een begrip in een ander domein.";
+  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG.";
 .
 req:Concept_narrowlyMatches a sh:PropertyShape;
 	rdfs:label "lijkt op smaller";
@@ -155,6 +156,7 @@ req:Concept_narrowlyMatches a sh:PropertyShape;
 	sh:path skos:narrowMatch;
 	sh:node req:ExternConcept;
 	rdfs:comment "Een begrip is een generalisatie van een begrip in een ander domein.";
+  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus.";
 .
 req:Concept_seeAlso a sh:PropertyShape;
 	rdfs:label "afgeleid van";
@@ -162,6 +164,7 @@ req:Concept_seeAlso a sh:PropertyShape;
 	sh:path skos:relatedMatch;
 	sh:node req:ExternConcept;
 	rdfs:comment "Een begrip is gerelateerd aan een begrip in een ander domein.";
+  skos:example '''Een Perceel in de BRK is gerelateerd aan een adres (Nummeraanduiding) in de BAG.''';
 .
 req:Concept_closelyMatches a sh:PropertyShape;
 	rdfs:label "vergelijkbaar met";
@@ -169,6 +172,7 @@ req:Concept_closelyMatches a sh:PropertyShape;
 	sh:path skos:closeMatch;
 	rdfs:comment "Een begrip betekent bijna hetzelfde als een begrip in een ander domein.";
 	sh:node req:ExternConcept;
+  skos:example "Een OnroerendGoed in de BRK is ongeveer hetzelfde als een WOZobject in de WOZ.";
 .
 req:Concept_exactlyMatches a sh:PropertyShape;
 	rdfs:label "exact gelijk aan";
@@ -176,6 +180,7 @@ req:Concept_exactlyMatches a sh:PropertyShape;
 	sh:path skos:exactMatch;
 	sh:node req:ExternConcept;
 	rdfs:comment "Een begrip betekent precies hetzelfde als een begrip in een ander domein.";
+  skos:example "Een Perceel in het BAL betekent hetzelfde als een Perceel in de BRK.";
 .
 req:Concept_specialisationOf a sh:PropertyShape;
 	rdfs:label "specialisatie van";
@@ -183,6 +188,7 @@ req:Concept_specialisationOf a sh:PropertyShape;
 	sh:path skosthes:broaderGeneric;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip is een specialisatie van een begrip met een bredere betekenis.";
+  skos:example "Een Perceel is een OnroerendGoed.";
 .
 req:Concept_generalisationOf a sh:PropertyShape;
 	rdfs:label "generalisatie van";
@@ -190,6 +196,7 @@ req:Concept_generalisationOf a sh:PropertyShape;
 	sh:path skosthes:narrowerGeneric;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip is een generalisatie van een begrip met een engere of nauwere betekenis.";
+  skos:example "Een KadastraalObject is een OnroerendGoed of een Registergoed.";
 .
 req:Concept_partOf a sh:PropertyShape;
 	rdfs:label "onderdeel van";
@@ -197,6 +204,7 @@ req:Concept_partOf a sh:PropertyShape;
 	sh:path skosthes:broaderPartitive;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip gaat over een deel van een breder begrip.";
+  skos:example "Een motor is onderdeel van een schip.";
 .
 req:Concept_consistsOf a sh:PropertyShape;
 	rdfs:label "bestaat uit";
@@ -204,6 +212,7 @@ req:Concept_consistsOf a sh:PropertyShape;
 	sh:path skosthes:narrowerPartitive;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip bestaat uit een aantal onderdelen.";
+  skos:example '''Een schip bestaat uit een romp, kajuit, motor, … ''';
 .
 req:Concept_isRelatedTo a sh:PropertyShape;
 	rdfs:label "gerelateerd aan";
@@ -211,6 +220,7 @@ req:Concept_isRelatedTo a sh:PropertyShape;
 	sh:path skos:semanticRelation;
 	sh:class skos:Concept;
 	rdfs:comment "Een begrip is gerelateerd aan een ander begrip.";
+  skos:example "Een perceel is gerelateerd aan KadastraleGrens.";
 .
 
 #---------------------
@@ -247,6 +257,8 @@ req:Collectie_heeftLid a sh:PropertyShape;
 	rdfs:label "heeft lid";
 	sh:path skos:member;
 	sh:class skos:Concept;
+  rdfs:comment "Een begrip is onderdeel van een collectie met vergelijkbare begrippen.";
+  skos:example ''' ‘Erfpacht’ is onderdeel van de collectie ‘ZakelijkeRechten’. ''';
 .
 req:Collectie_provenance a sh:PropertyShape;
 	sh:path foaf:isPrimaryTopicOf;
