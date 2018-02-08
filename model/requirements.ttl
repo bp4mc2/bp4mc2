@@ -327,6 +327,8 @@ req:CatalogGraph_changeNote a sh:PropertyShape;
 	rdfs:label "change note";
 	sh:path skos:changeNote;
 	sh:name "skos:changeNote";
+  rdfs:comment "De rationale van de aanpassing kan worden aangegeven.";
+  skos:example "Een tikfout.";
 .
 req:CatalogGraph_attributedTo a sh:PropertyShape;
 	rdfs:label "was attributed to";
@@ -631,21 +633,21 @@ req:Dataset_dateIssued rdf:type sh:PropertyShape;
     rdfs:label "publicatiedatum";
 	sh:name "dcterms:issued";
     rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus.";
-    rdf:value "1/10/2017";
+    skos:example '''1/10/2017''';
     sh:path dcterms:issued
 .
 req:Dataset_language rdf:type sh:PropertyShape;
     rdfs:label "taal";
 	sh:name "dcterms:language";
     rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
-    rdf:value "";
+    skos:example "@nl";
     sh:path dcterms:language
 .
 req:Dataset_description rdf:type sh:PropertyShape;
     rdfs:label "beschrijving";
 	sh:name "dcterms:description";
     rdfs:comment "De dataset heeft een duidelijke beschrijving";
-    rdf:value "<beschrijving>";
+    skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
     sh:path dcterms:description
 .
 
@@ -659,7 +661,7 @@ req:Datasetversie rdf:type sh:NodeShape;
     rdfs:label "Dataset";
 	sh:name "dcat:Dataset";
     sh:targetClass dcat:Dataset;
-	sh:property req:Datasetversie_version; # [MB] Hier wordt gesproken over dataset en datasetversie: ik mis dit onderscheid: ik zou dus twee shapes verwachten, 1 met dataset en 1 met datasetversie
+	sh:property req:Datasetversie_version; 
 	sh:property req:Datasetversie_versionNotes;	
 	sh:property req:Datasetversie_isDerivedFrom;
 	sh:property req:Datasetversie_distribution;
@@ -676,18 +678,21 @@ req:Datasetversie_version rdf:type sh:PropertyShape;
 	sh:name "adms:version";
 	rdfs:comment "De versie van de dataset.";
 	sh:path adms:version;
+  skos:example "2.1.0";
 .
 req:Datasetversie_versionNotes rdf:type sh:PropertyShape;
 	rdfs:label "versie notes";
 	sh:name "adms:versionNotes";
 	rdfs:comment "Een versie heeft release notes.";
 	sh:path adms:versionNotes;
+  skos:example '''IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log.''';
 .
 req:Datasetversie_distribution a sh:PropertyShape;
 	rdfs:label "distributie";
 	sh:path dcat:distribution;
 	sh:class dcat:Distribution;
 	rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen.";
+  skos:example "Digitale Kadastrale Kaart download service.";
 .
 req:Datasetversie_versionOf a sh:PropertyShape;
 	rdfs:label "versie van";
@@ -695,19 +700,27 @@ req:Datasetversie_versionOf a sh:PropertyShape;
 	rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset.";
 	sh:node req:Dataset;
 	sh:maxCount 1;
+  skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
 .
 req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
     rdfs:label "werkingsgebied";
     rdfs:comment "Het gebied waar de dataset over gaat";
     sh:class dcterms:Location;
-    rdf:value "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+    skos:example "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
+#[IT] skos:example "gemeente Apeldoorn";    
     sh:path dcterms:spatial
 .
 req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
 	rdfs:label "gerelateerd aan";
-	rdfs:comment "Geeft de dataset aan waar deze dataset aan gerelateerd is (wordt gebruikt om aan te geven hoe een dataset is afgeleid uit 1 of meerdere andere datasets";
+	rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel.";
 	sh:path dcterms:relation;
 	sh:class dcat:Dataset;
+.
+req:Datasetversie_describedBy rdf:type sh:PropertyShape;
+	rdfs:label "beschreven in";
+	rdfs:comment "De data in een dataset is beschreven in een informatiemodel.";
+	sh:path wdrs:describedBy;
+  skos:example '''kadaster.nl/schemas/imkad''';
 .
 
 #---------------------
@@ -843,48 +856,49 @@ req:Distributie_name rdf:type sh:PropertyShape;
 	rdfs:label "naam";
 	sh:name "dcterms:title";
 	rdfs:comment "De distributie heeft een naam";
-	rdf:value "'Linked Data omgevingswet'";
+	skos:example "Digitale Kadastrale Kaart download service";
 	sh:path dcterms:title;
 .
 req:Distributie_description rdf:type sh:PropertyShape;
 	rdfs:label "beschrijving";
 	sh:name "dcterms:description";
 	rdfs:comment "De distributie heeft een duidelijke beschrijving.";
-	rdf:value "<beschrijving>";
+	skos:example '''Het Kadaster is houder van de Basisregistratie Kadaster (BRK). Onderdeel van de BRK is de Digitale kadastrale kaart. Deze is beschikbaar als open data en nu via dit portaal ook als Linked Open Data (vooralsnog zonder de topografie).''';
 	sh:path dcterms:description;
 .
 req:Distributie_issueDate rdf:type sh:PropertyShape;
 	rdfs:label "publicatiedatum";
 	sh:name "dcterms:issued";
 	rdfs:comment "De distributie is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de distributie in de catalogus.";
-	rdf:value "1/10/2016";
+	skos:example "1/10/2016";
 	sh:path dcterms:issued;
 .
 req:Distributie_license rdf:type sh:PropertyShape;
 	rdfs:label "licentie";
     rdfs:comment "Een licentie is van toepassing op de catalogus.";
-    rdf:value "uri-beerware";
+    skos:example "uri-beerware";
+#[IT] skos:example "Creative Commons Naamsvermelding 4.0 licentie";    
     sh:path dcterms:license;
 	sh:name "dcterms:license";
 .
 req:Distributie_rights rdf:type sh:PropertyShape;
 	rdfs:label "rechten";
     rdfs:comment "De rechten met betrekking tot de distributie zijn beschreven. Zie ook: svbg:gebruiksvoorwaarden en iso:confidentiality";
-    rdf:value "<tekst over de distributie>";
+    skos:example '''Wilt u direct aan  de slag met BRK Levering? Raadpleeg dan de reference card bij 'Documenten'. Daarin vindt u de stappen die u moet zetten om met BRK Levering te kunnen starten. Eerste of éénmalige levering tot 100.000 objecten, per object €1,16;tot 1.000.000 objecten, per object €0,98;bij meer dan 1.000.000 objecten, per object €0,73;Gebiedsuitbreiding van een bestaand abonnement, per object €1,16;Abonnementslevering, per jaar en per 1.000 objecten binnen abonnement €208,00;Extra (losse) levering van een bestand, per verstrekking €192,00;Tweede mutatie-abonnement, per jaar €192,00;Deze bedragen zijn vrij van btw;Dit product valt onder de budgetfinanciering BRK.''';
     sh:path dcterms:rights;
 	sh:name "dcterms:rights";
 .
 req:Distributie_accessURL rdf:type sh:PropertyShape;
 	rdfs:label "API/servicelocatie";
     rdfs:comment "Een distributie kan een API zijn of een webservice die beschikbaar is via een uri.";
-    rdf:value "..";
+    skos:example '''https://data.pdok.nl/brk/api/v1''';
     sh:path dcat:accessURL;
 	sh:name "dcat:accessURL";
 .
 req:Distributie_downloadURL rdf:type sh:PropertyShape;
 	rdfs:label "downloadlocatie";
     rdfs:comment "Een distributie kan een downloadservice zijn die beschikbaar is via een uri.";
-    rdf:value "..";
+    skos:example '''https://www.pdok.nl/nl/producten/pdok-downloads/basis-registratie-kadaster/kadastrale-kaart''';
     sh:path dcat:downloadURL;
 	sh:name "dcat:downloadURL";
 .
