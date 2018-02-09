@@ -1,11 +1,13 @@
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 
 #
@@ -65,6 +67,7 @@ Naast deze eigenschappen die direct betrekking hebben op het begrip zelf, kent d
 - In het geval van een begrippenmodel van een (basis)registratie vallen regelgeving en standaard samen. Er is 1 beheerder, namelijk de beheerder van de (basis)registratie, die vaak in wet- of regelgeving is aangewezen als een soort van bevoegd gezag voor deze registratie.'''
 [html:img "metadata.png"]
 [elmo:contains stage:ReqDocument_metadata]
+[elmo:contains stage:ReqDocument_metadataTemporal]
 '''## Gebeurtenissen
 ### Uitgangspunten
 Gebeurtenissen zijn net als begrippen 'concepten'. Ze hebben dezelfde kenmerken als begrippen, die objecten aanduiden, maar hebben ook nog enkele andere kenmerken. 
@@ -138,6 +141,10 @@ Voor calalogi worden de volgende standaarden gebruikt:'''
 [elmo:contains stage:ReqDocument_catalogus]
 "#### Dataset"
 [elmo:contains stage:ReqDocument_dataset]
+"#### Dataset versie"
+[elmo:contains stage:ReqDocument_datasetVersie]
+"#### Locatie"
+[elmo:contains stage:ReqDocument_datasetLocatie]
 "#### Distributie"
 [elmo:contains stage:ReqDocument_distributie]
 '''## Samenhang dataset, concepten schema en informatiemodel
@@ -157,22 +164,22 @@ In de aansluitvoorwaarden voor informatiehuizen wordt bepaald dat een informatie
 |------------------|----------
 |1. Definitie van het informatieproduct, dat minimaal bestaat uit een naam, omschrijving en een versienummer.|Deze wordt vastgelegd via de name, description en version in de dcat:Dataset beschrijving van het informatieproduct
 |2. Informatiemodel van het informatieproduct.|Bij deze dataset hoort een (product)informatiemodel.
-|3. Informatiemodellen van brongegevens die ten grondslag liggen aan het informatiemodel voor het informatieproduct.	Het productinformatiemodel is afgeleid van een of meerdere concrete datasets. Dit kan bijvoorbeeld een model zijn voor het informatiehuis ruimte dat een product levert op basis van het ruimtelijke plannen versie 2012, versie 2008 en eventuele eerder versies.
-4. Kwaliteitseigenschappen.|<Voor de beschrijving van de kwaliteitsnorm van de dataset als geheel – kwaliteitselementen die nu op object- en attribuutniveau worden gehanteerd in KKG toepassen op dataset>
-5. Relevante begrippen.|Begrippen zitten in het begrippenmodel dat hoort bij de abstracte dataset
-6. Services:|
-6.1. Verwijzingen naar services in de registratie van het Stelselknooppunt DSO.|Bij iedere dataset die een informatieproduct beschrijft hoort een datadistributie. Het gegeven ‘has access url’ verwijst naar de url van de API op het knooppunt.
-6.2. De endpoints van de laatste in gebruik zijnde productieversies van de services.|Via de laatste ‘issued date’ kan de laatste in gebruik zijnde versie worden gevonden. <invalidated at time nog toevoegen>
-7. Gebruiksdoel(en) en doelgroep(en).|De 'rights' in de distributiebeschrijving van het informatieproduct kan worden gebruikt als proclaimer. Hierin kunnen indien gewenst ook statements over gebruiksdoel(en) en doelgroep(en) worden opgenomen.
-8. Ondersteunde zoekdimensies. |<dit komt niet in de catalogus, maar in de OAS>
-9. Verbeeldingsstandaard. |Deze kan worden opgenomen bij de waardenlijsten
-10. Brongegevens en daarvoor verantwoordelijke bronhouders (Dit geldt ook voor eventuele generieke gegevens, informatieproducten van andere informatiehuizen en stam/referentiegegevens die worden gebruikt bij de totstandkoming van een informatieproduct..)|Als deze bronnen ook zijn gedocumenteerd in een vergelijkbare catalogus kan daaraan worden gelinkt. Het informatieproduct wordt dan afgeleid (via dct:realation) van al deze bronnen.  <Als het niet-linked data bronnen zijn, moet er iets worden verzonnen via dc:source oid>
-11. BIV-Classificatie.|<nog uitwerken – is een lastige: op de onderliggende ISO standaard rust copyright, dus een vocabulaire publiceren dat deze standaard representeert kan niet zomaari>
-12. Indicatie of het vertrouwelijke of persoonsgegevens bevat.|<dit is een van de elementen van het ldqv (linked data quality vocabulary)>
-13. Werkingsgebied.|Via dct:location dat de geldigheid van de dataset aangeeft
-14. Metadata voor archivering van informatieproducten, waaronder minimaal de verplichte velden zoals beschreven in de Richtlijn Metagegevens Overheidsinformatie.|met het tijdreismodel en de provenance informatie zou je hieraan moeten voldoen
-15. Coördinaatstelsel, waarbij minimaal RD en/of ETRS89 wordt ondersteund (indien het informatieproduct een geografische component bevat).|<In DCAT-AP, no equivalent term is foreseen. This is also the case for the NeoGeo [NEOGEO], GeoSPARQL [GEOSPARQL], and the Core Location Vocabulary [LOCN]. Based on this, these elements are provisionally mapped to property dct:conformsTo. Moreover, in order to indicate that the object of dct:conformsTo denotes a reference system, an additional statement with predicate dct:type is added, with a code list value defining the notion of (spatial / temporal) reference system, taken from the glossary operated by the INSPIRE Registry.>
-16. Verwijzing naar documentatie op website van informatiehuis|Profiel uitbreiden met dcat:landingpage
+|3. Informatiemodellen van brongegevens die ten grondslag liggen aan het informatiemodel voor het informatieproduct.|Het productinformatiemodel is afgeleid van een of meerdere concrete datasets. Dit kan bijvoorbeeld een model zijn voor het informatiehuis ruimte dat een product levert op basis van het ruimtelijke plannen versie 2012, versie 2008 en eventuele eerder versies.
+|4. Kwaliteitseigenschappen.|<Voor de beschrijving van de kwaliteitsnorm van de dataset als geheel – kwaliteitselementen die nu op object- en attribuutniveau worden gehanteerd in KKG toepassen op dataset>
+|5. Relevante begrippen.|Begrippen zitten in het begrippenmodel dat hoort bij de abstracte dataset
+|6. Services:|
+|6.1. Verwijzingen naar services in de registratie van het Stelselknooppunt DSO.|Bij iedere dataset die een informatieproduct beschrijft hoort een datadistributie. Het gegeven ‘has access url’ verwijst naar de url van de API op het knooppunt.
+|6.2. De endpoints van de laatste in gebruik zijnde productieversies van de services.|Via de laatste ‘issued date’ kan de laatste in gebruik zijnde versie worden gevonden. <invalidated at time nog toevoegen>
+|7. Gebruiksdoel(en) en doelgroep(en).|De 'rights' in de distributiebeschrijving van het informatieproduct kan worden gebruikt als proclaimer. Hierin kunnen indien gewenst ook statements over gebruiksdoel(en) en doelgroep(en) worden opgenomen.
+|8. Ondersteunde zoekdimensies. |<dit komt niet in de catalogus, maar in de OAS>
+|9. Verbeeldingsstandaard. |Deze kan worden opgenomen bij de waardenlijsten
+|10. Brongegevens en daarvoor verantwoordelijke bronhouders (Dit geldt ook voor eventuele generieke gegevens, informatieproducten van andere informatiehuizen en stam/referentiegegevens die worden gebruikt bij de totstandkoming van een informatieproduct..)|Als deze bronnen ook zijn gedocumenteerd in een vergelijkbare catalogus kan daaraan worden gelinkt. Het informatieproduct wordt dan afgeleid (via dct:realation) van al deze bronnen.  <Als het niet-linked data bronnen zijn, moet er iets worden verzonnen via dc:source oid>
+|11. BIV-Classificatie.|<nog uitwerken – is een lastige: op de onderliggende ISO standaard rust copyright, dus een vocabulaire publiceren dat deze standaard representeert kan niet zomaari>
+|12. Indicatie of het vertrouwelijke of persoonsgegevens bevat.|<dit is een van de elementen van het ldqv (linked data quality vocabulary)>
+|13. Werkingsgebied.|Via dct:location dat de geldigheid van de dataset aangeeft
+|14. Metadata voor archivering van informatieproducten, waaronder minimaal de verplichte velden zoals beschreven in de Richtlijn Metagegevens Overheidsinformatie.|met het tijdreismodel en de provenance informatie zou je hieraan moeten voldoen
+|15. Coördinaatstelsel, waarbij minimaal RD en/of ETRS89 wordt ondersteund (indien het informatieproduct een geografische component bevat).|<In DCAT-AP, no equivalent term is foreseen. This is also the case for the NeoGeo [NEOGEO], GeoSPARQL [GEOSPARQL], and the Core Location Vocabulary [LOCN]. Based on this, these elements are provisionally mapped to property dct:conformsTo. Moreover, in order to indicate that the object of dct:conformsTo denotes a reference system, an additional statement with predicate dct:type is added, with a code list value defining the notion of (spatial / temporal) reference system, taken from the glossary operated by the INSPIRE Registry.>
+|16. Verwijzing naar documentatie op website van informatiehuis|Profiel uitbreiden met dcat:landingpage
 
 ## Provenance
 Administratieve aspecten worden bijgehouden conform het de prov ontologie. Hierbij gaat het om wie, wat, wanneer en om wat voor reden heeft vastgelegd of gewijzigd. 
@@ -181,30 +188,50 @@ Administratieve aspecten worden bijgehouden conform het de prov ontologie. Hierb
 [html:img "provenance.png"]
 "### Provenance"
 [elmo:contains stage:ReqDocument_provenance]
+"### Cataloguswijziging"
+[elmo:contains stage:ReqDocument_catalogusGraph]
+"### Provenance agent (person, organization or software agent)"
+[elmo:contains stage:ReqDocument_agent]
 )
 .
 
 #
 # Statische data
 #
-<http://www.w3.org/2004/02/skos/core#> a owl:Ontology;
-  elmo:prefix "skos";
+stage:Ontology_skos a owl:Ontology;
+  sh:prefix "skos";
+  sh:namespace "http://www.w3.org/2004/02/skos/core#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/skos-reference/>;
   rdfs:seeAlso stage:ReqDocument_conceptPrefixes
 .
-<http://www.w3.org/2000/01/rdf-schema#> a owl:Ontology;
-  elmo:prefix "rdfs";
+stage:Ontology_rdfs a owl:Ontology;
+  sh:prefix "rdfs";
+  sh:namespace "http://www.w3.org/2000/01/rdf-schema#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/rdf-schema/>;
   rdfs:seeAlso stage:ReqDocument_conceptPrefixes
 .
-<http://www.w3.org/TR/vocab-dcat/> a owl:Ontology;
-  elmo:prefix "dcat";
+stage:Ontology_dct a owl:Ontology;
+  sh:prefix "dct";
+  sh:namespace "http://dublincore.org/documents/dcmi-terms/";
+  foaf:isPrimaryTopicOf <http://www.dublincore.org/documents/dcmi-terms/>;
+  rdfs:seeAlso stage:ReqDocument_conceptPrefixes
+.
+stage:Ontology_dcat a owl:Ontology;
+  sh:prefix "dcat";
+  sh:namespace "http://www.w3.org/ns/dcat#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-dcat/>;
   rdfs:seeAlso stage:ReqDocument_catalogusPrefixes
 .
-<http://www.w3.org/TR/vocab-adms#> a owl:Ontology;
-  elmo:prefix "adms";
+stage:Ontology_adms a owl:Ontology;
+  sh:prefix "adms";
+  sh:namespace "http://www.w3.org/ns/adms#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-adms/>;
   rdfs:seeAlso stage:ReqDocument_catalogusPrefixes
 .
-<http://www.w3.org/TR/prov-o#> a owl:Ontology;
-  elmo:prefix "prov";
+stage:Ontology_prov a owl:Ontology;
+  sh:prefix "prov";
+  sh:namespace "http://www.w3.org/ns/prov#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/prov-o/>;
   rdfs:seeAlso stage:ReqDocument_catalogusPrefixes
 .
 
@@ -238,10 +265,19 @@ stage:ReqDocument_metadata a elmo:Part;
   elmo:query stage:ReqDocumentQuery_requirements;
   stage:include req:Metadata;
 .
+stage:ReqDocument_metadataTemporal a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Metadata_Temporal;
+.
 stage:ReqDocument_gebeurtenissen a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:HandelingAct
+  stage:include req:HandelingAct;
+  stage:include req:HandelingActor;
+  stage:include req:HandelingAgent;
+  stage:include req:HandelingObject;
+  stage:include req:HandelingNorm;
 .
 stage:ReqDocument_informatiemodel a elmo:Part;
   elmo:index "1";
@@ -258,6 +294,16 @@ stage:ReqDocument_dataset a elmo:Part;
   elmo:query stage:ReqDocumentQuery_requirements;
   stage:include req:Dataset
 .
+stage:ReqDocument_datasetVersie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Datasetversie
+.
+stage:ReqDocument_datasetLocatie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Datasetversie_locatie
+.
 stage:ReqDocument_distributie a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
@@ -267,6 +313,19 @@ stage:ReqDocument_provenance a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
   stage:include req:Metadata
+.
+stage:ReqDocument_catalogusGraph a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:CatalogGraph
+.
+stage:ReqDocument_agent a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:ProvenanceAgent;
+  stage:include req:ProvenancePerson;
+  stage:include req:ProvenanceOrganization;
+  stage:include req:ProvenanceSoftwareAgent;
 .
 
 #
@@ -282,14 +341,17 @@ stage:ReqDocument_catalogusPrefixes a elmo:Part;
 .
 stage:ReqDocument_prefixesQuery a elmo:Query;
   elmo:query '''
-    select ?prefix (str(?ontology) as ?uri)
+    select ?prefix ?uri ?website
     where {
       graph <@STAGE@> {
         ?ontology a owl:Ontology.
-        ?ontology elmo:prefix ?prefix.
+        ?ontology sh:prefix ?prefix.
+        ?ontology sh:namespace ?uri.
+        OPTIONAL {?ontology foaf:isPrimaryTopicOf ?website}
         ?ontology rdfs:seeAlso <@REPRESENTATION@>
       }
     }
+    order by ?prefix
   ''';
 .
 
@@ -302,7 +364,7 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
         <@REPRESENTATION@> stage:include ?nodeshape
       }
       GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-        select ?nodeshape ?pshape ?requirement ?aanduiding ?vocabulair ?voorbeeld
+        select (if(isLiteral(?idx),?idx,"B") as ?index) ?nodeshape ?pshape ?requirement ?aanduiding ?vocabulair ?voorbeeld
         where {
           {
             ?nodeshape a sh:NodeShape.
@@ -311,6 +373,14 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
             ?pshape sh:name ?vocabulair.
             OPTIONAL {?pshape rdfs:comment ?requirement}
             OPTIONAL {?pshape skos:example ?voorbeeld}
+            OPTIONAL {
+              ?pshape sh:class ?class
+              BIND ("C" as ?idx)
+            }
+            OPTIONAL {
+              ?pshape sh:node ?node
+              BIND ("C" as ?idx)
+            }
           }
           UNION
           {
@@ -319,6 +389,7 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
             ?nodeshape sh:name ?vocabulair.
             OPTIONAL {?nodeshape rdfs:comment ?requirement}
             OPTIONAL {?nodeshape skos:example ?voorbeeld}
+            BIND ("A" as ?idx)
           }
         }
       }
@@ -352,7 +423,7 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
         }
       }
     }
-    order by ?aanduiding ?vocabulair
+    order by ?nodeshape ?index ?aanduiding ?vocabulair
   '''
 .
 
@@ -369,12 +440,17 @@ stage:ReqDocument	a	elmo:Representation;
   elmo:contains stage:ReqDocument_concept;
   elmo:contains stage:ReqDocument_externConcept;
   elmo:contains stage:ReqDocument_metadata;
+  elmo:contains stage:ReqDocument_metadataTemporal;
   elmo:contains stage:ReqDocument_gebeurtenissen;
   elmo:contains stage:ReqDocument_informatiemodel;
   elmo:contains stage:ReqDocument_catalogus;
   elmo:contains stage:ReqDocument_dataset;
+  elmo:contains stage:ReqDocument_datasetVersie;
+  elmo:contains stage:ReqDocument_datasetLocatie;
   elmo:contains stage:ReqDocument_distributie;
   elmo:contains stage:ReqDocument_provenance;
+  elmo:contains stage:ReqDocument_catalogusGraph;
+  elmo:contains stage:ReqDocument_agent;
   elmo:query '''
     construct {
       <urn:document> elmo:data ?data.
