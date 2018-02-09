@@ -83,6 +83,8 @@ req:Concept_domain a sh:PropertyShape;
   rdfs:label "has a domain";
   sh:name "skos:inScheme";
   sh:path skos:inScheme;
+  sh:minCount 1;
+  sh:maxCount 1;
   sh:class skos:ConceptScheme;
   rdfs:comment "Een begrip is gedefinieerd in een bepaald domein";
   skos:example "Basisregistratie Adressen en Gebouwen (BAG)"
@@ -109,6 +111,7 @@ req:Concept_dcsource a sh:PropertyShape;
 req:Concept_label a sh:PropertyShape;
   rdfs:label "has label";
   sh:name "rdfs:label";
+  sh:minCount 1;
   rdfs:comment "Een begrip heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
   sh:path rdfs:label;
   skos:example "Perceel"
@@ -116,6 +119,8 @@ req:Concept_label a sh:PropertyShape;
 req:Concept_prefLabel a sh:PropertyShape;
   rdfs:label "has preferred label";
   sh:name "skos:prefLabel";
+  sh:minCount 1;
+  sh:maxCount 1;
   rdfs:comment "Een begrip heeft een voor mensen leesbare naam die in documentatie kan worden gebruikt. Dit label kan meertalig zijn, aangegeven door @nl of @en";
   sh:path skos:prefLabel;
   skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
@@ -363,7 +368,7 @@ req:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
   skos:example "overheid:Rijswaterstaat";
   sh:name "prov:actedOnBehalfOf";
   sh:path prov:actedOnBehalfOf;
-  sh:node req:ProvenanceOrganization;
+  sh:class prov:Organization;
 .
 
 req:ProvenancePerson a sh:NodeShape;
@@ -404,7 +409,7 @@ req:Metadata_status a sh:PropertyShape;
   rdfs:label "heeft status";
   sh:name "adms:status";
   sh:path adms:status;
-  sh:node req:ConceptStatus;
+  sh:node req:Status;
   rdfs:comment "Een versie heeft een administratieve status.";
   skos:example "Proposed";
 #[IT] skos:example "Completed";
@@ -617,8 +622,13 @@ req:Dataset rdf:type sh:NodeShape;
   sh:property req:Dataset_dateIssued;
   sh:property req:Dataset_language;
   sh:property req:Dataset_description;
+  sh:property req:Dataset_provenance;
 .
 
+req:Dataset_provenance a sh:PropertyShape;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+.
 req:Dataset_name rdf:type sh:PropertyShape;
   rdfs:label "naam";
   sh:name "dcterms:title";
@@ -650,21 +660,20 @@ req:Dataset_description rdf:type sh:PropertyShape;
 
 req:Datasetversie rdf:type sh:NodeShape;
   rdfs:label "Datasetversie";
-  sh:name "dcat:Dataset";
-  sh:targetClass dcat:Dataset;
+  sh:name "dcat:Dataset (versie)";
+  sh:property req:Datasetversie_rol; 
   sh:property req:Datasetversie_version; 
   sh:property req:Datasetversie_versionNotes;	
   sh:property req:Datasetversie_isDerivedFrom;
   sh:property req:Datasetversie_distribution;
   sh:property req:Datasetversie_versionOf;
   sh:property req:Datasetversie_describedBy;
-  sh:property req:Datasetversie_provenance;
   sh:property req:Datasetversie_werkingsgebied;
 .
 
-req:Datasetversie_provenance a sh:PropertyShape;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:class prov:Entity;
+req:Datasetversie_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:hasValue dcat:Dataset;
 .
 req:Datasetversie_version rdf:type sh:PropertyShape;
   rdfs:label "versie";
