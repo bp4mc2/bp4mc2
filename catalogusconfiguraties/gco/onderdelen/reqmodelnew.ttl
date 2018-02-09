@@ -82,37 +82,63 @@ stage:ReqModelConcepten a elmo:Representation;
 		  ?shape ?shapepred ?shapeobj.
 		  ?shape sh:property ?prop.
 		  ?prop ?proppred ?propobj.
+      ?class rdfs:subClassOf ?parentclass.
+      ?class rdf:type owl:Class.
+      ?choice ?choiceprop ?list.
+      ?listitem rdf:first ?refshape.
+      ?listitem rdf:rest ?restlist.
 		}
 		WHERE {
 		  {
-			GRAPH <@STAGE@> {
-			  <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape
-			}
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-			  ?shape ?shapepred ?shapeobj.
-			  ?shape sh:property ?prop.
-			  ?prop ?proppred ?propobj
-			  FILTER NOT EXISTS {?prop sh:node ?refshape}
-			}
+        GRAPH <@STAGE@> {
+          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape ?shapepred ?shapeobj.
+          OPTIONAL {
+            ?shape sh:property ?prop.
+            ?prop ?proppred ?propobj.
+          }
+          OPTIONAL {
+            ?shape sh:targetClass ?class.
+            ?class rdfs:subClassOf ?parentclass.
+          }
+          FILTER NOT EXISTS {?prop sh:node ?refshape}
+        }
 		  }
 		  UNION
 		  {
-			GRAPH <@STAGE@> {
-			  <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape.
-			  <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?refshape.
-			}
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-			  ?shape sh:property ?prop.
-			  ?prop ?proppred ?propobj.
-			  ?prop sh:node ?refshape
-			}
+        GRAPH <@STAGE@> {
+          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?shape.
+          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?refshape.
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape sh:property ?prop.
+          ?prop ?proppred ?propobj.
+          ?prop sh:node ?refshape
+        }
 		  }
+      UNION
+      {
+        GRAPH <@STAGE@> {
+          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?shape.
+          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?refshape.
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape sh:property ?prop.
+          ?prop ?proppred ?propobj.
+          ?prop sh:node ?choice.
+          ?choice ?choiceprop ?list.
+          ?list rdf:rest* ?listitem.
+          ?listitem rdf:first ?refshape.
+          ?listitem rdf:rest ?restlist.
+        }
+      }
 		}
 	''';
 .
 
-<urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument
-.
+<urn:ReqModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument, req:Bron, req:WerkAlsBron, req:ExpressieAlsBron.
 
 stage:ReqModelConceptenMeta a elmo:Representation;
 	elmo:url-pattern "/query/model/conceptenmeta$";
@@ -165,8 +191,11 @@ stage:ReqModelConceptenMeta a elmo:Representation;
 			FILTER (
 				?shape = req:ConceptMetadata
 				|| ?shape = req:Concept
-				|| ?shape = req:Werkingsgebied
-				|| ?shape = req:ConceptStatus
+				|| ?shape = req:Begrippenkader
+				|| ?shape = req:Metadata
+				|| ?shape = req:Collectie
+        || ?shape = req:Metadata_Temporal
+        || ?shape = req:Status
 			)
 			FILTER(
 				?propobj != thes:broaderGeneric
@@ -198,13 +227,15 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		PREFIX dctype: <http://purl.org/dc/dcmitype/>
-		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex/>
+		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex#>
 		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
 		CONSTRUCT {
 			?shape ?shapepred ?shapeobj.
 			?shape sh:targetclass ?type.
 			?shape sh:property ?prop.
 			?prop ?proppred ?propobj.
+      ?type rdfs:subClassOf ?ptype.
+      ?type rdf:type rdfs:Class. #Bug, type is needed
 		}
 		WHERE {
 			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
@@ -212,6 +243,9 @@ stage:ReqModelGebeurtenissen a elmo:Representation;
 				?shape sh:targetClass ?type.
 				?shape sh:property ?prop.
 				?prop ?proppred ?propobj.
+        OPTIONAL {
+          ?type rdfs:subClassOf ?ptype.
+        }
 				FILTER (
 					?type = skos:Concept
 				#	||	?type = skos:ConceptScheme
@@ -306,7 +340,10 @@ stage:ReqModelProvenance a elmo:Representation;
 				|| ?shape = req:Catalogus
 				|| ?shape = req:Dataset
 				|| ?shape = req:Distributie
-				|| ?shape = req:ConceptMetadata
+				|| ?shape = req:Metadata
+        || ?shape = req:CatalogGraph
+        || ?shape = req:Metadata_Temporal
+        || ?shape = req:Status
 				)
 				FILTER(
 					?propobj != thes:broaderGeneric
