@@ -1787,6 +1787,7 @@ stage:EnactConceptScene a elmo:Scene;
     }
 	'''
 . 
+
 #
 #
 #
@@ -2155,6 +2156,8 @@ stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
       GRAPH ?conceptGraph {
         ?concept foaf:isPrimaryTopicOf ?conceptDoc.
         
+        ?concept skos:inScheme ?scheme.
+        
         ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerConceptGraph {
@@ -2234,7 +2237,6 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
     prefix skos:            <http://www.w3.org/2004/02/skos/core#>
     prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
     prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    
     prefix container:       <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
     prefix def:             <http://catalogus.test.kadaster.nl/def/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
@@ -2267,25 +2269,15 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
       GRAPH def:Waardelijsten {
         <@WAARDELIJST@> sh:property [ sh:hasValue ?class ].
       }
-      GRAPH ?classGraph {
-        ?class skos:member ?concept.
-        
-        ?classGraph prov:generatedAtTime ?classGraphTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerClassGraph {
-            ?class rdf:type rdfs:Class.
-            ?newerCollectionGraph prov:generatedAtTime ?newerCollectionGraphTime.
-            FILTER( ?newerClassGraphTime > ?classGraphTime )
-          }
-        }
-      }
-      
-      GRAPH ?classGraph {
+      GRAPH ?conceptGraph {
         ?concept foaf:isPrimaryTopicOf ?conceptDoc.
+        
+        ?concept rdf:type ?class.
         
         ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerConceptGraph {
+          #dit zullen geen skos:concepts blijven maar dienen wel zo worden aangeleverd
             ?concept rdf:type skos:Concept.
             ?newerConceptGraph prov:generatedAtTime ?newerConceptGraphTime.
             FILTER( ?newerConceptGraphTime > ?conceptGraphTime )
@@ -2314,6 +2306,7 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
           }
         }
       }
+      
       
       OPTIONAL {
         GRAPH ?previousConceptGraph {
