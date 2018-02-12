@@ -1943,9 +1943,14 @@ stage:WeergaveTabelConcepten a elmo:Part;
 	];
 	elmo:fragment [ 
 		rdfs:label "Bronnen"@nl;
-		elmo:applies-to dc:source;
+		elmo:applies-to dct:source;
 		elmo:appearance elmo:GlobalLink;
 		elmo:index "05";
+	];
+  elmo:fragment [
+		rdfs:label "Bronnen"@nl;
+		elmo:applies-to rdfs:label;
+		elmo:index "06";
 	];
 	elmo:fragment [
 		rdfs:label "Commentaar"@nl;
@@ -2033,11 +2038,7 @@ stage:WeergaveTabelConcepten a elmo:Part;
 		elmo:applies-to skos:inScheme;
 		elmo:index "30";
 	];
-		elmo:fragment [
-		rdfs:label "Bronnen"@nl;
-		elmo:applies-to rdfs:literal;
-		elmo:index "06";
-	];
+
 	elmo:query stage:WeergaveTabelConceptenQuery;
 .
 
@@ -2133,13 +2134,13 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 		PREFIX kdstat: <http://kadaster.basisregistraties.overheid.nl/id/status/>
 		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-		prefix dc: <http://purl.org/dc/elements/1.1/>
+		prefix dct: <http://purl.org/dc/terms/>
 
 		CONSTRUCT {
 			<@SUBJECT@> ?p ?o.
 			<@SUBJECT@> rdfs:label ?slabel.
 			<@SUBJECT@> skos:prefLabel ?spreflabel.
-			<@SUBJECT@> dc:source ?source.
+			<@SUBJECT@> dct:source ?source.
 			?source rdfs:label ?bronLabel.
 			?o rdfs:label ?olabel.
 			<@SUBJECT@> skos:member ?col.
@@ -2153,7 +2154,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					<@SUBJECT@> ?p ?o.
 					<@SUBJECT@> rdf:type skos:Concept.
 					OPTIONAL {
-						<@SUBJECT@> dc:source ?bronURI.
+						<@SUBJECT@> dct:source ?bronURI.
 						GRAPH ?bronGraph {
 							?bronURI dct:source ?linksource;
 								rdfs:label ?bronLabel.
@@ -2163,7 +2164,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 						}
 					}
 					OPTIONAL {
-						<@SUBJECT@> dc:source ?textsource.
+						<@SUBJECT@> dct:source ?textsource.
 					}
 					BIND(
 						IF( BOUND( ?linksource ), ?linksource, ?textsource ) AS ?source						
@@ -2179,7 +2180,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					FILTER NOT EXISTS {
 						<@SUBJECT@> prov:invalidatedAtTime ?stime.
 					}
-					FILTER( ?p != dc:source )
+					FILTER( ?p != dct:source )
 				}
 				GRAPH doc:mastergraph {
 					<@SUBJECT@> rdfs:isDefinedBy ?g.
@@ -2195,7 +2196,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					?p = rdfs:comment
 					|| ?p = skos:definition
 					|| ?p = skos:scopeNote
-					|| ?p = dc:source
+					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
 					|| ?p = skoslex:actor
@@ -2238,7 +2239,7 @@ stage:WeergaveTabelConceptenQuery a elmo:Query;
 					?p = rdfs:comment
 					|| ?p = skos:definition
 					|| ?p = skos:scopeNote
-					|| ?p = dc:source
+					|| ?p = dct:source
 					|| ?p = skos:comment
 					|| ?p = skos:member
 					|| ?p = skoslex:actor
@@ -3856,7 +3857,7 @@ updatestage:TaxExportConcepten a elmo:Production;
 	elmo:contains stage:TaxBeheermenu;
 	elmo:contains stage:TaxFooter;
 	elmo:queryForm stage:TaxSelectDataset;
-#	elmo:contains stage:ExportSubsetBegrippenQueryScene;
+	elmo:contains stage:ExportSubsetBegrippenQueryScene;
 .
 
 stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
@@ -3874,14 +3875,23 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-		CONSTRUCT {
-			?concept ?p ?o .
-			?concept rdf:type skos:Concept .
-		}
+    prefix dct: <http://purl.org/dc/terms/>
+    prefix dc: <http://purl.org/dc/elements/1.1/>
+    
+    CONSTRUCT {
+			?concept ?p ?o.
+               #dct:source ?osource.
+      ?o dct:source ?osource;
+         rdfs:label ?olabel;
+         rdfs:seeAlso ?oseealso.
+ 		}
 		WHERE {
 			GRAPH ?g {
-				?concept ?p ?o .
+				?concept ?p ?o.
 				?concept kddef:status ?status.
+        # OPTIONAL {
+          # ?concept dc:source/dct:source ?source.
+        # }
 				FILTER NOT EXISTS {
 					?concept prov:invalidatedAtTime ?time.
 				}
@@ -3889,6 +3899,7 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 					?status = kdstat:Gevalideerd ||
 					?status = kdstat:Geverifieerd
 				)
+        #FILTER( ?p != dc:source )
 			}
 			GRAPH doc:mastergraph {
 				?concept rdfs:isDefinedBy ?g.
@@ -3897,7 +3908,10 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 			OPTIONAL {
 				GRAPH ?og {
 					?o rdf:type ?otype.
-					?o kddef:status ?ostatus.
+					OPTIONAL {?o kddef:status ?ostatus.}
+          OPTIONAL {?o dct:source ?osource.}
+          OPTIONAL {?o rdfs:label ?olabel.}
+          OPTIONAL {?o rdfs:seeAlso ?oseealso.}
 				}
 				GRAPH doc:mastergraph {
 					?o rdfs:isDefinedBy ?og.
@@ -3914,12 +3928,12 @@ stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
 						|| ?ostatus = kdstat:Geverifieerd
 					)
 				)
+        || !BOUND(?ostatus)
 			)
 		}
 	'''
-.
-
- 
+    
+. 
 #
 #
 #

@@ -31,6 +31,10 @@ stage:ReqModelTotaal a elmo:Representation;
 	''';
 .
 
+# ====================
+#
+# Onduidelijk waar dit voor wordt gebruikt???
+#
 stage:ReqFModelConcepten a elmo:Representation;
   elmo:url-pattern "/query/fmodel/concepten$";
   elmo:appearance elmo:VocabularyAppearance;
@@ -70,264 +74,129 @@ stage:ReqFModelConcepten a elmo:Representation;
   ''';
 .
 <urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument.
-  
+#
+# ====================
 
+#
+# De verschillende representaties
+#  
 stage:ReqModelConcepten a elmo:Representation;
 	elmo:url-pattern "/query/model/concepten$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument, req:Bron, req:WerkAlsBron, req:ExpressieAlsBron
+.
+stage:ReqModelConceptenMeta a elmo:Representation;
+	elmo:url-pattern "/query/model/conceptenmeta$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept, req:Begrippenkader, req:Collectie, req:Metadata, req:Metadata_Temporal, req:Status, req:Dataset
+.
+stage:ReqModelGebeurtenissen a elmo:Representation;
+	elmo:url-pattern "/query/model/gebeurtenissen$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept,req:HandelingAct, req:HandelingAgent, req:HandelingActor, req:HandelingObject, req:HandelingNorm
+.
+stage:ReqModelDatasets a elmo:Representation;
+	elmo:url-pattern "/query/model/datasets$";
+	elmo:appearance elmo:VocabularyAppearance;
+  elmo:query stage:ReqModelQuery;
+	elmo:contains stage:Menu;
+  rdfs:seeAlso req:Dataset, req:Datasetversie, req:Distributie, req:Catalogus
+.
+stage:ReqModelProvenance a elmo:Representation;
+	elmo:url-pattern "/query/model/provenance$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept, req:Begrippenkader, req:Collectie, req:Metadata, req:Metadata_Temporal, req:Status, req:Dataset, req:Datasetversie, req:Distributie, req:CatalogGraph, req:ProvenanceAgent, req:ProvenancePerson, req:ProvenanceOrganization, req:ProvenanceSoftwareAgent
+.
+
+#
+# GENERIEKE OPLOSSING
+#
+
+stage:ReqModelQuery a elmo:Query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		CONSTRUCT {
 		  ?shape ?shapepred ?shapeobj.
 		  ?shape sh:property ?prop.
 		  ?prop ?proppred ?propobj.
+      ?class rdfs:subClassOf ?parentclass.
+      ?class rdf:type owl:Class.
+      ?choice ?choiceprop ?list.
+      ?listitem rdf:first ?refshape.
+      ?listitem rdf:rest ?restlist.
+      ?member skos:inScheme ?scheme.
+      ?member rdfs:label ?memberlabel
 		}
 		WHERE {
 		  {
-			GRAPH <@STAGE@> {
-			  <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape
-			}
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-			  ?shape ?shapepred ?shapeobj.
-			  ?shape sh:property ?prop.
-			  ?prop ?proppred ?propobj
-			  FILTER NOT EXISTS {?prop sh:node ?refshape}
-			}
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape ?shapepred ?shapeobj.
+          OPTIONAL {
+            ?shape sh:property ?prop.
+            ?prop ?proppred ?propobj.
+          }
+          OPTIONAL {
+            ?shape sh:targetClass ?class.
+            ?class rdfs:subClassOf ?parentclass.
+          }
+          FILTER NOT EXISTS {?prop sh:node ?refshape}
+        }
 		  }
 		  UNION
 		  {
-			GRAPH <@STAGE@> {
-			  <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape.
-			  <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?refshape.
-			}
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-			  ?shape sh:property ?prop.
-			  ?prop ?proppred ?propobj.
-			  ?prop sh:node ?refshape
-			}
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape.
+          <@REPRESENTATION@> rdfs:seeAlso ?refshape.
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape sh:property ?prop.
+          ?prop ?proppred ?propobj.
+          ?prop sh:node ?refshape
+        }
 		  }
-		}
-	''';
-.
-
-<urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument
-.
-
-stage:ReqModelConceptenMeta a elmo:Representation;
-	elmo:url-pattern "/query/model/conceptenmeta$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	elmo:query '''
-	PREFIX sh: <http://www.w3.org/ns/shacl#>
-	PREFIX dctype: <http://purl.org/dc/dcmitype/>
-	PREFIX prov: <http://www.w3.org/ns/prov#>
-	PREFIX dct: <http://purl.org/dc/terms/>
-	PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-	prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>
-	CONSTRUCT { 
-		?shape ?shapepred ?shapeobj.
-		?shape sh:targetclass ?type.
-		?shape sh:property ?prop.
-		?prop ?proppred ?propobj.
-		?member skos:inScheme ?scheme.
-		?member rdfs:label ?memberlabel
-	}
-	WHERE {
-		GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-			{
-				{
-					?shape ?shapepred ?shapeobj.
-					OPTIONAL {
-						?shape sh:property ?prop.
-						?prop ?proppred ?propobj.
-					}
-				}
-				UNION
-				{
-					?shape sh:property ?typeprop.
-					?typeprop sh:hasValue ?type.
-					?typeprop sh:path rdf:type.
-					OPTIONAL {
-						?shape sh:property ?typeprop.
-						?shape ?shapepred ?shapeobj.
-						?shape sh:property ?prop.
-						?prop ?proppred ?propobj.
-					}
-				}
-				UNION
-				{
+      UNION
+      {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape.
+          <@REPRESENTATION@> rdfs:seeAlso ?refshape.
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?shape sh:property ?prop.
+          ?prop ?proppred ?propobj.
+          ?prop sh:node ?choice.
+          ?choice ?choiceprop ?list.
+          ?list rdf:rest* ?listitem.
+          ?listitem rdf:first ?refshape.
+          ?listitem rdf:rest ?restlist.
+        }
+      }
+      UNION
+      {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 					?shape sh:property ?memberprop.
 					?memberprop sh:hasValue ?scheme.
 					?memberprop sh:path skos:inScheme.
-				}
-			}
-			FILTER (
-				?shape = req:ConceptMetadata
-				|| ?shape = req:Concept
-				|| ?shape = req:Werkingsgebied
-				|| ?shape = req:ConceptStatus
-			)
-			FILTER(
-				?propobj != thes:broaderGeneric
-				&& ?propobj != thes:broaderPartitive
-				&& ?propobj != thes:narrowerGeneric
-				&& ?propobj != thes:narrowerPartitive
-				&& ?propobj != skos:semanticRelation
-				&& ?propobj != skos:closeMatch
-				&& ?propobj != skos:relatedMatch
-				&& ?propobj != skos:exactMatch
-				&& ?propobj != skos:broadMatch
-				&& ?propobj != skos:narrowMatch
-			)
-		}
-		OPTIONAL {
-			GRAPH <http://bp4mc2.org/id/dataset/imports> {
-				?member skos:inScheme ?scheme.
-				?member skos:prefLabel ?memberlabel
-			}
-		}
-	}
-	''';
-.
-
-stage:ReqModelGebeurtenissen a elmo:Representation;
-	elmo:url-pattern "/query/model/gebeurtenissen$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dctype: <http://purl.org/dc/dcmitype/>
-		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex/>
-		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:targetclass ?type.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				?shape sh:targetClass ?type.
-				?shape sh:property ?prop.
-				?prop ?proppred ?propobj.
-				FILTER (
-					?type = skos:Concept
-				#	||	?type = skos:ConceptScheme
-				#	||	?type = skos:Collection
-				#	||	?type = dctype:Text
-					||	?type = skoslex:Act
-					||	?type = skoslex:Actor
-					||	?type = skoslex:Agent
-					||	?type = skoslex:Object
-					||	?type = skoslex:Norm
-				)
-				FILTER(
-					?propobj != thes:broaderGeneric
-					&& ?propobj != thes:broaderPartitive
-					&& ?propobj != thes:narrowerGeneric
-					&& ?propobj != thes:narrowerPartitive
-					&& ?propobj != skos:semanticRelation
-					&& ?propobj != skos:closeMatch
-					&& ?propobj != skos:relatedMatch
-					&& ?propobj != skos:exactMatch
-					&& ?propobj != skos:broadMatch
-					&& ?propobj != skos:narrowMatch
-				)
-			}
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/imports> {
+          ?member skos:inScheme ?scheme.
+          ?member skos:prefLabel ?memberlabel
+        }
+      }
 		}
 	''';
 .
-
-stage:ReqModelDatasets a elmo:Representation;
-	elmo:url-pattern "/query/model/datasets$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dcat: <http://www.w3.org/ns/dcat#>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:targetclass ?type.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				?shape sh:targetClass ?type.
-				?shape sh:property ?prop.
-				?prop ?proppred ?propobj.
-				FILTER (?type = dcat:Catalog
-					||	?type = dcat:Dataset
-					||	?type = dcat:Distribution
-				)
-			}
-		}
-	''';
-.
-
-stage:ReqModelCatalogus a elmo:Representation;
-	elmo:url-pattern "/query/model/catalogus$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	
-.
-
-stage:ReqModelProvenance a elmo:Representation;
-	elmo:url-pattern "/query/model/provenance$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-		elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dctype: <http://purl.org/dc/dcmitype/>
-		PREFIX req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>
-		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-		PREFIX dcat: <http://www.w3.org/ns/dcat#>
-		PREFIX dct: <http://purl.org/dc/terms/>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				OPTIONAL {
-					?shape sh:property ?prop.
-					?prop ?proppred ?propobj.
-				}
-				FILTER (?shape = req:Concept
-				|| ?shape = req:Collectie
-				|| ?shape = req:ProvenancePerson
-				|| ?shape = req:ProvenanceOrganisation
-				|| ?shape = req:Provenance
-				|| ?shape = req:Catalogus
-				|| ?shape = req:Dataset
-				|| ?shape = req:Distributie
-				|| ?shape = req:ConceptMetadata
-				)
-				FILTER(
-					?propobj != thes:broaderGeneric
-					&& ?propobj != thes:broaderPartitive
-					&& ?propobj != thes:narrowerGeneric
-					&& ?propobj != thes:narrowerPartitive
-					&& ?propobj != skos:semanticRelation
-					&& ?propobj != skos:closeMatch
-					&& ?propobj != skos:relatedMatch
-					&& ?propobj != skos:exactMatch
-					&& ?propobj != skos:broadMatch
-					&& ?propobj != skos:narrowMatch
-					&& ?propobj != skos:member
-					&& ?propobj != dcat:dataset
-					&& ?propobj != dcat:distribution
-					&& ?propobj != dct:relation
-					&& ?propobj != dct:isVersionOf
-				)
-			}
-		}
-	''';
-.
-
 

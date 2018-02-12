@@ -19,6 +19,12 @@ updatestage:clearalldata a elmo:Production;
   elmo:contains stage:ClearContainers
 .
 
+updatestage:clearwaardelijsten a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+  elmo:queryForm stage:DSOv2DummyForm;
+  elmo:contains stage:ClearWaardelijsten
+.
+
 # DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
 stage:DSOv2DummyForm a elmo:Form.
 
@@ -32,7 +38,7 @@ stage:ClearTransactions a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijderen transacties";
 	elmo:query '''
-		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
     
 		DELETE {
 			GRAPH ?g {
@@ -43,7 +49,7 @@ stage:ClearTransactions a elmo:Scene;
 			GRAPH ?g {
 				?s ?p ?o
 			}
-			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+			FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
 		}
   '''
 .
@@ -63,5 +69,14 @@ stage:ClearContainers a elmo:Scene;
 			}
 			FILTER regex( ?g, "http://localhost:8080/catalogus/dsov2/" )
 		}
+	'''
+.
+
+stage:ClearWaardelijsten a elmo:Scene;
+  elmo:index "2";
+  rdfs:label "Verwijderen waardelijsten";
+  elmo:query '''
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    CLEAR GRAPH def:Waardelijsten
 	'''
 .

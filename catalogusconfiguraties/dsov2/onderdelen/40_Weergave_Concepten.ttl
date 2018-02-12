@@ -68,6 +68,7 @@ stage:DSOv2ConceptQuery a elmo:Query;
 		prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
 		prefix dct: <http://purl.org/dc/terms/>
 		prefix dcmiperiod: <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     
 		CONSTRUCT {
       <@IDSUBJECT@> ?p ?o;
@@ -86,14 +87,9 @@ stage:DSOv2ConceptQuery a elmo:Query;
 		WHERE {
       GRAPH ?graph {
         <@IDSUBJECT@> ?p ?o;
-          wdrs:describedby ?doc.
-          
-        FILTER(
-          ?p = skos:definition
-          || ?p = rdfs:label
-        )
+          foaf:isPrimaryTopicOf ?doc.
       }
-      FILTER regex( ?graph, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
         ?doc adms:status ?status.
         OPTIONAL {

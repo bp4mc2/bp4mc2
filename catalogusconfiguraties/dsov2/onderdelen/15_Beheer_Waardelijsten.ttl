@@ -1,0 +1,195 @@
+#
+#
+#
+# BEHEER WAARDELIJSTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+# Aanmaken waardelijst
+updatestage:createwaardelijst a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:queryForm stage:CreateWaardelijstForm;
+	elmo:contains stage:CreateClassificerendScene;
+	elmo:contains stage:CreateCategoriserendScene;
+	elmo:contains stage:CreateRefererendScene;
+  elmo:contains stage:InformationModelsList;
+  elmo:contains stage:TypeWaardelijstenList;
+.
+
+stage:CreateWaardelijstForm a elmo:Form;
+	rdfs:label "Maak waardelijst aan";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "name";
+      rdfs:label "Naam van de waardelijst"@nl;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "1";
+  ];
+  elmo:fragment [
+      elmo:applies-to "type";
+      rdfs:label "Selecteer het type van de waardelijst"@nl;
+      elmo:valuesFrom stage:TypeWaardelijstenList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:applies-to "model";
+      rdfs:label "Selecteer het informatiemodel horende bij de waardelijst"@nl;
+      elmo:valuesFrom stage:InformationModelsList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+stage:InformationModelsList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix owl: 			<http://www.w3.org/2002/07/owl#>
+    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
+    
+    CONSTRUCT {
+      ?model rdfs:label ?model_label
+    }
+    WHERE {
+      GRAPH ?g {
+        ?model rdf:type owl:Ontology;
+          rdfs:label ?model_label
+        .
+      }
+      FILTER regex(?g, "^http://catalogus.test.kadaster.nl/def/")
+    }
+  ''';
+.
+
+stage:TypeWaardelijstenList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+    
+    CONSTRUCT {
+      bp4mc2:Classificerend rdfs:label "Classificerend".
+      bp4mc2:Categoriserend rdfs:label "Categoriserend".
+      bp4mc2:Refererend rdfs:label "Refererend".
+    }
+    WHERE {}
+  ''';
+.
+
+#
+# SCENES
+#
+
+# Scenes voor het creëren van een waardelijst
+stage:CreateClassificerendScene a elmo:Scene;
+  rdfs:label "Creëren classificerende waardelijst";
+  elmo:query '''
+    prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos:		<http://www.w3.org/2004/02/skos/core#>
+    
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+    prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
+
+    INSERT {
+      GRAPH def:Waardelijsten {
+        ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
+          shxl:stereotype shxl:ValueList;
+          sh:property [
+            sh:path [ sh:inversePath skos:member ];
+            sh:hasValue ?collection
+          ]
+        .
+      }
+    }
+    WHERE {
+      BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/collection/@NAME@") AS ?collection )  
+      FILTER( <@TYPE@> = bp4mc2:Classificerend )
+    }
+  '''
+.
+
+stage:CreateCategoriserendScene a elmo:Scene;
+  rdfs:label "Creëren categoriserende waardelijst";
+  elmo:query '''
+    prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix dcat:    <http://www.w3.org/ns/dcat#>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos:		<http://www.w3.org/2004/02/skos/core#>
+    
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+    prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
+
+    INSERT {
+      GRAPH def:Waardelijsten {
+        ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
+          shxl:stereotype shxl:ValueList;
+          sh:property [
+            sh:path skos:inScheme;
+            sh:hasValue ?scheme
+          ]
+        .
+        
+        ?scheme a skos:ConceptScheme, dcat:Dataset;
+          rdfs:label "@NAME@"
+        .
+      }
+    }
+    WHERE {
+      BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
+      BIND( IRI("http://catalogus.test.kadaster.nl/id/dataset/@NAME@") AS ?scheme )  
+      FILTER( <@TYPE@> = bp4mc2:Categoriserend )
+    }
+  '''
+.
+
+stage:CreateRefererendScene a elmo:Scene;
+  rdfs:label "Creëren refererende waardelijst";
+  elmo:query '''
+    prefix bp4mc2:  <http://bp4mc2.org/elmo/def/>
+    prefix def:     <http://catalogus.test.kadaster.nl/def/>
+    prefix rdf: 		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix rdfs:		<http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos:		<http://www.w3.org/2004/02/skos/core#>
+    
+    prefix sh: 		  <http://www.w3.org/ns/shacl#>
+    prefix shxl:    <http://bp4mc2.org/def/sh-xl#>
+
+    INSERT {
+      GRAPH def:Waardelijsten {
+        ?waardelijst a sh:NodeShape;
+          rdfs:label "@NAME@"@nl;
+          shxl:stereotype shxl:Valuelist;
+          sh:property [
+            sh:path rdf:type;
+            sh:hasValue ?class
+          ]
+        .
+        ?class a rdfs:Class.
+      }
+    }
+    WHERE {
+      BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
+      BIND( IRI("@MODEL@#@NAME@") AS ?class ) 
+      FILTER( <@TYPE@> = bp4mc2:Refererend )
+    }
+  '''
+.

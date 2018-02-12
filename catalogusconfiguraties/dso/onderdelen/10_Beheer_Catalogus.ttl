@@ -1,0 +1,251 @@
+#
+#
+#
+# BEHEER CATALOGUS
+#
+#
+#
+
+#
+# CONTAINERS
+#
+
+# Updatecontainer Catalogus
+container:catalogusupdate a elmo:Container;
+	elmo:contains stage:DSOBeheermenu;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:representation elmo:UpdateRepresentation;
+	rdfs:label "Update catalogus-metadata via Turtle (.ttl)";
+	elmo:query stage:DSOCatalogusUpdateScene;
+.
+
+#
+# SCENES
+#
+
+# Algoritme:
+#
+# - Verwijder voor de zekerheid de @CURRENTMOMENT@ GRAPH
+# - Vul mastergraph aan met nieuwe versie
+# - Voeg metadata toe aan nieuwe conceptengraph, activiteitengraph en actorengraph
+# - Voeg een prov:Entity-triple toe aan de subjecten die dat moeten krijgen (Catalog)
+# - Hash genereren, zodat we kunnen vergelijken of er iets gewijzigd is aan een concept
+# - Update de aanpasdatum van de Catalogus, CatalogRecord en Dataset
+# - Voeg in de nieuwe GRAPH de concepten toe die een andere hash dan de hash in de mastergraph hebben (d.w.z., die gewijzigd zijn)
+# - Voeg voor de gewijzigde concepten in de oude GRAPH wat metadata toe (prov:invalidatedAtTime)
+# - Verwijder de concepten uit de mastergraph die voorkomen in de nieuwe GRAPH (d.w.z. gewijzigd zijn)
+# - Voeg een verwijzing toe in de mastergraph naar de nieuwe GRAPH voor de concepten die in de nieuwe GRAPH staan
+# - Verwijder de (tijdelijke) graphs die gebruikt zijn door de updatecontainers
+
+# Updatequery Catalogus
+stage:DSOCatalogusUpdateScene a elmo:Scene;
+	rdfs:label "Postquery inladen Catalogus";
+	elmo:index "1";
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix dctype: <http://purl.org/dc/dcmitype/>
+		prefix bp4mc2: <http://bp4mc2.org/elmo/def/>
+		prefix foaf: <http://xmlns.com/foaf/0.1/>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+		prefix container: <http://localhost:8080/catalogus/dso/container/>
+		prefix doc: <http://localhost:8080/catalogus/dso/concepten/doc/>
+		prefix loc: <http://localhost:8080/catalogus/dso/id/>
+		prefix versiongraph: <http://localhost:8080/catalogus/dso/catalogus/doc/@CURRENTMOMENT@>
+		prefix usergraph: <http://localhost:8080/catalogus/dso/>
+		prefix dataset: <http://localhost:8080/catalogus/dso/id/dataset/>
+		prefix agent: <http://localhost:8080/catalogus/dso/id/agent/>
+		prefix activity: <http://localhost:8080/catalogus/dso/id/activity/@CURRENTMOMENT@>
+		prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+		prefix iso: <http://id.loc.gov/vocabulary/iso639-1/>
+		prefix dcat: <http://www.w3.org/ns/dcat#>
+		prefix vcard: <http://www.w3.org/2006/vcard/ns#>
+		
+		CLEAR GRAPH versiongraph:version
+		
+		INSERT {
+			GRAPH container:catalogusupdate {
+				?s rdfs:label ?spreflabel.
+			}
+		} WHERE {
+			GRAPH container:catalogusupdate {
+				?s dct:title ?spreflabel.
+				FILTER NOT EXISTS {
+					?s rdfs:label ?slabel.
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH doc:mastergraph {
+				doc:mastergraph rdf:type void:Dataset.
+				doc:mastergraph rdfs:label "Concepten".
+				versiongraph:version dct:isVersionOf doc:mastergraph.
+				dataset:concepten rdf:type skos:ConceptScheme.
+				dataset:concepten rdfs:label "Conceptschema".
+			}
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				dataset:concepten rdfs:isDefinedBy versiongraph:version.
+				versiongraph:version rdfs:label "Catalogusinformatie - DSO-programma (publicatiedatum @CURRENTMOMENT@)".
+				versiongraph:version prov:wasGeneratedBy activity:Update.
+				versiongraph:version rdf:type prov:Entity.
+				versiongraph:version prov:generatedAtTime "@CURRENTMOMENT@".
+				activity:Update rdf:type prov:Activity.
+				activity:Update rdfs:label "Update catalogus @CURRENTMOMENT@".
+				activity:Update prov:startedAtTime "@CURRENTMOMENT@".
+				activity:Update prov:wasAssociatedWith agent:tomcatUser.
+
+			}
+		}
+		
+		INSERT {
+			GRAPH usergraph:agents {
+				agent:tomcatUser rdf:type prov:Agent.
+				agent:tomcatUser rdfs:label "Tomcat User".
+				agent:tomcatUser foaf:givenName "Tomcat User".
+				agent:tomcatUser foaf:mbox "tomcat@user.org".
+				agent:tomcatUser prov:actedOnBehalfOf "Apache".	
+			}
+		}
+		
+		INSERT {
+			GRAPH container:catalogusupdate {
+				?s rdf:type prov:Entity.
+			}
+		}
+		WHERE {
+			GRAPH container:catalogusupdate {
+				?s rdf:type dcat:Catalog.
+			}
+		}
+
+		INSERT {
+			GRAPH container:catalogusupdate {
+				?s bp4mc2:signature ?sig.
+			}
+		}
+		WHERE {
+			SELECT DISTINCT ?s bif:md5(sql:group_concat(concat(?p,'=',?o),';')) as ?sig
+			WHERE {
+				GRAPH container:catalogusupdate {
+					SELECT ?s ?p ?o
+					WHERE {
+						?s ?p ?o.
+						?s rdf:type ?type.
+            FILTER
+            (
+              ?type = dcat:Catalog
+              || ?type = dctype:Text
+              || ?type = foaf:Image
+              || ?type = vcard:Organization
+            )
+					}
+					ORDER BY ?s ?p ?o
+				}
+            }
+		}
+		
+		INSERT {
+			GRAPH versiongraph:version {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH container:catalogusupdate {
+				?s rdf:type ?type;
+			    ?p ?o;
+			    bp4mc2:signature ?sig
+        .
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
+			}
+			FILTER NOT EXISTS {
+				GRAPH doc:mastergraph {
+					?s bp4mc2:signature ?sig
+				}
+			}
+		}
+		
+		INSERT {
+			GRAPH ?g {
+				?s prov:invalidatedAtTime "@CURRENTMOMENT@"
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s rdfs:isDefinedBy ?g
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
+			}
+			FILTER NOT EXISTS {
+				GRAPH ?g {
+					?s prov:invalidatedAtTime ?time.
+				}
+			}
+		}
+		
+		DELETE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+		}
+		WHERE {
+			GRAPH doc:mastergraph {
+				?s ?p ?o
+			}
+			GRAPH versiongraph:version {
+				?s rdf:type ?type.
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
+			}
+		}
+
+		INSERT {
+			GRAPH doc:mastergraph {
+				?s rdf:type ?type.
+				?s rdfs:isDefinedBy versiongraph:version.
+				?s bp4mc2:signature ?sig
+			}
+		}
+		WHERE {
+			GRAPH versiongraph:version {
+        ?s rdf:type ?type.
+        FILTER
+        (
+          ?type = dcat:Catalog
+          || ?type = dctype:Text
+          || ?type = foaf:Image
+          || ?type = vcard:Organization
+        )
+        ?s bp4mc2:signature ?sig.
+      }
+		}
+		
+		CLEAR GRAPH container:catalogusupdate
+	''';
+.

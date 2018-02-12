@@ -20,7 +20,8 @@
 #                           #
 # ------------------------- #
 
-# Deze declaraties komen in het informatiemodel terecht en vallen daarmee buiten het historiemodel.
+# Deze declaraties horen bij het informatiemodel en vallen daarmee buiten het historiemodel.
+# Waardelijsten worden wel los van het informatiemodel beheerd en komen dan ook in een aparte graph terecht.
 
 # Classificerend
 wl:BuildingStatusValueList a sh:NodeShape;
@@ -28,21 +29,25 @@ wl:BuildingStatusValueList a sh:NodeShape;
   shxl:stereotype shxl:ValueList;
 	sh:property [
 		sh:path [ sh:inversePath skos:member ];
-		sh:hasValue collection:BuildingStatuses
+		sh:hasValue collection:BuildingStatus
 	]
 .
 
 # Categoriserend
-wl:MunicipalitiesValueList a sh:NodeShape;
-	rdfs:label "The list of Dutch municipalities"@en;
+wl:ConceptStatusValueList a sh:NodeShape;
+	rdfs:label "The list of concept statuses"@en;
+  shxl:stereotype shxl:Valuelist;
 	sh:property [
 		sh:path skos:inScheme;
-		sh:hasValue scheme:Municipalities
+		sh:hasValue scheme:ConceptStatus
 	]
+.
+scheme:ConceptStatus a skos:ConceptScheme, dcat:Dataset;
+  rdfs:label "ConceptStatus"
 .
 
 # Refererend
-wl:Countries a sh:NodeShape;
+wl:CountryValueList a sh:NodeShape;
 	rdfs:label "The list of countries"@en;
   shxl:stereotype shxl:Valuelist;
 	sh:property [
@@ -61,22 +66,39 @@ class:Country a rdfs:Class.
 # Deze waarden komen in de Catalogus zelf terecht en worden onderdeel van het historiemodel.
 
 # Classificerend
-collection:BuildingStatuses a skos:Collection;
+collection:BuildingStatus a skos:Collection;
+  rdfs:label "BuildingStatus";
+  skos:prefLabel "BuildingStatus";
   skos:member concept:Demolished;
 	skos:member concept:InUse
 .
-concept:Demolished a skos:Concept.
-concept:InUse a skos:Concept.
+concept:Demolished a skos:Concept;
+  rdfs:label "Demolished"@en;
+  skos:prefLabel "Demolished"
+.
+concept:InUse a skos:Concept;
+  rdfs:label "InUse"@en;
+  skos:prefLabel "InUse"
+.
 
 # Categoriserend
-scheme:Municipalities a skos:ConceptScheme, dcat:Dataset.
-concept:Amsterdam a skosConcept;
-  skos:inScheme scheme:Municipalities
+concept:UnderDevelopment a skos:Concept;
+  rdfs:label "UnderDevelopment";
+  skos:prefLabel "UnderDevelopment";
+  skos:inScheme scheme:ConceptStatus
 .
-concept:Apeldoorn a skosConcept;
-  skos:inScheme scheme:Municipalities
+concept:Completed a skos:Concept;
+  rdfs:label "Completed";
+  skos:prefLabel "Completed";
+  skos:inScheme scheme:ConceptStatus
 .
 
 # Refererend
-country:Netherlands a class:Country.
-country:Belgium a class:Country.
+country:Netherlands a class:Country;
+  rdfs:label "Netherlands"@en;
+  skos:prefLabel "Netherlands"
+.
+country:Belgium a class:Country;
+  rdfs:label "Belgium"@en;
+  skos:prefLabel "Belgium"
+.
