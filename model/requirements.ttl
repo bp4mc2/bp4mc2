@@ -20,6 +20,10 @@
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 @prefix frbr: <http://purl.org/vocab/frbr/core#>.
 
+# [MB] ALGEMENE OPMERKINGEN
+# - Engels en Nederlands wordt door elkaar gebruikt in de beschrijving
+# - Het zou m.i. beter zijn als we alles in het Nederlands doen, en OOK in het engels
+
 #---------------------
 # IMPORT
 #---------------------
@@ -33,6 +37,11 @@ skoslex:Agent rdfs:subClassOf skoslex:Actor.
 #Overgenomen uit frbr
 frbr:Work rdfs:subClassOf frbr:Endeavour.
 frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#Overgenomen uit prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
 
 #---------------------
 # CONCEPTEN
@@ -74,6 +83,8 @@ req:Concept_domain a sh:PropertyShape;
   rdfs:label "has a domain";
   sh:name "skos:inScheme";
   sh:path skos:inScheme;
+  sh:minCount 1;
+  sh:maxCount 1;
   sh:class skos:ConceptScheme;
   rdfs:comment "Een begrip is gedefinieerd in een bepaald domein";
   skos:example "Basisregistratie Adressen en Gebouwen (BAG)"
@@ -86,7 +97,7 @@ req:Concept_dctsource a sh:PropertyShape;
   rdfs:label "has source";
   sh:name "dcterms:source";
   sh:path dcterms:source;
-  rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als ‘resource’ op het web vindbaar is.";
+  rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als 'resource' op het web vindbaar is.";
   sh:node [ sh:xone (req:Bron req:Brondocument)];
   skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"
 .
@@ -100,6 +111,7 @@ req:Concept_dcsource a sh:PropertyShape;
 req:Concept_label a sh:PropertyShape;
   rdfs:label "has label";
   sh:name "rdfs:label";
+  sh:minCount 1;
   rdfs:comment "Een begrip heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
   sh:path rdfs:label;
   skos:example "Perceel"
@@ -107,6 +119,8 @@ req:Concept_label a sh:PropertyShape;
 req:Concept_prefLabel a sh:PropertyShape;
   rdfs:label "has preferred label";
   sh:name "skos:prefLabel";
+  sh:minCount 1;
+  sh:maxCount 1;
   rdfs:comment "Een begrip heeft een voor mensen leesbare naam die in documentatie kan worden gebruikt. Dit label kan meertalig zijn, aangegeven door @nl of @en";
   sh:path skos:prefLabel;
   skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
@@ -255,10 +269,11 @@ req:Collectie_label a sh:PropertyShape;
 .
 req:Collectie_heeftLid a sh:PropertyShape;
   rdfs:label "heeft lid";
+  sh:name "skos:member";
   sh:path skos:member;
   sh:class skos:Concept;
-  rdfs:comment "Een begrip is onderdeel van een collectie met vergelijkbare begrippen.";
-  skos:example ''' ‘Erfpacht’ is onderdeel van de collectie ‘ZakelijkeRechten’. ''';
+  rdfs:comment "Een collectie kan één of meerdere begrippen omvatten, die eventueel afkomstig kunnen zijn uit meerdere conceptschema's";
+  skos:example "de collectie 'ZakelijkeRechten' bevat het begrip 'Erfpacht'";
 .
 req:Collectie_provenance a sh:PropertyShape;
   sh:path foaf:isPrimaryTopicOf;
@@ -289,7 +304,7 @@ req:Begrippenkader_hasTopConcept a sh:PropertyShape;
   sh:name "skos:hasTopConcept";
   sh:class skos:Concept;
   rdfs:comment "Een concepten schema heeft 1 begrip dat het schema zelf aanduidt.";
-  skos:example "Het schema met als label ‘Regelgeving’ heeft als topconcept 'Regelgeving'."
+  skos:example "Het schema met als label 'Regelgeving' heeft als topconcept 'Regelgeving'."
 .
 req:Begrippenkader_type a sh:PropertyShape;
   rdfs:label "rol van dataset";
@@ -320,6 +335,7 @@ req:CatalogGraph a sh:NodeShape;
 .
 req:CatalogGraph_generatedAtTime a sh:PropertyShape;
   rdfs:label "generated at time";
+  rdfs:comment "De datum en tijd van de administratieve handeling wordt bewaard. Daardoor is altijd terug te halen wat op welk tijdstip aan informatie bekend was.";
   sh:path prov:generatedAtTime;
   sh:name "prov:generatedAtTime";
 .
@@ -332,66 +348,48 @@ req:CatalogGraph_changeNote a sh:PropertyShape;
 .
 req:CatalogGraph_attributedTo a sh:PropertyShape;
   rdfs:label "was attributed to";
+  rdfs:comment "De persoon of organisatie die de wijziging heeft (laten) doorvoeren";
   sh:name "prov:wasAttributedTo";
   sh:path prov:wasAttributedTo;
-  sh:node req:ProvenancePerson;
+  sh:class prov:Agent;
+  skos:example "Het Kadaster";
+.
+
+req:ProvenanceAgent a sh:NodeShape;
+  rdfs:label "Agent";
+  rdfs:comment "An agent is something that bears some form of responsibility for an activity taking place, for the existence of an entity, or for another agent's activity. ";
+  sh:name "prov:Agent";
+  sh:targetClass prov:Agent;
+  sh:property req:ProvenanceAgent_OnBehalfOf;
+.
+req:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
+  rdfs:label "acted on behalf of";
+  rdfs:comment "Een persoon of organisatie kan opereren namens een andere persoon of organisatie";
+  skos:example "overheid:Rijswaterstaat";
+  sh:name "prov:actedOnBehalfOf";
+  sh:path prov:actedOnBehalfOf;
+  sh:class prov:Organization;
 .
 
 req:ProvenancePerson a sh:NodeShape;
   rdfs:label "ProvenancePerson";
+  rdfs:comment "A human person";
   sh:name "prov:Person";
   sh:targetClass prov:Person;
-  rdfs:subClassOf prov:Agent;
-  sh:property req:ProvenancePerson_Agent;
-  sh:property req:ProvenancePerson_OnBehalfOf;
 .
-req:ProvenancePerson_Agent a sh:PropertyShape;
-  rdfs:label "Agent";
-  sh:name "prov:agent";
-  sh:path prov:agent;
-.
-req:ProvenancePerson_OnBehalfOf a sh:PropertyShape;
-  rdfs:label "acted on behalf of";
-  sh:name "prov:actedOnBehalfOf";
-  sh:path prov:actedOnBehalfOf;
-  sh:node req:ProvenanceOrganisation;
-.
+
 req:ProvenanceSoftwareAgent a sh:NodeShape;
   rdfs:label "ProvenanceSoftwareAgent";
+  rdfs:comment "A software agent is running software.";
   sh:name "prov:SoftwareAgent";
   sh:targetClass prov:SoftwareAgent;
-  rdfs:subClassOf prov:Agent;
-  sh:property req:ProvenanceSoftwareAgent_Agent;
-  sh:property req:ProvenanceSoftwareAgent_OnBehalfOf;
 .
-req:ProvenanceSoftwareAgent_Agent a sh:PropertyShape;
-  rdfs:label "Agent";
-  sh:name "prov:agent";
-  sh:path prov:agent;
-.
-req:ProvenanceSoftwareAgent_OnBehalfOf a sh:PropertyShape;
-  rdfs:label "acted on behalf of";
-  sh:name "prov:actedOnBehalfOf";
-  sh:path prov:actedOnBehalfOf;
-  sh:node req:ProvenanceOrganisation;
-.
-req:ProvenanceOrganisation a sh:NodeShape;
-  rdfs:label "Organisation";
-  sh:name "prov:Organisation";
-  sh:targetClass prov:Organisation;
-  sh:property req:ProvenanceOrganisation_Agent;
-  sh:property req:ProvenanceOrganisation_OnBehalfOf;
-.
-req:ProvenanceOrganisation_Agent a sh:PropertyShape;
-  rdfs:label "Agent";
-  sh:name "prov:agent";
-  sh:path prov:agent;
-.
-req:ProvenanceOrganisation_OnBehalfOf a sh:PropertyShape;
-  rdfs:label "acted on behalf of";
-  sh:name "prov:actedOnBehalfOf";
-  sh:path prov:actedOnBehalfOf;
-  sh:class prov:Organisation;
+
+req:ProvenanceOrganization a sh:NodeShape;
+  rdfs:label "Organization";
+  rdfs:comment "An organization is a social or legal institution such as a company, society, etc.";
+  sh:name "prov:Organization";
+  sh:targetClass prov:Organization;
 .
 
 #---------------------
@@ -403,17 +401,15 @@ req:Metadata a sh:NodeShape;
   sh:name "prov:Entity";
   sh:targetClass prov:Entity;
   sh:property req:Metadata_status;
-  sh:property req:Metadata_GeneratedAtTime;
-  sh:property req:Metadata_InvalidatedAtTime;
   sh:property req:Metadata_isValidDuring;
   sh:property req:Metadata_isIssued;
-  sh:property req:Metadata_location;
+  sh:property req:Metadata_changeNote;
 .
 req:Metadata_status a sh:PropertyShape;
   rdfs:label "heeft status";
   sh:name "adms:status";
   sh:path adms:status;
-  sh:node req:ConceptStatus;
+  sh:node req:Status;
   rdfs:comment "Een versie heeft een administratieve status.";
   skos:example "Proposed";
 #[IT] skos:example "Completed";
@@ -479,7 +475,8 @@ req:Status a sh:NodeShape;
 # Act, Object, Actor, Agent
 #---------------------
 req:HandelingAct a sh:NodeShape;
-  rdfs:label "Handeling Act";
+  rdfs:label "Act";
+  rdfs:comment "An act is a legal construct representing a set of activities, performed by an Actor and with respect to some Object.";
   sh:targetClass skoslex:Act;
   sh:name "skoslex:Act";
   sh:property req:Handeling_name;
@@ -489,19 +486,22 @@ req:HandelingAct a sh:NodeShape;
   sh:property req:Handeling_refersTo;
 .
 req:HandelingActor a sh:NodeShape;
-  rdfs:label "Handeling Actor";
+  rdfs:label "Actor";
+  rdfs:comment "An actor is some person (individual, group or organization) that performs some Act";
   sh:targetClass skoslex:Actor;
   sh:name "skoslex:Actor";
   sh:property req:Handeling_name;
 .
 req:HandelingAgent a sh:NodeShape;
-  rdfs:label "Handeling Agent";
+  rdfs:label "Agent";
+  rdfs:comment "An agent is some person (individual, group or organization) involved in some act, without actually performing the act.";
   sh:targetClass skoslex:Agent;
   sh:name "skoslex:Agent";
   sh:property req:Handeling_name;
 .
 req:HandelingObject a sh:NodeShape;
-  rdfs:label "Handeling Object";
+  rdfs:label "Object";
+  rdfs:comment "An object is some thing (not an actor) that is created, used or changed during some Act";
   sh:targetClass skoslex:Object;
   sh:name "skoslex:Object";
   sh:property req:Handeling_name;
@@ -511,7 +511,7 @@ req:Handeling_name a sh:PropertyShape;
   sh:path rdfs:label;
 .
 req:Handeling_actor a sh:PropertyShape;
-  rdfs:label "actor";
+  rdfs:label "is performed by";
   sh:name "skoslex:actor";
   rdfs:comment "actor relates an Act with the Actor that performs the act.";
   sh:path skoslex:actor;
@@ -543,7 +543,8 @@ req:Handeling_refersTo a sh:PropertyShape;
 # Norm
 #---------------------
 req:HandelingNorm a sh:NodeShape;
-  rdfs:label "Handeling Norm";
+  rdfs:label "Norm";
+  rdfs:comment "A norm effects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A norm represents the set of rules that apply to an Act.";
   sh:targetClass skoslex:Norm;
   sh:name "skoslex:Norm";
   sh:property req:Handeling_name;
@@ -551,6 +552,8 @@ req:HandelingNorm a sh:NodeShape;
 .
 req:Handeling_affects a sh:PropertyShape;
   rdfs:label "affects";
+  rdfs:comment "Affects relates a norm with the Act that is affected by the norm. Such an act is restricted by the rules identified by the norm.";
+  sh:name "skoslex:affects";
   sh:path skoslex:affects;
   sh:class skoslex:Act;
 .
@@ -612,66 +615,65 @@ req:Brondocument_label a sh:PropertyShape;
 # Dataset
 #---------------------
 req:Dataset rdf:type sh:NodeShape;
-    rdfs:label "Dataset";
+  rdfs:label "Dataset";
   sh:name "dcat:Dataset";
-    sh:targetClass dcat:Dataset;
-    sh:property req:Dataset_name;
-    sh:property req:Dataset_dateIssued;
-    sh:property req:Dataset_language;
-    sh:property req:Dataset_description;
+  sh:targetClass dcat:Dataset;
+  sh:property req:Dataset_name;
+  sh:property req:Dataset_dateIssued;
+  sh:property req:Dataset_language;
+  sh:property req:Dataset_description;
+  sh:property req:Dataset_provenance;
 .
 
+req:Dataset_provenance a sh:PropertyShape;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+.
 req:Dataset_name rdf:type sh:PropertyShape;
-    rdfs:label "naam";
-    rdfs:label "name"@nen;
+  rdfs:label "naam";
   sh:name "dcterms:title";
-    rdfs:comment "De dataset heeft een naam";
-    skos:example ''''Omgevingswet','BAL','BRK', etc'''';
-    sh:path dcterms:title
+  rdfs:comment "De dataset heeft een naam";
+  skos:example ''''Omgevingswet','BAL','BRK', etc'''';
+  sh:path dcterms:title
 .
 req:Dataset_dateIssued rdf:type sh:PropertyShape;
-    rdfs:label "publicatiedatum";
+  rdfs:label "publicatiedatum";
   sh:name "dcterms:issued";
-    rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus.";
-    skos:example '''1/10/2017''';
-    sh:path dcterms:issued
+  rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus.";
+  skos:example '''1/10/2017''';
+  sh:path dcterms:issued
 .
 req:Dataset_language rdf:type sh:PropertyShape;
-    rdfs:label "taal";
+  rdfs:label "taal";
   sh:name "dcterms:language";
-    rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
-    skos:example "@nl";
-    sh:path dcterms:language
+  rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)";
+  skos:example "@nl";
+  sh:path dcterms:language
 .
 req:Dataset_description rdf:type sh:PropertyShape;
-    rdfs:label "beschrijving";
+  rdfs:label "beschrijving";
   sh:name "dcterms:description";
-    rdfs:comment "De dataset heeft een duidelijke beschrijving";
-    skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
-    sh:path dcterms:description
+  rdfs:comment "De dataset heeft een duidelijke beschrijving";
+  skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
+  sh:path dcterms:description
 .
 
-#---------------------
-# Datasetversie
-# Datum: 7-11-2017
-# Door: Ingrid Thurlings
-#---------------------
-
 req:Datasetversie rdf:type sh:NodeShape;
-    rdfs:label "Dataset";
-  sh:name "dcat:Dataset";
-    sh:targetClass dcat:Dataset;
+  rdfs:label "Datasetversie";
+  sh:name "dcat:Dataset (versie)";
+  sh:property req:Datasetversie_rol; 
   sh:property req:Datasetversie_version; 
   sh:property req:Datasetversie_versionNotes;	
   sh:property req:Datasetversie_isDerivedFrom;
   sh:property req:Datasetversie_distribution;
   sh:property req:Datasetversie_versionOf;
-  sh:property req:Datasetversie_provenance;
+  sh:property req:Datasetversie_describedBy;
+  sh:property req:Datasetversie_werkingsgebied;
 .
 
-req:Datasetversie_provenance a sh:PropertyShape;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:class prov:Entity;
+req:Datasetversie_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:hasValue dcat:Dataset;
 .
 req:Datasetversie_version rdf:type sh:PropertyShape;
   rdfs:label "versie";
@@ -690,6 +692,7 @@ req:Datasetversie_versionNotes rdf:type sh:PropertyShape;
 req:Datasetversie_distribution a sh:PropertyShape;
   rdfs:label "distributie";
   sh:path dcat:distribution;
+  sh:name "dcat:distribution";
   sh:class dcat:Distribution;
   rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen.";
   skos:example "Digitale Kadastrale Kaart download service.";
@@ -697,30 +700,39 @@ req:Datasetversie_distribution a sh:PropertyShape;
 req:Datasetversie_versionOf a sh:PropertyShape;
   rdfs:label "versie van";
   sh:path dcterms:isVersionOf;
-  rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset.";
+  sh:name "dcterms:isVersionOf";
+  rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset. A versioned datasets is derived from the general dataset and a productmodel is derived from an informationmodel";
   sh:node req:Dataset;
   sh:maxCount 1;
   skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
 .
 req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
-    rdfs:label "werkingsgebied";
+    rdfs:label "geografische afbakening";
     rdfs:comment "Het gebied waar de dataset over gaat";
     sh:class dcterms:Location;
-    skos:example "'de exclusieve economische zone' en 'op in Nederland geregistreerde vaartuigen en luchtvaartuigen die zich buiten Nederland en de exclusieve economische zone bevinden'";
-#[IT] skos:example "gemeente Apeldoorn";    
-    sh:path dcterms:spatial
+    skos:example "gemeente Apeldoorn";
+    sh:path dcterms:spatial;
+    sh:name "dcterms:spatial"
 .
 req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
   rdfs:label "gerelateerd aan";
   rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel.";
   sh:path dcterms:relation;
+  sh:name "dcterms:relation";
   sh:class dcat:Dataset;
 .
 req:Datasetversie_describedBy rdf:type sh:PropertyShape;
   rdfs:label "beschreven in";
   rdfs:comment "De data in een dataset is beschreven in een informatiemodel.";
   sh:path wdrs:describedBy;
+  sh:name "wdrs:describedBy";
+  sh:class adms:Asset;
   skos:example '''kadaster.nl/schemas/imkad''';
+.
+
+req:Datasetversie_locatie a sh:NodeShape;
+  rdfs:label "Locatie";
+  sh:name "dcterms:Location";
 .
 
 #---------------------
@@ -793,32 +805,6 @@ req:Catalogus_dateIssued rdf:type sh:PropertyShape;
     skos:example "1/10/2016";
     sh:path dcterms:issued
 .
-req:Catalogus_dateModified rdf:type sh:PropertyShape;
-    rdfs:label "datum wijziging";
-    rdfs:comment "De datum waarop iets in de catalogus zelf is veranderd, wordt bewaard, bijvoorbeeld een eigenschap van de catalogus of een nieuwe dataset";
-    skos:example "1/10/2016";
-    sh:path dcterms:modified
-.
-req:Catalogus_homepage rdf:type sh:PropertyShape;
-    rdfs:label "homepage";
-    rdfs:comment "De catalogus als portaal is vindbaar op een homepage.";
-    skos:example '''https://www.digitaalstelselomgevingswet.nl/catalogus''';
-# [IT] skos:example '''http://catalogus.kadaster.nl/''';     
-    sh:path foaf:homepage
-.
-req:Catalogus_licence rdf:type sh:PropertyShape;
-    rdfs:label "licentie";
-    rdfs:comment "Een licentie is van toepassing op de catalogus zelf. Dit kan een andere licentie zijn als de licentie voor distributies van datasets";
-    skos:example "uri-beerware";
-#[IT] skos:example "Creative Commons Naamsvermelding 4.0 licentie";    
-    sh:path dcterms:license
-.
-req:Catalogus_rights rdf:type sh:PropertyShape;
-    rdfs:label "rechten";
-    rdfs:comment "Een beschrijving van de rechten die van toepassing is op de catalogus. Dit kunnen andere rechten zijn als die voor distributies van datasets";
-    skos:example "Proclaimer: De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud.";
-    sh:path dcterms:rights
-.
 req:Catalogus_language rdf:type sh:PropertyShape;
     rdfs:label "taal";
   sh:name "dcterms:language";
@@ -826,9 +812,34 @@ req:Catalogus_language rdf:type sh:PropertyShape;
     skos:example "@nl";
     sh:path dcterms:language
 .
-
-
-
+req:Catalogus_dateModified rdf:type sh:PropertyShape;
+    rdfs:label "datum wijziging";
+    rdfs:comment "De datum waarop iets in de catalogus zelf is veranderd, wordt bewaard, bijvoorbeeld een eigenschap van de catalogus of een nieuwe dataset";
+    skos:example "1/10/2016";
+    sh:name "dcterms:modified";
+    sh:path dcterms:modified
+.
+req:Catalogus_homepage rdf:type sh:PropertyShape;
+    rdfs:label "homepage";
+    rdfs:comment "De catalogus als portaal is vindbaar op een homepage.";
+    skos:example "http://catalogus.kadaster.nl/";
+    sh:name "foaf:homepage";
+    sh:path foaf:homepage
+.
+req:Catalogus_licence rdf:type sh:PropertyShape;
+    rdfs:label "licentie";
+    rdfs:comment "Een licentie is van toepassing op de catalogus zelf. Dit kan een andere licentie zijn als de licentie voor distributies van datasets";
+    skos:example "Creative Commons Naamsvermelding 4.0 licentie";
+    sh:name "dcterms:license";
+    sh:path dcterms:license
+.
+req:Catalogus_rights rdf:type sh:PropertyShape;
+    rdfs:label "rechten";
+    rdfs:comment "Een beschrijving van de rechten die van toepassing is op de catalogus. Dit kunnen andere rechten zijn als die voor distributies van datasets";
+    skos:example "Proclaimer: De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud.";
+    sh:name "dcterms:rights";
+    sh:path dcterms:rights
+.
 
 #---------------------
 # Distributie
