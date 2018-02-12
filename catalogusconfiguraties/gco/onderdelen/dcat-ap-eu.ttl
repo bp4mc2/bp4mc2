@@ -5,6 +5,65 @@
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://localhost:8080/catalogus/gco/doc#>.
+
+#
+# De inhoud van het document
+#
+doc:dcat-ap-eu elmo:data (
+'''# DCAT AP EU v1.1
+This document described the DCAT Application Profile for data portals in Europe as specified by the EU JoinUp initiative. This document is generated from Linked Data sources (mainly SHACL and the original DCAT ontology) to facilitate automatic translation and comparision between DCAT profiles.
+
+The original source document can be found at: [https://joinup.ec.europa.eu/release/dcat-ap-v11](https://joinup.ec.europa.eu/release/dcat-ap-v11)
+
+The following vocabularies are used:
+'''
+[elmo:contains stage:dcat-ap-eu-prefixes]
+[html:img "dcat-ap-eu.png"]
+"## Class description"
+[elmo:contains stage:dcat-ap-eu-lijst_classes]
+"## Property description"
+[elmo:contains stage:dcat-ap-eu-lijst_properties]
+)
+.
+
+#
+# Prefixes
+#
+stage:dcat-ap-eu-prefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-prefixes
+.
+
+#
+# Tonen van de pagina
+#
+stage:dcat-ap-eu-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/dcat-ap-eu(|.md)$";
+  elmo:index "0";
+  elmo:contains stage:dcat-ap-eu-prefixes;
+	elmo:contains stage:dcat-ap-eu-lijst_classes;
+	elmo:contains stage:dcat-ap-eu-lijst_properties;
+  elmo:query '''
+    prefix doc: <http://localhost:8080/catalogus/gco/doc#>
+    construct {
+      doc:dcat-ap-eu elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:dcat-ap-eu elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
 
 stage:dcat-ap-eu	a	elmo:Representation;
 	elmo:url-pattern	"/query/dcat-ap-eu(\\.(xml|ttl|json))?$";
