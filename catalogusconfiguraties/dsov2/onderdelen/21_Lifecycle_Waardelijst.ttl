@@ -361,13 +361,15 @@ stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
     }
     WHERE {
       GRAPH def:Waardelijsten {
-        <@WAARDELIJST@> sh:property [ sh:hasValue ?scheme ].
+        <@WAARDELIJST@> sh:property [ 
+          sh:path skos:inScheme;
+          sh:hasValue ?scheme 
+        ].
       }
       
       GRAPH ?conceptGraph {
-        ?concept foaf:isPrimaryTopicOf ?conceptDoc.
-        
-        ?concept skos:inScheme ?scheme.
+        ?concept foaf:isPrimaryTopicOf ?conceptDoc;
+                 skos:inScheme ?scheme.
         
         ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
         FILTER NOT EXISTS {

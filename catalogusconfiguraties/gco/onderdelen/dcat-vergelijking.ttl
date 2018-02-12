@@ -6,6 +6,60 @@
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://localhost:8080/catalogus/gco/doc#>.
+
+#
+# De inhoud van het document
+#
+doc:dcat-home elmo:data (
+'''# DCAT profiles
+This document gives a comparision and description of the different DCAT profiles that exists and are in use within the Netherlands. This document also includes a comparision with the ISO19115 metadata profile for geospatial datasets.
+
+The following profiles are compared:
+
+|Profile|Original documentation
+|-------|-----------------------
+|[DCAT W3c](/dcat/dcat)|[http://www.w3.org/TR/vocab-dcat/](http://www.w3.org/TR/vocab-dcat/)
+|[DCAT AP EU v1.1](/dcat/dcat-ap-eu)|[https://joinup.ec.europa.eu/release/dcat-ap-v11](https://joinup.ec.europa.eu/release/dcat-ap-v11)
+|[GeoDCAT AP v1.0.1](/dcat/geodcat-ap-eu)|[https://joinup.ec.europa.eu/release/geodcat-ap/v101](https://joinup.ec.europa.eu/release/geodcat-ap/v101)
+|[DCAT AP NL v0.6](/dcat-dcat-ap-nl)|[2014-11-13 DCAT-NL IPM Datasets 0.6.pdf](https://data.overheid.nl/sites/default/files/2014-11-13%20DCAT-NL%20IPM%20Datasets%200.6%20kopie.pdf)
+
+## Comparison
+### Classes
+'''
+[elmo:contains stage:dcat-vergelijking_classes]
+"### Properties"
+[elmo:contains stage:dcat-vergelijking_properties]
+)
+.
+
+#
+# Tonen van de pagina
+#
+stage:dcat-home-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/dcat-home(|.md)";
+  elmo:index "0";
+	elmo:contains stage:dcat-vergelijking_classes;
+	elmo:contains stage:dcat-vergelijking_properties;
+  elmo:query '''
+    prefix doc: <http://localhost:8080/catalogus/gco/doc#>
+    construct {
+      doc:dcat-home elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:dcat-home elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
 
 stage:dcat-vergelijking	a	elmo:Representation;
 	elmo:url-pattern	"/query/dcat-vergelijking$";

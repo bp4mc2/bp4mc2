@@ -1,3 +1,4 @@
+@prefix dcat-model: <http://bp4mc2.org/def/dcat-model/>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -5,7 +6,154 @@
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+@prefix doc: <http://localhost:8080/catalogus/gco/doc#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 
+#
+# De inhoud van het document
+#
+doc:dcat elmo:data (
+'''# DCAT W3c basis
+This document described the Data Catalog Vocabulary (DCAT) as described by The W3c. This document is generated from Linked Data sources (mainly SHACL and the original DCAT ontology) to facilitate automatic translation and comparision between DCAT profiles.
+
+The original source document can be found at: [http://www.w3.org/TR/vocab-dcat](http://www.w3.org/TR/vocab-dcat)
+
+The following vocabularies are used:
+'''
+[elmo:contains stage:dcat-model-prefixes]
+[html:img "dcat-model.png"]
+"## Class: Catalog"
+[elmo:contains stage:dcat-model_catalog]
+"## Class: Catalog record"
+[elmo:contains stage:dcat-model_catalogrecord]
+"## Class: Dataset"
+[elmo:contains stage:dcat-model_dataset]
+"## Class: Distribution"
+[elmo:contains stage:dcat-model_distribution]
+)
+.
+
+#
+# Statische data
+#
+stage:Ontology_foaf a owl:Ontology;
+  sh:prefix "foaf";
+  sh:namespace "http://xmlns.com/foaf/0.1/";
+  foaf:isPrimaryTopicOf <http://xmlns.com/foaf/spec/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_skos a owl:Ontology;
+  sh:prefix "skos";
+  sh:namespace "http://www.w3.org/2004/02/skos/core#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/skos-reference/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_rdfs a owl:Ontology;
+  sh:prefix "rdfs";
+  sh:namespace "http://www.w3.org/2000/01/rdf-schema#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/rdf-schema/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_dct a owl:Ontology;
+  sh:prefix "dct";
+  sh:namespace "http://dublincore.org/documents/dcmi-terms/";
+  foaf:isPrimaryTopicOf <http://www.dublincore.org/documents/dcmi-terms/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_dcat a owl:Ontology;
+  sh:prefix "dcat";
+  sh:namespace "http://www.w3.org/ns/dcat#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-dcat/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_adms a owl:Ontology;
+  sh:prefix "adms";
+  sh:namespace "http://www.w3.org/ns/adms#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-adms/>;
+  rdfs:seeAlso stage:dcat-ap-eu-prefixes
+.
+
+#
+# Tabellen
+#
+stage:dcat-model_catalog a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:Catalog
+.
+stage:dcat-model_catalogrecord a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:CatalogRecord
+.
+stage:dcat-model_dataset a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:Dataset
+.
+stage:dcat-model_distribution a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:Distribution
+.
+
+#
+# Prefixes
+#
+stage:dcat-model-prefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-prefixes
+.
+stage:dcat-model-prefixes a elmo:Query;
+  elmo:query '''
+    select ?prefix ?uri ?website
+    where {
+      graph <@STAGE@> {
+        ?ontology a owl:Ontology.
+        ?ontology sh:prefix ?prefix.
+        ?ontology sh:namespace ?uri.
+        OPTIONAL {?ontology foaf:isPrimaryTopicOf ?website}
+        ?ontology rdfs:seeAlso <@REPRESENTATION@>
+      }
+    }
+    order by ?prefix
+  ''';
+.
+
+#
+# Tonen van de pagina
+#
+stage:dcat-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/dcat(|.md)$";
+  elmo:index "0";
+  elmo:contains stage:dcat-model-prefixes;
+  elmo:contains stage:dcat-model_catalog;
+  elmo:contains stage:dcat-model_catalogrecord;
+  elmo:contains stage:dcat-model_dataset;
+  elmo:contains stage:dcat-model_distribution;
+  elmo:query '''
+    prefix doc: <http://localhost:8080/catalogus/gco/doc#>
+    construct {
+      doc:dcat elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:dcat elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
+
+#
+# Tonen van de vocabulaire
+#
 stage:dcat-model	a	elmo:Representation;
 	elmo:url-pattern	"/query/dcat(\\.(xml|ttl|json))?$";
 	elmo:contains stage:Menu;
@@ -51,4 +199,97 @@ stage:dcat-model	a	elmo:Representation;
 			}
 		}
 	''';
+.
+
+#
+# Query voor ophalen van de spec
+#
+stage:dcat-model-table a elmo:Query;
+  elmo:query '''
+    prefix stage: <http://localhost:8080/catalogus/gco/stage#>
+    select ?name ?vocabulair ?definition
+    where {
+      GRAPH <@STAGE@> {
+        <@REPRESENTATION@> stage:include ?nodeshape
+      }
+      {
+        select (if(isLiteral(?idx),?idx,"B") as ?index) ?nodeshape ?pshape ?name ?vocabulair ?definition
+        where {
+          {
+            GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+              ?nodeshape a sh:NodeShape.
+              ?nodeshape sh:property ?pshape.
+              ?pshape rdfs:label ?name.
+              ?pshape sh:name ?vocabulair.
+              OPTIONAL {
+                ?pshape sh:class ?class
+                BIND ("C" as ?idx)
+              }
+              OPTIONAL {
+                ?pshape sh:node ?node
+                BIND ("C" as ?idx)
+              }
+            }
+            OPTIONAL {
+              GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+                ?pshape sh:path ?prop
+              }
+              GRAPH <http://bp4mc2.org/id/dataset/imports> {
+                ?prop rdfs:comment ?definition.
+                filter (lang(?definition)="en")
+              }
+            }
+          }
+          UNION
+          {
+            GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+              ?nodeshape a sh:NodeShape.
+              ?nodeshape rdfs:label ?name.
+              ?nodeshape sh:name ?vocabulair.
+              BIND ("A" as ?idx)
+            }
+            OPTIONAL {
+              GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+                ?nodeshape sh:targetClass ?tclass
+              }
+              GRAPH <http://bp4mc2.org/id/dataset/imports> {
+                ?tclass rdfs:comment ?definition.
+                filter (lang(?definition)="en")
+              }
+            }
+          }
+        }
+      }
+      FILTER NOT EXISTS {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> stage:excludeReference ?refshape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+          ?pshape sh:node ?refshape
+        }
+      }
+      FILTER EXISTS {
+        {
+          GRAPH <@STAGE@> {
+            <@REPRESENTATION@> stage:includeReference ?refshape
+          }
+          GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+            ?pshape sh:node ?refshape
+          }
+        }
+        UNION
+        {
+          GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+            ?nodeshape a sh:NodeShape.
+          }
+          FILTER NOT EXISTS {
+            GRAPH <@STAGE@> {
+              <@REPRESENTATION@> stage:includeReference ?refshape
+            }
+          }
+        }
+      }
+    }
+    order by ?nodeshape ?index ?name ?vocabulair
+  '''
 .
