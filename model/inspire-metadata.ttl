@@ -698,16 +698,227 @@ inspire-shape:ResourceType a sh:PropertyShape;
   inspire-meta:xpath "hierarchyLevel";
   skos:example "dataset";
 .
+inspire-shape:ResourceLocation a sh:PropertyShape;
+  dct:subject inspire-concept:ResourceLocation;
+  sh:name "location";
+  sh:severity sh:Warning;
+  sh:datatype xsd:anyURI; #URL
+  inspire-meta:isoref "397. linkage";
+  inspire-meta:xpath "distributionInfo/*/transferOptions/*/onLine/*/linkage";
+  skos:example "http://edo.jrc.ec.europa.eu/chm/ows.php?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities";
+  skos:example "http://www.eea.europa.eu/data-and-maps/data/wise-river-basin-districts-rbds-1";
+  rdfs:comment '''A Resource Locator could be described, moreover, by other additional elements as a Title, a Description and a Function. In that case, the Title and the Description shall be free text and the Function shall be filled by the CI_OnLineFunctionCode (ISO 19115 code list).
+Examples of Resource Locator with these additional elements:
+- JRC EDO (European Drought Observatory) - Drought Indexes WMS
+  - Linkage: http://edo.jrc.ec.europa.eu/chm/ows.php?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities
+- Title: JRC EDO (European Drought Observatory) - Drought Indexes WMS
+- Description: WMS delivering maps of drought indexes provided by the European Drought Observatory (EDO).
+- Function: information
+- WISE River basin districts (RBDs)
+  - Linkage: http://www.eea.europa.eu/data-and-maps/data/wise-river-basin-districts-rbds-1
+  - Title: WISE River basin districts (RBDs)
+  - Description: Version 1.4 (06/2011) - River Basin Districts (RBDs) and/or their subunits (RBDSUs) are the main units for the management of river basins and have been delineated by Member States under Article 3 and updated by reporting to Article 13 of the Water Framework Directive.
+  - Function: information''';
+.
+inspire-shape:UniqueResourceIdentifier a sh:PropertyShape;
+  dct:subject inspire-concept:UniqueResourceIdentifier;
+  sh:name "identifier";
+  sh:severity sh:Violation; #Only for dataset and dataset series
+  sh:datatype xsd:anyURI #205. MD_Identifier, domain = URI
+  sh:minCount 1; #Only for dataset and dataset series
+  inspire-meta:isoref "365. identifier";
+  inspire-meta:xpath "identificationInfo[1]/*/citation/*/identifier";
+  skos:example "The Unique resource identifier semantically consisting of namespace: https://example.org/ and identifier: ab749859 and is provided together in element code: https://example.org/ab749859";
+  rdfs:comment "The unique resource identifier is needed to provide a queryable information when following data-service-coupling (see also 4.1.2.4). Therefore it is necessary to have the identifier itself together with the namespace in element code. The use of RS_Identifier (with a separate element codeSpace) is not suitable here";
+.
+inspire-shape:CoupledResource a sh:PropertyShape;
+  dct:subject inspire-concept:CoupledResource;
+  sh:name "coupledResource";
+  sh:severity sh:Warning #Not applicable for datasets and dataset series, mandatory if linkage to datasets on which the service operates are available
+  sh:node inspire-shape:Resource # 36. MD_DataIdentification, unique resource identifier or locator (URL) of the MD_DataIdentification object
+  inspire-meta:isoref "9 of table C.1. operatesOn";
+  inspire-meta:xpath "identificationInfo[1]/*/operatesOn";
+  skos:example "http://vap-xgeodev.jrc.ec.europa.eu/geonetwork/srv/eng/csw?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetRecordById&ID=f9ee6623-cf4c-11e1-9105-0017085a97ab&OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&ELEMENTSETNAME=full#lakes";
+  rdfs:comment "The implementation of this element by reference means that the xlink:href element are pointing to a metadatarecord that contains a MD_DataIdentification object. The reference to the MD_DataIdentification object is done using the xpointer reference using the #-sign. The example above points to #lakes which is the ID of this object. Check example on xml encoding in section 0. The Unique Resource Identifier for the can be explicilty defined for the target dataset using the optional uuidref.attribute.";
+.
+inspire-shape:ResourceLanguage a sh:PropertyShape;
+  dct:subject inspire-concept:ResourceLanguage;
+  sh:name "language";
+  sh:severity sh:Warning # Mandatory if the resource includes textual information, not applicable to services
+  sh:datatype xsd:string; # LanguageCode (ISO/TS 19139)
+  inspire-meta:isoref "39. language";
+  inspire-meta:xpath "identificationInfo[1]/*/language";
+  skos:example "eng";
+.
+inspire-shape:TopicCategory a sh:PropertyShape;
+  dct:subject inspire-concept:TopicCategory;
+  sh:name "topicCategory";
+  sh:severity sh:Violation # Only for dataset and dataset series, not applicable to services
+  sh:class skos:Concept; # MD_TopicCategory
+  sh:node inspire-shape:TopicCategories;
+  inspire-meta:isoref "41. topicCategory";
+  inspire-meta:xpath "identificationInfo[1]/*/topicCategory";
+  skos:example "climatologyMeteorologyAtmosphere";
+  rdfs:comment "The topic categories defined in Part D 2 of [Regulation 1205/2008] are derived directly from the topic categories defined in MD_TopicCategoryCode (B.5.27 of ISO 19115)";
+.
+inspire-shape:SpatialDataServiceType a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDataServiceType;
+  sh:name "SDS type";
+  sh:severity sh:Violation # Only for services, not applicable to datasets and dataset series
+  sh:class skos:Concept; # GenericName
+  sh:node inspire-shape:SpatialDataServiceTypes;
+  inspire-meta:isoref "1 of table C.1. serviceType";
+  inspire-meta:xpath "identificationInfo[1]/*/serviceType";
+  skos:example "view";
+.
+inspire-shape:KeywordValue a sh:PropertyShape;
+  dct:subject inspire-concept:KeywordValue;
+  sh:name "keyword value";
+  sh:severity sh:Violation;
+  sh:datatype xsd:string;
+  sh:node inspire-shape:FreeText;
+  sh:minCount 1;
+  inspire-meta:isoref "53. keyword";
+  inspire-meta:xpath "identificationInfo[1]/*/descriptiveKeywords/*/keyword";
+  skos:example "Atmospheric conditions (INSPIRE Spatial Data Theme)";
+  skos:example "humanCatalogueViewer (spatial data service subcategory)";
+  skos:example "water springs (AGROVOC)";
+  skos:example "rain water (GEMET Concepts)";
+  rdfs:comment "Each instance of ISO 19115 keyword may originate from a controlled vocabulary described through the thesaurusName property of the instance of descriptiveKeywords to which the keyword pertains";
+.
+inspire-shape:KeywordOriginatingControlledVocabulary a sh:PropertyShape;
+  dct:subject inspire-concept:KeywordOriginatingControlledVocabulary;
+  sh:name "originating controlled vocabulary";
+  sh:severity sh:Warning; # Mandatory if keyword is from controlled vocabulary
+  sh:node inspire-shape:Citation;
+  sh:nodeKind sh:BlankNode;
+  inspire-meta:isoref "55. thesaurusName";
+  inspire-meta:xpath "identificationInfo[1]/*/descriptiveKeywords/*/thesaurusName";
+  skos:example "Identification for a keyword originating from GEMET- INSPIRE themes:
+- title: GEMET - INSPIRE themes, version 1.0
+- date:
+  - dateType: publication
+  - date: 2008-06-01";
+  skos:example "Identification for a keyword originating from GEMET - Concepts:
+- title: GEMET - Concepts, version 2.4
+- date:
+  - dateType: publication
+  - date: 2010-01-13";
+  skos:example "Identification for a keyword originating from AGROVOC:
+- title: AGROVOC
+- date:
+    - dateType: publication
+    - date: 2008-04-14";
+.
+inspire-shape:GeographicBoundingBox a sh:PropertyShape;
+  dct:subject inspire-concept:GeographicBoundingBox;
+  sh:name "geographicBoundingBox";
+  sh:severity sh:Violation # Mandatory for datasets and spatial dataset series, Conditional for spatial services: mandatory for services with an explicit geographic extent
+  sh:node inspire-shape inspire-shape:BoundingBox;
+  sh:nodeKindg sh:BlankNode;
+  inspire-meta:isoref "344. westBoundLongitude";
+  inspire-meta:isoref "345. eastBoundLongitude";
+  inspire-meta:isoref "346. southBoundLatitude";
+  inspire-meta:isoref "347. northBoundLatitude";
+  inspire-meta:xpath "identificationInfo[1]/*/extent/*/geographicElement/*/westBoundLongitude";
+  inspire-meta:xpath "identificationInfo[1]/*/extent/*/geographicElement/*/eastBoundLongitude";
+  inspire-meta:xpath "identificationInfo[1]/*/extent/*/geographicElement/*/southBoundLatitude";
+  inspire-meta:xpath "identificationInfo[1]/*/extent/*/geographicElement/*/northBoundLatitude";
+.
+
+
 #
-# Domeinen (waardelijsten en attribuuttypen)
+# Complex attributes
+#
+inspire-shape:Citation a sh:NodeShape;
+  sh:name "Citation";
+  sh:property [
+    sh:name "title";
+    sh:datatype xsd:string;
+    sh:node inspire-shape:FreeText;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "referenceDate";
+    sh:node inspire-shape:Date;
+    sh:minCount 1;
+    sh:maxCount 1;
+    sh:nodeKind sh:BlankNode
+  ];
+.
+inspire-shape:Date a sh:NodeShape;
+  sh:name "Date";
+  sh:property [
+    sh:name "dateType";
+    sh:in ("creation" "publication" "revision");
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "date";
+    sh:datatype xsd:date;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ]
+.
+inspire-shape:BoundingBox a sh:NodeShape;
+  sh:name "BoundingBox";
+  sh:property [
+    sh:name "westBoundLongitude";
+    sh:datatype xsd:decimal;
+    sh:minCount 1;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "eastBoundLongitudeBoundLongitude";
+    sh:datatype xsd:decimal;
+    sh:minCount 1;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "southBoundLatitudeBoundLatitude";
+    sh:datatype xsd:decimal;
+    sh:minCount 1;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "northBoundLatitude";
+    sh:datatype xsd:decimal;
+    sh:minCount 1;
+    sh:maxCount 1
+  ];
+.
+
+#
+# Domain: Data types
 #
 inspire-shape:FreeText a sh:Nodeshape;
   sh:name "Free text";
 .
+
+#
+# Waardelijsten
+#
 inspire-shape:ResourceTypes a sh:NodeShape;
   sh:name "CodeList (see annex B.5.25 of ISO 19115)";
   sh:property [
     sh:inversePath [sh:path skos:member];
     sh:hasValue inspire-collection:ResourceTypes
+  ]
+.
+inspire-shape:TopicCategories a sh:NodeShape;
+  sh:name "Enumeration (See B.5.27 of ISO 19115 or Part D 2 of [Regulation 1205/2008])";
+  sh:property [
+    sh:inversePath [sh:path sko:member];
+    sh:hasValue inspire-collection:TopicCategories
+  ]
+.
+inspire-shape:SpatialDataServiceTypes a sh:NodeShape;
+  sh:name "Code list. See Part D 3 of [Regulation 1205/2008]";
+  sh:property [
+    sh:inversePath [sh:path sko:member];
+    sh:hasValue inspire-collection:SpatialDataServiceTypes
   ]
 .
