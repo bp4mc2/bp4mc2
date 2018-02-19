@@ -19,6 +19,7 @@
 @prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 @prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
 
 # [MB] ALGEMENE OPMERKINGEN
 # - Engels en Nederlands wordt door elkaar gebruikt in de beschrijving
@@ -42,6 +43,12 @@ frbr:Expression rdfs:subClassOf frbr:Endeavour.
 prov:Person rdfs:subClassOf prov:Agent.
 prov:Organization rdfs:subClassOf prov:Agent.
 prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#Overgenomen uit foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#Overgenomen uit org
+org:Organization rdfs:subClassOf foaf:Organization.
 
 #---------------------
 # CONCEPTEN
@@ -361,14 +368,22 @@ req:ProvenanceAgent a sh:NodeShape;
   sh:name "prov:Agent";
   sh:targetClass prov:Agent;
   sh:property req:ProvenanceAgent_OnBehalfOf;
+  sh:property req:ProvenanceAgent_knownAgent
 .
 req:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
   rdfs:label "acted on behalf of";
   rdfs:comment "Een persoon of organisatie kan opereren namens een andere persoon of organisatie";
-  skos:example "overheid:Rijswaterstaat";
+  skos:example "overheid:Rijkswaterstaat";
   sh:name "prov:actedOnBehalfOf";
   sh:path prov:actedOnBehalfOf;
   sh:class prov:Organization;
+.
+req:ProvenanceAgent_knownAgent a sh:PropertyShape;
+  rdfs:label "is identified as";
+  rdfs:comment "Een persoon of organisatie is bekend";
+  skos:example "overheid:Rijkswaterstaat";
+  sh:path rdf:type;
+  sh:hasValue foaf:Agent;
 .
 
 req:ProvenancePerson a sh:NodeShape;
@@ -390,6 +405,31 @@ req:ProvenanceOrganization a sh:NodeShape;
   rdfs:comment "An organization is a social or legal institution such as a company, society, etc.";
   sh:name "prov:Organization";
   sh:targetClass prov:Organization;
+.
+
+# Extra info rondom organizations
+req:FoafAgent a sh:NodeShape;
+  rdfs:label "Agent";
+  sh:name "foaf:Agent";
+  sh:targetClass foaf:Agent;
+.
+req:FoafOrganization a sh:NodeShape;
+  rdfs:label "Organization";
+  sh:name "foaf:Organization";
+  sh:targetClass foaf:Organization
+.
+req:OrgOrganization a sh:NodeShape;
+  rdfs:label "Organization";
+  sh:name "org:Organization";
+  sh:targetClass org:Organization;
+  sh:property req:OrgOrganization_oin
+.
+req:OrgOrganization_oin a sh:PropertyShape;
+  rdfs:label "has oin";
+  sh:name "org:identifier";
+  sh:path org:identifier;
+  sh:minCount 1;
+  sh:maxCount 1
 .
 
 #---------------------
@@ -623,6 +663,7 @@ req:Dataset rdf:type sh:NodeShape;
   sh:property req:Dataset_language;
   sh:property req:Dataset_description;
   sh:property req:Dataset_provenance;
+  sh:property req:Dataset_publisher;
 .
 
 req:Dataset_provenance a sh:PropertyShape;
@@ -656,6 +697,14 @@ req:Dataset_description rdf:type sh:PropertyShape;
   rdfs:comment "De dataset heeft een duidelijke beschrijving";
   skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
   sh:path dcterms:description
+.
+req:Dataset_publisher a sh:PropertyShape;
+  rdfs:label "publicist";
+  sh:name "dcterms:publisher";
+  rdfs:comment "Het is bekend door wie een dataset wordt gepubliceerd. Deze organisatie of persoon heeft toestemming om deze handeling uit te voeren";
+  skos:example "overheid:Rijkswaterstaat";
+  sh:path dcterms:publisher;
+  sh:class foaf:Agent;
 .
 
 req:Datasetversie rdf:type sh:NodeShape;

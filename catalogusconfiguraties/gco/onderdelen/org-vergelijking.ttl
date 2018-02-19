@@ -1,0 +1,189 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://localhost:8080/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://localhost:8080/catalogus/gco/doc#>.
+@prefix org-shape: <http://bp4mc2.org/def/org/>.
+
+#
+# Data
+#
+org-shape:organization a sh:NodeShape;
+  rdfs:label "organization";
+  sh:name "organization";
+.
+org-shape:agent a sh:NodeShape;
+  rdfs:label "agent";
+  sh:name "agent";
+.
+org-shape:person a sh:NodeShape;
+  rdfs:label "person";
+  sh:name "person";
+.
+org-shape:softwareAgent a sh:NodeShape;
+  rdfs:label "softwareAgent";
+  sh:name "software agent";
+.
+
+org-shape:foaf-agent a sh:NodeShape;
+  sh:name "foaf:Agent";
+  sh:targetClass foaf:Agent;
+.
+
+stage:org-vergelijking	a	elmo:Representation;
+	elmo:url-pattern	"/query/org-vergelijking$";
+	elmo:contains stage:Menu;
+	elmo:contains stage:org-vergelijking_classes;
+	elmo:contains stage:org-vergelijking_classesdef;
+.
+
+stage:org-vergelijking_classes a elmo:Part;
+	elmo:index "1";
+	elmo:appearance elmo:ShortTableAppearance;
+  rdfs:seeAlso org-shape:agent, org-shape:organization, org-shape:person, org-shape:softwareAgent;
+	elmo:fragment [
+		elmo:applies-to "data";
+		rdfs:label "label";
+    elmo:name "SUBJECT"
+	];
+	elmo:fragment [
+		elmo:applies-to "sdct";
+		rdfs:label "DCTERMS";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:fragment [
+		elmo:applies-to "sprov";
+		rdfs:label "PROV";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:fragment [
+		elmo:applies-to "sfoaf";
+		rdfs:label "FOAF";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:fragment [
+		elmo:applies-to "sorg";
+		rdfs:label "ORG";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select ?data ?data_label ?sdct ?sdct_label ?sprov ?sprov_label ?sfoaf ?sfoaf_label ?sorg ?sorg_label
+		where {
+      graph <@STAGE@> {
+        <@REPRESENTATION@> rdfs:seeAlso ?data.
+        ?data rdfs:label ?data_label
+        BIND (concat("^",?data_label,"$") as ?filter)
+      }
+      graph <http://bp4mc2.org/id/dataset/imports> {
+        {
+          ?sdct rdfs:isDefinedBy <http://purl.org/dc/terms/>.
+          ?sdct a rdfs:Class.
+          ?sdct rdfs:label ?sdct_label
+          FILTER regex(?sdct_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sprov rdfs:isDefinedBy <http://www.w3.org/ns/prov-o#>.
+          ?sprov a owl:Class.
+          ?sprov rdfs:label ?sprov_label
+          FILTER regex(?sprov_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sfoaf rdfs:isDefinedBy <http://xmlns.com/foaf/0.1/>.
+          ?sfoaf a rdfs:Class.
+          ?sfoaf rdfs:label ?sfoaf_label
+          FILTER regex(?sfoaf_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sorg rdfs:isDefinedBy <http://www.w3.org/ns/org>.
+          ?sorg a rdfs:Class.
+          ?sorg rdfs:label ?sorg_label
+          FILTER regex(?sorg_label,?filter,"i")
+        }
+      }
+    }
+    order by ?data
+	''';
+.
+
+stage:org-vergelijking_classesdef a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:ShortTableAppearance;
+  rdfs:seeAlso org-shape:agent, org-shape:organization, org-shape:person, org-shape:softwareAgent;
+	elmo:fragment [
+		elmo:applies-to "data";
+		rdfs:label "label";
+    elmo:name "SUBJECT"
+	];
+	elmo:fragment [
+		elmo:applies-to "sdctdef";
+		rdfs:label "DCTERMS";
+	];
+	elmo:fragment [
+		elmo:applies-to "sprovdef";
+		rdfs:label "PROV";
+	];
+	elmo:fragment [
+		elmo:applies-to "sfoafdef";
+		rdfs:label "FOAF";
+	];
+	elmo:fragment [
+		elmo:applies-to "sorgdef";
+    elmo:appearance elmo:MarkdownAppearance;
+		rdfs:label "ORG";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+    prefix prov: <http://www.w3.org/ns/prov#>
+		select ?data ?data_label ?sdctdef ?sprovdef ?sfoafdef ?sorgdef
+		where {
+      graph <@STAGE@> {
+        <@REPRESENTATION@> rdfs:seeAlso ?data.
+        ?data rdfs:label ?data_label
+        BIND (concat("^",?data_label,"$") as ?filter)
+      }
+      graph <http://bp4mc2.org/id/dataset/imports> {
+        {
+          ?sdct rdfs:isDefinedBy <http://purl.org/dc/terms/>.
+          ?sdct a rdfs:Class.
+          ?sdct rdfs:comment ?sdctdef.
+          ?sdct rdfs:label ?sdct_label
+          FILTER regex(?sdct_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sprov rdfs:isDefinedBy <http://www.w3.org/ns/prov-o#>.
+          ?sprov a owl:Class.
+          ?sprov prov:definition ?sprovdef.
+          ?sprov rdfs:label ?sprov_label
+          FILTER regex(?sprov_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sfoaf rdfs:isDefinedBy <http://xmlns.com/foaf/0.1/>.
+          ?sfoaf rdfs:comment ?sfoafdef.
+          ?sfoaf a rdfs:Class.
+          ?sfoaf rdfs:label ?sfoaf_label
+          FILTER regex(?sfoaf_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sorg rdfs:isDefinedBy <http://www.w3.org/ns/org>.
+          ?sorg rdfs:comment ?sorgdef.
+          ?sorg a rdfs:Class.
+          ?sorg rdfs:label ?sorg_label
+          FILTER regex(?sorg_label,?filter,"i")
+          FILTER (lang(?sorgdef)="en")
+        }
+      }
+    }
+    order by ?data
+	''';
+.

@@ -465,83 +465,83 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
 
         ?period dcmiperiod:start "@GELDIGHEID@".
         
-        ?conceptDoc ?conceptP ?conceptO;
+        ?resourceDoc ?resourceP ?resourceO;
           adms:status adms-status:Completed;
           dcterms:temporal ?period
         .
         
-        ?prevConceptDoc ?prevConceptP ?prevConceptO;
-          dcterms:temporal ?prevConceptTemporal
+        ?prevResourceDoc ?prevResourceP ?prevResourceO;
+          dcterms:temporal ?prevResourceTemporal
         .
           
-        ?prevConceptTemporal dcmiperiod:start ?prevConceptStart;
+        ?prevResourceTemporal dcmiperiod:start ?prevResourceStart;
           dcmiperiod:end "@GELDIGHEID@"
         .
       }
     }
     WHERE {
       GRAPH def:Waardelijsten {
-        <@WAARDELIJST@> sh:property [ sh:hasValue ?class ].
+        <@WAARDELIJST@> sh:property [ 
+          sh:path rdf:type;
+          sh:hasValue ?class
+        ].
       }
-      GRAPH ?conceptGraph {
-        ?concept foaf:isPrimaryTopicOf ?conceptDoc.
+      GRAPH ?resourceGraph {
+        ?resource foaf:isPrimaryTopicOf ?resourceDoc;
+                  rdf:type ?class
+        .
         
-        ?concept rdf:type ?class.
-        
-        ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
+        ?resourceGraph prov:generatedAtTime ?resourceGraphTime.
         FILTER NOT EXISTS {
-          GRAPH ?newerConceptGraph {
-          #dit zullen geen skos:concepts blijven maar dienen wel zo worden aangeleverd
-            ?concept rdf:type skos:Concept.
-            ?newerConceptGraph prov:generatedAtTime ?newerConceptGraphTime.
-            FILTER( ?newerConceptGraphTime > ?conceptGraphTime )
+          GRAPH ?newerResourceGraph {
+            ?resource rdf:type ?class.
+            ?newerResourceGraph prov:generatedAtTime ?newerResourceGraphTime.
+            FILTER( ?newerResourceGraphTime > ?resourceGraphTime )
           }
         }
       }
-      GRAPH ?conceptDocGraph {
-        ?conceptDoc ?conceptP ?conceptO;
-          adms:status ?conceptStatus
+      GRAPH ?resourceDocGraph {
+        ?resourceDoc ?resourceP ?resourceO;
+                     adms:status ?resourceStatus
         .
         FILTER(
-          ?conceptP != adms:status
-          && ?conceptP != prov:wasGeneratedBy
+          ?resourceP != adms:status
+          && ?resourceP != prov:wasGeneratedBy
         )
         FILTER( 
-          ?conceptStatus != adms-status:Deprecated
-          && ?conceptStatus != adms-status:Withdrawn
-          && ?conceptStatus != adms-status:Completed
+          ?resourceStatus != adms-status:Deprecated
+          && ?resourceStatus != adms-status:Withdrawn
+          && ?resourceStatus != adms-status:Completed
         )
-        ?conceptDocGraph prov:generatedAtTime ?conceptDocTime.
+        ?resourceDocGraph prov:generatedAtTime ?resourceDocTime.
         FILTER NOT EXISTS {
-          GRAPH ?newerConceptDocGraph {
-            ?conceptDoc rdf:type prov:Entity.
-            ?newerConceptDocGraph prov:generatedAtTime ?newerConceptDocTime.
-            FILTER( ?newerConceptDocTime > ?conceptDocTime )
+          GRAPH ?newerResourceDocGraph {
+            ?resourceDoc rdf:type prov:Entity.
+            ?newerResourceDocGraph prov:generatedAtTime ?newerResourceDocTime.
+            FILTER( ?newerResourceDocTime > ?resourceDocTime )
           }
         }
       }
-      
-      
       OPTIONAL {
-        GRAPH ?previousConceptGraph {
-          ?concept foaf:isPrimaryTopicOf ?prevConceptDoc.
+        GRAPH ?previousResourceGraph {
+          ?resource foaf:isPrimaryTopicOf ?prevResourceDoc.
         }
-        GRAPH ?prevConceptDocGraph {
-          ?prevConceptDoc ?prevConceptP ?prevConceptO;
-            dcterms:temporal ?prevConceptTemporal
+        GRAPH ?prevResourceDocGraph {
+          ?prevResourceDoc ?prevResourceP ?prevResourceO;
+                           dcterms:temporal ?prevResourceTemporal
           .
-          ?prevConceptTemporal dcmiperiod:start ?prevConceptStart.
+          ?prevResourceTemporal dcmiperiod:start ?prevResourceStart.
           FILTER NOT EXISTS {
-            ?prevConceptTemporal dcmiperiod:end ?prevConceptEnd.
+            ?prevResourceTemporal dcmiperiod:end ?prevResourceEnd.
           }
-          FILTER( ?prevConceptP != dcterms:temporal )
+          FILTER( ?prevResourceP != dcterms:temporal )
           
-          ?prevConceptDocGraph prov:generatedAtTime ?prevConceptDocTime.
+          ?prevResourceDocGraph prov:generatedAtTime ?prevResourceDocTime.
           FILTER NOT EXISTS {
-            GRAPH ?newerPrevConceptDocGraph {
-              ?newerPrevConceptDocGraph prov:generatedAtTime ?newerPrevConceptDocTime.
-              ?prevConceptDoc rdf:type prov:Entity.
-              FILTER( ?newerPrevConceptDocTime > ?prevConceptDocTime )
+            GRAPH ?newerPrevResourceDocGraph {
+              ?newerPrevResourceDocGraph prov:generatedAtTime ?newerPrevResourceDocTime.
+              ?prevResourceDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevResourceDocTime > ?prevResourceDocTime )
             }
           }
         }
