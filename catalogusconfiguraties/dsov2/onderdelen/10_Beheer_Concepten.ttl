@@ -55,7 +55,26 @@ container:concept-put-ttl a elmo:Container;
   
   # Weergave
   elmo:representation elmo:UploadRepresentation;
-  rdfs:label "Update bestaand concept (.ttl)";
+  rdfs:label "Update bestaande resource (.ttl)";
+  
+  # Assertions
+  elmo:assertion [
+    rdfs:label "De upload bevat resources die nog niet bestaan.";
+    elmo:assert-not '''
+      prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+      ASK {
+        GRAPH container:generiek {
+          ?s rdf:type ?type.
+        }
+        FILTER NOT EXISTS {
+          GRAPH ?transactie {
+            ?s rdf:type ?type.
+          }
+          FILTER regex( ?transactie, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        }
+      }
+    '''
+  ];
   
   # Data
   elmo:replaces container:generiek;
@@ -299,9 +318,10 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     
     CLEAR GRAPH container:generiek
     CLEAR GRAPH container:concept-put-ttl
+
   '''
 .
-
+    
 stage:DSOv2ConceptenAdd a elmo:Scene;
 	rdfs:label "Query voor verwerken aanvullen concept";
 	elmo:query '''
