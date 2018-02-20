@@ -33,9 +33,15 @@ stage:DSOv2NameForm a elmo:Form;
         elmo:index "1";
     ];
     elmo:fragment [
+        elmo:applies-to "prefix";
+        rdfs:label "Prefix (optioneel)"@nl;
+        rdfs:label "Prefix (optional)"@en;
+        elmo:index "2";
+    ];
+    elmo:fragment [
         elmo:appearance elmo:SubmitAppearance;
         rdfs:label "Voeg toe"@nl;
-        elmo:index "2";
+        elmo:index "3";
     ]
 .
 
@@ -57,7 +63,8 @@ stage:AddNewModelScene a elmo:Scene;
 		}
 		WHERE {
 			BIND( REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) AS ?label )
-			BIND( IRI( CONCAT( "http://catalogus.test.kadaster.nl/def/", REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) ) ) AS ?graph )
+			BIND( IF( substr( "@PREFIX@", 2 ) = "PREFIX@",  "http://catalogus.test.kadaster.nl/def/", "@PREFIX@" ) AS ?prefix )
+      BIND( IRI( CONCAT( ?prefix, REPLACE( "@NAME@", "[^A-Za-z0-9-_]", "" ) ) ) AS ?graph )
 		}
 	'''
 .

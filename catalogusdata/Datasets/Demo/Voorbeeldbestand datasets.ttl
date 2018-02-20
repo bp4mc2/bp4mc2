@@ -1,0 +1,50 @@
+@prefix rdf: 		        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:		        <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos:		        <http://www.w3.org/2004/02/skos/core#>.
+@prefix dcat:		        <http://www.w3.org/ns/dcat#>.
+@prefix org:            <http://www.w3.org/TR/vocab-org#>
+@prefix sh: 		        <http://www.w3.org/ns/shacl#>.
+@prefix shxl:           <http://bp4mc2.org/def/sh-xl#>.
+
+@prefix dataset:        <http://regelgeving.tst.omgevingswet.overheid.nl/gemeenteapeldoorn/id/dataset/>.
+@prefix wl:             <http://www.w3.org/TR/vocab-org/>
+
+# ------------------------- #
+#                           #
+# Declaraties datasets      #
+#                           #
+# ------------------------- #
+
+dataset:GemeenteApeldoorn a dcat:Dataset, skos:ConceptScheme;
+  rdfs:label "Dataset Gemeente Apeldoorn";
+  dct:title "Dataset Gemeente Apeldoorn";
+  dct:publisher org:GemeenteApeldoorn
+.
+
+# ------------------------- #
+#                           #
+# Waardelijst organisaties  #
+#                           #
+# ------------------------- #
+
+wl:OrganizationValueList a sh:NodeShape;
+	rdfs:label "The list of organizations"@en;
+  shxl:stereotype shxl:Valuelist;
+	sh:property [
+		sh:path rdf:type;
+		sh:hasValue org:Organization
+	]
+.
+org:Organization a rdfs:Class.
+
+org:GemeenteApeldoorn a org:Organization, prov:Organization;
+  rdfs:label "Gemeente Apeldoorn";
+  skos:prefLabel "GemeenteApeldoorn";
+  org:identifier "00000001001299918000"
+.
+
+org:ProvincieUtrecht a skos:Concept;
+  rdfs:label "Provincie Utrecht"@nl;
+  skos:prefLabel "ProvincieUtrecht";
+  org:identifier "00000001002220647000"
+.
