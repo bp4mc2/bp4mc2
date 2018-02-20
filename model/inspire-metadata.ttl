@@ -890,12 +890,17 @@ inspire-concept:CoordinateReferenceSystemIdentifier a skos:Concept;
 inspire-concept:QualityOfService a skos:Concept;
   dct:source inspire-lex:AnnexVIPartB4;
   rdfs:label "Quality of Service"@en;
-  skos:definition "Where appropriate, this is the list of coordinate reference systems supported by the spatial data service."@en;
-  skos:scopeNote "Each supported coordinate reference system shall be expressed using an identifier."@en;
+  skos:definition "This is the minimum quality of service estimated by the spatial data service responsible party and expected to be valid over a period of time."@en;
 .
-inspire-collection:QualityOfServiceCriteria a skos:Collection;
+inspire-concept:QualityOfServiceCriteria a skos:Concept;
   dct:source inspire-lex:AnnexVIPartB4-1;
   rdfs:label "Quality of Service Criteria"@en;
+  skos:definition "These are the criteria to which the measurements refer."@en;
+  skos:scopeNote "The value domain of this metadata element is as follows: [availability, performance, capacity]"@en;
+.
+inspire-collection:QualityOfServiceCriteriaCodes a skos:Collection;
+  dct:source inspire-lex:AnnexVIPartB4-1;
+  rdfs:label "Quality of Service Criteria Codes"@en;
   skos:member inspire-concept:Availability;
   skos:member inspire-concept:Performance;
   skos:member inspire-concept:Capacity;
@@ -955,8 +960,8 @@ inspire-concept:InvocationMetadata a skos:Concept;
 
 inspire-shape:Resource a sh:NodeShape;
   sh:name "Resource";
-  sh:property inspire:ResourceTitle;
-  sh:property inspire:ResourceAbstract
+  sh:property inspire-shape:ResourceTitle;
+  sh:property inspire-shape:ResourceAbstract
 .
 inspire-shape:ResourceTitle a sh:PropertyShape;
   dct:subject inspire-concept:ResourceTitle;
@@ -1365,6 +1370,8 @@ inspire-shape:SpatialDatasetCoordinateReferenceSystem a sh:Propertyshape;
   sh:name "coordinateReferenceSystem";
   sh:severity sh:Violation; #Mandatory for dataset and dataset series; not applicable to network services
   sh:minCount 1;
+  sh:node inspire-shape:ReferenceSystem;
+  sh:class inspire:CoordinateReferenceSystem;
   inspire-meta:isoref "13. referenceSystem";
   inspire-meta:xpath "referenceSystemInfo";
   skos:example "code: http://www.opengis.net/def/crs/EPSG/0/4258";
@@ -1374,6 +1381,8 @@ inspire-shape:SpatialDatasetTemporalReferenceSystem a sh:PropertyShape;
   dct:subject inspire-concept:SpatialDatasetTemporalReferenceSystem;
   sh:name "temporal reference system";
   sh:severity sh:Warning; #Only required for dataset if non-default
+  sh:node inspire-shape:ReferenceSystem;
+  sh:class inspire:TemporalReferenceSystem;
   inspire-meta:isoref "13. referenceSystemInfo";
   inspire-meta:xpath "referenceSystemInfo";
   skos:example "JulianCalendar";
@@ -1385,6 +1394,7 @@ inspire-shape:SpatialDatasetEncoding a sh:PropertyShape;
   sh:name "encoding";
   sh:nodeKind sh:BlankNode;
   sh:node inspire-shape:Format;
+  sh:class inspire:Mediatype; #Not sure, could be something else!
   inspire-meta:isoref "271.distributionFormat";
   inspire-meta:xpath "distributionInfo/MD_Distribution/distributionFormat";
 .
@@ -1411,6 +1421,7 @@ inspire-shape:SpatialDatasetTopologicalConsistencyQuantitive a sh:PropertyShape;
   sh:severity sh:Warning;
   sh:name "topologicalConsistency";
   sh:node inspire-shape:DataQualityElement;
+  sh:class inspire:DataQualityMeasurement;
   inspire-meta:isoref "80. report";
   inspire-meta:xpath "dataQualityInfo/DQ_DataQuality/report/"
 .
@@ -1419,6 +1430,7 @@ inspire-shape:SpatialDatasetTopologicalConsistencyDescriptive a sh:PropertyShape
   sh:severity sh:Warning;
   sh:name "topologicalConsistency";
   sh:node inspire-shape:ConformanceResult;
+  sh:class inspire:ConformanceResult;
   inspire-meta:isoref "80. report";
   inspire-meta:xpath "dataQualityInfo/DQ_DataQuality/report/"
 .  
@@ -1447,19 +1459,28 @@ inspire-shape:SpatialDataServicesCategory a sh:PropertyShape;
 inspire-shape:CoordinateReferenceSystemIdentifier a sh:PropertyShape;
   dct:subject inspire-concept:CoordinateReferenceSystemIdentifier;
   sh:name "coordinateReferenceSystem";
+  sh:node inspire-shape:ReferenceSystem;
+  sh:class inspire:CoordinateReferenceSystem;
   inspire-meta:isoref "13. referenceSystem";
   inspire-meta:xpath "referenceSystemInfo";
   sh:severity sh:Violation; #Mandatory if relevant for interoperable spatial data services
 .
-inspire-shape:Criteria a sh:PropertyShape;
-  dct:subject inspire-concept:Criteria;
+inspire-shape:QualityOfService a sh:PropertyShape;
+  dct:subject inspire-concept:QualityOfService;
+  sh:name "QualityOfService";
+  sh:node inspire-shape:QualityOfServiceElement;
+  sh:class inspire:QualityOfService;
+  inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/";
+.
+inspire-shape:QualityOfServiceCriteria a sh:PropertyShape;
+  dct:subject inspire-concept:QualityOfServiceCriteria;
   sh:name "criteria";
   inspire-meta:isoref "100. nameOfMeasure";
   inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/nameOfMeasure";
   sh:severity sh:Violation; #Mandatory for interoperable spatial data services
   sh:minCount 1;
   sh:maxCount 1;
-  sh:node inspire-shape:QualityOfServiceCriteria;
+  sh:node inspire-shape:QualityOfServiceCriteriaCodes;
   sh:class skos:Concept;
   skos:example "availability";
   rdfs:comment "The identifier of the measure is enough to retrieve all information about the quality measure. This element enable direct understanding of the metadata";
@@ -1472,6 +1493,8 @@ inspire-shape:QualityOfServiceMeasurementDescription a sh:PropertyShape;
   inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/measureIdentification";
   sh:minCount 1;
   sh:maxCount 1;
+  sh:datatype xsd:string; #Not sure
+  sh:node inspire-shape:Code;
   skos:example "INSPIRE QoS2"
 .
 inspire-shape:QualityOfServiceMeasurementValue a sh:PropertyShape;
@@ -1481,6 +1504,8 @@ inspire-shape:QualityOfServiceMeasurementValue a sh:PropertyShape;
   inspire-meta:isoref "137. value";
   inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/result/DQ_QuantitativeResult/value";
   sh:minCount 1;
+  sh:class rdfs:Literal;
+  sh:node inspire-shape:ValueDatatype;
   skos:example "1";
 .
 inspire-shape:QualityOfServiceMeasurementUnit a sh:PropertyShape;
@@ -1489,6 +1514,8 @@ inspire-shape:QualityOfServiceMeasurementUnit a sh:PropertyShape;
   sh:severity sh:Violation; #Mandatory for interoperable spatial data services
   inspire-meta:isoref "135. valueUnit";
   inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/result/DQ_QuantitativeResult/valueUnit";
+  sh:node inspire-shape:UnitOfMeasure;
+  sh:class inspire:UnitOfMeasure;
   sh:minCount 1;
   sh:maxCount 1;
   skos:example "second";
@@ -1517,6 +1544,7 @@ inspire-shape:DCP a sh:PropertyShape;
   inspire-meta:isoref "Table C2 2. DCP";
   inspire-meta:xpath "identificationInfo[1]/*/containsOperations/*/DCP";
   sh:node inspire-shape:DCPList;
+  sh:class skos:Concept;
   skos:example "WebServices";
 .
 inspire-shape:ConnectPoint a sh:PropertyShape;
@@ -1542,7 +1570,7 @@ inspire-shape:ConnectPoint a sh:PropertyShape;
 # Complex attributes
 #
 inspire-shape:Citation a sh:NodeShape;
-  sh:name "Citation";
+  sh:name "+Citation";
   sh:property [
     sh:name "title";
     sh:datatype xsd:string;
@@ -1559,7 +1587,7 @@ inspire-shape:Citation a sh:NodeShape;
   ];
 .
 inspire-shape:Date a sh:NodeShape;
-  sh:name "Date";
+  sh:name "+Date";
   sh:property [
     sh:name "dateType";
     sh:in ("creation" "publication" "revision");
@@ -1575,7 +1603,7 @@ inspire-shape:Date a sh:NodeShape;
   ]
 .
 inspire-shape:BoundingBox a sh:NodeShape;
-  sh:name "BoundingBox";
+  sh:name "+BoundingBox";
   sh:property [
     sh:name "westBoundLongitude";
     sh:datatype xsd:decimal;
@@ -1602,7 +1630,7 @@ inspire-shape:BoundingBox a sh:NodeShape;
   ];
 .
 inspire-shape:Format a sh:NodeShape;
-  sh:name "Format";
+  sh:name "*Format";
   sh:property [
     sh:name "name";
     sh:datatype xsd:string;
@@ -1617,7 +1645,7 @@ inspire-shape:Format a sh:NodeShape;
   ]
 .
 inspire-shape:DataQualityElement a sh:NodeShape;
-  sh:name "DataQualityElement";
+  sh:name "+DataQualityElement";
   sh:property [
     sh:name "nameOfMeasure";
   ];
@@ -1638,8 +1666,15 @@ inspire-shape:DataQualityElement a sh:NodeShape;
     sh:maxCount 2;
   ];
 .
-inspire-shape:ConformanceReport a sh:NodeShape;
-  sh:name "ConformanceReport";
+inspire-shape:QualityOfServiceElement a sh:NodeShape;
+  sh:name "+QualityOfService";
+  sh:property inspire-shape:QualityOfServiceCriteria;
+  sh:property inspire-shape:QualityOfServiceMeasurementDescription;
+  sh:property inspire-shape:QualityOfServiceMeasurementUnit;
+  sh:property inspire-shape:QualityOfServiceMeasurementValue;
+.
+inspire-shape:ConformanceResult a sh:NodeShape;
+  sh:name "+ConformanceResult";
   sh:property [
     sh:name "specification";
     sh:minCount 1;
@@ -1660,7 +1695,7 @@ inspire-shape:ConformanceReport a sh:NodeShape;
   ];
 .
 inspire-shape:ResourceLocatorElement a sh:NodeShape;
-  sh:name "ResourceLocatorElement";
+  sh:name "+ResourceLocatorElement";
   sh:property [
     sh:name "URL";
     sh:datatype xsd:AnyURI;
@@ -1686,15 +1721,44 @@ inspire-shape:ResourceLocatorElement a sh:NodeShape;
     sh:node inspire-shape:OnlineFunctionCodes;
   ]
 .
+inspire-shape:ReferenceSystem a sh:NodeShape;
+  sh:name "*ReferenceSystem";
+  sh:property [
+    sh:name "code";
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "description";
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
 
 #
 # Domain: Data types
 #
 inspire-shape:FreeText a sh:Nodeshape;
-  sh:name "Free text";
+  sh:name "*Free text";
 .
 inspire-shape:OnlineResource a sh:NodeShape;
-  sh:name "Online resource";
+  sh:name "*Online resource";
+.
+inspire-shape:ValueDatatype a sh:NodeShape;
+  sh:name "*ValueDatatype";
+  rdfs:comment "Any datatype according to the specific measurement";
+.
+inspire-shape:Code a sh:Nodeshape;
+  sh:name "*Code";
+  rdfs:comment "Some code identifier. In case a predefined list is not available (in such cases, codes would be part of a skos:notation element)";
+.
+inspire-shape:UnitOfMeasure a sh:NodeShape;
+  sh:name "*UnitOfMeasure";
+.
+inspire-shape:Mediatype a sh:NodeShape;
+  sh:name "*Mediatype";
 .
 
 #
@@ -1749,11 +1813,11 @@ inspire-shape:SpatialDataServicesCategories a sh:NodeShape;
     sh:hasValue inspire-collection:SpatialDataServicesCategories
   ]
 .
-inspire-shape:QualityOfServiceCriteria a sh:NodeShape;
+inspire-shape:QualityOfServiceCriteriaCodes a sh:NodeShape;
   sh:name "Enumeration (availability, performance, capacity)";
   sh:property [
     sh:inversePath [sh:path skos:member];
-    sh:hasValue inspire-collection:QualityOfServiceCriteria
+    sh:hasValue inspire-collection:QualityOfServiceCriteriaCodes
   ]
 .
 inspire-shape:OnlineFunctionCodes a sh:NodeShape;
