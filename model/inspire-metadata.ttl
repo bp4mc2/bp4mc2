@@ -1016,6 +1016,13 @@ Examples of Resource Locator with these additional elements:
   - Description: Version 1.4 (06/2011) - River Basin Districts (RBDs) and/or their subunits (RBDSUs) are the main units for the management of river basins and have been delineated by Member States under Article 3 and updated by reporting to Article 13 of the Water Framework Directive.
   - Function: information''';
 .
+inspire-shape:ResourceLocatorComplex a sh:PropertyShape;
+  dct:subject inspire-concept:ResourceLocator;
+  sh:name "locator";
+  sh:node inspire-shape:ResourceLocatorElement;
+  inspire-meta:xpath "distributionInfo/*/transferOptions/*/onLine/*/linkage/";
+.
+  
 inspire-shape:UniqueResourceIdentifier a sh:PropertyShape;
   dct:subject inspire-concept:UniqueResourceIdentifier;
   sh:name "identifier";
@@ -1355,12 +1362,181 @@ inspire-shape:MetadataLanguage a sh:PropertyShape;
 #
 inspire-shape:SpatialDatasetCoordinateReferenceSystem a sh:Propertyshape;
   dct:subject inspire-concept:SpatialDatasetCoordinateReferenceSystem;
-  sh:name "coordinate reference system";
+  sh:name "coordinateReferenceSystem";
   sh:severity sh:Violation; #Mandatory for dataset and dataset series; not applicable to network services
   sh:minCount 1;
   inspire-meta:isoref "13. referenceSystem";
   inspire-meta:xpath "referenceSystemInfo";
+  skos:example "code: http://www.opengis.net/def/crs/EPSG/0/4258";
+  rdfs:comment "ISO 19115 lists several elements which build MD_ReferenceSystem. For the purpose of theme-specific metadata according to the INSPIRE Data specifications the element listed above is sufficient."
 .
+inspire-shape:SpatialDatasetTemporalReferenceSystem a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDatasetTemporalReferenceSystem;
+  sh:name "temporal reference system";
+  sh:severity sh:Warning; #Only required for dataset if non-default
+  inspire-meta:isoref "13. referenceSystemInfo";
+  inspire-meta:xpath "referenceSystemInfo";
+  skos:example "JulianCalendar";
+  rdfs:comment "The primary temporal reference system for use with geographic information is the Gregorian Calendar and 24 hour local or Coordinated Universal Time (UTC), but special applications may entail the use of alternative reference systems. So this element is mandatory only if the spatial data set contains temporal information that does not refer to the default temporal reference system.";
+.
+inspire-shape:SpatialDatasetEncoding a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDatasetEncoding;
+  sh:severity sh:Violation; #Only for dataset and dataset series
+  sh:name "encoding";
+  sh:nodeKind sh:BlankNode;
+  sh:node inspire-shape:Format;
+  inspire-meta:isoref "271.distributionFormat";
+  inspire-meta:xpath "distributionInfo/MD_Distribution/distributionFormat";
+.
+inspire-shape:SpatialDatasetCharacterEncoding a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDatasetCharacterEncoding;
+  sh:severity sh:Warning; # Mandatory if not UTF8. Not applicable to services
+  sh:name "characterEncoding";
+  inspire-meta:isoref "40. characterSet";
+  inspire-meta:xpath "identificationInfo[1]/*/characterSet";
+  skos:example "usAscii";
+.
+inspire-shape:SpatialDatasetSpatialRepresentationType a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDatasetSpatialRepresentationType;
+  sh:severity sh:Violation; #Only for dataset and datasetseries, not applicable to services
+  sh:name "spatialRepresentationType";
+  sh:minCount 1;
+  inspire-meta:isoref "37. SpatialRepresentationType";
+  inspire-meta:xpath "identificationInfo[1]/*/spatialRepresentationType";
+  skos:example "vector";
+  rdfs:comment "This element is used to broadly categorise a spatial data resource being described."
+.
+inspire-shape:SpatialDatasetTopologicalConsistencyQuantitive a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDatasetTopologicalConsistency;
+  sh:severity sh:Warning;
+  sh:name "topologicalConsistency";
+  sh:node inspire-shape:DataQualityElement;
+  inspire-meta:isoref "80. report";
+  inspire-meta:xpath "dataQualityInfo/DQ_DataQuality/report/"
+.
+inspire-shape:SpatialDatasetTopologicalConsistencyDescriptive a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDatasetTopologicalConsistency;
+  sh:severity sh:Warning;
+  sh:name "topologicalConsistency";
+  sh:node inspire-shape:ConformanceResult;
+  inspire-meta:isoref "80. report";
+  inspire-meta:xpath "dataQualityInfo/DQ_DataQuality/report/"
+.  
+
+#
+# Section C.4 of Technical Guidance for the implementation of INSPIRE dataset and service metadata based on ISO/TS 19139:2007
+#
+
+inspire-shape:SpatialDataServicesCategory a sh:PropertyShape;
+  dct:subject inspire-concept:SpatialDataServicesCategory;
+  sh:name "category";
+  inspire-meta:isoref "130. specification";
+  inspire-meta:xpath "dataQualityInfo/*/report/*/result/*/specification";
+  sh:severity sh:Violation; #Mandatory for invocable spatial data service
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:node inspire-shape:SpatialDataServicesCategories;
+  sh:class skos:Concept;
+  skos:example '''<gmx:Anchor xlink:href=" http://inspire.ec.europa.eu/id/ats/metadata/2.0/sds-invocable" xlink:title="conformanceClass_Invocable">invocable</gmx:Anchor>'''
+.
+
+#
+# Section C.5 of Technical Guidance for the implementation of INSPIRE dataset and service metadata based on ISO/TS 19139:2007
+#
+
+inspire-shape:CoordinateReferenceSystemIdentifier a sh:PropertyShape;
+  dct:subject inspire-concept:CoordinateReferenceSystemIdentifier;
+  sh:name "coordinateReferenceSystem";
+  inspire-meta:isoref "13. referenceSystem";
+  inspire-meta:xpath "referenceSystemInfo";
+  sh:severity sh:Violation; #Mandatory if relevant for interoperable spatial data services
+.
+inspire-shape:Criteria a sh:PropertyShape;
+  dct:subject inspire-concept:Criteria;
+  sh:name "criteria";
+  inspire-meta:isoref "100. nameOfMeasure";
+  inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/nameOfMeasure";
+  sh:severity sh:Violation; #Mandatory for interoperable spatial data services
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:node inspire-shape:QualityOfServiceCriteria;
+  sh:class skos:Concept;
+  skos:example "availability";
+  rdfs:comment "The identifier of the measure is enough to retrieve all information about the quality measure. This element enable direct understanding of the metadata";
+.
+inspire-shape:QualityOfServiceMeasurementDescription a sh:PropertyShape;
+  dct:subject inspire-concept:QualityOfServiceMeasurementDescription;
+  sh:name "description";
+  sh:severity sh:Violation; #Mandatory for interoperable spatial data services
+  inspire-meta:isoref "101. measureIdentification";
+  inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/measureIdentification";
+  sh:minCount 1;
+  sh:maxCount 1;
+  skos:example "INSPIRE QoS2"
+.
+inspire-shape:QualityOfServiceMeasurementValue a sh:PropertyShape;
+  dct:subject inspire-concept:QualityOfServiceMeasurementValue;
+  sh:name "value";
+  sh:severity sh:Violation; #Mandatory for interoperable spatial data services
+  inspire-meta:isoref "137. value";
+  inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/result/DQ_QuantitativeResult/value";
+  sh:minCount 1;
+  skos:example "1";
+.
+inspire-shape:QualityOfServiceMeasurementUnit a sh:PropertyShape;
+  dct:subject inspire-concept:QualityOfServiceMeasurementUnit;
+  sh:name "unit";
+  sh:severity sh:Violation; #Mandatory for interoperable spatial data services
+  inspire-meta:isoref "135. valueUnit";
+  inspire-meta:xpath "dataQualityInfo/*/report/DQ_ConceptualConsistency/result/DQ_QuantitativeResult/valueUnit";
+  sh:minCount 1;
+  sh:maxCount 1;
+  skos:example "second";
+.
+  
+#
+# Section C.6 of Technical Guidance for the implementation of INSPIRE dataset and service metadata based on ISO/TS 19139:2007
+#
+inspire-shape:OperationName a sh:PropertyShape;
+  dct:subject inspire-concept:InvocationMetadata;
+  sh:name "operationName";
+  sh:severity sh:Violation; #Mandatory for harmonised spatial data services
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:datatype xsd:string;
+  sh:node inspire-shape:FreeText;
+  inspire-meta:isoref "Table C2 1. operationName";
+  inspire-meta:xpath "identificationInfo[1]/*/containsOperations/*/operationName";
+  skos:example "GetSampleColumn";
+.
+inspire-shape:DCP a sh:PropertyShape;
+  dct:subject inspire-concept:InvocationMetadata;
+  sh:name "distributedComputingPlatform";
+  sh:severity sh:Violation; #Mandatory for harmonised spatial data services
+  sh:minCount 1;
+  inspire-meta:isoref "Table C2 2. DCP";
+  inspire-meta:xpath "identificationInfo[1]/*/containsOperations/*/DCP";
+  sh:node inspire-shape:DCPList;
+  skos:example "WebServices";
+.
+inspire-shape:ConnectPoint a sh:PropertyShape;
+  dct:subject inspire-concept:InvocationMetadata;
+  sh:name "connectPoint";
+  sh:severity sh:Violation; #Mandatory for harmonised spatial data services
+  sh:minCount 1;
+  sh:node inspire-shape:OnlineResource;
+  sh:datatype xsd:anyURI;
+  inspire-meta:isoref "Table C2 6. connectPoint";
+  inspire-meta:xpath "identificationInfo[1]/*/containsOperations/*/connectPoint/*/linkage";
+  skos:example "http://www.dinoservices.nl:80/geo3dmodelwebservices-1/Geo3DModelService";
+.
+
+
+#
+# Section C.7 of Technical Guidance for the implementation of INSPIRE dataset and service metadata based on ISO/TS 19139:2007
+#
+
+# [This section is about specific extensions and not part of the core]
 
 #
 # Complex attributes
@@ -1425,12 +1601,100 @@ inspire-shape:BoundingBox a sh:NodeShape;
     sh:maxCount 1
   ];
 .
+inspire-shape:Format a sh:NodeShape;
+  sh:name "Format";
+  sh:property [
+    sh:name "name";
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "version";
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1
+  ]
+.
+inspire-shape:DataQualityElement a sh:NodeShape;
+  sh:name "DataQualityElement";
+  sh:property [
+    sh:name "nameOfMeasure";
+  ];
+  sh:property [
+    sh:name "evaluationMethodType";
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "evaluationMethodDescription";
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "dateTime";
+  ];
+  sh:property [
+    sh:name "result";
+    sh:minCount 1;
+    sh:maxCount 2;
+  ];
+.
+inspire-shape:ConformanceReport a sh:NodeShape;
+  sh:name "ConformanceReport";
+  sh:property [
+    sh:name "specification";
+    sh:minCount 1;
+    sh:maxCount 1;
+    sh:node inspire-shape:Citation;
+    sh:nodeKind sh:BlankNode;
+  ];
+  sh:property [
+    sh:name "explanation";
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "pass";
+    sh:minCount 1;
+    sh:maxCount 1;
+    sh:datatype xsd:boolean;
+  ];
+.
+inspire-shape:ResourceLocatorElement a sh:NodeShape;
+  sh:name "ResourceLocatorElement";
+  sh:property [
+    sh:name "URL";
+    sh:datatype xsd:AnyURI;
+  ];
+  sh:property [
+    sh:name "title";
+    sh:datatype xsd:string;
+  ];
+  sh:property [
+    sh:name "name";
+    sh:datatype xsd:string; #Not quite sure if it should be "name" or "title". Both are mentioned
+  ];
+  sh:property [
+    sh:name "description";
+    sh:datatype xsd:string;
+  ];
+  sh:property [
+    sh:name "description";
+    sh:node inspire-shape:OnlineDescriptionCodes;
+  ];
+  sh:property [
+    sh:name "function";
+    sh:node inspire-shape:OnlineFunctionCodes;
+  ]
+.
 
 #
 # Domain: Data types
 #
 inspire-shape:FreeText a sh:Nodeshape;
   sh:name "Free text";
+.
+inspire-shape:OnlineResource a sh:NodeShape;
+  sh:name "Online resource";
 .
 
 #
@@ -1478,6 +1742,41 @@ inspire-shape:ResponsiblePartyRoles a sh:NodeShape;
     sh:hasValue inspire-collection:ResponsiblePartyRoles
   ]
 .
+inspire-shape:SpatialDataServicesCategories a sh:NodeShape;
+  sh:name "Enumeration (invocable, interoperable, harmonized)";
+  sh:property [
+    sh:inversePath [sh:path skos:member];
+    sh:hasValue inspire-collection:SpatialDataServicesCategories
+  ]
+.
+inspire-shape:QualityOfServiceCriteria a sh:NodeShape;
+  sh:name "Enumeration (availability, performance, capacity)";
+  sh:property [
+    sh:inversePath [sh:path skos:member];
+    sh:hasValue inspire-collection:QualityOfServiceCriteria
+  ]
+.
+inspire-shape:OnlineFunctionCodes a sh:NodeShape;
+  sh:name "OnlineFunctionCodes";
+  sh:property [
+    sh:inversePath [sh:path skos:member];
+    sh:hasValue inspire-collection:OnlineFunctionCodes
+  ]
+.
+inspire-shape:OnlineDescriptionCodes a sh:NodeShape;
+  sh:name "OnlineDescriptionCodes";
+  sh:property [
+    sh:inversePath [sh:path skos:member];
+    sh:hasValue inspire-collection:OnlineDescriptionCodes
+  ]
+.
+inspire-shape:DCPList a sh:NodeShape;
+  sh:name "DCPList";
+  sh:property [
+    sh:inversePath [sh:path skos:member];
+    sh:hasValue inspire-collection:DCPList
+  ]
+.
 
 #
 # Technische waardelijsten
@@ -1495,3 +1794,48 @@ inspire-collection:PublicAccessLimitations a skos:Collection;
   skos:member inspire-concept:INSPIRE_Directive_Article13_1h;
 .
 #TODO: Waarden toevoegen
+
+inspire-collection:OnlineFunctionCodes a skos:Collection;
+  rdfs:label "Online function codes";
+  skos:member inspire-concept:Download;
+  skos:member inspire-concept:Information;
+  skos:member inspire-concept:OfflineAccess;
+  skos:member inspire-concept:Order;
+  skos:member inspire-concept:Search;
+.
+inspire-concept:Download a skos:Concept;
+  rdfs:label "Download"@en;
+  skos:definition "online instructions for transferring data from one storage device or system to another"@en;
+.
+inspire-concept:Information a skos:Concept;
+  rdfs:label "Information"@en;
+  skos:definition "online information about the resource";
+.
+inspire-concept:OfflineAccess a skos:Concept;
+  rdfs:label "Offline access"@en;
+  skos:definition "online instructions for requesting the resource from the provider"@en;
+.
+inspire-concept:Order a skos:Concept;
+  rdfs:label "Order"@en;
+  skos:definition "online order process for obtening the resource"@en;
+.
+inspire-concept:Search a skos:Concept;
+  rdfs:label "Search"@en;
+  skos:definition "online search interface for seeking out information about the resource"@en;
+.
+
+inspire-collection:OnlineDescriptionCodes a skos:Collection;
+  rdfs:label "Online description codes";
+  skos:member inspire-concept:AccessPoint;
+  skos:member inspire-concept:EndPoint;
+.
+
+inspire-collection:DCPList a skos:Collection;
+  rdfs:label "Distributed Computing Platforms";
+  skos:member inspire-concept:XML;
+  skos:member inspire-concept:CORBA;
+  skos:member inspire-concept:JAVA;
+  skos:member inspire-concept:COM;
+  skos:member inspire-concept:SQL;
+  skos:member inspire-concept:WebServices;
+.

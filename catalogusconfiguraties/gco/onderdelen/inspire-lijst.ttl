@@ -70,6 +70,10 @@ stage:inspire-lijst2 a elmo:Representation;
         OPTIONAL {
           ?shape dct:subject ?item.
           ?shape inspire-meta:xpath ?shape_label
+          OPTIONAL {
+            ?shape sh:node ?domain.
+            ?domain sh:name ?domain_label
+          }
         }
         FILTER NOT EXISTS {?col skos:member ?item}
       }
