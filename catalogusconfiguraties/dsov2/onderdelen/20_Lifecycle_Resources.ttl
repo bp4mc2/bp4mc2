@@ -1,0 +1,552 @@
+#
+#
+#
+# LIFECYCLE CONCEPTEN
+#
+#
+#
+
+#
+# PRODUCTIONS
+#
+
+updatestage:resource-geldigmaken a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:search-nietgeldige-resources;
+	elmo:queryForm stage:ResourceGeldigMakenForm;
+	elmo:contains stage:ResourceGeldigMakenScene;
+	elmo:contains stage:geldigheidsregels;
+.
+
+updatestage:resource-ongeldigmaken a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:search-geldige-resource;
+	elmo:queryForm stage:ResourceOngeldigMakenForm;
+	elmo:contains stage:ResourceOngeldigMakenScene
+.
+
+updatestage:dataset-geldigmaken a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:queryForm stage:DatasetGeldigMakenForm;
+  elmo:contains stage:DatasetGeldigMakenScene
+.
+
+#
+# FORMS
+#
+
+stage:ResourceGeldigMakenForm a elmo:Form;
+	rdfs:label "Selecteer resource";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "doc";
+		rdfs:label "Selecteer resource"@nl;
+		elmo:valuesFrom stage:search-nietgeldige-resources;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:applies-to "geldigheid";
+		elmo:valueDatatype xsd:Date;
+		rdfs:label "Geldigheid:"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		rdf:value elmo:Now;
+		elmo:index "3";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "4";
+	];
+.
+
+stage:DatasetGeldigMakenForm a elmo:Form;
+	rdfs:label "Geldig maken gehele dataset";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "dataset";
+      rdfs:label "Selecteer de dataset"@nl;
+      elmo:valuesFrom stage:DatasetNonCompletedList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "2";
+  ];
+  elmo:fragment [
+		elmo:applies-to "geldigheid";
+		elmo:valueDatatype xsd:Date;
+		rdfs:label "Geldigheid:"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		rdf:value elmo:Now;
+		elmo:index "3";
+	];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
+.
+
+stage:ResourceOngeldigMakenForm a elmo:Form;
+	rdfs:label "Selecteer resource";
+	elmo:index "1";
+	elmo:fragment [
+		elmo:applies-to "doc";
+		rdfs:label "Selecteer resource"@nl;
+		elmo:valuesFrom stage:search-geldige-resource;
+		elmo:constraint elmo:MandatoryConstraint;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:applies-to "geldigheid";
+		elmo:valueDatatype xsd:Date;
+		rdfs:label "Geldigheid:"@nl;
+		elmo:constraint elmo:MandatoryConstraint;
+		rdf:value elmo:Now;
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:appearance elmo:SubmitAppearance;
+		rdfs:label "Ga verder"@nl;
+		elmo:index "3";
+	];
+.
+
+#
+# PARTS
+#
+
+stage:search-nietgeldige-resources a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix prov: <http://www.w3.org/ns/prov#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
+		prefix adms: <http://www.w3.org/ns/adms#>
+		prefix sd: <http://www.w3.org/ns/sparql-service-description>
+    prefix adms-status: <http://purl.org/adms/status/>
+    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
+    
+		CONSTRUCT {
+			?doc rdfs:label ?label
+		}
+		WHERE {
+      GRAPH ?g {
+        ?resource foaf:isPrimaryTopicOf ?doc.
+      }
+      FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc rdf:type prov:Entity;
+          adms:status ?status
+        .
+        
+        FILTER(
+          ?status != adms-status:Completed
+          && ?status != adms-status:Deprecated
+          && ?status != adms-status:Withdrawn
+        )
+        
+        ?docGraph prov:generatedAtTime ?docGraphTime.       
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
+          }
+        }
+      }
+      BIND( concat( str( ?resource ), " (", ?status, ")" ) AS ?label )
+		}
+	''';
+.
+
+stage:search-geldige-resource a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+		prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		prefix slex-status:     <http://bp4mc2.org/skos-lex/status/>
+    prefix wdrs:            <http://www.w3.org/2007/05/powder-s#>
+    
+		CONSTRUCT {
+			?doc rdfs:label ?label
+		}
+		WHERE {
+      GRAPH ?g {
+        ?resource rdfs:label ?label;
+          foaf:isPrimaryTopicOf ?doc
+        .
+      }
+      FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:Completed
+        .
+        ?doc dcterms:temporal ?temporal.
+          ?temporal dcmiperiod:start ?start
+        .
+        OPTIONAL {
+          ?temporal dcmiperiod:end ?end.
+        }
+        FILTER(
+          strdt( ?start, xsd:dateTime ) <= now()
+          && (
+            !BOUND( ?end ) ||
+            strdt( ?end, xsd:dateTime ) > now()
+          )
+        )
+        
+        ?docGraph prov:generatedAtTime ?docGraphTime.       
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
+          }
+        }
+      }
+		}
+	''';
+.
+
+stage:DatasetNonCompletedList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcat: 		        <http://www.w3.org/ns/dcat#>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix foaf: 	          <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix rdfs: 		        <http://www.w3.org/2000/01/rdf-schema#>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+        
+    CONSTRUCT {
+      ?dataset rdfs:label ?dataset_label
+    }
+    WHERE {
+      GRAPH ?datasetGraph {
+        ?dataset rdf:type dcat:Dataset;
+          rdfs:label ?dataset_label;
+          foaf:isPrimaryTopicOf ?docDataset
+        .
+        
+        ?datasetGraph prov:generatedAtTime ?datasetTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDatasetGraph {
+            ?newerDatasetGraph prov:generatedAtTime ?newerDatasetTime.
+            ?docDataset rdf:type dcat:Dataset.
+            FILTER( ?newerDatasetTime > ?datasetTime )
+          }
+        }
+      }
+      GRAPH ?docDatasetGraph {
+        ?docDataset adms:status adms-status:Completed.
+        FILTER NOT EXISTS {
+          ?docDataset dcterms:temporal/dcmiperiod:end ?end.
+          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+        }
+        
+        ?docDatasetGraph prov:generatedAtTime ?docDatasetTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocDatasetGraph {
+            ?newerDocDatasetGraph prov:generatedAtTime ?newerDocDatasetTime.
+            ?docDataset rdf:type prov:Entity.
+            FILTER( ?newerDocDatasetTime > ?docDatasetTime )
+          }
+        }
+      }
+      FILTER NOT EXISTS {
+        GRAPH def:Waardelijsten {
+          ?wl sh:property [ sh:hasValue ?dataset ].
+        }
+      }
+    }
+  ''';
+.
+
+#
+# SCENES
+#
+
+stage:ResourceGeldigMakenScene a elmo:Scene;
+	elmo:index "3";
+	rdfs:label "Laat gekozen versie van resource in werking treden";
+	elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:         <http://purl.org/dc/terms/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix slex-status:     <http://bp4mc2.org/skos-lex/status/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {      
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "In werkingtreding van het begrip";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+
+        <@DOC@> ?p ?o;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?temporal
+        .
+        
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
+        
+        ?prevDoc ?prevP ?prevO;
+          dcterms:temporal ?prevTemporal
+        .
+          
+        ?prevTemporal dcmiperiod:start ?prevStart;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+      }
+    }
+    WHERE {
+      GRAPH ?docGraph {
+        <@DOC@> rdf:type prov:Entity;
+          adms:status ?status;
+          ?p ?o
+        .
+        FILTER(
+          ?p != adms:status
+          && ?p != dcterms:issued
+        )
+        OPTIONAL {
+          <@DOC@> dcterms:issued ?currentIssued.
+        }
+        
+        ?docGraph prov:generatedAtTime ?docTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              <@DOC@> rdf:type prov:Entity.
+              FILTER( ?newerDocTime > ?docTime )
+            }
+          }
+      }
+      
+      GRAPH ?currentTransaction {
+        ?resource foaf:isPrimaryTopicOf <@DOC@>.
+      }
+      OPTIONAL {
+        GRAPH ?previousTransaction {
+          ?resource foaf:isPrimaryTopicOf ?prevDoc.
+        }
+        GRAPH ?prevDocGraph {
+          ?prevDoc ?prevP ?prevO;
+            dcterms:temporal ?prevTemporal
+          .
+          ?prevTemporal dcmiperiod:start ?prevStart.
+          FILTER NOT EXISTS {
+            ?prevTemporal dcmiperiod:end ?end.
+          }
+          FILTER( ?prevP != dcterms:temporal )
+          
+          ?prevDocGraph prov:generatedAtTime ?prevDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerPrevDocGraph {
+              ?newerPrevDocGraph prov:generatedAtTime ?newerPrevDocTime.
+              ?prevDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevDocTime > ?prevDocTime )
+            }
+          }
+        }
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( replace( "@DOC@", "entity", "temporal" ) ) AS ?temporal )
+      BIND( now() AS ?now )
+    }
+	'''
+.
+
+stage:ResourceOngeldigMakenScene a elmo:Scene;
+	elmo:index "3";
+	rdfs:label "Einddatum geldigheid toevoegen aan resource";
+	elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+		prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:         <http://purl.org/dc/terms/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix slex-status:     <http://bp4mc2.org/skos-lex/status/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {      
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Einddatum geldigheid toevoegen aan resource";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+
+        <@DOC@> ?p ?o;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?temporal
+        .
+        
+        ?temporal ?temporalP ?temporalO;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+      }
+    }
+    WHERE {
+      GRAPH ?docGraph {
+        <@DOC@> rdf:type prov:Entity;
+          dcterms:temporal ?temporal;
+          ?p ?o
+        .
+        ?temporal ?temporalP ?temporalO.
+        FILTER( ?p != dcterms:temporal )
+        
+        ?docGraph prov:generatedAtTime ?docTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              <@DOC@> rdf:type prov:Entity.
+              FILTER( ?newerDocTime > ?docTime )
+            }
+          }
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( now() AS ?now )
+    }
+	'''
+.
+
+stage:DatasetGeldigMakenScene a elmo:Scene;
+  rdfs:label "Geldig maken alle resources in dataset";
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
+    
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    INSERT {
+      GRAPH ?transactie {      
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "In werkingtreding van de gehele dataset";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
+        
+        ?resourceDoc ?resourceP ?resourceO;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?temporal
+        .
+        
+        ?prevResourceDoc ?prevResourceP ?prevResourceO;
+          dcterms:temporal ?prevResourceTemporal
+        .
+          
+        ?prevResourceTemporal dcmiperiod:start ?prevResourceStart;
+          dcmiperiod:end "@GELDIGHEID@"
+        .
+      }
+    }
+    WHERE {
+      GRAPH ?resourceGraph {
+        ?resource rdf:type ?resourceType;
+          foaf:isPrimaryTopicOf ?resourceDoc;
+          skos:inScheme <@DATASET@>
+        .
+        
+        ?resourceGraph prov:generatedAtTime ?resourceGraphTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerResourceGraph {
+            ?resource rdf:type ?resourceType.
+            ?newerResourceGraph prov:generatedAtTime ?newerResourceGraphTime.
+            FILTER( ?newerResourceGraphTime > ?resourceGraphTime )
+          }
+        }
+      }
+      GRAPH ?resourceDocGraph {
+        ?resourceDoc ?resourceP ?resourceO;
+          adms:status ?resourceStatus
+        .
+        FILTER( ?resourceP != adms:status )
+        FILTER( 
+          ?resourceStatus != adms-status:Deprecated
+          && ?resourceStatus != adms-status:Withdrawn
+          && ?resourceStatus != adms-status:Completed
+        )
+        ?resourceDocGraph prov:generatedAtTime ?resourceDocTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerResourceDocGraph {
+            ?resourceDoc rdf:type prov:Entity.
+            ?newerResourceDocGraph prov:generatedAtTime ?newerResourceDocTime.
+            FILTER( ?newerResourceDocTime > ?resourceDocTime )
+          }
+        }
+      }
+      
+      OPTIONAL {
+        GRAPH ?previousResourceGraph {
+          ?resource foaf:isPrimaryTopicOf ?prevResourceDoc.
+        }
+        GRAPH ?prevResourceDocGraph {
+          ?prevResourceDoc ?prevResourceP ?prevResourceO;
+            dcterms:temporal ?prevResourceTemporal
+          .
+          ?prevResourceTemporal dcmiperiod:start ?prevResourceStart.
+          FILTER NOT EXISTS {
+            ?prevResourceTemporal dcmiperiod:end ?prevResourceEnd.
+          }
+          FILTER( ?prevResourceP != dcterms:temporal )
+          
+          ?prevResourceDocGraph prov:generatedAtTime ?prevResourceDocTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerPrevResourceDocGraph {
+              ?newerPrevResourceDocGraph prov:generatedAtTime ?newerPrevResourceDocTime.
+              ?prevResourceDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevResourceDocTime > ?prevResourceDocTime )
+            }
+          }
+        }
+      }
+      
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( iri( replace( str( ?resourceDoc ), "entity", "temporal" ) ) AS ?temporal )
+      BIND( now() AS ?now )
+    }  
+  '''
+.

@@ -101,11 +101,11 @@ stage:ClassificerendeWaardelijstCollectionGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?collectionDoc ?collectionP ?collectionO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevCollectionDoc ?prevCollectionP ?prevCollectionO;
@@ -183,7 +183,7 @@ stage:ClassificerendeWaardelijstCollectionGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?collectionDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }
   '''
@@ -216,11 +216,11 @@ stage:ClassificerendeWaardelijstConceptsGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?conceptDoc ?conceptP ?conceptO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevConceptDoc ?prevConceptP ?prevConceptO;
@@ -310,7 +310,7 @@ stage:ClassificerendeWaardelijstConceptsGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?conceptDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }
   '''
@@ -343,11 +343,11 @@ stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?conceptDoc ?conceptP ?conceptO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevConceptDoc ?prevConceptP ?prevConceptO;
@@ -430,7 +430,7 @@ stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?conceptDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }  
   '''
@@ -463,11 +463,11 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?resourceDoc ?resourceP ?resourceO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevResourceDoc ?prevResourceP ?prevResourceO;
@@ -548,7 +548,7 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?resourceDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }
   '''

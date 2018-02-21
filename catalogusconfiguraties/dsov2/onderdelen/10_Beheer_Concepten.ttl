@@ -55,7 +55,26 @@ container:concept-put-ttl a elmo:Container;
   
   # Weergave
   elmo:representation elmo:UploadRepresentation;
-  rdfs:label "Update bestaand concept (.ttl)";
+  rdfs:label "Update bestaande resource (.ttl)";
+  
+  # Assertions
+  elmo:assertion [
+    rdfs:label "De upload bevat resources die nog niet bestaan.";
+    elmo:assert-not '''
+      prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+      ASK {
+        GRAPH container:generiek {
+          ?s rdf:type ?type.
+        }
+        FILTER NOT EXISTS {
+          GRAPH ?transactie {
+            ?s rdf:type ?type.
+          }
+          FILTER regex( ?transactie, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        }
+      }
+    '''
+  ];
   
   # Data
   elmo:replaces container:generiek;
@@ -137,7 +156,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       GRAPH ?docOrgGraph {
         ?docOrg adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docOrg dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docOrg dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         
@@ -167,7 +186,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       GRAPH ?docDatasetGraph {
         ?docDataset adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docDataset dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docDataset dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         
@@ -299,9 +318,10 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     
     CLEAR GRAPH container:generiek
     CLEAR GRAPH container:concept-put-ttl
+
   '''
 .
-
+    
 stage:DSOv2ConceptenAdd a elmo:Scene;
 	rdfs:label "Query voor verwerken aanvullen concept";
 	elmo:query '''
