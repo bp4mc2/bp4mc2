@@ -54,7 +54,7 @@ stage:inspire-lijst2 a elmo:Representation;
 		prefix sh: <http://www.w3.org/ns/shacl#>
     prefix dct: <http://purl.org/dc/terms/>
     prefix inspire-meta: <http://bp4mc2.org/inspire/def/meta#>
-    select ?item ?item_label ?source ?source_label ?shape ?shape_label ?domain ?domain_label (if(bound(?datatype),?datatype,?class) as ?datatypeclass)
+    select ?item ?item_label ?source ?source_label ?shape ?shape_label ?domain ?domain_label (if(bound(?nodekind),?nodekind,?dtclass) as ?datatypeclass)
     where {
       graph <http://bp4mc2.org/id/dataset/inspire> {
         ?item a skos:Concept.
@@ -75,10 +75,10 @@ stage:inspire-lijst2 a elmo:Representation;
             ?domain sh:name ?domain_label
           }
           OPTIONAL {
-            ?shape sh:datatype ?datatype
+            ?shape sh:nodeKind ?nodekind
           }
           OPTIONAL {
-            ?shape sh:class ?class
+            {?shape sh:datatype ?dtclass} UNION {?shape sh:class ?dtclass}
           }
         }
         FILTER NOT EXISTS {?col skos:member ?item}
