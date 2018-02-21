@@ -156,7 +156,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       GRAPH ?docOrgGraph {
         ?docOrg adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docOrg dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docOrg dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         
@@ -186,7 +186,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       GRAPH ?docDatasetGraph {
         ?docDataset adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docDataset dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docDataset dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         

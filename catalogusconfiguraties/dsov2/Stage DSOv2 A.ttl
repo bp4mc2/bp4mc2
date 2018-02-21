@@ -130,7 +130,7 @@ stage:DSOv2Beheermenu a elmo:Part;
       elmo:data [
 				rdfs:label "Maak resource geldig";
 				elmo:index "05";
-				xhtml:link "/catalogus/dsov2/update/concept-enact";
+				xhtml:link "/catalogus/dsov2/update/resource-geldigmaken";
 			];
       elmo:data [
 				rdfs:label "Maak resource ongeldig";
@@ -676,7 +676,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       GRAPH ?docOrgGraph {
         ?docOrg adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docOrg dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docOrg dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         
@@ -706,7 +706,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       GRAPH ?docDatasetGraph {
         ?docDataset adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docDataset dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docDataset dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         
@@ -1685,25 +1685,17 @@ stage:GarbageCollectionScene a elmo:Scene;
 # PRODUCTIONS
 #
 
-# Production om concept te selecteren en vervolgens bekend te maken
-updatestage:concept-issue a elmo:Production;
-	elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:search-concepts-under-development;
-	elmo:queryForm stage:DSOv2IssueConceptsForm;
-	elmo:contains stage:IssueConceptScene;
-.
-
-updatestage:concept-enact a elmo:Production;
+updatestage:resource-geldigmaken a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:search-concepts-nonenacted;
-	elmo:queryForm stage:DSOv2EnactConceptsForm;
-	elmo:contains stage:EnactConceptScene;
+	elmo:contains stage:search-nietgeldige-resources;
+	elmo:queryForm stage:ResourceGeldigMakenForm;
+	elmo:contains stage:ResourceGeldigMakenScene;
 	elmo:contains stage:geldigheidsregels;
 .
 
 updatestage:resource-ongeldigmaken a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:search-resource-enacted;
+	elmo:contains stage:search-geldige-resource;
 	elmo:queryForm stage:ResourceOngeldigMakenForm;
 	elmo:contains stage:ResourceOngeldigMakenScene
 .
@@ -1720,40 +1712,15 @@ updatestage:dataset-geldigmaken a elmo:Production;
 # FORMS
 #
 
-stage:DSOv2IssueConceptsForm a elmo:Form;
-	rdfs:label "Selecteer concept";
-	elmo:index "1";
-	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Selecteer concept"@nl;
-		elmo:valuesFrom stage:search-concepts-under-development;
-		elmo:constraint elmo:MandatoryConstraint;
-		elmo:index "1";
-	];
-	elmo:fragment [
-		elmo:appearance elmo:SubmitAppearance;
-		rdfs:label "Ga verder"@nl;
-		elmo:index "2";
-	];
-.
-
-stage:DSOv2EnactConceptsForm a elmo:Form;
-	rdfs:label "Selecteer concept";
+stage:ResourceGeldigMakenForm a elmo:Form;
+	rdfs:label "Selecteer resource";
 	elmo:index "1";
 	elmo:fragment [
 		elmo:applies-to "doc";
-		rdfs:label "Selecteer concept"@nl;
-		elmo:valuesFrom stage:search-concepts-nonenacted;
+		rdfs:label "Selecteer resource"@nl;
+		elmo:valuesFrom stage:search-nietgeldige-resources;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "1";
-	];
-	elmo:fragment [
-		elmo:applies-to "geldigheidsregel";
-		rdfs:label "Geldigheidsregel:"@nl;
-		elmo:valuesFrom stage:geldigheidsregels;
-		rdf:value <urn:wr-ow>;
-		elmo:constraint elmo:MandatoryConstraint;
-		elmo:index "2";
 	];
 	elmo:fragment [
 		elmo:applies-to "geldigheid";
@@ -1801,7 +1768,7 @@ stage:ResourceOngeldigMakenForm a elmo:Form;
 	elmo:fragment [
 		elmo:applies-to "doc";
 		rdfs:label "Selecteer resource"@nl;
-		elmo:valuesFrom stage:search-resource-enacted;
+		elmo:valuesFrom stage:search-geldige-resource;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "1";
 	];
@@ -1824,43 +1791,7 @@ stage:ResourceOngeldigMakenForm a elmo:Form;
 # PARTS
 #
 
-stage:search-concepts-under-development a elmo:Part;
-	elmo:appearance elmo:HiddenAppearance;
-	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sd: <http://www.w3.org/ns/sparql-service-description>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-    
-		CONSTRUCT {
-			?concept rdfs:label ?label
-		}
-		WHERE {
-			GRAPH ?g {
-				?concept foaf:isPrimaryTopicOf ?doc.
-          
-        ?doc adms:status adms-status:UnderDevelopment.
-    		BIND( str(?concept) AS ?label )
-
-        ?docGraph prov:generatedAtTime ?docGraphTime.       
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocGraph {
-            ?doc rdf:type prov:Entity.
-            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-            FILTER ( ?newerDocGraphTime > ?docGraphTime )            
-          }
-        }
-			}
-      FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
-		}
-	''';
-.
-
-stage:search-concepts-nonenacted a elmo:Part;
+stage:search-nietgeldige-resources a elmo:Part;
 	elmo:appearance elmo:HiddenAppearance;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
@@ -1877,12 +1808,13 @@ stage:search-concepts-nonenacted a elmo:Part;
 		}
 		WHERE {
       GRAPH ?g {
-        ?concept foaf:isPrimaryTopicOf ?doc.
+        ?resource foaf:isPrimaryTopicOf ?doc.
       }
       FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
         ?doc rdf:type prov:Entity;
-          adms:status ?status.
+          adms:status ?status
+        .
         
         FILTER(
           ?status != adms-status:Completed
@@ -1899,12 +1831,12 @@ stage:search-concepts-nonenacted a elmo:Part;
           }
         }
       }
-      BIND( concat( str( ?concept ), " (", ?status, ")" ) AS ?label )
+      BIND( concat( str( ?resource ), " (", ?status, ")" ) AS ?label )
 		}
 	''';
 .
 
-stage:search-resource-enacted a elmo:Part;
+stage:search-geldige-resource a elmo:Part;
 	elmo:appearance elmo:HiddenAppearance;
 	elmo:query '''
 		prefix adms:            <http://www.w3.org/ns/adms#>
@@ -1930,11 +1862,14 @@ stage:search-resource-enacted a elmo:Part;
       FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docGraph {
         ?doc rdf:type prov:Entity;
-          adms:status adms-status:Completed;
-          dcterms:temporal ?temporal
+          adms:status adms-status:Completed
         .
-        ?temporal dcmiperiod:start ?start.
-        OPTIONAL {  ?temporal dcmiperiod:end ?end. }
+        ?doc dcterms:temporal ?temporal.
+          ?temporal dcmiperiod:start ?start
+        .
+        OPTIONAL {
+          ?temporal dcmiperiod:end ?end.
+        }
         FILTER(
           strdt( ?start, xsd:dateTime ) <= now()
           && (
@@ -1953,18 +1888,6 @@ stage:search-resource-enacted a elmo:Part;
         }
       }
 		}
-	''';
-.
-
-stage:geldigheidsregels a elmo:Part;
-	elmo:appearance elmo:HiddenAppearance;
-	elmo:query '''
-		construct {
-			<urn:wr-twk> rdfs:label "TWK Terugwerkende kracht".
-			<urn:wr-ow> rdfs:label "OW Onmiddelijke werking".
-			<urn:wr-uw> rdfs:label "UW Uitgestelde werking".
-		}
-		where {}
 	''';
 .
 
@@ -2004,7 +1927,7 @@ stage:DatasetNonCompletedList a elmo:Part;
       GRAPH ?docDatasetGraph {
         ?docDataset adms:status adms-status:Completed.
         FILTER NOT EXISTS {
-          ?docDataset dcterms:temporal [ dcmiperiod:end ?end ].
+          ?docDataset dcterms:temporal/dcmiperiod:end ?end.
           FILTER( strdt( ?end, xsd:dateTime ) < now() )
         }
         
@@ -2030,87 +1953,9 @@ stage:DatasetNonCompletedList a elmo:Part;
 # SCENES
 #
 
-stage:IssueConceptScene a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Maak begrip bekend";
-	elmo:query '''
-    prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix adms: <http://www.w3.org/ns/adms#>
-		prefix sd: <http://www.w3.org/ns/sparql-service-description/>
-    prefix adms-status: <http://purl.org/adms/status/>
-    prefix slex-status: <http://bp4mc2.org/skos-lex/status/>
-    prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
-    prefix dcterms: <http://purl.org/dc/terms/>
-    
-    prefix container: <http://data.acceptatie.pdok.nl/catalogus/dsov2/container/>
-    prefix user: <http://catalogus.test.kadaster.nl/users/>
-		
-    INSERT {
-      GRAPH ?transactie {      
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          rdfs:label "Bekendmaking van het begrip in de LVBB, en de registratie hiervan in de Catalogus";
-          prov:generatedAtTime ?now
-        .
-
-        ?doc rdf:type prov:Entity;
-          prov:wasRevisionOf ?prevDoc;
-          adms:status slex-status:Issued;
-          dcterms:issued ?date
-        .
-        
-        ?prevDoc ?prevP ?prevO;
-          adms:status adms-status:Deprecated
-        .
-      }
-    }
-    WHERE {
-      GRAPH ?graph {
-        ?graph prov:generatedAtTime ?time.
-        <@CONCEPT@> foaf:isPrimaryTopicOf ?doc.
-      }
-      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      OPTIONAL {
-        GRAPH ?docGraph {
-          ?doc prov:wasRevisionOf ?revision.
-        }
-        FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      }
-      FILTER NOT EXISTS {
-        ?newdoc prov:wasRevisionOf ?doc.
-      }
-      OPTIONAL {
-        GRAPH ?prevGraph {
-          ?prevGraph prov:generatedAtTime ?prevTime. 
-          <@CONCEPT@> foaf:isPrimaryTopicOf ?prevDoc.
-          FILTER( ?prevTime < ?time )
-        }
-        GRAPH ?prevDocGraph {
-          ?prevDocGraph prov:generatedAtTime ?prevDocTime.
-          ?prevDoc ?prevP ?prevO;
-            adms:status slex-status:Issued.
-          FILTER( ?prevP != adms:status )
-        }
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocGraph {
-            ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-            ?prevDoc rdf:type prov:Entity.
-            FILTER( ?newerDocGraphTime > ?prevDocTime )
-          }
-        }
-      }
-      
-      BIND( strdt( concat(  year( now() ), "-", month( now() ), "-", day( now() ) ), xsd:date ) AS ?date )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( now() AS ?now )
-    }
-	'''
-.
-
-stage:EnactConceptScene a elmo:Scene;
+stage:ResourceGeldigMakenScene a elmo:Scene;
 	elmo:index "3";
-	rdfs:label "Laat gekozen versie van concept in werking treden";
+	rdfs:label "Laat gekozen versie van resource in werking treden";
 	elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
 		prefix adms-status:     <http://purl.org/adms/status/>
@@ -2136,11 +1981,10 @@ stage:EnactConceptScene a elmo:Scene;
 
         <@DOC@> ?p ?o;
           adms:status adms-status:Completed;
-          dcterms:issued ?issuedDate;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?prevDoc ?prevP ?prevO;
           dcterms:temporal ?prevTemporal
@@ -2176,11 +2020,11 @@ stage:EnactConceptScene a elmo:Scene;
       }
       
       GRAPH ?currentTransaction {
-        ?concept foaf:isPrimaryTopicOf <@DOC@>.
+        ?resource foaf:isPrimaryTopicOf <@DOC@>.
       }
       OPTIONAL {
         GRAPH ?previousTransaction {
-          ?concept foaf:isPrimaryTopicOf ?prevDoc.
+          ?resource foaf:isPrimaryTopicOf ?prevDoc.
         }
         GRAPH ?prevDocGraph {
           ?prevDoc ?prevP ?prevO;
@@ -2204,9 +2048,8 @@ stage:EnactConceptScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( "@DOC@", "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
-      BIND( IF( BOUND( ?currentIssued ), ?currentIssued, concat( year( now() ), "-", month( now() ), "-", day( now() ) ) ) AS ?issuedDate )
     }
 	'''
 .
@@ -2273,7 +2116,7 @@ stage:ResourceOngeldigMakenScene a elmo:Scene;
 .
 
 stage:DatasetGeldigMakenScene a elmo:Scene;
-  rdfs:label "Geldig maken alle concepten in dataset";
+  rdfs:label "Geldig maken alle resources in dataset";
   elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -2299,84 +2142,85 @@ stage:DatasetGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
-        ?conceptDoc ?conceptP ?conceptO;
+        ?resourceDoc ?resourceP ?resourceO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
-        ?prevConceptDoc ?prevConceptP ?prevConceptO;
-          dcterms:temporal ?prevConceptTemporal
+        ?prevResourceDoc ?prevResourceP ?prevResourceO;
+          dcterms:temporal ?prevResourceTemporal
         .
           
-        ?prevConceptTemporal dcmiperiod:start ?prevConceptStart;
+        ?prevResourceTemporal dcmiperiod:start ?prevResourceStart;
           dcmiperiod:end "@GELDIGHEID@"
         .
       }
     }
     WHERE {
-      GRAPH ?conceptGraph {
-        ?concept foaf:isPrimaryTopicOf ?conceptDoc;
-                 skos:inScheme <@DATASET@>
+      GRAPH ?resourceGraph {
+        ?resource rdf:type ?resourceType;
+          foaf:isPrimaryTopicOf ?resourceDoc;
+          skos:inScheme <@DATASET@>
         .
         
-        ?conceptGraph prov:generatedAtTime ?conceptGraphTime.
+        ?resourceGraph prov:generatedAtTime ?resourceGraphTime.
         FILTER NOT EXISTS {
-          GRAPH ?newerConceptGraph {
-            ?concept rdf:type skos:Concept.
-            ?newerConceptGraph prov:generatedAtTime ?newerConceptGraphTime.
-            FILTER( ?newerConceptGraphTime > ?conceptGraphTime )
+          GRAPH ?newerResourceGraph {
+            ?resource rdf:type ?resourceType.
+            ?newerResourceGraph prov:generatedAtTime ?newerResourceGraphTime.
+            FILTER( ?newerResourceGraphTime > ?resourceGraphTime )
           }
         }
       }
-      GRAPH ?conceptDocGraph {
-        ?conceptDoc ?conceptP ?conceptO;
-          adms:status ?conceptStatus
+      GRAPH ?resourceDocGraph {
+        ?resourceDoc ?resourceP ?resourceO;
+          adms:status ?resourceStatus
         .
-        FILTER( ?conceptP != adms:status )
+        FILTER( ?resourceP != adms:status )
         FILTER( 
-          ?conceptStatus != adms-status:Deprecated
-          && ?conceptStatus != adms-status:Withdrawn
-          && ?conceptStatus != adms-status:Completed
+          ?resourceStatus != adms-status:Deprecated
+          && ?resourceStatus != adms-status:Withdrawn
+          && ?resourceStatus != adms-status:Completed
         )
-        ?conceptDocGraph prov:generatedAtTime ?conceptDocTime.
+        ?resourceDocGraph prov:generatedAtTime ?resourceDocTime.
         FILTER NOT EXISTS {
-          GRAPH ?newerConceptDocGraph {
-            ?conceptDoc rdf:type prov:Entity.
-            ?newerConceptDocGraph prov:generatedAtTime ?newerConceptDocTime.
-            FILTER( ?newerConceptDocTime > ?conceptDocTime )
+          GRAPH ?newerResourceDocGraph {
+            ?resourceDoc rdf:type prov:Entity.
+            ?newerResourceDocGraph prov:generatedAtTime ?newerResourceDocTime.
+            FILTER( ?newerResourceDocTime > ?resourceDocTime )
           }
         }
       }
       
       OPTIONAL {
-        GRAPH ?previousConceptGraph {
-          ?concept foaf:isPrimaryTopicOf ?prevConceptDoc.
+        GRAPH ?previousResourceGraph {
+          ?resource foaf:isPrimaryTopicOf ?prevResourceDoc.
         }
-        GRAPH ?prevConceptDocGraph {
-          ?prevConceptDoc ?prevConceptP ?prevConceptO;
-            dcterms:temporal ?prevConceptTemporal
+        GRAPH ?prevResourceDocGraph {
+          ?prevResourceDoc ?prevResourceP ?prevResourceO;
+            dcterms:temporal ?prevResourceTemporal
           .
-          ?prevConceptTemporal dcmiperiod:start ?prevConceptStart.
+          ?prevResourceTemporal dcmiperiod:start ?prevResourceStart.
           FILTER NOT EXISTS {
-            ?prevConceptTemporal dcmiperiod:end ?prevConceptEnd.
+            ?prevResourceTemporal dcmiperiod:end ?prevResourceEnd.
           }
-          FILTER( ?prevConceptP != dcterms:temporal )
+          FILTER( ?prevResourceP != dcterms:temporal )
           
-          ?prevConceptDocGraph prov:generatedAtTime ?prevConceptDocTime.
+          ?prevResourceDocGraph prov:generatedAtTime ?prevResourceDocTime.
           FILTER NOT EXISTS {
-            GRAPH ?newerPrevConceptDocGraph {
-              ?newerPrevConceptDocGraph prov:generatedAtTime ?newerPrevConceptDocTime.
-              ?prevConceptDoc rdf:type prov:Entity.
-              FILTER( ?newerPrevConceptDocTime > ?prevConceptDocTime )
+            GRAPH ?newerPrevResourceDocGraph {
+              ?newerPrevResourceDocGraph prov:generatedAtTime ?newerPrevResourceDocTime.
+              ?prevResourceDoc rdf:type prov:Entity.
+              FILTER( ?newerPrevResourceDocTime > ?prevResourceDocTime )
             }
           }
         }
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?resourceDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }  
   '''
@@ -2484,11 +2328,11 @@ stage:ClassificerendeWaardelijstCollectionGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?collectionDoc ?collectionP ?collectionO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevCollectionDoc ?prevCollectionP ?prevCollectionO;
@@ -2566,7 +2410,7 @@ stage:ClassificerendeWaardelijstCollectionGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?collectionDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }
   '''
@@ -2599,11 +2443,11 @@ stage:ClassificerendeWaardelijstConceptsGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?conceptDoc ?conceptP ?conceptO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevConceptDoc ?prevConceptP ?prevConceptO;
@@ -2693,7 +2537,7 @@ stage:ClassificerendeWaardelijstConceptsGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?conceptDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }
   '''
@@ -2726,11 +2570,11 @@ stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?conceptDoc ?conceptP ?conceptO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevConceptDoc ?prevConceptP ?prevConceptO;
@@ -2813,7 +2657,7 @@ stage:CategoriserendeWaardelijstGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?conceptDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }  
   '''
@@ -2846,11 +2690,11 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
           prov:wasAttributedTo user:TomcatUser
         .
 
-        ?period dcmiperiod:start "@GELDIGHEID@".
+        ?temporal dcmiperiod:start "@GELDIGHEID@".
         
         ?resourceDoc ?resourceP ?resourceO;
           adms:status adms-status:Completed;
-          dcterms:temporal ?period
+          dcterms:temporal ?temporal
         .
         
         ?prevResourceDoc ?prevResourceP ?prevResourceO;
@@ -2931,7 +2775,7 @@ stage:RefererendeWaardelijstGeldigMakenScene a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/period/", replace( now(), " ", "T" ) ) ) AS ?period )
+      BIND( iri( replace( str( ?resourceDoc ), "entity", "temporal" ) ) AS ?temporal )
       BIND( now() AS ?now )
     }
   '''
