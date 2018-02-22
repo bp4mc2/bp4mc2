@@ -45,7 +45,7 @@ container:concept-post-ttl a elmo:Container;
   
   # Data
   elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenPost
+  elmo:query stage:DSOv2UploadPost;
 .
 
 # Container PUT Turtle Concepten
@@ -92,14 +92,14 @@ container:concept-add-ttl a elmo:Container;
   
   # Data
   elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenAdd;
+  elmo:query stage:DSOv2ConceptenAdd
 .
 
 #
 # SCENES
 #
 
-stage:DSOv2ConceptenPost a elmo:Scene;
+stage:DSOv2UploadPost a elmo:Scene;
 	rdfs:label "Query voor verwerken POST";
 	elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
@@ -200,7 +200,7 @@ stage:DSOv2ConceptenPost a elmo:Scene;
         }
       }
       GRAPH container:generiek {
-        ?s rdf:type skos:Concept;
+          ?s rdf:type ?type;
           skos:prefLabel ?prefLabel;
           ?p ?o
         .
@@ -208,13 +208,15 @@ stage:DSOv2ConceptenPost a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( strbefore( "@DATASET@", "/id/" ) AS ?prefix )
-      BIND( iri( concat( ?prefix, "/id/concept/", ?prefLabel ) ) AS ?subject )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
+      BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
+      BIND( iri( concat( ?prefix, "/id/", ?typename, "/", ?prefLabel ) ) AS ?subject )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?prefLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
     CLEAR GRAPH container:generiek
     CLEAR GRAPH container:concept-post-ttl
+    CLEAR GRAPH container:collection-post-ttl
 	''';
 .
 

@@ -52,7 +52,7 @@ stage:search_concepts a elmo:Part;
 				?concept rdf:type skos:Concept.
     		BIND( str(?concept) AS ?label )
 			}
-			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+			#FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	''';
 .
@@ -76,7 +76,7 @@ stage:ClearSingleConceptScene a elmo:Scene;
 			GRAPH ?g {
 				<@CONCEPT@> ?p ?o
 			}
-      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      #FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	'''
 .
