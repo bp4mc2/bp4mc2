@@ -1517,6 +1517,201 @@ stage:GarbageCollectionScene a elmo:Scene;
 #
 #
 #
+# BEHEER COLLECTION
+#
+#
+#
+#
+# PRODUCTIONS
+#
+
+# Aanmaken collectie
+container:collection-post-ttl a elmo:Container;
+#updatestage:createcollection a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+  elmo:fragment [
+      elmo:applies-to "oin";
+      rdfs:label "OIN"@nl;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "1";
+  ];
+  elmo:fragment [
+      elmo:applies-to "dataset";
+      rdfs:label "Dataset"@nl;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "2";
+  ];
+  elmo:representation elmo:UploadRepresentation;
+	rdfs:label "Upload Collectie";
+  
+    # Data
+  elmo:replaces container:generiek;
+  elmo:query stage:DSOv2UploadPost;
+  #elmo:contains stage:DSOv2CollectiesConceptenPost;
+  .
+  
+# stage:DSOv2CollectiesPost a elmo:Scene;
+	# rdfs:label "Query voor verwerken POST";
+	# elmo:query '''
+    # prefix adms:            <http://www.w3.org/ns/adms#>
+    # prefix adms-status:     <http://purl.org/adms/status/>
+    # prefix dcat: 		        <http://www.w3.org/ns/dcat#>
+    # prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    # prefix dcterms:    		  <http://purl.org/dc/terms/>
+    # prefix def:             <http://catalogus.test.kadaster.nl/def/>
+    # prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    # prefix org:             <http://www.w3.org/TR/vocab-org#>
+    # prefix prov:            <http://www.w3.org/ns/prov#>
+    # prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    # prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    # prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    # prefix collection:      <http://catalogus.test.kadaster.nl/id/collection>
+    # prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    # prefix user:            <http://catalogus.test.kadaster.nl/users/>
+    
+    # INSERT {
+      # GRAPH ?transactie {
+        # ?transactie rdf:type sd:Graph, prov:Entity;
+          # skos:changeNote "Reserveren van het collectie in de Catalogus";
+          # prov:generatedAtTime ?now;
+          # prov:wasAttributedTo user:TomcatUser
+        # .
+        
+        # ?s ?p ?o;
+          # foaf:isPrimaryTopicOf ?doc
+        # .
+        
+        # ?doc rdf:type prov:Entity;
+          # adms:status adms-status:UnderDevelopment
+        # .
+      # }
+      # }
+    # WHERE {
+      # GRAPH container:generiek {
+        # ?s rdf:type skos:Collection;
+           # rdfs:label ?label_collection;
+          # ?p ?o
+        # .
+      # }
+      
+      # BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      # BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-collection-", ?prefLabel ) ) AS ?doc )
+      # BIND( now() AS ?now )
+    # }
+    
+	# ''';
+# .
+
+
+stage:CollectieList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix owl: 			<http://www.w3.org/2002/07/owl#>
+    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
+    
+    CONSTRUCT {
+      ?collectie rdfs:label ?collectie_label
+    }
+    WHERE {
+      GRAPH ?g {
+        ?collectie rdf:type skos:Collection;
+          rdfs:label ?collectie_label
+        .
+      }
+      
+    }
+  ''';
+.
+
+stage:ConceptList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix owl: 			<http://www.w3.org/2002/07/owl#>
+    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
+    
+  CONSTRUCT {
+    ?member rdfs:label ?label
+  }
+    WHERE {
+        ?s skos:member ?member;
+        ?p ?o.
+
+        BIND ( replace(replace(str(?member), strbefore( str(?member), "/concept/" ) ,""),"/concept/","") AS ?label)
+    }
+    # CONSTRUCT {
+      # ?concept rdfs:label ?concept_label
+    # }
+    # WHERE {
+      # GRAPH ?g {
+        # ?collectie  skos:member ?concept.
+        # ?concept rdfs:label ?concept_label
+        # .
+      # }
+    # }
+    
+  ''';
+.
+
+updatestage:deletewaardencollectie a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+	elmo:contains stage:DSOv2Header;
+	elmo:contains stage:DSOv2Footer;
+	elmo:queryForm stage:DeleteWaardenCollectieForm;
+  #elmo:contains stage:GarbageCollectionScene;
+  elmo:contains stage:CollectieList;
+  elmo:contains stage:ConceptList;
+  elmo:contains stage:ClearSingleMemberScene
+.
+
+
+stage:DeleteWaardenCollectieForm a elmo:Form;
+	rdfs:label "Verwijder waarde uit collectie";
+  elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "collectie";
+      rdfs:label "Selecteer de collectielijst"@nl;
+      elmo:valuesFrom stage:CollectieList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "3";
+  ];
+  elmo:fragment [
+      elmo:applies-to "concept";
+      rdfs:label "Selecteer het concept"@nl;
+      elmo:valuesFrom stage:ConceptList;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "4";
+  ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "5";
+  ]
+.
+
+
+# Scene gebruikt voor het verwijderen alle de geslecteerde skos:member
+stage:ClearSingleMemberScene a elmo:Scene;
+	elmo:index "1";
+	rdfs:label "Verwijder enkele member uit collectie";
+	elmo:query '''
+		DELETE {
+			GRAPH ?g {
+				<@COLLECTIE@> skos:member <@CONCEPT@>.
+			}
+		}
+		WHERE {
+			GRAPH ?g {
+				<@COLLECTIE@> ?p ?o;
+                    skos:member <@CONCEPT@>.
+			}
+     # FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+		}
+	'''
+.
+ 
+#
+#
+#
 # LIFECYCLE CONCEPTEN
 #
 #
@@ -2915,7 +3110,7 @@ stage:AddNewModelScene a elmo:Scene;
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConcepten a elmo:Representation;
+stage:WeergavePaginaResource a elmo:Representation;
   # Bereikbaarheid
   elmo:uri-pattern "/id/";
     
@@ -2923,10 +3118,10 @@ stage:WeergavePaginaConcepten a elmo:Representation;
   elmo:contains stage:DSOv2Menu;
   
   # Weergave
-  elmo:contains stage:WeergavePaginaConceptenAppearance
+  elmo:contains stage:WeergavePaginaResourceAppearance
 .
 
-stage:WeergavePaginaConceptenAppearance a elmo:Part;
+stage:WeergavePaginaResourceAppearance a elmo:Part;
   elmo:appearance elmo:ContentAppearance;
   elmo:fragment [
     elmo:applies-to skos:definition;
@@ -2964,11 +3159,11 @@ stage:WeergavePaginaConceptenAppearance a elmo:Part;
     elmo:applies-to rdfs:label;
     elmo:appearance elmo:HiddenAppearance
   ];
-  elmo:query stage:DSOv2ConceptQuery
+  elmo:query stage:DSOv2ResourceQuery
 .
 
 # Query voor WeergaveTabel
-stage:DSOv2ConceptQuery a elmo:Query;
+stage:DSOv2ResourceQuery a elmo:Query;
 	elmo:query '''    
     prefix prov: <http://www.w3.org/ns/prov#>
 		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
@@ -3311,25 +3506,22 @@ stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
 # Query voor tonen alle concepten
 stage:DSOv2ConceptenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
-		prefix collection: <http://localhost:8080/catalogus/dsov2/id/collection/>
-		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
+		prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?type ?uitleg
 		WHERE {
       GRAPH ?graph {
-        ?concept rdf:type skos:Concept;
-          rdfs:label ?concept_label.
-        OPTIONAL {?concept skos:definition ?uitleg}
+        ?concept rdf:type ?type.
+        OPTIONAL { ?concept rdfs:label ?concept_label. }
+        OPTIONAL { ?concept skos:definition ?uitleg. }
+        FILTER( ?type NOT IN ( sd:Graph, prov:Entity, skos:ConceptScheme ) )
         
         ?graph prov:generatedAtTime ?graphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
-            ?concept rdf:type skos:Concept.
+            ?concept rdf:type ?type.
             FILTER( ?newerTime > ?graphTime )
           }
         }
