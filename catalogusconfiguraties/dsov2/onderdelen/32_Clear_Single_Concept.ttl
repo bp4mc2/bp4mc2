@@ -10,22 +10,22 @@
 # PRODUCTIONS
 #
 
-# Speciale pagina om alle data over een enkel concept te wissen
+# Speciale pagina om alle data over een enkel resource te wissen
 # Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
-updatestage:clearsingleconcept a elmo:Production;
+updatestage:clearsingleresource a elmo:Production;
 	elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:search_concepts;
-	elmo:queryForm stage:DSOv2SelectConceptForm;
-	elmo:contains stage:ClearSingleConceptScene;
+	elmo:contains stage:search_resources;
+	elmo:queryForm stage:DSOv2SelectResourceForm;
+	elmo:contains stage:ClearSingleResourceScene;
 .
 
-stage:DSOv2SelectConceptForm a elmo:Form;
-	rdfs:label "Selecteer concept";
+stage:DSOv2SelectResourceForm a elmo:Form;
+	rdfs:label "Selecteer resource";
 	elmo:index "1";
 	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Selecteer concept"@nl;
-		elmo:valuesFrom stage:search_concepts;
+		elmo:applies-to "resource";
+		rdfs:label "Selecteer resource"@nl;
+		elmo:valuesFrom stage:search_resources;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "1";
 	];
@@ -40,19 +40,19 @@ stage:DSOv2SelectConceptForm a elmo:Form;
 # PARTS
 #
 
-stage:search_concepts a elmo:Part;
+stage:search_resources a elmo:Part;
 	elmo:appearance elmo:HiddenAppearance;
 	elmo:query '''
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		CONSTRUCT {
-			?concept rdfs:label ?label
+			?resource rdfs:label ?label
 		}
 		WHERE {
 			GRAPH ?g {
-				?concept rdf:type skos:Concept.
-    		BIND( str(?concept) AS ?label )
+				?resource rdf:type ?type.
+    		BIND( str(?resource) AS ?label )
 			}
-			FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+			FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
 		}
 	''';
 .
@@ -63,18 +63,18 @@ stage:search_concepts a elmo:Part;
 #
 
 # Scene gebruikt voor het verwijderen van alle data
-stage:ClearSingleConceptScene a elmo:Scene;
+stage:ClearSingleResourceScene a elmo:Scene;
 	elmo:index "1";
-	rdfs:label "Verwijder enkel concept";
+	rdfs:label "Verwijder enkel resource";
 	elmo:query '''
 		DELETE {
 			GRAPH ?g {
-				<@CONCEPT@> ?p ?o
+				<@RESOURCE@> ?p ?o
 			}
 		}
 		WHERE {
 			GRAPH ?g {
-				<@CONCEPT@> ?p ?o
+				<@RESOURCE@> ?p ?o
 			}
       FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
