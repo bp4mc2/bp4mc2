@@ -11,7 +11,6 @@
 
 # Aanmaken collectie
 container:collection-post-ttl a elmo:Container;
-#updatestage:createcollection a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
   elmo:fragment [
       elmo:applies-to "oin";
@@ -107,7 +106,7 @@ stage:CollectieList a elmo:Part;
   ''';
 .
 
-stage:ConceptList a elmo:Part;
+stage:CollectionMemberList a elmo:Part;
   elmo:appearance elmo:HiddenAppearance;
   elmo:query '''
     prefix owl: 			<http://www.w3.org/2002/07/owl#>
@@ -141,9 +140,8 @@ updatestage:deletewaardencollectie a elmo:Production;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
 	elmo:queryForm stage:DeleteWaardenCollectieForm;
-  #elmo:contains stage:GarbageCollectionScene;
   elmo:contains stage:CollectieList;
-  elmo:contains stage:ConceptList;
+  elmo:contains stage:CollectionMemberList;
   elmo:contains stage:ClearSingleMemberScene
 .
 
@@ -161,7 +159,7 @@ stage:DeleteWaardenCollectieForm a elmo:Form;
   elmo:fragment [
       elmo:applies-to "concept";
       rdfs:label "Selecteer het concept"@nl;
-      elmo:valuesFrom stage:ConceptList;
+      elmo:valuesFrom stage:CollectionMemberList;
       elmo:constraint elmo:MandatoryConstraint;
       elmo:index "4";
   ];
