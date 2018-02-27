@@ -279,6 +279,8 @@ stage:GarbageCollectionScene a elmo:Scene;
   '''
 .
 
+
+
 #-------------------------- deleten van specifieke waarden uit waardelijst
 
 stage:ValuelistMemberList a elmo:Part;
@@ -286,23 +288,40 @@ stage:ValuelistMemberList a elmo:Part;
   elmo:query '''
     prefix owl: 			<http://www.w3.org/2002/07/owl#>
     prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
+    prefix sh: 		          <http://www.w3.org/ns/shacl#>
     
     CONSTRUCT {
-      ?concept rdfs:label ?concept_label
+      ?concepten rdfs:label ?concept_label
     }
     WHERE {
-      GRAPH ?g {
-        ?waardelijst rdf:type sh:NodeShape.
-        ?concept rdfs:label ?concept_label
-        .
-      }
-    }
-    
+      ?waardelijst a rdfs:Class.
+      ?concepten a ?waardelijst;
+        rdfs:label ?concept_label
+    } 
   ''';
 .
 
+stage:WaardelijstenList2 a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>  
+    CONSTRUCT {
+      GRAPH ?g {
+        ?s rdf:type rdfs:Class.
+         
+      }
+    }
+
+    WHERE {
+      GRAPH ?g{
+        ?s rdf:type rdfs:Class.
+      }
+    }
+  ''';
+  .
+
 # Delete waarden van waardelijst
-updatestage:deletewaarden a elmo:Production;
+updatestage:deletewaardenwaardelijst a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
@@ -311,8 +330,7 @@ updatestage:deletewaarden a elmo:Production;
 	# elmo:contains stage:UpdateCollectionScene;
 	# elmo:contains stage:PostWaardenCategoriserendScene;
   elmo:contains stage:DeleteWaardenRefererendScene;
-  elmo:contains stage:GarbageCollectionScene;
-  elmo:contains stage:WaardelijstenList;
+  elmo:contains stage:WaardelijstenList2;
   elmo:contains stage:ValuelistMemberList;
 .
 
@@ -335,6 +353,11 @@ stage:DeleteWaardenForm a elmo:Form;
       elmo:constraint elmo:MandatoryConstraint;
       elmo:index "4";
   ];
+  elmo:fragment [
+      elmo:appearance elmo:SubmitAppearance;
+      rdfs:label "Ga verder"@nl;
+      elmo:index "4";
+  ]
 .
   
   
@@ -361,47 +384,18 @@ stage:DeleteWaardenRefererendScene a elmo:Scene;
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     DELETE {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Opslaan waarden voor refererende waardelijst";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        
-        ?subject ?p ?o;
-          foaf:isPrimaryTopicOf ?doc;
-          rdf:type ?class
-        .
-        
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment
-        .
-      }
-    }
-    WHERE {
-      GRAPH ?g {
-        <@CONCEPT@> rdf:type skos:Concept;
-          skos:prefLabel ?prefLabel;
-          ?p ?o
-        .
-        FILTER ( ?p != rdf:type )
-      }
-      GRAPH def:Waardelijsten {
-        <@WAARDELIJST@> rdf:type sh:NodeShape;
-          rdfs:label ?name;
-          sh:property [
-            sh:path rdf:type;
-            sh:hasValue ?class
-          ]
-        .
-      }
+     
+        ?s rdf:type <@WAARDELIJST@>
       
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # TODO: checken of onderstaande URI klopt!
-      BIND( lcase( replace( replace( str( ?class ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/", ?typename, "/", ?prefLabel ) ) AS ?subject )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?prefLabel ) ) AS ?doc )
-      BIND( now() AS ?now )
-    }  
+    }
+    
+    WHERE {
+      GRAPH ?g{
+        ?s rdf:type <@WAARDELIJST@>
+        }
+      #BIND (IRI(replace(strbefore(str(<@WAARDELIJST@>) ,"ValueList" ),"/","#")) AS ?waardelijst)
+      #FILTER (?s = <@CONCEPT@>)
+    }
+            
   '''
 .

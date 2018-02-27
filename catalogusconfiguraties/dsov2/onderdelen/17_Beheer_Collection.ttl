@@ -32,59 +32,6 @@ container:collection-post-ttl a elmo:Container;
   elmo:query stage:DSOv2UploadPost;
   #elmo:contains stage:DSOv2CollectiesConceptenPost;
   .
-  
-# stage:DSOv2CollectiesPost a elmo:Scene;
-	# rdfs:label "Query voor verwerken POST";
-	# elmo:query '''
-    # prefix adms:            <http://www.w3.org/ns/adms#>
-    # prefix adms-status:     <http://purl.org/adms/status/>
-    # prefix dcat: 		        <http://www.w3.org/ns/dcat#>
-    # prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    # prefix dcterms:    		  <http://purl.org/dc/terms/>
-    # prefix def:             <http://catalogus.test.kadaster.nl/def/>
-    # prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    # prefix org:             <http://www.w3.org/TR/vocab-org#>
-    # prefix prov:            <http://www.w3.org/ns/prov#>
-    # prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
-    # prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    # prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-    # prefix collection:      <http://catalogus.test.kadaster.nl/id/collection>
-    # prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    # prefix user:            <http://catalogus.test.kadaster.nl/users/>
-    
-    # INSERT {
-      # GRAPH ?transactie {
-        # ?transactie rdf:type sd:Graph, prov:Entity;
-          # skos:changeNote "Reserveren van het collectie in de Catalogus";
-          # prov:generatedAtTime ?now;
-          # prov:wasAttributedTo user:TomcatUser
-        # .
-        
-        # ?s ?p ?o;
-          # foaf:isPrimaryTopicOf ?doc
-        # .
-        
-        # ?doc rdf:type prov:Entity;
-          # adms:status adms-status:UnderDevelopment
-        # .
-      # }
-      # }
-    # WHERE {
-      # GRAPH container:generiek {
-        # ?s rdf:type skos:Collection;
-           # rdfs:label ?label_collection;
-          # ?p ?o
-        # .
-      # }
-      
-      # BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-collection-", ?prefLabel ) ) AS ?doc )
-      # BIND( now() AS ?now )
-    # }
-    
-	# ''';
-# .
-
 
 stage:CollectieList a elmo:Part;
   elmo:appearance elmo:HiddenAppearance;
@@ -111,26 +58,16 @@ stage:CollectionMemberList a elmo:Part;
   elmo:query '''
     prefix owl: 			<http://www.w3.org/2002/07/owl#>
     prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
-    
-  CONSTRUCT {
-    ?member rdfs:label ?label
-  }
-    WHERE {
-        ?s skos:member ?member;
-        ?p ?o.
-
-        BIND ( replace(replace(str(?member), strbefore( str(?member), "/concept/" ) ,""),"/concept/","") AS ?label)
+    CONSTRUCT {
+      ?concept rdfs:label ?concept_label
     }
-    # CONSTRUCT {
-      # ?concept rdfs:label ?concept_label
-    # }
-    # WHERE {
-      # GRAPH ?g {
-        # ?collectie  skos:member ?concept.
-        # ?concept rdfs:label ?concept_label
-        # .
-      # }
-    # }
+    WHERE {
+      GRAPH ?g {
+        ?collectie  skos:member ?concept.
+        ?concept rdfs:label ?concept_label
+        .
+      }
+    }
     
   ''';
 .
@@ -144,7 +81,6 @@ updatestage:deletewaardencollectie a elmo:Production;
   elmo:contains stage:CollectionMemberList;
   elmo:contains stage:ClearSingleMemberScene
 .
-
 
 stage:DeleteWaardenCollectieForm a elmo:Form;
 	rdfs:label "Verwijder waarde uit collectie";
@@ -170,7 +106,6 @@ stage:DeleteWaardenCollectieForm a elmo:Form;
   ]
 .
 
-
 # Scene gebruikt voor het verwijderen alle de geslecteerde skos:member
 stage:ClearSingleMemberScene a elmo:Scene;
 	elmo:index "1";
@@ -186,7 +121,6 @@ stage:ClearSingleMemberScene a elmo:Scene;
 				<@COLLECTIE@> ?p ?o;
                     skos:member <@CONCEPT@>.
 			}
-     # FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	'''
 .
