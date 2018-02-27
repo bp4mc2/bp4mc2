@@ -1229,7 +1229,7 @@ inspire-shape:TopicCategory a sh:PropertyShape;
 .
 inspire-shape:SpatialDataServiceType a sh:PropertyShape;
   dct:subject inspire-concept:SpatialDataServiceType;
-  sh:name "SDS type";
+  sh:name "SDStype";
   sh:severity sh:Violation; # Only for services, not applicable to datasets and dataset series
   sh:class skos:Concept; # GenericName
   sh:minCount 1;
@@ -1323,9 +1323,9 @@ inspire-shape:TemporalExtent a sh:PropertyShape;
 inspire-shape:DateOfPublication a sh:PropertyShape;
   dct:subject inspire-concept:DateOfPublication;
   sh:name "dateOfPublication";
-  sh:node inspire-shape:CIDate;
+  sh:node inspire-shape:CIDate; #Described in ISO 19108 and ISO 8601
   sh:severity sh:Warning; #Conditional: at least one date of publication / date of creation / date of revision is required
-  sh:datatype xsd:dateTime; #Described in ISO 19108 and ISO 8601
+  sh:nodekind sh:BlankNode;
   inspire-meta:isoref "362. date";
   inspire-meta:xpath "identificationInfo[1]/*/citation/*/date[./*/dateType/*/text()='publication']/*/date";
   skos:example "2009-03-15";
@@ -1336,8 +1336,8 @@ inspire-shape:DateOfLastRevision a sh:PropertyShape;
   sh:name "dateOfLastRevision";
   sh:severity sh:Warning; #Conditional: at least one date of publication / date of creation / date of revision is required
   sh:maxCount 1;
-  sh:node inspire-shape:CIDate;
-  sh:datatype xsd:dateTime; #Described in ISO 19108 and ISO 8601
+  sh:node inspire-shape:CIDate; #Described in ISO 19108 and ISO 8601
+  sh:nodekind sh:BlankNode;
   inspire-meta:isoref "362. date";
   inspire-meta:xpath "identificationInfo[1]/*/citation/*/date[./*/dateType/*/text()='publication']/*/date";
   skos:example "2009-04-15";
@@ -1349,8 +1349,8 @@ inspire-shape:DateOfCreation a sh:PropertyShape;
   sh:name "dateOfCreation";
   sh:severity sh:Warning; #Conditional: at least one date of publication / date of creation / date of revision is required
   sh:maxCount 1;
-  sh:node inspire-shape:CIDate;
-  sh:datatype xsd:dateTime; #Described in ISO 19108 and ISO 8601
+  sh:node inspire-shape:CIDate; #Described in ISO 19108 and ISO 8601
+  sh:nodekind sh:BlankNode;
   inspire-meta:isoref "362. date";
   inspire-meta:xpath "identificationInfo[1]/*/citation/*/date[./*/dateType/*/text()='publication']/*/date";
   skos:example "2009-02-15";
@@ -1383,7 +1383,7 @@ inspire-shape:SpatialResolutionDistance a sh:PropertyShape;
   dct:subject inspire-concept:SpatialResolution;
   sh:name "spatialResolution";
   sh:severity sh:Warning; #Mandatory if an equivalent scale or a resolution distance can be specified. Mandatory when there is a restriction on the spatial resolution for service.
-  sh:datatype xsd:decimal;
+  sh:datatype xsd:integer;
   sh:node inspire-shape:Distance;
   inspire-meta:isoref "61. distance";
   inspire-meta:xpath "identificationInfo[1]/*/spatialResolution/*/distance";

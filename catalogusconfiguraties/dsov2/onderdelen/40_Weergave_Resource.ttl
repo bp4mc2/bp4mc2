@@ -3,21 +3,18 @@
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConcepten a elmo:Representation;
+stage:WeergavePaginaResource a elmo:Representation;
   # Bereikbaarheid
-  elmo:uri-pattern "/id/concept/";
-  elmo:applies-to [
-    rdf:type skos:Concept
-  ];
+  elmo:uri-pattern "/id/";
     
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
   
   # Weergave
-  elmo:contains stage:WeergavePaginaConceptenAppearance
+  elmo:contains stage:WeergavePaginaResourceAppearance
 .
 
-stage:WeergavePaginaConceptenAppearance a elmo:Part;
+stage:WeergavePaginaResourceAppearance a elmo:Part;
   elmo:appearance elmo:ContentAppearance;
   elmo:fragment [
     elmo:applies-to skos:definition;
@@ -55,11 +52,11 @@ stage:WeergavePaginaConceptenAppearance a elmo:Part;
     elmo:applies-to rdfs:label;
     elmo:appearance elmo:HiddenAppearance
   ];
-  elmo:query stage:DSOv2ConceptQuery
+  elmo:query stage:DSOv2ResourceQuery
 .
 
 # Query voor WeergaveTabel
-stage:DSOv2ConceptQuery a elmo:Query;
+stage:DSOv2ResourceQuery a elmo:Query;
 	elmo:query '''    
     prefix prov: <http://www.w3.org/ns/prov#>
 		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>

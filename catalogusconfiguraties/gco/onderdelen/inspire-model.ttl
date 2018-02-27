@@ -8,23 +8,85 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix doc: <http://localhost:8080/catalogus/gco/doc#>.
 
+#
+# De inhoud van het document
+#
+doc:inspire elmo:data (
+'''# Inspire metadataprofiel
+This document described the INSPIRE Profile
+
+The original source document can be found at: 
+
+This profile is described as SHACL shape graph, but does **not** use any vocabularies. A [seperate mapping]() to GEO-DCAT-AP is provided.'''
+[html:img "inspire.png"]
+"## Metadata elements as described in the regulation"
+[elmo:contains stage:inspire-lijst]
+"## Metadata elements from the technical guidelines"
+[elmo:contains stage:inspire-lijst2]
+)
+.
+
+#
+# Tonen van de pagina
+#
+stage:inspire-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/inspire(|.md)$";
+  elmo:index "0";
+	elmo:contains stage:inspire-lijst;
+	elmo:contains stage:inspire-lijst2;
+  elmo:query '''
+    prefix doc: <http://localhost:8080/catalogus/gco/doc#>
+    construct {
+      doc:dcat-ap-eu elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:inspire elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
+
+#
+# Model
+#
 stage:inspire-model a elmo:Representation;
 	elmo:index "1";
 	elmo:url-pattern	"/query/inspire-model$";
 	elmo:contains stage:Menu;
   elmo:appearance elmo:VocabularyAppearance;
 	elmo:query '''
+    prefix dct: <http://purl.org/dc/terms/>
     construct {
       ?s?p?o.
-      ?property rdf:type sh:PropertyShape
+      ?property sh:path ?predicate.
+      ?predicate rdf:type rdf:Property.
+      ?predicate rdfs:label ?property_name.
+      ?predicate rdfs:comment ?comment
     }
     where {
-      graph <http://bp4mc2.org/id/dataset/inspire> {
-        ?s?p?o
-        OPTIONAL {
-          ?s sh:property ?property
+      select ?s ?p ?o ?comment ?property ?property_name (if(bound($property_name),iri(concat("http://bp4mc2.org/inspire/def/inspire#",$property_name)),$property_name) as ?predicate)
+      where {
+        graph <http://bp4mc2.org/id/dataset/inspire> {
+          ?s?p?o
+          OPTIONAL {
+            ?s sh:property ?property.
+            ?property sh:name ?property_name.
+            FILTER NOT EXISTS {?property sh:path ?path}
+            OPTIONAL {
+              ?property dct:subject ?concept.
+              ?concept skos:definition ?comment
+            }
+          }
+          FILTER (!isLiteral(?o) || lang(?o)="en" || lang(?o)="")
         }
-        FILTER (!isLiteral(?o) || lang(?o)="en" || lang(?o)="")
       }
     }
   '''

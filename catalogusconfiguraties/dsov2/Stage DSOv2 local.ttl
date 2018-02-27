@@ -105,28 +105,23 @@ stage:DSOv2Beheermenu a elmo:Part;
 			xhtml:link "/catalogus/dsov2";
 		];
 		elmo:data [
-			rdfs:label "Concepten";
+			rdfs:label "Resources";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Voer nieuw concept op";
+				rdfs:label "Voer nieuwe resource(s) op";
 				elmo:index "01";
-				xhtml:link "/catalogus/dsov2/container/concept-post-ttl";
+				xhtml:link "/catalogus/dsov2/container/resource-post-ttl";
 			];
 			elmo:data [
-				rdfs:label "Pas bestaande resource aan";
+				rdfs:label "Pas bestaande resource(s) aan";
 				elmo:index "02";
-				xhtml:link "/catalogus/dsov2/container/concept-put-ttl";
+				xhtml:link "/catalogus/dsov2/container/resource-put-ttl";
 			];
       elmo:data [
-				rdfs:label "Vul bestaand concept aan";
+				rdfs:label "Vul bestaande resource aan";
 				elmo:index "03";
-				xhtml:link "/catalogus/dsov2/container/concept-add-ttl";
+				xhtml:link "/catalogus/dsov2/container/resource-add-ttl";
 			];
-      # elmo:data [
-				# rdfs:label "Maak begrip bekend";
-				# elmo:index "04";
-				# xhtml:link "/catalogus/dsov2/update/concept-issue";
-			# ];
       elmo:data [
 				rdfs:label "Maak resource geldig";
 				elmo:index "05";
@@ -138,36 +133,11 @@ stage:DSOv2Beheermenu a elmo:Part;
 				xhtml:link "/catalogus/dsov2/update/resource-ongeldigmaken";
 			];
       elmo:data [
-				rdfs:label "Voer nieuwe dataset op";
-				elmo:index "06";
-				xhtml:link "/catalogus/dsov2/container/dataset-post-ttl";
+				rdfs:label "Maak alle resources in dataset geldig";
+				elmo:index "07";
+				xhtml:link "/catalogus/dsov2/update/dataset-geldigmaken";
 			];
 		];
-     elmo:data [
-      rdfs:label "Collecties";
-      elmo:index "3";
-      elmo:data [
-				rdfs:label "Maak een collectie aan";
-				elmo:index "1";
-        xhtml:link "/catalogus/dsov2/container/collection-post-ttl";
-			];
-      # elmo:data [
-        # rdfs:label "Upload waarden collectie";
-        # elmo:index "2";
-        # xhtml:link "/catalogus/dsov2/container/waarden-collectie-post"
-      # ];
-      # elmo:data [
-         # rdfs:label "Sync waarden naar collectie";
-         # elmo:index "3";
-         # xhtml:link "update/syncwaardencollectie";
-      # ];   
-      elmo:data [
-          rdfs:label "Delete waarden uit collectie";
-          elmo:index "3";
-          xhtml:link "update/deletewaardencollectie";
-       ];   
-      
-    ];
     elmo:data [
       rdfs:label "Waardelijsten";
       elmo:index "3";
@@ -211,9 +181,9 @@ stage:DSOv2Beheermenu a elmo:Part;
 				xhtml:link "/catalogus/dsov2/update/clearwaardelijsten";
 			];
       elmo:data [
-				rdfs:label "Verwijder enkel concept";
+				rdfs:label "Verwijder enkele resource";
 				elmo:index "3";
-				xhtml:link "/catalogus/dsov2/update/clearsingleconcept";
+				xhtml:link "/catalogus/dsov2/update/clearsingleresource";
 			];
       elmo:data [
 				rdfs:label "Voer TomcatUser op";
@@ -552,11 +522,11 @@ container:begripaanpassen a elmo:Container;
 
 # Twee soorten containers:
 # POST
-# 	- Voegt één of meerdere nieuwe begrippen toe
-# 	- Geeft een foutmelding als één of meerdere van de geuploade begrippen al bestaan
+# 	- Voegt één of meerdere nieuwe resourcepen toe
+# 	- Geeft een foutmelding als één of meerdere van de geuploade resourcepen al bestaan
 # PUT
-# 	- Update bestaande begrippen
-#	- Geeft een foutmelding als één of meerdere van de geuploade begrippen nog niet bestaan
+# 	- Update bestaande resourcepen
+#	- Geeft een foutmelding als één of meerdere van de geuploade resourcepen nog niet bestaan
 # 
 
 #
@@ -564,7 +534,7 @@ container:begripaanpassen a elmo:Container;
 #
 
 # Container POST Turtle Concepten
-container:concept-post-ttl a elmo:Container;
+container:resource-post-ttl a elmo:Container;
   # Onderdelen
   elmo:contains stage:DSOv2Beheermenu;
   elmo:fragment [
@@ -581,15 +551,76 @@ container:concept-post-ttl a elmo:Container;
   ];
   # Weergave
   elmo:representation elmo:UploadRepresentation;
-  rdfs:label "Voeg nieuw concept toe (.ttl)";
+  rdfs:label "Voeg nieuw resource toe (.ttl)";
+  
+  # Assertions
+  elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+			prefix dcterms: <http://purl.org/dc/terms/>
+      prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:generiek {
+					?s rdf:type ?type.
+          FILTER(  ?type IN ( dcat:Dataset, skos:ConceptScheme ) )
+					FILTER NOT EXISTS {
+						?s dcterms:title ?title.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:generiek {
+					?s rdf:type dcat:Dataset.
+					FILTER NOT EXISTS {
+						?s rdf:type skos:ConceptScheme.
+					}
+				}
+			}
+		''';
+	];
+	elmo:assertion [
+		rdfs:label "De upload mag geen conceptschemes zonder dcat:Dataset bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:generiek {
+					?s rdf:type skos:ConceptScheme.
+					FILTER NOT EXISTS {
+						?s rdf:type dcat:Dataset.
+					}
+				}
+			}
+		''';
+	];
+  elmo:assertion [
+		rdfs:label "De upload mag geen triples met skos:inScheme als predicate bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:generiek {
+					?s skos:inScheme ?scheme.
+				}
+			}
+		''';
+	];
   
   # Data
   elmo:replaces container:generiek;
-  elmo:query stage:DSOv2UploadPost;
+  elmo:query stage:ResourcePostScene
 .
 
 # Container PUT Turtle Concepten
-container:concept-put-ttl a elmo:Container;
+container:resource-put-ttl a elmo:Container;
   # Onderdelen
   elmo:contains stage:DSOv2Beheermenu;
   
@@ -618,29 +649,30 @@ container:concept-put-ttl a elmo:Container;
   
   # Data
   elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenPut;
+  elmo:query stage:ResourcePutScene;
 .
 
-# Container voor aanvullen concept
-container:concept-add-ttl a elmo:Container;
+# Container voor aanvullen resource
+container:resource-add-ttl a elmo:Container;
   # Onderdelen
   elmo:contains stage:DSOv2Beheermenu;
   
   # Weergave
   elmo:representation elmo:UploadRepresentation;
-  rdfs:label "Vul bestaand concept aan (.ttl)";
+  rdfs:label "Vul bestaand resource aan (.ttl)";
   
   # Data
   elmo:replaces container:generiek;
-  elmo:query stage:DSOv2ConceptenAdd
+  elmo:query stage:ResourceAddScene;
 .
 
 #
 # SCENES
 #
 
-stage:DSOv2UploadPost a elmo:Scene;
-	rdfs:label "Query voor verwerken POST";
+stage:ResourcePostScene a elmo:Scene;
+	rdfs:label "Opslaan van de resources";
+  elmo:index "90";
 	elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -662,14 +694,17 @@ stage:DSOv2UploadPost a elmo:Scene;
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Reserveren van het begrip in de Catalogus";
+          skos:changeNote "Reserveren van de resource in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
         
         ?subject ?p ?o;
+          rdf:type ?type;
+          skos:prefLabel ?prefLabel;
+          dcterms:title ?title;
           foaf:isPrimaryTopicOf ?doc;
-          skos:inScheme <@DATASET@>
+          skos:inScheme ?dataset
         .
         
         ?doc rdf:type prov:Entity;
@@ -678,89 +713,111 @@ stage:DSOv2UploadPost a elmo:Scene;
       }
     }
     WHERE {
-      GRAPH ?orgGraph {
-        ?org rdf:type org:Organization;
-          org:identifier "@OIN@"^^xsd:string;
-          foaf:isPrimaryTopicOf ?docOrg
-        .
-        
-        ?orgGraph prov:generatedAtTime ?orgTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerOrgGraph {
-            ?newerOrgGraph prov:generatedAtTime ?newerOrgTime.
-            ?org rdf:type org:Organization.
-            FILTER( ?newerOrgTime > ?orgTime )
+      {
+        GRAPH ?orgGraph {
+          ?org rdf:type org:Organization;
+            org:identifier "@OIN@"^^xsd:string;
+            foaf:isPrimaryTopicOf ?docOrg
+          .
+          
+          ?orgGraph prov:generatedAtTime ?orgTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerOrgGraph {
+              ?newerOrgGraph prov:generatedAtTime ?newerOrgTime.
+              ?org rdf:type org:Organization.
+              FILTER( ?newerOrgTime > ?orgTime )
+            }
           }
         }
-      }
-      GRAPH ?docOrgGraph {
-        ?docOrg adms:status adms-status:Completed.
-        FILTER NOT EXISTS {
-          ?docOrg dcterms:temporal/dcmiperiod:end ?end.
-          FILTER( strdt( ?end, xsd:dateTime ) < now() )
-        }
-        
-        ?docOrgGraph prov:generatedAtTime ?docOrgTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocOrgGraph {
-            ?newerDocOrgGraph prov:generatedAtTime ?newerDocOrgTime.
-            ?docOrg rdf:type prov:Entity.
-            FILTER( ?newerDocOrgTime > ?docOrgTime )
+        GRAPH ?docOrgGraph {
+          ?docOrg adms:status adms-status:Completed.
+          FILTER NOT EXISTS {
+            ?docOrg dcterms:temporal/dcmiperiod:end ?end.
+            FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          }
+          
+          ?docOrgGraph prov:generatedAtTime ?docOrgTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocOrgGraph {
+              ?newerDocOrgGraph prov:generatedAtTime ?newerDocOrgTime.
+              ?docOrg rdf:type prov:Entity.
+              FILTER( ?newerDocOrgTime > ?docOrgTime )
+            }
           }
         }
-      }
-      GRAPH ?datasetGraph {
-        <@DATASET@> dcterms:publisher ?org;
-          foaf:isPrimaryTopicOf ?docDataset
-        .
-        
-        ?datasetGraph prov:generatedAtTime ?datasetTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerDatasetGraph {
-            ?newerDatasetGraph prov:generatedAtTime ?newerDatasetTime.
-            ?docDataset rdf:type dcat:Dataset.
-            FILTER( ?newerDatasetTime > ?datasetTime )
+        GRAPH ?datasetGraph {
+          <@DATASET@> dcterms:publisher ?org;
+            foaf:isPrimaryTopicOf ?docDataset
+          .
+          
+          ?datasetGraph prov:generatedAtTime ?datasetTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDatasetGraph {
+              ?newerDatasetGraph prov:generatedAtTime ?newerDatasetTime.
+              <@DATASET@> rdf:type dcat:Dataset.
+              FILTER( ?newerDatasetTime > ?datasetTime )
+            }
           }
         }
-      }
-      GRAPH ?docDatasetGraph {
-        ?docDataset adms:status adms-status:Completed.
-        FILTER NOT EXISTS {
-          ?docDataset dcterms:temporal/dcmiperiod:end ?end.
-          FILTER( strdt( ?end, xsd:dateTime ) < now() )
-        }
-        
-        ?docDatasetGraph prov:generatedAtTime ?docDatasetTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocDatasetGraph {
-            ?newerDocDatasetGraph prov:generatedAtTime ?newerDocDatasetTime.
-            ?docDataset rdf:type prov:Entity.
-            FILTER( ?newerDocDatasetTime > ?docDatasetTime )
+        GRAPH ?docDatasetGraph {
+          ?docDataset adms:status adms-status:Completed.
+          FILTER NOT EXISTS {
+            ?docDataset dcterms:temporal/dcmiperiod:end ?end.
+            FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          }
+          
+          ?docDatasetGraph prov:generatedAtTime ?docDatasetTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocDatasetGraph {
+              ?newerDocDatasetGraph prov:generatedAtTime ?newerDocDatasetTime.
+              ?docDataset rdf:type prov:Entity.
+              FILTER( ?newerDocDatasetTime > ?docDatasetTime )
+            }
           }
         }
-      }
-      GRAPH container:generiek {
+        GRAPH container:generiek {
           ?s rdf:type ?type;
-          skos:prefLabel ?prefLabel;
-          ?p ?o
-        .
+            ?p ?o
+          .
+          FILTER( ?type NOT IN ( dcat:Dataset, skos:ConceptScheme, org:Organization ) )
+          FILTER( ?p NOT IN ( skos:prefLabel, skos:inScheme, rdf:type ) )
+          OPTIONAL {
+            ?s skos:prefLabel ?prefLabel
+          }
+          OPTIONAL {
+            ?s skos:inScheme ?scheme.
+          }
+        }
+        BIND( IF( BOUND( ?scheme ), ?scheme, iri( "@DATASET@" ) ) AS ?dataset )
+      } UNION {
+        GRAPH container:generiek {
+          ?s rdf:type ?type;
+            ?p ?o
+          .
+          FILTER( ?p NOT IN ( skos:inScheme ) )
+          OPTIONAL {
+            ?s dcterms:title ?title.
+          }
+          FILTER( ?type IN ( dcat:Dataset, skos:ConceptScheme, org:Organization ) )
+        }
       }
       
+      BIND( IF( BOUND( ?prefLabel ), ?prefLabel,
+            IF( BOUND( ?title ), replace( ?title, " ", "" ),
+            replace( str( ?s ), ".+/", "" )
+          ) ) AS ?workingLabel )
+      BIND( IF( ?type = skos:ConceptScheme, dcat:Dataset, ?type ) AS ?workingType )
+      BIND( lcase( replace( replace( str( ?workingType ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( strbefore( "@DATASET@", "/id/" ) AS ?prefix )
-      BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( iri( concat( ?prefix, "/id/", ?typename, "/", ?prefLabel ) ) AS ?subject )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?prefLabel ) ) AS ?doc )
+      BIND( IF( ?workingType = dcat:Dataset, ?s, iri( concat( ?prefix, "/id/", ?typename, "/", ?workingLabel ) ) ) AS ?subject )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?workingLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
-    
-    CLEAR GRAPH container:generiek
-    CLEAR GRAPH container:concept-post-ttl
-    CLEAR GRAPH container:collection-post-ttl
 	''';
 .
 
-stage:DSOv2ConceptenPut a elmo:Scene;
+stage:ResourcePutScene a elmo:Scene;
 	rdfs:label "Query voor verwerken PUT";
 	elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
@@ -780,7 +837,7 @@ stage:DSOv2ConceptenPut a elmo:Scene;
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanpassen van een begrip in de Catalogus";
+          skos:changeNote "Aanpassen van een resource in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
@@ -851,21 +908,21 @@ stage:DSOv2ConceptenPut a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( IF( ?type = skos:ConceptScheme, dcat:Dataset, ?type ) AS ?workingtype )
-      BIND( lcase( replace( replace( str( ?workingtype ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
+      BIND( IF( ?type = skos:ConceptScheme, dcat:Dataset, ?type ) AS ?workingType )
+      BIND( lcase( replace( replace( str( ?workingType ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
       BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
       BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
     CLEAR GRAPH container:generiek
-    CLEAR GRAPH container:concept-put-ttl
+    CLEAR GRAPH container:resource-put-ttl
 
   '''
 .
     
-stage:DSOv2ConceptenAdd a elmo:Scene;
-	rdfs:label "Query voor verwerken aanvullen concept";
+stage:ResourceAddScene a elmo:Scene;
+	rdfs:label "Query voor verwerken aanvullen resource";
 	elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -883,7 +940,7 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanvullen van een in werking zijnde begrip met buiten-besluit elementen";
+          skos:changeNote "Aanvullen van een in werking zijnde resource met buiten-besluit elementen";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
@@ -917,10 +974,16 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
         )
       }
       GRAPH ?graph {
-        ?s foaf:isPrimaryTopicOf ?currentDoc;
-          skos:prefLabel ?prefLabel;
+        ?s rdf:type ?type;
+          foaf:isPrimaryTopicOf ?currentDoc;
           ?pred ?obj
         .
+        OPTIONAL {
+          ?s skos:prefLabel ?prefLabel.
+        }
+        OPTIONAL {
+          ?s dcterms:title ?title.
+        }
         FILTER(
           ?pred != foaf:isPrimaryTopicOf
         )
@@ -963,142 +1026,18 @@ stage:DSOv2ConceptenAdd a elmo:Scene;
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
+      BIND( lcase( replace( replace( str( ?workingType ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
+      BIND( IF( BOUND( ?prefLabel ), ?prefLabel,
+            IF( BOUND( ?title ), ?title, 
+          ) ) AS ?workingLabel )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity", replace( now(), " ", "T" ), "-", ?typename, "-", ?workingLabel ) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
     CLEAR GRAPH container:generiek
-    CLEAR GRAPH container:concept-add-ttl
+    CLEAR GRAPH container:resource-add-ttl
   '''
 . 
-#
-#
-#
-# BEHEER DATASETS
-#
-#
-#
-
-#
-# CONTAINERS
-#
-
-# Uploadcontainer datasets
-container:dataset-post-ttl a elmo:Container;
-	elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:DSOv2Header;
-	elmo:contains stage:DSOv2Footer;
-	elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload Dataset beschrijving (RDF of Turtle)";
-  elmo:replaces container:generiek;
-	elmo:query stage:DSOv2DatasetUploadScene;
-	elmo:assertion [
-		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-			prefix dct: <http://purl.org/dc/terms/>
-			ASK {
-				GRAPH container:generiek {
-					?s rdf:type ?type.
-					FILTER NOT EXISTS {
-						?s dct:title ?title.
-					}
-				}
-			}
-		''';
-	];
-	elmo:assertion [
-		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-			prefix dcat: <http://www.w3.org/ns/dcat#>
-			ASK {
-				GRAPH container:generiek {
-					?s rdf:type ?type.
-					FILTER NOT EXISTS {
-						?s rdf:type skos:ConceptScheme.
-					}
-				}
-			}
-		''';
-	];
-	elmo:assertion [
-		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
-		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-			prefix dcat: <http://www.w3.org/ns/dcat#>
-			ASK {
-				GRAPH container:generiek {
-					?s rdf:type ?type.
-					FILTER NOT EXISTS {
-						?s rdf:type dcat:Dataset.
-					}
-				}
-			}
-		''';
-	];
-.
-
-#
-# SCENES
-#
-
-# Uploadquery datasets
-stage:DSOv2DatasetUploadScene a elmo:Scene;
-	rdfs:label "Postquery inladen dataset-metadata";
-	elmo:index "1";
-	elmo:query '''
-    prefix adms:            <http://www.w3.org/ns/adms#>
-    prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcat: 	  		    <http://www.w3.org/ns/dcat#>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix def:             <http://catalogus.test.kadaster.nl/def/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    prefix org:             <http://www.w3.org/TR/vocab-org#>
-    prefix prov:            <http://www.w3.org/ns/prov#>
-    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
-    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    
-    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    prefix user:            <http://catalogus.test.kadaster.nl/users/>
-    
-    INSERT {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Reserveren van het dataset in de Catalogus";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        
-        ?s ?p ?o;
-          foaf:isPrimaryTopicOf ?doc
-        .
-        
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment
-        .
-      }
-    }
-    WHERE {
-      GRAPH container:generiek {
-        ?s rdf:type dcat:Dataset;
-          dcterms:title ?title;
-          ?p ?o
-        .
-      }
-      
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-dataset-", replace( ?title, " ", "" ) ) ) AS ?doc )
-      BIND( now() AS ?now )
-    }
-    
-		CLEAR GRAPH container:dataset-post-ttl
-    CLEAR GRAPH container:generiek
-	''';
-.
- 
 #
 #
 #
@@ -1313,19 +1252,21 @@ container:waarden-post a elmo:Container;
   elmo:contains stage:DSOv2Beheermenu;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
-	elmo:replaces container:generiek
+	elmo:replaces container:generiek;
+  elmo:assertion [
+		rdfs:label "De upload mag geen triples met skos:inScheme als predicate bevatten.";
+		elmo:assert-not '''
+			prefix container: <http://localhost:8080/catalogus/dsov2/container/>
+			prefix dcat: <http://www.w3.org/ns/dcat#>
+			ASK {
+				GRAPH container:generiek {
+					?s skos:inScheme ?scheme.
+				}
+			}
+		''';
+	];
 .
 
-container:waarden-put a elmo:Container;
-  rdfs:label "Upload om waarden in een waardelijst aan te passen";
-  elmo:representation elmo:UploadRepresentation;
-  elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:DSOv2Header;
-	elmo:contains stage:DSOv2Footer;
-	elmo:replaces container:generiek;
-  elmo:contains stage:PutWaardenScene;
-  elmo:contains stage:GarbageCollectionScene
-.
 
 #
 # PRODUCTIONS
@@ -1337,17 +1278,29 @@ updatestage:syncwaarden a elmo:Production;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
 	elmo:queryForm stage:PostWaardenForm;
-	elmo:contains stage:PostWaardenClassificerendScene;
-	elmo:contains stage:UpdateCollectionScene;
-	elmo:contains stage:PostWaardenCategoriserendScene;
-	elmo:contains stage:PostWaardenRefererendScene;
-  elmo:contains stage:GarbageCollectionScene;
+	elmo:contains stage:PrepareClassificerendScene;
+	elmo:contains stage:PrepareCategoriserendScene;
+	elmo:contains stage:PrepareRefererendScene;
+  elmo:contains stage:ResourcePostScene;
+	elmo:contains stage:GarbageCollectionScene;
   elmo:contains stage:WaardelijstenList;
 .
 
 stage:PostWaardenForm a elmo:Form;
 	rdfs:label "Sync waarden naar waardelijst";
   elmo:index "2";
+  elmo:fragment [
+      elmo:applies-to "oin";
+      rdfs:label "OIN"@nl;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "1";
+  ];
+  elmo:fragment [
+      elmo:applies-to "dataset";
+      rdfs:label "Dataset"@nl;
+      elmo:constraint elmo:MandatoryConstraint;
+      elmo:index "2";
+  ];
   elmo:fragment [
       elmo:applies-to "waardelijst";
       rdfs:label "Selecteer de waardelijst"@nl;
@@ -1386,72 +1339,9 @@ stage:WaardelijstenList a elmo:Part;
 # SCENES
 #
 
-# Scenes voor het toevoegen van waarden aan een waardelijst
-stage:PostWaardenClassificerendScene a elmo:Scene;
-  rdfs:label "Toevoegen waarden aan classificerende waardelijst";
-  elmo:index "1";
-  elmo:query '''
-    prefix adms:            <http://www.w3.org/ns/adms#>
-    prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcterms:    	    <http://purl.org/dc/terms/>
-    prefix foaf: 	  	      <http://xmlns.com/foaf/0.1/>
-    prefix prov:            <http://www.w3.org/ns/prov#>
-    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
-    prefix sh: 		          <http://www.w3.org/ns/shacl#>
-    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
-    
-    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    prefix def:             <http://catalogus.test.kadaster.nl/def/>
-    prefix user:            <http://catalogus.test.kadaster.nl/users/>
-    
-    INSERT {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Opslaan waarden voor classificerende waardelijst";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        
-        ?subject ?p ?o;
-          foaf:isPrimaryTopicOf ?doc
-        .
-        
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment
-        .
-      }
-    }
-    WHERE {
-      GRAPH container:generiek {
-        ?s rdf:type skos:Concept;
-          skos:prefLabel ?prefLabel;
-          ?p ?o
-        .
-      }
-      GRAPH def:Waardelijsten {
-        <@WAARDELIJST@> rdf:type sh:NodeShape;
-          rdfs:label ?name;
-          sh:property [
-            sh:path [ sh:inversePath skos:member ];
-            sh:hasValue ?collection
-          ]
-        .
-      }
-      
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
-      BIND( now() AS ?now )
-    }
-  '''
-.
-
-stage:UpdateCollectionScene a elmo:Scene;
-  rdfs:label "Updaten collectie van classificerende waardelijst";
-  elmo:index "2";
+stage:PrepareClassificerendScene a elmo:Scene;
+  rdfs:label "Klaarzetten data voor classificerende waardelijst";
+  elmo:index "01";
   elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -1469,36 +1359,18 @@ stage:UpdateCollectionScene a elmo:Scene;
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     INSERT {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Toevoegen waarden aan classificerende waardelijst";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        
+      GRAPH container:generiek {
         ?collection rdf:type skos:Collection;
           rdfs:label ?name;
           skos:prefLabel ?name;
-          skos:member ?subject;
-          skos:member ?member;
-          foaf:isPrimaryTopicOf ?doc
-        .
-        
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?currentDoc
-        .
-        
-        ?udDoc ?docP ?docO;
-          adms:status adms-status:Withdrawn
+          skos:member ?s;
+          skos:member ?member
         .
       }
     }
     WHERE {
       GRAPH container:generiek {
-        ?s rdf:type skos:Concept;
-          skos:prefLabel ?prefLabel
-        .
+        ?s rdf:type skos:Concept.
       }
       GRAPH def:Waardelijsten {
         <@WAARDELIJST@> rdf:type sh:NodeShape;
@@ -1511,9 +1383,7 @@ stage:UpdateCollectionScene a elmo:Scene;
       }
       OPTIONAL {
         GRAPH ?graph {       
-          ?collection foaf:isPrimaryTopicOf ?currentDoc;
-            skos:member ?member
-          .
+          ?collection skos:member ?member.
           ?graph prov:generatedAtTime ?graphTime.
           FILTER NOT EXISTS {
             GRAPH ?newerGraph {
@@ -1525,39 +1395,13 @@ stage:UpdateCollectionScene a elmo:Scene;
         }
         FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       }
-      OPTIONAL {
-        GRAPH ?udGraph {
-          ?collection foaf:isPrimaryTopicOf ?udDoc.
-          ?udDoc ?docP ?docO;
-            adms:status adms-status:UnderDevelopment
-          .
-          FILTER( ?docP != adms:status )
-          
-          ?udGraph prov:generatedAtTime ?udGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?udDoc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER ( ?newerDocGraphTime > ?udGraphTime )            
-            }
-          }
-        }
-        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      }
-      
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
-      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/collection/", ?name ) ) AS ?collection )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-collection-", ?name ) ) AS ?doc )
-      BIND( now() AS ?now )
     }
   '''
 .
 
-stage:PostWaardenCategoriserendScene a elmo:Scene;
-  rdfs:label "Toevoegen waarden aan categoriserende waardelijst";
-  elmo:index "3";
+stage:PrepareCategoriserendScene a elmo:Scene;
+  rdfs:label "Klaarzetten data voor categoriserende waardelijst";
+  elmo:index "02";
   elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -1575,29 +1419,13 @@ stage:PostWaardenCategoriserendScene a elmo:Scene;
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     INSERT {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Opslaan waarden voor categoriserende waardelijst";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        
-        ?subject ?p ?o;
-          foaf:isPrimaryTopicOf ?doc;
-          skos:inScheme ?scheme
-        .
-        
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment
-        .
+      GRAPH container:generiek {
+        ?s skos:inScheme ?scheme.
       }
     }
     WHERE {
       GRAPH container:generiek {
-        ?s rdf:type skos:Concept;
-          skos:prefLabel ?prefLabel;
-          ?p ?o
-        .
+        ?s rdf:type skos:Concept.
       }
       GRAPH def:Waardelijsten {
         <@WAARDELIJST@> rdf:type sh:NodeShape;
@@ -1608,19 +1436,13 @@ stage:PostWaardenCategoriserendScene a elmo:Scene;
           ]
         .
       }
-      
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # TODO: checken of onderstaande URI klopt!
-      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/concept/", ?prefLabel ) ) AS ?subject )
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "/concept/", ?prefLabel ) ) AS ?doc )
-      BIND( now() AS ?now )
     }
   '''
 .
 
-stage:PostWaardenRefererendScene a elmo:Scene;
-  rdfs:label "Toevoegen waarden aan refererende waardelijst";
-  elmo:index "4";
+stage:PrepareRefererendScene a elmo:Scene;
+  rdfs:label "Klaarzetten data voor refererende waardelijst";
+  elmo:index "03";
   elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
     prefix adms-status:     <http://purl.org/adms/status/>
@@ -1638,30 +1460,13 @@ stage:PostWaardenRefererendScene a elmo:Scene;
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     INSERT {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Opslaan waarden voor refererende waardelijst";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        
-        ?subject ?p ?o;
-          foaf:isPrimaryTopicOf ?doc;
-          rdf:type ?class
-        .
-        
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment
-        .
+      GRAPH container:generiek {
+        ?s rdf:type ?class.
       }
     }
     WHERE {
       GRAPH container:generiek {
-        ?s rdf:type skos:Concept;
-          skos:prefLabel ?prefLabel;
-          ?p ?o
-        .
-        FILTER ( ?p != rdf:type )
+        ?s rdf:type ?type.
       }
       GRAPH def:Waardelijsten {
         <@WAARDELIJST@> rdf:type sh:NodeShape;
@@ -1672,20 +1477,34 @@ stage:PostWaardenRefererendScene a elmo:Scene;
           ]
         .
       }
-      
-      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # TODO: checken of onderstaande URI klopt!
-      BIND( lcase( replace( replace( str( ?class ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( iri( concat( "http://content.tst.omgevingswet.overheid.nl/id/", ?typename, "/", ?prefLabel ) ) AS ?subject )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?prefLabel ) ) AS ?doc )
-      BIND( now() AS ?now )
-    }  
+    }
+    
+    DELETE {
+      GRAPH container:generiek {
+        ?s rdf:type ?type.
+      }
+    }
+    WHERE {
+      GRAPH container:generiek {
+        ?s rdf:type ?type.
+      }
+      GRAPH def:Waardelijsten {
+        <@WAARDELIJST@> rdf:type sh:NodeShape;
+          rdfs:label ?name;
+          sh:property [
+            sh:path rdf:type;
+            sh:hasValue ?class
+          ]
+        .
+      }
+      FILTER ( ?type != ?class )
+    }
   '''
 .
 
 stage:GarbageCollectionScene a elmo:Scene;
   rdfs:label "Opruimen tijdelijks graphs";
-  elmo:index "9";
+  elmo:index "99";
   elmo:query '''
     prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
     
@@ -1783,123 +1602,6 @@ container:collection-post-ttl a elmo:Container;
 	# ''';
 # .
 
-# stage:DSOv2CollectiesConceptenPost a elmo:Scene;
-	# rdfs:label "Query voor verwerken POST";
-	# elmo:query '''
-    # prefix adms:            <http://www.w3.org/ns/adms#>
-    # prefix adms-status:     <http://purl.org/adms/status/>
-    # prefix dcat: 		        <http://www.w3.org/ns/dcat#>
-    # prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    # prefix dcterms:    		  <http://purl.org/dc/terms/>
-    # prefix def:             <http://catalogus.test.kadaster.nl/def/>
-    # prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    # prefix org:             <http://www.w3.org/TR/vocab-org#>
-    # prefix prov:            <http://www.w3.org/ns/prov#>
-    # prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
-    # prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    # prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
-    # prefix collection:      <http://catalogus.test.kadaster.nl/id/collection>
-    # prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
-    # prefix user:            <http://catalogus.test.kadaster.nl/users/>
-    
-# INSERT {
-      # GRAPH ?transactie {
-        # ?transactie rdf:type sd:Graph, prov:Entity;
-          # skos:changeNote "Reserveren van het begrip in de Catalogus";
-          # prov:generatedAtTime ?now;
-          # prov:wasAttributedTo user:TomcatUser
-        # .
-        
-        # ?subject ?p ?o;
-          # foaf:isPrimaryTopicOf ?doc;
-          # skos:inScheme <@DATASET@>
-        # .
-        
-        # ?doc rdf:type prov:Entity;
-          # adms:status adms-status:UnderDevelopment
-        # .
-      # }
-    # }
-    # WHERE {
-      # GRAPH ?orgGraph {
-        # ?org rdf:type org:Organization;
-          # org:identifier "@OIN@"^^xsd:string;
-          # foaf:isPrimaryTopicOf ?docOrg
-        # .
-        
-        # ?orgGraph prov:generatedAtTime ?orgTime.
-        # FILTER NOT EXISTS {
-          # GRAPH ?newerOrgGraph {
-            # ?newerOrgGraph prov:generatedAtTime ?newerOrgTime.
-            # ?org rdf:type org:Organization.
-            # FILTER( ?newerOrgTime > ?orgTime )
-          # }
-        # }
-      # }
-      # GRAPH ?docOrgGraph {
-        # ?docOrg adms:status adms-status:Completed.
-        # FILTER NOT EXISTS {
-          # ?docOrg dcterms:temporal [ dcmiperiod:end ?end ].
-          # FILTER( strdt( ?end, xsd:dateTime ) < now() )
-        # }
-        
-        # ?docOrgGraph prov:generatedAtTime ?docOrgTime.
-        # FILTER NOT EXISTS {
-          # GRAPH ?newerDocOrgGraph {
-            # ?newerDocOrgGraph prov:generatedAtTime ?newerDocOrgTime.
-            # ?docOrg rdf:type prov:Entity.
-            # FILTER( ?newerDocOrgTime > ?docOrgTime )
-          # }
-        # }
-      # }
-      # GRAPH ?datasetGraph {
-        # <@DATASET@> dcterms:publisher ?org;
-          # foaf:isPrimaryTopicOf ?docDataset
-        # .
-        
-        # ?datasetGraph prov:generatedAtTime ?datasetTime.
-        # FILTER NOT EXISTS {
-          # GRAPH ?newerDatasetGraph {
-            # ?newerDatasetGraph prov:generatedAtTime ?newerDatasetTime.
-            # ?docDataset rdf:type dcat:Dataset.
-            # FILTER( ?newerDatasetTime > ?datasetTime )
-          # }
-        # }
-      # }
-      # GRAPH ?docDatasetGraph {
-        # ?docDataset adms:status adms-status:Completed.
-        # FILTER NOT EXISTS {
-          # ?docDataset dcterms:temporal [ dcmiperiod:end ?end ].
-          # FILTER( strdt( ?end, xsd:dateTime ) < now() )
-        # }
-        
-        # ?docDatasetGraph prov:generatedAtTime ?docDatasetTime.
-        # FILTER NOT EXISTS {
-          # GRAPH ?newerDocDatasetGraph {
-            # ?newerDocDatasetGraph prov:generatedAtTime ?newerDocDatasetTime.
-            # ?docDataset rdf:type prov:Entity.
-            # FILTER( ?newerDocDatasetTime > ?docDatasetTime )
-          # }
-        # }
-      # }
-      # GRAPH container:generiek {
-        # ?s rdf:type skos:Concept;
-          # skos:prefLabel ?prefLabel;
-          # ?p ?o
-        # .
-      # }
-      
-      # BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      # BIND( strbefore( "@DATASET@", "/id/" ) AS ?prefix )
-      # BIND( iri( concat( ?prefix, "/id/concept/", ?prefLabel ) ) AS ?subject )
-      # BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-concept-", ?prefLabel ) ) AS ?doc )
-      # BIND( now() AS ?now )
-    # }
-		# CLEAR GRAPH container:collection-post-ttl
-    # CLEAR GRAPH container:generiek
-	# ''';
-# .
-
 
 stage:CollectieList a elmo:Part;
   elmo:appearance elmo:HiddenAppearance;
@@ -1949,7 +1651,6 @@ stage:ConceptList a elmo:Part;
     
   ''';
 .
-
 
 updatestage:deletewaardencollectie a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
@@ -3262,22 +2963,22 @@ stage:InsertTomcatUserScene a elmo:Scene;
 # PRODUCTIONS
 #
 
-# Speciale pagina om alle data over een enkel concept te wissen
+# Speciale pagina om alle data over een enkel resource te wissen
 # Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
-updatestage:clearsingleconcept a elmo:Production;
+updatestage:clearsingleresource a elmo:Production;
 	elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:search_concepts;
-	elmo:queryForm stage:DSOv2SelectConceptForm;
-	elmo:contains stage:ClearSingleConceptScene;
+	elmo:contains stage:search_resources;
+	elmo:queryForm stage:DSOv2SelectResourceForm;
+	elmo:contains stage:ClearSingleResourceScene;
 .
 
-stage:DSOv2SelectConceptForm a elmo:Form;
-	rdfs:label "Selecteer concept";
+stage:DSOv2SelectResourceForm a elmo:Form;
+	rdfs:label "Selecteer resource";
 	elmo:index "1";
 	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Selecteer concept"@nl;
-		elmo:valuesFrom stage:search_concepts;
+		elmo:applies-to "resource";
+		rdfs:label "Selecteer resource"@nl;
+		elmo:valuesFrom stage:search_resources;
 		elmo:constraint elmo:MandatoryConstraint;
 		elmo:index "1";
 	];
@@ -3292,19 +2993,19 @@ stage:DSOv2SelectConceptForm a elmo:Form;
 # PARTS
 #
 
-stage:search_concepts a elmo:Part;
+stage:search_resources a elmo:Part;
 	elmo:appearance elmo:HiddenAppearance;
 	elmo:query '''
 		prefix dcat: <http://www.w3.org/ns/dcat#>
 		CONSTRUCT {
-			?concept rdfs:label ?label
+			?resource rdfs:label ?label
 		}
 		WHERE {
 			GRAPH ?g {
-				?concept rdf:type skos:Concept.
-    		BIND( str(?concept) AS ?label )
+				?resource rdf:type ?type.
+    		BIND( str(?resource) AS ?label )
 			}
-			#FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+			FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
 		}
 	''';
 .
@@ -3315,20 +3016,20 @@ stage:search_concepts a elmo:Part;
 #
 
 # Scene gebruikt voor het verwijderen van alle data
-stage:ClearSingleConceptScene a elmo:Scene;
+stage:ClearSingleResourceScene a elmo:Scene;
 	elmo:index "1";
-	rdfs:label "Verwijder enkel concept";
+	rdfs:label "Verwijder enkel resource";
 	elmo:query '''
 		DELETE {
 			GRAPH ?g {
-				<@CONCEPT@> ?p ?o
+				<@RESOURCE@> ?p ?o
 			}
 		}
 		WHERE {
 			GRAPH ?g {
-				<@CONCEPT@> ?p ?o
+				<@RESOURCE@> ?p ?o
 			}
-      #FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
+      FILTER regex( ?g, "http://omgevingswet.overheid.nl/catalogus/id/transactie/" )
 		}
 	'''
 .
@@ -3409,21 +3110,18 @@ stage:AddNewModelScene a elmo:Scene;
 #
 
 # Weergavepagina inclusief versies en grafische weergave
-stage:WeergavePaginaConcepten a elmo:Representation;
+stage:WeergavePaginaResource a elmo:Representation;
   # Bereikbaarheid
-  elmo:uri-pattern "/id/concept/";
-  elmo:applies-to [
-    rdf:type skos:Concept
-  ];
+  elmo:uri-pattern "/id/";
     
   # Onderdelen
   elmo:contains stage:DSOv2Menu;
   
   # Weergave
-  elmo:contains stage:WeergavePaginaConceptenAppearance
+  elmo:contains stage:WeergavePaginaResourceAppearance
 .
 
-stage:WeergavePaginaConceptenAppearance a elmo:Part;
+stage:WeergavePaginaResourceAppearance a elmo:Part;
   elmo:appearance elmo:ContentAppearance;
   elmo:fragment [
     elmo:applies-to skos:definition;
@@ -3461,11 +3159,11 @@ stage:WeergavePaginaConceptenAppearance a elmo:Part;
     elmo:applies-to rdfs:label;
     elmo:appearance elmo:HiddenAppearance
   ];
-  elmo:query stage:DSOv2ConceptQuery
+  elmo:query stage:DSOv2ResourceQuery
 .
 
 # Query voor WeergaveTabel
-stage:DSOv2ConceptQuery a elmo:Query;
+stage:DSOv2ResourceQuery a elmo:Query;
 	elmo:query '''    
     prefix prov: <http://www.w3.org/ns/prov#>
 		prefix wdrs: <http://www.w3.org/2007/05/powder-s#>
@@ -3808,25 +3506,22 @@ stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
 # Query voor tonen alle concepten
 stage:DSOv2ConceptenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
-		prefix collection: <http://localhost:8080/catalogus/dsov2/id/collection/>
-		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
+		prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?type ?uitleg
 		WHERE {
       GRAPH ?graph {
-        ?concept rdf:type skos:Concept;
-          rdfs:label ?concept_label.
-        OPTIONAL {?concept skos:definition ?uitleg}
+        ?concept rdf:type ?type.
+        OPTIONAL { ?concept rdfs:label ?concept_label. }
+        OPTIONAL { ?concept skos:definition ?uitleg. }
+        FILTER( ?type NOT IN ( sd:Graph, prov:Entity, skos:ConceptScheme ) )
         
         ?graph prov:generatedAtTime ?graphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
-            ?concept rdf:type skos:Concept.
+            ?concept rdf:type ?type.
             FILTER( ?newerTime > ?graphTime )
           }
         }
