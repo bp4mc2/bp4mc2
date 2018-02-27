@@ -11,13 +11,28 @@
 # De inhoud van het document
 #
 doc:profiel elmo:data (
-'''# Profile documentation
-This document describes the profile.'''
-[html:img "/images/profiel.png"]
+"# Profile documentation"
+[elmo:contains stage:DocProfile]
+"## Vocabularies and namespaces"
+"The following vocabularies are used:"
+[elmo:contains stage:ProfielVocabularies]
+[html:img "/images/w3c-dcat-profiel.png"]
 "## Classes"
-[elmo:contains stage:ProfielClasses]
-"## Properties"
-[elmo:contains stage:ProfielProperties]
+'''The profile contains classes that are considered core to the profile and are part of the catalog core. Other classes are only used by reference and are stable with respect to the operational data ("Master data"). And some classes are merly used as complex datatypes.'''
+"### Core classes"
+[elmo:contains stage:DocClass_Core]
+"### Reference classes"
+[elmo:contains stage:DocClass_Ref]
+"### Datatype classes"
+[elmo:contains stage:DocClass_Datatype]
+"## Catalog"
+[elmo:contains stage:DocProperties_Catalog]
+"## Catalog record"
+[elmo:contains stage:DocProperties_CatalogRecord]
+"## Dataset"
+[elmo:contains stage:DocProperties_Dataset]
+"## Distribution"
+[elmo:contains stage:DocProperties_Distribution]
 )
 .
 
@@ -27,8 +42,15 @@ This document describes the profile.'''
 stage:ProfielDocument a elmo:Representation;
   elmo:url-pattern "/query/profiel-doc.md$";
   elmo:index "0";
-	elmo:contains stage:ProfielClasses;
-	elmo:contains stage:ProfielProperties;
+  elmo:contains stage:DocProfile;
+  elmo:contains stage:ProfielVocabularies;
+	elmo:contains stage:DocClass_Core;
+	elmo:contains stage:DocClass_Ref;
+	elmo:contains stage:DocClass_Datatype;
+	elmo:contains stage:DocProperties_Catalog;
+  elmo:contains stage:DocProperties_CatalogRecord;
+  elmo:contains stage:DocProperties_Dataset;
+  elmo:contains stage:DocProperties_Distribution;
   elmo:query '''
     prefix doc: <http://localhost:8080/modelleren/doc#>
     construct {
@@ -62,24 +84,26 @@ stage:ProfielDocumentRespec a elmo:Representation;
 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <title>Respec profiel documentatie</title>
-          <script src='//www.w3.org/Tools/respec/respec-w3c-common' async='async' class='remove'></script>
+          <script src='/js/respec-ldt.js' async='async' class='remove'></script>
           <script class='remove'>
             var respecConfig = {
-              specStatus: "ED",
+              specStatus: "BP",
               editors: [{
                 name: "PLDN",
-                url: "http://your-site.com",
+                url: "https://your-site.com",
               }],
               processVersion: 2018,
-              edDraftURI: "http://github.com/bp4mc2",
-              shortName: "bp4mc2"
+              edDraftURI: "https://github.com/bp4mc2",
+              shortName: "bp4mc2",
+              license: "cc0",
+              logos: []
             };
           </script>
       </head>  
         <body>
           <section id='abstract'>
             <p>              
-              Dit document beschrijft een profiel
+              This a generated document for a DCAT profile.
             </p>
           </section>
           <section id='sotd'>

@@ -5,25 +5,105 @@
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://localhost:8080/modelleren/stage#>.
+@prefix shxl: <http://bp4mc2.org/def/shacl-xl#>.
+
+stage:DocClass_Core a elmo:Representation;
+  elmo:fragment [
+    elmo:applies-to "class";
+    elmo:appearance elmo:GlobalLink;
+    rdfs:label "core classes";
+  ];
+	elmo:url-pattern	"/query/doc-classes$";
+  elmo:index "1";
+	elmo:contains	stage:Menu;
+  rdfs:seeAlso shxl:Uitwisselgegeven;
+  elmo:query stage:DocClassQuery
+.
+stage:DocClass_Ref a elmo:Representation;
+  elmo:fragment [
+    elmo:applies-to "class";
+    elmo:appearance elmo:GlobalLink;
+    rdfs:label "reference classes";
+  ];
+	elmo:url-pattern	"/query/doc-classes$";
+  elmo:index "2";
+	elmo:contains	stage:Menu;
+  rdfs:seeAlso shxl:Referentiegegeven;
+  elmo:query stage:DocClassQuery
+.
+stage:DocClass_Datatype a elmo:Representation;
+  elmo:fragment [
+    elmo:applies-to "class";
+    elmo:appearance elmo:GlobalLink;
+    rdfs:label "datatype classes";
+  ];
+	elmo:url-pattern	"/query/doc-classes$";
+  elmo:index "3";
+	elmo:contains	stage:Menu;
+  rdfs:seeAlso shxl:Datatype;
+  elmo:query stage:DocClassQuery
+.
+
+stage:DocClassQuery a elmo:Query;
+  elmo:query '''
+    prefix containerlocal: <http://localhost:8080/modelleren/container/>
+    prefix shxl: <http://bp4mc2.org/def/shacl-xl#>
+    select ?class ?class_label ?definition
+    where {
+      graph <@STAGE@> {
+        <@REPRESENTATION@> rdfs:seeAlso ?stereotype
+      }
+      graph containerlocal:profiel {
+        ?shape a sh:NodeShape.
+        ?shape sh:targetClass ?class.
+        ?shape shxl:stereotype ?stereotype.
+        ?shape sh:name ?class_label.
+        OPTIONAL {
+          ?shape skos:definition ?definition
+        }
+      }
+    }
+    order by ?class
+  '''
+.
 
 stage:ProfielClasses	a	elmo:Representation;
 	elmo:url-pattern	"/query/profiel-classes$";
 	elmo:contains	stage:Menu;
   elmo:query '''
     prefix containerlocal: <http://localhost:8080/modelleren/container/>
-    select (strafter(str(?shape),"#") as ?class)
-           (if(?prefix="http://www.w3.org/2006/vcard/ns","vcard",
-            if(?prefix="http://www.w3.org/ns/dcat","dcat",
-            "?"
-            )) as ?vocabular
+    prefix shxl: <http://bp4mc2.org/def/shacl-xl#>
+    select (strafter(str(?stereotype),"#") as ?groep)
+           ?class
+           (if(bound(?vocprefix),
+               ?vocprefix,
+               if(bound(?prefix),"?","?")
+            ) as ?vocabular
            )
-           (replace(str(?class),"(#|/)([^ ]+)","$2") as ?classname)
+           (replace(str(?shapeclass),"^([^ ]+)(#|/)([^ ]+)$","$3") as ?classname)
+           ?label_nl
     where {
       graph containerlocal:profiel {
         ?shape a sh:NodeShape.
-        ?shape sh:targetClass ?class
-        BIND (replace(str(?class),"^([^ ]+)(#|/)([^#/]+)","$1") as ?prefix)
+        ?shape sh:targetClass ?shapeclass
+        BIND (replace(str(?shapeclass),"^([^ ]+)(#|/)([^#/]+)","$1$2") as ?prefix)
+        OPTIONAL {
+          ?shape shxl:stereotype ?stereotype.
+          ?stereotype shxl:index ?index
+        }
+        OPTIONAL {
+          ?voc sh:namespace ?vocnamespace.
+          ?voc sh:prefix ?vocprefix
+          FILTER (str(?vocnamespace) = str(?prefix))
+        }
+        OPTIONAL {
+          ?shape rdfs:label ?label_nl.
+          FILTER (lang(?label_nl)="nl")
+        }
+        ?shape rdfs:label ?class.
+        FILTER (lang(?class)="en")
       }
     }
+    order by ?index ?class
   '''
 .

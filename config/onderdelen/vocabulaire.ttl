@@ -11,13 +11,28 @@ stage:ProfielVocabulaire	a	elmo:Representation;
 	elmo:contains	stage:Menu;
   elmo:appearance elmo:VocabularyAppearance;
   elmo:query '''
+    prefix shxl: <http://bp4mc2.org/def/shacl-xl#>
     prefix containerlocal: <http://localhost:8080/modelleren/container/>
     construct {
-      ?s ?p ?o
+      ?s ?p ?o.
+      ?shape sh:property [
+        sh:path []
+      ]
     }
     where {
       graph containerlocal:profiel {
-        ?s ?p ?o
+        {
+          ?s ?p ?o
+          FILTER (!isLiteral(?o) || lang(?o)="en" || lang(?o)="")
+        }
+        UNION
+        {
+          ?shape a sh:NodeShape.
+          ?shape shxl:stereotype shxl:Referentiegegeven.
+          FILTER NOT EXISTS {
+            ?shape sh:property ?prop
+          }
+        }
       }
     }
   '''
