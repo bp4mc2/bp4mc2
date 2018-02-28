@@ -43,9 +43,12 @@ updatestage:syncwaarden a elmo:Production;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
 	elmo:queryForm stage:PostWaardenForm;
+  elmo:contains stage:SelectOrganization;
+  elmo:contains stage:SelectDataset;
 	elmo:contains stage:PrepareClassificerendScene;
 	elmo:contains stage:PrepareCategoriserendScene;
 	elmo:contains stage:PrepareRefererendScene;
+  elmo:contains stage:PrepareDatasetDataScene;
   elmo:contains stage:ResourcePostScene;
 	elmo:contains stage:GarbageCollectionScene;
   elmo:contains stage:WaardelijstenList;
@@ -57,12 +60,14 @@ stage:PostWaardenForm a elmo:Form;
   elmo:fragment [
       elmo:applies-to "oin";
       rdfs:label "OIN"@nl;
+      elmo:valuesFrom stage:SelectOrganization;
       elmo:constraint elmo:MandatoryConstraint;
       elmo:index "1";
   ];
   elmo:fragment [
       elmo:applies-to "dataset";
       rdfs:label "Dataset"@nl;
+      elmo:valuesFrom stage:SelectDataset;
       elmo:constraint elmo:MandatoryConstraint;
       elmo:index "2";
   ];
