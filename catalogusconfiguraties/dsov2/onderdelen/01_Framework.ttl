@@ -67,28 +67,28 @@ stage:DSOv2Beheermenu a elmo:Part;
 			xhtml:link "/catalogus/dsov2";
 		];
 		elmo:data [
-			rdfs:label "Concepten";
+			rdfs:label "Resources";
 			elmo:index "2";
 			elmo:data [
-				rdfs:label "Voer nieuw concept op";
+				rdfs:label "Upload resources";
 				elmo:index "01";
-				xhtml:link "/catalogus/dsov2/container/concept-post-ttl";
-			];
-			elmo:data [
-				rdfs:label "Pas bestaande resource aan";
-				elmo:index "02";
-				xhtml:link "/catalogus/dsov2/container/concept-put-ttl";
+				xhtml:link "/catalogus/dsov2/container/resource-post-ttl";
 			];
       elmo:data [
-				rdfs:label "Vul bestaand concept aan";
-				elmo:index "03";
-				xhtml:link "/catalogus/dsov2/container/concept-add-ttl";
+				rdfs:label "Sync nieuwe resources";
+				elmo:index "02";
+				xhtml:link "/catalogus/dsov2/update/resource-post";
 			];
-      # elmo:data [
-				# rdfs:label "Maak begrip bekend";
-				# elmo:index "04";
-				# xhtml:link "/catalogus/dsov2/update/concept-issue";
-			# ];
+			elmo:data [
+				rdfs:label "Pas bestaande resource(s) aan";
+				elmo:index "03";
+				xhtml:link "/catalogus/dsov2/container/resource-put-ttl";
+			];
+      elmo:data [
+				rdfs:label "Vul bestaande resource aan";
+				elmo:index "04";
+				xhtml:link "/catalogus/dsov2/container/resource-add-ttl";
+			];
       elmo:data [
 				rdfs:label "Maak resource geldig";
 				elmo:index "05";
@@ -96,40 +96,15 @@ stage:DSOv2Beheermenu a elmo:Part;
 			];
       elmo:data [
 				rdfs:label "Maak resource ongeldig";
-				elmo:index "05";
+				elmo:index "06";
 				xhtml:link "/catalogus/dsov2/update/resource-ongeldigmaken";
 			];
       elmo:data [
-				rdfs:label "Voer nieuwe dataset op";
-				elmo:index "06";
-				xhtml:link "/catalogus/dsov2/container/dataset-post-ttl";
+				rdfs:label "Maak alle resources in dataset geldig";
+				elmo:index "07";
+				xhtml:link "/catalogus/dsov2/update/dataset-geldigmaken";
 			];
 		];
-     elmo:data [
-      rdfs:label "Collecties";
-      elmo:index "3";
-      elmo:data [
-				rdfs:label "Maak een collectie aan";
-				elmo:index "1";
-        xhtml:link "/catalogus/dsov2/container/collection-post-ttl";
-			];
-      # elmo:data [
-        # rdfs:label "Upload waarden collectie";
-        # elmo:index "2";
-        # xhtml:link "/catalogus/dsov2/container/waarden-collectie-post"
-      # ];
-      # elmo:data [
-         # rdfs:label "Sync waarden naar collectie";
-         # elmo:index "3";
-         # xhtml:link "update/syncwaardencollectie";
-      # ];   
-      elmo:data [
-          rdfs:label "Delete waarden uit collectie";
-          elmo:index "3";
-          xhtml:link "update/deletewaardencollectie";
-       ];   
-      
-    ];
     elmo:data [
       rdfs:label "Waardelijsten";
       elmo:index "3";
@@ -150,13 +125,28 @@ stage:DSOv2Beheermenu a elmo:Part;
 			];
       elmo:data [
 				rdfs:label "Verwijder waarde uit waardelijst";
-				elmo:index "5";
-				xhtml:link "container/waarden-delete";
+				elmo:index "4";
+        xhtml:link "/catalogus/dsov2/update/deletewaardenwaardelijst";
+        
 			];
       elmo:data [
 				rdfs:label "Maak versie van waardelijst geldig";
 				elmo:index "6";
 				xhtml:link "update/waardelijst-geldigmaken";
+			];
+    ];
+    elmo:data [
+      rdfs:label "Collecties";
+      elmo:index "4";
+      elmo:data [
+				rdfs:label "Maak een collectie aan";
+				elmo:index "1";
+				xhtml:link "container/collection-post-ttl";
+			];
+      elmo:data [
+				rdfs:label "Verwijder waarde uit collectie";
+				elmo:index "5";
+        xhtml:link "update/deletewaardencollectie"; 
 			];
     ];
 		elmo:data [
@@ -173,18 +163,23 @@ stage:DSOv2Beheermenu a elmo:Part;
 				xhtml:link "/catalogus/dsov2/update/clearwaardelijsten";
 			];
       elmo:data [
-				rdfs:label "Verwijder enkel concept";
-				elmo:index "3";
-				xhtml:link "/catalogus/dsov2/update/clearsingleconcept";
+        rdfs:label "Verwijder alle collecties";
+        elmo:index "3";
+        xhtml:link "/catalogus/dsov2/update/clearcollection"
+      ];
+      elmo:data [
+				rdfs:label "Verwijder enkele resource";
+				elmo:index "4";
+				xhtml:link "/catalogus/dsov2/update/clearsingleresource";
 			];
       elmo:data [
 				rdfs:label "Voer TomcatUser op";
-				elmo:index "4";
+				elmo:index "5";
 				xhtml:link "/catalogus/dsov2/update/insert-tomcatuser";
 			];
       elmo:data [
 				rdfs:label "Voeg nieuw model toe";
-				elmo:index "5";
+				elmo:index "6";
 				xhtml:link "update/addnewmodel";
 			];
 		];

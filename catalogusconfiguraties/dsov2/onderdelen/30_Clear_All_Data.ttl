@@ -25,6 +25,12 @@ updatestage:clearwaardelijsten a elmo:Production;
   elmo:contains stage:ClearWaardelijsten
 .
 
+updatestage:clearcollection a elmo:Production;
+  elmo:contains stage:DSOv2Beheermenu;
+  elmo:queryForm stage:DSOv2DummyForm;
+  elmo:contains stage:ClearCollectionAndMembers
+.
+
 # DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
 stage:DSOv2DummyForm a elmo:Form.
 
@@ -80,3 +86,34 @@ stage:ClearWaardelijsten a elmo:Scene;
     CLEAR GRAPH def:Waardelijsten
 	'''
 .
+
+stage:ClearCollectionAndMembers a elmo:Scene;
+  elmo:index:"3";
+  rdfs:lable "Verwijderen collecties";
+  elmo:query '''
+    DELETE {
+      GRAPH ?g {
+        ?collection skos:member ?concept
+      }
+    }
+    WHERE {
+      GRAPH ?g{
+        ?collection skos:member ?concept
+      }
+    }
+
+    DELETE {
+      GRAPH ?g {
+        ?collection rdf:type skos:Collection
+      }
+    }
+    WHERE {
+      GRAPH ?g{
+        ?collection rdf:type skos:Collection
+      }
+    }   
+  '''
+.
+    
+    
+    

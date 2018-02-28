@@ -32,25 +32,22 @@ stage:DSOv2Overzichtspagina rdf:type elmo:Representation;
 # Query voor tonen alle concepten
 stage:DSOv2ConceptenQuery a elmo:Query;
 	elmo:query '''
-		prefix prov: <http://www.w3.org/ns/prov#>
-		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://localhost:8080/catalogus/dsov2/container/>
-		prefix doc: <http://localhost:8080/catalogus/dsov2/concepten/doc/>
-		prefix collection: <http://localhost:8080/catalogus/dsov2/id/collection/>
-		prefix concept: <http://localhost:8080/catalogus/dsov2/id/concept/>
+		prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
 		
-		SELECT ?concept ?concept_label ?uitleg
+		SELECT ?concept ?concept_label ?type ?uitleg
 		WHERE {
       GRAPH ?graph {
-        ?concept rdf:type skos:Concept;
-          rdfs:label ?concept_label.
-        OPTIONAL {?concept skos:definition ?uitleg}
+        ?concept rdf:type ?type.
+        OPTIONAL { ?concept rdfs:label ?concept_label. }
+        OPTIONAL { ?concept skos:definition ?uitleg. }
+        FILTER( ?type NOT IN ( sd:Graph, prov:Entity, skos:ConceptScheme ) )
         
         ?graph prov:generatedAtTime ?graphTime.
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
-            ?concept rdf:type skos:Concept.
+            ?concept rdf:type ?type.
             FILTER( ?newerTime > ?graphTime )
           }
         }
