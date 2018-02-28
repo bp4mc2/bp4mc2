@@ -111,16 +111,43 @@ stage:ClearSingleMemberScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijder enkele member uit collectie";
 	elmo:query '''
-		DELETE {
-			GRAPH ?g {
-				<@COLLECTIE@> skos:member <@CONCEPT@>.
-			}
-		}
-		WHERE {
-			GRAPH ?g {
-				<@COLLECTIE@> ?p ?o;
-                    skos:member <@CONCEPT@>.
-			}
-		}
+		#DELETE {
+		#	GRAPH ?g {
+		#		<@COLLECTIE@> skos:member <@CONCEPT@>.
+		#	}
+		#}
+		#WHERE {
+		#	GRAPH ?g {
+		#		<@COLLECTIE@> ?p ?o;
+    #                skos:member <@CONCEPT@>.
+		#	}
+		#}
+    
+    INSERT {
+      GRAPH ?transactie {
+        # Metadata over de transactie
+        ...
+        
+        # De triples van de nieuwe versie van de collectie
+        ...
+        
+        # De triples van de prov:Entity horende bij de nieuwe versie van de collectie
+        ...
+        
+        # Eventuele update van vorige werkversie van de collectie
+        ...
+      }
+    }
+    WHERE {
+      # Ophalen triples van de laatste versie van de collectie
+      # Met uitzondering van de skos:member-triple van het concept dat je wilt verwijderen
+      ...
+      
+      # Ophalen van de prov:Entity horende bij de laatste versie van de collectie, MITS die de status werkversie heeft
+      ...
+      
+      # Bindings
+      ...
+    }
 	'''
 .
