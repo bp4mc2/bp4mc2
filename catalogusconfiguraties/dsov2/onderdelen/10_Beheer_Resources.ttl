@@ -229,6 +229,15 @@ stage:SelectOrganization a elmo:Part;
             ?doc dcterms:temporal/dcmiperiod:end ?end.
             FILTER( strdt( ?end, xsd:dateTime ) < now() )
           }
+          
+          ?docGraph prov:generatedAtTime ?docTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?doc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              FILTER( ?newerDocTime > ?docTime )
+            }
+          }
         }
         BIND( iri( ?identifier) AS ?oin )
       } UNION {
@@ -274,6 +283,15 @@ stage:SelectDataset a elmo:Part;
           FILTER NOT EXISTS {
             ?doc dcterms:temporal/dcmiperiod:end ?end.
             FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          }
+          
+          ?docGraph prov:generatedAtTime ?docTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?doc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              FILTER( ?newerDocTime > ?docTime )
+            }
           }
         }
       } UNION {
@@ -370,6 +388,15 @@ stage:ResourcePostScene a elmo:Scene;
             ?docOrg dcterms:temporal/dcmiperiod:end ?orgEnd.
             FILTER( strdt( ?orgEnd, xsd:dateTime ) < now() )
           }
+          
+          ?docOrgGraph prov:generatedAtTime ?docOrgTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocOrgGraph {
+              ?docOrg rdf:type prov:Entity.
+              ?newerDocOrgGraph prov:generatedAtTime ?newerDocOrgTime.
+              FILTER( ?newerDocOrgTime > ?docOrgTime )
+            }
+          }
         }
         GRAPH ?datasetGraph {
           <@DATASET@> dcterms:publisher ?org;
@@ -384,6 +411,15 @@ stage:ResourcePostScene a elmo:Scene;
           FILTER NOT EXISTS {
             ?docDataset dcterms:temporal/dcmiperiod:end ?datasetEnd.
             FILTER( strdt( ?datasetEnd, xsd:dateTime ) < now() )
+          }
+          
+          ?docDatasetGraph prov:generatedAtTime ?docDatasetTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocDatasetGraph {
+              ?docDataset rdf:type prov:Entity.
+              ?newerDocDatasetGraph prov:generatedAtTime ?newerDocDatasetTime.
+              FILTER( ?newerDocDatasetTime > ?docDatasetTime )
+            }
           }
         }
         GRAPH container:generiek {
