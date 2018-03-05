@@ -9,23 +9,25 @@
 # PRODUCTIONS
 #
 
-updatestage:deletewaardencollectie a elmo:Production;
+# De form laat alle members van alle geldige collecties zien, voor het LDT 2.0 zouden we hier liever een afhankelijkheid van de geselecteerde collectie in willen bouwen.
+
+updatestage:deletevaluescollection a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
-	elmo:queryForm stage:DeleteWaardenCollectieForm;
+	elmo:queryForm stage:DeleteWaardenCollectionForm;
   elmo:contains stage:SelectCollection;
   elmo:contains stage:CollectionMemberList;
   elmo:contains stage:ClearSingleMemberScene
 .
 
-stage:DeleteWaardenCollectieForm a elmo:Form;
+stage:DeleteWaardenCollectionForm a elmo:Form;
 	rdfs:label "Verwijder waarde uit collectie";
   elmo:index "2";
   elmo:fragment [
       elmo:applies-to "collectie";
       rdfs:label "Selecteer de collectielijst"@nl;
-      elmo:valuesFrom stage:CollectieList;
+      elmo:valuesFrom stage:SelectCollection;
       elmo:constraint elmo:MandatoryConstraint;
       elmo:index "3";
   ];
@@ -59,16 +61,10 @@ stage:CollectionMemberList a elmo:Part;
 			?concept rdfs:label ?concept_label
 		}
 		WHERE {
-      #
-      # Haakje is overbodig
-      #
-      {
         GRAPH ?orgGraph {
-          ?collectie  skos:member ?concept.
-          ?concept rdfs:label ?concept_label.        }
-        #
-        # Denk om je uitlijning. Blokhaak sluiten hierboven moet op een nieuwe regel.
-        #
+          ?collection  skos:member ?concept.
+          ?concept rdfs:label ?concept_label.        
+        }
         FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
         GRAPH ?docGraph {
           ?doc rdf:type prov:Entity;
@@ -80,19 +76,16 @@ stage:CollectionMemberList a elmo:Part;
             ?doc dcterms:temporal/dcmiperiod:end ?end.
             FILTER( strdt( ?end, xsd:dateTime ) < now() )
           }
-          #
-          # Dit patroon bevat nog een fout, maar die heb je meegekopieerd van mij dus dat kan ik je niet kwalijk nemen.
-          # Ik heb de bugfix die ik elders al heb doorgevoerd, toegevoegd hieronder.
-          #
+          
           ?docGraph prov:generatedAtTime ?docTime.
           FILTER NOT EXISTS {
             GRAPH ?newerDocGraph {
               ?doc rdf:type prov:Entity.
               ?newerDocGraph prov:generatedAtTime ?newerDocTime.
               FILTER( ?newerDocTime > ?docTime )
-          }
-        }
-      }
+            }
+          }  
+        }    
     }
  '''
 .  
@@ -110,10 +103,9 @@ stage:SelectCollection a elmo:Part;
 		prefix skos:            <http://www.w3.org/2004/02/skos/core#>
 		
 		CONSTRUCT {
-			?collectie rdfs:label ?label.
+			?collection rdfs:label ?label.
 		}
 		WHERE {
-      {
         GRAPH ?orgGraph {
           ?collection rdf:type skos:Collection;
             rdfs:label ?label;
@@ -131,23 +123,22 @@ stage:SelectCollection a elmo:Part;
             ?doc dcterms:temporal/dcmiperiod:end ?end.
             FILTER( strdt( ?end, xsd:dateTime ) < now() )
           }
-          #
-          # Graag ook hieronder de bovenstaande bugfix doorvoeren
-          #
+          
+         ?docGraph prov:generatedAtTime ?docTime.
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?doc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              FILTER( ?newerDocTime > ?docTime )
+            }
+          }  
         }
-      } UNION {
-      #
-      # Vanwaar deze union?
-      #
-        BIND( iri( "blank" ) AS ?collectie )
-        BIND( "(N/A)" AS ?label )
       }
-		}
 	'''
 .
 
 
-# Scene gebruikt voor het verwijderen alle de geslecteerde skos:member
+# Scene gebruikt voor het verwijderen van alleen de geslecteerde skos:member
 stage:ClearSingleMemberScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijder enkele member uit collectie";
@@ -166,24 +157,16 @@ stage:ClearSingleMemberScene a elmo:Scene;
     prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
  
-   #
-   # Denk om je uitlijning. De INSERT moet verder ingesprongen worden
-   #
- INSERT {
-
+    INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-        #
-        # Changenote aanpassen
-        #
-          skos:changeNote "Aanpassen van een resource in de Catalogus";
+          skos:changeNote "Aanpassen van een collectie in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
         <@COLLECTIE@>  ?p ?o;
           skos:member ?concept;
           foaf:isPrimaryTopicOf ?doc
-          #skos:inScheme ?scheme
         .
 
         ?doc rdf:type prov:Entity;
@@ -196,77 +179,27 @@ stage:ClearSingleMemberScene a elmo:Scene;
         .
       }
     }
-  #
-  # Uitlijning. Het hele onderstaande blok moet verder ingesprongen worden
-  #
-  WHERE {
-
-    GRAPH ?g {
-      #
-      # Dit voldoet niet aan de coding guidelines. Triples samentrekken.
-      # Bovendien: hier ontbreekt een triple: foaf:primaryTopicOf ?currentDoc.
-      # Vraag: waarom hoort die triple hier thuis?
-      #
-      <@COLLECTIE@> ?p ?o;
-        skos:member ?concept.
-      <@COLLECTIE@> rdf:type ?type
+    WHERE {
+      GRAPH ?graph {
+        <@COLLECTIE@> ?p ?o;
+          skos:member ?concept;
+          rdf:type ?type;
+          foaf:primaryTopicOf ?currentDoc
         .
-
-      #
-      # Waarom dit filter?
-      #
-      FILTER( ?p != skos:inScheme )
-      FILTER( ?p != skos:member )
-      FILTER( ?concept != <@CONCEPT@>)
-      
-      ?g prov:generatedAtTime ?gTime.
-      #
-      # Let op je uitlijning
-      #
-        FILTER NOT EXISTS {
-          GRAPH ?newerGraph {
-            ?newerGraph prov:generatedAtTime ?newerTime.
-            #
-            # Waarom de onderstaande drie triples? Hint: je hebt er maar eentje nodig.
-            # Vraag: met welk doel moeten we hier een triple opnemen met @COLLECTI@ als subject?
-            #
-            <@COLLECTIE@>  ?p ?o;
-            skos:member ?concept.
-            <@COLLECTIE@> rdf:type ?type.
-            FILTER( ?newerTime > ?gTime )
-          }
-        }
-      }
-     FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
-
-     #
-     # Wat ben je hier aan het doen, in dit blok??
-     #
-      GRAPH ?graph {       
-        <@COLLECTIE@>  foaf:isPrimaryTopicOf ?currentDoc.
-          OPTIONAL{ 
-            <@COLLECTIE@> skos:prefLabel ?prefLabel.
-          }
-          OPTIONAL{  
-            <@COLLECTIE@> skos:inScheme ?scheme.
-          }
- 
+        FILTER( ?p != skos:member )
+        FILTER( ?concept != <@CONCEPT@>)
+        
         ?graph prov:generatedAtTime ?graphTime.
 
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
-            <@COLLECTIE@> rdf:type ?type.
+            <@COLLECTIE@> rdf:type skos:Collection.
             FILTER( ?newerTime > ?graphTime )
           }
         }
       }
-
       FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      #
-      # Voor de duidelijkheid: bovenstaande vraag geldt tot hier. De rest is correct.
-      #
-
       OPTIONAL {
         GRAPH ?udGraph {
           <@COLLECTIE@>  foaf:isPrimaryTopicOf ?udDoc.
@@ -292,8 +225,7 @@ stage:ClearSingleMemberScene a elmo:Scene;
       BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
       BIND( now() AS ?now )
     }
-
-
+    
 	'''
 .
 
