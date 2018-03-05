@@ -177,13 +177,8 @@ stage:DSOv2Beheermenu a elmo:Part;
       rdfs:label "Collecties";
       elmo:index "4";
       elmo:data [
-				rdfs:label "Maak een collectie aan";
-				elmo:index "1";
-				xhtml:link "container/collection-post-ttl";
-			];
-      elmo:data [
 				rdfs:label "Verwijder waarde uit collectie";
-				elmo:index "5";
+				elmo:index "1";
         xhtml:link "update/deletewaardencollectie"; 
 			];
     ];
@@ -1796,75 +1791,12 @@ stage:DeleteWaardenRefererendScene a elmo:Scene;
 # PRODUCTIONS
 #
 
-# Aanmaken collectie
-container:collection-post-ttl a elmo:Container;
-  elmo:contains stage:DSOv2Beheermenu;
-  elmo:fragment [
-      elmo:applies-to "oin";
-      rdfs:label "OIN"@nl;
-      elmo:constraint elmo:MandatoryConstraint;
-      elmo:index "1";
-  ];
-  elmo:fragment [
-      elmo:applies-to "dataset";
-      rdfs:label "Dataset"@nl;
-      elmo:constraint elmo:MandatoryConstraint;
-      elmo:index "2";
-  ];
-  elmo:representation elmo:UploadRepresentation;
-	rdfs:label "Upload Collectie";
-  
-    # Data
-  elmo:replaces container:generiek;
-  elmo:query stage:DSOv2UploadPost;
-  #elmo:contains stage:DSOv2CollectiesConceptenPost;
-  .
-
-stage:CollectieList a elmo:Part;
-  elmo:appearance elmo:HiddenAppearance;
-  elmo:query '''
-    prefix owl: 			<http://www.w3.org/2002/07/owl#>
-    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
-    
-    CONSTRUCT {
-      ?collectie rdfs:label ?collectie_label
-    }
-    WHERE {
-      GRAPH ?g {
-        ?collectie rdf:type skos:Collection;
-          rdfs:label ?collectie_label
-        .
-      }
-      
-    }
-  ''';
-.
-
-stage:CollectionMemberList a elmo:Part;
-  elmo:appearance elmo:HiddenAppearance;
-  elmo:query '''
-    prefix owl: 			<http://www.w3.org/2002/07/owl#>
-    prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
-    CONSTRUCT {
-      ?concept rdfs:label ?concept_label
-    }
-    WHERE {
-      GRAPH ?g {
-        ?collectie  skos:member ?concept.
-        ?concept rdfs:label ?concept_label
-        .
-      }
-    }
-    
-  ''';
-.
-
 updatestage:deletewaardencollectie a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
 	elmo:contains stage:DSOv2Header;
 	elmo:contains stage:DSOv2Footer;
 	elmo:queryForm stage:DeleteWaardenCollectieForm;
-  elmo:contains stage:CollectieList;
+  elmo:contains stage:SelectCollection;
   elmo:contains stage:CollectionMemberList;
   elmo:contains stage:ClearSingleMemberScene
 .
@@ -1893,51 +1825,323 @@ stage:DeleteWaardenCollectieForm a elmo:Form;
   ]
 .
 
+# stage:CollectionMemberList a elmo:Part;
+  # elmo:appearance elmo:HiddenAppearance;
+  # elmo:query '''
+    # prefix owl: 			<http://www.w3.org/2002/07/owl#>
+    # prefix rdfs: 			<http://www.w3.org/2000/01/rdf-schema#>
+    # prefix prov:      <http://www.w3.org/ns/prov#>
+    # prefix skos:      <http://www.w3.org/2004/02/skos/core#>
+    
+    # CONSTRUCT {
+      # ?concept rdfs:label ?concept_label
+    # }
+    # WHERE {
+      # GRAPH ?g {
+        # ?collectie  skos:member ?concept.
+        # ?concept rdfs:label ?concept_label.
+        # ?g prov:generatedAtTime ?gTime.
+      
+        # FILTER NOT EXISTS {
+          # GRAPH ?newerGraph {
+            # ?collectie skos:member ?concept.
+            # ?concept rdfs:label ?concept_label.
+            # ?newerGraph prov:generatedAtTime ?newerTime.
+            # FILTER( ?newerTime > ?gTime )
+          # }
+        # }
+      # }
+    # } 
+  # ''';
+# .
+
+stage:CollectionMemberList a elmo:Part;
+  elmo:appearance elmo:HiddenAppearance;
+  elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix org:             <http://www.w3.org/TR/vocab-org#>
+		prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    
+		CONSTRUCT {
+			?concept rdfs:label ?concept_label
+		}
+		WHERE {
+      {
+        GRAPH ?orgGraph {
+          ?collectie  skos:member ?concept.
+          ?concept rdfs:label ?concept_label.        }
+        FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        GRAPH ?docGraph {
+          ?doc rdf:type prov:Entity;
+            adms:status adms-status:Completed;
+            dcterms:temporal/dcmiperiod:start ?start
+          .
+          FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+          FILTER NOT EXISTS {
+            ?doc dcterms:temporal/dcmiperiod:end ?end.
+            FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          }
+        }
+      }
+    }
+ '''
+.  
+
+
+
+
+
+# stage:SelectCollection a elmo:Part;
+	# elmo:appearance elmo:HiddenAppearance;
+	# elmo:query '''
+    # prefix adms:            <http://www.w3.org/ns/adms#>
+    # prefix adms-status:     <http://purl.org/adms/status/>
+    # prefix dcat: 		        <http://www.w3.org/ns/dcat#>
+    # prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    # prefix dcterms:    		  <http://purl.org/dc/terms/>
+    # prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    # prefix org:             <http://www.w3.org/TR/vocab-org#>
+		# prefix prov:            <http://www.w3.org/ns/prov#>
+		# prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		
+		# CONSTRUCT {
+			# ?collection rdfs:label ?label.
+		# }
+		# WHERE {
+      # {
+        # GRAPH ?collectionGraph {
+          # ?collection rdf:type skos:Collection;
+           # rdfs:label ?label;
+            # foaf:isPrimaryTopicOf ?doc
+          # .
+          
+          # ?collectionGraph prov:generatedAtTime ?collectionGraphTime.       
+          # FILTER NOT EXISTS {
+            # GRAPH ?newerCollectionGraph {
+              # ?collection foaf:isPrimaryTopicOf ?docNewerCollection.
+              # ?newerCollectionGraph prov:generatedAtTime ?newerCollectionGraphTime.
+              # FILTER ( ?newerCollectionGraphTime > ?collectionGraphTime )            
+            # }
+            # GRAPH ?docNewerCollectionGraph {
+              # ?docNewerCollection adms:status adms-status:Completed;
+                # dcterms:temporal/dcmiperiod:start ?docNewerCollectionStart
+              # .
+              # FILTER( strdt( ?docNewerCollectionStart, xsd:dateTime ) <= now() )
+              # FILTER NOT EXISTS {
+                # ?docNewerCollection dcterms:temporal/dcmiperiod:end ?docNewerCollectionEnd.
+                # FILTER( strdt( ?docNewerCollectionEnd, xsd:dateTime ) < now() )
+              # }
+              
+              # ?docNewerCollectionGraph prov:generatedAtTime ?docNewerCollectionTime.       
+              # FILTER NOT EXISTS {
+                # GRAPH ?newerDocNewerCollectionGraph {
+                  # ?docNewerCollection rdf:type prov:Entity.
+                  # ?newerDocNewerCollectionGraph prov:generatedAtTime ?newerDocNewerCollectionTime.
+                  # FILTER ( ?newerDocNewerCollectionTime > ?docNewerCollectionTime )            
+                # }
+              # }
+            # }
+          # }
+        # }
+        # FILTER regex( ?collectionGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        # GRAPH ?docGraph {
+          # ?doc rdf:type prov:Entity;
+            # adms:status adms-status:Completed
+          # .
+          # FILTER NOT EXISTS {
+            # ?doc dcterms:temporal/dcmiperiod:end ?end.
+            # FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          # }
+          
+          # ?docGraph prov:generatedAtTime ?docGraphTime.       
+          # FILTER NOT EXISTS {
+            # GRAPH ?newerDocGraph {
+              # ?doc rdf:type prov:Entity.
+              # ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              # FILTER ( ?newerDocGraphTime > ?docGraphTime )            
+            # }
+          # }
+        # }
+      # } UNION {
+        # BIND( iri( "blank" ) AS ?collection )
+        # BIND( "(N/A)" AS ?label )
+      # }
+		# }
+	# '''
+# .
+
+
+
+stage:SelectCollection a elmo:Part;
+	elmo:appearance elmo:HiddenAppearance;
+	elmo:query '''
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix org:             <http://www.w3.org/TR/vocab-org#>
+		prefix prov:            <http://www.w3.org/ns/prov#>
+		prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+		
+		CONSTRUCT {
+			?collectie rdfs:label ?label.
+		}
+		WHERE {
+      {
+        GRAPH ?orgGraph {
+          ?collection rdf:type skos:Collection;
+            rdfs:label ?label;
+            foaf:isPrimaryTopicOf ?doc
+          .
+        }
+        FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        GRAPH ?docGraph {
+          ?doc rdf:type prov:Entity;
+            adms:status adms-status:Completed;
+            dcterms:temporal/dcmiperiod:start ?start
+          .
+          FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+          FILTER NOT EXISTS {
+            ?doc dcterms:temporal/dcmiperiod:end ?end.
+            FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          }
+        }
+      } UNION {
+        BIND( iri( "blank" ) AS ?collectie )
+        BIND( "(N/A)" AS ?label )
+      }
+		}
+	'''
+.
+
+
 # Scene gebruikt voor het verwijderen alle de geslecteerde skos:member
 stage:ClearSingleMemberScene a elmo:Scene;
 	elmo:index "1";
 	rdfs:label "Verwijder enkele member uit collectie";
 	elmo:query '''
-		#DELETE {
-		#	GRAPH ?g {
-		#		<@COLLECTIE@> skos:member <@CONCEPT@>.
-		#	}
-		#}
-		#WHERE {
-		#	GRAPH ?g {
-		#		<@COLLECTIE@> ?p ?o;
-    #                skos:member <@CONCEPT@>.
-		#	}
-		#}
+    prefix adms:            <http://www.w3.org/ns/adms#>
+    prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcat: 	  		    <http://www.w3.org/ns/dcat#>
+    prefix dcterms:    		  <http://purl.org/dc/terms/>
+    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    prefix prov:            <http://www.w3.org/ns/prov#>
+    prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+    prefix skos-lex-status: <http://bp4mc2.org/skos-lex/status/>
     
-    INSERT {
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
+    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+ 
+ INSERT {
+
       GRAPH ?transactie {
-        # Metadata over de transactie
-        ...
-        
-        # De triples van de nieuwe versie van de collectie
-        ...
-        
-        # De triples van de prov:Entity horende bij de nieuwe versie van de collectie
-        ...
-        
-        # Eventuele update van vorige werkversie van de collectie
-        ...
+        ?transactie rdf:type sd:Graph, prov:Entity;
+          skos:changeNote "Aanpassen van een resource in de Catalogus";
+          prov:generatedAtTime ?now;
+          prov:wasAttributedTo user:TomcatUser
+        .
+        <@COLLECTIE@>  ?p ?o;
+          skos:member ?concept;
+          foaf:isPrimaryTopicOf ?doc
+          #skos:inScheme ?scheme
+        .
+
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:UnderDevelopment;
+          prov:wasRevisionOf ?currentDoc
+        .
+
+        ?udDoc ?docP ?docO;
+          adms:status adms-status:Withdrawn
+        .
       }
     }
-    WHERE {
-      # Ophalen triples van de laatste versie van de collectie
-      # Met uitzondering van de skos:member-triple van het concept dat je wilt verwijderen
-      ...
+  WHERE {
+
+    GRAPH ?g {
+      <@COLLECTIE@> ?p ?o;
+        skos:member ?concept.
+      <@COLLECTIE@> rdf:type ?type
+        .
+
+      FILTER( ?p != skos:inScheme )
+      FILTER( ?p != skos:member )
+      FILTER( ?concept != <@CONCEPT@>)
+      ?g prov:generatedAtTime ?gTime.
+
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            <@COLLECTIE@>  ?p ?o;
+            skos:member ?concept.
+            <@COLLECTIE@> rdf:type ?type.
+            FILTER( ?newerTime > ?gTime )
+          }
+        }
+      }
+     FILTER regex( ?g, "http://catalogus.test.kadaster.nl/id/transactie/" )
+
+      GRAPH ?graph {       
+        <@COLLECTIE@>  foaf:isPrimaryTopicOf ?currentDoc.
+          OPTIONAL{ 
+            <@COLLECTIE@> skos:prefLabel ?prefLabel.
+          }
+          OPTIONAL{  
+            <@COLLECTIE@> skos:inScheme ?scheme.
+          }
+ 
+        ?graph prov:generatedAtTime ?graphTime.
+
+        FILTER NOT EXISTS {
+          GRAPH ?newerGraph {
+            ?newerGraph prov:generatedAtTime ?newerTime.
+            <@COLLECTIE@> rdf:type ?type.
+            FILTER( ?newerTime > ?graphTime )
+          }
+        }
+      }
+
+      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+
+      OPTIONAL {
+
+        GRAPH ?udGraph {
+          <@COLLECTIE@>  foaf:isPrimaryTopicOf ?udDoc.
+          ?udDoc ?docP ?docO;
+            adms:status adms-status:UnderDevelopment
+          .
+          FILTER( ?docP != adms:status )    
+          ?udGraph prov:generatedAtTime ?udGraphTime.         
+          FILTER NOT EXISTS {
+            GRAPH ?newerDocGraph {
+              ?udDoc rdf:type prov:Entity.
+              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
+              FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+            }
+          }
+        } 
+        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      }
       
-      # Ophalen van de prov:Entity horende bij de laatste versie van de collectie, MITS die de status werkversie heeft
-      ...
-      
-      # Bindings
-      ...
+      BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
+      BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
+      BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
+      BIND( now() AS ?now )
     }
+
+
 	'''
 .
+
  
 #
 #
@@ -3135,6 +3339,7 @@ stage:ClearWaardelijsten a elmo:Scene;
 	'''
 .
 
+# Tijdelijke query tbv testen 
 stage:ClearCollectionAndMembers a elmo:Scene;
   elmo:index:"3";
   rdfs:lable "Verwijderen collecties";
