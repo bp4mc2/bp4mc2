@@ -217,54 +217,17 @@ stage:SelectOrganization a elmo:Part;
             foaf:isPrimaryTopicOf ?doc;
             org:identifier ?identifier
           .
-          
-          ?orgGraph prov:generatedAtTime ?orgGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerOrgGraph {
-              ?org rdf:type org:Organization;
-                foaf:isPrimaryTopicOf ?docNewerOrg
-              .
-              ?newerOrgGraph prov:generatedAtTime ?newerOrgGraphTime.
-              FILTER ( ?newerOrgGraphTime > ?orgGraphTime )            
-            }
-            GRAPH ?docNewerOrgGraph {
-              ?docNewerOrg adms:status adms-status:Completed;
-                dcterms:temporal/dcmiperiod:start ?docNewerOrgStart
-              .
-              FILTER( strdt( ?docNewerOrgStart, xsd:dateTime ) <= now() )
-              FILTER NOT EXISTS {
-                ?docNewerOrg dcterms:temporal/dcmiperiod:end ?docNewerOrgEnd.
-                FILTER( strdt( ?docNewerOrgEnd, xsd:dateTime ) < now() )
-              }
-              
-              ?docNewerOrgGraph prov:generatedAtTime ?docNewerOrgTime.       
-              FILTER NOT EXISTS {
-                GRAPH ?newerDocNewerOrgGraph {
-                  ?docNewerOrg rdf:type prov:Entity.
-                  ?newerDocNewerOrgGraph prov:generatedAtTime ?newerDocNewerOrgTime.
-                  FILTER ( ?newerDocNewerOrgTime > ?docNewerOrgTime )            
-                }
-              }
-            }
-          }
         }
         FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
         GRAPH ?docGraph {
           ?doc rdf:type prov:Entity;
-            adms:status adms-status:Completed
+            adms:status adms-status:Completed;
+            dcterms:temporal/dcmiperiod:start ?start
           .
+          FILTER( strdt( ?start, xsd:dateTime ) <= now() )
           FILTER NOT EXISTS {
             ?doc dcterms:temporal/dcmiperiod:end ?end.
             FILTER( strdt( ?end, xsd:dateTime ) < now() )
-          }
-          
-          ?docGraph prov:generatedAtTime ?docGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?doc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER ( ?newerDocGraphTime > ?docGraphTime )            
-            }
           }
         }
         BIND( iri( ?identifier) AS ?oin )
@@ -300,52 +263,17 @@ stage:SelectDataset a elmo:Part;
             dcterms:title ?label;
             foaf:isPrimaryTopicOf ?doc
           .
-          
-          ?datasetGraph prov:generatedAtTime ?datasetGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDatasetGraph {
-              ?dataset foaf:isPrimaryTopicOf ?docNewerDataset.
-              ?newerDatasetGraph prov:generatedAtTime ?newerDatasetGraphTime.
-              FILTER ( ?newerDatasetGraphTime > ?datasetGraphTime )            
-            }
-            GRAPH ?docNewerDatasetGraph {
-              ?docNewerDataset adms:status adms-status:Completed;
-                dcterms:temporal/dcmiperiod:start ?docNewerDatasetStart
-              .
-              FILTER( strdt( ?docNewerDatasetStart, xsd:dateTime ) <= now() )
-              FILTER NOT EXISTS {
-                ?docNewerDataset dcterms:temporal/dcmiperiod:end ?docNewerDatasetEnd.
-                FILTER( strdt( ?docNewerDatasetEnd, xsd:dateTime ) < now() )
-              }
-              
-              ?docNewerDatasetGraph prov:generatedAtTime ?docNewerDatasetTime.       
-              FILTER NOT EXISTS {
-                GRAPH ?newerDocNewerDatasetGraph {
-                  ?docNewerDataset rdf:type prov:Entity.
-                  ?newerDocNewerDatasetGraph prov:generatedAtTime ?newerDocNewerDatasetTime.
-                  FILTER ( ?newerDocNewerDatasetTime > ?docNewerDatasetTime )            
-                }
-              }
-            }
-          }
         }
         FILTER regex( ?datasetGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
         GRAPH ?docGraph {
           ?doc rdf:type prov:Entity;
-            adms:status adms-status:Completed
+            adms:status adms-status:Completed;
+            dcterms:temporal/dcmiperiod:start ?docStart
           .
+          FILTER( strdt( ?docStart, xsd:dateTime ) <= now() )
           FILTER NOT EXISTS {
             ?doc dcterms:temporal/dcmiperiod:end ?end.
             FILTER( strdt( ?end, xsd:dateTime ) < now() )
-          }
-          
-          ?docGraph prov:generatedAtTime ?docGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?doc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER ( ?newerDocGraphTime > ?docGraphTime )            
-            }
           }
         }
       } UNION {
@@ -432,100 +360,30 @@ stage:ResourcePostScene a elmo:Scene;
             org:identifier "@OIN@"^^xsd:string;
             foaf:isPrimaryTopicOf ?docOrg
           .
-          
-          ?orgGraph prov:generatedAtTime ?orgGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerOrgGraph {
-              ?org rdf:type org:Organization;
-                foaf:isPrimaryTopicOf ?docNewerOrg
-              .
-              ?newerOrgGraph prov:generatedAtTime ?newerOrgGraphTime.
-              FILTER ( ?newerOrgGraphTime > ?orgGraphTime )            
-            }
-            GRAPH ?docNewerOrgGraph {
-              ?docNewerOrg adms:status adms-status:Completed;
-                dcterms:temporal/dcmiperiod:start ?docNewerOrgStart
-              .
-              FILTER( strdt( ?docNewerOrgStart, xsd:dateTime ) <= now() )
-              FILTER NOT EXISTS {
-                ?docNewerOrg dcterms:temporal/dcmiperiod:end ?docNewerOrgEnd.
-                FILTER( strdt( ?docNewerOrgEnd, xsd:dateTime ) < now() )
-              }
-              
-              ?docNewerOrgGraph prov:generatedAtTime ?docNewerOrgTime.       
-              FILTER NOT EXISTS {
-                GRAPH ?newerDocNewerOrgGraph {
-                  ?docNewerOrg rdf:type prov:Entity.
-                  ?newerDocNewerOrgGraph prov:generatedAtTime ?newerDocNewerOrgTime.
-                  FILTER ( ?newerDocNewerOrgTime > ?docNewerOrgTime )            
-                }
-              }
-            }
-          }
         }
         GRAPH ?docOrgGraph {
-          ?docOrg adms:status adms-status:Completed.
+          ?docOrg adms:status adms-status:Completed;
+            dcterms:temporal/dcmiperiod:start ?orgStart
+          .
+          FILTER( strdt( ?orgStart, xsd:dateTime ) <= now() )
           FILTER NOT EXISTS {
-            ?docOrg dcterms:temporal/dcmiperiod:end ?end.
-            FILTER( strdt( ?end, xsd:dateTime ) < now() )
-          }
-          
-          ?docOrgGraph prov:generatedAtTime ?docOrgTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocOrgGraph {
-              ?newerDocOrgGraph prov:generatedAtTime ?newerDocOrgTime.
-              ?docOrg rdf:type prov:Entity.
-              FILTER( ?newerDocOrgTime > ?docOrgTime )
-            }
+            ?docOrg dcterms:temporal/dcmiperiod:end ?orgEnd.
+            FILTER( strdt( ?orgEnd, xsd:dateTime ) < now() )
           }
         }
         GRAPH ?datasetGraph {
           <@DATASET@> dcterms:publisher ?org;
             foaf:isPrimaryTopicOf ?docDataset
           .
-          
-          ?datasetGraph prov:generatedAtTime ?datasetGraphTime.       
-          FILTER NOT EXISTS {
-            GRAPH ?newerDatasetGraph {
-              <@DATASET@> foaf:isPrimaryTopicOf ?docNewerDataset.
-              ?newerDatasetGraph prov:generatedAtTime ?newerDatasetGraphTime.
-              FILTER ( ?newerDatasetGraphTime > ?datasetGraphTime )            
-            }
-            GRAPH ?docNewerDatasetGraph {
-              ?docNewerDataset adms:status adms-status:Completed;
-                dcterms:temporal/dcmiperiod:start ?docNewerDatasetStart
-              .
-              FILTER( strdt( ?docNewerDatasetStart, xsd:dateTime ) <= now() )
-              FILTER NOT EXISTS {
-                ?docNewerDataset dcterms:temporal/dcmiperiod:end ?docNewerDatasetEnd.
-                FILTER( strdt( ?docNewerDatasetEnd, xsd:dateTime ) < now() )
-              }
-              
-              ?docNewerDatasetGraph prov:generatedAtTime ?docNewerDatasetTime.       
-              FILTER NOT EXISTS {
-                GRAPH ?newerDocNewerDatasetGraph {
-                  ?docNewerDataset rdf:type prov:Entity.
-                  ?newerDocNewerDatasetGraph prov:generatedAtTime ?newerDocNewerDatasetTime.
-                  FILTER ( ?newerDocNewerDatasetTime > ?docNewerDatasetTime )            
-                }
-              }
-            }
-          }
         }
         GRAPH ?docDatasetGraph {
-          ?docDataset adms:status adms-status:Completed.
+          ?docDataset adms:status adms-status:Completed;
+            dcterms:temporal/dcmiperiod:start ?datasetStart
+          .
+          FILTER( strdt( ?datasetStart, xsd:dateTime ) <= now() ).
           FILTER NOT EXISTS {
-            ?docDataset dcterms:temporal/dcmiperiod:end ?end.
-            FILTER( strdt( ?end, xsd:dateTime ) < now() )
-          }
-          
-          ?docDatasetGraph prov:generatedAtTime ?docDatasetTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocDatasetGraph {
-              ?newerDocDatasetGraph prov:generatedAtTime ?newerDocDatasetTime.
-              ?docDataset rdf:type prov:Entity.
-              FILTER( ?newerDocDatasetTime > ?docDatasetTime )
-            }
+            ?docDataset dcterms:temporal/dcmiperiod:end ?datasetEnd.
+            FILTER( strdt( ?datasetEnd, xsd:dateTime ) < now() )
           }
         }
         GRAPH container:generiek {
