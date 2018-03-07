@@ -61,8 +61,12 @@ stage:CollectionMemberList a elmo:Part;
 			?concept rdfs:label ?concept_label
 		}
 		WHERE {
+    ### Uitlijning: onderstaande blok is 1 tab teveel ingesprongen
         GRAPH ?orgGraph {
           ?collection  skos:member ?concept.
+          ### We moeten rekening houden met de mogelijkheid dat de (laatste) informatie over een concept,
+          ### niet in dezelfde graph staat als de laatste informatie over de collectie.
+          ### Wat moet er dus gebeuren?
           ?concept rdfs:label ?concept_label.        
         }
         FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
@@ -106,6 +110,7 @@ stage:SelectCollection a elmo:Part;
 			?collection rdfs:label ?label.
 		}
 		WHERE {
+    ### Uitlijning
         GRAPH ?orgGraph {
           ?collection rdf:type skos:Collection;
             rdfs:label ?label;
@@ -160,6 +165,8 @@ stage:ClearSingleMemberScene a elmo:Scene;
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
+          ### changeNote mag nog wel wat nauwkeuriger wat mij betreft:
+          ### "Weghalen van een concept uit een collectie"
           skos:changeNote "Aanpassen van een collectie in de Catalogus";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
@@ -190,7 +197,6 @@ stage:ClearSingleMemberScene a elmo:Scene;
         FILTER( ?concept != <@CONCEPT@>)
         
         ?graph prov:generatedAtTime ?graphTime.
-
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
