@@ -1758,33 +1758,49 @@ stage:CollectionMemberList a elmo:Part;
 			?concept rdfs:label ?concept_label
 		}
 		WHERE {
-        GRAPH ?orgGraph {
-          ?collection  skos:member ?concept.
-          ?concept rdfs:label ?concept_label.        
-        }
-        FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-        GRAPH ?docGraph {
-          ?doc rdf:type prov:Entity;
-            adms:status adms-status:Completed;
-            dcterms:temporal/dcmiperiod:start ?start
-          .
-          FILTER( strdt( ?start, xsd:dateTime ) <= now() )
-          FILTER NOT EXISTS {
-            ?doc dcterms:temporal/dcmiperiod:end ?end.
-            FILTER( strdt( ?end, xsd:dateTime ) < now() )
+      GRAPH ?orgGraph {
+        ?collection  skos:member ?concept.
+        ### We moeten rekening houden met de mogelijkheid dat de (laatste) informatie over een concept,
+        ### niet in dezelfde graph staat als de laatste informatie over de collectie.
+        ### Wat moet er dus gebeuren? 
+        ## Onderstaande? de nieuwste informatie (in dit geval het label) ophalen uit de nieuwste graph die we kunnen vinden waar het concept in staat? 
+      }
+      FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?conceptgraph {
+      ?concept rdfs:label ?concept_label. 
+      ?conceptgraph prov:generatedAtTime ?ConceptTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerConceptGraph {
+            ?concept a skos:Concept. 
+            ?newerConceptGraph prov:generatedAtTime ?newerConceptTime.
+            FILTER( ?newerConceptTime > ?ConceptTime )
           }
-          
-          ?docGraph prov:generatedAtTime ?docTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?doc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
-              FILTER( ?newerDocTime > ?docTime )
-            }
-          }  
-        }    
+        }  
+      }
+      FILTER regex( ?conceptgraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:Completed;
+          dcterms:temporal/dcmiperiod:start ?start
+        .
+        FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+        FILTER NOT EXISTS {
+          ?doc dcterms:temporal/dcmiperiod:end ?end.
+          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+        }
+        
+        ?docGraph prov:generatedAtTime ?docTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+            FILTER( ?newerDocTime > ?docTime )
+          }
+        }  
+      }    
     }
- '''
+    
+  '''
 .  
 
 stage:SelectCollection a elmo:Part;
@@ -1803,34 +1819,35 @@ stage:SelectCollection a elmo:Part;
 			?collection rdfs:label ?label.
 		}
 		WHERE {
-        GRAPH ?orgGraph {
-          ?collection rdf:type skos:Collection;
-            rdfs:label ?label;
-            foaf:isPrimaryTopicOf ?doc
-          .
-        }
-        FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-        GRAPH ?docGraph {
-          ?doc rdf:type prov:Entity;
-            adms:status adms-status:Completed;
-            dcterms:temporal/dcmiperiod:start ?start
-          .
-          FILTER( strdt( ?start, xsd:dateTime ) <= now() )
-          FILTER NOT EXISTS {
-            ?doc dcterms:temporal/dcmiperiod:end ?end.
-            FILTER( strdt( ?end, xsd:dateTime ) < now() )
-          }
-          
-         ?docGraph prov:generatedAtTime ?docTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?doc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
-              FILTER( ?newerDocTime > ?docTime )
-            }
-          }  
-        }
+      GRAPH ?orgGraph {
+        ?collection rdf:type skos:Collection;
+          rdfs:label ?label;
+          foaf:isPrimaryTopicOf ?doc
+        .
       }
+      FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?docGraph {
+        ?doc rdf:type prov:Entity;
+          adms:status adms-status:Completed;
+          dcterms:temporal/dcmiperiod:start ?start
+        .
+        FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+        FILTER NOT EXISTS {
+          ?doc dcterms:temporal/dcmiperiod:end ?end.
+          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+        }
+        
+       ?docGraph prov:generatedAtTime ?docTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+            FILTER( ?newerDocTime > ?docTime )
+          }
+        }  
+      }
+    }
+    
 	'''
 .
 
@@ -1857,7 +1874,7 @@ stage:ClearSingleMemberScene a elmo:Scene;
     INSERT {
       GRAPH ?transactie {
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanpassen van een collectie in de Catalogus";
+          skos:changeNote "Verwijderen van een concept uit een collectie";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
@@ -1887,7 +1904,6 @@ stage:ClearSingleMemberScene a elmo:Scene;
         FILTER( ?concept != <@CONCEPT@>)
         
         ?graph prov:generatedAtTime ?graphTime.
-
         FILTER NOT EXISTS {
           GRAPH ?newerGraph {
             ?newerGraph prov:generatedAtTime ?newerTime.
@@ -1987,7 +2003,7 @@ stage:ValuelistMemberList a elmo:Part;
 		CONSTRUCT {
 			?member rdfs:label ?label
 		}
-    # Classificerend 
+    # Classificerend: aangenomen dat de uris wel staan zoals ze moeten staan moet ik een andere collectie hier ophalen die heet wel hetzelfde maar heeft een andere uri. gewoon het laatste stukje pakken en binden aan een andere uri?
 		WHERE {
       {
         GRAPH def:Waardelijsten {
@@ -2012,6 +2028,7 @@ stage:ValuelistMemberList a elmo:Part;
             }
           }
         }
+        
         FILTER regex( ?graphClassificerend, "http://catalogus.test.kadaster.nl/id/transactie/" )
       }
       # Categoriserend
