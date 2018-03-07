@@ -66,10 +66,15 @@ stage:CollectionMemberList a elmo:Part;
         ### We moeten rekening houden met de mogelijkheid dat de (laatste) informatie over een concept,
         ### niet in dezelfde graph staat als de laatste informatie over de collectie.
         ### Wat moet er dus gebeuren? 
-        ## Onderstaande? de nieuwste informatie (in dit geval het label) ophalen uit de nieuwste graph die we kunnen vinden waar het concept in staat? 
+        ## Onderstaande? de nieuwste informatie (in dit geval het label) ophalen uit de nieuwste graph die we kunnen vinden waar het concept in staat?
+
+        ### Je zit in de goede richting. Echter, je haalt nu zowel niet de laatste versie van de collectie, als de laatste versie van het concept op.
+        ### Ik zie nergens de foaf:isPrimaryTopicOf relatie staan, dus ?doc komt nu uit het luchtledige.
+        ### Vraag: waar moet die ?doc vandaan komen?
       }
       FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?conceptgraph {
+      ### Inspringen...
       ?concept rdfs:label ?concept_label. 
       ?conceptgraph prov:generatedAtTime ?ConceptTime.
         FILTER NOT EXISTS {
