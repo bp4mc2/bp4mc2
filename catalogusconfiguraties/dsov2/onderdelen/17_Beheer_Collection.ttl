@@ -62,21 +62,16 @@ stage:CollectionMemberList a elmo:Part;
 		}
 		WHERE {
       GRAPH ?orgGraph {
-        ?collection  skos:member ?concept.
-        ### We moeten rekening houden met de mogelijkheid dat de (laatste) informatie over een concept,
-        ### niet in dezelfde graph staat als de laatste informatie over de collectie.
-        ### Wat moet er dus gebeuren? 
-        ## Onderstaande? de nieuwste informatie (in dit geval het label) ophalen uit de nieuwste graph die we kunnen vinden waar het concept in staat?
-
-        ### Je zit in de goede richting. Echter, je haalt nu zowel niet de laatste versie van de collectie, als de laatste versie van het concept op.
-        ### Ik zie nergens de foaf:isPrimaryTopicOf relatie staan, dus ?doc komt nu uit het luchtledige.
-        ### Vraag: waar moet die ?doc vandaan komen?
+        ?collection  skos:member ?concept;
+          foaf:isPrimaryTopicOf ?doc
+        .
       }
       FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?conceptgraph {
-      ### Inspringen...
-      ?concept rdfs:label ?concept_label. 
-      ?conceptgraph prov:generatedAtTime ?ConceptTime.
+        ?concept rdfs:label ?concept_label;
+          foaf:isPrimaryTopicOf ?conceptdoc
+        .
+        ?conceptgraph prov:generatedAtTime ?ConceptTime.
         FILTER NOT EXISTS {
           GRAPH ?newerConceptGraph {
             ?concept a skos:Concept. 
@@ -103,6 +98,26 @@ stage:CollectionMemberList a elmo:Part;
             ?doc rdf:type prov:Entity.
             ?newerDocGraph prov:generatedAtTime ?newerDocTime.
             FILTER( ?newerDocTime > ?docTime )
+          }
+        }  
+      }
+      GRAPH ?docConceptGraph {
+        ?conceptdoc rdf:type prov:Entity;
+          adms:status adms-status:Completed;
+          dcterms:temporal/dcmiperiod:start ?start
+        .
+        FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+        FILTER NOT EXISTS {
+          ?doc dcterms:temporal/dcmiperiod:end ?end.
+          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+        }
+        
+        ?docConceptGraph prov:generatedAtTime ?docConceptTime.
+        FILTER NOT EXISTS {
+          GRAPH ?newerDocConceptGraph {
+            ?doc rdf:type prov:Entity.
+            ?newerDocConceptGraph prov:generatedAtTime ?newerDocConceptTime.
+            FILTER( ?newerDocConceptTime > ?docConceptTime )
           }
         }  
       }    
@@ -158,7 +173,6 @@ stage:SelectCollection a elmo:Part;
     
 	'''
 .
-
 
 # Scene gebruikt voor het verwijderen van alleen de geslecteerde skos:member
 stage:ClearSingleMemberScene a elmo:Scene;
