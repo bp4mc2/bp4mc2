@@ -61,87 +61,52 @@ stage:CollectionMemberList a elmo:Part;
 			?concept rdfs:label ?concept_label
 		}
 		WHERE {
-      ### We komen nu ogenschijnlijk op het gebied van muggenzifterij, maar straks verderop ga je wel merken waarom het belangrijk is.
-      ### Graag de graph-name goedzetten. Dit gaat niet over organisaties (org) maar collections.
-      ### ?collectionGraph dus
-      GRAPH ?orgGraph {
+      GRAPH ?collectionGraph {
         ?collection  skos:member ?concept;
-          ### Liefst ook ?docCollection gebruiken hier voor de duidelijkheid
-          foaf:isPrimaryTopicOf ?doc
+          foaf:isPrimaryTopicOf ?docCollection
         .
       }
-      FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      ### Graag camelCase gebruiken voor de graphnames. ?conceptGraph dus
-      GRAPH ?conceptgraph {
+      FILTER regex( ?collectionGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?conceptGraph {
         ?concept rdfs:label ?concept_label;
-          ### Door schade en schande ben ik erachter gekomen dat het beter is om dit ?docConcept te noemen, dan ?conceptDoc
-          ### Heeft te maken met variabelenamen die op een gegeven moment heel ingewikkeld kunnen worden
-          foaf:isPrimaryTopicOf ?conceptdoc
+          foaf:isPrimaryTopicOf ?docConcept
         .
-        
-        ### Ik begrijp de verwarring hier, maar dit query-gedeelte is niet nodig.
-        ### Je bent immers bezig om de -huidige actuele versie- van een concept op te halen
-        ### Dat is niet per se de **nieuwste** versie van een concept!! Er kan best een nieuwere werkversie klaarstaan,
-        ### maar daar ben je in dit geval niet in geïnteresseerd.
-        ?conceptgraph prov:generatedAtTime ?ConceptTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerConceptGraph {
-            ?concept a skos:Concept. 
-            ?newerConceptGraph prov:generatedAtTime ?newerConceptTime.
-            FILTER( ?newerConceptTime > ?ConceptTime )
-          }
-        }
       }
-      FILTER regex( ?conceptgraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      ### Liefst ?docCollectionGraph voor de duidelijkheid
-      GRAPH ?docGraph {
-        ?doc rdf:type prov:Entity;
+      FILTER regex( ?conceptGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?docCollectionGraph {
+        ?docCollection rdf:type prov:Entity;
           adms:status adms-status:Completed;
-          ### En ?collectionStart
-          dcterms:temporal/dcmiperiod:start ?start
+          dcterms:temporal/dcmiperiod:start ?collectionStart
         .
-        FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+        FILTER( strdt( ?collectionStart, xsd:dateTime ) <= now() )
         FILTER NOT EXISTS {
-          ### En ?collectionEnd
-          ?doc dcterms:temporal/dcmiperiod:end ?end.
-          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          ?docCollection dcterms:temporal/dcmiperiod:end ?collectionEnd.
+          FILTER( strdt( ?collectionEnd, xsd:dateTime ) < now() )
         }
-        
-        ### ?docCollectionGraph, ?docCollectionTime...
-        ?docGraph prov:generatedAtTime ?docTime.
+        ?docCollectionGraph prov:generatedAtTime ?docCollectionTime.
         FILTER NOT EXISTS {
-          ### Hier nog een paar keer...
-          GRAPH ?newerDocGraph {
-            ?doc rdf:type prov:Entity.
-            ?newerDocGraph prov:generatedAtTime ?newerDocTime.
-            FILTER( ?newerDocTime > ?docTime )
+          GRAPH ?newerDocCollectionGraph {
+            ?docCollection rdf:type prov:Entity.
+            ?newerDocCollectionGraph prov:generatedAtTime ?newerDocCollectionTime.
+            FILTER( ?newerDocCollectionTime > ?docCollectionTime )
           }
         }  
       }
       GRAPH ?docConceptGraph {
-        ### ?docConcept
-        ?conceptdoc rdf:type prov:Entity;
+        ?docConcept rdf:type prov:Entity;
           adms:status adms-status:Completed;
-          ### A-HA!!!!! En HIER wordt hopelijk eindelijk duidelijk waarom ik hierboven zo vervelend ben...
-          ### Want hier ga je in de fout. ?start heb je al gebruikt nu, voor de startdatum van de collectie
-          ### Zoals de query zo staat, is-ie op zoek naar een concept met dezelfde startdatum als de collectie
-          ### En dat is natuurlijk niet wat je wilt.
-          ### Oplossing is natuurlijk simpel: hernoemen naar ?conceptStart.
-          dcterms:temporal/dcmiperiod:start ?start
+          dcterms:temporal/dcmiperiod:start ?conceptStart
         .
-        FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+        FILTER( strdt( ?conceptStart, xsd:dateTime ) <= now() )
         FILTER NOT EXISTS {
-          ### Hier ga je nogmaals in de fout, je vraagt zelfs om ?doc ipv om ?docConcept.
-          ### En ook, ?conceptEnd...
-          ?doc dcterms:temporal/dcmiperiod:end ?end.
-          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          ?docConcept dcterms:temporal/dcmiperiod:end ?conceptEnd.
+          FILTER( strdt( ?conceptEnd, xsd:dateTime ) < now() )
         }
         
         ?docConceptGraph prov:generatedAtTime ?docConceptTime.
         FILTER NOT EXISTS {
           GRAPH ?newerDocConceptGraph {
-            ### Weer ?doc ipv ?docConcept!
-            ?doc rdf:type prov:Entity.
+            ?docConcept rdf:type prov:Entity.
             ?newerDocConceptGraph prov:generatedAtTime ?newerDocConceptTime.
             FILTER( ?newerDocConceptTime > ?docConceptTime )
           }
@@ -168,30 +133,30 @@ stage:SelectCollection a elmo:Part;
 			?collection rdfs:label ?label.
 		}
 		WHERE {
-      GRAPH ?orgGraph {
+      GRAPH ?collectionGraph {
         ?collection rdf:type skos:Collection;
           rdfs:label ?label;
-          foaf:isPrimaryTopicOf ?doc
+          foaf:isPrimaryTopicOf ?docCollection
         .
       }
-      FILTER regex( ?orgGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      GRAPH ?docGraph {
-        ?doc rdf:type prov:Entity;
+      FILTER regex( ?collectionGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      GRAPH ?docCollectionGraph {
+        ?docCollection rdf:type prov:Entity;
           adms:status adms-status:Completed;
-          dcterms:temporal/dcmiperiod:start ?start
+          dcterms:temporal/dcmiperiod:start ?collectionStart
         .
-        FILTER( strdt( ?start, xsd:dateTime ) <= now() )
+        FILTER( strdt( ?collectionStart, xsd:dateTime ) <= now() )
         FILTER NOT EXISTS {
-          ?doc dcterms:temporal/dcmiperiod:end ?end.
-          FILTER( strdt( ?end, xsd:dateTime ) < now() )
+          ?docCollection dcterms:temporal/dcmiperiod:end ?collectionEnd.
+          FILTER( strdt( ?collectionEnd, xsd:dateTime ) < now() )
         }
         
-       ?docGraph prov:generatedAtTime ?docTime.
+       ?docCollectionGraph prov:generatedAtTime ?docCollectionTime.
         FILTER NOT EXISTS {
-          GRAPH ?newerDocGraph {
-            ?doc rdf:type prov:Entity.
-            ?newerDocGraph prov:generatedAtTime ?newerDocTime.
-            FILTER( ?newerDocTime > ?docTime )
+          GRAPH ?newerDocCollectionGraph {
+            ?docCollection rdf:type prov:Entity.
+            ?newerDocCollectionGraph prov:generatedAtTime ?newerDocCollectionTime.
+            FILTER( ?newerDocCollectionTime > ?docCollectionTime )
           }
         }  
       }
