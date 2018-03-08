@@ -128,6 +128,7 @@ stage:ValuelistMemberList a elmo:Part;
         GRAPH def:Waardelijsten {
           ?waardelijst rdf:type sh:NodeShape;
             sh:property [
+            ### Dit klopt niet, moet zijn skos:inScheme, en geen sh:inversePath. Zie voorbeeldbestand waardelijsten
               sh:path [ sh:inversePath skos:member ];
               sh:hasValue ?scheme
             ]
@@ -169,6 +170,7 @@ stage:ValuelistMemberList a elmo:Part;
         GRAPH def:Waardelijsten {
           ?waardelijst rdf:type sh:NodeShape;
             sh:property [
+            ### Moet zijn rdf:type, en geen sh:inversePath
               sh:path [ sh:inversePath skos:member ];
               sh:hasValue ?class
             ]
@@ -356,6 +358,8 @@ stage:DeleteWaardenCategoriserendScene a elmo:Scene;
           ]
         .
       }
+      ### Onderstaande is niet wat je moet doen, daarmee zorg je ervoor dat je concept gewoon niet opgeslagen wordt
+      ### Vraag: wat betekent het in dit geval om een waarde uit de waardelijst te halen?
       GRAPH ?conceptGraph {
         ?concept ?o ?p;
           skos:inScheme ?schema;
@@ -462,6 +466,9 @@ stage:DeleteWaardenCategoriserendScene a elmo:Scene;
           ]
         .
       }
+      ### Ook onderstaande is niet correct
+      ### De vraag wat precies het verwachte gedrag is, is in dit geval niet zo makkelijk te beantwoorden
+      ### Mijn intuïtie zegt: de klasse ongeldig maken, maar dit moet afgestemd worden met Arjen.
       GRAPH ?conceptGraph {
         ?concept ?p ?o;
           rdf:type ?class;
