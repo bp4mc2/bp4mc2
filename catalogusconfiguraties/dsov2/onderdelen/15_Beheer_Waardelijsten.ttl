@@ -117,7 +117,8 @@ stage:CreateClassificerendScene a elmo:Scene;
     }
     WHERE {
       BIND( IRI("@MODEL@/@NAME@ValueList") AS ?waardelijst )
-      BIND( IRI("http://catalogus.test.kadaster.nl/id/collection/@NAME@") AS ?collection )  
+      #aangepast van http://catalogus.test.kadaster.nl/id/ naar omgevingswet. Hier moeten we nog een sync kunnen uitvoeren naar de juiste dataset en ION zoals we bij de algemene resource upload doen.
+      BIND( IRI("http://wetgeving.tst.omgevingswet.overheid.nl/id/collection/@NAME@") AS ?collection )  
       FILTER( <@TYPE@> = bp4mc2:Classificerend )
     }
   '''
