@@ -128,8 +128,7 @@ stage:ValuelistMemberList a elmo:Part;
         GRAPH def:Waardelijsten {
           ?waardelijst rdf:type sh:NodeShape;
             sh:property [
-            ### Dit klopt niet, moet zijn skos:inScheme, en geen sh:inversePath. Zie voorbeeldbestand waardelijsten
-              sh:path [ sh:inversePath skos:member ];
+              sh:path skos:inScheme;
               sh:hasValue ?scheme
             ]
           .
@@ -170,8 +169,7 @@ stage:ValuelistMemberList a elmo:Part;
         GRAPH def:Waardelijsten {
           ?waardelijst rdf:type sh:NodeShape;
             sh:property [
-            ### Moet zijn rdf:type, en geen sh:inversePath
-              sh:path [ sh:inversePath skos:member ];
+              sh:path rdf:type;
               sh:hasValue ?class
             ]
           .
@@ -365,7 +363,8 @@ stage:DeleteWaardenCategoriserendScene a elmo:Scene;
           skos:inScheme ?schema;
           foaf:isPrimaryTopicOf ?docConcept
         .
-        FILTER( ?concept != <@MEMBER@>)
+        FILTER(?o != skos:inScheme)
+        MINUS( <@MEMBER@> skos:inScheme ?schema)
       }
       FILTER regex( ?conceptGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       GRAPH ?docConceptGraph {
@@ -435,92 +434,10 @@ stage:DeleteWaardenCategoriserendScene a elmo:Scene;
     prefix shxl:            <http://bp4mc2.org/def/sh-xl#>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
-    INSERT {
-      GRAPH ?transactie {
-        ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanpassen van een referende waardelijst in de Catalogus";
-          prov:generatedAtTime ?now;
-          prov:wasAttributedTo user:TomcatUser
-        .
-        ?concept ?o ?p;
-          foaf:isPrimaryTopicOf ?doc
-        .
-
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?currentDoc
-        .
-
-        ?udDoc ?docP ?docO;
-          adms:status adms-status:Withdrawn
-        .
-      }
-    } 
-    WHERE {
-      GRAPH {
-        <@WAARDELIJST@> a sh:NodeShape;
-          shxl:stereotype shxl:Valuelist;
-          sh:property [
-            sh:path skos:inScheme;
-            sh:hasValue ?class
-          ]
-        .
-      }
-      ### Ook onderstaande is niet correct
+      
       ### De vraag wat precies het verwachte gedrag is, is in dit geval niet zo makkelijk te beantwoorden
       ### Mijn intuïtie zegt: de klasse ongeldig maken, maar dit moet afgestemd worden met Arjen.
-      GRAPH ?conceptGraph {
-        ?concept ?p ?o;
-          rdf:type ?class;
-          foaf:isPrimaryTopicOf ?docConcept
-        .
-        FILTER (?concept != <@MEMBER@>)  
-      }
-      FILTER regex( ?conceptGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      GRAPH ?docConceptGraph {
-        ?docConcept rdf:type prov:Entity;
-          adms:status adms-status:Completed;
-          dcterms:temporal/dcmiperiod:start ?conceptStart
-        .
-        FILTER( strdt( ?conceptStart, xsd:dateTime ) <= now() )
-        FILTER NOT EXISTS {
-          ?docConcept dcterms:temporal/dcmiperiod:end ?conceptEnd.
-          FILTER( strdt( ?conceptEnd, xsd:dateTime ) < now() )
-        }
-        
-        ?docConceptGraph prov:generatedAtTime ?docConceptTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocConceptGraph {
-            ?docConcept rdf:type prov:Entity.
-            ?newerDocConceptGraph prov:generatedAtTime ?newerDocConceptTime.
-            FILTER( ?newerDocConceptTime > ?docConceptTime )
-          }
-        }  
-      } 
-      OPTIONAL {
-        GRAPH ?udGraph {
-          ?concept  foaf:isPrimaryTopicOf ?udDoc.
-          ?udDoc ?docP ?docO;
-            adms:status adms-status:UnderDevelopment
-          .
-          FILTER( ?docP != adms:status )    
-          ?udGraph prov:generatedAtTime ?udGraphTime.         
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?udDoc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER( ?newerDocGraphTime > ?udGraphTime )            
-            }
-          }
-        } 
-        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      }
-    }
-    BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-    BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-    BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
-    BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
-    BIND( now() AS ?now )
+      
             
   '''
 .
