@@ -247,7 +247,7 @@ stage:ClearSingleMemberScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename ) ) AS ?doc )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T"), "-", ?typename,"-", "@COLLECTION@") ) AS ?doc )
       BIND( now() AS ?now )
     }
     
