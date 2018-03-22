@@ -211,7 +211,8 @@ stage:ClearSingleMemberScene a elmo:Scene;
         <@COLLECTIE@> ?p ?o;
           skos:member ?concept;
           rdf:type ?type;
-          foaf:primaryTopicOf ?currentDoc
+          skos:prefLabel ?prefLabel;
+          foaf:isPrimaryTopicOf ?currentDoc
         .
         FILTER( ?p != skos:member )
         FILTER( ?concept != <@CONCEPT@>)
@@ -247,8 +248,7 @@ stage:ClearSingleMemberScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T"), "-", ?typename,"-", ?prefLabel) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
