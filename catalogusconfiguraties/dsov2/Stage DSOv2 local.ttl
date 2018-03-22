@@ -1909,7 +1909,8 @@ stage:ClearSingleMemberScene a elmo:Scene;
         <@COLLECTIE@> ?p ?o;
           skos:member ?concept;
           rdf:type ?type;
-          foaf:primaryTopicOf ?currentDoc
+          skos:prefLabel ?prefLabel;
+          foaf:isPrimaryTopicOf ?currentDoc
         .
         FILTER( ?p != skos:member )
         FILTER( ?concept != <@CONCEPT@>)
@@ -1945,8 +1946,7 @@ stage:ClearSingleMemberScene a elmo:Scene;
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
       BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
+      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T"), "-", ?typename,"-", ?prefLabel) ) AS ?doc )
       BIND( now() AS ?now )
     }
     
@@ -1958,29 +1958,31 @@ stage:ClearSingleMemberScene a elmo:Scene;
 # Delete waarden van waardelijst
 updatestage:deletewaardenvaluelist a elmo:Production;
   elmo:contains stage:DSOv2Beheermenu;
-	elmo:contains stage:DSOv2Header;
-	elmo:contains stage:DSOv2Footer;
-	elmo:queryForm stage:DeleteWaardenForm;
-  elmo:contains stage:DeleteWaardenClassificerendScene;
+  elmo:contains stage:DSOv2Header;
+  elmo:contains stage:DSOv2Footer;
+  elmo:queryForm stage:DeleteWaardenForm;
+  elmo:contains stage:ResourceWaardelijstOngeldigMakenScene;
   elmo:contains stage:WaardelijstenList;
-  elmo:contains stage:ValuelistMemberList;
+  elmo:contains stage:search-geldige-resource;
+  #elmo:contains stage:ValuelistMemberList;
 .
 
-
+## Dit werkt voor nu, in LDT 2.0 straks graag afhankelijke dropdown van waardelijst en bijbehorende waarden
+## Daarom ValuelistMemberList nog even bewaard, deze zal alleen de DOC moeten teruggeven (zoals search-geldige-resource dat doet) 
 stage:DeleteWaardenForm a elmo:Form;
 	rdfs:label "Verwijder waarden uit waardelijst";
-  elmo:index "2";
+  #elmo:index "2";
+  # elmo:fragment [
+      # elmo:applies-to "waardelijst";
+      # rdfs:label "Selecteer de waardelijst"@nl;
+      # elmo:valuesFrom stage:WaardelijstenList;
+      # elmo:constraint elmo:MandatoryConstraint;
+      # elmo:index "3";
+  # ];
   elmo:fragment [
-      elmo:applies-to "waardelijst";
-      rdfs:label "Selecteer de waardelijst"@nl;
-      elmo:valuesFrom stage:WaardelijstenList;
-      elmo:constraint elmo:MandatoryConstraint;
-      elmo:index "3";
-  ];
-  elmo:fragment [
-      elmo:applies-to "member";
+      elmo:applies-to "doc";
       rdfs:label "Selecteer member"@nl;
-      elmo:valuesFrom stage:ValuelistMemberList;
+      elmo:valuesFrom stage:search-geldige-resource;
       elmo:constraint elmo:MandatoryConstraint;
       elmo:index "4";
   ];
@@ -1991,412 +1993,242 @@ stage:DeleteWaardenForm a elmo:Form;
   ]
 .
   
-
-#-------------------------- deleten van specifieke waarden uit waardelijst
-
-stage:ValuelistMemberList a elmo:Part;
- elmo:appearance elmo:HiddenAppearance;
-  elmo:query '''
+stage:ResourceWaardelijstOngeldigMakenScene a elmo:Scene;
+	elmo:index "3";
+	rdfs:label "Einddatum geldigheid toevoegen aan resource waardelijst";
+	elmo:query '''
     prefix adms:            <http://www.w3.org/ns/adms#>
-    prefix adms-status:     <http://purl.org/adms/status/>
+	prefix adms-status:     <http://purl.org/adms/status/>
+    prefix dcterms:         <http://purl.org/dc/terms/>
     prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    prefix org:             <http://www.w3.org/TR/vocab-org#>
+    prefix foaf: 	  		<http://xmlns.com/foaf/0.1/>
     prefix prov:            <http://www.w3.org/ns/prov#>
+	prefix sd:              <http://www.w3.org/ns/sparql-service-description/>
+    prefix slex-status:     <http://bp4mc2.org/skos-lex/status/>
     prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    prefix bp4mc2:          <http://bp4mc2.org/elmo/def/>
-    prefix def:             <http://catalogus.test.kadaster.nl/def/>  
-    prefix sh: 		          <http://www.w3.org/ns/shacl#>
-    prefix shxl:            <http://bp4mc2.org/def/sh-xl#>
-    
-    
-		CONSTRUCT {
-			?member rdfs:label ?label
-		}
-		WHERE {
-    ##Classificerende waarden  
-      {
-        GRAPH def:Waardelijsten {
-          ?waardelijst rdf:type sh:NodeShape;
-            sh:property [
-              sh:path [ sh:inversePath skos:member ];
-              sh:hasValue ?collection
-            ]
-          .
-        }
-        GRAPH ?collectionGraph {
-          ?collection  skos:member ?member;
-            foaf:isPrimaryTopicOf ?docCollection
-          .
-        }
-        FILTER regex( ?collectionGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-        GRAPH ?conceptGraph {
-          ?member rdfs:label ?label;
-            foaf:isPrimaryTopicOf ?docConcept
-          .
-        }
-        FILTER regex( ?conceptGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-        GRAPH ?docCollectionGraph {
-          ?docCollection rdf:type prov:Entity;
-            adms:status adms-status:Completed;
-            dcterms:temporal/dcmiperiod:start ?collectionStart
-          .
-          FILTER( strdt( ?collectionStart, xsd:dateTime ) <= now() )
-          FILTER NOT EXISTS {
-            ?docCollection dcterms:temporal/dcmiperiod:end ?collectionEnd.
-            FILTER( strdt( ?collectionEnd, xsd:dateTime ) < now() )
-          }
-          ?docCollectionGraph prov:generatedAtTime ?docCollectionTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocCollectionGraph {
-              ?docCollection rdf:type prov:Entity.
-              ?newerDocCollectionGraph prov:generatedAtTime ?newerDocCollectionTime.
-              FILTER( ?newerDocCollectionTime > ?docCollectionTime )
-            }
-          }  
-        }
-        GRAPH ?docConceptGraph {
-          ?docConcept rdf:type prov:Entity;
-            adms:status adms-status:Completed;
-            dcterms:temporal/dcmiperiod:start ?conceptStart
-          .
-          FILTER( strdt( ?conceptStart, xsd:dateTime ) <= now() )
-          FILTER NOT EXISTS {
-            ?docConcept dcterms:temporal/dcmiperiod:end ?conceptEnd.
-            FILTER( strdt( ?conceptEnd, xsd:dateTime ) < now() )
-          }
-          
-          ?docConceptGraph prov:generatedAtTime ?docConceptTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocConceptGraph {
-              ?docConcept rdf:type prov:Entity.
-              ?newerDocConceptGraph prov:generatedAtTime ?newerDocConceptTime.
-              FILTER( ?newerDocConceptTime > ?docConceptTime )
-            }
-          }  
-        }   
-      }
-      
-    ## Categoriserende waarden
-      UNION
-      {
-        GRAPH def:Waardelijsten {
-          ?waardelijst rdf:type sh:NodeShape;
-            sh:property [
-              sh:path skos:inScheme;
-              sh:hasValue ?scheme
-            ]
-          .
-        }
-        GRAPH ?memberGraph {
-          ?member skos:inScheme ?scheme;
-            rdfs:label ?label;
-            foaf:isPrimaryTopicOf ?docMember
-          .
-        }
-        FILTER regex( ?memberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-        GRAPH ?docMemberGraph {
-          ?docMember rdf:type prov:Entity;
-            adms:status adms-status:Completed;
-            dcterms:temporal/dcmiperiod:start ?memberStart
-          .
-          FILTER( strdt( ?memberStart, xsd:dateTime ) <= now() )
-          FILTER NOT EXISTS {
-            ?docMember dcterms:temporal/dcmiperiod:end ?memberEnd.
-            FILTER( strdt( ?memberEnd, xsd:dateTime ) < now() )
-          }
-          
-          ?docMemberGraph prov:generatedAtTime ?docConceptTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocMemberGraph {
-              ?docMember rdf:type prov:Entity.
-              ?newerDocMemberGraph prov:generatedAtTime ?newerDocMemberTime.
-              FILTER( ?newerDocMemberTime > ?docMemberTime )
-            }
-          }  
-        }   
-        FILTER regex( ?docMemberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      }
-    
-    ## Refererend waarden
-      UNION
-      {
-        GRAPH def:Waardelijsten {
-          ?waardelijst rdf:type sh:NodeShape;
-            sh:property [
-              sh:path rdf:type;
-              sh:hasValue ?class
-            ]
-          .
-        }
-        GRAPH ?memberGraph {
-          ?member rdf:type ?class;
-            rdfs:label ?label;
-            foaf:isPrimaryTopicOf ?docMember
-          .
-        }
-        FILTER regex( ?memberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-        GRAPH ?docMemberGraph {
-          ?docMember rdf:type prov:Entity;
-            adms:status adms-status:Completed;
-            dcterms:temporal/dcmiperiod:start ?memberStart
-          .
-          FILTER( strdt( ?memberStart, xsd:dateTime ) <= now() )
-          FILTER NOT EXISTS {
-            ?docMember dcterms:temporal/dcmiperiod:end ?memberEnd.
-            FILTER( strdt( ?memberEnd, xsd:dateTime ) < now() )
-          }
-          
-          ?docMemberGraph prov:generatedAtTime ?docConceptTime.
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocMemberGraph {
-              ?docMember rdf:type prov:Entity.
-              ?newerDocMemberGraph prov:generatedAtTime ?newerDocMemberTime.
-              FILTER( ?newerDocMemberTime > ?docMemberTime )
-            }
-          }  
-        }   
-        FILTER regex( ?docMemberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      } 
-    }
- '''
-.  
-
-#-----------------------------------------------------------------------------------------  
-stage:DeleteWaardenClassificerendScene a elmo:Scene;
-  rdfs:label "Verwijderen onderdeel van Classificerende waardelijst";
-  elmo:index "01"; 
-  elmo:query '''
-    prefix adms:            <http://www.w3.org/ns/adms#>
-    prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    prefix org:             <http://www.w3.org/TR/vocab-org#>
-    prefix prov:            <http://www.w3.org/ns/prov#>
-    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    prefix bp4mc2:          <http://bp4mc2.org/elmo/def/>
-    prefix def:             <http://catalogus.test.kadaster.nl/def/>  
-    prefix sh: 		          <http://www.w3.org/ns/shacl#>
-    prefix shxl:            <http://bp4mc2.org/def/sh-xl#>
+	prefix skoslex:         <http://bp4mc2.org/def/skos-lex/>
+		
+    prefix container:       <http://localhost:8080/catalogus/dsov2/container/>
     prefix user:            <http://catalogus.test.kadaster.nl/users/>
     
     INSERT {
-      GRAPH ?transactie {
+      GRAPH ?transactie {      
         ?transactie rdf:type sd:Graph, prov:Entity;
-          skos:changeNote "Aanpassen van een classificerende waardelijst in de Catalogus";
+          skos:changeNote "Einddatum geldigheid toevoegen aan resource";
           prov:generatedAtTime ?now;
           prov:wasAttributedTo user:TomcatUser
         .
-        ?collection rdf:type skos:Collection;
-          skos:member ?concept;
-          foaf:isPrimaryTopicOf ?doc
-        .
 
-        ?doc rdf:type prov:Entity;
-          adms:status adms-status:UnderDevelopment;
-          prov:wasRevisionOf ?currentDoc
+        <@DOC@> ?p ?o;
+          adms:status adms-status:Completed;
+          dcterms:temporal ?temporal
         .
-
-        ?udDoc ?docP ?docO;
-          adms:status adms-status:Withdrawn
+        
+        ?temporal ?temporalP ?temporalO;
+          dcmiperiod:end ?now
         .
       }
     }
     WHERE {
-      GRAPH def:Waardelijsten {
-        <@WAARDELIJST@> rdf:type sh:NodeShape;
-           rdfs:label ?name;
-            sh:property [
-              sh:path [ sh:inversePath skos:member ];
-              sh:hasValue ?collection
-            ]
-          .
-      }
-      GRAPH ?graph {
-        ?collection ?p ?o;
-          skos:member ?concept;
-          rdf:type ?type;
-          foaf:isPrimaryTopicOf ?currentDoc
+      GRAPH ?docGraph {
+        <@DOC@> rdf:type prov:Entity;
+          dcterms:temporal ?temporal;
+          ?p ?o
         .
-        FILTER( ?p != skos:member)
-        FILTER( ?concept != <@CONCEPT@>)
+        ?temporal ?temporalP ?temporalO.
+        FILTER( ?p != dcterms:temporal )
         
-        ?graph prov:generatedAtTime ?graphTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerGraph {
-            ?newerGraph prov:generatedAtTime ?newerTime.
-            ?collection rdf:type skos:Collection.
-            FILTER( ?newerTime > ?graphTime )
-          }
-        }
-      }
-      FILTER regex( ?graph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      OPTIONAL {
-        GRAPH ?udGraph {
-          ?collection  foaf:isPrimaryTopicOf ?udDoc.
-          ?udDoc ?docP ?docO;
-            adms:status adms-status:UnderDevelopment
-          .
-          FILTER( ?docP != adms:status )    
-          ?udGraph prov:generatedAtTime ?udGraphTime.         
+        ?docGraph prov:generatedAtTime ?docTime.
           FILTER NOT EXISTS {
             GRAPH ?newerDocGraph {
-              ?udDoc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER ( ?newerDocGraphTime > ?udGraphTime )            
+              ?newerDocGraph prov:generatedAtTime ?newerDocTime.
+              <@DOC@> rdf:type prov:Entity.
+              FILTER( ?newerDocTime > ?docTime )
             }
           }
-        } 
-        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
       }
       
       BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-      BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-      BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
-      BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
       BIND( now() AS ?now )
-    } 
-      
-  '''
-.
-
-#-----------------------------------------------------------------------------------------  
-stage:DeleteWaardenCategoriserendScene a elmo:Scene;
-  rdfs:label "Verwijder waarden uit refererende waardelijst";
-  elmo:index "4";
-  elmo:query '''
-    prefix adms:            <http://www.w3.org/ns/adms#>
-    prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    prefix org:             <http://www.w3.org/TR/vocab-org#>
-    prefix prov:            <http://www.w3.org/ns/prov#>
-    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    prefix bp4mc2:          <http://bp4mc2.org/elmo/def/>
-    prefix def:             <http://catalogus.test.kadaster.nl/def/>  
-    prefix sh: 		          <http://www.w3.org/ns/shacl#>
-    prefix shxl:            <http://bp4mc2.org/def/sh-xl#>
-    prefix user:            <http://catalogus.test.kadaster.nl/users/>
-    
-    INSERT {
-        GRAPH ?transactie {
-          ?transactie rdf:type sd:Graph, prov:Entity;
-            skos:changeNote "Aanpassen van een categoriserende waardelijst in de Catalogus";
-            prov:generatedAtTime ?now;
-            prov:wasAttributedTo user:TomcatUser
-          .
-          ?concept ?o ?p;
-            foaf:isPrimaryTopicOf ?doc
-          .
-
-          ?doc rdf:type prov:Entity;
-            adms:status adms-status:UnderDevelopment;
-            prov:wasRevisionOf ?currentDoc
-          .
-
-          ?udDoc ?docP ?docO;
-            adms:status adms-status:Withdrawn
-          .
-        }
-      } 
-    WHERE {
-      GRAPH {
-        <@WAARDELIJST@> a sh:NodeShape;
-          shxl:stereotype shxl:Valuelist;
-          sh:property [
-            sh:path skos:inScheme;
-            sh:hasValue ?schema
-          ]
-        .
-      }
-      ### Onderstaande is niet wat je moet doen, daarmee zorg je ervoor dat je concept gewoon niet opgeslagen wordt
-      ### Vraag: wat betekent het in dit geval om een waarde uit de waardelijst te halen?
-      GRAPH ?conceptGraph {
-        ?concept ?o ?p;
-          skos:inScheme ?schema;
-          foaf:isPrimaryTopicOf ?docConcept
-        .
-        FILTER(?o != skos:inScheme)
-        MINUS( <@MEMBER@> skos:inScheme ?schema)
-      }
-      FILTER regex( ?conceptGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      GRAPH ?docConceptGraph {
-        ?docConcept rdf:type prov:Entity;
-          adms:status adms-status:Completed;
-          dcterms:temporal/dcmiperiod:start ?conceptStart
-        .
-        FILTER( strdt( ?conceptStart, xsd:dateTime ) <= now() )
-        FILTER NOT EXISTS {
-          ?docConcept dcterms:temporal/dcmiperiod:end ?conceptEnd.
-          FILTER( strdt( ?conceptEnd, xsd:dateTime ) < now() )
-        }
-        
-        ?docConceptGraph prov:generatedAtTime ?docConceptTime.
-        FILTER NOT EXISTS {
-          GRAPH ?newerDocConceptGraph {
-            ?docConcept rdf:type prov:Entity.
-            ?newerDocConceptGraph prov:generatedAtTime ?newerDocConceptTime.
-            FILTER( ?newerDocConceptTime > ?docConceptTime )
-          }
-        }  
-      } 
-      OPTIONAL {
-        GRAPH ?udGraph {
-          ?concept  foaf:isPrimaryTopicOf ?udDoc.
-          ?udDoc ?docP ?docO;
-            adms:status adms-status:UnderDevelopment
-          .
-          FILTER( ?docP != adms:status )    
-          ?udGraph prov:generatedAtTime ?udGraphTime.         
-          FILTER NOT EXISTS {
-            GRAPH ?newerDocGraph {
-              ?udDoc rdf:type prov:Entity.
-              ?newerDocGraph prov:generatedAtTime ?newerDocGraphTime.
-              FILTER( ?newerDocGraphTime > ?udGraphTime )            
-            }
-          }
-        } 
-        FILTER regex( ?udGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
-      }
     }
-    BIND( iri( concat( "http://catalogus.test.kadaster.nl/id/transactie/", replace( now(), " ", "T" ) ) ) AS ?transactie )
-    BIND( lcase( replace( replace( str( ?type ), ".+/", "" ), ".+#", "" ) ) AS ?typename )
-    BIND( IF( BOUND( ?title ), replace( ?title, " ", "" ), ?prefLabel ) AS ?label )
-    BIND( iri ( concat(  "http://catalogus.test.kadaster.nl/id/entity/", replace( now(), " ", "T" ), "-", ?typename, "-", ?label ) ) AS ?doc )
-    BIND( now() AS ?now )
-            
-  '''
+	'''
 .
 
-#------------------------------------------------------------------------------------------
-  stage:DeleteWaardenRefererendScene a elmo:Scene;
-  rdfs:label "Verwijder waarden uit refererende waardelijst";
-  elmo:index "4";
-  elmo:query '''
-    prefix adms:            <http://www.w3.org/ns/adms#>
-    prefix adms-status:     <http://purl.org/adms/status/>
-    prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
-    prefix dcterms:    		  <http://purl.org/dc/terms/>
-    prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
-    prefix org:             <http://www.w3.org/TR/vocab-org#>
-    prefix prov:            <http://www.w3.org/ns/prov#>
-    prefix skos:            <http://www.w3.org/2004/02/skos/core#>
-    prefix bp4mc2:          <http://bp4mc2.org/elmo/def/>
-    prefix def:             <http://catalogus.test.kadaster.nl/def/>  
-    prefix sh: 		          <http://www.w3.org/ns/shacl#>
-    prefix shxl:            <http://bp4mc2.org/def/sh-xl#>
-    prefix user:            <http://catalogus.test.kadaster.nl/users/>
+
+
+#-------------------------- deleten van specifieke waarden uit waardelijst
+
+# stage:ValuelistMemberList a elmo:Part;
+ # elmo:appearance elmo:HiddenAppearance;
+  # elmo:query '''
+    # prefix adms:            <http://www.w3.org/ns/adms#>
+    # prefix adms-status:     <http://purl.org/adms/status/>
+    # prefix dcmiperiod:      <http://dublincore.org/documents/2006/04/10/dcmi-period/>
+    # prefix dcterms:    		  <http://purl.org/dc/terms/>
+    # prefix foaf: 	  		    <http://xmlns.com/foaf/0.1/>
+    # prefix org:             <http://www.w3.org/TR/vocab-org#>
+    # prefix prov:            <http://www.w3.org/ns/prov#>
+    # prefix skos:            <http://www.w3.org/2004/02/skos/core#>
+    # prefix bp4mc2:          <http://bp4mc2.org/elmo/def/>
+    # prefix def:             <http://catalogus.test.kadaster.nl/def/>  
+    # prefix sh: 		          <http://www.w3.org/ns/shacl#>
+    # prefix shxl:            <http://bp4mc2.org/def/sh-xl#>
     
+    
+		# CONSTRUCT {
+			# ?member rdfs:label ?label
+		# }
+		# WHERE {
+    #Classificerende waarden  
+      # {
+        # GRAPH def:Waardelijsten {
+          # ?waardelijst rdf:type sh:NodeShape;
+            # sh:property [
+              # sh:path [ sh:inversePath skos:member ];
+              # sh:hasValue ?collection
+            # ]
+          # .
+        # }
+        # GRAPH ?collectionGraph {
+          # ?collection  skos:member ?member;
+            # foaf:isPrimaryTopicOf ?docCollection
+          # .
+        # }
+        # FILTER regex( ?collectionGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        # GRAPH ?conceptGraph {
+          # ?member rdfs:label ?label;
+            # foaf:isPrimaryTopicOf ?docConcept
+          # .
+        # }
+        # FILTER regex( ?conceptGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        # GRAPH ?docCollectionGraph {
+          # ?docCollection rdf:type prov:Entity;
+            # adms:status adms-status:Completed;
+            # dcterms:temporal/dcmiperiod:start ?collectionStart
+          # .
+          # FILTER( strdt( ?collectionStart, xsd:dateTime ) <= now() )
+          # FILTER NOT EXISTS {
+            # ?docCollection dcterms:temporal/dcmiperiod:end ?collectionEnd.
+            # FILTER( strdt( ?collectionEnd, xsd:dateTime ) < now() )
+          # }
+          # ?docCollectionGraph prov:generatedAtTime ?docCollectionTime.
+          # FILTER NOT EXISTS {
+            # GRAPH ?newerDocCollectionGraph {
+              # ?docCollection rdf:type prov:Entity.
+              # ?newerDocCollectionGraph prov:generatedAtTime ?newerDocCollectionTime.
+              # FILTER( ?newerDocCollectionTime > ?docCollectionTime )
+            # }
+          # }  
+        # }
+        # GRAPH ?docConceptGraph {
+          # ?docConcept rdf:type prov:Entity;
+            # adms:status adms-status:Completed;
+            # dcterms:temporal/dcmiperiod:start ?conceptStart
+          # .
+          # FILTER( strdt( ?conceptStart, xsd:dateTime ) <= now() )
+          # FILTER NOT EXISTS {
+            # ?docConcept dcterms:temporal/dcmiperiod:end ?conceptEnd.
+            # FILTER( strdt( ?conceptEnd, xsd:dateTime ) < now() )
+          # }
+          
+          # ?docConceptGraph prov:generatedAtTime ?docConceptTime.
+          # FILTER NOT EXISTS {
+            # GRAPH ?newerDocConceptGraph {
+              # ?docConcept rdf:type prov:Entity.
+              # ?newerDocConceptGraph prov:generatedAtTime ?newerDocConceptTime.
+              # FILTER( ?newerDocConceptTime > ?docConceptTime )
+            # }
+          # }  
+        # }   
+      # }
       
-      ### De vraag wat precies het verwachte gedrag is, is in dit geval niet zo makkelijk te beantwoorden
-      ### Mijn intuïtie zegt: de klasse ongeldig maken, maar dit moet afgestemd worden met Arjen.
-      
-            
-  '''
-.
+    # Categoriserende waarden
+      # UNION
+      # {
+        # GRAPH def:Waardelijsten {
+          # ?waardelijst rdf:type sh:NodeShape;
+            # sh:property [
+              # sh:path skos:inScheme;
+              # sh:hasValue ?scheme
+            # ]
+          # .
+        # }
+        # GRAPH ?memberGraph {
+          # ?member skos:inScheme ?scheme;
+            # rdfs:label ?label;
+            # foaf:isPrimaryTopicOf ?docMember
+          # .
+        # }
+        # FILTER regex( ?memberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        # GRAPH ?docMemberGraph {
+          # ?docMember rdf:type prov:Entity;
+            # adms:status adms-status:Completed;
+            # dcterms:temporal/dcmiperiod:start ?memberStart
+          # .
+          # FILTER( strdt( ?memberStart, xsd:dateTime ) <= now() )
+          # FILTER NOT EXISTS {
+            # ?docMember dcterms:temporal/dcmiperiod:end ?memberEnd.
+            # FILTER( strdt( ?memberEnd, xsd:dateTime ) < now() )
+          # }
+          
+          # ?docMemberGraph prov:generatedAtTime ?docConceptTime.
+          # FILTER NOT EXISTS {
+            # GRAPH ?newerDocMemberGraph {
+              # ?docMember rdf:type prov:Entity.
+              # ?newerDocMemberGraph prov:generatedAtTime ?newerDocMemberTime.
+              # FILTER( ?newerDocMemberTime > ?docMemberTime )
+            # }
+          # }  
+        # }   
+        # FILTER regex( ?docMemberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      # }
+    
+    # Refererend waarden
+      # UNION
+      # {
+        # GRAPH def:Waardelijsten {
+          # ?waardelijst rdf:type sh:NodeShape;
+            # sh:property [
+              # sh:path rdf:type;
+              # sh:hasValue ?class
+            # ]
+          # .
+        # }
+        # GRAPH ?memberGraph {
+          # ?member rdf:type ?class;
+            # rdfs:label ?label;
+            # foaf:isPrimaryTopicOf ?docMember
+          # .
+        # }
+        # FILTER regex( ?memberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+        # GRAPH ?docMemberGraph {
+          # ?docMember rdf:type prov:Entity;
+            # adms:status adms-status:Completed;
+            # dcterms:temporal/dcmiperiod:start ?memberStart
+          # .
+          # FILTER( strdt( ?memberStart, xsd:dateTime ) <= now() )
+          # FILTER NOT EXISTS {
+            # ?docMember dcterms:temporal/dcmiperiod:end ?memberEnd.
+            # FILTER( strdt( ?memberEnd, xsd:dateTime ) < now() )
+          # }
+          
+          # ?docMemberGraph prov:generatedAtTime ?docConceptTime.
+          # FILTER NOT EXISTS {
+            # GRAPH ?newerDocMemberGraph {
+              # ?docMember rdf:type prov:Entity.
+              # ?newerDocMemberGraph prov:generatedAtTime ?newerDocMemberTime.
+              # FILTER( ?newerDocMemberTime > ?docMemberTime )
+            # }
+          # }  
+        # }   
+        # FILTER regex( ?docMemberGraph, "http://catalogus.test.kadaster.nl/id/transactie/" )
+      # } 
+    # }
+ # '''
+# .  
+
+
+
 
  
 #
