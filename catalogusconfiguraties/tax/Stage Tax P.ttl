@@ -168,12 +168,12 @@ stage:TaxBeheermenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Upload dataset-metadata (RDF of Turtle)";
 				elmo:index "1";
-				xhtml:link "/container/datasetupload";
+				xhtml:link "/admin/container/datasetupload";
 			];
 			elmo:data [
 				rdfs:label "Upload status (RDF of Turtle)";					#Voor het updaten van de status-graph, deze bevat geen concepten en kan dus niet via 'Upload concepten'.
 				elmo:index "2";
-				xhtml:link "/container/statusupload";
+				xhtml:link "/admin/container/statusupload";
 			];
 		];
 		elmo:data [
@@ -182,17 +182,17 @@ stage:TaxBeheermenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Upload een enkel Concept (Excel)";
 				elmo:index "3";
-				xhtml:link "/container/excelupdate";
+				xhtml:link "/admin/container/excelupdate";
 			];
 			elmo:data [
 				rdfs:label "Upload een enkel Concept (RDF of Turtle)";
 				elmo:index "4";
-				xhtml:link "/container/ttlupdate";
+				xhtml:link "/admin/container/ttlupdate";
 			];
 			elmo:data [
 				rdfs:label "Sync geuploade concepten naar dataset (RDF of Turtle)";
 				elmo:index "5";
-				xhtml:link "/update/syncttlupdate";
+				xhtml:link "/admin/update/syncttlupdate";
 			];
 		];
 		elmo:data[
@@ -201,7 +201,7 @@ stage:TaxBeheermenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Upload UML-model (Turtle)";
 				elmo:index "3";
-				xhtml:link "container/ttlmodelupload";
+				xhtml:link "/admin/container/ttlmodelupload";
 			];
 		];
 		elmo:data [
@@ -210,73 +210,73 @@ stage:TaxBeheermenu a elmo:Part;
 			elmo:data [
 				rdfs:label "Relatiecontrole";								#triples waar <A skos:SemanticRelation B> wel bestaat, maar de omgekeerde relatie ontbreekt
 				elmo:index "2";
-				xhtml:link "/query/relatiecontrole";
+				xhtml:link "/admin/query/relatiecontrole";
 			];
 			elmo:data [
 				rdfs:label "Missing Links";									#triples waar <B rdf:type type> geen geldige triple is
 				elmo:index "3";
-				xhtml:link "/query/missinglinks";
+				xhtml:link "/admin/query/missinglinks";
 			];
 			elmo:data [
 				rdfs:label "Homoniemen";									#begrippen die in meerdere begripskaders voorkomen
 				elmo:index "4";
-				xhtml:link "/query/homoniemen1";
+				xhtml:link "/admin/query/homoniemen1";
 			];
 			elmo:data [
 				rdfs:label "Synoniemen";									#begrippen die meerdere keren voorkomen, inclusief synoniemen
 				elmo:index "5";
-				xhtml:link "/query/synoniemen";
+				xhtml:link "/admin/query/synoniemen";
 			];
 			elmo:data [
 				rdfs:label "Statuscontrole";								#alle begrippen en hun status. Hoofdpagina bevat alleen gevalideerde/geverifieerde begrippen
 				elmo:index "1";
-				xhtml:link "/query/statuscontrole";
+				xhtml:link "/admin/query/statuscontrole";
 			];
 			elmo:data [
 				rdfs:label "Looping";										#triples waar zowel <A skos:SemanticRelation B> als <B skos:SemanticRelation A> bestaat, waardoor er een loop ontstaat
 				elmo:index "7";
-				xhtml:link "/query/loopingcontrole";
+				xhtml:link "/admin/query/loopingcontrole";
 			];
 			elmo:data [
 				rdfs:label "Where used";									#triples waar geldt <B ?relatie A>, dus alle subjecten gerelateerd aan een object
 				elmo:index "8";
-				xhtml:link "/query/whereused?term=";
+				xhtml:link "/admin/query/whereused?term=";
 			];
 			elmo:data [
 				rdfs:label "Niet Gevalideerde Links";						#triples waarbij een gevalideerd concept gelinkt is aan een niet-gevalideerd object
 				elmo:index "6";
-				xhtml:link "/query/nietgevalideerdelinks";
+				xhtml:link "/admin/query/nietgevalideerdelinks";
 			];
 		];
+#		elmo:data [
+#			rdfs:label "Exporteren";										#alle hulpmiddelen die geen rapportages zijn
+#			elmo:index "7";
+#			elmo:data [
+#				rdfs:label "Verwijder alle data";
+#				elmo:index "1";
+#				xhtml:link "/update/clearalldata";
+#			];
+#			elmo:data [
+#				rdfs:label "Verwijder enkel concept";
+#				elmo:index "2";
+#				xhtml:link "/update/clearsingleconcept";
+#			];
+#			elmo:data [
+#				rdfs:label "Verwijder alle concepten";
+#				elmo:index "3";
+#				xhtml:link "/update/clearalleconcepten";
+#			];
 		elmo:data [
-			rdfs:label "Hulpmiddelen";										#alle hulpmiddelen die geen rapportages zijn
-			elmo:index "7";
-			elmo:data [
-				rdfs:label "Verwijder alle data";
-				elmo:index "1";
-				xhtml:link "/update/clearalldata";
-			];
-			elmo:data [
-				rdfs:label "Verwijder enkel concept";
-				elmo:index "2";
-				xhtml:link "/update/clearsingleconcept";
-			];
-			elmo:data [
-				rdfs:label "Verwijder alle concepten";
-				elmo:index "3";
-				xhtml:link "/update/clearalleconcepten";
-			];
-			elmo:data [
-				rdfs:label "Exporteren van specifieke dataset";
-				elmo:index "4";
-				xhtml:link "/query/exportsubsetbegrippen";
-			];
+			rdfs:label "Exporteren van specifieke dataset";
+			elmo:index "4";
+			xhtml:link "/query/exportsubsetbegrippen";
+		];
 		#	elmo:data [
 		#		rdfs:label "Exporteren van alle data";
 		#		elmo:index "3";
 		#		xhtml:link "/query/exporteren";
 		#	];
-		];
+#		];
 	]
 .
 
@@ -327,7 +327,7 @@ stage:TaxTTLUploadScene a elmo:Scene;
 	rdfs:label "Postquery TTL-upload";
 	elmo:index "1";
 	elmo:query '''
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 
 		INSERT {
@@ -359,7 +359,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload bevat geen concepten.";
 		elmo:assert '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 			ASK {
@@ -372,7 +372,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
@@ -385,7 +385,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten zonder kddef:status bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 			ASK {
@@ -401,7 +401,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
@@ -435,7 +435,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
@@ -481,7 +481,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
 		elmo:assert '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:excelupdate {
@@ -496,7 +496,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten zonder kddef:status bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 			ASK {
@@ -512,7 +512,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:excelupdate {
@@ -558,7 +558,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:excelupdate {
@@ -700,7 +700,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix loc: <http://pdok-ld-gck.cs.kadaster.nl/id/>
 		prefix versiongraph: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/@CURRENTMOMENT@>
@@ -958,7 +958,7 @@ container:datasetupload a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen datasets zonder dct:title bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix dct: <http://purl.org/dc/terms/>
 			ASK {
 				GRAPH container:datasetupload {
@@ -973,7 +973,7 @@ container:datasetupload a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen datasets zonder skos:ConceptScheme bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix dcat: <http://www.w3.org/ns/dcat#>
 			ASK {
 				GRAPH container:datasetupload {
@@ -988,7 +988,7 @@ container:datasetupload a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen datasets zonder dcat:Dataset bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+			prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 			prefix dcat: <http://www.w3.org/ns/dcat#>
 			ASK {
 				GRAPH container:datasetupload {
@@ -1035,7 +1035,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix loc: <http://pdok-ld-gck.cs.kadaster.nl/id/>
 		prefix versiongraph: <http://pdok-ld-gck.cs.kadaster.nl/datasets/doc/@CURRENTMOMENT@>
@@ -1240,7 +1240,7 @@ stage:TaxDatasetUploadScene a elmo:Scene;
 
 #Hoofdpagina Relatiecontrole Rapportage
 stage:TaxRelatiecontrole a elmo:Representation;
-	elmo:url-pattern "/query/relatiecontrole$";
+	elmo:url-pattern "/admin/query/relatiecontrole$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -1276,7 +1276,7 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -1337,193 +1337,6 @@ stage:TaxRelatiecontroleQuery a elmo:query;
 #
 #
 #
-# CLEAR SINGLE CONCEPT
-#
-#
-#
-
-#
-# PRODUCTIONS
-#
-
-# Speciale pagina om alle data over een enkel concept te wissen
-# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
-updatestage:clearsingleconcept a elmo:Production;
-	elmo:contains stage:TaxBeheermenu;
-	elmo:contains stage:TaxFooter;
-	elmo:contains stage:search_concepts;
-	elmo:queryForm stage:TaxSelectConceptForm;
-	elmo:contains stage:ClearSingleConceptScene;
-.
-
-# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
-stage:TaxSelectConceptForm a elmo:Form;
-	rdfs:label "Selecteer concept";
-	elmo:index "1";
-	elmo:fragment [
-		elmo:applies-to "concept";
-		rdfs:label "Selecteer concept"@nl;
-		elmo:valuesFrom stage:search_concepts;
-		elmo:constraint elmo:MandatoryConstraint;
-		elmo:index "1";
-	];
-	elmo:fragment [
-		elmo:appearance elmo:SubmitAppearance;
-		rdfs:label "Ga verder"@nl;
-		elmo:index "2";
-	];
-.
-
-#
-# PARTS
-#
-
-stage:search_concepts a elmo:Part;
-	elmo:appearance elmo:HiddenAppearance;
-	elmo:query '''
-		prefix dcat: <http://www.w3.org/ns/dcat#>
-		CONSTRUCT {
-			?concept rdfs:label ?label
-		}
-		WHERE {
-			GRAPH ?g {
-				?concept rdf:type skos:Concept.
-    			BIND( str(?concept) AS ?label )
-			}
-			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
-		}
-	''';
-.
-
-
-#
-# SCENES
-#
-
-# Scene gebruikt voor het verwijderen van enkel concept
-stage:ClearSingleConceptScene a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Verwijder enkel concept";
-	elmo:query '''
-		DELETE {
-			GRAPH ?g {
-				<@CONCEPT@> ?p ?o
-			}
-		}
-		WHERE {
-			GRAPH ?g {
-				<@CONCEPT@> ?p ?o
-			}
-			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
-		}
-	'''
-.
- 
-#
-#
-#
-# CLEAR ALL DATA
-#
-#
-#
-
-
-
-#
-# PRODUCTIONS
-#
-
-# Speciale pagina om alle gegevens te wissen
-# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
-updatestage:clearalldata a elmo:Production;
-	elmo:contains stage:TaxBeheermenu;
-	elmo:contains stage:TaxFooter;
-	elmo:queryForm stage:TaxDummyForm;
-	elmo:contains stage:ClearAllDataScene;
-.
-
-# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
-stage:TaxDummyForm a elmo:Form.
-
-
-#
-# SCENES
-#
-
-# Scene gebruikt voor het verwijderen van alle data
-stage:ClearAllDataScene a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Verwijder alle data";
-	elmo:query '''
-		DELETE {
-			GRAPH ?g {
-				?s ?p ?o
-			}
-		}
-		WHERE {
-			GRAPH ?g {
-				?s ?p ?o
-			}
-			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
-		}
-	'''
-.
-
-#
-#
-#
-# CLEAR ALLE CONCEPTEN
-#
-#
-#
-
-
-
-#
-# PRODUCTIONS
-#
-
-# Speciale pagina om alle concepten te wissen
-# Deze backdoor moet zeer waarschijnlijk verwijderd worden uit de definitieve configuratie!
-updatestage:clearalleconcepten a elmo:Production;
-	elmo:contains stage:TaxBeheermenu;
-	elmo:contains stage:TaxFooter;
-	elmo:queryForm stage:TaxDummyForm;
-	elmo:contains stage:ClearAllConceptsScene;
-.
-
-# DummyForm nodig omdat anders de feedback vanuit de scenes niet getoond wordt
-stage:TaxDummyForm a elmo:Form.
-
-
-#
-# SCENES
-#
-
-# Scene gebruikt voor het verwijderen van alle data
-stage:ClearAllConceptsScene a elmo:Scene;
-	elmo:index "1";
-	rdfs:label "Verwijder alle concepten";
-	elmo:query '''
-		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-		prefix skos: <http://www.w3.org/2004/02/skos/core#>
-		DELETE {
-			GRAPH ?g {
-				?s ?p ?o
-			}
-		}
-		WHERE {
-			GRAPH ?g {
-				?s ?p ?o ; rdf:type skos:Concept
-			}
-			FILTER regex(?g, "^http://pdok-ld-gck.cs.kadaster.nl/(?!stage)")
-		}
-	'''
-.
- 
-#
-#
-#
 # BEHEER MISSING LINKS
 #
 #
@@ -1532,7 +1345,7 @@ stage:ClearAllConceptsScene a elmo:Scene;
 
 #Hoofdpagina Missing Links Rapportage
 stage:TaxMissingLinks a elmo:Representation;
-	elmo:url-pattern "/query/missinglinks$";
+	elmo:url-pattern "/admin/query/missinglinks$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -1602,7 +1415,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 		prefix owl: <http://www.w3.org/2002/07/owl#>
 		prefix thes: <http://purl.org/iso25964/skos-thes#>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix dct: <http://purl.org/dc/terms/>
 		
 		SELECT 	#?graph ?graph_label
@@ -1726,7 +1539,7 @@ stage:TaxMissingLinksQuery a elmo:query;
 
 #Hoofdpagina Statuscontrole Rapportage
 stage:TaxStatusControle a elmo:Representation;
-	elmo:url-pattern "/query/statuscontrole$";
+	elmo:url-pattern "/admin/query/statuscontrole$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -1767,7 +1580,7 @@ stage:TaxStatusControleQuery a elmo:query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
 		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -2323,7 +2136,7 @@ stage:WeergaveTabelGerelateerdeConceptenQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -2370,7 +2183,7 @@ stage:GlossaryConcepten elmo:appearance elmo:HiddenAppearance;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -2565,7 +2378,7 @@ stage:WeergaveTabelMetadataQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -2652,7 +2465,7 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -2704,7 +2517,7 @@ stage:WeergaveVersiesConceptenQuery a elmo:Query;
 
 #Hoofdpagina Homoniemen -1 Rapportage
 stage:TaxHomoniemen a elmo:Representation;
-	elmo:url-pattern "/query/homoniemen1$";
+	elmo:url-pattern "/admin/query/homoniemen1$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -2768,7 +2581,7 @@ stage:TaxHomoniemenQuery a elmo:query;
 		PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 		PREFIX prov: <http://www.w3.org/ns/prov#>
 		PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
-		PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		SELECT DISTINCT ?concept ?concept_label ?preflabel ?dataset1 ?dataset1_label ?status1 ?status1_label ?dataset2 ?dataset2_label ?status2 ?status2_label
 		WHERE {
 			GRAPH ?g {
@@ -2830,7 +2643,7 @@ stage:TaxHomoniemenQuery a elmo:query;
 
 #Hoofdpagina Synoniemen Rapportage
 stage:TaxHomoniemen2 a elmo:Representation;
-	elmo:url-pattern "/query/synoniemen$";
+	elmo:url-pattern "/admin/query/synoniemen$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -2897,7 +2710,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 	PREFIX doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 	PREFIX prov: <http://www.w3.org/ns/prov#>
 	PREFIX kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
-	PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+	PREFIX container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 	SELECT DISTINCT ?concept1 ?concept1_label  ?altlabel1 ?dataset1 ?dataset1_label ?status1 ?status1_label ?concept2 ?concept2_label ?altlabel2 ?dataset2 ?dataset2_label ?status2 ?status2_label
 	WHERE {
 		GRAPH ?g1 {
@@ -2976,7 +2789,7 @@ stage:TaxSynoniemenQuery a elmo:query;
 
 #Hoofdpagina Looping Rapportage
 stage:TaxLoopingcontrole a elmo:Representation;
-	elmo:url-pattern "/query/loopingcontrole$";
+	elmo:url-pattern "/admin/query/loopingcontrole$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -3016,7 +2829,7 @@ stage:TaxLoopingQuery a elmo:query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -3331,7 +3144,7 @@ stage:WeergaveTabelActivityQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -3373,7 +3186,7 @@ stage:WeergaveTabelAgentQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -3411,7 +3224,7 @@ stage:WeergaveVersiesActivityQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -3457,7 +3270,7 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -3509,7 +3322,7 @@ stage:WeergaveVersiesAgentQuery a elmo:Query;
 
 # Hoofdpagina Where Used Rapportage
 stage:TaxWhereUsedPagina rdf:type elmo:Representation;
-	elmo:url-pattern "/query/whereused(|/|\\..+)$";
+	elmo:url-pattern "/admin/query/whereused(|/|\\..+)$";
 	elmo:contains stage:TaxWhereUsedTabel;
 	elmo:contains stage:TaxWhereUsedIndex;
 	elmo:contains stage:TaxFooter;
@@ -3579,7 +3392,7 @@ stage:TaxWhereUsedQuery a elmo:Query;
 	prefix kdstat:		<http://kadaster.basisregistraties.overheid.nl/id/status/>
 	prefix thes: 		<http://purl.org/iso25964/skos-thes#>
 	prefix skos: 		<http://www.w3.org/2004/02/skos/core#>
-	prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+	prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 	prefix dct: <http://purl.org/dc/terms/>
 	
 	SELECT ?concept ?concept_label ?link ?link_label ?subject ?subject_label
@@ -3675,7 +3488,7 @@ stage:TaxWhereUsedQuery a elmo:Query;
 
 # Hoofdpagina Niet-gevalideerde Rapportage
 stage:TaxNietGevalideerdeLinks a elmo:Representation;
-	elmo:url-pattern "/query/nietgevalideerdelinks$";
+	elmo:url-pattern "/admin/query/nietgevalideerdelinks$";
 	elmo:contains stage:TaxHeader;
 	elmo:contains stage:TaxFooter;
 	elmo:contains stage:TaxBeheermenu;
@@ -3744,7 +3557,7 @@ stage:TaxNietGevalideerdeLinksQuery a elmo:query;
 	prefix owl: <http://www.w3.org/2002/07/owl#>
 	prefix thes: <http://purl.org/iso25964/skos-thes#>
 	prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-	prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+	prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 	prefix dct: <http://purl.org/dc/terms/>
 
 	SELECT 	?klasse
@@ -3861,7 +3674,7 @@ updatestage:TaxExportConcepten a elmo:Production;
 .
 
 stage:ExportSubsetBegrippenQueryScene rdf:type elmo:Representation;
-	elmo:url-pattern "/exportsubsetbegrippen(|/|\\..+)$";
+	elmo:url-pattern "/admin/exportsubsetbegrippen(|/|\\..+)$";
 	elmo:queryForm stage:TaxSelectDataset;
 	elmo:appearance elmo:ContentAppearance;
 	elmo:index "1";
@@ -4029,7 +3842,7 @@ stage:TaxConceptenQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
 		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -4083,7 +3896,7 @@ stage:TaxConceptenDatasetQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
 		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -4367,7 +4180,7 @@ stage:WeergaveTabelDatasetQuery a elmo:Query;
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -4450,7 +4263,7 @@ stage:WeergaveVersiesDatasetQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: <http://www.w3.org/ns/prov#>
 		prefix dc: <http://purl.org/dc/terms/>
-		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: <http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: <http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: <http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: <http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
@@ -4635,7 +4448,7 @@ stage:TaxSearchQuery a elmo:Query;
 	elmo:query '''
 		prefix prov: 		<http://www.w3.org/ns/prov#>
 		prefix skoslex: 	<http://bp4mc2.org/def/skos-lex/>
-		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/container/>
+		prefix container: 	<http://pdok-ld-gck.cs.kadaster.nl/admin/container/>
 		prefix doc: 		<http://pdok-ld-gck.cs.kadaster.nl/concepten/doc/>
 		prefix dataset: 	<http://pdok-ld-gck.cs.kadaster.nl/id/dataset/>
 		prefix concept: 	<http://pdok-ld-gck.cs.kadaster.nl/id/concept/>
