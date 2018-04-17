@@ -10,7 +10,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload bevat geen concepten.";
 		elmo:assert '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 			ASK {
@@ -23,7 +23,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
@@ -36,7 +36,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten zonder kddef:status bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 			ASK {
@@ -52,7 +52,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg rdfs:label bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
@@ -86,7 +86,7 @@ container:ttlupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder of met leeg skos:prefLabel bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:ttlupdate {
@@ -132,7 +132,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten met skos:inScheme bevatten.";
 		elmo:assert '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:excelupdate {
@@ -147,7 +147,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten zonder kddef:status bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			prefix kddef: <http://kadaster.basisregistraties.overheid.nl/som/def#>
 			ASK {
@@ -163,7 +163,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder rdfs:label bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:excelupdate {
@@ -209,7 +209,7 @@ container:excelupdate a elmo:Container;
 	elmo:assertion [
 		rdfs:label "De upload mag geen concepten of collecties zonder skos:prefLabel bevatten.";
 		elmo:assert-not '''
-			prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+			prefix container: <http://localhost:8080/catalogus/tax/container/>
 			prefix skos: <http://www.w3.org/2004/02/skos/core#>
 			ASK {
 				GRAPH container:excelupdate {
@@ -351,7 +351,7 @@ stage:TaxSpecifiekeUploadScene a elmo:Scene;
 		prefix foaf: <http://xmlns.com/foaf/0.1/>
 		prefix skoslex: <http://bp4mc2.org/def/skos-lex#>
 		prefix owl: <http://www.w3.org/2002/07/owl#>
-		prefix container: <http://localhost:8080/catalogus/tax/admin/container/>
+		prefix container: <http://localhost:8080/catalogus/tax/container/>
 		prefix doc: <http://localhost:8080/catalogus/tax/concepten/doc/>
 		prefix loc: <http://localhost:8080/catalogus/tax/id/>
 		prefix versiongraph: <http://localhost:8080/catalogus/tax/concepten/doc/@CURRENTMOMENT@>
