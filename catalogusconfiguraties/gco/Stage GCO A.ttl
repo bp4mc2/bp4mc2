@@ -289,6 +289,65 @@ stage:dcat-ap-eu-lijst_properties a elmo:Part;
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>.
+
+#
+# De inhoud van het document
+#
+doc:dcat-ap-eu elmo:data (
+'''# DCAT AP EU v1.1
+This document described the DCAT Application Profile for data portals in Europe as specified by the EU JoinUp initiative. This document is generated from Linked Data sources (mainly SHACL and the original DCAT ontology) to facilitate automatic translation and comparision between DCAT profiles.
+
+The original source document can be found at: [https://joinup.ec.europa.eu/release/dcat-ap-v11](https://joinup.ec.europa.eu/release/dcat-ap-v11)
+
+The following vocabularies are used:
+'''
+[elmo:contains stage:dcat-ap-eu-prefixes]
+[html:img "dcat-ap-eu.png"]
+"## Class description"
+[elmo:contains stage:dcat-ap-eu-lijst_classes]
+"## Property description"
+[elmo:contains stage:dcat-ap-eu-lijst_properties]
+)
+.
+
+#
+# Prefixes
+#
+stage:dcat-ap-eu-prefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-prefixes
+.
+
+#
+# Tonen van de pagina
+#
+stage:dcat-ap-eu-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/dcat-ap-eu(|.md)$";
+  elmo:index "0";
+  elmo:contains stage:dcat-ap-eu-prefixes;
+	elmo:contains stage:dcat-ap-eu-lijst_classes;
+	elmo:contains stage:dcat-ap-eu-lijst_properties;
+  elmo:query '''
+    prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>
+    construct {
+      doc:dcat-ap-eu elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:dcat-ap-eu elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
 
 stage:dcat-ap-eu	a	elmo:Representation;
 	elmo:url-pattern	"/query/dcat-ap-eu(\\.(xml|ttl|json))?$";
@@ -796,6 +855,60 @@ stage:dcat-nl_properties a elmo:Part;
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>.
+
+#
+# De inhoud van het document
+#
+doc:dcat-home elmo:data (
+'''# DCAT profiles
+This document gives a comparision and description of the different DCAT profiles that exists and are in use within the Netherlands. This document also includes a comparision with the ISO19115 metadata profile for geospatial datasets.
+
+The following profiles are compared:
+
+|Profile|Original documentation
+|-------|-----------------------
+|[DCAT W3c](/dcat/dcat)|[http://www.w3.org/TR/vocab-dcat/](http://www.w3.org/TR/vocab-dcat/)
+|[DCAT AP EU v1.1](/dcat/dcat-ap-eu)|[https://joinup.ec.europa.eu/release/dcat-ap-v11](https://joinup.ec.europa.eu/release/dcat-ap-v11)
+|[GeoDCAT AP v1.0.1](/dcat/geodcat-ap-eu)|[https://joinup.ec.europa.eu/release/geodcat-ap/v101](https://joinup.ec.europa.eu/release/geodcat-ap/v101)
+|[DCAT AP NL v0.6](/dcat-dcat-ap-nl)|[2014-11-13 DCAT-NL IPM Datasets 0.6.pdf](https://data.overheid.nl/sites/default/files/2014-11-13%20DCAT-NL%20IPM%20Datasets%200.6%20kopie.pdf)
+
+## Comparison
+### Classes
+'''
+[elmo:contains stage:dcat-vergelijking_classes]
+"### Properties"
+[elmo:contains stage:dcat-vergelijking_properties]
+)
+.
+
+#
+# Tonen van de pagina
+#
+stage:dcat-home-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/dcat-home(|.md)";
+  elmo:index "0";
+	elmo:contains stage:dcat-vergelijking_classes;
+	elmo:contains stage:dcat-vergelijking_properties;
+  elmo:query '''
+    prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>
+    construct {
+      doc:dcat-home elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:dcat-home elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
 
 stage:dcat-vergelijking	a	elmo:Representation;
 	elmo:url-pattern	"/query/dcat-vergelijking$";
@@ -960,6 +1073,7 @@ stage:dcat-vergelijking_properties a elmo:Part;
 		order by ?class ?property
 	''';
 . 
+@prefix dcat-model: <http://bp4mc2.org/def/dcat-model/>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -967,7 +1081,154 @@ stage:dcat-vergelijking_properties a elmo:Part;
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
+@prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 
+#
+# De inhoud van het document
+#
+doc:dcat elmo:data (
+'''# DCAT W3c basis
+This document described the Data Catalog Vocabulary (DCAT) as described by The W3c. This document is generated from Linked Data sources (mainly SHACL and the original DCAT ontology) to facilitate automatic translation and comparision between DCAT profiles.
+
+The original source document can be found at: [http://www.w3.org/TR/vocab-dcat](http://www.w3.org/TR/vocab-dcat)
+
+The following vocabularies are used:
+'''
+[elmo:contains stage:dcat-model-prefixes]
+[html:img "dcat-model.png"]
+"## Class: Catalog"
+[elmo:contains stage:dcat-model_catalog]
+"## Class: Catalog record"
+[elmo:contains stage:dcat-model_catalogrecord]
+"## Class: Dataset"
+[elmo:contains stage:dcat-model_dataset]
+"## Class: Distribution"
+[elmo:contains stage:dcat-model_distribution]
+)
+.
+
+#
+# Statische data
+#
+stage:Ontology_foaf a owl:Ontology;
+  sh:prefix "foaf";
+  sh:namespace "http://xmlns.com/foaf/0.1/";
+  foaf:isPrimaryTopicOf <http://xmlns.com/foaf/spec/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_skos a owl:Ontology;
+  sh:prefix "skos";
+  sh:namespace "http://www.w3.org/2004/02/skos/core#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/skos-reference/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_rdfs a owl:Ontology;
+  sh:prefix "rdfs";
+  sh:namespace "http://www.w3.org/2000/01/rdf-schema#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/rdf-schema/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_dct a owl:Ontology;
+  sh:prefix "dct";
+  sh:namespace "http://dublincore.org/documents/dcmi-terms/";
+  foaf:isPrimaryTopicOf <http://www.dublincore.org/documents/dcmi-terms/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_dcat a owl:Ontology;
+  sh:prefix "dcat";
+  sh:namespace "http://www.w3.org/ns/dcat#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-dcat/>;
+  rdfs:seeAlso stage:dcat-model-prefixes, stage:dcat-ap-eu-prefixes
+.
+stage:Ontology_adms a owl:Ontology;
+  sh:prefix "adms";
+  sh:namespace "http://www.w3.org/ns/adms#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-adms/>;
+  rdfs:seeAlso stage:dcat-ap-eu-prefixes
+.
+
+#
+# Tabellen
+#
+stage:dcat-model_catalog a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:Catalog
+.
+stage:dcat-model_catalogrecord a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:CatalogRecord
+.
+stage:dcat-model_dataset a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:Dataset
+.
+stage:dcat-model_distribution a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-table;
+  stage:include dcat-model:Distribution
+.
+
+#
+# Prefixes
+#
+stage:dcat-model-prefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:dcat-model-prefixes
+.
+stage:dcat-model-prefixes a elmo:Query;
+  elmo:query '''
+    select ?prefix ?uri ?website
+    where {
+      graph <@STAGE@> {
+        ?ontology a owl:Ontology.
+        ?ontology sh:prefix ?prefix.
+        ?ontology sh:namespace ?uri.
+        OPTIONAL {?ontology foaf:isPrimaryTopicOf ?website}
+        ?ontology rdfs:seeAlso <@REPRESENTATION@>
+      }
+    }
+    order by ?prefix
+  ''';
+.
+
+#
+# Tonen van de pagina
+#
+stage:dcat-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/dcat(|.md)$";
+  elmo:index "0";
+  elmo:contains stage:dcat-model-prefixes;
+  elmo:contains stage:dcat-model_catalog;
+  elmo:contains stage:dcat-model_catalogrecord;
+  elmo:contains stage:dcat-model_dataset;
+  elmo:contains stage:dcat-model_distribution;
+  elmo:query '''
+    prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>
+    construct {
+      doc:dcat elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:dcat elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
+
+#
+# Tonen van de vocabulaire
+#
 stage:dcat-model	a	elmo:Representation;
 	elmo:url-pattern	"/query/dcat(\\.(xml|ttl|json))?$";
 	elmo:contains stage:Menu;
@@ -1013,6 +1274,99 @@ stage:dcat-model	a	elmo:Representation;
 			}
 		}
 	''';
+.
+
+#
+# Query voor ophalen van de spec
+#
+stage:dcat-model-table a elmo:Query;
+  elmo:query '''
+    prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>
+    select ?name ?vocabulair ?definition
+    where {
+      GRAPH <@STAGE@> {
+        <@REPRESENTATION@> stage:include ?nodeshape
+      }
+      {
+        select (if(isLiteral(?idx),?idx,"B") as ?index) ?nodeshape ?pshape ?name ?vocabulair ?definition
+        where {
+          {
+            GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+              ?nodeshape a sh:NodeShape.
+              ?nodeshape sh:property ?pshape.
+              ?pshape rdfs:label ?name.
+              ?pshape sh:name ?vocabulair.
+              OPTIONAL {
+                ?pshape sh:class ?class
+                BIND ("C" as ?idx)
+              }
+              OPTIONAL {
+                ?pshape sh:node ?node
+                BIND ("C" as ?idx)
+              }
+            }
+            OPTIONAL {
+              GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+                ?pshape sh:path ?prop
+              }
+              GRAPH <http://bp4mc2.org/id/dataset/imports> {
+                ?prop rdfs:comment ?definition.
+                filter (lang(?definition)="en")
+              }
+            }
+          }
+          UNION
+          {
+            GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+              ?nodeshape a sh:NodeShape.
+              ?nodeshape rdfs:label ?name.
+              ?nodeshape sh:name ?vocabulair.
+              BIND ("A" as ?idx)
+            }
+            OPTIONAL {
+              GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+                ?nodeshape sh:targetClass ?tclass
+              }
+              GRAPH <http://bp4mc2.org/id/dataset/imports> {
+                ?tclass rdfs:comment ?definition.
+                filter (lang(?definition)="en")
+              }
+            }
+          }
+        }
+      }
+      FILTER NOT EXISTS {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> stage:excludeReference ?refshape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+          ?pshape sh:node ?refshape
+        }
+      }
+      FILTER EXISTS {
+        {
+          GRAPH <@STAGE@> {
+            <@REPRESENTATION@> stage:includeReference ?refshape
+          }
+          GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+            ?pshape sh:node ?refshape
+          }
+        }
+        UNION
+        {
+          GRAPH <http://bp4mc2.org/id/dataset/dcat-model> {
+            ?nodeshape a sh:NodeShape.
+          }
+          FILTER NOT EXISTS {
+            GRAPH <@STAGE@> {
+              <@REPRESENTATION@> stage:includeReference ?refshape
+            }
+          }
+        }
+      }
+    }
+    order by ?nodeshape ?index ?name ?vocabulair
+  '''
 .
  
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
@@ -1065,6 +1419,18 @@ stage:Menu elmo:appearance elmo:NavbarSearchAppearance;
 		elmo:data [
 			elmo:index "4";
 			rdfs:label "DCAT";
+			elmo:data [ elmo:index "1"; rdfs:label "DCAT hoofdpagina"; html:link "query/doc/dcat-home.md"];
+			elmo:data [ elmo:index "2"; rdfs:label "DCAT basis - vocabulaire"; html:link "query/dcat"];
+			elmo:data [ elmo:index "3"; rdfs:label "DCAT basis - documentatie"; html:link "query/doc/dcat.md"];
+			elmo:data [ elmo:index "4"; rdfs:label "DCAT-AP-EU - vocabulaire"; html:link "query/dcat-ap-eu"];
+			elmo:data [ elmo:index "5"; rdfs:label "DCAT-AP-EU - documentatie"; html:link "query/doc/dcat-ap-eu"];
+      elmo:data [ elmo:index "6"; rdfs:label "Inspire - definities"; html:link "query/inspire-lijst"];
+      elmo:data [ elmo:index "7"; rdfs:label "Inspire - overzicht"; html:link "query/inspire-lijst2"];
+      elmo:data [ elmo:index "8"; rdfs:label "Inspire - model"; html:link "query/inspire-model"];
+		];
+		elmo:data [
+			elmo:index "4a";
+			rdfs:label "DCAT(old)";
 			elmo:data [ elmo:index "1"; rdfs:label "Vocabulaire DCAT basis"; html:link "query/dcat"];
 			elmo:data [ elmo:index "2"; rdfs:label "Vocabulaire AP-EU"; html:link "query/dcat-ap-eu"];
 			elmo:data [ elmo:index "3"; rdfs:label "Lijst AP-EU"; html:link "query/dcat-ap-eu-lijst"];
@@ -1128,6 +1494,188 @@ stage:Welkom a elmo:Part;
 		where {
 		}
 	'''
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>.
+
+stage:inspire-lijst a elmo:Representation;
+	elmo:index "1";
+	elmo:url-pattern	"/query/inspire-lijst$";
+	elmo:contains stage:Menu;
+  elmo:fragment [
+    elmo:applies-to "item";
+    elmo:name "SUBJECT"
+  ];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+    prefix dct: <http://purl.org/dc/terms/>
+    select *
+    where {
+      graph <http://bp4mc2.org/id/dataset/inspire> {
+        ?item a skos:Concept.
+        OPTIONAL {
+          ?item rdfs:label ?item_label.
+          FILTER (lang(?item_label)="en")
+        }
+        OPTIONAL {
+          ?item dct:source ?source.
+          ?source rdfs:label ?source_label.
+          FILTER (lang(?source_label)="en")
+        }
+        OPTIONAL {
+          ?item skos:definition ?definition
+          FILTER (lang(?definition)="en")
+        }
+        OPTIONAL {
+          ?item skos:scopeNote ?scope
+        }
+        FILTER NOT EXISTS {?col skos:member ?item}
+      }
+    }
+    order by ?source
+  '''
+.
+
+stage:inspire-lijst2 a elmo:Representation;
+	elmo:index "1";
+	elmo:url-pattern	"/query/inspire-lijst2$";
+	elmo:contains stage:Menu;
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+    prefix dct: <http://purl.org/dc/terms/>
+    prefix inspire-meta: <http://bp4mc2.org/inspire/def/meta#>
+    select ?item ?item_label ?source ?source_label ?shape ?shape_label ?domain ?domain_label (if(bound(?nodekind),?nodekind,?dtclass) as ?datatypeclass)
+    where {
+      graph <http://bp4mc2.org/id/dataset/inspire> {
+        ?item a skos:Concept.
+        OPTIONAL {
+          ?item rdfs:label ?item_label.
+          FILTER (lang(?item_label)="en")
+        }
+        OPTIONAL {
+          ?item dct:source ?source.
+          ?source rdfs:label ?source_label.
+          FILTER (lang(?source_label)="en")
+        }
+        OPTIONAL {
+          ?shape dct:subject ?item.
+          ?shape inspire-meta:xpath ?shape_label
+          OPTIONAL {
+            ?shape sh:node ?domain.
+            ?domain sh:name ?domain_label
+          }
+          OPTIONAL {
+            ?shape sh:nodeKind ?nodekind
+          }
+          OPTIONAL {
+            {?shape sh:datatype ?dtclass} UNION {?shape sh:class ?dtclass}
+          }
+        }
+        FILTER NOT EXISTS {?col skos:member ?item}
+      }
+    }
+    order by ?source
+  '''
+. 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>.
+
+#
+# De inhoud van het document
+#
+doc:inspire elmo:data (
+'''# Inspire metadataprofiel
+This document described the INSPIRE Profile
+
+The original source document can be found at: 
+
+This profile is described as SHACL shape graph, but does **not** use any vocabularies. A [seperate mapping]() to GEO-DCAT-AP is provided.'''
+[html:img "inspire.png"]
+"## Metadata elements as described in the regulation"
+[elmo:contains stage:inspire-lijst]
+"## Metadata elements from the technical guidelines"
+[elmo:contains stage:inspire-lijst2]
+)
+.
+
+#
+# Tonen van de pagina
+#
+stage:inspire-document a elmo:Representation;
+  elmo:url-pattern "/query/doc/inspire(|.md)$";
+  elmo:index "0";
+	elmo:contains stage:inspire-lijst;
+	elmo:contains stage:inspire-lijst2;
+  elmo:query '''
+    prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>
+    construct {
+      doc:dcat-ap-eu elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        doc:inspire elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
+.
+
+#
+# Model
+#
+stage:inspire-model a elmo:Representation;
+	elmo:index "1";
+	elmo:url-pattern	"/query/inspire-model$";
+	elmo:contains stage:Menu;
+  elmo:appearance elmo:VocabularyAppearance;
+	elmo:query '''
+    prefix dct: <http://purl.org/dc/terms/>
+    construct {
+      ?s?p?o.
+      ?property sh:path ?predicate.
+      ?predicate rdf:type rdf:Property.
+      ?predicate rdfs:label ?property_name.
+      ?predicate rdfs:comment ?comment
+    }
+    where {
+      select ?s ?p ?o ?comment ?property ?property_name (if(bound($property_name),iri(concat("http://bp4mc2.org/inspire/def/inspire#",$property_name)),$property_name) as ?predicate)
+      where {
+        graph <http://bp4mc2.org/id/dataset/inspire> {
+          ?s?p?o
+          OPTIONAL {
+            ?s sh:property ?property.
+            ?property sh:name ?property_name.
+            FILTER NOT EXISTS {?property sh:path ?path}
+            OPTIONAL {
+              ?property dct:subject ?concept.
+              ?concept skos:definition ?comment
+            }
+          }
+          FILTER (!isLiteral(?o) || lang(?o)="en" || lang(?o)="")
+        }
+      }
+    }
+  '''
 . 
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
@@ -1349,6 +1897,196 @@ stage:ModelYed a elmo:Representation;
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix doc: <http://data.acceptatie.pdok.nl/catalogus/gco/doc#>.
+@prefix org-shape: <http://bp4mc2.org/def/org/>.
+
+#
+# Data
+#
+org-shape:organization a sh:NodeShape;
+  rdfs:label "organization";
+  sh:name "organization";
+.
+org-shape:agent a sh:NodeShape;
+  rdfs:label "agent";
+  sh:name "agent";
+.
+org-shape:person a sh:NodeShape;
+  rdfs:label "person";
+  sh:name "person";
+.
+org-shape:softwareAgent a sh:NodeShape;
+  rdfs:label "softwareAgent";
+  sh:name "software agent";
+.
+
+org-shape:foaf-agent a sh:NodeShape;
+  sh:name "foaf:Agent";
+  sh:targetClass foaf:Agent;
+.
+
+stage:org-vergelijking	a	elmo:Representation;
+	elmo:url-pattern	"/query/org-vergelijking$";
+	elmo:contains stage:Menu;
+	elmo:contains stage:org-vergelijking_classes;
+	elmo:contains stage:org-vergelijking_classesdef;
+.
+
+stage:org-vergelijking_classes a elmo:Part;
+	elmo:index "1";
+	elmo:appearance elmo:ShortTableAppearance;
+  rdfs:seeAlso org-shape:agent, org-shape:organization, org-shape:person, org-shape:softwareAgent;
+	elmo:fragment [
+		elmo:applies-to "data";
+		rdfs:label "label";
+    elmo:name "SUBJECT"
+	];
+	elmo:fragment [
+		elmo:applies-to "sdct";
+		rdfs:label "DCTERMS";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:fragment [
+		elmo:applies-to "sprov";
+		rdfs:label "PROV";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:fragment [
+		elmo:applies-to "sfoaf";
+		rdfs:label "FOAF";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:fragment [
+		elmo:applies-to "sorg";
+		rdfs:label "ORG";
+    elmo:appearance elmo:GlobalLink;
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+		select ?data ?data_label ?sdct ?sdct_label ?sprov ?sprov_label ?sfoaf ?sfoaf_label ?sorg ?sorg_label
+		where {
+      graph <@STAGE@> {
+        <@REPRESENTATION@> rdfs:seeAlso ?data.
+        ?data rdfs:label ?data_label
+        BIND (concat("^",?data_label,"$") as ?filter)
+      }
+      graph <http://bp4mc2.org/id/dataset/imports> {
+        {
+          ?sdct rdfs:isDefinedBy <http://purl.org/dc/terms/>.
+          ?sdct a rdfs:Class.
+          ?sdct rdfs:label ?sdct_label
+          FILTER regex(?sdct_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sprov rdfs:isDefinedBy <http://www.w3.org/ns/prov-o#>.
+          ?sprov a owl:Class.
+          ?sprov rdfs:label ?sprov_label
+          FILTER regex(?sprov_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sfoaf rdfs:isDefinedBy <http://xmlns.com/foaf/0.1/>.
+          ?sfoaf a rdfs:Class.
+          ?sfoaf rdfs:label ?sfoaf_label
+          FILTER regex(?sfoaf_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sorg rdfs:isDefinedBy <http://www.w3.org/ns/org>.
+          ?sorg a rdfs:Class.
+          ?sorg rdfs:label ?sorg_label
+          FILTER regex(?sorg_label,?filter,"i")
+        }
+      }
+    }
+    order by ?data
+	''';
+.
+
+stage:org-vergelijking_classesdef a elmo:Part;
+	elmo:index "2";
+	elmo:appearance elmo:ShortTableAppearance;
+  rdfs:seeAlso org-shape:agent, org-shape:organization, org-shape:person, org-shape:softwareAgent;
+	elmo:fragment [
+		elmo:applies-to "data";
+		rdfs:label "label";
+    elmo:name "SUBJECT"
+	];
+	elmo:fragment [
+		elmo:applies-to "sdctdef";
+		rdfs:label "DCTERMS";
+	];
+	elmo:fragment [
+		elmo:applies-to "sprovdef";
+		rdfs:label "PROV";
+	];
+	elmo:fragment [
+		elmo:applies-to "sfoafdef";
+		rdfs:label "FOAF";
+	];
+	elmo:fragment [
+		elmo:applies-to "sorgdef";
+    elmo:appearance elmo:MarkdownAppearance;
+		rdfs:label "ORG";
+	];
+	elmo:query '''
+		prefix sh: <http://www.w3.org/ns/shacl#>
+    prefix prov: <http://www.w3.org/ns/prov#>
+		select ?data ?data_label ?sdctdef ?sprovdef ?sfoafdef ?sorgdef
+		where {
+      graph <@STAGE@> {
+        <@REPRESENTATION@> rdfs:seeAlso ?data.
+        ?data rdfs:label ?data_label
+        BIND (concat("^",?data_label,"$") as ?filter)
+      }
+      graph <http://bp4mc2.org/id/dataset/imports> {
+        {
+          ?sdct rdfs:isDefinedBy <http://purl.org/dc/terms/>.
+          ?sdct a rdfs:Class.
+          ?sdct rdfs:comment ?sdctdef.
+          ?sdct rdfs:label ?sdct_label
+          FILTER regex(?sdct_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sprov rdfs:isDefinedBy <http://www.w3.org/ns/prov-o#>.
+          ?sprov a owl:Class.
+          ?sprov prov:definition ?sprovdef.
+          ?sprov rdfs:label ?sprov_label
+          FILTER regex(?sprov_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sfoaf rdfs:isDefinedBy <http://xmlns.com/foaf/0.1/>.
+          ?sfoaf rdfs:comment ?sfoafdef.
+          ?sfoaf a rdfs:Class.
+          ?sfoaf rdfs:label ?sfoaf_label
+          FILTER regex(?sfoaf_label,?filter,"i")
+        }
+        UNION
+        {
+          ?sorg rdfs:isDefinedBy <http://www.w3.org/ns/org>.
+          ?sorg rdfs:comment ?sorgdef.
+          ?sorg a rdfs:Class.
+          ?sorg rdfs:label ?sorg_label
+          FILTER regex(?sorg_label,?filter,"i")
+          FILTER (lang(?sorgdef)="en")
+        }
+      }
+    }
+    order by ?data
+	''';
+.
+ 
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
 
 stage:Reqdocument	a	elmo:Representation;
 #	elmo:url-pattern	"/query/reqdocument$";
@@ -1420,55 +2158,477 @@ stage:Reqdocument_doc a elmo:Part;
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix void: <http://rdfs.org/ns/void#>.
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 @prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 
-stage:ReqDocument	a	elmo:Representation;
-	elmo:url-pattern	"/query/reqdocument(|.md)$";
-  elmo:contains stage:ReqDocument_h1;
-  elmo:contains stage:ReqDocument_prefixes;
-  elmo:contains stage:ReqDocument_h2;
+#
+# Configuratie statements
+#
+stage:include a owl:ObjectProperty;
+  rdfs:label "include";
+  rdfs:comment "Include the resource in the table"
 .
-stage:ReqDocument_h1 a elmo:Part;
-  elmo:appearance elmo:MarkdownAppearance;
-  elmo:index "001";
-  elmo:data [
-    rdfs:label "Model";
-    elmo:md '''Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
+stage:exclude a owl:ObjectProperty;
+  rdfs:label "excludeReference";
+  rdfs:comment "Exclude the refered resource from the table"
+.
+stage:exclude a owl:ObjectProperty;
+  rdfs:label "includeReference";
+  rdfs:comment "Include (only) the refered resource in the table"
+.
+
+#
+# De inhoud van het document
+#
+<urn:document> elmo:data (
+'''# Modelleringswijze
+Er is voor gekozen veel mogelijk gebruik te maken van standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gebruikte begrippen 'begrijpen'.
 
 Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
-    '''
-  ];
+'''
+[elmo:contains stage:ReqDocument_conceptPrefixes]
+'''## Begrippenkader
+Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
+[html:img "begrippenkader.png"]
+'''Concept schema's, collecties en concepten krijgt een uri volgens het patroon:
+-	`http://{domain}/id/ConceptScheme}/{rdfs:label}` voor concepten schema's
+-	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
+-	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten
+### Concepten schema'''
+[elmo:contains stage:ReqDocument_conceptenschema]
+"### Collectie"
+[elmo:contains stage:ReqDocument_collectie]
+"### Concept"
+[elmo:contains stage:ReqDocument_concept]
+"Bovenstaande relaties gelden altijd binnen een domein (concept schema). Begrippen uit een domein kunnen worden gekoppeld aan begrippen uit andere domeinen."
+[elmo:contains stage:ReqDocument_externConcept]
+'''## Meta-eigenschappen
+Naast deze eigenschappen die direct betrekking hebben op het begrip zelf, kent de beschrijving van het begrip ook nog enkele specifieke meta-elementen. Deze meta-elementen zeggen iets over de beschrijving van het begrip zelf, zoals de status van deze beschrijving.
+- Een conceptenschema kan een standaard zijn, zoals bijvoorbeeld het waterschap lexicon (Aquolex). 
+    - De standaard gaat over 1 domein, bijvoorbeeld het aquo domein. Dit wordt vertaald naar een concept schema.
+    - Begrippen kunnen worden georganiseerd in collecties, die bijvoorbeeld waardenlijsten representeren. Een voorbeeld uit het aquo domein is de waardenlijst met waterkeringstypen.
+    - Begrippen in dit domein worde bijgehouden door de beheerder van de standaard, bijvoorbeeld het Informatie Huis Water.
+    - In de standaard doorloopt een begrip verschillende administratieve stadia (statussen). Uiteindelijk wordt het formeel gepubliceerd als onderdeel van de standaard (issued).
+    - Deze statussen zijn relevant voor begrippen, niet voor het schema en voor collecties.
+- Een begrip uit deze standaard kan door een bevoegd gezag in regelgeving wordt opgenomen, bijvoorbeeld in een waterschapsverordening.
+    - Regelgeving gaat over wat mag en niet mag in een bepaald bestuurlijk gebied. Dit gebied is geografisch is afgebakend.
+    - Regelgeving wordt opgesteld door een bevoegd gezag, bijvoorbeeld een waterschap.
+    - In regelgeving doorloopt de toepassing van een begrip eveneens verschillende statussen. Uiteindelijk wordt het begrip geldig (valid) in het betreffende bestuurlijke gebied (Location) en wordt deze toepassing formeel gepubliceerd (issued) in bijvoorbeeld een waterschapsverordening.
+- Op deze wijze wordt een door een standaarden beheerder centraal beheerd begrip via regelgeving juridisch geldig in een of meer bestuurlijke gebieden.
+- In het geval van een begrippenmodel van een (basis)registratie vallen regelgeving en standaard samen. Er is 1 beheerder, namelijk de beheerder van de (basis)registratie, die vaak in wet- of regelgeving is aangewezen als een soort van bevoegd gezag voor deze registratie.'''
+[html:img "metadata-begrippen.png"]
+[elmo:contains stage:ReqDocument_metadata]
+[elmo:contains stage:ReqDocument_metadataTemporal]
+'''## Gebeurtenissen
+### Uitgangspunten
+Gebeurtenissen zijn net als begrippen 'concepten'. Ze hebben dezelfde kenmerken als begrippen, die objecten aanduiden, maar hebben ook nog enkele andere kenmerken. 
+- Gebeurtenissen worden in wet- en regelgeving beschreven als mogelijke (rechts)handelingen die kunnen plaatsvinden in een bepaald domein. Een voorbeeld is het exploiteren van een jachthaven in het domein van het Besluit Activiteiten Leefomgeving (BAL). 
+- In een registratie maken gebeurtenissen de dynamiek van een registratie zichtbaar. Om te begrijpen wat er is veranderd in een registratie helpt het om te zien wat er is gebeurd. Een voorbeeld is het overdragen van een onroerend goed, waarvan het resultaat wordt vastgelegd in de BRK.
+Omdat het begrippenkader is gebaseerd op een institutionele bron gaat het daarbij nog steeds om institutionele gebeurtenissen, bijvoorbeeld rechtshandelingen. Deze hebben altijd een aanleiding in de natuurlijke werkelijkheid. Institutionele gebeurtenissen zijn, zoals in de denkwijze aangegeven, onderdeel van de institutionele werkelijkheid en kennen daarmee vaak een of meerdere actoren, bijvoorbeeld de verkoper en de koper bij de overdracht van een huis. En niet iedereen is bevoegd om een institutionele gebeurtenis vast te leggen. Dat gebeurt door een beÃ«digd ambtenaar of door een notaris. Dit wordt een 'agent' (in de Engelse betekenis van het woord) genoemd. Tot slot zijn er de regels ofwel normen waaraan voldaan moet zijn voordat het feit kan plaatsvinden, de voorwaarde en de regels waaraan het resultaat van de gebeurtenis voldoet, de eindsituatie.
+
+### Model
+Om gebeurtenissen c.q. rechtshandelingen te kunnen beschrijven worden begrippen getypeerd als activiteit (act), actor, agent, norm en object. De samenhang tussen deze begrippen is weergegeven in onderstaande figuur. In juridische termen wordt een actor ook wel een normadressaat genoemd.'''
+[html:img "gebeurtenissen.png"]
+[elmo:contains stage:ReqDocument_gebeurtenissen]
+'''## Waardelijsten
+Een speciale categorie waarin informatie over begrippen wordt vastgelegd betreft waardenlijsten. Waarden zijn termen die bepaalde, samenhangende begrippen aanduiden waaraan in verschillende toepassingen en soms zelfs bij verschillende organisaties wordt gerefereerd. Soms worden dit daarom ook referentiedata genoemd.
+Elementen in een waardenlijst worden stuk voor stuk aangeduid met een begrip in het begrippenkader. Een voorbeeld uit de BAG is het 'gebruiksdoel' van een 'pand'. Dat kan 'wonen', 'winkel', 'kantoor', et cetera zijn. Semantisch betekent dit dat er verschillende soorten panden zijn, namelijk woonhuizen, winkels en kantoren. Om het datamodel overzichtelijk te houden is in de BAG de ontwerpkeuze gemaakt om 1 objecttype te definiÃ«ren. Dit heeft als attribuuttype 'gebruiksdoel', dat de waarden â€œwonenâ€, â€œwinkelâ€, â€œkantoorâ€, et cetera in de waardenlijst kan aannemen. Bijkomend voordeel is dat het datamodel niet hoeft te worden aangepast als er een gebruiksdoel bij komt. Dan hoeft alleen maar een nieuw element aan de waardenlijst te worden toegevoegd.
+Een ander type waardenlijst is een lijst met instanties van een klasse. Een voorbeeld is een lijst van Nederlandse gemeenten of een lijst met bestuurlijke gebieden.
+Voor de structuur van de waardenlijst maakt het niet uit of het een lijst (skos collectie) is met een aantal instanties van skos concepten of een lijst met mogelijke instanties van een klasse. 
+- Beide vormen hebben een basale structuur met soms een code (bijvoorbeeld de CBS-gemeentecode) en altijd een omschrijving (bijvoorbeeld de gemeentenaam). 
+    - Voor de omschrijving wordt het skos:prefLabel gebruikt.
+    - Voor de code kan skos:notation worden gebruikt.
+- Wanneer een waardenlijst als Linked data wordt gepubliceerd krijgt iedere waarde in die lijst bovendien een uri.
+    - Een waarde in een lijst (collectie) van begrippen krijgt een uri volgens het patroon: https://{domein}/id/Concept/{rdfs:label}.
+    - Een waarde in een lijst met instanties van een klasse krijgt een uri volgens het patroon https://{domein}/id/{Klassenaam}/{rdfs:label}, waarbij het label de naam van de betreffende instantie is.
+- De waarden in de waardenlijst kunnen dezelfde metadata meekrijgen als begrippen, namelijk has status, is generated at time, is invalidated at time, is valid during, is issued, is valid at.
+- Indien gewenst kunnen extra kenmerken worden toegevoegd, bijvoorbeeld de geometrie van bestuurlijk gebied en visualisatiecodes voor afbeelding op een kaart.
+## Administratieve werkelijkheid - Informatiemodel
+### Vertaling begrippenkader naar een datamodel
+Het begrippenkader is bruikbaar om met domeineigenaren en data afnemers te communiceren over de inhoud van een registratie. Het vertalen van dit begrip naar een samenhangend datamodel is het werkveld van de data architect. Een datamodel kan worden opgevat als een ontwerp van een structuur waarin data over de begrippen in het semantische model kunnen worden opgeslagen. 
+Een hulpmiddel voor het maken van een datamodel is het KKG-metamodel. Dit model bevat objectklassen, attribuutsoorten, gegevensgroepen, gegevensgroeptypen, generalisaties, relatiesoorten en relatieklassen. Een met KKG gemaakt informatiemodel kan worden uitgedrukt in UML of in RDF. Met andere woorden het is 'vormvrij'. 
+Een KKG-klasse is in de regel een realisatie van een begrip. Zo is het de attribuutsoort 'hoofdadres' in de BRK de realisatie van het begrip 'Hoofdadres' en de objectklasse 'AdresseerbaarObject', waarbij een 'hoofdadres' hoort de realisatie van het begrip 'AdresseerbaarObject'. Het begrip 'AdresseerbaarObject' gaat over de (talige, dat wil zeggen in taal) betekenis van een adresseerbaar object. De objectklasse is als het ware een 'bakje' waarin de data over een adresseerbaar object kan worden opgeslagen.
+Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden op [http://brk.basisregistraties.overheid.nl/def/objectklasse/AdresseerbaarObject#hoofdadres] . Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie.
+Dit voorbeeld laat ook mooi zien hoe de uri-strategie voor het beschrijven van een datamodel werkt. Het intypen van bovenstaande URL zal leiden tot de weergave van de pagina [http://brk.basisregistraties.overheid.nl/def/objectklasse/AdresseerbaarObject] (het deel voor de "#"). Met andere woorden: de beschrijving van de entiteit "Adresseerbaar object"'''
+[elmo:contains stage:ReqDocument_informatiemodel]
+'''## Catalogus
+### Uitgangspunten
+Op het web is het gebruikelijk data te beschrijven in een catalogus met behulp van DCAT (Data Catalog). DCAT is een W3C standaard die door de EU (ISA) wordt voorgeschreven om datasets binnen Europa op een interoperabele wijze te beschrijven. In Nederland wordt DCAT onder andere toegepast in data.overheid.nl, waar alle open datasets in Nederland worden beschreven. Het nationaal georegister (nationaalgeoregister.nl), waar alle open geo-datasets worden beschreven biedt een DCAT export. Voor data.overheid.nl is het toepassingsprofiel DCAT-AP-NL gemaakt. Daarin wordt beschreven welke elementen uit DCAT worden gebruikt en hoe deze elementen specifiek worden ingevuld. Voor de geo-wereld is er Geo-DCAT-AP, dat door de EU (ISA) is opgesteld. 
+Voor de catalogus geldt dat het applicatieprofiel voor DCAT moet voldoen aan bestaande applicatieprofielen voor DCAT, met name DCAT-AP-NL en geoDCAT-AP.
+- [Het Nederlands Applicatieprofiel voor DCAT (DCAT-AP-NL)](https://data.overheid.nl/sites/default/files/2014-11-13%20DCAT-NL%20IPM%20Datasets%200.6%20kopie.pdf).
+    - is gebaseerd op het [DCAT Application Profile voor data portals in Europa](https://joinup.ec.europa.eu/asset/dcat_application_profile/description).
+    - geeft richtlijnen voor de vertaling van metagegevens in overeenstemming met het Nederlandse metadata profiel op ISO 19115 Geografie, 1.3.1 (ISO19115)
+    - is gespecificeerd in een IPM
+- [geoDCAT-AP](https://joinup.ec.europa.eu/node/154143/)
+    - is een profiel voor data portals in Europa voor het beschrijven van geo datasets, datasetseries en services.
+    - biedt een RDF-syntaxbinding voor de alle metadata-elementen van het kernprofiel van ISO 19115: 2003 en die welke zijn gedefinieerd in het kader van de [INSPIRE-richtlijn](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?Uri=PB:L:2007:108:0001:0014:nl:PDF)
+Vaak wordt de term Informatie Publicatie Model (IPM) gebruikt. Een IPM voor datasets geeft een norm voor de online uitwisseling van metadata tussen Nederlandse gegevens en catalogi, waaronder: data.overheid.nl, National Geo Register (NGR) en bijvoorbeeld de (open) data catalogus van gemeenten en provincies.
+#### Catalogus
+Een catalogus kan worden opgezet als Metadata Broker. 
+Een Metadata Broker verzamelt meta data uit verschillende catalogi en ontgrendelt deze collectie weer in een aparte catalogus. De Broker Metadata Catalogus bevat beschrijvingen van de andere catalogi en hun catalogusrecords. Zo worden datasets beschreven in meerdere catalogi. Dit maakt dat deze datasets vanuit dezelfde bron in verschillende contexten, bijvoorbeeld als statistische gegevens en als geografische gegevens, kunnen worden beschreven. 
+- Een dataset wordt 1 keer als 'abstracte dataset' opgenomen in de catalogus. Dit gebeurt door een link naar de publicatie van de beheerder van de originele dataset in de dcat repository van deze beheerder.
+- Een (concrete) versies van deze abstracte dataset is een Concrete dataset. Deze versies worden door de beheerder van de originele dataset gepubliceerd en gedocumenteerd in de dcat repository van deze beheerder. Doordat er vanuit de catalogus al een link is naar de Abstracte dataset en doordat een Concrete dataset wordt gekoppeld aan de Abstracte dataset, is deze informatie direct beschikbaar in onze catalogus.
+- Een informatieproduct wordt afgeleid van een dataset. Meestal bevat zo'n informatieproduct een subset van de data in de totale dataset.
+- Een informatieproduct wordt uiteindelijk verspreid als datadistributie.
+Op basis van deze uitgangspunten ontstaat het volgende DCAT-profiel van onze catalogus. Dit profiel is ontleend aan de [actuele DCAT specificatie](https://www.w3.org/TR/vocab-dcat/) en het [ADMS profiel](https://www.w3.org/TR/vocab-adms/).
+#### Dataset
+Een dataset wordt door de W3C niet scherp gedefinieerd. Dit, aldus een van de DCAT-auteurs op het DCAT congres in november 2016, met opzet niet gedaan om mogelijk te maken dat je dit begrip ruimt kunt gebruiken. Een dataset is eigenlijk alles wat je een dataset noemt. Dat geeft de ruimte om samenhangende sets met informatie op verschillende niveaus te beschrijven als dataset.
+- Een (bron)document dat informatie bevat kan worden beschreven als dataset. In de context van bijvoorbeeld de Omgevingswet kan de Omgevingswet zelf (1 wet) als dataset worden beschreven, net als de verzameling van AMVB's en ministeriÃ«le regelingen waarin deze wet wordt uitgewerkt als dataset kan worden beschreven. 
+- Net zo kan een registratie (bijvoorbeeld de BRK) als dataset worden beschreven. Ook een uit een subset van data in die registratie opgebouwd informatieproduct kan als dataset worden beschreven.
+
+We staan voor een aanpak waarin de metadata elke dataset aan de bron worden beschreven en metadata brokers deze informatie aan de bron koppelen. Daarbij wordt iedere dataset in 1 catalogus beschreven. Dat is dan de authentieke bron van die metadata.
+- Een dataset wordt 1 keer als abstracte (versieloze) dataset aan de catalogus gekoppeld. Deze beschrijving gaat over alle versies die ooit zijn geweest of ooit zullen zijn.
+- Als er een nieuwe versie van een dataset komt, wordt deze door de eigenaar in zijn eigen omgeving als nieuwe versie van de abstracte dataset gepubliceerd. Doordat de catalogus een link bevat naar de originele abstracte dataset, is deze nieuwe versie direct vindbaar.
+- Voor beschrijvingen van een authentieke registratie wordt een nieuwe versie van het informatiemodel beschouwd als een nieuwe versie van de dataset. Wanneer data direct uit een registratie wordt gehaald, bijvoorbeeld via een API of via het Linked data protocol, is er niet sprake van een traditionele dataset waarvan periodiek, bijvoorbeeld maandelijks een nieuwe versie wordt verspreid. Dat zou na iedere mutatie een nieuwe versie opleveren. 
+Een beschrijving van een subset van een dataset die bijvoorbeeld als informatieproduct beschikbaar is, wordt eveneens beschreven als een dataset.
+#### Distributie
+Iedere fysieke verspreidingsvorm van een dataset (dat is altijd een informatieproduct), wordt beschreven als een datadistributie. Deze bevat bijvoorbeeld de verwijzing naar een downloadportaal of een API-store.
+### Model
+Voor calalogi worden de volgende standaarden gebruikt:'''
+[elmo:contains stage:ReqDocument_catalogusPrefixes]
+'''De centrale elementen zijn catalogus (dcat:Catalog), dataset (dcat:Dataset) en distributie (dcat:Distribution).'''
+[html:img "datasets.png"]
+"#### Catalogus"
+[elmo:contains stage:ReqDocument_catalogus]
+"#### Dataset"
+[elmo:contains stage:ReqDocument_dataset]
+"#### Dataset versie"
+[elmo:contains stage:ReqDocument_datasetVersie]
+"#### Locatie"
+[elmo:contains stage:ReqDocument_datasetLocatie]
+"#### Distributie"
+[elmo:contains stage:ReqDocument_distributie]
+'''## Samenhang dataset, concepten schema en informatiemodel
+### Samenhang
+- Een begrippenmodel (skos:ConceptScheme), inclusief de bijbehorende waardenlijsten is 1 op 1 gekoppeld aan een Abstracte dataset. 
+    - Versiebeheer gebeurt hier op het niveau van begrippen en waarden in waardenlijsten. 
+    - Het begrippenmodel, de collectie of de waardenlijst is versieloos. Wel kan op elk moment in de tijd een overzicht worden gemaakt van de geldige of gepubliceerde stand op een bepaald moment in de tijd.
+- Een versie van een informatiemodel is 1 op 1 gekoppeld aan een concrete dataset.
+    - Een registratie (bijvoorbeeld de BRK) is altijd beschreven als concrete dataset.
+    - De dataset bevat dan de versie informatie, releasenotes, publicatiedatum etc. van de dataset die is beschreven met een bepaalde versie van het informatiemodel. Een voorbeeld is het informatiemodel van de BAG-versie 2.0.
+    - Een catalogus die wet- en regelgeving beschrijft is wel een abstracte dataset, maar bevat geen instantieerbare data. Er is dan dus ook geen concrete dataset.'''
+[html:img "datasets.png"]
+'''### Toepassing in informatiehuizen
+In de aansluitvoorwaarden voor informatiehuizen wordt bepaald dat een informatieproduct is geregistreerd in de Stelselcatalogus DSO of een direct daaraan gekoppelde metadatacatalogus, inclusief een aantal gegevens. In onderstaande tabel is weergegeven hoe dit in de catalogus wordt vastgelegd. Op hoofdlijnen bevat de dataset de beschrijving van het 'wat' en de distributie de beschrijving van het 'hoe'. 
+
+|Aansluitvoorwaarde|Uitwerking
+|------------------|----------
+|1. Definitie van het informatieproduct, dat minimaal bestaat uit een naam, omschrijving en een versienummer.|Deze wordt vastgelegd via de name, description en version in de dcat:Dataset beschrijving van het informatieproduct
+|2. Informatiemodel van het informatieproduct.|Bij deze dataset hoort een (product)informatiemodel.
+|3. Informatiemodellen van brongegevens die ten grondslag liggen aan het informatiemodel voor het informatieproduct.|Het productinformatiemodel is afgeleid van een of meerdere concrete datasets. Dit kan bijvoorbeeld een model zijn voor het informatiehuis ruimte dat een product levert op basis van het ruimtelijke plannen versie 2012, versie 2008 en eventuele eerder versies.
+|4. Kwaliteitseigenschappen.|<Voor de beschrijving van de kwaliteitsnorm van de dataset als geheel â€“ kwaliteitselementen die nu op object- en attribuutniveau worden gehanteerd in KKG toepassen op dataset>
+|5. Relevante begrippen.|Begrippen zitten in het begrippenmodel dat hoort bij de abstracte dataset
+|6. Services:|
+|6.1. Verwijzingen naar services in de registratie van het Stelselknooppunt DSO.|Bij iedere dataset die een informatieproduct beschrijft hoort een datadistributie. Het gegeven â€˜has access urlâ€™ verwijst naar de url van de API op het knooppunt.
+|6.2. De endpoints van de laatste in gebruik zijnde productieversies van de services.|Via de laatste â€˜issued dateâ€™ kan de laatste in gebruik zijnde versie worden gevonden. <invalidated at time nog toevoegen>
+|7. Gebruiksdoel(en) en doelgroep(en).|De 'rights' in de distributiebeschrijving van het informatieproduct kan worden gebruikt als proclaimer. Hierin kunnen indien gewenst ook statements over gebruiksdoel(en) en doelgroep(en) worden opgenomen.
+|8. Ondersteunde zoekdimensies. |<dit komt niet in de catalogus, maar in de OAS>
+|9. Verbeeldingsstandaard. |Deze kan worden opgenomen bij de waardenlijsten
+|10. Brongegevens en daarvoor verantwoordelijke bronhouders (Dit geldt ook voor eventuele generieke gegevens, informatieproducten van andere informatiehuizen en stam/referentiegegevens die worden gebruikt bij de totstandkoming van een informatieproduct..)|Als deze bronnen ook zijn gedocumenteerd in een vergelijkbare catalogus kan daaraan worden gelinkt. Het informatieproduct wordt dan afgeleid (via dct:realation) van al deze bronnen.  <Als het niet-linked data bronnen zijn, moet er iets worden verzonnen via dc:source oid>
+|11. BIV-Classificatie.|<nog uitwerken â€“ is een lastige: op de onderliggende ISO standaard rust copyright, dus een vocabulaire publiceren dat deze standaard representeert kan niet zomaari>
+|12. Indicatie of het vertrouwelijke of persoonsgegevens bevat.|<dit is een van de elementen van het ldqv (linked data quality vocabulary)>
+|13. Werkingsgebied.|Via dct:location dat de geldigheid van de dataset aangeeft
+|14. Metadata voor archivering van informatieproducten, waaronder minimaal de verplichte velden zoals beschreven in de Richtlijn Metagegevens Overheidsinformatie.|met het tijdreismodel en de provenance informatie zou je hieraan moeten voldoen
+|15. CoÃ¶rdinaatstelsel, waarbij minimaal RD en/of ETRS89 wordt ondersteund (indien het informatieproduct een geografische component bevat).|<In DCAT-AP, no equivalent term is foreseen. This is also the case for the NeoGeo [NEOGEO], GeoSPARQL [GEOSPARQL], and the Core Location Vocabulary [LOCN]. Based on this, these elements are provisionally mapped to property dct:conformsTo. Moreover, in order to indicate that the object of dct:conformsTo denotes a reference system, an additional statement with predicate dct:type is added, with a code list value defining the notion of (spatial / temporal) reference system, taken from the glossary operated by the INSPIRE Registry.>
+|16. Verwijzing naar documentatie op website van informatiehuis|Profiel uitbreiden met dcat:landingpage
+
+## Provenance
+Administratieve aspecten worden bijgehouden conform het de prov ontologie. Hierbij gaat het om wie, wat, wanneer en om wat voor reden heeft vastgelegd of gewijzigd. 
+- Daartoe worden begrippen en hun metadata, collecties, catalogus, dataset en distributie beschreven in een prov:Entity. 
+- Op het informatiemodel en het begrippenmodel wordt geen provenance bijgehouden. Dit gebeurt via de abstracte respectievelijk concrete dataset.'''
+[html:img "provenance.png"]
+"### Provenance"
+[elmo:contains stage:ReqDocument_provenance]
+"### Cataloguswijziging"
+[elmo:contains stage:ReqDocument_catalogusGraph]
+"### Provenance agent (person, organization or software agent)"
+[html:img "agents.png"]
+'''Een wijziging in de data wordt vastgelegd in een eigen `sd:graph` (de verzameling van gewijzigde elementen in 1 transactie). Deze wijziging is afkomstig van een `prov:agent`. Deze `prov:agent` dient geautoriseerd te zijn om een dergelijke wijziging uit te voeren. Dit betekent dat de `prov:agent` ook als `foaf:Agent` bekend is in een lijst met partijen (feitelijk een lijst van organisaties). Via de relatie `dcterms:publisher` is duidelijk wie de publicist is van een dataset, en daarmee degene die wijzigingen op de informatie over deze dataset mag doorvoeren.'''
+[elmo:contains stage:ReqDocument_agent]
+)
 .
-stage:ReqDocument_prefixes a elmo:Part;
-  elmo:index "002";
+
+#
+# Statische data
+#
+stage:Ontology_skos a owl:Ontology;
+  sh:prefix "skos";
+  sh:namespace "http://www.w3.org/2004/02/skos/core#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/skos-reference/>;
+  rdfs:seeAlso stage:ReqDocument_conceptPrefixes
+.
+stage:Ontology_rdfs a owl:Ontology;
+  sh:prefix "rdfs";
+  sh:namespace "http://www.w3.org/2000/01/rdf-schema#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/rdf-schema/>;
+  rdfs:seeAlso stage:ReqDocument_conceptPrefixes
+.
+stage:Ontology_dct a owl:Ontology;
+  sh:prefix "dct";
+  sh:namespace "http://dublincore.org/documents/dcmi-terms/";
+  foaf:isPrimaryTopicOf <http://www.dublincore.org/documents/dcmi-terms/>;
+  rdfs:seeAlso stage:ReqDocument_conceptPrefixes
+.
+stage:Ontology_dcat a owl:Ontology;
+  sh:prefix "dcat";
+  sh:namespace "http://www.w3.org/ns/dcat#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-dcat/>;
+  rdfs:seeAlso stage:ReqDocument_catalogusPrefixes
+.
+stage:Ontology_adms a owl:Ontology;
+  sh:prefix "adms";
+  sh:namespace "http://www.w3.org/ns/adms#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/vocab-adms/>;
+  rdfs:seeAlso stage:ReqDocument_catalogusPrefixes
+.
+stage:Ontology_prov a owl:Ontology;
+  sh:prefix "prov";
+  sh:namespace "http://www.w3.org/ns/prov#";
+  foaf:isPrimaryTopicOf <http://www.w3.org/TR/prov-o/>;
+  rdfs:seeAlso stage:ReqDocument_catalogusPrefixes
+.
+
+#
+# Tabellen (definities)
+#
+stage:ReqDocument_conceptenschema a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Begrippenkader
+.
+stage:ReqDocument_collectie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Collectie
+.
+stage:ReqDocument_concept a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Concept;
+  stage:excludeReference req:ExternConcept
+.
+stage:ReqDocument_externConcept a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Concept;
+  stage:includeReference req:ExternConcept
+.
+stage:ReqDocument_metadata a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Metadata;
+.
+stage:ReqDocument_metadataTemporal a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Metadata_Temporal;
+.
+stage:ReqDocument_gebeurtenissen a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:HandelingAct;
+  stage:include req:HandelingActor;
+  stage:include req:HandelingAgent;
+  stage:include req:HandelingObject;
+  stage:include req:HandelingNorm;
+.
+stage:ReqDocument_informatiemodel a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Informatiemodel
+.
+stage:ReqDocument_catalogus a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Catalogus
+.
+stage:ReqDocument_dataset a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Dataset
+.
+stage:ReqDocument_datasetVersie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Datasetversie
+.
+stage:ReqDocument_datasetLocatie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Datasetversie_locatie
+.
+stage:ReqDocument_distributie a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Distributie
+.
+stage:ReqDocument_provenance a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Metadata
+.
+stage:ReqDocument_catalogusGraph a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:CatalogGraph
+.
+stage:ReqDocument_agent a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:ProvenanceAgent;
+  stage:include req:ProvenancePerson;
+  stage:include req:ProvenanceOrganization;
+  stage:include req:ProvenanceSoftwareAgent;
+.
+
+#
+# Queries om data op te halen voor tabellen
+#
+stage:ReqDocument_conceptPrefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocument_prefixesQuery
+.
+stage:ReqDocument_catalogusPrefixes a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocument_prefixesQuery
+.
+stage:ReqDocument_prefixesQuery a elmo:Query;
   elmo:query '''
-    select ?prefix (str(?ontology) as ?uri)
+    select ?prefix ?uri ?website
     where {
       graph <@STAGE@> {
         ?ontology a owl:Ontology.
-        ?ontology elmo:prefix ?prefix
+        ?ontology sh:prefix ?prefix.
+        ?ontology sh:namespace ?uri.
+        OPTIONAL {?ontology foaf:isPrimaryTopicOf ?website}
+        ?ontology rdfs:seeAlso <@REPRESENTATION@>
       }
     }
+    order by ?prefix
   ''';
 .
-stage:ReqDocument_h2 a elmo:Part;
-  elmo:appearance elmo:MarkdownAppearance;
-  elmo:index "003";
-  elmo:data [
-    elmo:md '''Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
-  ];
+
+stage:ReqDocumentQuery_requirements a elmo:Query;
+  elmo:query '''
+    prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>
+    select ?requirement ?aanduiding ?vocabulair ?voorbeeld
+    where {
+      GRAPH <@STAGE@> {
+        <@REPRESENTATION@> stage:include ?nodeshape
+      }
+      GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+        select (if(isLiteral(?idx),?idx,"B") as ?index) ?nodeshape ?pshape ?requirement ?aanduiding ?vocabulair ?voorbeeld
+        where {
+          {
+            ?nodeshape a sh:NodeShape.
+            ?nodeshape sh:property ?pshape.
+            ?pshape rdfs:label ?aanduiding.
+            ?pshape sh:name ?vocabulair.
+            OPTIONAL {?pshape rdfs:comment ?requirement}
+            OPTIONAL {?pshape skos:example ?voorbeeld}
+            OPTIONAL {
+              ?pshape sh:class ?class
+              BIND ("C" as ?idx)
+            }
+            OPTIONAL {
+              ?pshape sh:node ?node
+              BIND ("C" as ?idx)
+            }
+          }
+          UNION
+          {
+            ?nodeshape a sh:NodeShape.
+            ?nodeshape rdfs:label ?aanduiding.
+            ?nodeshape sh:name ?vocabulair.
+            OPTIONAL {?nodeshape rdfs:comment ?requirement}
+            OPTIONAL {?nodeshape skos:example ?voorbeeld}
+            BIND ("A" as ?idx)
+          }
+        }
+      }
+      FILTER NOT EXISTS {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> stage:excludeReference ?refshape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+          ?pshape sh:node ?refshape
+        }
+      }
+      FILTER EXISTS {
+        {
+          GRAPH <@STAGE@> {
+            <@REPRESENTATION@> stage:includeReference ?refshape
+          }
+          GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+            ?pshape sh:node ?refshape
+          }
+        }
+        UNION
+        {
+          GRAPH <http://bp4mc2.org/id/dataset/requirements> {
+            ?nodeshape a sh:NodeShape.
+          }
+          FILTER NOT EXISTS {
+            GRAPH <@STAGE@> {
+              <@REPRESENTATION@> stage:includeReference ?refshape
+            }
+          }
+        }
+      }
+    }
+    order by ?nodeshape ?index ?aanduiding ?vocabulair
+  '''
 .
 
-<http://www.w3.org/2004/02/skos/core#> a owl:Ontology;
-  elmo:prefix "skos"
+#
+# Tonen van de pagina
+#
+stage:ReqDocument	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqdocument(|.md)$";
+  elmo:index "0";
+  elmo:contains stage:ReqDocument_conceptPrefixes;
+  elmo:contains stage:ReqDocument_catalogusPrefixes;
+  elmo:contains stage:ReqDocument_conceptenschema;
+  elmo:contains stage:ReqDocument_collectie;
+  elmo:contains stage:ReqDocument_concept;
+  elmo:contains stage:ReqDocument_externConcept;
+  elmo:contains stage:ReqDocument_metadata;
+  elmo:contains stage:ReqDocument_metadataTemporal;
+  elmo:contains stage:ReqDocument_gebeurtenissen;
+  elmo:contains stage:ReqDocument_informatiemodel;
+  elmo:contains stage:ReqDocument_catalogus;
+  elmo:contains stage:ReqDocument_dataset;
+  elmo:contains stage:ReqDocument_datasetVersie;
+  elmo:contains stage:ReqDocument_datasetLocatie;
+  elmo:contains stage:ReqDocument_distributie;
+  elmo:contains stage:ReqDocument_provenance;
+  elmo:contains stage:ReqDocument_catalogusGraph;
+  elmo:contains stage:ReqDocument_agent;
+  elmo:query '''
+    construct {
+      <urn:document> elmo:data ?data.
+      ?item rdf:first ?first.
+      ?item rdf:rest ?rest.
+      ?first ?p ?o
+    }
+    where {
+      graph <@STAGE@> {
+        <urn:document> elmo:data ?data.
+        ?data rdf:rest* ?item.
+        ?item rdf:first ?first.
+        ?item rdf:rest ?rest.
+        OPTIONAL {?first ?p ?o}
+      }
+    }
+  '''
 .
-<http://www.w3.org/2000/01/rdf-schema#> a owl:Ontology;
-  elmo:prefix "rdfs"
-. 
+ 
 @prefix stage: <http://data.acceptatie.pdok.nl/catalogus/gco/stage#>.
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
 @prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
@@ -1609,6 +2769,10 @@ stage:ReqModelTotaal a elmo:Representation;
 	''';
 .
 
+# ====================
+#
+# Onduidelijk waar dit voor wordt gebruikt???
+#
 stage:ReqFModelConcepten a elmo:Representation;
   elmo:url-pattern "/query/fmodel/concepten$";
   elmo:appearance elmo:VocabularyAppearance;
@@ -1648,12 +2812,60 @@ stage:ReqFModelConcepten a elmo:Representation;
   ''';
 .
 <urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument.
-  
+#
+# ====================
 
+#
+# De verschillende representaties
+#  
 stage:ReqModelConcepten a elmo:Representation;
 	elmo:url-pattern "/query/model/concepten$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument, req:Bron, req:WerkAlsBron, req:ExpressieAlsBron
+.
+stage:ReqModelConceptenMeta a elmo:Representation;
+	elmo:url-pattern "/query/model/conceptenmeta$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept, req:Begrippenkader, req:Collectie, req:Metadata, req:Metadata_Temporal, req:Status, req:Dataset
+.
+stage:ReqModelGebeurtenissen a elmo:Representation;
+	elmo:url-pattern "/query/model/gebeurtenissen$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept,req:HandelingAct, req:HandelingAgent, req:HandelingActor, req:HandelingObject, req:HandelingNorm
+.
+stage:ReqModelDatasets a elmo:Representation;
+	elmo:url-pattern "/query/model/datasets$";
+	elmo:appearance elmo:VocabularyAppearance;
+  elmo:query stage:ReqModelQuery;
+	elmo:contains stage:Menu;
+  rdfs:seeAlso req:Dataset, req:Datasetversie, req:Distributie, req:Catalogus
+.
+stage:ReqModelProvenance a elmo:Representation;
+	elmo:url-pattern "/query/model/provenance$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Concept, req:Begrippenkader, req:Collectie, req:Metadata, req:Metadata_Temporal, req:Status, req:Dataset, req:Datasetversie, req:Distributie, req:CatalogGraph, req:ProvenanceAgent, req:ProvenancePerson, req:ProvenanceOrganization, req:ProvenanceSoftwareAgent
+.
+stage:ReqModelAgent a elmo:Representation;
+	elmo:url-pattern "/query/model/agent$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Dataset, req:CatalogGraph, req:Metadata, req:ProvenanceAgent, req:ProvenancePerson, req:ProvenanceOrganization, req:ProvenanceSoftwareAgent, req:OrgOrganization, req:FoafOrganization, req:FoafAgent
+.
+
+#
+# GENERIEKE OPLOSSING
+#
+
+stage:ReqModelQuery a elmo:Query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		CONSTRUCT {
@@ -1665,11 +2877,13 @@ stage:ReqModelConcepten a elmo:Representation;
       ?choice ?choiceprop ?list.
       ?listitem rdf:first ?refshape.
       ?listitem rdf:rest ?restlist.
+      ?member skos:inScheme ?scheme.
+      ?member rdfs:label ?memberlabel
 		}
 		WHERE {
 		  {
         GRAPH <@STAGE@> {
-          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?shape
+          <@REPRESENTATION@> rdfs:seeAlso ?shape
         }
         GRAPH <http://bp4mc2.org/id/dataset/requirements> {
           ?shape ?shapepred ?shapeobj.
@@ -1687,8 +2901,8 @@ stage:ReqModelConcepten a elmo:Representation;
 		  UNION
 		  {
         GRAPH <@STAGE@> {
-          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?shape.
-          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?refshape.
+          <@REPRESENTATION@> rdfs:seeAlso ?shape.
+          <@REPRESENTATION@> rdfs:seeAlso ?refshape.
         }
         GRAPH <http://bp4mc2.org/id/dataset/requirements> {
           ?shape sh:property ?prop.
@@ -1699,8 +2913,8 @@ stage:ReqModelConcepten a elmo:Representation;
       UNION
       {
         GRAPH <@STAGE@> {
-          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?shape.
-          <urn:ReqModelConceptenShapes> rdfs:seeAlso ?refshape.
+          <@REPRESENTATION@> rdfs:seeAlso ?shape.
+          <@REPRESENTATION@> rdfs:seeAlso ?refshape.
         }
         GRAPH <http://bp4mc2.org/id/dataset/requirements> {
           ?shape sh:property ?prop.
@@ -1712,236 +2926,24 @@ stage:ReqModelConcepten a elmo:Representation;
           ?listitem rdf:rest ?restlist.
         }
       }
-		}
-	''';
-.
-
-<urn:ReqModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:Begrippenkader, req:Collectie, req:Brondocument, req:Bron, req:WerkAlsBron, req:ExpressieAlsBron.
-
-stage:ReqModelConceptenMeta a elmo:Representation;
-	elmo:url-pattern "/query/model/conceptenmeta$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	elmo:query '''
-	PREFIX sh: <http://www.w3.org/ns/shacl#>
-	PREFIX dctype: <http://purl.org/dc/dcmitype/>
-	PREFIX prov: <http://www.w3.org/ns/prov#>
-	PREFIX dct: <http://purl.org/dc/terms/>
-	PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-	prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>
-	CONSTRUCT { 
-		?shape ?shapepred ?shapeobj.
-		?shape sh:targetclass ?type.
-		?shape sh:property ?prop.
-		?prop ?proppred ?propobj.
-		?member skos:inScheme ?scheme.
-		?member rdfs:label ?memberlabel
-	}
-	WHERE {
-		GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-			{
-				{
-					?shape ?shapepred ?shapeobj.
-					OPTIONAL {
-						?shape sh:property ?prop.
-						?prop ?proppred ?propobj.
-					}
-				}
-				UNION
-				{
-					?shape sh:property ?typeprop.
-					?typeprop sh:hasValue ?type.
-					?typeprop sh:path rdf:type.
-					OPTIONAL {
-						?shape sh:property ?typeprop.
-						?shape ?shapepred ?shapeobj.
-						?shape sh:property ?prop.
-						?prop ?proppred ?propobj.
-					}
-				}
-				UNION
-				{
+      UNION
+      {
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
 					?shape sh:property ?memberprop.
 					?memberprop sh:hasValue ?scheme.
 					?memberprop sh:path skos:inScheme.
-				}
-			}
-			FILTER (
-				?shape = req:ConceptMetadata
-				|| ?shape = req:Concept
-				|| ?shape = req:Werkingsgebied
-				|| ?shape = req:ConceptStatus
-			)
-			FILTER(
-				?propobj != thes:broaderGeneric
-				&& ?propobj != thes:broaderPartitive
-				&& ?propobj != thes:narrowerGeneric
-				&& ?propobj != thes:narrowerPartitive
-				&& ?propobj != skos:semanticRelation
-				&& ?propobj != skos:closeMatch
-				&& ?propobj != skos:relatedMatch
-				&& ?propobj != skos:exactMatch
-				&& ?propobj != skos:broadMatch
-				&& ?propobj != skos:narrowMatch
-			)
-		}
-		OPTIONAL {
-			GRAPH <http://bp4mc2.org/id/dataset/imports> {
-				?member skos:inScheme ?scheme.
-				?member skos:prefLabel ?memberlabel
-			}
-		}
-	}
-	''';
-.
-
-stage:ReqModelGebeurtenissen a elmo:Representation;
-	elmo:url-pattern "/query/model/gebeurtenissen$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dctype: <http://purl.org/dc/dcmitype/>
-		PREFIX skoslex: <http://bp4mc2.org/def/skos-lex#>
-		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:targetclass ?type.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-      ?type rdfs:subClassOf ?ptype.
-      ?type rdf:type rdfs:Class. #Bug, type is needed
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				?shape sh:targetClass ?type.
-				?shape sh:property ?prop.
-				?prop ?proppred ?propobj.
-        OPTIONAL {
-          ?type rdfs:subClassOf ?ptype.
         }
-				FILTER (
-					?type = skos:Concept
-				#	||	?type = skos:ConceptScheme
-				#	||	?type = skos:Collection
-				#	||	?type = dctype:Text
-					||	?type = skoslex:Act
-					||	?type = skoslex:Actor
-					||	?type = skoslex:Agent
-					||	?type = skoslex:Object
-					||	?type = skoslex:Norm
-				)
-				FILTER(
-					?propobj != thes:broaderGeneric
-					&& ?propobj != thes:broaderPartitive
-					&& ?propobj != thes:narrowerGeneric
-					&& ?propobj != thes:narrowerPartitive
-					&& ?propobj != skos:semanticRelation
-					&& ?propobj != skos:closeMatch
-					&& ?propobj != skos:relatedMatch
-					&& ?propobj != skos:exactMatch
-					&& ?propobj != skos:broadMatch
-					&& ?propobj != skos:narrowMatch
-				)
-			}
+        GRAPH <http://bp4mc2.org/id/dataset/imports> {
+          ?member skos:inScheme ?scheme.
+          ?member skos:prefLabel ?memberlabel
+        }
+      }
 		}
 	''';
 .
-
-stage:ReqModelDatasets a elmo:Representation;
-	elmo:url-pattern "/query/model/datasets$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dcat: <http://www.w3.org/ns/dcat#>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:targetclass ?type.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				?shape sh:targetClass ?type.
-				?shape sh:property ?prop.
-				?prop ?proppred ?propobj.
-				FILTER (?type = dcat:Catalog
-					||	?type = dcat:Dataset
-					||	?type = dcat:Distribution
-				)
-			}
-		}
-	''';
-.
-
-stage:ReqModelCatalogus a elmo:Representation;
-	elmo:url-pattern "/query/model/catalogus$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-	
-.
-
-stage:ReqModelProvenance a elmo:Representation;
-	elmo:url-pattern "/query/model/provenance$";
-	elmo:appearance elmo:VocabularyAppearance;
-	elmo:contains stage:Menu;
-		elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		PREFIX dctype: <http://purl.org/dc/dcmitype/>
-		PREFIX req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>
-		PREFIX thes: <http://purl.org/iso25964/skos-thes#>
-		PREFIX dcat: <http://www.w3.org/ns/dcat#>
-		PREFIX dct: <http://purl.org/dc/terms/>
-		CONSTRUCT {
-			?shape ?shapepred ?shapeobj.
-			?shape sh:property ?prop.
-			?prop ?proppred ?propobj.
-		}
-		WHERE {
-			GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-				?shape ?shapepred ?shapeobj.
-				OPTIONAL {
-					?shape sh:property ?prop.
-					?prop ?proppred ?propobj.
-				}
-				FILTER (?shape = req:Concept
-				|| ?shape = req:Collectie
-				|| ?shape = req:ProvenancePerson
-				|| ?shape = req:ProvenanceOrganisation
-				|| ?shape = req:Provenance
-				|| ?shape = req:Catalogus
-				|| ?shape = req:Dataset
-				|| ?shape = req:Distributie
-				|| ?shape = req:Metadata
-        || ?shape = req:CatalogGraph
-        || ?shape = req:Metadata_Temporal
-        || ?shape = req:Status
-				)
-				FILTER(
-					?propobj != thes:broaderGeneric
-					&& ?propobj != thes:broaderPartitive
-					&& ?propobj != thes:narrowerGeneric
-					&& ?propobj != thes:narrowerPartitive
-					&& ?propobj != skos:semanticRelation
-					&& ?propobj != skos:closeMatch
-					&& ?propobj != skos:relatedMatch
-					&& ?propobj != skos:exactMatch
-					&& ?propobj != skos:broadMatch
-					&& ?propobj != skos:narrowMatch
-					&& ?propobj != skos:member
-					&& ?propobj != dcat:dataset
-					&& ?propobj != dcat:distribution
-					&& ?propobj != dct:relation
-					&& ?propobj != dct:isVersionOf
-				)
-			}
-		}
-	''';
-.
-
 
  
 @prefix elmo: <http://bp4mc2.org/elmo/def#>.
