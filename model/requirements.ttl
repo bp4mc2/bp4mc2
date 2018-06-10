@@ -20,10 +20,12 @@
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 @prefix frbr: <http://purl.org/vocab/frbr/core#>.
 @prefix org: <http://www.w3.org/ns/org#>.
+@prefix skostype: <http://bp4mc2.org/id/type/>.
 
 # [MB] ALGEMENE OPMERKINGEN
 # - Engels en Nederlands wordt door elkaar gebruikt in de beschrijving
 # - Het zou m.i. beter zijn als we alles in het Nederlands doen, en OOK in het engels
+# [OVERLEGT MET ARJEN: YUP, nu in het Nederlands, maar er MOET straks wel in het engels iets komen]
 
 #---------------------
 # IMPORT
@@ -49,6 +51,13 @@ foaf:Organization rdfs:subClassOf foaf:Agent.
 
 #Overgenomen uit org
 org:Organization rdfs:subClassOf foaf:Organization.
+
+#Overgenomen uit adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#Extra
+rdf:type sh:name "rdf:type".
 
 #---------------------
 # CONCEPTEN
@@ -119,18 +128,18 @@ req:Concept_label a sh:PropertyShape;
   rdfs:label "has label";
   sh:name "rdfs:label";
   sh:minCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
+  rdfs:comment "Een begrip heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. In dat geval bevat alleen het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan (wel) meertalig zijn, aangegeven door @nl of @en";
   sh:path rdfs:label;
-  skos:example "Perceel"
+  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
 .
 req:Concept_prefLabel a sh:PropertyShape;
   rdfs:label "has preferred label";
   sh:name "skos:prefLabel";
   sh:minCount 1;
   sh:maxCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam die in documentatie kan worden gebruikt. Dit label kan meertalig zijn, aangegeven door @nl of @en";
+  rdfs:comment "Een begrip heeft een voor mensen leesbare naam die als voorkeursterm voor dit begrip wordt gehanteerd. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig)";
   sh:path skos:prefLabel;
-  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
+  skos:example '''"Kadastraal perceel"'''
 .
 req:Concept_synonym a sh:PropertyShape;
 #	rdfs:label "alternatieve aanduiding";
@@ -233,7 +242,7 @@ req:Concept_consistsOf a sh:PropertyShape;
   sh:path skosthes:narrowerPartitive;
   sh:class skos:Concept;
   rdfs:comment "Een begrip bestaat uit een aantal onderdelen.";
-  skos:example '''Een schip bestaat uit een romp, kajuit, motor, … ''';
+  skos:example '''Een schip bestaat uit een romp, kajuit, motor, ... ''';
 .
 req:Concept_isRelatedTo a sh:PropertyShape;
   rdfs:label "gerelateerd aan";
@@ -271,7 +280,7 @@ req:Collectie_label a sh:PropertyShape;
   rdfs:label "has label";
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
+  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel.";
   skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'"
 .
 req:Collectie_heeftLid a sh:PropertyShape;
@@ -280,7 +289,7 @@ req:Collectie_heeftLid a sh:PropertyShape;
   sh:path skos:member;
   sh:class skos:Concept;
   rdfs:comment "Een collectie kan één of meerdere begrippen omvatten, die eventueel afkomstig kunnen zijn uit meerdere conceptschema's";
-  skos:example "de collectie 'ZakelijkeRechten' bevat het begrip 'Erfpacht'";
+  skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'";
 .
 req:Collectie_provenance a sh:PropertyShape;
   sh:path foaf:isPrimaryTopicOf;
@@ -302,8 +311,8 @@ req:Begrippenkader_label a sh:PropertyShape;
   rdfs:label "has label";
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam. De conventie is om deze naam in UpperCamelCase te noteren.";
-  skos:example "Het schema dat het domein regelgeving in het DSO beschrijft heeft als label 'Regelgeving'."
+  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel.";
+  skos:example "Het schema dat het domein regelgeving beschrijft heeft als label 'Regelgeving'."
 .
 req:Begrippenkader_hasTopConcept a sh:PropertyShape;
   rdfs:label "has top concept";
@@ -648,10 +657,6 @@ req:Brondocument_label a sh:PropertyShape;
 .
 
 #---------------------
-# CONCEPTEN
-#---------------------
-
-#---------------------
 # Dataset
 #---------------------
 req:Dataset rdf:type sh:NodeShape;
@@ -713,7 +718,6 @@ req:Datasetversie rdf:type sh:NodeShape;
   sh:property req:Datasetversie_rol; 
   sh:property req:Datasetversie_version; 
   sh:property req:Datasetversie_versionNotes;	
-  sh:property req:Datasetversie_isDerivedFrom;
   sh:property req:Datasetversie_distribution;
   sh:property req:Datasetversie_versionOf;
   sh:property req:Datasetversie_describedBy;
@@ -722,6 +726,7 @@ req:Datasetversie rdf:type sh:NodeShape;
 
 req:Datasetversie_rol a sh:PropertyShape;
   sh:path rdf:type;
+  sh:name "rdf:type";
   sh:hasValue dcat:Dataset;
 .
 req:Datasetversie_version rdf:type sh:PropertyShape;
@@ -775,7 +780,7 @@ req:Datasetversie_describedBy rdf:type sh:PropertyShape;
   rdfs:comment "De data in een dataset is beschreven in een informatiemodel.";
   sh:path wdrs:describedBy;
   sh:name "wdrs:describedBy";
-  sh:class adms:Asset;
+  sh:node req:Informatiemodel;
   skos:example '''kadaster.nl/schemas/imkad''';
 .
 
@@ -784,16 +789,107 @@ req:Datasetversie_locatie a sh:NodeShape;
   sh:name "dcterms:Location";
 .
 
+req:Informatieproduct rdf:type sh:NodeShape;
+  rdfs:label "Informatieproduct";
+  sh:name "dcat:Dataset (informatieproduct)";
+  sh:property req:Informatieproduct_rol; 
+  sh:property req:Informatieproduct_version; 
+  sh:property req:Informatieproduct_versionNotes;	
+  sh:property req:Informatieproduct_isDerivedFrom;
+  sh:property req:Informatieproduct_distribution;
+  sh:property req:Informatieproduct_versionOf;
+  sh:property req:Informatieproduct_describedBy;
+  sh:property req:Informatieproduct_werkingsgebied;
+.
+
+req:Informatieproduct_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:name "rdf:type";
+  sh:hasValue dcat:Dataset;
+.
+req:Informatieproduct_version rdf:type sh:PropertyShape;
+  rdfs:label "versie";
+  sh:name "adms:version";
+  rdfs:comment "De versie van het informatieproduct.";
+  sh:path adms:version;
+  skos:example "2.1.0";
+.
+req:Informatieproduct_versionNotes rdf:type sh:PropertyShape;
+  rdfs:label "versie notes";
+  sh:name "adms:versionNotes";
+  rdfs:comment "Een versie heeft release notes.";
+  sh:path adms:versionNotes;
+.
+req:Informatieproduct_distribution a sh:PropertyShape;
+  rdfs:label "distributie";
+  sh:path dcat:distribution;
+  sh:name "dcat:distribution";
+  sh:class dcat:Distribution;
+  rdfs:comment "Een informatieproduct kan worden verspreid via verschillende kanalen.";
+.
+req:Informatieproduct_werkingsgebied rdf:type sh:PropertyShape;
+    rdfs:label "geografische afbakening";
+    rdfs:comment "Het gebied waar de dataset over gaat";
+    sh:class dcterms:Location;
+    skos:example "gemeente Apeldoorn";
+    sh:path dcterms:spatial;
+    sh:name "dcterms:spatial"
+.
+req:Informatieproduct_isDerivedFrom rdf:type sh:PropertyShape;
+  rdfs:label "gerelateerd aan";
+  rdfs:comment "Een concreet, geversioneerd informatieproduct is afgeleid van een concrete datasetversie";
+  sh:path dcterms:relation;
+  sh:name "dcterms:relation";
+  sh:node req:Datasetversie;
+.
+req:Informatieproduct_describedBy rdf:type sh:PropertyShape;
+  rdfs:label "beschreven in";
+  rdfs:comment "De data in een informatieproduct is beschreven in een informatiemodel.";
+  sh:path wdrs:describedBy;
+  sh:name "wdrs:describedBy";
+  sh:node req:Informatiemodel;
+.
+
+req:Informatieproduct_locatie a sh:NodeShape;
+  rdfs:label "Locatie";
+  sh:name "dcterms:Location";
+.
+
 #---------------------
-# Informatiemodel
-# Datum: 7-11-2017
-# Door: Ingrid Thurlings
+# Assets (Informatiemodel)
 #---------------------
+req:Asset a sh:NodeShape;
+  rdfs:label "Asset";
+  sh:name "adms:Asset";
+  sh:targetClass adms:Asset;
+.
 req:Informatiemodel rdf:type sh:NodeShape;
-    rdfs:label "Informatiemodel";
-    sh:name "adms:Asset";
-    sh:targetClass adms:Asset;
+    rdfs:label "Asset (Informatiemodel)";
+    sh:name "adms:Asset (Informatiemodel)";
+    sh:property req:Informatiemodel_role;
+    sh:property req:Informatiemodel_typeInformatiemodel;
     sh:property req:Informatiemodel_name;
+    sh:property req:Informatiemodel_distributie;
+    sh:property req:Informatiemodel_landingPage;
+.
+req:Informatiemodel_landingPage a sh:PropertyShape;
+  sh:name "dcat:landingPage";
+  sh:path dcat:landingPage;
+  sh:node req:LandingPage;
+  sh:maxCount 1;
+.
+req:Informatiemodel_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+.
+req:Informatiemodel_typeInformatiemodel a sh:PropertyShape;
+  rdfs:label "type asset = informatiemodel";
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue skostype:Informatiemodel;
 .
 req:Informatiemodel_name rdf:type sh:PropertyShape;
     rdfs:label "name";
@@ -803,14 +899,288 @@ req:Informatiemodel_name rdf:type sh:PropertyShape;
     sh:path rdfs:comment
 .
 
+req:Informatiemodel_distributie rdf:type sh:PropertyShape;
+  rdfs:label "distribution"@en;
+  sh:name "dcat:distribution";
+  sh:path dcat:distribution;
+  sh:node req:ModelVoorkomen;
+.
 
+skostype:Informatiemodel a skos:Concept;
+  rdfs:label "Informatiemodel";
+  sh:name "skostype:Informatiemodel"
+.
+
+req:ModelVoorkomen a sh:NodeShape;
+  rdfs:label "Modelvoorkomen";
+  sh:name "adms:Distribution";
+  sh:targetClass adms:Distribution;
+  sh:property req:ModelVoorkomen_accessURL;
+  sh:property req:ModelVoorkomen_downloadURL;
+  sh:property req:ModelVoorkomen_representationTechnique;
+.
+
+req:ModelVoorkomen_accessURL a sh:PropertyShape;
+  sh:name "dcat:accessURL";
+  sh:path dcat:accessURL;
+.
+
+req:ModelVoorkomen_downloadURL a sh:PropertyShape;
+  sh:name "dcat:downloadURL";
+  sh:path dcat:downloadURL;
+  sh:node req:DownloadFormat;
+.
+
+req:ModelVoorkomen_representationTechnique a sh:PropertyShape;
+  sh:name "adms:representationTechnique";
+  sh:path adms:representationTechnique;
+  sh:node req:RepresentationTechnique;
+.
+
+req:RepresentationTechnique a sh:NodeShape;
+  sh:name "Representation technique waardelijst";
+  sh:property [
+    sh:path skos:inScheme;
+    sh:hasValue <http://purl.org/adms/representationtechnique/1.0>;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+req:Vocabulaire a sh:NodeShape;
+  rdfs:label "Vocabulaire";
+  sh:name "owl:Ontology";
+  sh:targetClass owl:Ontology;
+  sh:property [
+    sh:path sh:shapesGraph;
+    sh:name "sh:shapesGraph";
+    sh:node req:ShapesGraph
+  ];
+  sh:property [
+    sh:path foaf:isPrimaryTopicOf;
+    sh:name "foaf:isPrimaryTopicOf";
+    sh:node req:LandingPage;
+  ]
+.
+req:ShapesGraph a sh:NodeShape;
+  rdfs:label "Shapes graph";
+  sh:name "Shapes graph";
+  sh:property [
+    sh:path rdfs:label;
+    sh:name "rdfs:label";
+  ];
+.
+req:Klasse a sh:NodeShape;
+  sh:name "owl:Class";
+  sh:targetClass owl:Class;
+  sh:property [
+    sh:path rdfs:isDefinedBy;
+    sh:name "rdfs:isDefinedBy";
+    sh:node req:Vocabulaire;
+  ];
+.
+req:NodeShape a sh:NodeShape;
+  rdfs:label "node shape";
+  sh:name "sh:NodeShape";
+  sh:targetClass sh:NodeShape;
+  sh:property [
+    sh:path sh:targetClass;
+    sh:name "sh:targetClass";
+    sh:class owl:Class
+  ];
+.
+
+#---------------------
+# Assets (Waardelijst)
+#---------------------
+
+req:Waardelijst rdf:type sh:NodeShape;
+    rdfs:label "Asset (Waardelijst)";
+    sh:name "adms:Asset (Waardelijst)";
+    sh:property req:Waardelijst_role;
+    sh:property req:Waardelijst_typeWaardelijst;
+    sh:property req:Waardelijst_name;
+    sh:property req:Waardelijst_distributie;
+    sh:property req:Waardelijst_specificatie;
+    sh:property req:Waardelijst_onderdeelVan;
+    sh:property req:Waardelijst_landingPage;
+.
+req:Waardelijst_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+.
+req:Waardelijst_onderdeelVan a sh:PropertyShape;
+  sh:name "dcterms:isPartOf";
+  sh:path dcterms:isPartOf;
+  sh:node req:Dataset;
+  sh:maxCount 1
+.
+req:Waardelijst_landingPage a sh:PropertyShape;
+  sh:name "dcat:landingPage";
+  sh:path dcat:landingPage;
+  sh:node req:LandingPage;
+  sh:maxCount 1;
+.
+req:Waardelijst_typeWaardelijst a sh:PropertyShape;
+  rdfs:label "type asset = Waardelijst";
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue skostype:Waardelijst;
+.
+req:Waardelijst_name rdf:type sh:PropertyShape;
+    rdfs:label "name";
+    sh:name "rdfs:comment";
+    rdfs:comment "De waardelijst heeft een naam";
+    skos:example "'Lijst van landen'";
+    sh:path rdfs:comment
+.
+
+req:Waardelijst_distributie rdf:type sh:PropertyShape;
+  rdfs:label "distribution"@en;
+  sh:name "dcat:distribution";
+  sh:path dcat:distribution;
+  sh:node req:WaardelijstDistributie;
+.
+
+req:Waardelijst_specificatie a sh:PropertyShape;
+  rdfs:label "specificatie"@nl;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node req:NodeShape;
+.
+
+skostype:Waardelijst a skos:Concept;
+  rdfs:label "Waardelijst";
+  sh:name "skostype:Waardelijst"
+.
+
+req:WaardelijstDistributie a sh:NodeShape;
+  rdfs:label "WaardelijstDistributie";
+  sh:name "adms:Distribution";
+  sh:targetClass adms:Distribution;
+  sh:property req:WaardelijstDistributie_accessURL;
+  sh:property req:WaardelijstDistributie_downloadURL;
+  sh:property req:WaardelijstDistributie_representationTechnique;
+.
+
+req:WaardelijstDistributie_accessURL a sh:PropertyShape;
+  sh:name "dcat:accessURL";
+  sh:path dcat:accessURL;
+.
+
+req:WaardelijstDistributie_downloadURL a sh:PropertyShape;
+  sh:name "dcat:downloadURL";
+  sh:path dcat:downloadURL;
+  sh:node req:DownloadFormat;
+.
+
+req:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
+  sh:name "adms:representationTechnique";
+  sh:path adms:representationTechnique;
+  sh:node req:RepresentationTechnique;
+.
+
+req:Categorisatie a sh:NodeShape;
+  sh:name "Categorisatie";
+  sh:property req:Categorisatie_role;
+  sh:property [
+    sh:path sh:property;
+    sh:name "sh:property";
+    sh:node req:CategorisatieSpec;
+    sh:nodeKind sh:BlankNode;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+req:Categorisatie_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+req:CategorisatieSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path/sh:inversePath = skos:member"; #Hack, propertypaths are not shown correctly
+#   sh:hasValue skos:member    
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:node req:Begrippenkader;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+req:Referentielijst a sh:NodeShape;
+  sh:name "sh:Nodeshape (Referentielijst)";
+  sh:property [
+    sh:path rdf:type;
+    sh:name "rol";
+    sh:hasValue sh:NodeShape;
+  ];
+  sh:property [
+    sh:path sh:property;
+    sh:name "sh:property";
+    sh:node req:ReferentielijstSpec;
+    sh:nodeKind sh:BlankNode;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+req:ReferentielijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue rdf:type;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class owl:Class;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+#
+# Webpages (landingPage, downloadURL)
+#
+req:LandingPage a sh:NodeShape;
+  sh:name "foaf:Document (Landing page)";
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue foaf:Document;
+  ];
+.
+req:DownloadFormat a sh:NodeShape;
+  sh:name "foaf:Document (Download format)";
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue foaf:Document;
+  ];
+  sh:property [
+    sh:name "dcterms:isFormatOf";
+    sh:path dcat:landingPage;
+    sh:node req:LandingPage;
+  ];
+.
 
 #---------------------
 # Catalogus 
 # datum:23-10-2017 
 # door: Ingrid Thurlings
 #---------------------
-req:Catalogus rdf:type sh:NodeShape;
+req:Catalogus a sh:NodeShape;
     rdfs:label "Catalogus";
   sh:name "dcat:Catalog";
     sh:property req:Catalogus_dateModified;
@@ -839,6 +1209,7 @@ req:Catalogus_name rdf:type sh:PropertyShape;
 req:Catalogus_dataset a sh:PropertyShape;
   sh:path dcat:dataset;
   sh:class dcat:Dataset;
+  sh:name "dcat:dataset";
 .
 req:Catalogus_description rdf:type sh:PropertyShape;
     rdfs:label "beschrijving";

@@ -40,9 +40,21 @@ Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
 Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
 [html:img "begrippenkader.png"]
 '''Concept schema's, collecties en concepten krijgt een uri volgens het patroon:
--	`http://{domain}/id/ConceptScheme}/{rdfs:label}` voor concepten schema's
--	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
--	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten
+-	`http://{domain}/id/ConceptScheme}/{UpperCamelCase(skos:prefLabel)}` voor concepten schema's
+-	`http://{domain}/id/Collection}/{UpperCamelCase(skos:prefLabel)}` voor collecties
+-	`http://{domain}/id/Concept}/{UpperCamelCase(skos:prefLabel)}` voor concepten
+
+Op het moment bovenstaande nog niet tot een unieke URI leidt (bijvoorbeeld als binnen een conceptschema twee concepten bestaan met hetzelfde `skos:prefLabel`), dan wordt de URI uitgebreid met een underscore (`_`), gevolgd door een term waaruit het onderscheid blijkt. Deze term wordt vervolgens ook tussen haakjes opgenomen in het `rdfs:label` van dit concept. Voorbeeld:
+
+	ex:Pand_Recht a skos:Concept;
+	  skos:prefLabel "Pand"@nl;
+	  rdfs:label "Pand (Recht)"@nl
+	.
+	ex:Pand_Gebouw a skos:Concept;
+	  skos:prefLabel "Pand"@nl;
+	  rdfs:label "Pand (Gebouw)"@nl
+	.
+
 ### Concepten schema'''
 [elmo:contains stage:ReqDocument_conceptenschema]
 "### Collectie"
@@ -432,8 +444,50 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
 #
 # Tonen van de pagina
 #
-stage:ReqDocument	a	elmo:Representation;
-	elmo:url-pattern	"/query/reqdocument(|.md)$";
+stage:ReqDocument a elmo:Representation;
+  elmo:url-pattern "/query/reqdocument$";
+  elmo:appearance elmo:PlainHtmlAppearance;
+  elmo:data [
+    elmo:html '''
+<html lang="nl">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>Nederlands profiel voor gegevenscatalogi</title>
+    <script src='//www.w3.org/Tools/respec/respec-w3c-common' async='async' class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+        specStatus: "ED",
+        editors: [{
+          name: "Arjen Santema",
+          url: "http://your-site.com",
+        }],
+        processVersion: 2018,
+        edDraftURI: "http://github.com/bp4mc2",
+        shortName: "bp4mc2"
+      };
+    </script>
+</head>  
+  <body>
+    <section id='abstract'>
+      <p>              
+        Dit document beschrijft de best-practice voor een Nederlands profiel voor gegevenscatalogi
+      </p>
+    </section>
+    <section id='sotd'>
+      <p>        
+      </p>
+    </section>  
+   <section data-format="markdown" data-include="reqdocument.md"></section>
+  </body>
+</html>
+    '''
+  ];
+.
+
+stage:ReqDocumentMd	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqdocument(.md|.html)$";
   elmo:index "0";
   elmo:contains stage:ReqDocument_conceptPrefixes;
   elmo:contains stage:ReqDocument_catalogusPrefixes;

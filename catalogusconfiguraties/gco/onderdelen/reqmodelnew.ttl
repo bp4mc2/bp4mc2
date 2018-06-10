@@ -122,6 +122,20 @@ stage:ReqModelAgent a elmo:Representation;
   elmo:query stage:ReqModelQuery;
   rdfs:seeAlso req:Dataset, req:CatalogGraph, req:Metadata, req:ProvenanceAgent, req:ProvenancePerson, req:ProvenanceOrganization, req:ProvenanceSoftwareAgent, req:OrgOrganization, req:FoafOrganization, req:FoafAgent
 .
+stage:ReqModelInformatiemodel a elmo:Representation;
+  elmo:url-pattern "/query/model/informatiemodel$";
+  elmo:appearance elmo:VocabularyAppearance;
+  elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Datasetversie, req:Dataset, req:Informatieproduct, req:Asset, req:Informatiemodel, req:ModelVoorkomen, req:RepresentationTechnique, req:Vocabulaire, req:ShapesGraph, req:Klasse, req:NodeShape, req:LandingPage, req:DownloadFormat;
+.
+stage:ReqModelWaardelijst a elmo:Representation;
+  elmo:url-pattern "/query/model/waardelijst$";
+  elmo:appearance elmo:VocabularyAppearance;
+  elmo:contains stage:Menu;
+  elmo:query stage:ReqModelQuery;
+  rdfs:seeAlso req:Dataset, req:Asset, req:Waardelijst, req:WaardelijstDistributie, req:RepresentationTechnique, req:Begrippenkader, req:NodeShape, req:Klasse, req:Categorisatie, req:CategorisatieSpec, req:Referentielijst, req:ReferentielijstSpec, req:LandingPage, req:DownloadFormat;
+.
 
 #
 # GENERIEKE OPLOSSING
@@ -140,7 +154,8 @@ stage:ReqModelQuery a elmo:Query;
       ?listitem rdf:first ?refshape.
       ?listitem rdf:rest ?restlist.
       ?member skos:inScheme ?scheme.
-      ?member rdfs:label ?memberlabel
+      ?member rdfs:label ?memberlabel.
+      ?value sh:name ?valuename
 		}
 		WHERE {
 		  {
@@ -152,6 +167,10 @@ stage:ReqModelQuery a elmo:Query;
           OPTIONAL {
             ?shape sh:property ?prop.
             ?prop ?proppred ?propobj.
+            OPTIONAL {
+              ?prop sh:hasValue ?value.
+              ?value sh:name ?valuename
+            }
           }
           OPTIONAL {
             ?shape sh:targetClass ?class.
