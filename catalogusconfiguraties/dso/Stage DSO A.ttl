@@ -477,6 +477,11 @@ stage:DSOBeheermenu a elmo:Part;
 				elmo:index "4";
 				xhtml:link "container/ttlmodelupload";
 			];
+      elmo:data [
+				rdfs:label "Upload UML-model (Excel)";
+				elmo:index "5";
+				xhtml:link "container/xlsmodelupload";
+			];
 		];
 		elmo:data [
 			rdfs:label "Acties";
@@ -3951,6 +3956,23 @@ elmo:representation elmo:UploadRepresentation;
     ];
 .
 
+# Uploadcontainer UML-model Turtle
+container:xlsmodelupload a elmo:Container;
+  elmo:representation elmo:UploadRepresentation;
+	elmo:contains stage:DSOHeader;
+	elmo:contains stage:DSOFooter;
+	elmo:contains stage:DSOBeheermenu;
+	rdfs:label "Upload UML-model via Turtle";
+  elmo:translator elmo:TableExcelTranslator;
+	elmo:query stage:DSOXLSUploadScene;
+	elmo:fragment [
+    elmo:applies-to "model";
+    rdfs:label "Selecteer model"@nl;
+    elmo:constraint elmo:MandatoryConstraint;
+    elmo:index "1";
+  ];
+.
+
 #
 # SCENES
 #
@@ -4165,6 +4187,29 @@ stage:DSOTTLUploadScene a elmo:Scene;
 		}
 
 		CLEAR GRAPH container:ttlmodelupload
+	''';
+.
+
+# Uploadquery Excel-model
+stage:DSOXLSUploadScene a elmo:Scene;
+	rdfs:label "Postquery XSL-upload";
+	elmo:index "1";
+	elmo:query '''
+		prefix container: <http://data.acceptatie.pdok.nl/catalogus/dso/container/>
+		prefix owl: <http://www.w3.org/2002/07/owl#>
+
+		INSERT {
+			GRAPH <http://data.acceptatie.pdok.nl/catalogus/dso/def/@MODEL@> {
+				?s ?p ?o.
+			}
+		}
+		WHERE {
+			GRAPH container:xlsmodelupload {
+				?s ?p ?o.
+			}
+		}
+
+		CLEAR GRAPH container:xlsmodelupload
 	''';
 . 
 #
