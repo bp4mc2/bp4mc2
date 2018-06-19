@@ -40,9 +40,21 @@ Voor het beschrijven van begrippen worden de volgende standaarden gebruikt:
 Dit leidt tot de volgende opzet voor het beschrijven van een begrippenkader:'''
 [html:img "begrippenkader.png"]
 '''Concept schema's, collecties en concepten krijgt een uri volgens het patroon:
--	`http://{domain}/id/ConceptScheme}/{rdfs:label}` voor concepten schema's
--	`http://{domain}/id/Collection}/{rdfs:label}` voor collecties
--	`http://{domain}/id/Concept}/{rdfs:label}` voor concepten
+-	`http://{domain}/id/ConceptScheme}/{UpperCamelCase(skos:prefLabel)}` voor concepten schema's
+-	`http://{domain}/id/Collection}/{UpperCamelCase(skos:prefLabel)}` voor collecties
+-	`http://{domain}/id/Concept}/{UpperCamelCase(skos:prefLabel)}` voor concepten
+
+Op het moment bovenstaande nog niet tot een unieke URI leidt (bijvoorbeeld als binnen een conceptschema twee concepten bestaan met hetzelfde `skos:prefLabel`), dan wordt de URI uitgebreid met een underscore (`_`), gevolgd door een term waaruit het onderscheid blijkt. Deze term wordt vervolgens ook tussen haakjes opgenomen in het `rdfs:label` van dit concept. Voorbeeld:
+
+	ex:Pand_Recht a skos:Concept;
+	  skos:prefLabel "Pand"@nl;
+	  rdfs:label "Pand (Recht)"@nl
+	.
+	ex:Pand_Gebouw a skos:Concept;
+	  skos:prefLabel "Pand"@nl;
+	  rdfs:label "Pand (Gebouw)"@nl
+	.
+
 ### Concepten schema'''
 [elmo:contains stage:ReqDocument_conceptenschema]
 "### Collectie"
@@ -91,15 +103,18 @@ Voor de structuur van de waardenlijst maakt het niet uit of het een lijst (skos 
     - Een waarde in een lijst (collectie) van begrippen krijgt een uri volgens het patroon: https://{domein}/id/Concept/{rdfs:label}.
     - Een waarde in een lijst met instanties van een klasse krijgt een uri volgens het patroon https://{domein}/id/{Klassenaam}/{rdfs:label}, waarbij het label de naam van de betreffende instantie is.
 - De waarden in de waardenlijst kunnen dezelfde metadata meekrijgen als begrippen, namelijk has status, is generated at time, is invalidated at time, is valid during, is issued, is valid at.
-- Indien gewenst kunnen extra kenmerken worden toegevoegd, bijvoorbeeld de geometrie van bestuurlijk gebied en visualisatiecodes voor afbeelding op een kaart.
-## Administratieve werkelijkheid - Informatiemodel
-### Vertaling begrippenkader naar een datamodel
+- Indien gewenst kunnen extra kenmerken worden toegevoegd, bijvoorbeeld de geometrie van bestuurlijk gebied en visualisatiecodes voor afbeelding op een kaart.'''
+[html:img "waardelijsten.png"]
+[elmo:contains stage:ReqDocument_waardelijst]
+'''## Administratieve werkelijkheid - Informatiemodel'''
+[html:img "informatiemodel.png"]
+[elmo:contains stage:ReqDocument_informatiemodel]
+'''### Vertaling begrippenkader naar een datamodel
 Het begrippenkader is bruikbaar om met domeineigenaren en data afnemers te communiceren over de inhoud van een registratie. Het vertalen van dit begrip naar een samenhangend datamodel is het werkveld van de data architect. Een datamodel kan worden opgevat als een ontwerp van een structuur waarin data over de begrippen in het semantische model kunnen worden opgeslagen. 
 Een hulpmiddel voor het maken van een datamodel is het KKG-metamodel. Dit model bevat objectklassen, attribuutsoorten, gegevensgroepen, gegevensgroeptypen, generalisaties, relatiesoorten en relatieklassen. Een met KKG gemaakt informatiemodel kan worden uitgedrukt in UML of in RDF. Met andere woorden het is 'vormvrij'. 
 Een KKG-klasse is in de regel een realisatie van een begrip. Zo is het de attribuutsoort 'hoofdadres' in de BRK de realisatie van het begrip 'Hoofdadres' en de objectklasse 'AdresseerbaarObject', waarbij een 'hoofdadres' hoort de realisatie van het begrip 'AdresseerbaarObject'. Het begrip 'AdresseerbaarObject' gaat over de (talige, dat wil zeggen in taal) betekenis van een adresseerbaar object. De objectklasse is als het ware een 'bakje' waarin de data over een adresseerbaar object kan worden opgeslagen.
 Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden op [http://brk.basisregistraties.overheid.nl/def/objectklasse/AdresseerbaarObject#hoofdadres] . Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie.
 Dit voorbeeld laat ook mooi zien hoe de uri-strategie voor het beschrijven van een datamodel werkt. Het intypen van bovenstaande URL zal leiden tot de weergave van de pagina [http://brk.basisregistraties.overheid.nl/def/objectklasse/AdresseerbaarObject] (het deel voor de "#"). Met andere woorden: de beschrijving van de entiteit "Adresseerbaar object"'''
-[elmo:contains stage:ReqDocument_informatiemodel]
 '''## Catalogus
 ### Uitgangspunten
 Op het web is het gebruikelijk data te beschrijven in een catalogus met behulp van DCAT (Data Catalog). DCAT is een W3C standaard die door de EU (ISA) wordt voorgeschreven om datasets binnen Europa op een interoperabele wijze te beschrijven. In Nederland wordt DCAT onder andere toegepast in data.overheid.nl, waar alle open datasets in Nederland worden beschreven. Het nationaal georegister (nationaalgeoregister.nl), waar alle open geo-datasets worden beschreven biedt een DCAT export. Voor data.overheid.nl is het toepassingsprofiel DCAT-AP-NL gemaakt. Daarin wordt beschreven welke elementen uit DCAT worden gebruikt en hoe deze elementen specifiek worden ingevuld. Voor de geo-wereld is er Geo-DCAT-AP, dat door de EU (ISA) is opgesteld. 
@@ -286,6 +301,11 @@ stage:ReqDocument_informatiemodel a elmo:Part;
   elmo:query stage:ReqDocumentQuery_requirements;
   stage:include req:Informatiemodel
 .
+stage:ReqDocument_waardelijst a elmo:Part;
+  elmo:index "1";
+  elmo:query stage:ReqDocumentQuery_requirements;
+  stage:include req:Waardelijst, req:WaardelijstDistributie;
+.
 stage:ReqDocument_catalogus a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
@@ -432,8 +452,50 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
 #
 # Tonen van de pagina
 #
-stage:ReqDocument	a	elmo:Representation;
-	elmo:url-pattern	"/query/reqdocument(|.md)$";
+stage:ReqDocument a elmo:Representation;
+  elmo:url-pattern "/query/reqdocument$";
+  elmo:appearance elmo:PlainHtmlAppearance;
+  elmo:data [
+    elmo:html '''
+<html lang="nl">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>Nederlands profiel voor gegevenscatalogi</title>
+    <script src='//www.w3.org/Tools/respec/respec-w3c-common' async='async' class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+        specStatus: "ED",
+        editors: [{
+          name: "Arjen Santema",
+          url: "http://your-site.com",
+        }],
+        processVersion: 2018,
+        edDraftURI: "http://github.com/bp4mc2",
+        shortName: "bp4mc2"
+      };
+    </script>
+</head>  
+  <body>
+    <section id='abstract'>
+      <p>              
+        Dit document beschrijft de best-practice voor een Nederlands profiel voor gegevenscatalogi
+      </p>
+    </section>
+    <section id='sotd'>
+      <p>        
+      </p>
+    </section>  
+   <section data-format="markdown" data-include="reqdocument.md"></section>
+  </body>
+</html>
+    '''
+  ];
+.
+
+stage:ReqDocumentMd	a	elmo:Representation;
+	elmo:url-pattern	"/query/reqdocument(.md|.html)$";
   elmo:index "0";
   elmo:contains stage:ReqDocument_conceptPrefixes;
   elmo:contains stage:ReqDocument_catalogusPrefixes;
@@ -445,6 +507,7 @@ stage:ReqDocument	a	elmo:Representation;
   elmo:contains stage:ReqDocument_metadataTemporal;
   elmo:contains stage:ReqDocument_gebeurtenissen;
   elmo:contains stage:ReqDocument_informatiemodel;
+  elmo:contains stage:ReqDocument_waardelijst;
   elmo:contains stage:ReqDocument_catalogus;
   elmo:contains stage:ReqDocument_dataset;
   elmo:contains stage:ReqDocument_datasetVersie;
