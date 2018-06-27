@@ -260,34 +260,50 @@ req:ExternConcept a sh:NodeShape;
 .
 
 #---------------------
-# Collectie
+# Collection
 #---------------------
-req:Collectie a sh:NodeShape;
+req:Collection a sh:NodeShape;
   rdfs:label "Collectie"@nl;
+  rdfs:label "Collection"@en;
   sh:targetClass skos:Collection;
   sh:name "skos:Collection";
-  sh:property req:Collectie_label;
-  sh:property req:Collectie_heeftLid;
-  sh:property req:Collectie_provenance;
+  rdfs:comment "Een groep samenhangende begrippen kan worden gebundeld in een collectie."@nl;
+  rdfs:comment "A group of coherent concepts can be bundled in a collection."@en;
+  skos:example "De collectie die alle activiteiten in het BAL beschrijft."@nl;
+  sh:property req:Collection_label;
+  sh:property req:Collection_hasMember;
+  sh:property req:Collection_provenance;
 .
-req:Collectie_label a sh:PropertyShape;
+req:Collection_label a sh:PropertyShape;
   rdfs:label "label"@nl;
+  rdfs:label "label"@en;
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
-  skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'"
+  rdfs:comment "Een collectie  heeft een voor mensen leesbare naam. Spaties en diacritische tekens zijn daarin toegestaan."@nl;
+  rdfs:comment "A collection has a human readable label. Blanks and diacritics are allowed."@en;
+  skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'";
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een collectie heeft altijd een label in de moedertaal."@nl;
+  sh:message "A collection always has a label in native language."@en
 .
-req:Collectie_heeftLid a sh:PropertyShape;
+req:Collection_hasMember a sh:PropertyShape;
   rdfs:label "heeft lid"@nl;
+  rdfs:label "has member"@en;
   sh:name "skos:member";
   sh:path skos:member;
   sh:class skos:Concept;
   rdfs:comment "Een collectie kan één of meerdere begrippen omvatten, die eventueel afkomstig kunnen zijn uit meerdere conceptschema's"@nl;
+  rdfs:comment "A collection can contain one or more concepts, that possibly come from multiple concept schemes."@en;
   skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'";
 .
-req:Collectie_provenance a sh:PropertyShape;
+req:Collection_provenance a sh:PropertyShape;
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een collectie wordt bij voorkeur provenance informatie bijgehouden."@nl;
+  sh:message "Prefably provenance information is kept on a collection."@en
 .
 
 #---------------------
