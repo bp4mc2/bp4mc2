@@ -300,6 +300,9 @@ req:Begrippenkader a sh:NodeShape;
   rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
   skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl;
   sh:name "skos:ConceptScheme";
+  rdfs:comment "De kennis over de fysieke werkelijkheid wordt beschreven in een talig model, een begrippenmodel. In een begrippenmodel wordt deze kennis zodanig gestructureerd vastgelegd dat deze door zowel mensen als door computers wordt begrepen."@nl;
+  rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
+  skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl
   sh:targetClass skos:ConceptScheme;
   sh:property req:Begrippenkader_type;
   sh:property req:Begrippenkader_label;
@@ -307,6 +310,7 @@ req:Begrippenkader a sh:NodeShape;
 .
 req:Begrippenkader_label a sh:PropertyShape;
   rdfs:label "label"@nl;
+  rdfs:label "label"@en;
   sh:path rdfs:label;
   sh:name "rdfs:label";
   rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
@@ -314,17 +318,22 @@ req:Begrippenkader_label a sh:PropertyShape;
 .
 req:Begrippenkader_hasTopConcept a sh:PropertyShape;
   rdfs:label "top concept"@nl;
+  rdfs:label "top concept"@en;
   sh:path skos:hasTopConcept;
   sh:name "skos:hasTopConcept";
   sh:class skos:Concept;
-  rdfs:comment "Een concepten schema heeft mogelijk 1 begrip dat het schema zelf aanduidt. Dit is geen verplichting. Ook kan het zijn dat het conceptschema slechts een platte lijst betreft, waarbij alle concepten topconcepten zijn. In ieder geval moet gelden dat een topconcept geen skos:broader relatie heeft naar een bovenliggend concept."@nl;
-  skos:example "Het schema met als label 'Regelgeving' heeft als topconcept 'Regelgeving'."
+  rdfs:comment "Een concepten schema kan concepten bevatten die die het meest generiek zijn in een hiërarchie van specialisaties/generalisaties."@nl;
+  rdfs:comment "A concept schema can contain concepts that are the most generic in a hierarchy of specializations / generalizations."@en;
+  skos:example "Het concept 'Zakelijk recht' als meest generieke concept voor 'Eigendom', 'Opstal', 'Erfpacht', etc."@nl
 .
 req:Begrippenkader_type a sh:PropertyShape;
-  rdfs:label "rol van dataset"@nl;
-  rdfs:comment "Een begrippenkader vervult de rol van dataset"@nl;
+  rdfs:label "getypeerd als dataset"@nl;
+  rdfs:label "typified as dataset"@en;
+  rdfs:comment "Een begrippenkader kan worden getypeerd als een dataset"@nl;
+  rdfs:comment "A concept schema can be typified as a dataset"@en;
   sh:path rdf:type;
   sh:hasValue dcat:Dataset;
+  sh:maxCount 1
 .
 
 #---------------------
