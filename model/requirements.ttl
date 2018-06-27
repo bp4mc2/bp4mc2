@@ -302,7 +302,7 @@ req:Begrippenkader a sh:NodeShape;
   sh:name "skos:ConceptScheme";
   rdfs:comment "De kennis over de fysieke werkelijkheid wordt beschreven in een talig model, een begrippenmodel. In een begrippenmodel wordt deze kennis zodanig gestructureerd vastgelegd dat deze door zowel mensen als door computers wordt begrepen."@nl;
   rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
-  skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl
+  skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl;
   sh:targetClass skos:ConceptScheme;
   sh:property req:Begrippenkader_type;
   sh:property req:Begrippenkader_label;
@@ -494,7 +494,7 @@ req:Metadata_isvalidWithin a sh:PropertyShape;
   sh:name "dcterms:spatial";
   sh:path dcterms:spatial;
   sh:class dcterms:Location;
-  s:maxCount 1;
+  sh:maxCount 1;
   rdfs:comment "Een versie is formeel/juridisch geldig in een gebied."@nl;
 .
 req:Metadata_isIssued a sh:PropertyShape;
@@ -1377,4 +1377,14 @@ req:Eigenschap_onderwerp a sh:PropertyShape;
   rdfs:label "onderwerp"@nl;
   sh:name "dcterms:subject";
   sh:path dcterms:subject;
+.
+
+#---------------------
+# Datakwaliteitseisen
+#---------------------
+req:QualityDimension a sh:NodeShape;
+  sh:targetClass dqv:Dimension;
+  rdfs:label "Kwaliteitsdimensie"@nl;
+  rdfs:label "Quality dimension"@en;
+  sh:name "dqv:Dimension";
 .
