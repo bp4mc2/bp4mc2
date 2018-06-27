@@ -123,7 +123,7 @@ req:Concept_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   sh:name "rdfs:label";
   sh:minCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. In dat geval bevat alleen het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan (wel) meertalig zijn, aangegeven door @nl of @en"@nl;
+  rdfs:comment "Een begrip heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. Dit is geen good practice en dient zoveel mogelijk voorkomen te worden. In het geval dat dit toch voorkomt, bevat alleen het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan (wel) meertalig zijn, aangegeven door @nl of @en"@nl;
   sh:path rdfs:label;
   skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
 .
@@ -132,7 +132,7 @@ req:Concept_prefLabel a sh:PropertyShape;
   sh:name "skos:prefLabel";
   sh:minCount 1;
   sh:maxCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam die als voorkeursterm voor dit begrip wordt gehanteerd. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig)"@nl;
+  rdfs:comment "Een begrip heeft een voor mensen leesbare naam die als voorkeursterm voor dit begrip wordt gehanteerd. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig). Het is een good practice dat in 1 begrippenkader elke begrip een uniek prefLabel heeft."@nl;
   sh:path skos:prefLabel;
   skos:example '''"Kadastraal perceel"'''
 .
@@ -274,7 +274,7 @@ req:Collectie_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel."@nl;
+  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
   skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'"
 .
 req:Collectie_heeftLid a sh:PropertyShape;
@@ -295,6 +295,10 @@ req:Collectie_provenance a sh:PropertyShape;
 #---------------------
 req:Begrippenkader a sh:NodeShape;
   rdfs:label "Begrippenkader"@nl;
+  rdfs:label "Concept scheme"@en;
+  rdfs:comment "De kennis over de fysieke werkelijkheid wordt beschreven in een talig model, een begrippenmodel.  In een begrippenmodel wordt deze kennis zodanig gestructureerd vastgelegd dat deze door zowel mensen als door computers wordt begrepen."@nl;
+  rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
+  skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl;
   sh:name "skos:ConceptScheme";
   sh:targetClass skos:ConceptScheme;
   sh:property req:Begrippenkader_type;
@@ -305,7 +309,7 @@ req:Begrippenkader_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel."@nl;
+  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
   skos:example "Het schema dat het domein regelgeving beschrijft heeft als label 'Regelgeving'."
 .
 req:Begrippenkader_hasTopConcept a sh:PropertyShape;
@@ -313,7 +317,7 @@ req:Begrippenkader_hasTopConcept a sh:PropertyShape;
   sh:path skos:hasTopConcept;
   sh:name "skos:hasTopConcept";
   sh:class skos:Concept;
-  rdfs:comment "Een concepten schema heeft 1 begrip dat het schema zelf aanduidt."@nl;
+  rdfs:comment "Een concepten schema heeft mogelijk 1 begrip dat het schema zelf aanduidt. Dit is geen verplichting. Ook kan het zijn dat het conceptschema slechts een platte lijst betreft, waarbij alle concepten topconcepten zijn. In ieder geval moet gelden dat een topconcept geen skos:broader relatie heeft naar een bovenliggend concept."@nl;
   skos:example "Het schema met als label 'Regelgeving' heeft als topconcept 'Regelgeving'."
 .
 req:Begrippenkader_type a sh:PropertyShape;
@@ -445,6 +449,7 @@ req:Metadata a sh:NodeShape;
   sh:targetClass prov:Entity;
   sh:property req:Metadata_status;
   sh:property req:Metadata_isValidDuring;
+  sh:property req:Metadata_isvalidWithin;
   sh:property req:Metadata_isIssued;
   sh:property req:Metadata_changeNote;
 .
@@ -453,6 +458,8 @@ req:Metadata_status a sh:PropertyShape;
   sh:name "adms:status";
   sh:path adms:status;
   sh:node req:Status;
+  sh:maxCount 1;
+  sh:minCount 1;
   rdfs:comment "Een versie heeft een administratieve status."@nl;
   skos:example "Proposed";
 #[IT] skos:example "Completed";
@@ -465,17 +472,27 @@ req:Metadata_changeNote a sh:PropertyShape;
   skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid.";
 .
 req:Metadata_isValidDuring a sh:PropertyShape;
-  rdfs:label "geldig in"@nl;
+  rdfs:label "geldig in tijd"@nl;
   sh:name "dcterms:temporal";
   sh:path dcterms:temporal;
   sh:node req:Metadata_Temporal;
+  sh:maxCount 1;
   rdfs:comment '''Een versie is formeel/juridisch geldig gedurende een periode.'''@nl;
   skos:example '''22/10/2017 - ''';
+.
+req:Metadata_isvalidWithin a sh:PropertyShape;
+  rdfs:label "geldig in gebied";
+  sh:name "dcterms:spatial";
+  sh:path dcterms:spatial;
+  sh:class dcterms:Location;
+  s:maxCount 1;
+  rdfs:comment "Een versie is formeel/juridisch geldig in een gebied."@nl;
 .
 req:Metadata_isIssued a sh:PropertyShape;
   rdfs:label "bekendgemaakt op"@nl;
   sh:name "dcterms:issued";
   sh:path dcterms:issued;
+  sh:maxCount 1;
   rdfs:comment "Een versie is formeel bekend gemaakt op een bepaald moment."@nl;
   skos:example '''21/10/2017 20:21''';
 .
@@ -491,6 +508,7 @@ req:Temporal_Start a sh:PropertyShape;
   sh:path dcmiperiod:start;
   rdfs:comment "Een versie is formeel/juridisch geldig vanaf"@nl;
   skos:example "21/10/2017";
+  sh:maxCount 1;
 .
 req:Temporal_End a sh:PropertyShape;
   rdfs:label "einde"@nl;
@@ -498,6 +516,7 @@ req:Temporal_End a sh:PropertyShape;
   sh:path dcmiperiod:end;
   rdfs:comment "Een versie is formeel/juridisch geldig tot"@nl;
   skos:example "23/10/2017";
+  sh:maxCount 1;
 .
 
 req:Status a sh:NodeShape;
@@ -727,7 +746,7 @@ req:Datasetversie rdf:type sh:NodeShape;
   sh:property req:Datasetversie_distribution;
   sh:property req:Datasetversie_versionOf;
   sh:property req:Datasetversie_describedBy;
-  sh:property req:Datasetversie_werkingsgebied;
+  sh:property req:Datasetversie_geometrischeAfbakening;
 .
 
 req:Datasetversie_rol a sh:PropertyShape;
@@ -766,7 +785,7 @@ req:Datasetversie_versionOf a sh:PropertyShape;
   sh:maxCount 1;
   skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
 .
-req:Datasetversie_werkingsgebied rdf:type sh:PropertyShape;
+req:Datasetversie_geometrischeAfbakening rdf:type sh:PropertyShape;
     rdfs:label "geografische afbakening"@nl;
     rdfs:comment "Het gebied waar de dataset over gaat"@nl;
     sh:class dcterms:Location;
@@ -907,6 +926,7 @@ req:ModelVoorkomen_downloadURL a sh:PropertyShape;
   sh:name "dcat:downloadURL";
   sh:path dcat:downloadURL;
   sh:node req:DownloadFormat;
+  sh:maxCount 1;
 .
 
 req:ModelVoorkomen_representationTechnique a sh:PropertyShape;
@@ -938,6 +958,7 @@ req:Vocabulaire a sh:NodeShape;
     sh:path foaf:isPrimaryTopicOf;
     sh:name "foaf:isPrimaryTopicOf";
     sh:node req:LandingPage;
+    sh:maxCount 1;
   ]
 .
 req:ShapesGraph a sh:NodeShape;
