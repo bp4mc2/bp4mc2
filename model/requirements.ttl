@@ -51,6 +51,10 @@ org:Organization rdfs:subClassOf foaf:Organization.
 adms:Asset rdfs:subClassOf dcat:Dataset.
 adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
 
+#Overgenomen uit dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
 #Extra
 rdf:type sh:name "rdf:type".
 
@@ -832,6 +836,7 @@ req:Informatieproduct rdf:type sh:NodeShape;
   sh:property req:Informatieproduct_isDerivedFrom;
   sh:property req:Informatieproduct_distribution;
   sh:property req:Informatieproduct_versionOf;
+  sh:property req:Informatieproduct_qualityMeasurement;
 .
 
 req:Informatieproduct_rol a sh:PropertyShape;
@@ -845,6 +850,11 @@ req:Informatieproduct_version rdf:type sh:PropertyShape;
   rdfs:comment "De versie van het informatieproduct."@nl;
   sh:path adms:version;
   skos:example "2.1.0";
+.
+req:Informatieproduct_qualityMeasurement a sh:PropertyShape;
+  sh:path dqv:hasQualityMeasurement;
+  sh:name "dqv:hasQualityMeasurement";
+  sh:class dqv:QualityMeasurement;
 .
 req:Informatieproduct_versionNotes rdf:type sh:PropertyShape;
   rdfs:label "versie-notities"@nl;
@@ -1382,9 +1392,94 @@ req:Eigenschap_onderwerp a sh:PropertyShape;
 #---------------------
 # Datakwaliteitseisen
 #---------------------
+req:QualityCategory a sh:NodeShape;
+  sh:targetClass dqv:Category;
+  rdfs:label "Categorie"@nl;
+  rdfs:label "Quality category"@en;
+  sh:name "dqv:Category";
+  sh:property req:QualityCategory_label;
+.
+
 req:QualityDimension a sh:NodeShape;
   sh:targetClass dqv:Dimension;
   rdfs:label "Kwaliteitsdimensie"@nl;
   rdfs:label "Quality dimension"@en;
   sh:name "dqv:Dimension";
+  sh:property req:QualityDimension_label;
+  sh:property req:QualityDimension_inCategory;
+.
+
+req:QualityDimension_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+req:QualityDimension_inCategory a sh:PropertyShape;
+  sh:name "dqv:inCategory";
+  sh:path dqv:inCategory;
+  sh:class dqv:Category;
+.
+
+req:QualityIndicator a sh:NodeShape;
+  sh:name "Indicator (dqv:Dimension)";
+  rdfs:label "Quality indicator"@en;
+  rdfs:label "Kwaliteitsindicator"@nl;
+  sh:property req:QualityIndicator_label;
+  sh:property req:QualityIndicator_broader;
+  sh:property req:QualityIndicator_role;
+.
+
+req:QualityIndicator_role a sh:PropertyShape;
+  sh:name "role";
+  sh:path rdf:type;
+  sh:hasValue dqv:Dimension;
+.
+req:QualityIndicator_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+req:QualityIndicator_broader a sh:PropertyShape;
+  sh:name "skos:broader";
+  sh:path skos:broader;
+  sh:node req:QualityDimension;
+.
+
+req:QualityMetric a sh:NodeShape;
+  sh:targetClass dqv:Metric;
+  rdfs:label "Meetfunctie"@nl;
+  rdfs:label "Quality metric"@en;
+  sh:name "dqv:Metric";
+  sh:property req:QualityMetric_label;
+  sh:property req:QualityMetric_inDimension;
+  sh:property req:QualityMetric_expectedDataType;
+.
+
+req:QualityMetric_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+req:QualityMetric_inDimension a sh:PropertyShape;
+  sh:name "dqv:inDimension";
+  sh:path dqv:inDimension;
+  sh:node req:QualityIndicator;
+.
+req:QualityMetric_expectedDataType a sh:PropertyShape;
+  sh:name "dqv:expectedDataType";
+  sh:path dqv:expectedDataType;
+.
+
+req:QualityMeasurement a sh:NodeShape;
+  sh:targetClass dqv:QualityMeasurement;
+  sh:name "dqv:QualityMeasurement";
+  sh:property req:QualityMeasurement_isMeasurementOf;
+  sh:property req:QualityMeasurement_value;
+.
+
+req:QualityMeasurement_isMeasurementOf a sh:PropertyShape;
+  sh:name "dqv:isMeasurementOf";
+  sh:path dqv:isMeasurementOf;
+  sh:class dqv:Metric;
+.
+req:QualityMeasurement_value a sh:PropertyShape;
+  sh:name "dqv:value";
+  sh:path dqv:value;
 .
