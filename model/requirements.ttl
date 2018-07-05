@@ -57,6 +57,7 @@ dqv:Category rdfs:subClassOf skos:Concept.
 
 #Extra
 rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
 
 #---------------------
 # CONCEPTEN
@@ -321,7 +322,7 @@ req:ConceptScheme_label a sh:PropertyShape;
   skos:example "Het schema dat het domein regelgeving beschrijft heeft als label 'Regelgeving'.";
   sh:minCount 1;
   sh:severity sh:Violation;
-  sh:message "Een begrippenkader heeft altijd een label in de moedertaal."@nl
+  sh:message "Een begrippenkader heeft altijd een label in de moedertaal."@nl;
   sh:message "A concept scheme always has a label in the native language."@en
 .
 req:ConceptScheme_hasTopConcept a sh:PropertyShape;
@@ -1126,7 +1127,7 @@ req:CategorisatieSpec a sh:NodeShape;
   sh:property [
     sh:path sh:path;
     sh:name "sh:path/sh:inversePath = skos:member"; #Hack, propertypaths are not shown correctly
-#   sh:hasValue skos:member
+#    sh:hasValue skos:member;
     sh:minCount 1;
     sh:maxCount 1;
   ];
@@ -1395,31 +1396,17 @@ req:Eigenschap_onderwerp a sh:PropertyShape;
 #---------------------
 # Datakwaliteitseisen
 #---------------------
-req:QualityCategory a sh:NodeShape;
-  sh:targetClass dqv:Category;
-  rdfs:label "Categorie"@nl;
-  rdfs:label "Quality category"@en;
-  sh:name "dqv:Category";
-  sh:property req:QualityCategory_label;
-.
-
 req:QualityDimension a sh:NodeShape;
   sh:targetClass dqv:Dimension;
   rdfs:label "Kwaliteitsdimensie"@nl;
   rdfs:label "Quality dimension"@en;
   sh:name "dqv:Dimension";
   sh:property req:QualityDimension_label;
-  sh:property req:QualityDimension_inCategory;
 .
 
 req:QualityDimension_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
-.
-req:QualityDimension_inCategory a sh:PropertyShape;
-  sh:name "dqv:inCategory";
-  sh:path dqv:inCategory;
-  sh:class dqv:Category;
 .
 
 req:QualityIndicator a sh:NodeShape;
@@ -1481,8 +1468,98 @@ req:QualityMeasurement_isMeasurementOf a sh:PropertyShape;
   sh:name "dqv:isMeasurementOf";
   sh:path dqv:isMeasurementOf;
   sh:class dqv:Metric;
+  sh:minCount 1;
+  sh:maxCount 1;
 .
 req:QualityMeasurement_value a sh:PropertyShape;
   sh:name "dqv:value";
   sh:path dqv:value;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+req:QualityPolicy a sh:NodeShape;
+  sh:name "dqv:QualityPolicy";
+  rdfs:label "Quality policy"@en;
+  rdfs:label "Kwaliteitseis"@nl;
+  sh:property req:QualityPolicy_role;
+  sh:property req:QualityPolicy_targetNode;
+  sh:property req:QualityPolicy_message;
+  sh:property req:QualityPolicy_severity;
+  sh:property req:QualityPolicy_property;
+.
+
+req:QualityPolicy_role a sh:PropertyShape;
+  sh:name "role";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+req:QualityPolicy_targetNode a sh:PropertyShape;
+  sh:name "sh:targetNode";
+  sh:class dqv:Metric;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+req:QualityPolicy_message a sh:PropertyShape;
+  sh:name "sh:message";
+  sh:datatype xsd:string;
+.
+req:QualityPolicy_severity a sh:PropertyShape;
+  sh:name "sh:severity";
+  sh:maxCount 1;
+.
+req:QualityPolicy_property a sh:PropertyShape;
+  sh:name "sh:property";
+  sh:path sh:property;
+  sh:nodeKind sh:BlankNode;
+  sh:node req:QualityPolicySpec;
+  sh:minCount 1;
+  sh:maxCount 1
+.
+
+req:QualityPolicySpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path/sh:inversePath = dqv:isMeasurementOf"; #Hack, propertypaths are not supported yet
+#    sh:hasValue dqv:isMeasurementOf;
+    sh:minCount 1;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:path sh:node;
+    sh:name "sh:node";
+    sh:nodeKind sh:BlankNode;
+    sh:node req:QualityPolicyMeasurement;
+    sh:minCount 1;
+    sh:maxCount 1
+  ]
+.
+
+req:QualityPolicyMeasurement a sh:NodeShape;
+  sh:name "measurement";
+  sh:property [
+    sh:nodeKind sh:BlankNode;
+    sh:path sh:property;
+    sh:name "sh:property";
+    sh:node req:QualityPolicyValue;
+    sh:maxCount 1;
+  ]
+.
+
+req:QualityPolicyValue a sh:NodeShape;
+  sh:name "value";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue dqv:value;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path dqv:value;
+    sh:name "dqv:value";
+    sh:minCount 1;
+    sh:maxCount 1;
+  ]
 .
