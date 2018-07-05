@@ -58,6 +58,7 @@ dqv:Category rdfs:subClassOf skos:Concept.
 #Extra
 rdf:type sh:name "rdf:type".
 dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
 
 #---------------------
 # CONCEPTEN
@@ -1105,24 +1106,63 @@ req:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
   sh:node req:RepresentationTechnique;
 .
 
-req:Categorisatie a sh:NodeShape;
-  sh:name "Categorisatie"@nl;
-  sh:property req:Categorisatie_role;
-  sh:property [
-    sh:path sh:property;
-    sh:name "sh:property";
-    sh:node req:CategorisatieSpec;
-    sh:nodeKind sh:BlankNode;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
+req:SchemaWaardelijst a sh:NodeShape;
+  sh:name "sh:NodeShape (Begrippenkader)"@nl;
+  sh:property req:SchemaWaardelijst_role;
+  sh:property req:SchemaWaardelijst_property;
 .
-req:Categorisatie_role a sh:PropertyShape;
+req:SchemaWaardelijst_role a sh:PropertyShape;
   sh:name "rdf:type";
   sh:path rdf:type;
   sh:hasValue sh:NodeShape;
 .
-req:CategorisatieSpec a sh:NodeShape;
+req:SchemaWaardelijst_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node req:SchemaWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+req:SchemaWaardelijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue skos:inScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:ConceptScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+req:CollectieWaardelijst a sh:NodeShape;
+  sh:name "sh:NodeShape (Collectie)"@nl;
+  sh:property req:CollectieWaardelijst_role;
+  sh:property req:CollectieWaardelijst_property;
+.
+req:CollectieWaardelijst_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+req:CollectieWaardelijst_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node req:CollectieWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+req:CollectieWaardelijstSpec a sh:NodeShape;
   sh:name "spec";
   sh:property [
     sh:path sh:path;
@@ -1134,7 +1174,7 @@ req:CategorisatieSpec a sh:NodeShape;
   sh:property [
     sh:path sh:hasValue;
     sh:name "sh:hasValue";
-    sh:node req:Begrippenkader;
+    sh:class skos:Collection;
     sh:minCount 1;
     sh:maxCount 1;
   ];
