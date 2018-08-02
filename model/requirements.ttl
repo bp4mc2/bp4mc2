@@ -69,16 +69,21 @@ skos:inScheme sh:name "skos:inScheme".
 #---------------------
 req:Concept a sh:NodeShape;
   rdfs:label "Begrip"@nl;
+  rdfs:label "Concept"@en;
+  rdfs:comment "Een begrip is een idee of notitie, een eenheid van denken, een onderwerp van gesprek."@nl;
+  rdfs:comment "A  concept is an idea or notion, a unit of thought, a topic in the universe of discourse."@en;
+  rdfs:exampple "het begrip 'Perceel' in de BRK"@nl;
   sh:name "skos:Concept";
   sh:targetClass skos:Concept;
   # Datatype properties
-  sh:property req:Concept_comment;
-  sh:property req:Concept_dcsource;
-  sh:property req:Concept_definition;
   sh:property req:Concept_label;
   sh:property req:Concept_prefLabel;
-  sh:property req:Concept_scopeNote;
   sh:property req:Concept_synonym;
+  sh:property req:Concept_comment;
+  sh:property req:Concept_definition;
+  sh:property req:Concept_scopeNote;
+  sh:property req:Concept_editorialNote;
+  sh:property req:Concept_dcsource;
   # Object properties
   sh:property req:Concept_dctsource;
   sh:property req:Concept_domain;
@@ -97,15 +102,20 @@ req:Concept a sh:NodeShape;
   sh:property req:Concept_narrowlyMatches;
 .
 req:Concept_domain a sh:PropertyShape;
-  rdfs:label "in begrippenkader"@nl;
+  rdfs:label "domein"@nl;
+  rdfs:label "domain"@en;
+  rdfs:comment "Een begrip is gedefinieerd in de context van een bepaald domein."@nl;
+  rdfs:comment "A concept is defined in the context of a certain domain."@en;
+  skos:example "Basisregistratie Adressen en Gebouwen (BAG)";
   sh:name "skos:inScheme";
   sh:path skos:inScheme;
+  h:class skos:ConceptScheme;
   sh:minCount 1;
   sh:maxCount 1;
-  sh:class skos:ConceptScheme;
-  rdfs:comment "Een begrip is gedefinieerd in een bepaald begrippenkader"@nl;
-  skos:example "Basisregistratie Adressen en Gebouwen (BAG)"
-.
+  sh:severity sh:Violation;
+  sh:message "Een begrip bestaat altijd binnen de context van een domein."@nl;
+  sh:message "A concept allways exists in the context of a domai."@en
+ .
 req:Concept_metadata a sh:PropertyShape;
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
