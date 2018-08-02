@@ -109,51 +109,74 @@ req:Concept_domain a sh:PropertyShape;
   skos:example "Basisregistratie Adressen en Gebouwen (BAG)";
   sh:name "skos:inScheme";
   sh:path skos:inScheme;
-  h:class skos:ConceptScheme;
+  sh:class skos:ConceptScheme;
   sh:minCount 1;
   sh:maxCount 1;
   sh:severity sh:Violation;
   sh:message "Een begrip bestaat altijd binnen de context van een domein."@nl;
-  sh:message "A concept allways exists in the context of a domai."@en
- .
+  sh:message "A concept allways exists in the context of a domain."@en
+.
 req:Concept_metadata a sh:PropertyShape;
+  rdfs:label "herkomst (begrip)"@nl;
+  rdfs:label "provenance (concept)"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
+  rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
+  rdfs:comment "Provenance, validity and status of a concept can be described."@en;
+  skos:example "De uitleg van een begrip kan worden aangepast naar aanleiding van een vraag van een klant";
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een begrip wordt bij voorkeur herkomst-, geldigheid- en statusinformatie bijgehouden."@nl;
+  sh:message "Prefably provenance, validity and status information is kept on a concept."@en
 .
 req:Concept_dctsource a sh:PropertyShape;
-  rdfs:label "identificeerbare bron"@nl;
+  rdfs:label "bron op het web"@nl;
+  rdfs:label "source on the web"@en;
   sh:name "dcterms:source";
   sh:path dcterms:source;
-  rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als 'resource' op het web vindbaar is."@nl;
+  rdfs:comment "Een begrip kan zijn ontleend aan een bron die direct als'resource' op het web vindbaar is."@nl;
+  rdfs:comment "A concept can be derived from a source that can be found directly on the web as a 'resource'.."@en;
   sh:node [ sh:xone (req:Bron req:Brondocument)];
   skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"
 .
 req:Concept_dcsource a sh:PropertyShape;
-  rdfs:label "bron"@nl;
+  rdfs:label "geschreven bron"@nl;
+  rdfs:label "written source"@en;
   sh:name "dc:source";
   sh:path dc:source;
-  rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn."@nl;
+  rdfs:comment "Een begrip is ontleend aan een geschreven bron."@nl;
+  rdfs:comment "A concept can be derived from a written source."@en;
   skos:example "Europees verdrag voor de rechten van de mens"
 .
 req:Concept_label a sh:PropertyShape;
-  rdfs:label "label"@nl;
+  rdfs:label "label (begrip)"@nl;
+  rdfs:label "label (concept)"@en;
   sh:name "rdfs:label";
-  sh:minCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. Dit is geen good practice en dient zoveel mogelijk voorkomen te worden. In het geval dat dit toch voorkomt, bevat alleen het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan (wel) meertalig zijn, aangegeven door @nl of @en"@nl;
   sh:path rdfs:label;
-  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
+  rdfs:comment "Een begrip wordt aangeduid met een voor mensen leesbare term (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. Dit is geen good practice en dient zoveel mogelijk voorkomen te worden. In het geval dat dit toch voorkomt, krijgt het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan meertalig zijn, aangegeven door @nl of @en"@nl;
+  rdfs:comment "A concept has a human-readable label (including spaces and diacritics). This is equal to the skos: prefLabel. An exception to this is the situation that within one concept scheme the same skos:prefLabel is used more than once. This is not a good practice and should be avoided as much as possible. In case this occurs nonetheless, the rdfs: label gets an addition between brackets that indicates the distinction. This label can be multilingual, indicated by @nl or @en"@en;
+  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en''';
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een begrip wordt altijd aangeduid met een voor mensen leesbare term"@nl;
+  sh:message "A concept always has a human readable label"@en
 .
 req:Concept_prefLabel a sh:PropertyShape;
   rdfs:label "voorkeursterm"@nl;
+  rdfs:label "preferred label"@en;
   sh:name "skos:prefLabel";
+  sh:path skos:prefLabel;
+  rdfs:comment "Een begrip heeft een voor mensen leesbare voorkeursterm. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig). Het is een good practice dat ieder begrip binen 1 begrippenkader een uniek prefLabel heeft."@nl;
+  rdfs:comment "A concept has a human-readable preferred label. There is exactly one preferred label in the preferred language (this field is not multilingual). It is good practice that in 1 concept scheme each concept has a unique prefLabel."@en;
+  skos:example "Kadastraal perceel";
   sh:minCount 1;
   sh:maxCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam die als voorkeursterm voor dit begrip wordt gehanteerd. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig). Het is een good practice dat in 1 begrippenkader elke begrip een uniek prefLabel heeft."@nl;
-  sh:path skos:prefLabel;
-  skos:example '''"Kadastraal perceel"'''
+  sh:severity sh:Violation;
+  sh:message "Een begrip heeft altijd 1 voorkeursterm."@nl;
+  sh:message "A concept always has 1 preferred label"@en
 .
 req:Concept_synonym a sh:PropertyShape;
-	rdfs:label "alternatieve aanduiding"@nl;
+  rdfs:label "alternatieve aanduiding"@nl;
 #  rdfs:label "has synonym"@en;
   sh:name "skos:altLabel";
   rdfs:comment "Een begrip kan een alternatieve aanduiding, een synoniem hebben"@nl;
@@ -291,8 +314,8 @@ req:Collection a sh:NodeShape;
   sh:property req:Collection_provenance;
 .
 req:Collection_label a sh:PropertyShape;
-  rdfs:label "label"@nl;
-  rdfs:label "label"@en;
+  rdfs:label "label (collectie)"@nl;
+  rdfs:label "label (collecion)"@en;
   sh:path rdfs:label;
   sh:name "rdfs:label";
   rdfs:comment "Een collectie  heeft een voor mensen leesbare naam. Spaties en diacritische tekens zijn daarin toegestaan."@nl;
@@ -314,11 +337,16 @@ req:Collection_hasMember a sh:PropertyShape;
   skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'";
 .
 req:Collection_provenance a sh:PropertyShape;
+  rdfs:label "herkomst (collectie)"@nl;
+  rdfs:label "provenance (collection)"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
+  rdfs:comment "Van een collectie kan de herkomst worden beschreven."@nl;
+  rdfs:comment "Provenance of a collection can be described."@en;
+  skos:example "Op basis van de nieuwe wet op de BAG is een aantal begrippen toegevoegd aan de collectie 'aard gebruik'";
   sh:minCount 1;
   sh:severity sh:Warning;
-  sh:message "Van een collectie wordt bij voorkeur provenance informatie bijgehouden."@nl;
+  sh:message "Van een collectie wordt bij voorkeur herkomst informatie bijgehouden."@nl;
   sh:message "Prefably provenance information is kept on a collection."@en
 .
 
