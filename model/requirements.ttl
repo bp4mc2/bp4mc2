@@ -89,65 +89,19 @@ req:Concept a sh:NodeShape;
   sh:property req:Concept_domain;
   sh:property req:Concept_metadata;
   # References to other concepts
-  sh:property req:Concept_consistsOf;
-  sh:property req:Concept_generalisationOf;
   sh:property req:Concept_isRelatedTo;
-  sh:property req:Concept_partOf;
   sh:property req:Concept_specialisationOf;
+  sh:property req:Concept_generalisationOf;
+  sh:property req:Concept_partOf;
+  sh:property req:Concept_consistsOf;
   # References to other concepts in other concept schemes
   sh:property req:Concept_seeAlso;
-  sh:property req:Concept_broadlyMatches;
   sh:property req:Concept_closelyMatches;
   sh:property req:Concept_exactlyMatches;
+  sh:property req:Concept_broadlyMatches;
   sh:property req:Concept_narrowlyMatches
 .
-req:Concept_domain a sh:PropertyShape;
-  rdfs:label "domein"@nl;
-  rdfs:label "domain"@en;
-  sh:name "skos:inScheme";
-  sh:path skos:inScheme;
-  sh:class skos:ConceptScheme;
-  rdfs:comment "Een begrip is gedefinieerd in de context van een bepaald domein."@nl;
-  rdfs:comment "A concept is defined in the context of a certain domain."@en;
-  skos:example "Basisregistratie Adressen en Gebouwen (BAG)"@nl;
-  sh:minCount 1;
-  sh:maxCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een begrip bestaat altijd binnen de context van een domein."@nl;
-  sh:message "A concept allways exists in the context of a domain."@en
-.
-req:Concept_metadata a sh:PropertyShape;
-  rdfs:label "herkomst (begrip)"@nl;
-  rdfs:label "provenance (concept)"@en;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:class prov:Entity;
-  rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
-  rdfs:comment "Provenance, validity and status of a concept can be described."@en;
-  skos:example "De uitleg van een begrip kan worden aangepast naar aanleiding van een vraag van een klant"@nl;
-  sh:minCount 1;
-  sh:severity sh:Warning;
-  sh:message "Van een begrip wordt bij voorkeur herkomst-, geldigheid- en statusinformatie bijgehouden."@nl;
-  sh:message "Prefably provenance, validity and status information is kept on a concept."@en
-.
-req:Concept_dctsource a sh:PropertyShape;
-  rdfs:label "bron op het web"@nl;
-  rdfs:label "source on the web"@en;
-  sh:name "dcterms:source";
-  sh:path dcterms:source;
-  rdfs:comment "Een begrip kan zijn ontleend aan een bron die direct als'resource' op het web vindbaar is."@nl;
-  rdfs:comment "A concept can be derived from a source that can be found directly on the web as a 'resource'.."@en;
-  sh:node [ sh:xone (req:Bron req:Brondocument)];
-  skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
-.
-req:Concept_dcsource a sh:PropertyShape;
-  rdfs:label "geschreven bron"@nl;
-  rdfs:label "written source"@en;
-  sh:name "dc:source";
-  sh:path dc:source;
-  rdfs:comment "Een begrip is ontleend aan een geschreven bron."@nl;
-  rdfs:comment "A concept can be derived from a written source."@en;
-  skos:example "Europees verdrag voor de rechten van de mens"@nl
-.
+# Datatype properties
 req:Concept_label a sh:PropertyShape;
   rdfs:label "label (begrip)"@nl;
   rdfs:label "label (concept)"@en;
@@ -184,19 +138,6 @@ req:Concept_synonym a sh:PropertyShape;
   rdfs:comment "A concept can have an alternative label, a synonym"@en;
   skos:example "KadastraalPerceel"@nl
 .
-req:Concept_definition a sh:PropertyShape;
-  rdfs:label "definitie"@nl;
-  rdfs:label "definition"@en;
-  sh:name "skos:definition";
-  sh:path skos:definition;
-  rdfs:comment "Een begrip kan een formele definitiehebben. Deze wordt waar mogelijk overgenomen uit een officiële publicatie."@nl;
-  rdfs:comment "A concept can have a formal definition. If possible this is taken from a formal publication."@en;
-  skos:example "Een perceel is een begrensd deel van het Nederlands grondgebied dat kadastraal geïdentificeerd is en met kadastrale grenzen begrensd is."@nl;
-  sh:minCount 1;
-  sh:severity sh:Warning;
-  sh:message "Een begrip heeft bij voorkeur een formele definitie"@nl;
-  sh:message "Prefably a concept always has a formal definition"@en
-.
 req:Concept_comment a sh:PropertyShape;
   rdfs:label "uitleg"@nl;
   rdfs:label "comment"@en;
@@ -209,6 +150,19 @@ req:Concept_comment a sh:PropertyShape;
   sh:severity sh:Warning;
   sh:message "Een begrip heeft bij voorkeur uitleg in ‘klare taal’."@nl;
   sh:message "Prefably a concept always has comment in 'clear language'"@en
+.
+req:Concept_definition a sh:PropertyShape;
+  rdfs:label "definitie"@nl;
+  rdfs:label "definition"@en;
+  sh:name "skos:definition";
+  sh:path skos:definition;
+  rdfs:comment "Een begrip kan een formele definitiehebben. Deze wordt waar mogelijk overgenomen uit een officiële publicatie."@nl;
+  rdfs:comment "A concept can have a formal definition. If possible this is taken from a formal publication."@en;
+  skos:example "Een perceel is een begrensd deel van het Nederlands grondgebied dat kadastraal geïdentificeerd is en met kadastrale grenzen begrensd is."@nl;
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Een begrip heeft bij voorkeur een formele definitie"@nl;
+  sh:message "Prefably a concept always has a formal definition"@en
 .
 req:Concept_scopeNote a sh:PropertyShape;
   rdfs:label "toelichting"@nl;
@@ -228,34 +182,114 @@ req:Concept_EditorialNote a sh:PropertyShape;
   rdfs:comment "A concept can have an editorial comment."@en;
   skos:example "Dit begrip wordt nog gewijzigd bij het invoeringsbesluit."@nl
 .
-req:Concept_broadlyMatches a sh:PropertyShape;
-  rdfs:label "lijkt op breder"@nl;
-  rdfs:label "broadly matches with"@en;
-  sh:name "skos:broadMatch";
-  sh:path skos:broadMatch;
-  sh:node req:ExternConcept;
-  rdfs:comment "Een begrip is een specialisatie van een begrip in een ander domein."@nl;
-  rdfs:comment "A concept is a specializaton of a concept in another domain."@en;
-  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG.";@nl
+req:Concept_dcsource a sh:PropertyShape;
+  rdfs:label "geschreven bron"@nl;
+  rdfs:label "written source"@en;
+  sh:name "dc:source";
+  sh:path dc:source;
+  rdfs:comment "Een begrip is ontleend aan een geschreven bron."@nl;
+  rdfs:comment "A concept can be derived from a written source."@en;
+  skos:example "Europees verdrag voor de rechten van de mens"@nl
 .
-req:Concept_narrowlyMatches a sh:PropertyShape;
-  rdfs:label "lijkt op smaller"@nl;
-  rdfs:label "narrowly matches with"@en;
-  sh:name "skos:narrowMatch";
-  sh:path skos:narrowMatch;
-  sh:node req:ExternConcept;
-  rdfs:comment "Een begrip is een generalisatie van een begrip in een ander domein."@nl;
-  rdfs:comment "A concept is a generalizaton of a concept in another domain."@en;
-  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus.";@nl
+# Object properties
+req:Concept_dctsource a sh:PropertyShape;
+  rdfs:label "bron op het web"@nl;
+  rdfs:label "source on the web"@en;
+  sh:name "dcterms:source";
+  sh:path dcterms:source;
+  rdfs:comment "Een begrip kan zijn ontleend aan een bron die direct als'resource' op het web vindbaar is."@nl;
+  rdfs:comment "A concept can be derived from a source that can be found directly on the web as a 'resource'.."@en;
+  sh:node [ sh:xone (req:Bron req:Brondocument)];
+  skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
 .
+req:Concept_domain a sh:PropertyShape;
+  rdfs:label "domein"@nl;
+  rdfs:label "domain"@en;
+  sh:name "skos:inScheme";
+  sh:path skos:inScheme;
+  sh:class skos:ConceptScheme;
+  rdfs:comment "Een begrip is gedefinieerd in de context van een bepaald domein."@nl;
+  rdfs:comment "A concept is defined in the context of a certain domain."@en;
+  skos:example "Basisregistratie Adressen en Gebouwen (BAG)"@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een begrip bestaat altijd binnen de context van een domein."@nl;
+  sh:message "A concept allways exists in the context of a domain."@en
+.
+req:Concept_metadata a sh:PropertyShape;
+  rdfs:label "herkomst (begrip)"@nl;
+  rdfs:label "provenance (concept)"@en;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+  rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
+  rdfs:comment "Provenance, validity and status of a concept can be described."@en;
+  skos:example "De uitleg van een begrip kan worden aangepast naar aanleiding van een vraag van een klant"@nl;
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een begrip wordt bij voorkeur herkomst-, geldigheid- en statusinformatie bijgehouden."@nl;
+  sh:message "Prefably provenance, validity and status information is kept on a concept."@en
+.
+# References to other concepts
+req:Concept_isRelatedTo a sh:PropertyShape;
+  rdfs:label "gerelateerd aan"@nl;
+  rdfs:label "related to"@en;
+  sh:name "skos:semanticRelation";
+  sh:path skos:semanticRelation;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan gerelateerd zijn aan een ander begrip."@nl;
+  rdfs:comment "A concept can be related to another concept."@en;
+  skos:example "Een perceel is gerelateerd aan KadastraleGrens."@nl
+.
+req:Concept_specialisationOf a sh:PropertyShape;
+  rdfs:label "specialisatie van"@nl;
+  rdfs:label "specialization of"@en;
+  sh:name "skosthes:broaderGeneric";
+  sh:path skosthes:broaderGeneric;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan een specialisatie zijn van een begrip met een bredere betekenis."@nl;
+  rdfs:comment "A concept can be a specialization of a concept with a broader meaning."@en;
+  skos:example "Een Perceel is een OnroerendGoed."@nl
+.
+req:Concept_generalisationOf a sh:PropertyShape;
+  rdfs:label "generalisatie van"@nl;
+  rdfs:label "generalization of"@en;
+  sh:name "skosthes:narrowerGeneric";
+  sh:path skosthes:narrowerGeneric;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan een generalisatie zijn van een begrip met een engere of nauwere betekenis."@nl;
+  rdfs:comment "A concept can be a generalization of a concept with a narrower meaning."@en;
+  skos:example "Een KadastraalObject is een OnroerendGoed of een Registergoed."@nl
+.
+req:Concept_partOf a sh:PropertyShape;
+  rdfs:label "onderdeel van"@nl;
+  rdfs:label "part of"@en;
+  sh:name "skosthes:broaderPartitive";
+  sh:path skosthes:broaderPartitive;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan gaan over een deel van een breder begrip."@nl;
+  rdfs:comment "A concept can be about a part of a broader concept."@en;
+  skos:example "Een motor is onderdeel van een schip."@nl
+.
+req:Concept_consistsOf a sh:PropertyShape;
+  rdfs:label "bestaat uit"@nl;
+  rdfs:label "consists of"@en;
+  sh:name "skosthes:narrowerPartitive";
+  sh:path skosthes:narrowerPartitive;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan kan gaan over een aantal onderdelen."@nl;
+  rdfs:comment "A concept can be about several parts."@en;
+  skos:example "Een schip bestaat uit een romp, kajuit, motor, ... "@nl
+.
+# References to other concepts in other concept schemes
 req:Concept_seeAlso a sh:PropertyShape;
   rdfs:label "gerelateerd aan"@nl;
   rdfs:label "related to"@en;
   sh:name "skos:relatedMatch";
   sh:path skos:relatedMatch;
   sh:node req:ExternConcept;
-  rdfs:comment "Een begrip is gerelateerd aan een begrip in een ander domein."@nl;
-  rdfs:comment "A concepts is related to a concept in another domain."@en;
+  rdfs:comment "Een begrip kan zijn gerelateerd aan een begrip in een ander domein."@nl;
+  rdfs:comment "A concepts can be related to a concept in another domain."@en;
   skos:example "Een Perceel in de BRK is gerelateerd aan een adres (Nummeraanduiding) in de BAG."@nl
 .
 req:Concept_closelyMatches a sh:PropertyShape;
@@ -264,8 +298,8 @@ req:Concept_closelyMatches a sh:PropertyShape;
   sh:name "skos:closeMatch";
   sh:path skos:closeMatch;
   sh:node req:ExternConcept;
-  rdfs:comment "Een begrip betekent bijna hetzelfde als een begrip in een ander domein."@nl;
-  rdfs:comment "A concept almost has the same meaning as a concept in another domain."@en;
+  rdfs:comment "Een begrip kan bijna hetzelfde betekenen als een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can have almost the same meaning as a concept in another domain."@en;
   skos:example "Een OnroerendGoed in de BRK is ongeveer hetzelfde als een WOZobject in de WOZ."@nl
 .
 req:Concept_exactlyMatches a sh:PropertyShape;
@@ -274,49 +308,29 @@ req:Concept_exactlyMatches a sh:PropertyShape;
   sh:name "skos:exactMatch";
   sh:path skos:exactMatch;
   sh:node req:ExternConcept;
-  rdfs:comment "Een begrip betekent precies hetzelfde als een begrip in een ander domein."@nl;
-  rdfs:comment "A concept has exactly the same meaning as a concept in another domain."@en;
+  rdfs:comment "Een begrip kan precies hetzelfde betekenen als een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can have exactly the same meaning as a concept in another domain."@en;
   skos:example "Een Perceel in het BAL betekent hetzelfde als een Perceel in de BRK."@nl
 .
-req:Concept_specialisationOf a sh:PropertyShape;
-  rdfs:label "specialisatie van"@nl;
-  sh:name "skosthes:broaderGeneric";
-  sh:path skosthes:broaderGeneric;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip is een specialisatie van een begrip met een bredere betekenis."@nl;
-  skos:example "Een Perceel is een OnroerendGoed.";
+req:Concept_broadlyMatches a sh:PropertyShape;
+  rdfs:label "lijkt op breder"@nl;
+  rdfs:label "broadly matches with"@en;
+  sh:name "skos:broadMatch";
+  sh:path skos:broadMatch;
+  sh:node req:ExternConcept;
+  rdfs:comment "Een begrip kan een specialisatie zijn van een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can be a specializaton of a concept in another domain."@en;
+  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG.";@nl
 .
-req:Concept_generalisationOf a sh:PropertyShape;
-  rdfs:label "generalisatie van"@nl;
-  sh:name "skosthes:narrowerGeneric";
-  sh:path skosthes:narrowerGeneric;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip is een generalisatie van een begrip met een engere of nauwere betekenis."@nl;
-  skos:example "Een KadastraalObject is een OnroerendGoed of een Registergoed.";
-.
-req:Concept_partOf a sh:PropertyShape;
-  rdfs:label "onderdeel van"@nl;
-  sh:name "skosthes:broaderPartitive";
-  sh:path skosthes:broaderPartitive;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip gaat over een deel van een breder begrip."@nl;
-  skos:example "Een motor is onderdeel van een schip.";
-.
-req:Concept_consistsOf a sh:PropertyShape;
-  rdfs:label "bestaat uit"@nl;
-  sh:name "skosthes:narrowerPartitive";
-  sh:path skosthes:narrowerPartitive;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip bestaat uit een aantal onderdelen."@nl;
-  skos:example '''Een schip bestaat uit een romp, kajuit, motor, ... ''';
-.
-req:Concept_isRelatedTo a sh:PropertyShape;
-  rdfs:label "gerelateerd aan"@nl;
-  sh:name "skos:semanticRelation";
-  sh:path skos:semanticRelation;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip is gerelateerd aan een ander begrip."@nl;
-  skos:example "Een perceel is gerelateerd aan KadastraleGrens.";
+req:Concept_narrowlyMatches a sh:PropertyShape;
+  rdfs:label "lijkt op smaller"@nl;
+  rdfs:label "narrowly matches with"@en;
+  sh:name "skos:narrowMatch";
+  sh:path skos:narrowMatch;
+  sh:node req:ExternConcept;
+  rdfs:comment "Een begrip kan een generalisatie zijn van een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can be a generalizaton of a concept in another domain."@en;
+  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus.";@nl
 .
 
 #---------------------
@@ -324,12 +338,20 @@ req:Concept_isRelatedTo a sh:PropertyShape;
 #---------------------
 req:ExternConcept a sh:NodeShape;
   sh:name "skos:Concept (extern)";
-    rdfs:label "Extern concept"@nl;
-    sh:property [
+  rdfs:label "Extern begrip"@nl;
+  rdfs:label "Extern concept"@en;
+  rdfs:comment "Een begrip in een ander begrippenkader waarmee een relatie wordt gelegd."@nl;
+  rdfs:comment "A concept in another concept scheme, to which is referenced."@en;
+  rdfs:exampple "Het begrip Nummeraanduiding in de BAG in relatie tot het begrip Postadres in de BRK"@nl;
+ sh:property
+    [
       sh:path rdf:type;
       sh:hasValue skos:Concept;
       sh:minCount 1;
-    ];
+      sh:severity sh:Violation;
+      sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
+      sh:message "A concept in another concept scheme to which is referred has to exist."@en
+   ];
 .
 
 #---------------------
