@@ -224,7 +224,7 @@ req:Concept_metadata a sh:PropertyShape;
   sh:class prov:Entity;
   rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
   rdfs:comment "Provenance, validity and status of a concept can be described."@en;
-  skos:example "De uitleg van een begrip kan worden aangepast naar aanleiding van een vraag van een klant"@nl;
+  skos:example "De uitleg van een begrip is aangepast naar aanleiding van een vraag van een klant"@nl;
   sh:minCount 1;
   sh:severity sh:Warning;
   sh:message "Van een begrip wordt bij voorkeur herkomst-, geldigheid- en statusinformatie bijgehouden."@nl;
@@ -343,15 +343,14 @@ req:ExternConcept a sh:NodeShape;
   rdfs:comment "Een begrip in een ander begrippenkader waarmee een relatie wordt gelegd."@nl;
   rdfs:comment "A concept in another concept scheme, to which is referenced."@en;
   rdfs:exampple "Het begrip Nummeraanduiding in de BAG in relatie tot het begrip Postadres in de BRK"@nl;
- sh:property
-    [
+  sh:property [
       sh:path rdf:type;
       sh:hasValue skos:Concept;
       sh:minCount 1;
       sh:severity sh:Violation;
       sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
       sh:message "A concept in another concept scheme to which is referred has to exist."@en
-   ];
+  ];
 .
 
 #---------------------
@@ -426,7 +425,8 @@ req:ConceptScheme_label a sh:PropertyShape;
   rdfs:label "label"@en;
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
+  rdfs:comment "Een begrippenkader heeft een voor mensen leesbare naam. Spaties en diacritische tekens zijn  toegestaan. "@nl;
+  rdfs:comment "A concept scheme has a human readable label. Blanks and diacritics are allowed."@en;
   skos:example "Het schema dat het domein regelgeving beschrijft heeft als label 'Regelgeving'.";
   sh:minCount 1;
   sh:severity sh:Violation;
@@ -461,7 +461,9 @@ req:ConceptScheme_type a sh:PropertyShape;
 #---------------------
 req:CatalogGraph a sh:NodeShape;
   rdfs:label "Catalogus graph"@nl;
-  rdfs:comment "De catalogus graph omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dwz: een sd:Graph"@nl;
+  rdfs:label "Catalogus graph"@en;
+  rdfs:comment "De catalogus graph omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dat wil zeggen: een sd:Graph"@nl;
+  rdfs:comment "The catalog graph contains both the concrete data (represented by a prov: Entity), and the metadata of the prov: Entity, that is: an sd: Graph"@nl;
   sh:name "sd:Graph";
   sh:targetClass sd:Graph;
   sh:property [
@@ -570,8 +572,12 @@ req:OrgOrganization_oin a sh:PropertyShape;
 
 req:Metadata a sh:NodeShape;
   rdfs:label "Metadata"@nl;
+  rdfs:label "Metadata"@nl;
   sh:name "prov:Entity";
   sh:targetClass prov:Entity;
+  rdfs:comment "Metadata van een versie van een entiteit kan worden beschreven."@nl;
+  rdfs:comment "Metadata of a version of an entity can be described."@en;
+  skos:example "De juridische geldigheid en/of de adnimistratieve housekeeping (provenance) gegevens van een entiteit"@nl;
   sh:property req:Metadata_status;
   sh:property req:Metadata_isValidDuring;
   sh:property req:Metadata_isvalidWithin;
@@ -583,11 +589,14 @@ req:Metadata_status a sh:PropertyShape;
   sh:name "adms:status";
   sh:path adms:status;
   sh:node req:Status;
+  rdfs:comment "Een versie heeft een administratieve status op basis van de ADMS waardenlijst."@nl;
+  rdfs:comment "A version has an administrative status based on the ADMS list of values."@en;
+  skos:example "Completed"@nl;
   sh:maxCount 1;
   sh:minCount 1;
-  rdfs:comment "Een versie heeft een administratieve status."@nl;
-  skos:example "Proposed";
-#[IT] skos:example "Completed";
+  sh:severity sh:Violation;
+  sh:message "Een versie heeft een administratieve status op basis van de ADMS waardenlijst."@nl;
+  sh:message "A version has an administrative status based on the ADMS list of values."@en
 .
 req:Metadata_changeNote a sh:PropertyShape;
   rdfs:label "wijzingsnotitie"@nl;
