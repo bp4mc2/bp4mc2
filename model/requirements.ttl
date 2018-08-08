@@ -540,9 +540,8 @@ req:ConceptScheme_type a sh:PropertyShape;
 #---------------------
 
 #---------------------
-# General
+# General metadata
 #---------------------
-
 req:Metadata a sh:NodeShape;
   rdfs:label "Metadata"@nl;
   rdfs:label "Metadata"@nl;
@@ -583,9 +582,8 @@ req:Metadata_changeNote a sh:PropertyShape;
 .
 
 #---------------------
-# Formally/legally
+# Formal/legal metadata
 #---------------------
-
 req:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "geldig in tijd"@nl;
   rdfs:label "temporal validity"@en;
@@ -681,7 +679,6 @@ req:Status a sh:NodeShape;
 #---------------------
 # Provenance
 #---------------------
-
 req:ProvenanceGraph a sh:NodeShape;
   rdfs:label "Provenance graaf"@nl;
   rdfs:label "Provenance graph"@en;
@@ -835,12 +832,14 @@ req:OrgOrganization_oin a sh:PropertyShape;
 #---------------------
 # Act, Object, Actor, Agent
 #---------------------
-req:HandelingAct a sh:NodeShape;
-  rdfs:label "Activiteit"@nl;
-#  rdfs:comment "An act is a legal construct representing a set of activities, performed by an Actor and with respect to some Object.";
-  rdfs:comment "Een activiteit is een juridische constructie als representatie voor een aantal handelingen, uitgevoerd door een Actor met betrekking tot een bepaald Object"@nl;
-  sh:targetClass skoslex:Act;
+req:LegalAct a sh:NodeShape;
+  rdfs:label "Rechtshandeling"@nl;
+  rdfs:label "Legal act"@en;
   sh:name "skoslex:Act";
+  sh:targetClass skoslex:Act;
+  rdfs:comment "Een rechtshandeling is een handeling die iemand uitvoert met de bedoeling een bepaald rechtsgevolg tot stand te brengen."@nl;
+  rdfs:comment "A legal act is an act that someone carries out with the intention of establishing a certain legal effect."@en;
+  skos:example "De levering van een onroerend goed zoals vastgelegd in een notariele akte."@nl;
   sh:property req:Handeling_name;
   sh:property req:Handeling_actor;
   sh:property req:Handeling_agent;
