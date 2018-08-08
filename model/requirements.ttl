@@ -683,19 +683,26 @@ req:Metadata_status a sh:PropertyShape;
 .
 req:Metadata_changeNote a sh:PropertyShape;
   rdfs:label "wijzingsnotitie"@nl;
+  rdfs:label "change note"@nl;
   sh:name "skos:changeNote";
   sh:path skos:changeNote;
-  rdfs:comment "Een versie is gemaakt met een bepaalde reden."@nl;
-  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid.";
+  rdfs:comment "De reden van een versie en andere aandachtspunten bij een versie kunnen worden toegelicht."@nl;
+  rdfs:comment "The reason for a version and other points of attention in a version can be explained."@en;
+  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
 .
 req:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "geldig in tijd"@nl;
+  rdfs:label "temporal validity"@nl;
   sh:name "dcterms:temporal";
   sh:path dcterms:temporal;
   sh:node req:Metadata_Temporal;
-  sh:maxCount 1;
-  rdfs:comment '''Een versie is formeel/juridisch geldig gedurende een periode.'''@nl;
+  rdfs:comment "Een versie kan formeel/juridisch geldig zijn gedurende een periode."@nl;
+  rdfs:comment "A version can be formally / legally valid for a period."@en;
   skos:example '''22/10/2017 - ''';
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal op 1 moment in de tijd formeel/juridisch geldig zijn."@nl;
+  sh:message "A version can be formally / legally valid up to 1 moment in time."@en
 .
 req:Metadata_isvalidWithin a sh:PropertyShape;
   rdfs:label "geldig in gebied";
