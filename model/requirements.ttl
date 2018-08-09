@@ -840,92 +840,109 @@ req:LegalAct a sh:NodeShape;
   rdfs:comment "Een rechtshandeling is een handeling die iemand uitvoert met de bedoeling een bepaald rechtsgevolg tot stand te brengen."@nl;
   rdfs:comment "A legal act is an act that someone carries out with the intention of establishing a certain legal effect."@en;
   skos:example "De levering van een onroerend goed zoals vastgelegd in een notariele akte."@nl;
-  sh:property req:Handeling_name;
-  sh:property req:Handeling_actor;
-  sh:property req:Handeling_agent;
-  sh:property req:Handeling_object;
-  sh:property req:Handeling_refersTo;
+  sh:property req:LegalLabel;
+  sh:property req:HasLegalActor;
+  sh:property req:HasLegalAgent;
+  sh:property req:HasLegalObject;
+  sh:property req:RefersToLegalNorm;
 .
-req:HandelingActor a sh:NodeShape;
-  rdfs:label "Actor"@nl;
-#  rdfs:comment "An actor is some person (individual, group or organization) that performs some Act";
-  rdfs:comment "Een actor is een persoon (individu, groep of organisatie) die een activiteit uitvoert"@nl;
-  sh:targetClass skoslex:Actor;
-  sh:name "skoslex:Actor";
-  sh:property req:Handeling_name;
-.
-req:HandelingAgent a sh:NodeShape;
-  rdfs:label "Agent"@nl;
-#  rdfs:comment "An agent is some person (individual, group or organization) involved in some act, without actually performing the act.";
-  rdfs:comment "Een agent is een persoon (individu, groep of organisatie) die betrokken is bij een activiteit, zonder daadwerkelijk de activiteit uit te voeren"@nl;
-  sh:targetClass skoslex:Agent;
-  sh:name "skoslex:Agent";
-  sh:property req:Handeling_name;
-.
-req:HandelingObject a sh:NodeShape;
-  rdfs:label "Object"@nl;
-#  rdfs:comment "An object is some thing (not an actor) that is created, used or changed during some Act";
-  rdfs:comment "Een object is een ding (geen actor) die ontstaat, gebruikt wordt of veranderd gedurende een activiteit"@nl;
-  sh:targetClass skoslex:Object;
-  sh:name "skoslex:Object";
-  sh:property req:Handeling_name;
-.
-
-req:Handeling_name a sh:PropertyShape;
+req:LegalLabel a sh:PropertyShape;
   sh:path rdfs:label;
 .
-req:Handeling_actor a sh:PropertyShape;
-#  rdfs:label "is performed by"@en;
+req:LegalActor a sh:NodeShape;
+  rdfs:label "Actor"@nl;
+  rdfs:label "Actor"@en;
+  sh:targetClass skoslex:Actor;
+  sh:name "skoslex:Actor";
+  rdfs:comment "Een actor is een persoon (individu, groep of organisatie) die een activiteit uitvoert"@nl;
+  rdfs:comment "An actor is some person (individual, group or organization) that performs some Act"@en;
+  skos:example "Jan Jansen."@nl;
+  sh:property req:LegalLabel;
+.
+req:LegalAgent a sh:NodeShape;
+  rdfs:label "Agent"@nl;
+   rdfs:label "Agent"@en;
+ sh:targetClass skoslex:Agent;
+  sh:name "skoslex:Agent";
+  rdfs:comment "Een agent is een persoon (individu, groep of organisatie) die betrokken is bij een activiteit, zonder daadwerkelijk de activiteit uit te voeren"@nl;
+  rdfs:comment "An agent is some person (individual, group or organization) involved in some act, without actually performing the act."@en;
+  skos:example "Notaris Pietersen."@nl;
+  sh:property req:LegalLabel;
+.
+req:LegalObject a sh:NodeShape;
+  rdfs:label "Object"@nl;
+  rdfs:label "Object"@en;
+  sh:targetClass skoslex:Object;
+  sh:name "skoslex:Object";
+  rdfs:comment "Een object is een ding (geen actor) die ontstaat, gebruikt wordt of veranderd gedurende een activiteit"@nl;
+  rdfs:comment "An object is some thing (not an actor) that is created, used or changed during some Act"@en;
+  skos:example "Het onroerend goed DPV00 B 1207."@nl;
+  sh:property req:LegalLabel;
+.
+
+req:HasLegalActor a sh:PropertyShape;
   rdfs:label "uitgevoerd door"@nl;
+  rdfs:label "is performed by"@en;
   sh:name "skoslex:actor";
-#  rdfs:comment "actor relates an Act with the Actor that performs the act.";
-  rdfs:comment "De actor die de act uitvoert"@nl;
   sh:path skoslex:actor;
   sh:class skoslex:Actor;
+  rdfs:comment "Een rechtshandeling kan worden uitgevoerd door een actor."@nl;
+  rdfs:comment "A legal act can be executed by an actor.";
+  skos:example "Jan Jansen in zijn rol van koper van een onroerend goed."@nl;
 .
-req:Handeling_object a sh:PropertyShape;
+req:HasLegalObject a sh:PropertyShape;
   rdfs:label "object"@nl;
+  rdfs:label "object"@en;
   sh:name "skoslex:object";
-#  rdfs:comment "object relates an Act with the object that is created, changed or used during the act.";
-  rdfs:comment "Het object m.b.t. de activiteit"@nl;
   sh:path skoslex:object;
   sh:class skoslex:Object;
+  rdfs:comment "Een rechtshandeling kan betrekking hebben op een object."@nl;
+  rdfs:comment "A legal act can relate to an object."@en;
+  skos:example "Het onroerend goed DPV00 B 1207 als onderwerp van de koop."@nl;
 .
-req:Handeling_agent a sh:PropertyShape;
+req:HasLegalAgent a sh:PropertyShape;
   rdfs:label "agent"@nl;
+  rdfs:label "agent"@en;
   sh:name "skoslex:agent";
   sh:path skoslex:agent;
   sh:class skoslex:Agent;
-#  rdfs:comment "agent relates an Act with the Agent involved in the act.";
-  rdfs:comment "De agent betrokken bij de activiteit"@nl;
+  rdfs:comment "Een agent kan betrokken zijn bij een activiteit."@nl;
+  rdfs:comment "An agent can be involved in an act.";
+  skos:example "Een notaris die een akte opmaakt bij de koop van een onroerend goed."@nl;
 .
-req:Handeling_refersTo a sh:PropertyShape;
+req:RefersToLegalNorm a sh:PropertyShape;
   rdfs:label "verwijst naar"@nl;
+  rdfs:label "refers to"@en;
   sh:name "skoslex:refersTo";
   sh:path skoslex:refersTo;
   sh:class skoslex:Norm;
-#  rdfs:comment "refersTo relates a norm with the Act that is refered by the norm. Such an act has some relation with the norm, without further specification. It might be effected by the norm, but could also be a precondition or simply mentioned in the rules.";
-  rdfs:comment "De activiteit waar de norm naar verwijst"@nl;
+  rdfs:comment "Een handeling kan verwijzen naar een norm. Zo'n handeling heeft enige relatie met de norm, zonder nadere specificatie. Hij kan worden beïnvloed door de norm, maar kan ook een voorwaarde zijn of eenvoudigweg worden genoemd in de regels."@nl;
+  rdfs:comment "An act can refer to a norm. Such an act has some relation with the norm, without further specification. It might be effected by the norm, but could also be a precondition or simply mentioned in the rules."@en;
+  skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
 .
 
 #---------------------
 # Norm
 #---------------------
-req:HandelingNorm a sh:NodeShape;
+req:LegalNorm a sh:NodeShape;
   rdfs:label "Norm"@nl;
-#  rdfs:comment "A norm effects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A norm represents the set of rules that apply to an Act.";
+  rdfs:label "Norm"@en;
   sh:targetClass skoslex:Norm;
   sh:name "skoslex:Norm";
-  sh:property req:Handeling_name;
-  sh:property req:Handeling_affects;
+  rdfs:comment "Een norm beïnvloedt een rechtshandeling. Hij impliceert wat 'moet' of 'mag niet' worden gedaan met betrekking tot een rechtshandeling. Een norm vertegenwoordigt de reeks regels die van toepassing zijn op een rechtshandeling."@nl;
+  rdfs:comment "A norm effects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A norm represents the set of rules that apply to an Act."@en;
+  skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
+  sh:property req:LegalLabel;
+  sh:property req:AffectsAct;
 .
-req:Handeling_affects a sh:PropertyShape;
+req:AffectsAct a sh:PropertyShape;
   rdfs:label "normeert"@nl;
-#  rdfs:comment "Affects relates a norm with the Act that is affected by the norm. Such an act is restricted by the rules identified by the norm.";
-  rdfs:comment "Verwijst naar de activiteit die wordt genormeerd, beperkt, door de norm"@nl;
+  rdfs:label "afffects"@nl;
   sh:name "skoslex:affects";
   sh:path skoslex:affects;
   sh:class skoslex:Act;
+  rdfs:comment "Een norm kan verwijzen naar een rechtshandeling die wordt beïnvloed door de norm. Een dergelijke rechtshandeling wordt beperkt door de regels die door de norm worden gesteld."@nl;
+  rdfs:comment "A norm can refer to the act that is affected by the norm. Such an act is restricted by the rules identified by the norm."@en;
 .
 
 #---------------------
