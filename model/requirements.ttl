@@ -946,182 +946,6 @@ req:AffectsAct a sh:PropertyShape;
 .
 
 #---------------------
-# Dataset
-#---------------------
-req:Dataset rdf:type sh:NodeShape;
-  rdfs:label "Dataset"@nl;
-  sh:name "dcat:Dataset";
-  sh:targetClass dcat:Dataset;
-  sh:property req:Dataset_name;
-  sh:property req:Dataset_dateIssued;
-  sh:property req:Dataset_language;
-  sh:property req:Dataset_description;
-  sh:property req:Dataset_provenance;
-  sh:property req:Dataset_publisher;
-.
-
-req:Dataset_provenance a sh:PropertyShape;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:class prov:Entity;
-.
-req:Dataset_name rdf:type sh:PropertyShape;
-  rdfs:label "naam"@nl;
-  sh:name "dcterms:title";
-  rdfs:comment "De dataset heeft een naam"@nl;
-  skos:example ''''Omgevingswet','BAL','BRK', etc'''';
-  sh:path dcterms:title
-.
-req:Dataset_dateIssued rdf:type sh:PropertyShape;
-  rdfs:label "publicatiedatum"@nl;
-  sh:name "dcterms:issued";
-  rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus."@nl;
-  skos:example '''1/10/2017''';
-  sh:path dcterms:issued
-.
-req:Dataset_language rdf:type sh:PropertyShape;
-  rdfs:label "taal"@nl;
-  sh:name "dcterms:language";
-  rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)"@nl;
-  skos:example "@nl";
-  sh:path dcterms:language
-.
-req:Dataset_description rdf:type sh:PropertyShape;
-  rdfs:label "beschrijving"@nl;
-  sh:name "dcterms:description";
-  rdfs:comment "De dataset heeft een duidelijke beschrijving"@nl;
-  skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
-  sh:path dcterms:description
-.
-req:Dataset_publisher a sh:PropertyShape;
-  rdfs:label "publicist"@nl;
-  sh:name "dcterms:publisher";
-  rdfs:comment "Het is bekend door wie een dataset wordt gepubliceerd. Deze organisatie of persoon heeft toestemming om deze handeling uit te voeren"@nl;
-  skos:example "overheid:Rijkswaterstaat";
-  sh:path dcterms:publisher;
-  sh:class foaf:Agent;
-.
-
-req:Datasetversie rdf:type sh:NodeShape;
-  rdfs:label "Datasetversie"@nl;
-  sh:name "dcat:Dataset (versie)";
-  sh:property req:Datasetversie_rol;
-  sh:property req:Datasetversie_version;
-  sh:property req:Datasetversie_versionNotes;
-  sh:property req:Datasetversie_distribution;
-  sh:property req:Datasetversie_versionOf;
-  sh:property req:Datasetversie_describedBy;
-  sh:property req:Datasetversie_geometrischeAfbakening;
-.
-
-req:Datasetversie_rol a sh:PropertyShape;
-  sh:path rdf:type;
-  sh:name "rdf:type";
-  sh:hasValue dcat:Dataset;
-.
-req:Datasetversie_version rdf:type sh:PropertyShape;
-  rdfs:label "versie"@nl;
-  sh:name "adms:version";
-  rdfs:comment "De versie van de dataset."@nl;
-  sh:path adms:version;
-  skos:example "2.1.0";
-.
-req:Datasetversie_versionNotes rdf:type sh:PropertyShape;
-  rdfs:label "versie-notities"@nl;
-  sh:name "adms:versionNotes";
-  rdfs:comment "Een versie heeft release notes."@nl;
-  sh:path adms:versionNotes;
-  skos:example '''IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log.''';
-.
-req:Datasetversie_distribution a sh:PropertyShape;
-  rdfs:label "distributie"@nl;
-  sh:path dcat:distribution;
-  sh:name "dcat:distribution";
-  sh:class dcat:Distribution;
-  rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen."@nl;
-  skos:example "Digitale Kadastrale Kaart download service.";
-.
-req:Datasetversie_versionOf a sh:PropertyShape;
-  rdfs:label "versie van"@nl;
-  sh:path dcterms:isVersionOf;
-  sh:name "dcterms:isVersionOf";
-  rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset. A versioned datasets is derived from the general dataset and a productmodel is derived from an informationmodel"@nl;
-  sh:node req:Dataset;
-  sh:maxCount 1;
-  skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
-.
-req:Datasetversie_geometrischeAfbakening rdf:type sh:PropertyShape;
-    rdfs:label "geografische afbakening"@nl;
-    rdfs:comment "Het gebied waar de dataset over gaat"@nl;
-    sh:class dcterms:Location;
-    skos:example "gemeente Apeldoorn";
-    sh:path dcterms:spatial;
-    sh:name "dcterms:spatial"
-.
-req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
-  rdfs:label "afgeleid van"@nl;
-  rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel."@nl;
-  sh:path dcterms:relation;
-  sh:name "dcterms:relation";
-  sh:class dcat:Dataset;
-.
-req:Datasetversie_describedBy rdf:type sh:PropertyShape;
-  rdfs:label "beschreven door"@nl;
-  rdfs:comment "De data in een dataset is beschreven door een informatiemodel."@nl;
-  sh:path wdrs:describedBy;
-  sh:name "wdrs:describedBy";
-  sh:node req:Informatiemodel;
-  skos:example '''kadaster.nl/schemas/imkad''';
-.
-
-req:Datasetversie_locatie a sh:NodeShape;
-  rdfs:label "Locatie"@nl;
-  sh:name "dcterms:Location";
-.
-
-req:Informatieproduct rdf:type sh:NodeShape;
-  rdfs:label "Informatieproduct"@nl;
-  sh:name "dcat:Dataset (informatieproduct)";
-  sh:property req:Informatieproduct_rol;
-  sh:property req:Informatieproduct_version;
-  sh:property req:Informatieproduct_versionNotes;
-  sh:property req:Informatieproduct_isDerivedFrom;
-  sh:property req:Informatieproduct_distribution;
-  sh:property req:Informatieproduct_versionOf;
-  sh:property req:Informatieproduct_qualityMeasurement;
-.
-
-req:Informatieproduct_rol a sh:PropertyShape;
-  sh:path rdf:type;
-  sh:name "rdf:type";
-  sh:hasValue dcat:Dataset;
-.
-req:Informatieproduct_version rdf:type sh:PropertyShape;
-  rdfs:label "versie"@nl;
-  sh:name "adms:version";
-  rdfs:comment "De versie van het informatieproduct."@nl;
-  sh:path adms:version;
-  skos:example "2.1.0";
-.
-req:Informatieproduct_qualityMeasurement a sh:PropertyShape;
-  sh:path dqv:hasQualityMeasurement;
-  sh:name "dqv:hasQualityMeasurement";
-  sh:class dqv:QualityMeasurement;
-.
-req:Informatieproduct_versionNotes rdf:type sh:PropertyShape;
-  rdfs:label "versie-notities"@nl;
-  sh:name "adms:versionNotes";
-  rdfs:comment "Een versie heeft release notes."@nl;
-  sh:path adms:versionNotes;
-.
-req:Informatieproduct_distribution a sh:PropertyShape;
-  rdfs:label "distributie"@nl;
-  sh:path dcat:distribution;
-  sh:name "dcat:distribution";
-  sh:class dcat:Distribution;
-  rdfs:comment "Een informatieproduct kan worden verspreid via verschillende kanalen."@nl;
-.
-
-#---------------------
 # Assets (Informatiemodel)
 #---------------------
 req:Asset a sh:NodeShape;
@@ -1260,51 +1084,74 @@ req:NodeShape a sh:NodeShape;
 .
 
 #---------------------
-# Assets (Waardelijst)
+# Controlled vocabularies
 #---------------------
 
-req:Waardelijst rdf:type sh:NodeShape;
-    rdfs:label "Asset (Waardelijst)"@nl;
-    sh:name "adms:Asset (Waardelijst)";
-    sh:property req:Waardelijst_role;
-    sh:property req:Waardelijst_typeWaardelijst;
-    sh:property req:Waardelijst_name;
-    sh:property req:Waardelijst_distributie;
-    sh:property req:Waardelijst_specificatie;
-    sh:property req:Waardelijst_onderdeelVan;
-    sh:property req:Waardelijst_landingPage;
+req:ControlledVocabulary rdf:type sh:NodeShape;
+  rdfs:label "Asset (Waardelijst)"@nl;
+  rdfs:label "Asset (ControlledVocabulary)"@en;
+  sh:name "adms:Asset (ControlledVocabulary)";
+  rdfs:comment "Een waardelijst is een verzameling van begrippen of elementen die worden gebruikt om inhoud te indexeren en / of inhoud op te halen via browsen of zoeken. Hij bevat meestal voorkeurs- en varianttermen en heeft een gedefinieerde scope of beschrijft een specifiek domein."@nl;
+  rdfs:comment "A controlled vocabulary is an organized arrangement of concepts or elements used to index content and/or to retrieve content through browsing or searching. It typically includes preferred and variant terms and has a defined scope or describes a specific domain."@en;
+  skos:example "De lijst met Kadastrale gemeenten."@nl;
+  sh:property req:ControlledVocabularyLabel;
+  sh:property req:ControlledVocabularyType;
+#  sh:property req:ControlledVocabularyType;
+  sh:property req:ControlledVocabularyPartOf;
+  sh:property req:ControlledVocabularyDistribution;
+  sh:property req:ControlledVocabularySpecification;
+  sh:property req:ControlledVocabularyPartOf;
+  sh:property req:ControlledVocabularyLandingPage
 .
-req:Waardelijst_role a sh:PropertyShape;
+req:ControlledVocabularyLabel rdf:type sh:PropertyShape;
+  rdfs:label "naam"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+  rdfs:comment "Een waardelijst heeft een naam."@nl;
+  rdfs:comment "A controlled vocabulary has a label."@nl;
+  skos:example "Landenlijst";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een waardelijst heeft een naam."@nl;
+  sh:message "A controlled vocabulary has a label."@en
+.
+req:ControlledVocabularyType a sh:PropertyShape;
   sh:name "rdf:type";
   sh:path rdf:type;
   sh:hasValue adms:Asset;
+  rdfs:comment "Een waardelijst wordt getypeerd als adms:Asset."@nl;
+  rdfs:comment "A controlled vocabulary is is typed as adms:Asset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
 .
-req:Waardelijst_onderdeelVan a sh:PropertyShape;
+#req:Waardelijst_typeWaardelijst a sh:PropertyShape;
+#  rdfs:label "type asset = Waardelijst";
+#  sh:path dcterms:type;
+#  sh:name "dcterms:type";
+#  sh:minCount 1;
+#  sh:maxCount 1;
+#  sh:hasValue skostype:Waardelijst;
+.
+req:ControlledVocabularyPartOf a sh:PropertyShape;
+  rdfs:label "onderdeel van (dataset)"@nl;
+  rdfs:label "part of (dataset)"@en;
   sh:name "dcterms:isPartOf";
   sh:path dcterms:isPartOf;
   sh:node req:Dataset;
+  rdfs:comment "Een waardelijst kan onderdeel zijn van een dataset."@nl;
+  rdfs:comment "A controlled vocabulary can be part of a dataset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is onderdeel van de BRK."@nl;
   sh:maxCount 1
+  sh:severity sh:Warning;
+  sh:message "Een waardelijst kan onderdeel zijn van maximaal 1 dataset."@nl;
+  sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
 .
 req:Waardelijst_landingPage a sh:PropertyShape;
   sh:name "dcat:landingPage";
   sh:path dcat:landingPage;
   sh:node req:LandingPage;
   sh:maxCount 1;
-.
-req:Waardelijst_typeWaardelijst a sh:PropertyShape;
-  rdfs:label "type asset = Waardelijst";
-  sh:path dcterms:type;
-  sh:name "dcterms:type";
-  sh:minCount 1;
-  sh:maxCount 1;
-  sh:hasValue skostype:Waardelijst;
-.
-req:Waardelijst_name rdf:type sh:PropertyShape;
-    rdfs:label "label"@nl;
-    sh:name "rdfs:label";
-    rdfs:comment "De waardelijst heeft een naam"@nl;
-    skos:example "'Lijst van landen'";
-    sh:path rdfs:label
 .
 
 req:Waardelijst_distributie rdf:type sh:PropertyShape;
@@ -1481,6 +1328,182 @@ req:DownloadFormat a sh:NodeShape;
     sh:path dcat:landingPage;
     sh:node req:LandingPage;
   ];
+.
+
+#---------------------
+# Dataset
+#---------------------
+req:Dataset rdf:type sh:NodeShape;
+  rdfs:label "Dataset"@nl;
+  sh:name "dcat:Dataset";
+  sh:targetClass dcat:Dataset;
+  sh:property req:Dataset_name;
+  sh:property req:Dataset_dateIssued;
+  sh:property req:Dataset_language;
+  sh:property req:Dataset_description;
+  sh:property req:Dataset_provenance;
+  sh:property req:Dataset_publisher;
+.
+
+req:Dataset_provenance a sh:PropertyShape;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+.
+req:Dataset_name rdf:type sh:PropertyShape;
+  rdfs:label "naam"@nl;
+  sh:name "dcterms:title";
+  rdfs:comment "De dataset heeft een naam"@nl;
+  skos:example ''''Omgevingswet','BAL','BRK', etc'''';
+  sh:path dcterms:title
+.
+req:Dataset_dateIssued rdf:type sh:PropertyShape;
+  rdfs:label "publicatiedatum"@nl;
+  sh:name "dcterms:issued";
+  rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus."@nl;
+  skos:example '''1/10/2017''';
+  sh:path dcterms:issued
+.
+req:Dataset_language rdf:type sh:PropertyShape;
+  rdfs:label "taal"@nl;
+  sh:name "dcterms:language";
+  rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)"@nl;
+  skos:example "@nl";
+  sh:path dcterms:language
+.
+req:Dataset_description rdf:type sh:PropertyShape;
+  rdfs:label "beschrijving"@nl;
+  sh:name "dcterms:description";
+  rdfs:comment "De dataset heeft een duidelijke beschrijving"@nl;
+  skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
+  sh:path dcterms:description
+.
+req:Dataset_publisher a sh:PropertyShape;
+  rdfs:label "publicist"@nl;
+  sh:name "dcterms:publisher";
+  rdfs:comment "Het is bekend door wie een dataset wordt gepubliceerd. Deze organisatie of persoon heeft toestemming om deze handeling uit te voeren"@nl;
+  skos:example "overheid:Rijkswaterstaat";
+  sh:path dcterms:publisher;
+  sh:class foaf:Agent;
+.
+
+req:Datasetversie rdf:type sh:NodeShape;
+  rdfs:label "Datasetversie"@nl;
+  sh:name "dcat:Dataset (versie)";
+  sh:property req:Datasetversie_rol;
+  sh:property req:Datasetversie_version;
+  sh:property req:Datasetversie_versionNotes;
+  sh:property req:Datasetversie_distribution;
+  sh:property req:Datasetversie_versionOf;
+  sh:property req:Datasetversie_describedBy;
+  sh:property req:Datasetversie_geometrischeAfbakening;
+.
+
+req:Datasetversie_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:name "rdf:type";
+  sh:hasValue dcat:Dataset;
+.
+req:Datasetversie_version rdf:type sh:PropertyShape;
+  rdfs:label "versie"@nl;
+  sh:name "adms:version";
+  rdfs:comment "De versie van de dataset."@nl;
+  sh:path adms:version;
+  skos:example "2.1.0";
+.
+req:Datasetversie_versionNotes rdf:type sh:PropertyShape;
+  rdfs:label "versie-notities"@nl;
+  sh:name "adms:versionNotes";
+  rdfs:comment "Een versie heeft release notes."@nl;
+  sh:path adms:versionNotes;
+  skos:example '''IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log.''';
+.
+req:Datasetversie_distribution a sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  sh:path dcat:distribution;
+  sh:name "dcat:distribution";
+  sh:class dcat:Distribution;
+  rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen."@nl;
+  skos:example "Digitale Kadastrale Kaart download service.";
+.
+req:Datasetversie_versionOf a sh:PropertyShape;
+  rdfs:label "versie van"@nl;
+  sh:path dcterms:isVersionOf;
+  sh:name "dcterms:isVersionOf";
+  rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset. A versioned datasets is derived from the general dataset and a productmodel is derived from an informationmodel"@nl;
+  sh:node req:Dataset;
+  sh:maxCount 1;
+  skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
+.
+req:Datasetversie_geometrischeAfbakening rdf:type sh:PropertyShape;
+    rdfs:label "geografische afbakening"@nl;
+    rdfs:comment "Het gebied waar de dataset over gaat"@nl;
+    sh:class dcterms:Location;
+    skos:example "gemeente Apeldoorn";
+    sh:path dcterms:spatial;
+    sh:name "dcterms:spatial"
+.
+req:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
+  rdfs:label "afgeleid van"@nl;
+  rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel."@nl;
+  sh:path dcterms:relation;
+  sh:name "dcterms:relation";
+  sh:class dcat:Dataset;
+.
+req:Datasetversie_describedBy rdf:type sh:PropertyShape;
+  rdfs:label "beschreven door"@nl;
+  rdfs:comment "De data in een dataset is beschreven door een informatiemodel."@nl;
+  sh:path wdrs:describedBy;
+  sh:name "wdrs:describedBy";
+  sh:node req:Informatiemodel;
+  skos:example '''kadaster.nl/schemas/imkad''';
+.
+
+req:Datasetversie_locatie a sh:NodeShape;
+  rdfs:label "Locatie"@nl;
+  sh:name "dcterms:Location";
+.
+
+req:Informatieproduct rdf:type sh:NodeShape;
+  rdfs:label "Informatieproduct"@nl;
+  sh:name "dcat:Dataset (informatieproduct)";
+  sh:property req:Informatieproduct_rol;
+  sh:property req:Informatieproduct_version;
+  sh:property req:Informatieproduct_versionNotes;
+  sh:property req:Informatieproduct_isDerivedFrom;
+  sh:property req:Informatieproduct_distribution;
+  sh:property req:Informatieproduct_versionOf;
+  sh:property req:Informatieproduct_qualityMeasurement;
+.
+
+req:Informatieproduct_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:name "rdf:type";
+  sh:hasValue dcat:Dataset;
+.
+req:Informatieproduct_version rdf:type sh:PropertyShape;
+  rdfs:label "versie"@nl;
+  sh:name "adms:version";
+  rdfs:comment "De versie van het informatieproduct."@nl;
+  sh:path adms:version;
+  skos:example "2.1.0";
+.
+req:Informatieproduct_qualityMeasurement a sh:PropertyShape;
+  sh:path dqv:hasQualityMeasurement;
+  sh:name "dqv:hasQualityMeasurement";
+  sh:class dqv:QualityMeasurement;
+.
+req:Informatieproduct_versionNotes rdf:type sh:PropertyShape;
+  rdfs:label "versie-notities"@nl;
+  sh:name "adms:versionNotes";
+  rdfs:comment "Een versie heeft release notes."@nl;
+  sh:path adms:versionNotes;
+.
+req:Informatieproduct_distribution a sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  sh:path dcat:distribution;
+  sh:name "dcat:distribution";
+  sh:class dcat:Distribution;
+  rdfs:comment "Een informatieproduct kan worden verspreid via verschillende kanalen."@nl;
 .
 
 #---------------------
