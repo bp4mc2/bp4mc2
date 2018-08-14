@@ -32,50 +32,6 @@ stage:ReqModelTotaal a elmo:Representation;
 .
 
 # ====================
-#
-# Onduidelijk waar dit voor wordt gebruikt???
-#
-stage:ReqFModelConcepten a elmo:Representation;
-  elmo:url-pattern "/query/fmodel/concepten$";
-  elmo:appearance elmo:VocabularyAppearance;
-  elmo:contains stage:Menu;
-  elmo:query '''
-    PREFIX sh: <http://www.w3.org/ns/shacl#>
-	CONSTRUCT {
-      ?shape ?shapepred ?shapeobj.
-      ?shape sh:property ?prop.
-      ?prop ?proppred ?propobj.
-    }
-    WHERE {
-      {
-        GRAPH <@STAGE@> {
-          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape
-        }
-        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-          ?shape ?shapepred ?shapeobj.
-          ?shape sh:property ?prop.
-          ?prop ?proppred ?propobj
-          FILTER NOT EXISTS {?prop sh:node ?refshape}
-        }
-      }
-      UNION
-      {
-        GRAPH <@STAGE@> {
-          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape.
-          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?refshape.
-        }
-        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-          ?shape sh:property ?prop.
-          ?prop ?proppred ?propobj.
-          ?prop sh:node ?refshape
-        }
-      }
-    }
-  ''';
-.
-<urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:ConceptScheme, req:Collectie, req:Brondocument.
-#
-# ====================
 
 #
 # De verschillende representaties
@@ -85,7 +41,7 @@ stage:ReqModelConcepten a elmo:Representation;
 	elmo:contains stage:Menu;
 	elmo:appearance elmo:VocabularyAppearance;
   elmo:query stage:ReqModelQuery;
-  rdfs:seeAlso req:Concept, req:ExternConcept, req:ConceptScheme, req:Collectie, req:Brondocument, req:Bron, req:WerkAlsBron, req:ExpressieAlsBron
+  rdfs:seeAlso req:Concept, req:ExternalConcept, req:ConceptScheme, req:Collection, req:SourceDocument, req:Source, req:WorkAsSource, req:ExpressionAsSource
 .
 stage:ReqModelConceptenMeta a elmo:Representation;
 	elmo:url-pattern "/query/model/conceptenmeta$";
