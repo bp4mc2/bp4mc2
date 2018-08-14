@@ -197,7 +197,7 @@ req:Concept_dctsource a sh:PropertyShape;
   rdfs:label "source on the web"@en;
   sh:name "dcterms:source";
   sh:path dcterms:source;
-  sh:node [ sh:xone (req:Specific_source req:Source_document)];
+  sh:node [ sh:xone (req:Source req:SourceDocument)];
   rdfs:comment "Een begrip kan zijn ontleend aan een op het web vindbare bron. Dit kan een (versie van) een beschrijving van een specifiek begrip of een document waarin een beschrijving van het begrip is te vinden."@nl;
   rdfs:comment "A concept can be derived from a source that can be found on the web. This can be a (version of) a description of a specific concept or a document in which a description of the concept can be found."@en;
   skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
@@ -222,6 +222,7 @@ req:Concept_metadata a sh:PropertyShape;
   rdfs:label "provenance (concept)"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
+  sh:name "foaf:isPrimaryTopicOf";
   rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
   rdfs:comment "Provenance, validity and status of a concept can be described."@en;
   skos:example "De uitleg van een begrip is aangepast naar aanleiding van een vraag van een klant"@nl;
@@ -287,7 +288,7 @@ req:Concept_seeAlso a sh:PropertyShape;
   rdfs:label "related to"@en;
   sh:name "skos:relatedMatch";
   sh:path skos:relatedMatch;
-  sh:node req:ExternConcept;
+  sh:node req:ExternalConcept;
   rdfs:comment "Een begrip kan zijn gerelateerd aan een begrip in een ander domein."@nl;
   rdfs:comment "A concepts can be related to a concept in another domain."@en;
   skos:example "Een Perceel in de BRK is gerelateerd aan een adres (Nummeraanduiding) in de BAG."@nl
@@ -297,7 +298,7 @@ req:Concept_closelyMatches a sh:PropertyShape;
   rdfs:label "closely matches with"@en;
   sh:name "skos:closeMatch";
   sh:path skos:closeMatch;
-  sh:node req:ExternConcept;
+  sh:node req:ExternalConcept;
   rdfs:comment "Een begrip kan bijna hetzelfde betekenen als een begrip in een ander domein."@nl;
   rdfs:comment "A concept can have almost the same meaning as a concept in another domain."@en;
   skos:example "Een OnroerendGoed in de BRK is ongeveer hetzelfde als een WOZobject in de WOZ."@nl
@@ -307,7 +308,7 @@ req:Concept_exactlyMatches a sh:PropertyShape;
   rdfs:label "exactly matches with"@en;
   sh:name "skos:exactMatch";
   sh:path skos:exactMatch;
-  sh:node req:ExternConcept;
+  sh:node req:ExternalConcept;
   rdfs:comment "Een begrip kan precies hetzelfde betekenen als een begrip in een ander domein."@nl;
   rdfs:comment "A concept can have exactly the same meaning as a concept in another domain."@en;
   skos:example "Een Perceel in het BAL betekent hetzelfde als een Perceel in de BRK."@nl
@@ -317,7 +318,7 @@ req:Concept_broadlyMatches a sh:PropertyShape;
   rdfs:label "broadly matches with"@en;
   sh:name "skos:broadMatch";
   sh:path skos:broadMatch;
-  sh:node req:ExternConcept;
+  sh:node req:ExternalConcept;
   rdfs:comment "Een begrip kan een specialisatie zijn van een begrip in een ander domein."@nl;
   rdfs:comment "A concept can be a specializaton of a concept in another domain."@en;
   skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG."@nl;
@@ -327,7 +328,7 @@ req:Concept_narrowlyMatches a sh:PropertyShape;
   rdfs:label "narrowly matches with"@en;
   sh:name "skos:narrowMatch";
   sh:path skos:narrowMatch;
-  sh:node req:ExternConcept;
+  sh:node req:ExternalConcept;
   rdfs:comment "Een begrip kan een generalisatie zijn van een begrip in een ander domein."@nl;
   rdfs:comment "A concept can be a generalizaton of a concept in another domain."@en;
   skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus."@nl;
@@ -336,7 +337,7 @@ req:Concept_narrowlyMatches a sh:PropertyShape;
 #---------------------
 # Bron
 #---------------------
-req:Specific_source a sh:NodeShape;
+req:Source a sh:NodeShape;
   rdfs:label "beschrijvende bron"@nl;
   rdfs:label "descriptive source"@en;
   sh:name "frbr:Endeavour (source)";
@@ -350,7 +351,7 @@ req:Specific_source a sh:NodeShape;
 req:WorkAsSource a sh:NodeShape;
   rdfs:label "algemeen beschrijvende bron"@nl;
   rdfs:label "generic descriptive source"@en;
-  sh:name "frbr:Work (generic source)";
+  sh:name "frbr:Work (source)";
   sh:targetClass frbr:Work;
   rdfs:comment "Een via het web identificeerbare beschrijvende bron, zonder dat expliciet wordt verwezen naar een specifieke versie."@nl;
   rdfs:comment "A descriptive source identifiable via the web, without an explicit reference to a specific version."@en;
@@ -366,9 +367,9 @@ req:ExpressionAsSource a sh:NodeShape;
   skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl
 .
 req:Source_label a sh:PropertyShape;
-  rdfs:label "label (bron)"@nl;
-  rdfs:label "label (source)"@en;
-  sh:name "rdfs:label (source)";
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
   rdfs:comment "Een bron heeft een voor mensen leesbaar label";
   sh:path rdfs:label;
   rdfs:comment "Een bron heeft een voor mensen leesbare naam."@nl;
@@ -384,7 +385,7 @@ req:Source_isTopicOf a sh:PropertyShape;
   rdfs:label "topic of"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
-  sh:node req:Source_document;
+  sh:node req:SourceDocument;
   rdfs:comment "Een beschrijvende bron kan een onderwerp zijn van een brondocument."@nl;
   rdfs:comment "A descriptive source can be a subject of a source document."@en;
   skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl;
@@ -393,19 +394,19 @@ req:Source_isTopicOf a sh:PropertyShape;
   sh:message "Een beschrijvende bron kan een onderwerp zijn van maximaal 1 brondocument."@nl;
   sh:message "A descriptive source can be a subject of up to 1 source document."@en
 .
-req:Source_document a sh:NodeShape;
+req:SourceDocument a sh:NodeShape;
   rdfs:label "Brondocument"@nl;
   rdfs:label "Source document"@en;
   sh:name "foaf:Document ( source document)";
   rdfs:comment "Een brondocument dat vindbaar is op het web."@nl;
   rdfs:comment "A source document that can be found on the web."@nl;
   skos:example "De volledige tekst van het Burgerlijk Wetboek."@nl;
-  sh:property req:Source_document_label
+  sh:property req:SourceDocument_label
 .
-req:Source_document_label a sh:PropertyShape;
-  rdfs:label "label (brondocument)"@nl;
-  rdfs:label "label (source document)"@en;
-  sh:name "rdfs:label (source document)";
+req:SourceDocument_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
   sh:path rdfs:label;
   rdfs:comment "Een brondocument heeft een voor mensen leesbaar label."@nl;
   rdfs:comment "A source document has a human-readable label."@nl;
@@ -419,7 +420,7 @@ req:Source_document_label a sh:PropertyShape;
 #---------------------
 # Extern concept
 #---------------------
-req:ExternConcept a sh:NodeShape;
+req:ExternalConcept a sh:NodeShape;
   sh:name "skos:Concept (extern)";
   rdfs:label "Extern begrip"@nl;
   rdfs:label "Extern concept"@en;
@@ -477,6 +478,7 @@ req:Collection_hasMember a sh:PropertyShape;
 req:Collection_provenance a sh:PropertyShape;
   rdfs:label "herkomst (collectie)"@nl;
   rdfs:label "provenance (collection)"@en;
+  sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
   rdfs:comment "Van een collectie kan de herkomst worden beschreven."@nl;
@@ -529,6 +531,7 @@ req:ConceptScheme_hasTopConcept a sh:PropertyShape;
 req:ConceptScheme_type a sh:PropertyShape;
   rdfs:label "getypeerd als asset"@nl;
   rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
   rdfs:comment "Een begrippenkader kan worden getypeerd als een asset"@nl;
   rdfs:comment "A concept schema can be typified as an asset"@en;
   sh:path rdf:type;
@@ -589,7 +592,7 @@ req:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "temporal validity"@en;
   sh:name "dcterms:temporal";
   sh:path dcterms:temporal;
-  sh:node req:Metadata_Temporal;
+  sh:node req:MetadataTemporal;
   rdfs:comment "Een versie kan formeel/juridisch geldig zijn gedurende een periode."@nl;
   rdfs:comment "A version can be formally / legally valid for a period."@en;
   skos:example "22/10/2017 - ";
@@ -625,16 +628,16 @@ req:Metadata_isIssued a sh:PropertyShape;
   sh:message "Een versie kan maximaal in 1 keer bekend worden gemaakt."@nl;
   sh:message "A version can be issued up to 1 time."@en
 .
-req:Metadata_Temporal a sh:NodeShape;
+req:MetadataTemporal a sh:NodeShape;
   rdfs:label "Tijdsperiode"@nl;
   rdfs:label "Time period"@nl;
   rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
   rdfs:comment "A period of time is pointed out by a start date and end date."@en;
   skos:example "22/10/2017 - 01/08/2018"@nl;
-  sh:property req:Temporal_Start;
-  sh:property req:Temporal_End
+  sh:property req:MetadataTemporal_start;
+  sh:property req:MetadataTemporal_end
 .
-req:Temporal_Start a sh:PropertyShape;
+req:MetadataTemporal_start a sh:PropertyShape;
   rdfs:label "start"@nl;
   rdfs:label "start"@en;
   sh:name "dcmiperiod:start";
@@ -647,7 +650,7 @@ req:Temporal_Start a sh:PropertyShape;
   sh:message "Een periode heeft maximaal in 1 startdatum/tijdstip."@nl;
   sh:message "A period has up to 1 start date / time."@en
 .
-req:Temporal_End a sh:PropertyShape;
+req:MetadataTemporal_end a sh:PropertyShape;
   rdfs:label "einde"@nl;
   rdfs:label "end"@en;
   sh:name "dcmiperiod:end";
@@ -671,6 +674,7 @@ req:Status a sh:NodeShape;
     sh:minCount 1;
     sh:maxCount 1;
     sh:severity sh:Violation;
+    sh:hasValue <http://purl.org/adms/status/1.0>;
     sh:message "De administratieve status wordt ontleend aan de ADMS waardenlijst."@nl;
     sh:message "The administrative status is based on the ADMS list of values."@en
   ];
@@ -1347,6 +1351,7 @@ req:Dataset rdf:type sh:NodeShape;
 
 req:Dataset_provenance a sh:PropertyShape;
   sh:path foaf:isPrimaryTopicOf;
+  sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity;
 .
 req:Dataset_name rdf:type sh:PropertyShape;
