@@ -691,13 +691,15 @@ req:ProvenanceGraph a sh:NodeShape;
   rdfs:comment "De provenance graaf omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dat wil zeggen: een sd:Graph"@nl;
   rdfs:comment "The provenance graph contains both the concrete data (represented by a prov:Entity), and the metadata of the prov:Entity, that is: an sd:Graph"@en;
   skos:example "Alle wijzigingen en nieuwe data die op 8 augustus 2018 in een keer zijn geladen."@nl;
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue prov:Entity;
-  ];
+  sh:property req:ProvenanceGraph_type;
   sh:property req:ProvenanceGraph_generatedAtTime;
   sh:property req:ProvenanceGraph_changeNote;
   sh:property req:ProvenanceGraph_attributedTo;
+.
+req:ProvenanceGraph_type a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue prov:Entity;
 .
 req:ProvenanceGraph_generatedAtTime a sh:PropertyShape;
   rdfs:label "registratiemoment"@nl;
@@ -1614,6 +1616,7 @@ req:Distributie a sh:NodeShape;
   sh:property req:Distributie_provenance;
 .
 req:Distributie_provenance a sh:PropertyShape;
+  sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
 .
