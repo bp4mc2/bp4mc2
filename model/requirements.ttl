@@ -171,7 +171,7 @@ req:Concept_scopeNote a sh:PropertyShape;
   sh:path skos:scopeNote;
   rdfs:comment "Een begrip kan nader worden toegelicht."@nl;
   rdfs:comment "A concept can be explained."@en;
-  skos:example "Een perceel is een (2D) vlakvormig ruimtelijk object dat "opdelend" van structuur is. Dit betekent dat Nederland altijd naadloos en volledig is bedekt met perceelsvlakken, die elkaar niet mogen overlappen."@nl
+  skos:example '''Een perceel is een (2D) vlakvormig ruimtelijk object dat "opdelend" van structuur is. Dit betekent dat Nederland altijd naadloos en volledig is bedekt met perceelsvlakken, die elkaar niet mogen overlappen.'''@nl;
 .
 req:Concept_EditorialNote a sh:PropertyShape;
   rdfs:label "redactionele opmerking"@nl;
@@ -320,7 +320,7 @@ req:Concept_broadlyMatches a sh:PropertyShape;
   sh:node req:ExternConcept;
   rdfs:comment "Een begrip kan een specialisatie zijn van een begrip in een ander domein."@nl;
   rdfs:comment "A concept can be a specializaton of a concept in another domain."@en;
-  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG.";@nl
+  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG."@nl;
 .
 req:Concept_narrowlyMatches a sh:PropertyShape;
   rdfs:label "lijkt op smaller"@nl;
@@ -330,7 +330,7 @@ req:Concept_narrowlyMatches a sh:PropertyShape;
   sh:node req:ExternConcept;
   rdfs:comment "Een begrip kan een generalisatie zijn van een begrip in een ander domein."@nl;
   rdfs:comment "A concept can be a generalizaton of a concept in another domain."@en;
-  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus.";@nl
+  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus."@nl;
 .
 
 #---------------------
@@ -373,7 +373,7 @@ req:Source_label a sh:PropertyShape;
   sh:path rdfs:label;
   rdfs:comment "Een bron heeft een voor mensen leesbare naam."@nl;
   rdfs:comment "A source has a human readable label."@en;
-  skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl
+  skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl;
   sh:minCount 1;
   sh:severity sh:Violation;
   sh:message "Een bron heeft een voor mensen leesbare naam."@nl;
@@ -387,7 +387,7 @@ req:Source_isTopicOf a sh:PropertyShape;
   sh:node req:Source_document;
   rdfs:comment "Een beschrijvende bron kan een onderwerp zijn van een brondocument."@nl;
   rdfs:comment "A descriptive source can be a subject of a source document."@en;
-  skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl
+  skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl;
   sh:maxCount 1;
   sh:severity sh:Violation;
   sh:message "Een beschrijvende bron kan een onderwerp zijn van maximaal 1 brondocument."@nl;
@@ -409,7 +409,7 @@ req:Source_document_label a sh:PropertyShape;
   sh:path rdfs:label;
   rdfs:comment "Een brondocument heeft een voor mensen leesbaar label."@nl;
   rdfs:comment "A source document has a human-readable label."@nl;
-  skos:example "Burgerlijk Wetboek 1838."@nl,
+  skos:example "Burgerlijk Wetboek 1838."@nl;
   sh:minCount 1;
   sh:severity sh:Violation;
   sh:message "EEen brondocument heeft een voor mensen leesbaar label."@nl;
@@ -599,8 +599,8 @@ req:Metadata_isValidDuring a sh:PropertyShape;
   sh:message "A version can be formally / legally valid in up to 1 moment in time."@en
 .
 req:Metadata_isvalidWithin a sh:PropertyShape;
-  rdfs:label "geldig in gebied";@nl
-  rdfs:label "spatial validity";@en
+  rdfs:label "geldig in gebied"@nl;
+  rdfs:label "spatial validity"@en;
   sh:name "dcterms:spatial";
   sh:path dcterms:spatial;
   sh:class dcterms:Location;
@@ -614,7 +614,7 @@ req:Metadata_isvalidWithin a sh:PropertyShape;
 .
 req:Metadata_isIssued a sh:PropertyShape;
   rdfs:label "bekendgemaakt"@nl;
-  rdfs:label "issued";@en
+  rdfs:label "issued"@en;
   sh:name "dcterms:issued";
   sh:path dcterms:issued;
   rdfs:comment "Een versie kan bekend worden gemaakt vanaf een bepaald moment."@nl;
@@ -795,7 +795,7 @@ req:FoafOrganization a sh:NodeShape;
   rdfs:label "Organisatie (foaf)"@nl;
   rdfs:label "Organization (foaf)"@en;
   sh:name "foaf:Organization";
-  sh:targetClass foaf:Organization
+  sh:targetClass foaf:Organization;
   rdfs:comment " De organisatie die verantwoordelijk is voor een dataset."@nl;
   rdfs:comment "The organization that is responsible for a dataset."@en;
   skos:example "Het Ministerie van BZK"@nl;
@@ -1132,7 +1132,7 @@ req:ControlledVocabularyType a sh:PropertyShape;
 #  sh:minCount 1;
 #  sh:maxCount 1;
 #  sh:hasValue skostype:Waardelijst;
-.
+#.
 req:ControlledVocabularyPartOf a sh:PropertyShape;
   rdfs:label "onderdeel van (dataset)"@nl;
   rdfs:label "part of (dataset)"@en;
@@ -1142,7 +1142,7 @@ req:ControlledVocabularyPartOf a sh:PropertyShape;
   rdfs:comment "Een waardelijst kan onderdeel zijn van een dataset."@nl;
   rdfs:comment "A controlled vocabulary can be part of a dataset."@en;
   skos:example "De lijst met Kadastrale gemeenten is onderdeel van de BRK."@nl;
-  sh:maxCount 1
+  sh:maxCount 1;
   sh:severity sh:Warning;
   sh:message "Een waardelijst kan onderdeel zijn van maximaal 1 dataset."@nl;
   sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
