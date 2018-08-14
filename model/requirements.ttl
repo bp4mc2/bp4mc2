@@ -1098,20 +1098,19 @@ req:NodeShape a sh:NodeShape;
 req:ControlledVocabulary rdf:type sh:NodeShape;
   rdfs:label "Asset (Waardelijst)"@nl;
   rdfs:label "Asset (ControlledVocabulary)"@en;
-  sh:name "adms:Asset (ControlledVocabulary)";
+  sh:name "adms:Asset (Waardelijst)";
   rdfs:comment "Een waardelijst is een verzameling van begrippen of elementen die worden gebruikt om inhoud te indexeren en / of inhoud op te halen via browsen of zoeken. Hij bevat meestal voorkeurs- en varianttermen en heeft een gedefinieerde scope of beschrijft een specifiek domein."@nl;
   rdfs:comment "A controlled vocabulary is an organized arrangement of concepts or elements used to index content and/or to retrieve content through browsing or searching. It typically includes preferred and variant terms and has a defined scope or describes a specific domain."@en;
   skos:example "De lijst met Kadastrale gemeenten."@nl;
-  sh:property req:ControlledVocabularyLabel;
-  sh:property req:ControlledVocabularyType;
-#  sh:property req:ControlledVocabularyType;
-  sh:property req:ControlledVocabularyPartOf;
-  sh:property req:ControlledVocabularyDistribution;
-  sh:property req:ControlledVocabularySpecification;
-  sh:property req:ControlledVocabularyPartOf;
-  sh:property req:ControlledVocabularyLandingPage
+  sh:property req:ControlledVocabulary_label;
+  sh:property req:ControlledVocabulary_type;
+  sh:property req:ControlledVocabulary_typeWaardelijst;
+  sh:property req:ControlledVocabulary_partOf;
+  sh:property req:ControlledVocabulary_distribution;
+  sh:property req:ControlledVocabulary_specification;
+  sh:property req:ControlledVocabulary_landingPage
 .
-req:ControlledVocabularyLabel rdf:type sh:PropertyShape;
+req:ControlledVocabulary_label rdf:type sh:PropertyShape;
   rdfs:label "naam"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label";
@@ -1125,7 +1124,7 @@ req:ControlledVocabularyLabel rdf:type sh:PropertyShape;
   sh:message "Een waardelijst heeft een naam."@nl;
   sh:message "A controlled vocabulary has a label."@en
 .
-req:ControlledVocabularyType a sh:PropertyShape;
+req:ControlledVocabulary_type a sh:PropertyShape;
   sh:name "rdf:type";
   sh:path rdf:type;
   sh:hasValue adms:Asset;
@@ -1133,17 +1132,17 @@ req:ControlledVocabularyType a sh:PropertyShape;
   rdfs:comment "A controlled vocabulary is is typed as adms:Asset."@en;
   skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
 .
-#req:Waardelijst_typeWaardelijst a sh:PropertyShape;
-#  rdfs:label "type asset = Waardelijst";
-#  sh:path dcterms:type;
-#  sh:name "dcterms:type";
-#  sh:minCount 1;
-#  sh:maxCount 1;
-#  sh:hasValue skostype:Waardelijst;
-#.
-req:ControlledVocabularyPartOf a sh:PropertyShape;
-  rdfs:label "onderdeel van (dataset)"@nl;
-  rdfs:label "part of (dataset)"@en;
+req:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
+  rdfs:label "type asset = Waardelijst";
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue skostype:Waardelijst;
+.
+req:ControlledVocabulary_partOf a sh:PropertyShape;
+  rdfs:label "onderdeel van"@nl;
+  rdfs:label "part of"@en;
   sh:name "dcterms:isPartOf";
   sh:path dcterms:isPartOf;
   sh:node req:Dataset;
@@ -1155,21 +1154,21 @@ req:ControlledVocabularyPartOf a sh:PropertyShape;
   sh:message "Een waardelijst kan onderdeel zijn van maximaal 1 dataset."@nl;
   sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
 .
-req:Waardelijst_landingPage a sh:PropertyShape;
+req:ControlledVocabulary_landingPage a sh:PropertyShape;
   sh:name "dcat:landingPage";
   sh:path dcat:landingPage;
   sh:node req:LandingPage;
   sh:maxCount 1;
 .
 
-req:Waardelijst_distributie rdf:type sh:PropertyShape;
+req:ControlledVocabulary_distribution rdf:type sh:PropertyShape;
   rdfs:label "distributie"@nl;
   sh:name "dcat:distribution";
   sh:path dcat:distribution;
   sh:node req:WaardelijstDistributie;
 .
 
-req:Waardelijst_specificatie a sh:PropertyShape;
+req:ControlledVocabulary_specification a sh:PropertyShape;
   rdfs:label "specificatie"@nl;
   sh:name "rdfs:isDefinedBy";
   sh:path rdfs:isDefinedBy;
