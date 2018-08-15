@@ -107,6 +107,7 @@ stage:ReqModelDatakwaliteit a elmo:Representation;
 stage:ReqModelQuery a elmo:Query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX yed: <http://bp4mc2.org/yed#>
 		CONSTRUCT {
 		  ?shape ?shapepred ?shapeobj.
 		  ?shape sh:property ?prop.
@@ -118,7 +119,9 @@ stage:ReqModelQuery a elmo:Query;
       ?listitem rdf:rest ?restlist.
       ?member skos:inScheme ?scheme.
       ?member rdfs:label ?memberlabel.
-      ?value sh:name ?valuename
+      ?value sh:name ?valuename.
+			?shape yed:geometry ?geom.
+			?geom ?geomp ?geomo
 		}
 		WHERE {
 		  {
@@ -140,6 +143,16 @@ stage:ReqModelQuery a elmo:Query;
             ?class rdfs:subClassOf ?parentclass.
           }
           FILTER NOT EXISTS {?prop sh:node ?refshape}
+        }
+		  }
+		  UNION
+			{
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://localhost:8080/catalogus/gco/container/graphml> {
+					?shape yed:geometry ?geom.
+					?geom ?geomp ?geomo
         }
 		  }
 		  UNION
