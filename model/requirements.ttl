@@ -4,6 +4,7 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix adms_skos: <http://purl.org/adms/>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
@@ -631,6 +632,7 @@ req:Metadata_isIssued a sh:PropertyShape;
 req:MetadataTemporal a sh:NodeShape;
   rdfs:label "Tijdsperiode"@nl;
   rdfs:label "Time period"@nl;
+  sh:name "dcmiperiod:Period";
   rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
   rdfs:comment "A period of time is pointed out by a start date and end date."@en;
   skos:example "22/10/2017 - 01/08/2018"@nl;
@@ -664,10 +666,11 @@ req:MetadataTemporal_end a sh:PropertyShape;
   sh:message "A period has up to 1 end date / time."@en
 .
 req:Status a sh:NodeShape;
-  sh:name "Status waardelijst"@nl;
-  sh:name "Status list of values"@en;
+  rdfs:label "Status waardelijst"@nl;
+  rdfs:label "Controlled vocabulary status"@en;
+  sh:name "adms_skos:status";
   rdfs:comment "Een versie kan een administratieve status hebben die wordt ontleend aan de ADMS waardenlijst."@nl;
-  rdfs:comment "A version can hav an administrative status that is based on the ADMS list of values."@en;
+  rdfs:comment "A version can hav an administrative status that is based on the ADMS controlled vocabulary."@en;
   skos:example "Completed"@nl;
   sh:property [
     sh:path skos:inScheme;
@@ -676,7 +679,7 @@ req:Status a sh:NodeShape;
     sh:severity sh:Violation;
     sh:hasValue <http://purl.org/adms/status/1.0>;
     sh:message "De administratieve status wordt ontleend aan de ADMS waardenlijst."@nl;
-    sh:message "The administrative status is based on the ADMS list of values."@en
+    sh:message "The administrative status is based on the ADMS controlled vocabulary."@en
   ];
 .
 
@@ -1198,8 +1201,8 @@ req:WaardelijstDistributie_downloadURL a sh:PropertyShape;
 .
 
 req:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
-  sh:name "adms:representationTechnique";
-  sh:path adms:representationTechnique;
+  sh:name "adms_skos:representationrTechnique";
+  sh:path adms_skos:representationtechnique;
   sh:node req:RepresentationTechnique;
 .
 
