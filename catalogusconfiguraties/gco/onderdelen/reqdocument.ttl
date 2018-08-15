@@ -260,24 +260,24 @@ stage:Ontology_prov a owl:Ontology;
 stage:ReqDocument_conceptenschema a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:Begrippenkader
+  stage:include req:ConceptScheme
 .
 stage:ReqDocument_collectie a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:Collectie
+  stage:include req:Collection
 .
 stage:ReqDocument_concept a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
   stage:include req:Concept;
-  stage:excludeReference req:ExternConcept
+  stage:excludeReference req:ExternalConcept
 .
 stage:ReqDocument_externConcept a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
   stage:include req:Concept;
-  stage:includeReference req:ExternConcept
+  stage:includeReference req:ExternalConcept
 .
 stage:ReqDocument_metadata a elmo:Part;
   elmo:index "1";
@@ -287,16 +287,16 @@ stage:ReqDocument_metadata a elmo:Part;
 stage:ReqDocument_metadataTemporal a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:Metadata_Temporal;
+  stage:include req:MetadataTemporal;
 .
 stage:ReqDocument_gebeurtenissen a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:HandelingAct;
-  stage:include req:HandelingActor;
-  stage:include req:HandelingAgent;
-  stage:include req:HandelingObject;
-  stage:include req:HandelingNorm;
+  stage:include req:Act;
+  stage:include req:Actor;
+  stage:include req:LegalAgent;
+  stage:include req:Object;
+  stage:include req:LegalNorm;
 .
 stage:ReqDocument_informatiemodel a elmo:Part;
   elmo:index "1";
@@ -306,7 +306,7 @@ stage:ReqDocument_informatiemodel a elmo:Part;
 stage:ReqDocument_waardelijst a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:Waardelijst, req:WaardelijstDistributie;
+  stage:include req:ControlledVocabulary, req:WaardelijstDistributie;
 .
 stage:ReqDocument_catalogus a elmo:Part;
   elmo:index "1";
@@ -341,7 +341,7 @@ stage:ReqDocument_provenance a elmo:Part;
 stage:ReqDocument_catalogusGraph a elmo:Part;
   elmo:index "1";
   elmo:query stage:ReqDocumentQuery_requirements;
-  stage:include req:CatalogGraph
+  stage:include req:ProvenanceGraph
 .
 stage:ReqDocument_agent a elmo:Part;
   elmo:index "1";
@@ -365,6 +365,7 @@ stage:ReqDocument_catalogusPrefixes a elmo:Part;
 .
 stage:ReqDocument_prefixesQuery a elmo:Query;
   elmo:query '''
+    prefix sh: <http://www.w3.org/ns/shacl#>
     select ?prefix ?uri ?website
     where {
       graph <@STAGE@> {
@@ -382,6 +383,7 @@ stage:ReqDocument_prefixesQuery a elmo:Query;
 stage:ReqDocumentQuery_requirements a elmo:Query;
   elmo:query '''
     prefix stage: <http://localhost:8080/catalogus/gco/stage#>
+    prefix sh: <http://www.w3.org/ns/shacl#>
     select ?requirement ?aanduiding ?vocabulair ?voorbeeld
     where {
       GRAPH <@STAGE@> {
@@ -393,9 +395,15 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
           {
             ?nodeshape a sh:NodeShape.
             ?nodeshape sh:property ?pshape.
-            ?pshape rdfs:label ?aanduiding.
+            OPTIONAL {
+              ?pshape rdfs:label ?aanduiding
+              FILTER (lang(?aanduiding)="nl")
+            }
             ?pshape sh:name ?vocabulair.
-            OPTIONAL {?pshape rdfs:comment ?requirement}
+            OPTIONAL {
+              ?pshape rdfs:comment ?requirement
+              FILTER (lang(?requirement)="nl")
+            }
             OPTIONAL {?pshape skos:example ?voorbeeld}
             OPTIONAL {
               ?pshape sh:class ?class
@@ -409,9 +417,15 @@ stage:ReqDocumentQuery_requirements a elmo:Query;
           UNION
           {
             ?nodeshape a sh:NodeShape.
-            ?nodeshape rdfs:label ?aanduiding.
+            OPTIONAL {
+              ?nodeshape rdfs:label ?aanduiding
+              FILTER (lang(?aanduiding)="nl")
+            }
             ?nodeshape sh:name ?vocabulair.
-            OPTIONAL {?nodeshape rdfs:comment ?requirement}
+            OPTIONAL {
+              ?nodeshape rdfs:comment ?requirement
+              FILTER (lang(?requirement)="nl")
+            }
             OPTIONAL {?nodeshape skos:example ?voorbeeld}
             BIND ("A" as ?idx)
           }
@@ -519,6 +533,7 @@ stage:ReqDocumentMd	a	elmo:Representation;
   elmo:contains stage:ReqDocument_catalogusGraph;
   elmo:contains stage:ReqDocument_agent;
   elmo:query '''
+    prefix elmo: <http://bp4mc2.org/elmo/def#>
     construct {
       <urn:document> elmo:data ?data.
       ?item rdf:first ?first.
