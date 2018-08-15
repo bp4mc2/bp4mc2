@@ -4,7 +4,6 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix req: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
-@prefix adms_skos: <http://purl.org/adms/>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
@@ -21,11 +20,28 @@
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 @prefix frbr: <http://purl.org/vocab/frbr/core#>.
 @prefix org: <http://www.w3.org/ns/org#>.
-@prefix skostype: <http://bp4mc2.org/id/type/>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
 
 #---------------------
 # IMPORT
 #---------------------
+
+#Overgenomen uit dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
 
 #Overgenomen uit skos-lex
 skoslex:Act rdfs:subClassOf skos:Concept.
@@ -965,7 +981,8 @@ req:Asset a sh:NodeShape;
 .
 req:Informatiemodel rdf:type sh:NodeShape;
     rdfs:label "Asset (Informatiemodel)"@nl;
-    sh:name "adms:Asset (Informatiemodel)";
+    rdfs:label "Asset (Data model)"@en;
+    sh:name "adms:Asset (Data model)";
     sh:property req:Informatiemodel_role;
     sh:property req:Informatiemodel_typeInformatiemodel;
     sh:property req:Informatiemodel_name;
@@ -985,12 +1002,12 @@ req:Informatiemodel_role a sh:PropertyShape;
   sh:hasValue adms:Asset;
 .
 req:Informatiemodel_typeInformatiemodel a sh:PropertyShape;
-  rdfs:label "type asset = informatiemodel";
+  rdfs:label "type asset = informatiemodel"@nl;
   sh:path dcterms:type;
   sh:name "dcterms:type";
   sh:minCount 1;
   sh:maxCount 1;
-  sh:hasValue skostype:Informatiemodel;
+  sh:hasValue dstype:Datamodel;
 .
 req:Informatiemodel_name rdf:type sh:PropertyShape;
     rdfs:label "label"@nl;
@@ -1005,11 +1022,6 @@ req:Informatiemodel_distributie rdf:type sh:PropertyShape;
   sh:name "dcat:distribution";
   sh:path dcat:distribution;
   sh:node req:ModelVoorkomen;
-.
-
-skostype:Informatiemodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  sh:name "skostype:Informatiemodel"
 .
 
 req:ModelVoorkomen a sh:NodeShape;
@@ -1140,7 +1152,7 @@ req:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
   sh:name "dcterms:type";
   sh:minCount 1;
   sh:maxCount 1;
-  sh:hasValue skostype:Waardelijst;
+  sh:hasValue dstype:ControlledVocabulary;
 .
 req:ControlledVocabulary_partOf a sh:PropertyShape;
   rdfs:label "onderdeel van"@nl;
@@ -1177,11 +1189,6 @@ req:ControlledVocabulary_specification a sh:PropertyShape;
   sh:node req:NodeShape;
 .
 
-skostype:Waardelijst a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  sh:name "skostype:Waardelijst"
-.
-
 req:WaardelijstDistributie a sh:NodeShape;
   rdfs:label "Waardelijstdistributie"@nl;
   sh:name "adms:Distribution";
@@ -1209,7 +1216,7 @@ req:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
 .
 
 req:SchemaWaardelijst a sh:NodeShape;
-  sh:name "sh:NodeShape (Begrippenkader)"@nl;
+  sh:name "sh:NodeShape (ConceptScheme spec)"@nl;
   sh:property req:SchemaWaardelijst_role;
   sh:property req:SchemaWaardelijst_property;
 .
@@ -1246,7 +1253,7 @@ req:SchemaWaardelijstSpec a sh:NodeShape;
 .
 
 req:CollectieWaardelijst a sh:NodeShape;
-  sh:name "sh:NodeShape (Collectie)"@nl;
+  sh:name "sh:NodeShape (Collection spec)"@nl;
   sh:property req:CollectieWaardelijst_role;
   sh:property req:CollectieWaardelijst_property;
 .
@@ -1283,7 +1290,7 @@ req:CollectieWaardelijstSpec a sh:NodeShape;
 .
 
 req:Referentielijst a sh:NodeShape;
-  sh:name "sh:Nodeshape (Referentielijst)";
+  sh:name "sh:Nodeshape (Class spec)";
   sh:property [
     sh:path rdf:type;
     sh:name "rol";
@@ -1347,6 +1354,7 @@ req:Dataset rdf:type sh:NodeShape;
   sh:name "dcat:Dataset";
   sh:targetClass dcat:Dataset;
   sh:property req:Dataset_name;
+  sh:property req:Dataset_type;
   sh:property req:Dataset_dateIssued;
   sh:property req:Dataset_language;
   sh:property req:Dataset_description;
@@ -1365,6 +1373,12 @@ req:Dataset_name rdf:type sh:PropertyShape;
   rdfs:comment "De dataset heeft een naam"@nl;
   skos:example ''''Omgevingswet','BAL','BRK', etc'''';
   sh:path dcterms:title
+.
+req:Dataset_type a sh:PropertyShape;
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
 .
 req:Dataset_dateIssued rdf:type sh:PropertyShape;
   rdfs:label "publicatiedatum"@nl;
@@ -1412,6 +1426,14 @@ req:Datasetversie_rol a sh:PropertyShape;
   sh:path rdf:type;
   sh:name "rdf:type";
   sh:hasValue dcat:Dataset;
+.
+req:Datasetversie_type a sh:PropertyShape;
+  rdfs:label "type dataset = dataset version";
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dstype:DatasetVersion;
 .
 req:Datasetversie_version rdf:type sh:PropertyShape;
   rdfs:label "versie"@nl;
