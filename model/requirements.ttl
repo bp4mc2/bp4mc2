@@ -593,7 +593,8 @@ req:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "temporal validity"@en;
   sh:name "dcterms:temporal";
   sh:path dcterms:temporal;
-  sh:node req:MetadataTemporal;
+  sh:class dcterms:PeriodOfTime;
+  sh:nodeKind sh:BlankNode;
   rdfs:comment "Een versie kan formeel/juridisch geldig zijn gedurende een periode."@nl;
   rdfs:comment "A version can be formally / legally valid for a period."@en;
   skos:example "22/10/2017 - ";
@@ -629,12 +630,13 @@ req:Metadata_isIssued a sh:PropertyShape;
   sh:message "Een versie kan maximaal in 1 keer bekend worden gemaakt."@nl;
   sh:message "A version can be issued up to 1 time."@en
 .
-req:MetadataTemporal a sh:NodeShape;
+req:PeriodOfTime a sh:NodeShape;
   rdfs:label "Tijdsperiode"@nl;
   rdfs:label "Time period"@nl;
-  sh:name "dcmiperiod:Period";
+  sh:name "dcterms:PeriodOfTime";
   rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
   rdfs:comment "A period of time is pointed out by a start date and end date."@en;
+  sh:targetClass dcterms:PeriodOfTime;
   skos:example "22/10/2017 - 01/08/2018"@nl;
   sh:property req:MetadataTemporal_start;
   sh:property req:MetadataTemporal_end
