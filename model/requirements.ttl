@@ -1125,9 +1125,9 @@ req:ControlledVocabulary rdf:type sh:NodeShape;
   sh:property req:ControlledVocabulary_landingPage
 .
 req:ControlledVocabulary_label rdf:type sh:PropertyShape;
-  rdfs:label "naam"@nl;
-  rdfs:label "label"@en;
-  sh:name "rdfs:label";
+  rdfs:label "naam (Waardelijst)"@nl;
+  rdfs:label "label (ControlledVocabulary)"@en;
+  sh:name "rdfs:label (ControlledVocabulary)";
   sh:path rdfs:label;
   rdfs:comment "Een waardelijst heeft een naam."@nl;
   rdfs:comment "A controlled vocabulary has a label."@nl;
@@ -1139,6 +1139,8 @@ req:ControlledVocabulary_label rdf:type sh:PropertyShape;
   sh:message "A controlled vocabulary has a label."@en
 .
 req:ControlledVocabulary_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
   sh:name "rdf:type";
   sh:path rdf:type;
   sh:hasValue adms:Asset;
@@ -1147,12 +1149,13 @@ req:ControlledVocabulary_type a sh:PropertyShape;
   skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
 .
 req:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
-  rdfs:label "type asset = Waardelijst";
-  sh:path dcterms:type;
+  rdfs:label "type asset = Waardelijst"@nl;
+  rdfs:label "type asset = Controlled vocabulary"@en;
   sh:name "dcterms:type";
+  sh:path dcterms:type;
   sh:minCount 1;
   sh:maxCount 1;
-  sh:hasValue dstype:ControlledVocabulary;
+  sh:hasValue dctype:ControlledVocabulary;
 .
 req:ControlledVocabulary_partOf a sh:PropertyShape;
   rdfs:label "onderdeel van"@nl;
@@ -1169,27 +1172,40 @@ req:ControlledVocabulary_partOf a sh:PropertyShape;
   sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
 .
 req:ControlledVocabulary_landingPage a sh:PropertyShape;
+  rdfs:label "webpagina"@nl;
+  rdfs:label "landing page"@en;
   sh:name "dcat:landingPage";
   sh:path dcat:landingPage;
   sh:node req:LandingPage;
+  rdfs:comment "Een waardelijst kan vindbaar zijn via een webpagina."@nl;
+  rdfs:comment "A controlled vocabulary can be found via a landing page on the web."@en;
+  skos:example "kadaster.nl/waardelijsten."@nl;
   sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een waardelijst kan maximaal via 1 bronpagina vindbaar zijn."@nl;
+  sh:message "A controlled vocabulary can be found on up to 1 source page."@en
 .
 
 req:ControlledVocabulary_distribution rdf:type sh:PropertyShape;
   rdfs:label "distributie"@nl;
+  rdfs:label "distribution"@en;
   sh:name "dcat:distribution";
   sh:path dcat:distribution;
-  sh:node req:WaardelijstDistributie;
+  sh:node req:ControlledVocabularyDistribution;
+  rdfs:comment "De wijze waarop een waardelijst wordt gepubliceerd kan worden aangegeven."@nl;
+  rdfs:comment "The way in which a controlled vocabulary is published can be indicated."@en;
+  skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
 .
 
 req:ControlledVocabulary_specification a sh:PropertyShape;
   rdfs:label "specificatie"@nl;
+  rdfs:label "specification"@en;
   sh:name "rdfs:isDefinedBy";
   sh:path rdfs:isDefinedBy;
   sh:node req:NodeShape;
 .
 
-req:WaardelijstDistributie a sh:NodeShape;
+req:ControlledVocabularyDistribution a sh:NodeShape;
   rdfs:label "Waardelijstdistributie"@nl;
   sh:name "adms:Distribution";
   sh:targetClass adms:Distribution;
