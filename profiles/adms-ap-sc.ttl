@@ -1,0 +1,208 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix scasset: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived from prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#derived from foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#derived from org
+org:Organization rdfs:subClassOf foaf:Organization.
+
+#derived from adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#derived from dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
+#Extra
+rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
+
+#---------------------
+# ASSETS
+#---------------------
+
+scasset:ControlledVocabulary rdf:type sh:NodeShape;
+  rdfs:label "Asset"@nl;
+  rdfs:label "Asset"@en;
+  sh:name "adms:Asset";
+  rdfs:comment "Een waardelijst is een verzameling van begrippen of elementen die worden gebruikt om inhoud te indexeren en / of inhoud op te halen via 
+
+browsen of zoeken. Hij bevat meestal voorkeurs- en varianttermen en heeft een gedefinieerde scope of beschrijft een specifiek domein."@nl;
+  rdfs:comment "A controlled vocabulary is an organized arrangement of concepts or elements used to index content and/or to retrieve content through 
+
+browsing or searching. It typically includes preferred and variant terms and has a defined scope or describes a specific domain."@en;
+  skos:example "De waardelijst met Kadastrale gemeenten."@nl;
+  sh:property scasset:ControlledVocabulary_label;
+  sh:property scasset:ControlledVocabulary_type;
+  sh:property scasset:ControlledVocabulary_typeWaardelijst;
+  sh:property scasset:ControlledVocabulary_partOf;
+  sh:property scasset:ControlledVocabulary_distribution;
+  sh:property scasset:ControlledVocabulary_specification;
+  sh:property scasset:ControlledVocabulary_landingPage
+.
+scasset:ControlledVocabulary_label rdf:type sh:PropertyShape;
+  rdfs:label "naam (Waardelijst)"@nl;
+  rdfs:label "label (ControlledVocabulary)"@en;
+  sh:name "rdfs:label (ControlledVocabulary)";
+  sh:path rdfs:label;
+  rdfs:comment "Een waardelijst heeft een naam."@nl;
+  rdfs:comment "A controlled vocabulary has a label."@nl;
+  skos:example "Landenlijst";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een waardelijst heeft een naam."@nl;
+  sh:message "A controlled vocabulary has a label."@en
+.
+scasset:ControlledVocabulary_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+  rdfs:comment "Een waardelijst wordt getypeerd als adms:Asset."@nl;
+  rdfs:comment "A controlled vocabulary is is typed as adms:Asset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
+.
+scasset:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
+  rdfs:label "type asset = Waardelijst"@nl;
+  rdfs:label "type asset = Controlled vocabulary"@en;
+  sh:name "dcterms:type";
+  sh:path dcterms:type;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dctype:ControlledVocabulary;
+.
+scasset:ControlledVocabulary_partOf a sh:PropertyShape;
+  rdfs:label "onderdeel van"@nl;
+  rdfs:label "part of"@en;
+  sh:name "dcterms:isPartOf";
+  sh:path dcterms:isPartOf;
+  sh:node scasset:Dataset;
+  rdfs:comment "Een waardelijst kan onderdeel zijn van een dataset."@nl;
+  rdfs:comment "A controlled vocabulary can be part of a dataset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is onderdeel van de BRK."@nl;
+  sh:maxCount 1;
+  sh:severity sh:Warning;
+  sh:message "Een waardelijst kan onderdeel zijn van maximaal 1 dataset."@nl;
+  sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
+.
+scasset:ControlledVocabulary_landingPage a sh:PropertyShape;
+  rdfs:label "webpagina"@nl;
+  rdfs:label "landing page"@en;
+  sh:name "dcat:landingPage";
+  sh:path dcat:landingPage;
+  sh:node scasset:LandingPage;
+  rdfs:comment "Een waardelijst kan vindbaar zijn via een webpagina."@nl;
+  rdfs:comment "A controlled vocabulary can be found via a landing page on the web."@en;
+  skos:example "kadaster.nl/waardelijsten."@nl;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een waardelijst kan maximaal via 1 bronpagina vindbaar zijn."@nl;
+  sh:message "A controlled vocabulary can be found on up to 1 source page."@en
+.
+
+scasset:ControlledVocabulary_distribution rdf:type sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  rdfs:label "distribution"@en;
+  sh:name "dcat:distribution";
+  sh:path dcat:distribution;
+  sh:node scasset:ControlledVocabularyDistribution;
+  rdfs:comment "De wijze waarop een waardelijst wordt gepubliceerd kan worden aangegeven."@nl;
+  rdfs:comment "The way in which a controlled vocabulary is published can be indicated."@en;
+  skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
+.
+
+scasset:ControlledVocabulary_specification a sh:PropertyShape;
+  rdfs:label "specificatie"@nl;
+  rdfs:label "specification"@en;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node scasset:NodeShape;
+.
+
+scasset:ControlledVocabularyDistribution a sh:NodeShape;
+  rdfs:label "Waardelijstdistributie"@nl;
+  sh:name "adms:Distribution";
+  sh:targetClass adms:Distribution;
+  sh:property scasset:WaardelijstDistributie_accessURL;
+  sh:property scasset:WaardelijstDistributie_downloadURL;
+  sh:property scasset:WaardelijstDistributie_representationTechnique;
+.
+
+scasset:WaardelijstDistributie_accessURL a sh:PropertyShape;
+  sh:name "dcat:accessURL";
+  sh:path dcat:accessURL;
+.
+
+scasset:WaardelijstDistributie_downloadURL a sh:PropertyShape;
+  sh:name "dcat:downloadURL";
+  sh:path dcat:downloadURL;
+  sh:node scasset:DownloadFormat;
+.
+
+scasset:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
+  sh:name "adms:representationrTechnique";
+  sh:path adms:representationtechnique;
+  sh:node scasset:RepresentationTechnique;
+.
