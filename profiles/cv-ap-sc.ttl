@@ -1,0 +1,247 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sccv: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived from prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#derived from foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#derived from org
+org:Organization rdfs:subClassOf foaf:Organization.
+
+#derived from adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#derived from dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
+#Extra
+rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
+
+#Controlled vocabulary
+
+
+
+sccv:ControlledVocabulary_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+  rdfs:comment "Een waardelijst wordt getypeerd als adms:Asset."@nl;
+  rdfs:comment "A controlled vocabulary is is typed as adms:Asset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
+.
+sccv:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
+  rdfs:label "type asset = Waardelijst"@nl;
+  rdfs:label "type asset = Controlled vocabulary"@en;
+  sh:name "dcterms:type";
+  sh:path dcterms:type;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dctype:ControlledVocabulary;
+.
+sccv:ControlledVocabulary_specification a sh:PropertyShape;
+  rdfs:label "specificatie"@nl;
+  rdfs:label "specification"@en;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node sccv:NodeShape;
+.
+sccv:ControlledVocabulary_specification a sh:PropertyShape;
+  rdfs:label "specificatie"@nl;
+  rdfs:label "specification"@en;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node sccv:NodeShape;
+.
+
+sccv:SchemaWaardelijst a sh:NodeShape;
+  sh:name "sh:NodeShape (ConceptScheme spec)"@nl;
+  sh:property sccv:SchemaWaardelijst_role;
+  sh:property sccv:SchemaWaardelijst_property;
+.
+sccv:SchemaWaardelijst_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+sccv:SchemaWaardelijst_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node sccv:SchemaWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+sccv:SchemaWaardelijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue skos:inScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:ConceptScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+sccv:CollectieWaardelijst a sh:NodeShape;
+  sh:name "sh:NodeShape (Collection spec)"@nl;
+  sh:property sccv:CollectieWaardelijst_role;
+  sh:property sccv:CollectieWaardelijst_property;
+.
+sccv:CollectieWaardelijst_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+sccv:CollectieWaardelijst_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node sccv:CollectieWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+sccv:CollectieWaardelijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path/sh:inversePath = skos:member"; #Hack, propertypaths are not shown correctly
+#    sh:hasValue skos:member;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:Collection;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+sccv:Referentielijst a sh:NodeShape;
+  sh:name "sh:Nodeshape (Class spec)";
+  sh:property [
+    sh:path rdf:type;
+    sh:name "rol";
+    sh:hasValue sh:NodeShape;
+  ];
+  sh:property [
+    sh:path sh:property;
+    sh:name "sh:property";
+    sh:node sccv:ReferentielijstSpec;
+    sh:nodeKind sh:BlankNode;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+sccv:ReferentielijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue rdf:type;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class owl:Class;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+#
+# Webpages (landingPage, downloadURL)
+#
+sccv:LandingPage a sh:NodeShape;
+  sh:name "foaf:Document (Landing page)";
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue foaf:Document;
+  ];
+.
+sccv:DownloadFormat a sh:NodeShape;
+  sh:name "foaf:Document (Download format)";
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue foaf:Document;
+  ];
+  sh:property [
+    sh:name "dcterms:isFormatOf";
+    sh:path dcat:landingPage;
+    sh:node sccv:LandingPage;
+  ];
+.
