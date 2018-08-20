@@ -1,0 +1,425 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix scdcat: <http://bp4mc2.org/somewhere/dcat-ap-sc/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived from prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#derived from foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#derived from org
+org:Organization rdfs:subClassOf foaf:Organization.
+
+#derived from adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#derived from dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
+#Extra
+rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
+
+#---------------------
+# Dataset
+#---------------------
+scdcat:Dataset rdf:type sh:NodeShape;
+  rdfs:label "Dataset"@nl;
+  sh:name "dcat:Dataset";
+  sh:targetClass dcat:Dataset;
+  sh:property scdcat:Dataset_name;
+  sh:property scdcat:Dataset_type;
+  sh:property scdcat:Dataset_dateIssued;
+  sh:property scdcat:Dataset_language;
+  sh:property scdcat:Dataset_description;
+  sh:property scdcat:Dataset_provenance;
+  sh:property scdcat:Dataset_publisher;
+.
+
+scdcat:Dataset_provenance a sh:PropertyShape;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:class prov:Entity;
+.
+scdcat:Dataset_name rdf:type sh:PropertyShape;
+  rdfs:label "naam"@nl;
+  sh:name "dcterms:title";
+  rdfs:comment "De dataset heeft een naam"@nl;
+  skos:example ''''Omgevingswet','BAL','BRK', etc'''';
+  sh:path dcterms:title
+.
+scdcat:Dataset_type a sh:PropertyShape;
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+scdcat:Dataset_dateIssued rdf:type sh:PropertyShape;
+  rdfs:label "publicatiedatum"@nl;
+  sh:name "dcterms:issued";
+  rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus."@nl;
+  skos:example '''1/10/2017''';
+  sh:path dcterms:issued
+.
+scdcat:Dataset_language rdf:type sh:PropertyShape;
+  rdfs:label "taal"@nl;
+  sh:name "dcterms:language";
+  rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)"@nl;
+  skos:example "@nl";
+  sh:path dcterms:language
+.
+scdcat:Dataset_description rdf:type sh:PropertyShape;
+  rdfs:label "beschrijving"@nl;
+  sh:name "dcterms:description";
+  rdfs:comment "De dataset heeft een duidelijke beschrijving"@nl;
+  skos:example '''Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.''';
+  sh:path dcterms:description
+.
+scdcat:Dataset_publisher a sh:PropertyShape;
+  rdfs:label "publicist"@nl;
+  sh:name "dcterms:publisher";
+  rdfs:comment "Het is bekend door wie een dataset wordt gepubliceerd. Deze organisatie of persoon heeft toestemming om deze handeling uit te voeren"@nl;
+  skos:example "overheid:Rijkswaterstaat";
+  sh:path dcterms:publisher;
+  sh:class foaf:Agent;
+.
+
+scdcat:Datasetversie rdf:type sh:NodeShape;
+  rdfs:label "Datasetversie"@nl;
+  sh:name "dcat:Dataset (versie)";
+  sh:property scdcat:Datasetversie_rol;
+  sh:property scdcat:Datasetversie_version;
+  sh:property scdcat:Datasetversie_versionNotes;
+  sh:property scdcat:Datasetversie_distribution;
+  sh:property scdcat:Datasetversie_versionOf;
+  sh:property scdcat:Datasetversie_describedBy;
+  sh:property scdcat:Datasetversie_geometrischeAfbakening;
+.
+
+scdcat:Datasetversie_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:name "rdf:type";
+  sh:hasValue dcat:Dataset;
+.
+scdcat:Datasetversie_type a sh:PropertyShape;
+  rdfs:label "type dataset = dataset version";
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dstype:DatasetVersion;
+.
+scdcat:Datasetversie_version rdf:type sh:PropertyShape;
+  rdfs:label "versie"@nl;
+  sh:name "adms:version";
+  rdfs:comment "De versie van de dataset."@nl;
+  sh:path adms:version;
+  skos:example "2.1.0";
+.
+scdcat:Datasetversie_versionNotes rdf:type sh:PropertyShape;
+  rdfs:label "versie-notities"@nl;
+  sh:name "adms:versionNotes";
+  rdfs:comment "Een versie heeft release notes."@nl;
+  sh:path adms:versionNotes;
+  skos:example '''IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log.''';
+.
+scdcat:Datasetversie_distribution a sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  sh:path dcat:distribution;
+  sh:name "dcat:distribution";
+  sh:class dcat:Distribution;
+  rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen."@nl;
+  skos:example "Digitale Kadastrale Kaart download service.";
+.
+scdcat:Datasetversie_versionOf a sh:PropertyShape;
+  rdfs:label "versie van"@nl;
+  sh:path dcterms:isVersionOf;
+  sh:name "dcterms:isVersionOf";
+  rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset. A versioned datasets is derived from the general dataset and a productmodel is derived from an informationmodel"@nl;
+  sh:node scdcat:Dataset;
+  sh:maxCount 1;
+  skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
+.
+scdcat:Datasetversie_geometrischeAfbakening rdf:type sh:PropertyShape;
+    rdfs:label "geografische afbakening"@nl;
+    rdfs:comment "Het gebied waar de dataset over gaat"@nl;
+    sh:class dcterms:Location;
+    skos:example "gemeente Apeldoorn";
+    sh:path dcterms:spatial;
+    sh:name "dcterms:spatial"
+.
+scdcat:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
+  rdfs:label "afgeleid van"@nl;
+  rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel."@nl;
+  sh:path dcterms:relation;
+  sh:name "dcterms:relation";
+  sh:class dcat:Dataset;
+.
+scdcat:Datasetversie_describedBy rdf:type sh:PropertyShape;
+  rdfs:label "beschreven door"@nl;
+  rdfs:comment "De data in een dataset is beschreven door een informatiemodel."@nl;
+  sh:path wdrs:describedBy;
+  sh:name "wdrs:describedBy";
+  sh:node scdcat:Informatiemodel;
+  skos:example '''kadaster.nl/schemas/imkad''';
+.
+
+scdcat:Datasetversie_locatie a sh:NodeShape;
+  rdfs:label "Locatie"@nl;
+  sh:name "dcterms:Location";
+.
+
+scdcat:Informatieproduct rdf:type sh:NodeShape;
+  rdfs:label "Informatieproduct"@nl;
+  sh:name "dcat:Dataset (informatieproduct)";
+  sh:property scdcat:Informatieproduct_rol;
+  sh:property scdcat:Informatieproduct_version;
+  sh:property scdcat:Informatieproduct_versionNotes;
+  sh:property scdcat:Informatieproduct_isDerivedFrom;
+  sh:property scdcat:Informatieproduct_distribution;
+  sh:property scdcat:Informatieproduct_versionOf;
+  sh:property scdcat:Informatieproduct_qualityMeasurement;
+.
+
+scdcat:Informatieproduct_rol a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:name "rdf:type";
+  sh:hasValue dcat:Dataset;
+.
+scdcat:Informatieproduct_version rdf:type sh:PropertyShape;
+  rdfs:label "versie"@nl;
+  sh:name "adms:version";
+  rdfs:comment "De versie van het informatieproduct."@nl;
+  sh:path adms:version;
+  skos:example "2.1.0";
+.
+scdcat:Informatieproduct_qualityMeasurement a sh:PropertyShape;
+  sh:path dqv:hasQualityMeasurement;
+  sh:name "dqv:hasQualityMeasurement";
+  sh:class dqv:QualityMeasurement;
+.
+scdcat:Informatieproduct_versionNotes rdf:type sh:PropertyShape;
+  rdfs:label "versie-notities"@nl;
+  sh:name "adms:versionNotes";
+  rdfs:comment "Een versie heeft release notes."@nl;
+  sh:path adms:versionNotes;
+.
+scdcat:Informatieproduct_distribution a sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  sh:path dcat:distribution;
+  sh:name "dcat:distribution";
+  sh:class dcat:Distribution;
+  rdfs:comment "Een informatieproduct kan worden verspreid via verschillende kanalen."@nl;
+.
+
+#---------------------
+# Catalogus
+#---------------------
+scdcat:Catalogus a sh:NodeShape;
+    rdfs:label "Catalogus"@nl;
+  sh:name "dcat:Catalog";
+    sh:property scdcat:Catalogus_dateModified;
+    sh:property scdcat:Catalogus_homepage;
+    sh:property scdcat:Catalogus_licence;
+    sh:property scdcat:Catalogus_dateIssued;
+    sh:property scdcat:Catalogus_name;
+    sh:property scdcat:Catalogus_description;
+    sh:property scdcat:Catalogus_rights;
+    sh:property scdcat:Catalogus_language;
+    sh:property scdcat:Catalogus_dataset;
+    sh:targetClass dcat:Catalog
+.
+scdcat:Catalogus_provenance a sh:PropertyShape;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+.
+scdcat:Catalogus_name rdf:type sh:PropertyShape;
+    rdfs:label "titel"@nl;
+    sh:name "dcterms:title";
+    rdfs:comment "De catalogus heeft een titel";
+    skos:example "Catalogus Omgevingswet";
+    sh:path dcterms:title
+.
+scdcat:Catalogus_dataset a sh:PropertyShape;
+  sh:path dcat:dataset;
+  sh:class dcat:Dataset;
+  sh:name "dcat:dataset";
+.
+scdcat:Catalogus_description rdf:type sh:PropertyShape;
+    rdfs:label "beschrijving"@nl;
+    sh:name "dcterms:description";
+    rdfs:comment "De catalogus heeft een duidelijke beschrijving"@nl;
+    skos:example "De Catalogus voor de Omgevingswet is een centrale ingang tot het stelsel, waarin wetgeving, begrippen, regels, informatiemodellen, datasets, producten en services met elkaar worden verbonden. De catalogus is daarmee een centrale plek waar de verschillende gebruikersgroepen van het stelsel kunnen zien waar het stelsel uit bestaat, wat begrippen betekenen en hoe de verschillende elementen van het stelsel aan elkaar zijn gerelateerd.";
+    sh:path dcterms:description
+.
+scdcat:Catalogus_dateIssued rdf:type sh:PropertyShape;
+    rdfs:label "publicatiedatum"@nl;
+  sh:name "dcterms:issued";
+    rdfs:comment "De catalogus is op een bepaalde datum gepubliceerd"@nl;
+    skos:example "1/10/2016";
+    sh:path dcterms:issued
+.
+scdcat:Catalogus_language rdf:type sh:PropertyShape;
+    rdfs:label "taal"@nl;
+  sh:name "dcterms:language";
+    rdfs:comment "De taal waarin de catalogus is beschreven"@nl;
+    skos:example "@nl";
+    sh:path dcterms:language
+.
+scdcat:Catalogus_dateModified rdf:type sh:PropertyShape;
+    rdfs:label "wijzigingsdatum"@nl;
+    rdfs:comment "De datum waarop iets in de catalogus zelf is veranderd, wordt bewaard, bijvoorbeeld een eigenschap van de catalogus of een nieuwe dataset"@nl;
+    skos:example "1/10/2016";
+    sh:name "dcterms:modified";
+    sh:path dcterms:modified
+.
+scdcat:Catalogus_homepage rdf:type sh:PropertyShape;
+    rdfs:label "homepage"@nl;
+    rdfs:comment "De catalogus als portaal is vindbaar op een homepage."@nl;
+    skos:example "http://catalogus.kadaster.nl/";
+    sh:name "foaf:homepage";
+    sh:path foaf:homepage
+.
+scdcat:Catalogus_licence rdf:type sh:PropertyShape;
+    rdfs:label "licentie"@nl;
+    rdfs:comment "Een licentie is van toepassing op de catalogus zelf. Dit kan een andere licentie zijn als de licentie voor distributies van datasets"@nl;
+    skos:example "Creative Commons Naamsvermelding 4.0 licentie";
+    sh:name "dcterms:license";
+    sh:path dcterms:license
+.
+scdcat:Catalogus_rights rdf:type sh:PropertyShape;
+    rdfs:label "rechten"@nl;
+    rdfs:comment "Een beschrijving van de rechten die van toepassing is op de catalogus. Dit kunnen andere rechten zijn als die voor distributies van datasets"@nl;
+    skos:example "Proclaimer: De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud.";
+    sh:name "dcterms:rights";
+    sh:path dcterms:rights
+.
+
+#---------------------
+# Distributie
+#---------------------
+scdcat:Distributie a sh:NodeShape;
+  rdfs:label "Distributie"@nl;
+  sh:targetClass dcat:Distribution;
+  sh:name "dcat:Distribution";
+  sh:property scdcat:Distributie_name;
+  sh:property scdcat:Distributie_description;
+  sh:property scdcat:Distributie_issueDate;
+  sh:property scdcat:Distributie_license;
+  sh:property scdcat:Distributie_rights;
+  sh:property scdcat:Distributie_accessURL;
+  sh:property scdcat:Distributie_downloadURL;
+  sh:property scdcat:Distributie_provenance;
+.
+scdcat:Distributie_provenance a sh:PropertyShape;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+.
+scdcat:Distributie_name rdf:type sh:PropertyShape;
+  rdfs:label "titel"@nl;
+  sh:name "dcterms:title";
+  rdfs:comment "De distributie heeft een titel";
+  skos:example "Digitale Kadastrale Kaart download service";
+  sh:path dcterms:title;
+.
+scdcat:Distributie_description rdf:type sh:PropertyShape;
+  rdfs:label "beschrijving"@nl;
+  sh:name "dcterms:description";
+  rdfs:comment "De distributie heeft een duidelijke beschrijving."@nl;
+  skos:example '''Het Kadaster is houder van de Basisregistratie Kadaster (BRK). Onderdeel van de BRK is de Digitale kadastrale kaart. Deze is beschikbaar als open data en nu via dit portaal ook als Linked Open Data (vooralsnog zonder de topografie).''';
+  sh:path dcterms:description;
+.
+scdcat:Distributie_issueDate rdf:type sh:PropertyShape;
+  rdfs:label "publicatiedatum"@nl;
+  sh:name "dcterms:issued";
+  rdfs:comment "De distributie is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de distributie in de catalogus."@nl;
+  skos:example "1/10/2016";
+  sh:path dcterms:issued;
+.
+scdcat:Distributie_license rdf:type sh:PropertyShape;
+  rdfs:label "licentie"@nl;
+    rdfs:comment "Een licentie is van toepassing op de distributie."@nl;
+    skos:example "uri-beerware";
+#[IT] skos:example "Creative Commons Naamsvermelding 4.0 licentie";
+    sh:path dcterms:license;
+  sh:name "dcterms:license";
+.
+scdcat:Distributie_rights rdf:type sh:PropertyShape;
+  rdfs:label "rechten"@nl;
+    rdfs:comment "De rechten met betrekking tot de distributie zijn beschreven. Zie ook: svbg:gebruiksvoorwaarden en iso:confidentiality"@nl;
+    skos:example '''Wilt u direct aan  de slag met BRK Levering? Raadpleeg dan de reference card bij 'Documenten'. Daarin vindt u de stappen die u moet zetten om met BRK Levering te kunnen starten. Eerste of éénmalige levering tot 100.000 objecten, per object €1,16;tot 1.000.000 objecten, per object €0,98;bij meer dan 1.000.000 objecten, per object €0,73;Gebiedsuitbreiding van een bestaand abonnement, per object €1,16;Abonnementslevering, per jaar en per 1.000 objecten binnen abonnement €208,00;Extra (losse) levering van een bestand, per verstrekking €192,00;Tweede mutatie-abonnement, per jaar €192,00;Deze bedragen zijn vrij van btw;Dit product valt onder de budgetfinanciering BRK.''';
+    sh:path dcterms:rights;
+  sh:name "dcterms:rights";
+.
+scdcat:Distributie_accessURL rdf:type sh:PropertyShape;
+  rdfs:label "API/servicelocatie"@nl;
+    rdfs:comment "Een distributie kan een API zijn of een webservice die beschikbaar is via een uri."@nl;
+    skos:example '''https://data.pdok.nl/brk/api/v1''';
+    sh:path dcat:accessURL;
+  sh:name "dcat:accessURL";
+.
+scdcat:Distributie_downloadURL rdf:type sh:PropertyShape;
+  rdfs:label "downloadlocatie"@nl;
+    rdfs:comment "Een distributie kan een downloadservice zijn die beschikbaar is via een uri."@nl;
+    skos:example '''https://www.pdok.nl/nl/producten/pdok-downloads/basis-registratie-kadaster/kadastrale-kaart''';
+    sh:path dcat:downloadURL;
+  sh:name "dcat:downloadURL";
+.
