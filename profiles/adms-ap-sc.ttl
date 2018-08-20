@@ -90,9 +90,9 @@ scasset:Asset rdf:type sh:NodeShape;
   skos:example "De waardelijst met Kadastrale gemeenten."@nl;
   sh:property scasset:Asset_label;
   sh:property scasset:Asset_partOf;
+  sh:property scasset:Asset_landingPage;
   sh:property scasset:Asset_distribution;
-  sh:property scasset:Asset_specification;
-  sh:property scasset:Asset_landingPage
+  sh:property scasset:Asset_provenance
 .
 scasset:Asset_label rdf:type sh:PropertyShape;
   rdfs:label "naam"@nl;
@@ -146,6 +146,20 @@ scasset:Asset_distribution rdf:type sh:PropertyShape;
   rdfs:comment "The way in which an asset is published can be indicated."@en;
   skos:example "De lijst met Kadastrale gemeenten kan worden gepubliceerd in genericode."@nl
 .
+scasset:Asset_provenance a sh:PropertyShape;
+  rdfs:label "herkomst (asset)"@nl;
+  rdfs:label "provenance (asset)"@en;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+  rdfs:comment "Van een asset kan de herkomst worden beschreven."@nl;
+  rdfs:comment "Provenance of a asset can be described."@en;
+  skos:example "Op basis van de nieuwe wet op de BAG is een een nieuw informatiemodel opgesteld";
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een asset wordt bij voorkeur herkomst informatie bijgehouden."@nl;
+  sh:message "Prefably provenance information is kept on an asset."@en
+.
 scasset:AssetDistribution a sh:NodeShape;
   rdfs:label "distributie"@nl;
   rdfs:label "distribution"@en;
@@ -154,6 +168,7 @@ scasset:AssetDistribution a sh:NodeShape;
   sh:property scasset:WaardelijstDistributie_accessURL;
   sh:property scasset:WaardelijstDistributie_downloadURL;
   sh:property scasset:WaardelijstDistributie_representationTechnique;
+  sh:property scasset:Distribution_provenance
   rdfs:comment "De wijze waarop een asset wordt gepubliceerd."@nl;
   rdfs:comment "The way in which an asset is published."@en;
   skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
@@ -167,7 +182,6 @@ scasset:AssetDistribution_accessURL a sh:PropertyShape;
   rdfs:comment "A distribution can be found via an access url."@en;
   skos:example "kadaster.nl/waardelijsten/gc"@nl;
 .
-
 scasset:AssetDistribution_downloadURL a sh:PropertyShape;
   rdfs:label "download url"@nl;
   rdfs:label "download url"@en;
@@ -178,7 +192,6 @@ scasset:AssetDistribution_downloadURL a sh:PropertyShape;
   rdfs:comment "A download can be found via an download url."@en;
   skos:example "kadaster.nl/waardelijsten/downloads"@nl;
 .
-
 scasset:AssetDistribution_representationTechnique a sh:PropertyShape;
   rdfs:label "representatie formaat"@nl;
   rdfs:label "representation format"@en;
@@ -190,10 +203,25 @@ scasset:AssetDistribution_representationTechnique a sh:PropertyShape;
   rdfs:comment "The format in which a distribution is available can be specified based on the adms controlled vocabulary on representation techniques."@en;
   skos:example "genericode"@nl;
 .
+scasset:AssetDistribution_provenance a sh:PropertyShape;
+  rdfs:label "herkomst (asset distributie)"@nl;
+  rdfs:label "provenance (asset distribution)"@en;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+  rdfs:comment "Van een distributie kan de herkomst worden beschreven."@nl;
+  rdfs:comment "Provenance of a distribution can be described."@en;
+  skos:example "De metadata van de reSpec beschrijving van het nieuwe informatiemodel voor de BAG";
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een ditributie wordt bij voorkeur herkomst informatie bijgehouden."@nl;
+  sh:message "Prefably provenance information is kept on a distribution."@en
+.
 
 #
 # Webpages (landingPage, downloadURL)
 #
+
 scasset:LandingPage a sh:NodeShape;
   rdfs:label "webpagina"@nl;
   rdfs:label "landing page"@en;
