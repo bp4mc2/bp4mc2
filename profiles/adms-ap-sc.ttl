@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix scasset: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix scasset: <http://bp4mc2.org/somewher/adms-ap-sc/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -81,128 +81,112 @@ skos:inScheme sh:name "skos:inScheme".
 # ASSETS
 #---------------------
 
-scasset:ControlledVocabulary rdf:type sh:NodeShape;
+scasset:Asset rdf:type sh:NodeShape;
   rdfs:label "Asset"@nl;
   rdfs:label "Asset"@en;
   sh:name "adms:Asset";
-  rdfs:comment "Een waardelijst is een verzameling van begrippen of elementen die worden gebruikt om inhoud te indexeren en / of inhoud op te halen via 
-
-browsen of zoeken. Hij bevat meestal voorkeurs- en varianttermen en heeft een gedefinieerde scope of beschrijft een specifiek domein."@nl;
-  rdfs:comment "A controlled vocabulary is an organized arrangement of concepts or elements used to index content and/or to retrieve content through 
-
-browsing or searching. It typically includes preferred and variant terms and has a defined scope or describes a specific domain."@en;
+  rdfs:comment "Een asset is een set van herbruikbare metadata en referentiegegevens die worden gebruikt voor de ontwikkeling van e-overheidssystemen."@nl;
+  rdfs:comment "An asset is a set of reusable metadata and reference data  that are used for eGovernment system development."@en;
   skos:example "De waardelijst met Kadastrale gemeenten."@nl;
-  sh:property scasset:ControlledVocabulary_label;
-  sh:property scasset:ControlledVocabulary_type;
-  sh:property scasset:ControlledVocabulary_typeWaardelijst;
-  sh:property scasset:ControlledVocabulary_partOf;
-  sh:property scasset:ControlledVocabulary_distribution;
-  sh:property scasset:ControlledVocabulary_specification;
-  sh:property scasset:ControlledVocabulary_landingPage
+  sh:property scasset:Asset_label;
+  sh:property scasset:Asset_partOf;
+  sh:property scasset:Asset_distribution;
+  sh:property scasset:Asset_specification;
+  sh:property scasset:Asset_landingPage
 .
-scasset:ControlledVocabulary_label rdf:type sh:PropertyShape;
-  rdfs:label "naam (Waardelijst)"@nl;
-  rdfs:label "label (ControlledVocabulary)"@en;
-  sh:name "rdfs:label (ControlledVocabulary)";
+scasset:Asset_label rdf:type sh:PropertyShape;
+  rdfs:label "naam"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label (Asset)";
   sh:path rdfs:label;
-  rdfs:comment "Een waardelijst heeft een naam."@nl;
-  rdfs:comment "A controlled vocabulary has a label."@nl;
+  rdfs:comment "Een asset heeft een naam."@nl;
+  rdfs:comment "An asset has a label."@nl;
   skos:example "Landenlijst";
   sh:minCount 1;
   sh:maxCount 1;
   sh:severity sh:Violation;
-  sh:message "Een waardelijst heeft een naam."@nl;
-  sh:message "A controlled vocabulary has a label."@en
+  sh:message "Een asset heeft een naam."@nl;
+  sh:message "An asset has a label."@en
 .
-scasset:ControlledVocabulary_type a sh:PropertyShape;
-  rdfs:label "getypeerd als asset"@nl;
-  rdfs:label "typified as asset"@en;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue adms:Asset;
-  rdfs:comment "Een waardelijst wordt getypeerd als adms:Asset."@nl;
-  rdfs:comment "A controlled vocabulary is is typed as adms:Asset."@en;
-  skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
-.
-scasset:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
-  rdfs:label "type asset = Waardelijst"@nl;
-  rdfs:label "type asset = Controlled vocabulary"@en;
-  sh:name "dcterms:type";
-  sh:path dcterms:type;
-  sh:minCount 1;
-  sh:maxCount 1;
-  sh:hasValue dctype:ControlledVocabulary;
-.
-scasset:ControlledVocabulary_partOf a sh:PropertyShape;
+scasset:Asset_partOf a sh:PropertyShape;
   rdfs:label "onderdeel van"@nl;
   rdfs:label "part of"@en;
   sh:name "dcterms:isPartOf";
   sh:path dcterms:isPartOf;
   sh:node scasset:Dataset;
-  rdfs:comment "Een waardelijst kan onderdeel zijn van een dataset."@nl;
-  rdfs:comment "A controlled vocabulary can be part of a dataset."@en;
+  rdfs:comment "Een asset kan onderdeel zijn van een dataset."@nl;
+  rdfs:comment "An asset can be part of a dataset."@en;
   skos:example "De lijst met Kadastrale gemeenten is onderdeel van de BRK."@nl;
   sh:maxCount 1;
   sh:severity sh:Warning;
-  sh:message "Een waardelijst kan onderdeel zijn van maximaal 1 dataset."@nl;
-  sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
+  sh:message "Een asset kan onderdeel zijn van maximaal 1 dataset."@nl;
+  sh:message "An asset can be part of up to 1 dataset."@en
 .
-scasset:ControlledVocabulary_landingPage a sh:PropertyShape;
+scasset:Asset_landingPage a sh:PropertyShape;
   rdfs:label "webpagina"@nl;
   rdfs:label "landing page"@en;
   sh:name "dcat:landingPage";
   sh:path dcat:landingPage;
   sh:node scasset:LandingPage;
-  rdfs:comment "Een waardelijst kan vindbaar zijn via een webpagina."@nl;
-  rdfs:comment "A controlled vocabulary can be found via a landing page on the web."@en;
+  rdfs:comment "Een asset kan vindbaar zijn via een webpagina."@nl;
+  rdfs:comment "An asset can be found via a landing page on the web."@en;
   skos:example "kadaster.nl/waardelijsten."@nl;
   sh:maxCount 1;
   sh:severity sh:Violation;
-  sh:message "Een waardelijst kan maximaal via 1 bronpagina vindbaar zijn."@nl;
-  sh:message "A controlled vocabulary can be found on up to 1 source page."@en
+  sh:message "Een asset kan maximaal via 1 bronpagina vindbaar zijn."@nl;
+  sh:message "An asset can be found on up to 1 source page."@en
 .
-
-scasset:ControlledVocabulary_distribution rdf:type sh:PropertyShape;
-  rdfs:label "distributie"@nl;
-  rdfs:label "distribution"@en;
+scasset:Asset_distribution rdf:type sh:PropertyShape;
+  rdfs:label "heeft distributie"@nl;
+  rdfs:label "has distribution"@en;
   sh:name "dcat:distribution";
   sh:path dcat:distribution;
-  sh:node scasset:ControlledVocabularyDistribution;
-  rdfs:comment "De wijze waarop een waardelijst wordt gepubliceerd kan worden aangegeven."@nl;
-  rdfs:comment "The way in which a controlled vocabulary is published can be indicated."@en;
-  skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
+  sh:node scasset:AssetDistribution;
+  rdfs:comment "De wijze waarop een asset wordt gepubliceerd kan worden aangegeven."@nl;
+  rdfs:comment "The way in which an asset is published can be indicated."@en;
+  skos:example "De lijst met Kadastrale gemeenten kan worden gepubliceerd in genericode."@nl
 .
-
-scasset:ControlledVocabulary_specification a sh:PropertyShape;
-  rdfs:label "specificatie"@nl;
-  rdfs:label "specification"@en;
-  sh:name "rdfs:isDefinedBy";
-  sh:path rdfs:isDefinedBy;
-  sh:node scasset:NodeShape;
-.
-
-scasset:ControlledVocabularyDistribution a sh:NodeShape;
-  rdfs:label "Waardelijstdistributie"@nl;
-  sh:name "adms:Distribution";
+scasset:AssetDistribution a sh:NodeShape;
+  rdfs:label "distributie"@nl;
+  rdfs:label "distribution"@en;
+  sh:name "distribution";
   sh:targetClass adms:Distribution;
   sh:property scasset:WaardelijstDistributie_accessURL;
   sh:property scasset:WaardelijstDistributie_downloadURL;
   sh:property scasset:WaardelijstDistributie_representationTechnique;
+  rdfs:comment "De wijze waarop een asset wordt gepubliceerd."@nl;
+  rdfs:comment "The way in which an asset is published."@en;
+  skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
 .
-
-scasset:WaardelijstDistributie_accessURL a sh:PropertyShape;
+scasset:AssetDistribution_accessURL a sh:PropertyShape;
+  rdfs:label "toegang url"@nl;
+  rdfs:label "access url"@en;
   sh:name "dcat:accessURL";
   sh:path dcat:accessURL;
+  rdfs:comment "Een distributie kan vindbaar zijn via een toegang url."@nl;
+  rdfs:comment "A distribution can be found via an access url."@en;
+  skos:example "kadaster.nl/waardelijsten/gc"@nl;
 .
 
-scasset:WaardelijstDistributie_downloadURL a sh:PropertyShape;
+scasset:AssetDistribution_downloadURL a sh:PropertyShape;
+  rdfs:label "download url"@nl;
+  rdfs:label "download url"@en;
   sh:name "dcat:downloadURL";
   sh:path dcat:downloadURL;
   sh:node scasset:DownloadFormat;
+  rdfs:comment "Een download kan vindbaar zijn via een download url."@nl;
+  rdfs:comment "A download can be found via an download url."@en;
+  skos:example "kadaster.nl/waardelijsten/downloads"@nl;
 .
 
-scasset:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
+scasset:AssetDistribution_representationTechnique a sh:PropertyShape;
+  rdfs:label "representatie formaat"@nl;
+  rdfs:label "representation format"@en;
+  sh:name "dcat:downloadURL";
   sh:name "adms:representationrTechnique";
   sh:path adms:representationtechnique;
   sh:node scasset:RepresentationTechnique;
+  rdfs:comment "Het formaat waarin een distributie beschikbaar is kan worden gespecificeerd op basis van de adms waardelijst representation techniques."@nl;
+  rdfs:comment "The format in which a distribution is available can be specified based on the adms controlled vocabulary on representation techniques."@en;
+  skos:example "genericode"@nl;
 .
