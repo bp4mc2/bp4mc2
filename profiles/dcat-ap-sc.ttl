@@ -78,154 +78,203 @@ dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
 
 #---------------------
-# Dataset
+# Dataset (general)
 #---------------------
 scdcat:Dataset rdf:type sh:NodeShape;
   rdfs:label "Dataset (algemeen)"@nl;
-  rdfs:label "Dataset (endeavour)"@en;
-  sh:name "dcat:Dataset (endeavour)";
+  rdfs:label "Dataset (general)"@en;
+  sh:name "dcat:Dataset (general)";
   sh:targetClass dcat:Dataset;
   rdfs:comment "Een dataset (algemeen) is een algemene beschrijving van een verzameling data, gepubliceerd of samengesteld door één beheerder."@nl;
-  rdfs:comment "A dataset (endeavour) is a general description of a collection of data, published or curated by a single agent."@en;
+  rdfs:comment "A dataset (general) is a general description of a collection of data, published or curated by a single agent."@en;
   skos:example "De Basisregistratie Kadaster (BRK) bestaat uit de kadastrale registratie van onroerende zaken, zakelijke rechten en de kadastrale kaart."@nl;
-  sh:property scdcat:Dataset_name;
-  sh:property scdcat:Dataset_type;
+  sh:property scdcat:Dataset_label;
   sh:property scdcat:Dataset_dateIssued;
   sh:property scdcat:Dataset_language;
   sh:property scdcat:Dataset_description;
   sh:property scdcat:Dataset_publisher;
+  sh:property scdcat:Dataset_type;
   sh:property scdcat:Dataset_provenance;
 .
-
-scdcat:Dataset_provenance a sh:PropertyShape;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:name "foaf:isPrimaryTopicOf";
-  sh:class prov:Entity;
-.
-scdcat:Dataset_name rdf:type sh:PropertyShape;
-  rdfs:label "naam"@nl;
+scdcat:Dataset_label rdf:type sh:PropertyShape;
+  rdfs:label "naam (dataset)"@nl;
+  rdfs:label "label (dataset)"@en;
   sh:name "dcterms:title";
-  rdfs:comment "De dataset heeft een naam"@nl;
-  skos:example "'Omgevingswet','BAL','BRK', etc'";
   sh:path dcterms:title
-.
-scdcat:Dataset_type a sh:PropertyShape;
-  sh:path dcterms:type;
-  sh:name "dcterms:type";
+  rdfs:comment "Een dataset heeft een naam."@nl;
+  rdfs:comment "A dataset has a label."@en;
+  skos:example "de BRK (in algemene zin)"@nl;
   sh:minCount 1;
   sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een dataset heeft een naam."@nl;
+  sh:message "A dataset has a label."@en
 .
 scdcat:Dataset_dateIssued rdf:type sh:PropertyShape;
-  rdfs:label "publicatiedatum"@nl;
+  rdfs:label "gepubliceerd"@nl;
+  rdfs:label "issued"@en;
   sh:name "dcterms:issued";
-  rdfs:comment "De dataset is op een bepaalde datum gepubliceerd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus."@nl;
-  skos:example "1/10/2017";
   sh:path dcterms:issued
+  rdfs:comment "De datum waarop een dataset is gepubliceerd kan worden vastgelegd. Dit is de oorspronkelijke publicatiedatum. Het is niet per se de datum van opname van de dataset in de catalogus."@nl;
+  rdfs:comment "The date on which a dataset was published can be recorded. This is the original publication date. It is not necessarily the date of inclusion of the dataset in the catalog."@en;
+  skos:example "1/10/2017";
 .
 scdcat:Dataset_language rdf:type sh:PropertyShape;
   rdfs:label "taal"@nl;
+  rdfs:label "language"@en;
   sh:name "dcterms:language";
-  rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL)"@nl;
-  skos:example "@nl";
   sh:path dcterms:language
+  rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL) kan worden vastgelegd."@nl;
+  rdfs:comment "The language in which the dataset is described (because of the compatibility with the DCAT-AP NL) can be recorded."@en;
+  skos:example "@nl"@nl;
 .
 scdcat:Dataset_description rdf:type sh:PropertyShape;
   rdfs:label "beschrijving"@nl;
+  rdfs:label "description"@en;
   sh:name "dcterms:description";
-  rdfs:comment "De dataset heeft een duidelijke beschrijving"@nl;
-  skos:example "Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking.";
+  rdfs:comment "De dataset kan een duidelijke beschrijving hebben."@nl;
+  rdfs:comment "The dataset can have a clear description."@en;
+  skos:example "Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking."@nl;
   sh:path dcterms:description
 .
 scdcat:Dataset_publisher a sh:PropertyShape;
   rdfs:label "publicist"@nl;
+  rdfs:label "publisher"@en;
   sh:name "dcterms:publisher";
-  rdfs:comment "Het is bekend door wie een dataset wordt gepubliceerd. Deze organisatie of persoon heeft toestemming om deze handeling uit te voeren"@nl;
-  skos:example "overheid:Rijkswaterstaat";
   sh:path dcterms:publisher;
   sh:class foaf:Agent;
+  rdfs:comment "Degene die een dataset publiceert kan worden vastgelegd. Deze organisatie of persoon heeft toestemming om deze handeling uit te voeren."@nl;
+  rdfs:comment "The person who publishes a dataset can be recorded. This organization or person has permission to perform this action."@en;
+  skos:example "overheid:Rijkswaterstaat"@nl;
 .
-
-scdcat:Datasetversie rdf:type sh:NodeShape;
-  rdfs:label "Datasetversie"@nl;
-  sh:name "dcat:Dataset (versie)";
-  sh:property scdcat:Datasetversie_rol;
-  sh:property scdcat:Datasetversie_version;
-  sh:property scdcat:Datasetversie_versionNotes;
-  sh:property scdcat:Datasetversie_distribution;
-  sh:property scdcat:Datasetversie_versionOf;
-  sh:property scdcat:Datasetversie_describedBy;
-  sh:property scdcat:Datasetversie_geometrischeAfbakening;
-.
-
-scdcat:Datasetversie_rol a sh:PropertyShape;
-  sh:path rdf:type;
-  sh:name "rdf:type";
-  sh:hasValue dcat:Dataset;
-.
-scdcat:Datasetversie_type a sh:PropertyShape;
-  rdfs:label "type dataset = dataset version";
+scdcat:Dataset_type a sh:PropertyShape;
+  rdfs:label "type dataset = DatasetAlgemeen"@nl;
+  rdfs:label "type dataset = DatasetGeneral"@en;
   sh:path dcterms:type;
   sh:name "dcterms:type";
   sh:minCount 1;
   sh:maxCount 1;
+  sh:hasValue dctype:DatasetGeneral;
+  rdfs:comment "Een dataset (algemeen) wordt expliciet getypeerd als DatasetAlgemeen."@nl;
+  rdfs:comment "A dataset (general) is explicitly typed as a DatasetGeneral."@en;
+  skos:example ""@nl;
+.
+scdcat:Dataset_provenance a sh:PropertyShape;
+  rdfs:label "herkomst (dataset)"@nl;
+  rdfs:label "provenance (dataset)"@en;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:class prov:Entity;
+  rdfs:comment "Van een dataset kan de herkomst worden beschreven."@nl;
+  rdfs:comment "Provenance of a dataset can be described."@en;
+  skos:example "De BAG is op xx/xx/xx gelanceerd";
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een dataset wordt bij voorkeur herkomst informatie bijgehouden."@nl;
+  sh:message "Prefably provenance information is kept on a dataset."@en
+.
+
+#---------------------
+# Dataset (version)
+#---------------------
+
+scdcat:DatasetVersion rdf:type sh:NodeShape;
+  rdfs:label "Dataset (versie)"@nl;
+  rdfs:label "Dataset (version)"@en;
+  sh:name "dcat:Dataset (version)";
+#  moet hier geen target class worden gedefinieerd?
+  rdfs:comment "Een dataset (versie) is een concrete, geversioneerde beschrijving van een verzameling data, gepubliceerd of samengesteld door één beheerder."@nl;
+  rdfs:comment "A dataset (general) is a concrete, versioned description of a collection of data, published or curated by a single agent."@en;
+  skos:example "De Basisregistratie Kadaster (BRK) zoals beschreven in IMKAD 2.1."@nl;
+  sh:property scdcat:DatasetVersion_role;
+  sh:property scdcat:DatasetVersion_version;
+  sh:property scdcat:DatasetVersion_versionNotes;
+  sh:property scdcat:DatasetVersion_distribution;
+  sh:property scdcat:DatasetVersion_versionOf;
+  sh:property scdcat:DatasetVersion_describedBy;
+  sh:property scdcat:DatasetVersion_geometrischeAfbakening;
+.
+
+scdcat:DatasetVersion_role a sh:PropertyShape;
+#label, comment en voorbeeld?
+sh:path rdf:type;
+  sh:name "rdf:type";
+  sh:hasValue dcat:Dataset;
+.
+scdcat:DatasetVersion_type a sh:PropertyShape;
+  rdfs:label "type dataset = DatasetVersie"@nl;
+  rdfs:label "type dataset = DatasetVersion"@en;
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  rdfs:comment "Een dataset (versie) wordt expliciet getypeerd als DatasetVersie."@nl;
+  rdfs:comment "A dataset (version) is explicitly typed as a DatasetVersion."@en;
+  skos:example ""@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
   sh:hasValue dstype:DatasetVersion;
 .
-scdcat:Datasetversie_version rdf:type sh:PropertyShape;
+scdcat:DatasetVersion_version rdf:type sh:PropertyShape;
   rdfs:label "versie"@nl;
+  rdfs:label "version"@en;
   sh:name "adms:version";
-  rdfs:comment "De versie van de dataset."@nl;
   sh:path adms:version;
-  skos:example "2.1.0";
+  rdfs:comment "Een dataset (versie) kan een versie aanduiding hebben."@nl;
+  rdfs:comment "A dataset (version) can have a version indication."@en;
+  skos:example "2.1.0"@nl;
 .
-scdcat:Datasetversie_versionNotes rdf:type sh:PropertyShape;
+scdcat:DatasetVersion_versionNotes rdf:type sh:PropertyShape;
   rdfs:label "versie-notities"@nl;
+  rdfs:label "version notes"@en;
   sh:name "adms:versionNotes";
-  rdfs:comment "Een versie heeft release notes."@nl;
   sh:path adms:versionNotes;
-  skos:example "IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log.";
+  rdfs:comment "Een dataset (versie) kan release notes bevatten."@nl;
+  rdfs:comment "A dataset (version) can contain release notes."@en;
+  skos:example "IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log."@nl;
 .
-scdcat:Datasetversie_distribution a sh:PropertyShape;
-  rdfs:label "distributie"@nl;
+scdcat:DatasetVersion_distribution a sh:PropertyShape;
+  rdfs:label "datasetversie distributie"@nl;
+  rdfs:label "datasetversion distribution"@en;
   sh:path dcat:distribution;
   sh:name "dcat:distribution";
   sh:class dcat:Distribution;
-  rdfs:comment "Een dataset kan worden verspreid via verschillende kanalen."@nl;
-  skos:example "Digitale Kadastrale Kaart download service.";
+  rdfs:comment "De kanalen via welke een dataset kan worden verspreid kunnen worden gespecificeerd."@nl;
+  rdfs:comment "The channels through which a dataset can be distributed can be recorded."@en;
+  skos:example "Digitale Kadastrale Kaart download service."@nl;
 .
-scdcat:Datasetversie_versionOf a sh:PropertyShape;
+scdcat:DatasetVersion_versionOf a sh:PropertyShape;
   rdfs:label "versie van"@nl;
+  rdfs:label "version of"@en;
   sh:path dcterms:isVersionOf;
   sh:name "dcterms:isVersionOf";
-  rdfs:comment "Een concrete, geversioneerde dataset is afgeleid van een abstracte dataset. A versioned datasets is derived from the general dataset and a productmodel is derived from an informationmodel"@nl;
   sh:node scdcat:Dataset;
+  rdfs:comment "Een concrete, geversioneerde dataset kan zijn afgeleid van een abstracte dataset."@nl;
+  rdfs:comment "A versioned datasets can be derived from a general dataset."@en;
+  skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD."@nl;
   sh:maxCount 1;
-  skos:example "IMKAD 2.1.0 is een concrete versie van IMKAD.";
+  sh:severity sh:Violation;
+  sh:message "Een concrete, geversioneerde dataset kan zijn afgeleid van maximaal 1 abstracte dataset."@nl;
+  sh:message "A versioned datasets can be derived from up to 1 general dataset."@en
 .
-scdcat:Datasetversie_geometrischeAfbakening rdf:type sh:PropertyShape;
-    rdfs:label "geografische afbakening"@nl;
-    rdfs:comment "Het gebied waar de dataset over gaat"@nl;
-    sh:class dcterms:Location;
-    skos:example "gemeente Apeldoorn";
-    sh:path dcterms:spatial;
-    sh:name "dcterms:spatial"
+scdcat:DatasetVersion_geometrischeAfbakening rdf:type sh:PropertyShape;
+  rdfs:label "geografische afbakening"@nl;
+  rdfs:label "geographical demarcation"@en;
+  sh:class dcterms:Location;
+  sh:path dcterms:spatial;
+  sh:name "dcterms:spatial"
+  rdfs:comment "Het gebied waar de dataset over gaat kan worden gespecificeerd."@nl;
+  rdfs:comment "The area the dataset is about can be recorded."@en;
+  skos:example "gemeente Apeldoorn"@nl;
 .
-scdcat:Datasetversie_isDerivedFrom rdf:type sh:PropertyShape;
-  rdfs:label "afgeleid van"@nl;
-  rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel."@nl;
-  sh:path dcterms:relation;
-  sh:name "dcterms:relation";
-  sh:class dcat:Dataset;
-.
-scdcat:Datasetversie_describedBy rdf:type sh:PropertyShape;
+scdcat:DatasetVersion_describedBy rdf:type sh:PropertyShape;
   rdfs:label "beschreven door"@nl;
-  rdfs:comment "De data in een dataset is beschreven door een informatiemodel."@nl;
+  rdfs:label "described by"@en;
   sh:path wdrs:describedBy;
   sh:name "wdrs:describedBy";
-  sh:node scdcat:Informatiemodel;
+  rdfs:comment "De data in een dataset is beschreven door een informatiemodel."@nl;
   skos:example "kadaster.nl/schemas/imkad";
 .
 
-scdcat:Datasetversie_locatie a sh:NodeShape;
+scdcat:DatasetVersion_locatie a sh:NodeShape;
   rdfs:label "Locatie"@nl;
   sh:name "dcterms:Location";
 .
@@ -240,6 +289,13 @@ scdcat:Informatieproduct rdf:type sh:NodeShape;
   sh:property scdcat:Informatieproduct_distribution;
   sh:property scdcat:Informatieproduct_versionOf;
   sh:property scdcat:Informatieproduct_qualityMeasurement;
+.
+scdcat:DatasetVersion_isDerivedFrom rdf:type sh:PropertyShape;
+  rdfs:label "afgeleid van"@nl;
+  rdfs:comment "Een concreet, geversioneerd productmodel is afgeleid van een concreet, geversioneerd informatiemodel."@nl;
+  sh:path dcterms:relation;
+  sh:name "dcterms:relation";
+  sh:class dcat:Dataset;
 .
 
 scdcat:Informatieproduct_rol a sh:PropertyShape;
