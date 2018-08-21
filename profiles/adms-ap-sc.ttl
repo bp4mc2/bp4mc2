@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix scasset: <http://bp4mc2.org/somewhere/adms-ap-sc/>.
+@prefix scadms: <http://bp4mc2.org/somewhere/adms-ap-sc/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -81,20 +81,20 @@ skos:inScheme sh:name "skos:inScheme".
 # ASSETS
 #---------------------
 
-scasset:Asset rdf:type sh:NodeShape;
+scadms:Asset rdf:type sh:NodeShape;
   rdfs:label "Asset"@nl;
   rdfs:label "Asset"@en;
   sh:name "adms:Asset";
   rdfs:comment "Een asset is een set van herbruikbare metadata en referentiegegevens die worden gebruikt voor de ontwikkeling van e-overheidssystemen."@nl;
   rdfs:comment "An asset is a set of reusable metadata and reference data  that are used for eGovernment system development."@en;
   skos:example "De waardelijst met Kadastrale gemeenten."@nl;
-  sh:property scasset:Asset_label;
-  sh:property scasset:Asset_partOf;
-  sh:property scasset:Asset_landingPage;
-  sh:property scasset:Asset_distribution;
-  sh:property scasset:Asset_provenance
+  sh:property scadms:Asset_label;
+  sh:property scadms:Asset_partOf;
+  sh:property scadms:Asset_landingPage;
+  sh:property scadms:Asset_distribution;
+  sh:property scadms:Asset_provenance
 .
-scasset:Asset_label rdf:type sh:PropertyShape;
+scadms:Asset_label rdf:type sh:PropertyShape;
   rdfs:label "naam"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label (Asset)";
@@ -108,12 +108,12 @@ scasset:Asset_label rdf:type sh:PropertyShape;
   sh:message "Een asset heeft een naam."@nl;
   sh:message "An asset has a label."@en
 .
-scasset:Asset_partOf a sh:PropertyShape;
+scadms:Asset_partOf a sh:PropertyShape;
   rdfs:label "onderdeel van"@nl;
   rdfs:label "part of"@en;
   sh:name "dcterms:isPartOf";
   sh:path dcterms:isPartOf;
-  sh:node scasset:Dataset;
+  sh:node scadms:Dataset;
   rdfs:comment "Een asset kan onderdeel zijn van een dataset."@nl;
   rdfs:comment "An asset can be part of a dataset."@en;
   skos:example "De lijst met Kadastrale gemeenten is onderdeel van de BRK."@nl;
@@ -122,12 +122,12 @@ scasset:Asset_partOf a sh:PropertyShape;
   sh:message "Een asset kan onderdeel zijn van maximaal 1 dataset."@nl;
   sh:message "An asset can be part of up to 1 dataset."@en
 .
-scasset:Asset_landingPage a sh:PropertyShape;
+scadms:Asset_landingPage a sh:PropertyShape;
   rdfs:label "heeft webpagina"@nl;
   rdfs:label "has landing page"@en;
   sh:name "dcat:landingPage";
   sh:path dcat:landingPage;
-  sh:node scasset:LandingPage;
+  sh:node scadms:LandingPage;
   rdfs:comment "De webpagina waarop een asset vindbaar is kan worden gespecificeerd."@nl;
   rdfs:comment "The landing page on the web on which an asset can be found can be specified."@en;
   skos:example "kadaster.nl/waardelijsten."@nl;
@@ -136,17 +136,17 @@ scasset:Asset_landingPage a sh:PropertyShape;
   sh:message "Een asset kan maximaal via 1 bronpagina vindbaar zijn."@nl;
   sh:message "An asset can be found on up to 1 source page."@en
 .
-scasset:Asset_distribution rdf:type sh:PropertyShape;
+scadms:Asset_distribution rdf:type sh:PropertyShape;
   rdfs:label "heeft distributie"@nl;
   rdfs:label "has distribution"@en;
   sh:name "dcat:distribution";
   sh:path dcat:distribution;
-  sh:node scasset:AssetDistribution;
+  sh:node scadms:AssetDistribution;
   rdfs:comment "De wijze waarop een asset wordt gepubliceerd kan worden aangegeven."@nl;
   rdfs:comment "The way in which an asset is published can be indicated."@en;
   skos:example "De lijst met Kadastrale gemeenten kan worden gepubliceerd in genericode."@nl
 .
-scasset:Asset_provenance a sh:PropertyShape;
+scadms:Asset_provenance a sh:PropertyShape;
   rdfs:label "herkomst (asset)"@nl;
   rdfs:label "provenance (asset)"@en;
   sh:name "foaf:isPrimaryTopicOf";
@@ -160,20 +160,20 @@ scasset:Asset_provenance a sh:PropertyShape;
   sh:message "Van een asset wordt bij voorkeur herkomst informatie bijgehouden."@nl;
   sh:message "Prefably provenance information is kept on an asset."@en
 .
-scasset:AssetDistribution a sh:NodeShape;
+scadms:AssetDistribution a sh:NodeShape;
   rdfs:label "distributie"@nl;
   rdfs:label "distribution"@en;
   sh:name "distribution";
   sh:targetClass adms:Distribution;
-  sh:property scasset:WaardelijstDistributie_accessURL;
-  sh:property scasset:WaardelijstDistributie_downloadURL;
-  sh:property scasset:WaardelijstDistributie_representationTechnique;
-  sh:property scasset:Distribution_provenance
+  sh:property scadms:WaardelijstDistributie_accessURL;
+  sh:property scadms:WaardelijstDistributie_downloadURL;
+  sh:property scadms:WaardelijstDistributie_representationTechnique;
+  sh:property scadms:Distribution_provenance
   rdfs:comment "De wijze waarop een asset wordt gepubliceerd."@nl;
   rdfs:comment "The way in which an asset is published."@en;
   skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
 .
-scasset:AssetDistribution_accessURL a sh:PropertyShape;
+scadms:AssetDistribution_accessURL a sh:PropertyShape;
   rdfs:label "toegang url"@nl;
   rdfs:label "access url"@en;
   sh:name "dcat:accessURL";
@@ -182,28 +182,28 @@ scasset:AssetDistribution_accessURL a sh:PropertyShape;
   rdfs:comment "A distribution can be found via an access url."@en;
   skos:example "kadaster.nl/waardelijsten/gc"@nl;
 .
-scasset:AssetDistribution_downloadURL a sh:PropertyShape;
+scadms:AssetDistribution_downloadURL a sh:PropertyShape;
   rdfs:label "download url"@nl;
   rdfs:label "download url"@en;
   sh:name "dcat:downloadURL";
   sh:path dcat:downloadURL;
-  sh:node scasset:DownloadFormat;
+  sh:node scadms:DownloadFormat;
   rdfs:comment "Een download kan vindbaar zijn via een download url."@nl;
   rdfs:comment "A download can be found via an download url."@en;
   skos:example "kadaster.nl/waardelijsten/downloads"@nl;
 .
-scasset:AssetDistribution_representationTechnique a sh:PropertyShape;
+scadms:AssetDistribution_representationTechnique a sh:PropertyShape;
   rdfs:label "representatie formaat"@nl;
   rdfs:label "representation format"@en;
   sh:name "dcat:downloadURL";
   sh:name "adms:representationrTechnique";
   sh:path adms:representationtechnique;
-  sh:node scasset:RepresentationTechnique;
+  sh:node scadms:RepresentationTechnique;
   rdfs:comment "Het formaat waarin een distributie beschikbaar is kan worden gespecificeerd op basis van de adms waardelijst representation techniques."@nl;
   rdfs:comment "The format in which a distribution is available can be specified based on the adms controlled vocabulary on representation techniques."@en;
   skos:example "genericode"@nl;
 .
-scasset:AssetDistribution_provenance a sh:PropertyShape;
+scadms:AssetDistribution_provenance a sh:PropertyShape;
   rdfs:label "herkomst (asset distributie)"@nl;
   rdfs:label "provenance (asset distribution)"@en;
   sh:name "foaf:isPrimaryTopicOf";
@@ -222,7 +222,7 @@ scasset:AssetDistribution_provenance a sh:PropertyShape;
 # Webpages (landingPage, downloadURL)
 #
 
-scasset:LandingPage a sh:NodeShape;
+scadms:LandingPage a sh:NodeShape;
   rdfs:label "webpagina"@nl;
   rdfs:label "landing page"@en;
   sh:name "foaf:Document (Landing page)";
@@ -234,7 +234,7 @@ scasset:LandingPage a sh:NodeShape;
   rdfs:comment "The landing page on the web on which an asset can be found."@en;
   skos:example "kadaster.nl/waardelijsten."@nl;
 .
-scasset:DownloadFormat a sh:NodeShape;
+scadms:DownloadFormat a sh:NodeShape;
   rdfs:label "download formaat"@nl;
   rdfs:label "download format"@en;
   sh:name "foaf:Document (Download format)";
@@ -245,7 +245,7 @@ scasset:DownloadFormat a sh:NodeShape;
   sh:property [
     sh:name "dcterms:isFormatOf";
     sh:path dcat:landingPage;
-    sh:node scasset:LandingPage;
+    sh:node scadms:LandingPage;
   ];
   rdfs:comment "De download kan een bestand zijn of een webpagina met informatie."@nl;
   rdfs:comment "The download can be a file or a landing page with information."@en;
