@@ -111,7 +111,7 @@ scdcat:Dataset_label rdf:type sh:PropertyShape;
   rdfs:label "naam (dataset)"@nl;
   rdfs:label "label (dataset)"@en;
   sh:name "dcterms:title";
-  sh:path dcterms:title
+  sh:path dcterms:title;
   rdfs:comment "Een dataset heeft een naam."@nl;
   rdfs:comment "A dataset has a label."@en;
   skos:example "de BRK (in algemene zin)"@nl;
@@ -125,7 +125,7 @@ scdcat:Dataset_language rdf:type sh:PropertyShape;
   rdfs:label "taal"@nl;
   rdfs:label "language"@en;
   sh:name "dcterms:language";
-  sh:path dcterms:language
+  sh:path dcterms:language;
   rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL) kan worden vastgelegd."@nl;
   rdfs:comment "The language in which the dataset is described (because of the compatibility with the DCAT-AP NL) can be recorded."@en;
   skos:example "@nl"@nl;
@@ -177,7 +177,7 @@ scdcat:DatasetVersion rdf:type sh:NodeShape;
   rdfs:comment "A dataset (general) is a concrete, versioned description of a collection of data, published or curated by a single agent."@en;
   skos:example "De Basisregistratie Kadaster (BRK) zoals beschreven in IMKAD 2.1."@nl;
   sh:property scdcat:DatasetVersion_role;
-  sh:property DatasetVersion_type;
+  sh:property scdcat:DatasetVersion_type;
   sh:property scdcat:DatasetVersion_version;
   sh:property scdcat:DatasetVersion_versionNotes;
   sh:property scdcat:DatasetVersion_distribution;
@@ -250,7 +250,7 @@ scdcat:DatasetVersion_versionOf a sh:PropertyShape;
 scdcat:DatasetVersion_geometricDemarcation rdf:type sh:PropertyShape;
   rdfs:label "geografische afbakening"@nl;
   rdfs:label "geographical demarcation"@en;
-  sh:name "dcterms:spatial"
+  sh:name "dcterms:spatial";
   sh:path dcterms:spatial;
   sh:class dcterms:Location;
   rdfs:comment "Het gebied waar de dataset over gaat kan worden gespecificeerd."@nl;
@@ -351,7 +351,7 @@ scdcat:DatasetProduct_isDerivedFrom rdf:type sh:PropertyShape;
   rdfs:label "derived from"@en;
   sh:name "dcterms:relation (derived from)";
   sh:path dcterms:relation;
-  sh:node scdcat:DatasetVersion; 
+  sh:node scdcat:DatasetVersion;
   rdfs:comment "Een dataset (product) kan zijn afgeleid van een dataset (versie)."@nl;
   rdfs:comment "A dataset (product) can be derived from a dataset (version)."@en;
   skos:example "BRK levering 2.2 isafgeleid van IMKAD 2.1.0."@nl;
@@ -388,7 +388,7 @@ scdcat:Catalog a sh:NodeShape;
   rdfs:label "Catalogus"@nl;
   rdfs:label "Catalog"@en;
   sh:name "dcat:Catalog";
-  sh:targetClass dcat:Catalog
+  sh:targetClass dcat:Catalog;
   rdfs:comment "Een catalogus is een samengestelde verzameling (federatief beheerde) metagegevens over datasets (algemeen, versie en product), distributies en bijbehorende assets"@nl;
   rdfs:comment "A catalog is a curated collection of (federally managed) metadata about datasets (general, version or product), distributions and associated assets."@en;
   skos:example "De catalogus voor de BRK met de verschillende versies, informatieproducten, begrippen, waardelijsten en informatiemodellen"@nl;
@@ -405,16 +405,16 @@ scdcat:Catalog_name rdf:type sh:PropertyShape;
   rdfs:label "naam (catalogus)"@nl;
   rdfs:label "label (catalog)"@en;
   sh:name "dcterms:title (catalog)";
-  sh:path dcterms:title
+  sh:path dcterms:title;
   rdfs:comment "De catalogus kan een naam hebben"@nl;
-  rdfs:comment "The catalog can have has a label"@@en;
+  rdfs:comment "The catalog can have has a label"@en;
   skos:example "Catalogus Omgevingswet";
 .
 scdcat:Catalog_description rdf:type sh:PropertyShape;
   rdfs:label "beschrijving (catalogus)"@nl;
   rdfs:label "description (catalog)"@en;
   sh:name "dcterms:description (catalog)";
-  sh:path dcterms:description
+  sh:path dcterms:description;
   rdfs:comment "De catalogus kan een beschrijving hebben."@nl;
   rdfs:comment "De catalog can be described."@en;
   skos:example "De Catalogus voor de Omgevingswet is een centrale ingang tot het stelsel, waarin wetgeving, begrippen, regels, informatiemodellen, datasets, producten en services met elkaar worden verbonden. De catalogus is daarmee een centrale plek waar de verschillende gebruikersgroepen van het stelsel kunnen zien waar het stelsel uit bestaat, wat begrippen betekenen en hoe de verschillende elementen van het stelsel aan elkaar zijn gerelateerd."@nl;
