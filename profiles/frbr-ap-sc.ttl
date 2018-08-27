@@ -9,16 +9,30 @@
 # IMPORT
 #---------------------
 
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
+#imported from frbr
+frbr:Work a rdfs:Class;
+  rdfs:subClassOf frbr:Endeavour
+.
+frbr:Expression a rdfs:Class;
+  rdfs:subClassOf frbr:Endeavour
+.
 
-#derived fromt foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
+#Shape outside this model, but used as reference
+scsource:Concept a sh:NodeShape;
+  sh:name "skos:Concept";
+  sh:property scsource:Concept_dctsource;
+.
+scsource:Concept_dctsource a sh:PropertyShape;
+  rdfs:label "bron op het web"@nl;
+  rdfs:label "source on the web"@en;
+  sh:name "dcterms:source";
+  sh:path dcterms:source;
+  sh:node [ sh:xone (scsource:Source scsource:SourceDocument)];
+  rdfs:comment "Een begrip kan zijn ontleend aan een op het web vindbare bron. Dit kan een (versie van) een beschrijving van een specifiek begrip of een document waarin een beschrijving van het begrip is te vinden."@nl;
+  rdfs:comment "A concept can be derived from a source that can be found on the web. This can be a (version of) a description of a specific concept or a document in which a description of the concept can be found."@en;
+  skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
+.
 
-#---------------------
-# Source
-#---------------------
 
 scsource:Source a sh:NodeShape;
   rdfs:label "beschrijvende bron"@nl;
