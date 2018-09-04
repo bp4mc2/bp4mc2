@@ -75,3 +75,43 @@ stage:profile-query a elmo:Query;
 		}
 	'''
 .
+
+stage:selected-profile-query a elmo:Query;
+	elmo:query '''
+		CONSTRUCT {
+			?shape ?p ?o.
+			?o ?po ?oo.
+			?oo ?poo ?ooo.
+			?ooo ?pooo ?oooo.
+		}
+		WHERE {
+			GRAPH <@STAGE@> {
+				<@REPRESENTATION@> rdfs:isDefinedBy ?shapesgraph.
+				<@REPRESENTATION@> rdfs:seeAlso ?shape
+			}
+			GRAPH ?shapesgraph {
+				{
+					?shape ?p ?o.
+				}
+				UNION
+				{
+					?shape ?p ?o.
+					?o ?po ?oo.
+				}
+				UNION
+				{
+					?shape ?p ?o.
+					?o ?po ?oo.
+					?oo ?poo ?ooo
+				}
+				UNION
+				{
+					?shape ?p ?o.
+					?o ?po ?oo.
+					?oo ?poo ?ooo.
+					?ooo ?pooo ?oooo.
+				}
+			}
+		}
+	'''
+.

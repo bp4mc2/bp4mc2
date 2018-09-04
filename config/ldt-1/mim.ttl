@@ -1,0 +1,52 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix html: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/bp4mc2/stage#>.
+@prefix container-local: <http://localhost:8080/bp4mc2/container/>.
+@prefix shape: <http://bp4mc2.org/def/mim-shapes#>.
+
+container-local:mim a elmo:Container;
+	elmo:contains stage:Menu;
+	elmo:representation elmo:UploadRepresentation;
+	rdfs:label "Upload MiM metamodel (RDF)";
+.
+
+stage:profile-mim a elmo:Representation;
+	elmo:url-pattern "/query/mim$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:mim;
+.
+stage:profile-mim-datatype a elmo:Representation;
+	elmo:url-pattern "/query/mim-datatype$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query stage:selected-profile-query;
+	rdfs:isDefinedBy container-local:mim;
+	rdfs:seeAlso shape:Datatype, shape:Attribuutsoort, shape:GestructureerdDatatype, shape:PrimitiefDatatype, shape:Enumeratie, shape:Referentielijst, shape:Union, shape:CodeList, shape:DataElement, shape:ReferentieElement, shape:UnionElement, shape:Enumeratiewaarde;
+.
+stage:profile-mim-kern a elmo:Representation;
+	elmo:url-pattern "/query/mim-kern$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query stage:selected-profile-query;
+	rdfs:isDefinedBy container-local:mim;
+	rdfs:seeAlso shape:Objecttype, shape:Attribuutsoort, shape:Datatype, shape:Generalisatie, shape:Gegevensgroep, shape:Gegevensgroeptype, shape:ExterneKoppeling, shape:Relatiesoort, shape:Relatieklasse;
+.
+stage:profile-mim-relatie a elmo:Representation;
+	elmo:url-pattern "/query/mim-relatie$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query stage:selected-profile-query;
+	rdfs:isDefinedBy container-local:mim;
+	rdfs:seeAlso shape:Objecttype, shape:Relatiesoort, shape:Relatierol, shape:RelatierolSource, shape:RelatierolTarget
+.
+stage:profile-mim-constraint a elmo:Representation;
+	elmo:url-pattern "/query/mim-constraint$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query stage:selected-profile-query;
+	rdfs:isDefinedBy container-local:mim;
+	rdfs:seeAlso shape:Constraint, shape:Objecttype, shape:Gegevensgroeptype, shape:Relatieklasse
+.
