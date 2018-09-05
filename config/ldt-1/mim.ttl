@@ -10,6 +10,12 @@ container-local:mim a elmo:Container;
 	elmo:representation elmo:UploadRepresentation;
 	rdfs:label "Upload MiM metamodel (RDF)";
 .
+container-local:mim-yed a elmo:Container;
+	elmo:translator elmo:GraphmlTranslator;
+	elmo:contains stage:Menu;
+	rdfs:label "Upload a MIM metamodel diagram (graphml)";
+#	elmo:representation elmo:UploadRepresentation;
+.
 
 stage:profile-mim a elmo:Representation;
 	elmo:url-pattern "/query/mim$";
@@ -32,7 +38,7 @@ stage:profile-mim-kern a elmo:Representation;
 	elmo:contains stage:Menu;
 	elmo:query stage:selected-profile-query;
 	rdfs:isDefinedBy container-local:mim;
-	rdfs:seeAlso shape:Objecttype, shape:Attribuutsoort, shape:Datatype, shape:Generalisatie, shape:Gegevensgroep, shape:Gegevensgroeptype, shape:ExterneKoppeling, shape:Relatiesoort, shape:Relatieklasse;
+	rdfs:seeAlso shape:Objecttype, shape:Attribuutsoort, shape:Datatype, shape:Generalisatie, shape:Gegevensgroep, shape:Gegevensgroeptype, shape:ExterneKoppeling, shape:Relatiesoort, shape:Relatieklasse, shape:Aggregatietypen;
 .
 stage:profile-mim-relatie a elmo:Representation;
 	elmo:url-pattern "/query/mim-relatie$";

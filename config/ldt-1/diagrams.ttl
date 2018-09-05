@@ -22,7 +22,8 @@ stage:diagram-frbr-ap-sc a elmo:Representation;
 stage:diagram-query a elmo:Query;
 	elmo:query '''
 		CONSTRUCT {
-			?s ?p ?o
+			?s ?p ?o.
+			?sgeo ?pgeo ?ogeo.
 		}
 		WHERE {
 			GRAPH <@STAGE@> {
@@ -38,7 +39,7 @@ stage:diagram-query a elmo:Query;
 				UNION
 				{
 					GRAPH ?geograph {
-						?s ?p ?o
+						?sgeo ?pgeo ?ogeo
 					}
 				}
 			}

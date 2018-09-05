@@ -83,33 +83,53 @@ stage:selected-profile-query a elmo:Query;
 			?o ?po ?oo.
 			?oo ?poo ?ooo.
 			?ooo ?pooo ?oooo.
+			?oooo ?poooo ?ooooo.
+			?sgeo ?pgeo ?ogeo.
 		}
 		WHERE {
 			GRAPH <@STAGE@> {
 				<@REPRESENTATION@> rdfs:isDefinedBy ?shapesgraph.
 				<@REPRESENTATION@> rdfs:seeAlso ?shape
 			}
-			GRAPH ?shapesgraph {
+			{
 				{
-					?shape ?p ?o.
+					GRAPH ?shapesgraph {
+						{
+							?shape ?p ?o.
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+							?oo ?poo ?ooo
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+							?oo ?poo ?ooo.
+							?ooo ?pooo ?oooo.
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+							?oo ?poo ?ooo.
+							?ooo ?pooo ?oooo.
+							?oooo ?poooo ?ooooo.
+						}
+					}
 				}
 				UNION
 				{
-					?shape ?p ?o.
-					?o ?po ?oo.
-				}
-				UNION
-				{
-					?shape ?p ?o.
-					?o ?po ?oo.
-					?oo ?poo ?ooo
-				}
-				UNION
-				{
-					?shape ?p ?o.
-					?o ?po ?oo.
-					?oo ?poo ?ooo.
-					?ooo ?pooo ?oooo.
+					GRAPH <http://localhost:8080/bp4mc2/container/mim-yed> {
+						?sgeo ?pgeo ?ogeo
+					}
 				}
 			}
 		}
