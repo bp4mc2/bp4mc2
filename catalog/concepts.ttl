@@ -1,0 +1,75 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/catalog/stage#>.
+
+stage:Concepts	a	elmo:Representation;
+	elmo:url-pattern	"/query/concepts$";
+	elmo:contains	stage:Menu;
+	elmo:contains stage:Concepts_Tree;
+	elmo:contains stage:Concepts_List;
+.
+
+stage:Concepts_Tree a elmo:Part;
+	elmo:appearance elmo:TreeAppearance;
+	elmo:query '''
+		prefix iso-thes: <http://purl.org/iso25964/skos-thes#>
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		construct {
+			?concept rdfs:seeAlso ?broader.
+			?concept rdfs:label ?label.
+			?broader rdfs:label ?broaderlabel.
+			?concept skos:inScheme ?scheme.
+			?scheme rdfs:label ?schemelabel.
+		}
+		where {
+		  graph <http://localhost:8080/catalog/container/concepts> {
+				{
+					?concept iso-thes:broaderGeneric ?broader.
+					?concept skos:prefLabel ?label.
+					?broader skos:prefLabel ?broaderlabel
+				}
+				UNION
+				{
+					?concept skos:inScheme ?scheme.
+					?concept skos:prefLabel ?label.
+					?scheme skos:prefLabel ?schemelabel
+					FILTER NOT EXISTS {
+						?concept iso-thes:broaderGeneric ?ref
+					}
+				}
+				UNION
+				{
+					?concept a skos:Concept.
+					?concept skos:prefLabel ?label.
+					BIND (rdf:nil as ?scheme)
+					BIND ("Schemeless" as ?schemelabel)
+					FILTER NOT EXISTS {
+						?concept skos:inScheme ?schemeref
+					}
+					FILTER NOT EXISTS {
+						?concept iso-thes:broaderGeneric ?ref
+					}
+				}
+			}
+		}
+	''';
+.
+
+stage:Concepts_List a elmo:Part;
+	elmo:query '''
+		prefix skos: <http://www.w3.org/2004/02/skos/core#>
+		select ?scheme ?concept ?concept_label
+		where {
+			graph <http://localhost:8080/catalog/container/concepts> {
+				?concept a skos:Concept
+				OPTIONAL {
+					?concept skos:prefLabel ?concept_label
+				}
+				OPTIONAL {
+					?concept skos:inScheme ?scheme
+				}
+			}
+		}
+	''';
+.
