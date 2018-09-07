@@ -1,0 +1,22 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/bp4mc2/stage#>.
+
+stage:Topmodel	a	elmo:Representation;
+	elmo:url-pattern	"/query/topmodel$";
+	elmo:contains	stage:Menu;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX dcterms: <http://purl.org/dc/terms/>
+	  SELECT ?shapegraph ?s
+		WHERE {
+		  GRAPH <http://localhost:8080/bp4mc2/container/topmodel> {
+			  ?g dcterms:hasPart ?shapegraph
+			}
+			GRAPH ?shapegraph {
+				?s a sh:NodeShape
+			}
+		}
+	'''
+.

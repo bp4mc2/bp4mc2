@@ -1,0 +1,48 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/bp4mc2/stage#>.
+@prefix container-local: <http://localhost:8080/bp4mc2/container/>.
+
+stage:diagram-skos-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/skos-ap-sc-yed$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:diagram-query;
+	rdfs:seeAlso container-local:skos-ap-sc
+.
+stage:diagram-frbr-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/frbr-ap-sc-yed$";
+	elmo:contains stage:Menu;
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:diagram-query;
+	rdfs:seeAlso container-local:frbr-ap-sc
+.
+
+stage:diagram-query a elmo:Query;
+	elmo:query '''
+		CONSTRUCT {
+			?s ?p ?o.
+			?sgeo ?pgeo ?ogeo.
+		}
+		WHERE {
+			GRAPH <@STAGE@> {
+				<@REPRESENTATION@> rdfs:seeAlso ?shapesgraph
+				BIND (iri(concat(str(?shapesgraph),'-yed')) as ?geograph)
+			}
+			{
+				{
+					GRAPH ?shapesgraph {
+						?s ?p ?o
+					}
+				}
+				UNION
+				{
+					GRAPH ?geograph {
+						?sgeo ?pgeo ?ogeo
+					}
+				}
+			}
+		}
+	'''
+.

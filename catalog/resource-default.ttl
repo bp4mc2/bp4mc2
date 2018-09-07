@@ -1,0 +1,57 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/catalog/stage#>.
+
+stage:Resource	a	elmo:Representation;
+	elmo:url-pattern	"/resource$";
+	elmo:layer elmo:BottomLayer;
+	elmo:contains	stage:Menu;
+	elmo:contains stage:Resource_Content;
+	elmo:contains stage:Resource_Graph;
+.
+
+stage:Resource_Content a elmo:Part;
+	elmo:query '''
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?o rdfs:label ?olabel
+		}
+		where {
+			graph <http://localhost:8080/catalog/container/concepts> {
+				<@SUBJECT@> ?p ?o
+				OPTIONAL {
+					?o rdfs:label ?olabel
+				}
+			}
+		}
+	'''
+.
+
+stage:Resource_Graph a elmo:Part;
+	elmo:appearance elmo:GraphAppearance;
+	elmo:query '''
+		construct {
+			<@SUBJECT@> ?p ?o.
+			?so ?sp <@SUBJECT@>.
+			?o ?op ?oo.
+		}
+		where {
+			graph <http://localhost:8080/catalog/container/concepts> {
+				{
+					<@SUBJECT@> ?p ?o
+				}
+				UNION
+				{
+					<@SUBJECT@> ?p ?o.
+					?o ?op ?oo.
+					FILTER (isLiteral(?oo))
+				}
+				UNION
+				{
+					?so ?sp <@SUBJECT@>
+				}
+			}
+		}
+	'''
+.

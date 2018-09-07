@@ -1,0 +1,22 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/catalog/stage#>.
+
+stage:AllClasses	a	elmo:Representation;
+	elmo:url-pattern	"/query/all-classes$";
+	elmo:contains	stage:Menu;
+	elmo:fragment [
+		elmo:applies-to "class";
+		xhtml:link "query/class-instances";
+	];
+	elmo:query '''
+		select ?class (count(?s) as ?class_count) where {
+			graph <http://localhost:8080/catalog/container/concepts> {
+				?s a ?class
+			}
+		}
+		group by ?class
+		order by ?class
+	'''
+.

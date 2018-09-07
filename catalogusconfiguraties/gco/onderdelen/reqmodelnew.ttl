@@ -32,50 +32,6 @@ stage:ReqModelTotaal a elmo:Representation;
 .
 
 # ====================
-#
-# Onduidelijk waar dit voor wordt gebruikt???
-#
-stage:ReqFModelConcepten a elmo:Representation;
-  elmo:url-pattern "/query/fmodel/concepten$";
-  elmo:appearance elmo:VocabularyAppearance;
-  elmo:contains stage:Menu;
-  elmo:query '''
-    PREFIX sh: <http://www.w3.org/ns/shacl#>
-	CONSTRUCT {
-      ?shape ?shapepred ?shapeobj.
-      ?shape sh:property ?prop.
-      ?prop ?proppred ?propobj.
-    }
-    WHERE {
-      {
-        GRAPH <@STAGE@> {
-          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape
-        }
-        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-          ?shape ?shapepred ?shapeobj.
-          ?shape sh:property ?prop.
-          ?prop ?proppred ?propobj
-          FILTER NOT EXISTS {?prop sh:node ?refshape}
-        }
-      }
-      UNION
-      {
-        GRAPH <@STAGE@> {
-          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?shape.
-          <urn:ReqFModelConceptenShapes> rdfs:seeAlso ?refshape.
-        }
-        GRAPH <http://bp4mc2.org/id/dataset/requirements> {
-          ?shape sh:property ?prop.
-          ?prop ?proppred ?propobj.
-          ?prop sh:node ?refshape
-        }
-      }
-    }
-  ''';
-.
-<urn:ReqFModelConceptenShapes> rdfs:seeAlso req:Concept, req:ExternConcept, req:ConceptScheme, req:Collectie, req:Brondocument.
-#
-# ====================
 
 #
 # De verschillende representaties
@@ -85,21 +41,21 @@ stage:ReqModelConcepten a elmo:Representation;
 	elmo:contains stage:Menu;
 	elmo:appearance elmo:VocabularyAppearance;
   elmo:query stage:ReqModelQuery;
-  rdfs:seeAlso req:Concept, req:ExternConcept, req:ConceptScheme, req:Collectie, req:Brondocument, req:Bron, req:WerkAlsBron, req:ExpressieAlsBron
+  rdfs:seeAlso req:Concept, req:ExternalConcept, req:ConceptScheme, req:Collection, req:SourceDocument, req:Source, req:WorkAsSource, req:ExpressionAsSource
 .
 stage:ReqModelConceptenMeta a elmo:Representation;
 	elmo:url-pattern "/query/model/conceptenmeta$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
   elmo:query stage:ReqModelQuery;
-  rdfs:seeAlso req:Concept, req:ConceptScheme, req:Collectie, req:Metadata, req:Metadata_Temporal, req:Status, req:Dataset
+  rdfs:seeAlso req:Concept, req:ConceptScheme, req:Collection, req:Metadata, req:PeriodOfTime, req:Status, req:Asset, req:Dataset
 .
 stage:ReqModelGebeurtenissen a elmo:Representation;
 	elmo:url-pattern "/query/model/gebeurtenissen$";
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
   elmo:query stage:ReqModelQuery;
-  rdfs:seeAlso req:Concept,req:HandelingAct, req:HandelingAgent, req:HandelingActor, req:HandelingObject, req:HandelingNorm
+  rdfs:seeAlso req:Concept,req:Act, req:LegalAgent, req:Actor, req:Object, req:LegalNorm
 .
 stage:ReqModelDatasets a elmo:Representation;
 	elmo:url-pattern "/query/model/datasets$";
@@ -113,7 +69,7 @@ stage:ReqModelProvenance a elmo:Representation;
 	elmo:appearance elmo:VocabularyAppearance;
 	elmo:contains stage:Menu;
   elmo:query stage:ReqModelQuery;
-  rdfs:seeAlso req:Concept, req:ConceptScheme, req:Collectie, req:Metadata, req:Metadata_Temporal, req:Status, req:Dataset, req:Datasetversie, req:Distributie, req:CatalogGraph, req:ProvenanceAgent, req:ProvenancePerson, req:ProvenanceOrganization, req:ProvenanceSoftwareAgent
+  rdfs:seeAlso req:Concept, req:ConceptScheme, req:Asset, req:Informationmodel, req:Collection, req:Metadata, req:PeriodOfTime, req:Status, req:Dataset, req:Datasetversie, req:Distributie, req:ProvenanceGraph, req:ProvenanceAgent, req:ProvenancePerson, req:ProvenanceOrganization, req:ProvenanceSoftwareAgent
 .
 stage:ReqModelAgent a elmo:Representation;
 	elmo:url-pattern "/query/model/agent$";
@@ -134,7 +90,7 @@ stage:ReqModelWaardelijst a elmo:Representation;
   elmo:appearance elmo:VocabularyAppearance;
   elmo:contains stage:Menu;
   elmo:query stage:ReqModelQuery;
-  rdfs:seeAlso req:Dataset, req:Asset, req:Waardelijst, req:WaardelijstDistributie, req:RepresentationTechnique, req:ConceptScheme, req:NodeShape, req:Klasse, req:CollectieWaardelijst, req:CollectieWaardelijstSpec, req:SchemaWaardelijst, req:ConceptScheme, req:Collectie, req:SchemaWaardelijstSpec, req:Referentielijst, req:ReferentielijstSpec, req:LandingPage, req:DownloadFormat;
+  rdfs:seeAlso req:Dataset, req:Asset, req:ControlledVocabulary, req:WaardelijstDistributie, req:RepresentationTechnique, req:ConceptScheme, req:NodeShape, req:Klasse, req:CollectieWaardelijst, req:CollectieWaardelijstSpec, req:SchemaWaardelijst, req:ConceptScheme, req:Collection, req:SchemaWaardelijstSpec, req:Referentielijst, req:ReferentielijstSpec, req:LandingPage, req:DownloadFormat;
 .
 stage:ReqModelDatakwaliteit a elmo:Representation;
 	elmo:url-pattern "/query/model/datakwaliteit$";
@@ -151,6 +107,7 @@ stage:ReqModelDatakwaliteit a elmo:Representation;
 stage:ReqModelQuery a elmo:Query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX yed: <http://bp4mc2.org/yed#>
 		CONSTRUCT {
 		  ?shape ?shapepred ?shapeobj.
 		  ?shape sh:property ?prop.
@@ -162,7 +119,9 @@ stage:ReqModelQuery a elmo:Query;
       ?listitem rdf:rest ?restlist.
       ?member skos:inScheme ?scheme.
       ?member rdfs:label ?memberlabel.
-      ?value sh:name ?valuename
+      ?value sh:name ?valuename.
+			?shape yed:geometry ?geom.
+			?geom ?geomp ?geomo
 		}
 		WHERE {
 		  {
@@ -184,6 +143,16 @@ stage:ReqModelQuery a elmo:Query;
             ?class rdfs:subClassOf ?parentclass.
           }
           FILTER NOT EXISTS {?prop sh:node ?refshape}
+        }
+		  }
+		  UNION
+			{
+        GRAPH <@STAGE@> {
+          <@REPRESENTATION@> rdfs:seeAlso ?shape
+        }
+        GRAPH <http://localhost:8080/catalogus/gco/container/graphml> {
+					?shape yed:geometry ?geom.
+					?geom ?geomp ?geomo
         }
 		  }
 		  UNION

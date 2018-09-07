@@ -1,0 +1,137 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/bp4mc2/stage#>.
+@prefix container-local: <http://localhost:8080/bp4mc2/container/>.
+
+stage:profile-skos-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/skos-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:contains stage:Menu;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:skos-ap-sc
+.
+stage:profile-skoslex-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/skoslex-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:skoslex-ap-sc
+.
+stage:profile-frbr-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/frbr-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:frbr-ap-sc
+.
+stage:profile-dcat-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/dcat-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:dcat-ap-sc
+.
+stage:profile-dqv-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/dqv-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:dqv-ap-sc
+.
+stage:profile-adms-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/adms-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:adms-ap-sc
+.
+stage:profile-dm-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/dm-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:dm-ap-sc
+.
+stage:profile-cv-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/cv-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:cv-ap-sc
+.
+stage:profile-prov-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/prov-ap-sc$";
+	elmo:appearance elmo:VocabularyAppearance;
+	elmo:query stage:profile-query;
+	rdfs:seeAlso container-local:prov-ap-sc
+.
+
+stage:profile-query a elmo:Query;
+	elmo:query '''
+		CONSTRUCT {
+			?s ?p ?o
+		}
+		WHERE {
+			GRAPH <@STAGE@> {
+				<@REPRESENTATION@> rdfs:seeAlso ?shapesgraph
+			}
+			GRAPH ?shapesgraph {
+				?s ?p ?o
+			}
+		}
+	'''
+.
+
+stage:selected-profile-query a elmo:Query;
+	elmo:query '''
+		CONSTRUCT {
+			?shape ?p ?o.
+			?o ?po ?oo.
+			?oo ?poo ?ooo.
+			?ooo ?pooo ?oooo.
+			?oooo ?poooo ?ooooo.
+			?sgeo ?pgeo ?ogeo.
+		}
+		WHERE {
+			GRAPH <@STAGE@> {
+				<@REPRESENTATION@> rdfs:isDefinedBy ?shapesgraph.
+				<@REPRESENTATION@> rdfs:seeAlso ?shape
+			}
+			{
+				{
+					GRAPH ?shapesgraph {
+						{
+							?shape ?p ?o.
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+							?oo ?poo ?ooo
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+							?oo ?poo ?ooo.
+							?ooo ?pooo ?oooo.
+						}
+						UNION
+						{
+							?shape ?p ?o.
+							?o ?po ?oo.
+							?oo ?poo ?ooo.
+							?ooo ?pooo ?oooo.
+							?oooo ?poooo ?ooooo.
+						}
+					}
+				}
+				UNION
+				{
+					GRAPH <http://localhost:8080/bp4mc2/container/mim-yed> {
+						?sgeo ?pgeo ?ogeo
+					}
+				}
+			}
+		}
+	'''
+.

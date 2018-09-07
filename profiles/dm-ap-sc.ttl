@@ -1,0 +1,198 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix scim: <http://bp4mc2.org/somewhere/dm-ap-sc/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived from prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#derived from foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#derived from org
+org:Organization rdfs:subClassOf foaf:Organization.
+
+#derived from adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#derived from dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
+#Extra
+rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
+
+
+#---------------------
+# Assets (DataModel)
+#---------------------
+
+scim:Informatiemodel rdf:type sh:NodeShape;
+  rdfs:label "Asset (Informatiemodel)"@nl;
+  rdfs:label "Asset (Data model)"@en;
+  sh:name "adms:Asset (Data model)";
+  sh:property scim:DataModel_type;
+  sh:property scim:DataModel_typeDataModel;
+.
+scim:DataModel_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+  rdfs:comment "Een informatiemodel wordt getypeerd als adms:Asset."@nl;
+  rdfs:comment "A data model is typed as adms:Asset."@en;
+  skos:example "IMKAD is vindbaar als een adms:Asset."@nl;
+.
+scim:DataModel_typeDataModel a sh:PropertyShape;
+  rdfs:label "type asset = informatiemodel"@nl;
+   rdfs:label "type asset = data model"@en;
+ sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dstype:Datamodel;
+  rdfs:comment "Een informatiemodel wordt expliciet getypeerd als informatiemodel."@nl;
+  rdfs:comment "A data model is explicitly typed as a data model."@en;
+  skos:example ""@nl;
+.
+
+scim:Vocabulaire a sh:NodeShape;
+  rdfs:label "Vocabulaire"@nl;
+  sh:name "owl:Ontology";
+  sh:targetClass owl:Ontology;
+  sh:property [
+    sh:path sh:shapesGraph;
+    sh:name "sh:shapesGraph";
+    sh:node scim:ShapesGraph
+  ];
+  sh:property [
+    sh:path foaf:isPrimaryTopicOf;
+    sh:name "foaf:isPrimaryTopicOf";
+    sh:node scim:LandingPage;
+    sh:maxCount 1;
+  ]
+.
+scim:ShapesGraph a sh:NodeShape;
+  rdfs:label "Shapes graph"@nl;
+  sh:name "Shapes graph";
+  sh:property [
+    sh:path rdfs:label;
+    sh:name "rdfs:label";
+  ];
+.
+scim:Klasse a sh:NodeShape;
+  sh:name "owl:Class";
+  sh:targetClass owl:Class;
+  sh:property [
+    sh:path rdfs:isDefinedBy;
+    sh:name "rdfs:isDefinedBy";
+    sh:node scim:Vocabulaire;
+  ];
+.
+scim:NodeShape a sh:NodeShape;
+  rdfs:label "node shape"@nl;
+  sh:name "sh:NodeShape";
+  sh:targetClass sh:NodeShape;
+  sh:property [
+    sh:path sh:targetClass;
+    sh:name "sh:targetClass";
+    sh:class owl:Class
+  ];
+.
+
+#---------------------
+# Classes
+#---------------------
+scim:Klasse a sh:NodeShape;
+  rdfs:label "Gegevensklasse"@nl;
+  sh:targetClass owl:Class;
+  sh:name "owl:Class";
+  sh:property scim:Klasse_label;
+  sh:property scim:Klasse_onderwerp;
+.
+scim:Klasse_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+scim:Klasse_onderwerp a sh:PropertyShape;
+  rdfs:label "onderwerp"@nl;
+  sh:name "dcterms:subject";
+  sh:path dcterms:subject;
+.
+#---------------------
+# Properties
+#---------------------
+scim:Eigenschap a sh:NodeShape;
+  rdfs:label "Eigenschap"@nl;
+  sh:targetClass rdf:Property;
+  sh:name "rdf:Property";
+  sh:property scim:Eigenschap_onderwerp;
+  sh:property scim:Eigenschap_label;
+.
+scim:Eigenschap_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+scim:Eigenschap_onderwerp a sh:PropertyShape;
+  rdfs:label "onderwerp"@nl;
+  sh:name "dcterms:subject";
+  sh:path dcterms:subject;
+.
