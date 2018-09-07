@@ -1,0 +1,20 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/bp4mc2/stage#>.
+
+stage:Home	a	elmo:Representation;
+	elmo:url-pattern	"/bp4mc2(|/|\\..+)$";
+	elmo:contains	stage:Menu;
+	elmo:contains	stage:Welkom;
+.
+
+stage:Welkom a elmo:Part;
+	elmo:appearance elmo:HtmlAppearance;
+	elmo:data [
+		rdfs:label "Welcome"@en;
+		elmo:html '''
+      <p>This website is used to generate the documentation for bp4mc2, from the original RDF models</p>
+    '''
+	]
+.

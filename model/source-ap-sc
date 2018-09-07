@@ -1,0 +1,102 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix source-ap-sc: <http://data.ontwikkeling.pdok.nl/gco/id/requirement/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived fromt foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#---------------------
+# Source
+#---------------------
+
+source-ap-sc:Source a sh:NodeShape;
+  rdfs:label "beschrijvende bron"@nl;
+  rdfs:label "descriptive source"@en;
+  sh:name "frbr:Endeavour (source)";
+  sh:targetClass frbr:Endeavour;
+  rdfs:comment "Een via het web identificeerbare beschrijvende bron."@nl;
+  rdfs:comment "A descriptive source that can be identified via the web."@en;
+  skos:example "Atrikel 1 van het burgerlijk wetboek of atrikel 1 van het burgerlijk wetboek van 1838"@nl;
+  sh:property source-ap-sc:Source_label;
+  sh:property source-ap-sc:Source_isTopicOf
+.
+source-ap-sc:WorkAsSource a sh:NodeShape;
+  rdfs:label "algemeen beschrijvende bron"@nl;
+  rdfs:label "generic descriptive source"@en;
+  sh:name "frbr:Work (source)";
+  sh:targetClass frbr:Work;
+  rdfs:comment "Een via het web identificeerbare beschrijvende bron, zonder dat expliciet wordt verwezen naar een specifieke versie."@nl;
+  rdfs:comment "A descriptive source identifiable via the web, without an explicit reference to a specific version."@en;
+  skos:example "Artikel 1 van het Burgerlijk Wetboek"@nl
+.
+source-ap-sc:ExpressionAsSource a sh:NodeShape;
+  rdfs:label "versie beschrijvende bron"@nl;
+  rdfs:label "version descriptive source"@en;
+  sh:name "frbr:Expression (source version)";
+  sh:targetClass frbr:Expression;
+  rdfs:comment "Een specifieke versie van een op het web identificeerbare beschrijvende bron."@nl;
+  rdfs:comment "A specific version of a descriptive source identifiable on the web."@en;
+  skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl
+.
+source-ap-sc:Source_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
+  rdfs:comment "Een bron heeft een voor mensen leesbaar label";
+  sh:path rdfs:label;
+  rdfs:comment "Een bron heeft een voor mensen leesbare naam."@nl;
+  rdfs:comment "A source has a human readable label."@en;
+  skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een bron heeft een voor mensen leesbare naam."@nl;
+  sh:message "A source has a human readable label."@en
+.
+source-ap-sc:Source_isTopicOf a sh:PropertyShape;
+  rdfs:label "onderwerp van"@nl;
+  rdfs:label "topic of"@en;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:path foaf:isPrimaryTopicOf;
+  sh:node source-ap-sc:SourceDocument;
+  rdfs:comment "Een beschrijvende bron kan een onderwerp zijn van een brondocument."@nl;
+  rdfs:comment "A descriptive source can be a subject of a source document."@en;
+  skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een beschrijvende bron kan een onderwerp zijn van maximaal 1 brondocument."@nl;
+  sh:message "A descriptive source can be a subject of up to 1 source document."@en
+.
+source-ap-sc:SourceDocument a sh:NodeShape;
+  rdfs:label "Brondocument"@nl;
+  rdfs:label "Source document"@en;
+  sh:name "foaf:Document ( source document)";
+  rdfs:comment "Een brondocument dat vindbaar is op het web."@nl;
+  rdfs:comment "A source document that can be found on the web."@nl;
+  skos:example "De volledige tekst van het Burgerlijk Wetboek."@nl;
+  sh:property source-ap-sc:SourceDocument_label
+.
+source-ap-sc:SourceDocument_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+  rdfs:comment "Een brondocument heeft een voor mensen leesbaar label."@nl;
+  rdfs:comment "A source document has a human-readable label."@nl;
+  skos:example "Burgerlijk Wetboek 1838."@nl;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "EEen brondocument heeft een voor mensen leesbaar label."@nl;
+  sh:message "A source document has a human-readable label."@en
+.
+

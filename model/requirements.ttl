@@ -20,38 +20,55 @@
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
 @prefix frbr: <http://purl.org/vocab/frbr/core#>.
 @prefix org: <http://www.w3.org/ns/org#>.
-@prefix skostype: <http://bp4mc2.org/id/type/>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
 
 #---------------------
 # IMPORT
 #---------------------
 
-#Overgenomen uit skos-lex
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
 skoslex:Act rdfs:subClassOf skos:Concept.
 skoslex:Object rdfs:subClassOf skos:Concept.
 skoslex:Actor rdfs:subClassOf skos:Concept.
 skoslex:Agent rdfs:subClassOf skoslex:Actor.
 
-#Overgenomen uit frbr
+#derived from frbr
 frbr:Work rdfs:subClassOf frbr:Endeavour.
 frbr:Expression rdfs:subClassOf frbr:Endeavour.
 
-#Overgenomen uit prov
+#derived from prov
 prov:Person rdfs:subClassOf prov:Agent.
 prov:Organization rdfs:subClassOf prov:Agent.
 prov:SoftwareAgent rdfs:subClassOf prov:Agent.
 
-#Overgenomen uit foaf
+#derived from foaf
 foaf:Organization rdfs:subClassOf foaf:Agent.
 
-#Overgenomen uit org
+#derived from org
 org:Organization rdfs:subClassOf foaf:Organization.
 
-#Overgenomen uit adms
+#derived from adms
 adms:Asset rdfs:subClassOf dcat:Dataset.
 adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
 
-#Overgenomen uit dqv
+#derived from dqv
 dqv:Dimension rdfs:subClassOf skos:Concept.
 dqv:Category rdfs:subClassOf skos:Concept.
 
@@ -61,7 +78,7 @@ dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
 
 #---------------------
-# CONCEPTEN
+# CONCEPTS
 #---------------------
 
 #---------------------
@@ -69,231 +86,425 @@ skos:inScheme sh:name "skos:inScheme".
 #---------------------
 req:Concept a sh:NodeShape;
   rdfs:label "Begrip"@nl;
+  rdfs:label "Concept"@en;
   sh:name "skos:Concept";
   sh:targetClass skos:Concept;
+  rdfs:comment "Een begrip is een idee of notitie, een eenheid van denken, een onderwerp van gesprek."@nl;
+  rdfs:comment "A  concept is an idea or notion, a unit of thought, a topic in the universe of discourse."@en;
+  rdfs:exampple "het begrip 'Perceel' in de BRK"@nl;
   # Datatype properties
-  sh:property req:Concept_comment;
-  sh:property req:Concept_dcsource;
-  sh:property req:Concept_definition;
   sh:property req:Concept_label;
   sh:property req:Concept_prefLabel;
-  sh:property req:Concept_scopeNote;
   sh:property req:Concept_synonym;
+  sh:property req:Concept_comment;
+  sh:property req:Concept_definition;
+  sh:property req:Concept_scopeNote;
+  sh:property req:Concept_editorialNote;
+  sh:property req:Concept_dcsource;
   # Object properties
   sh:property req:Concept_dctsource;
   sh:property req:Concept_domain;
   sh:property req:Concept_metadata;
   # References to other concepts
-  sh:property req:Concept_consistsOf;
-  sh:property req:Concept_generalisationOf;
   sh:property req:Concept_isRelatedTo;
-  sh:property req:Concept_partOf;
   sh:property req:Concept_specialisationOf;
+  sh:property req:Concept_generalisationOf;
+  sh:property req:Concept_partOf;
+  sh:property req:Concept_consistsOf;
   # References to other concepts in other concept schemes
   sh:property req:Concept_seeAlso;
-  sh:property req:Concept_broadlyMatches;
   sh:property req:Concept_closelyMatches;
   sh:property req:Concept_exactlyMatches;
-  sh:property req:Concept_narrowlyMatches;
+  sh:property req:Concept_broadlyMatches;
+  sh:property req:Concept_narrowlyMatches
 .
-req:Concept_domain a sh:PropertyShape;
-  rdfs:label "in begrippenkader"@nl;
-  sh:name "skos:inScheme";
-  sh:path skos:inScheme;
-  sh:minCount 1;
-  sh:maxCount 1;
-  sh:class skos:ConceptScheme;
-  rdfs:comment "Een begrip is gedefinieerd in een bepaald begrippenkader"@nl;
-  skos:example "Basisregistratie Adressen en Gebouwen (BAG)"
-.
-req:Concept_metadata a sh:PropertyShape;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:class prov:Entity;
-.
-req:Concept_dctsource a sh:PropertyShape;
-  rdfs:label "identificeerbare bron"@nl;
-  sh:name "dcterms:source";
-  sh:path dcterms:source;
-  rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een bron zijn die direct als 'resource' op het web vindbaar is."@nl;
-  sh:node [ sh:xone (req:Bron req:Brondocument)];
-  skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"
-.
-req:Concept_dcsource a sh:PropertyShape;
-  rdfs:label "bron"@nl;
-  sh:name "dc:source";
-  sh:path dc:source;
-  rdfs:comment "Een begrip is ontleend aan een formele bron. Dit kan een geschreven bron zijn."@nl;
-  skos:example "Europees verdrag voor de rechten van de mens"
-.
+# Datatype properties
 req:Concept_label a sh:PropertyShape;
-  rdfs:label "label"@nl;
+  rdfs:label "label (begrip)"@nl;
+  rdfs:label "label (concept)"@en;
   sh:name "rdfs:label";
-  sh:minCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. Dit is geen good practice en dient zoveel mogelijk voorkomen te worden. In het geval dat dit toch voorkomt, bevat alleen het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan (wel) meertalig zijn, aangegeven door @nl of @en"@nl;
   sh:path rdfs:label;
-  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''
+  rdfs:comment "Een begrip wordt aangeduid met een voor mensen leesbare term (inclusief spaties en diacrieten). Deze is gelijk aan het skos:prefLabel. Uitzondering hierop is de situatie dat binnen 1 conceptschema er vaker dezelfde skos:prefLabel wordt gebruikt. Dit is geen good practice en dient zoveel mogelijk voorkomen te worden. In het geval dat dit toch voorkomt, krijgt het rdfs:label een toevoeging tussen haakjes die het onderscheid aangeeft. Dit label kan meertalig zijn, aangegeven door @nl of @en"@nl;
+  rdfs:comment "A concept has a human-readable label (including spaces and diacritics). This is equal to the skos: prefLabel. An exception to this is the situation that within one concept scheme the same skos:prefLabel is used more than once. This is not a good practice and should be avoided as much as possible. In case this occurs nonetheless, the rdfs: label gets an addition between brackets that indicates the distinction. This label can be multilingual, indicated by @nl or @en"@en;
+  skos:example '''"Kadastraal perceel"@nl / "Cadastral parcel"@en'''@nl;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een begrip wordt altijd aangeduid met een voor mensen leesbare term"@nl;
+  sh:message "A concept always has a human readable label"@en
 .
 req:Concept_prefLabel a sh:PropertyShape;
   rdfs:label "voorkeursterm"@nl;
+  rdfs:label "preferred label"@en;
   sh:name "skos:prefLabel";
+  sh:path skos:prefLabel;
+  rdfs:comment "Een begrip heeft een voor mensen leesbare voorkeursterm. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig). Het is een good practice dat ieder begrip binen 1 begrippenkader een uniek prefLabel heeft."@nl;
+  rdfs:comment "A concept has a human-readable preferred label. There is exactly one preferred label in the preferred language (this field is not multilingual). It is good practice that in 1 concept scheme each concept has a unique prefLabel."@en;
+  skos:example "Kadastraal perceel"@nl;
   sh:minCount 1;
   sh:maxCount 1;
-  rdfs:comment "Een begrip heeft een voor mensen leesbare naam die als voorkeursterm voor dit begrip wordt gehanteerd. Er is precies 1 voorkeursterm in de voorkeurstaal (dit veld is dus niet meertalig). Het is een good practice dat in 1 begrippenkader elke begrip een uniek prefLabel heeft."@nl;
-  sh:path skos:prefLabel;
-  skos:example '''"Kadastraal perceel"'''
+  sh:severity sh:Violation;
+  sh:message "Een begrip heeft altijd 1 voorkeursterm."@nl;
+  sh:message "A concept always has 1 preferred label"@en
 .
 req:Concept_synonym a sh:PropertyShape;
-	rdfs:label "alternatieve aanduiding"@nl;
-#  rdfs:label "has synonym"@en;
+  rdfs:label "alternatieve aanduiding"@nl;
+  rdfs:label "alternative label"@en;
   sh:name "skos:altLabel";
-  rdfs:comment "Een begrip kan een alternatieve aanduiding, een synoniem hebben"@nl;
   sh:path skos:altLabel;
-  skos:example "KadastraalPerceel"
+  rdfs:comment "Een begrip kan een alternatieve aanduiding, een synoniem hebben"@nl;
+  rdfs:comment "A concept can have an alternative label, a synonym"@en;
+  skos:example "KadastraalPerceel"@nl
+.
+req:Concept_comment a sh:PropertyShape;
+  rdfs:label "uitleg"@nl;
+  rdfs:label "comment"@en;
+  sh:name "rdfs:comment";
+  sh:path rdfs:comment;
+  rdfs:comment "Een begrip heeft bij voorkeur een uitleg in ‘klare taal’."@nl;
+  rdfs:comment "Preferably a concept has a comment in 'clear language'."@en;
+  skos:example "Een perceel is een stuk grond waarvan het Kadaster de grenzen heeft gemeten en dat bij het Kadaster een eigen nummer heeft."@nl;
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Een begrip heeft bij voorkeur uitleg in ‘klare taal’."@nl;
+  sh:message "Prefably a concept always has comment in 'clear language'"@en
 .
 req:Concept_definition a sh:PropertyShape;
   rdfs:label "definitie"@nl;
+  rdfs:label "definition"@en;
   sh:name "skos:definition";
-  rdfs:comment "Een begrip heeft een formele definitie. Deze wordt waar mogelijk overgenomen uit een officiële publicatie."@nl;
   sh:path skos:definition;
-  skos:example "Een perceel is een begrensd deel van het Nederlands grondgebied dat kadastraal geïdentificeerd is en met kadastrale grenzen begrensd is."
-.
-req:Concept_comment a sh:PropertyShape;
-	rdfs:label "uitleg"@nl;
-  sh:name "rdfs:comment";
-  rdfs:comment "Een begrip heeft een uitleg in 'klare taal'."@nl;
-  sh:path rdfs:comment;
-  skos:example "Een perceel is een stuk grond waarvan het Kadaster de grenzen heeft gemeten en dat bij het Kadaster een eigen nummer heeft."
+  rdfs:comment "Een begrip kan een formele definitiehebben. Deze wordt waar mogelijk overgenomen uit een officiële publicatie."@nl;
+  rdfs:comment "A concept can have a formal definition. If possible this is taken from a formal publication."@en;
+  skos:example "Een perceel is een begrensd deel van het Nederlands grondgebied dat kadastraal geïdentificeerd is en met kadastrale grenzen begrensd is."@nl;
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Een begrip heeft bij voorkeur een formele definitie"@nl;
+  sh:message "Prefably a concept always has a formal definition"@en
 .
 req:Concept_scopeNote a sh:PropertyShape;
-	rdfs:label "toelichting"@nl;
+  rdfs:label "toelichting"@nl;
+  rdfs:label "scope note"@en;
   sh:name "skos:scopeNote";
-  rdfs:comment "Een begrip kan nader worden toegelicht."@nl;
   sh:path skos:scopeNote;
-  skos:example '''Een perceel is een (2D) vlakvormig ruimtelijk object dat "opdelend" van structuur is. Dit betekent dat Nederland altijd naadloos en volledig is bedekt met perceelsvlakken, die elkaar niet mogen overlappen.'''
+  rdfs:comment "Een begrip kan nader worden toegelicht."@nl;
+  rdfs:comment "A concept can be explained."@en;
+  skos:example '''Een perceel is een (2D) vlakvormig ruimtelijk object dat "opdelend" van structuur is. Dit betekent dat Nederland altijd naadloos en volledig is bedekt met perceelsvlakken, die elkaar niet mogen overlappen.'''@nl;
 .
-req:Concept_broadlyMatches a sh:PropertyShape;
-  rdfs:label "lijkt op breder"@nl;
-  sh:name "skos:broadMatch";
-  sh:path skos:broadMatch;
-  sh:node req:ExternConcept;
-  rdfs:comment "Een begrip is een specialisatie van een begrip in een ander domein."@nl;
-  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG.";
+req:Concept_EditorialNote a sh:PropertyShape;
+  rdfs:label "redactionele opmerking"@nl;
+  rdfs:label "editorial note"@en;
+  sh:name "skos:editorialNote";
+  sh:path skos:editorialNote;
+  rdfs:comment "Een begrip kan een redactionele opmerking hebben."@nl;
+  rdfs:comment "A concept can have an editorial comment."@en;
+  skos:example "Dit begrip wordt nog gewijzigd bij het invoeringsbesluit."@nl
 .
-req:Concept_narrowlyMatches a sh:PropertyShape;
-  rdfs:label "lijkt op smaller"@nl;
-  sh:name "skos:narrowMatch";
-  sh:path skos:narrowMatch;
-  sh:node req:ExternConcept;
-  rdfs:comment "Een begrip is een generalisatie van een begrip in een ander domein."@nl;
-  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus.";
+req:Concept_dcsource a sh:PropertyShape;
+  rdfs:label "geschreven bron"@nl;
+  rdfs:label "written source"@en;
+  sh:name "dc:source";
+  sh:path dc:source;
+  rdfs:comment "Een begrip is ontleend aan een geschreven bron."@nl;
+  rdfs:comment "A concept can be derived from a written source."@en;
+  skos:example "Europees verdrag voor de rechten van de mens"@nl
 .
-req:Concept_seeAlso a sh:PropertyShape;
-  rdfs:label "gerelateerd aan"@nl;
-  sh:name "skos:relatedMatch";
-  sh:path skos:relatedMatch;
-  sh:node req:ExternConcept;
-  rdfs:comment "Een begrip is gerelateerd aan een begrip in een ander domein."@nl;
-  skos:example '''Een Perceel in de BRK is gerelateerd aan een adres (Nummeraanduiding) in de BAG.''';
+# Object properties
+req:Concept_dctsource a sh:PropertyShape;
+  rdfs:label "bron op het web"@nl;
+  rdfs:label "source on the web"@en;
+  sh:name "dcterms:source";
+  sh:path dcterms:source;
+  sh:node [ sh:xone (req:Source req:SourceDocument)];
+  rdfs:comment "Een begrip kan zijn ontleend aan een op het web vindbare bron. Dit kan een (versie van) een beschrijving van een specifiek begrip of een document waarin een beschrijving van het begrip is te vinden."@nl;
+  rdfs:comment "A concept can be derived from a source that can be found on the web. This can be a (version of) a description of a specific concept or a document in which a description of the concept can be found."@en;
+  skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
 .
-req:Concept_closelyMatches a sh:PropertyShape;
-  rdfs:label "vergelijkbaar met"@nl;
-  sh:name "skos:closeMatch";
-  sh:path skos:closeMatch;
-  rdfs:comment "Een begrip betekent bijna hetzelfde als een begrip in een ander domein."@nl;
-  sh:node req:ExternConcept;
-  skos:example "Een OnroerendGoed in de BRK is ongeveer hetzelfde als een WOZobject in de WOZ.";
+req:Concept_domain a sh:PropertyShape;
+  rdfs:label "domein"@nl;
+  rdfs:label "domain"@en;
+  sh:name "skos:inScheme";
+  sh:path skos:inScheme;
+  sh:class skos:ConceptScheme;
+  rdfs:comment "Een begrip is gedefinieerd in de context van een bepaald domein."@nl;
+  rdfs:comment "A concept is defined in the context of a certain domain."@en;
+  skos:example "Basisregistratie Adressen en Gebouwen (BAG)"@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een begrip bestaat altijd binnen de context van een domein."@nl;
+  sh:message "A concept allways exists in the context of a domain."@en
 .
-req:Concept_exactlyMatches a sh:PropertyShape;
-  rdfs:label "exact gelijk aan"@nl;
-  sh:name "skos:exactMatch";
-  sh:path skos:exactMatch;
-  sh:node req:ExternConcept;
-  rdfs:comment "Een begrip betekent precies hetzelfde als een begrip in een ander domein."@nl;
-  skos:example "Een Perceel in het BAL betekent hetzelfde als een Perceel in de BRK.";
+req:Concept_metadata a sh:PropertyShape;
+  rdfs:label "herkomst (begrip)"@nl;
+  rdfs:label "provenance (concept)"@en;
+  sh:path foaf:isPrimaryTopicOf;
+  sh:class prov:Entity;
+  sh:name "foaf:isPrimaryTopicOf";
+  rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
+  rdfs:comment "Provenance, validity and status of a concept can be described."@en;
+  skos:example "De uitleg van een begrip is aangepast naar aanleiding van een vraag van een klant"@nl;
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een begrip wordt bij voorkeur herkomst-, geldigheid- en statusinformatie bijgehouden."@nl;
+  sh:message "Prefably provenance, validity and status information is kept on a concept."@en
 .
-req:Concept_specialisationOf a sh:PropertyShape;
-  rdfs:label "specialisatie van"@nl;
-  sh:name "skosthes:broaderGeneric";
-  sh:path skosthes:broaderGeneric;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip is een specialisatie van een begrip met een bredere betekenis."@nl;
-  skos:example "Een Perceel is een OnroerendGoed.";
-.
-req:Concept_generalisationOf a sh:PropertyShape;
-  rdfs:label "generalisatie van"@nl;
-  sh:name "skosthes:narrowerGeneric";
-  sh:path skosthes:narrowerGeneric;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip is een generalisatie van een begrip met een engere of nauwere betekenis."@nl;
-  skos:example "Een KadastraalObject is een OnroerendGoed of een Registergoed.";
-.
-req:Concept_partOf a sh:PropertyShape;
-  rdfs:label "onderdeel van"@nl;
-  sh:name "skosthes:broaderPartitive";
-  sh:path skosthes:broaderPartitive;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip gaat over een deel van een breder begrip."@nl;
-  skos:example "Een motor is onderdeel van een schip.";
-.
-req:Concept_consistsOf a sh:PropertyShape;
-  rdfs:label "bestaat uit"@nl;
-  sh:name "skosthes:narrowerPartitive";
-  sh:path skosthes:narrowerPartitive;
-  sh:class skos:Concept;
-  rdfs:comment "Een begrip bestaat uit een aantal onderdelen."@nl;
-  skos:example '''Een schip bestaat uit een romp, kajuit, motor, ... ''';
-.
+# References to other concepts
 req:Concept_isRelatedTo a sh:PropertyShape;
   rdfs:label "gerelateerd aan"@nl;
+  rdfs:label "related to"@en;
   sh:name "skos:semanticRelation";
   sh:path skos:semanticRelation;
   sh:class skos:Concept;
-  rdfs:comment "Een begrip is gerelateerd aan een ander begrip."@nl;
-  skos:example "Een perceel is gerelateerd aan KadastraleGrens.";
+  rdfs:comment "Een begrip kan gerelateerd zijn aan een ander begrip."@nl;
+  rdfs:comment "A concept can be related to another concept."@en;
+  skos:example "Een perceel is gerelateerd aan KadastraleGrens."@nl
+.
+req:Concept_specialisationOf a sh:PropertyShape;
+  rdfs:label "specialisatie van"@nl;
+  rdfs:label "specialization of"@en;
+  sh:name "skosthes:broaderGeneric";
+  sh:path skosthes:broaderGeneric;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan een specialisatie zijn van een begrip met een bredere betekenis."@nl;
+  rdfs:comment "A concept can be a specialization of a concept with a broader meaning."@en;
+  skos:example "Een Perceel is een OnroerendGoed."@nl
+.
+req:Concept_generalisationOf a sh:PropertyShape;
+  rdfs:label "generalisatie van"@nl;
+  rdfs:label "generalization of"@en;
+  sh:name "skosthes:narrowerGeneric";
+  sh:path skosthes:narrowerGeneric;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan een generalisatie zijn van een begrip met een engere of nauwere betekenis."@nl;
+  rdfs:comment "A concept can be a generalization of a concept with a narrower meaning."@en;
+  skos:example "Een KadastraalObject is een OnroerendGoed of een Registergoed."@nl
+.
+req:Concept_partOf a sh:PropertyShape;
+  rdfs:label "onderdeel van"@nl;
+  rdfs:label "part of"@en;
+  sh:name "skosthes:broaderPartitive";
+  sh:path skosthes:broaderPartitive;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan gaan over een deel van een breder begrip."@nl;
+  rdfs:comment "A concept can be about a part of a broader concept."@en;
+  skos:example "Een motor is onderdeel van een schip."@nl
+.
+req:Concept_consistsOf a sh:PropertyShape;
+  rdfs:label "bestaat uit"@nl;
+  rdfs:label "consists of"@en;
+  sh:name "skosthes:narrowerPartitive";
+  sh:path skosthes:narrowerPartitive;
+  sh:class skos:Concept;
+  rdfs:comment "Een begrip kan kan gaan over een aantal onderdelen."@nl;
+  rdfs:comment "A concept can be about several parts."@en;
+  skos:example "Een schip bestaat uit een romp, kajuit, motor, ... "@nl
+.
+# References to other concepts in other concept schemes
+req:Concept_seeAlso a sh:PropertyShape;
+  rdfs:label "gerelateerd aan"@nl;
+  rdfs:label "related to"@en;
+  sh:name "skos:relatedMatch";
+  sh:path skos:relatedMatch;
+  sh:node req:ExternalConcept;
+  rdfs:comment "Een begrip kan zijn gerelateerd aan een begrip in een ander domein."@nl;
+  rdfs:comment "A concepts can be related to a concept in another domain."@en;
+  skos:example "Een Perceel in de BRK is gerelateerd aan een adres (Nummeraanduiding) in de BAG."@nl
+.
+req:Concept_closelyMatches a sh:PropertyShape;
+  rdfs:label "vergelijkbaar met"@nl;
+  rdfs:label "closely matches with"@en;
+  sh:name "skos:closeMatch";
+  sh:path skos:closeMatch;
+  sh:node req:ExternalConcept;
+  rdfs:comment "Een begrip kan bijna hetzelfde betekenen als een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can have almost the same meaning as a concept in another domain."@en;
+  skos:example "Een OnroerendGoed in de BRK is ongeveer hetzelfde als een WOZobject in de WOZ."@nl
+.
+req:Concept_exactlyMatches a sh:PropertyShape;
+  rdfs:label "exact gelijk aan"@nl;
+  rdfs:label "exactly matches with"@en;
+  sh:name "skos:exactMatch";
+  sh:path skos:exactMatch;
+  sh:node req:ExternalConcept;
+  rdfs:comment "Een begrip kan precies hetzelfde betekenen als een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can have exactly the same meaning as a concept in another domain."@en;
+  skos:example "Een Perceel in het BAL betekent hetzelfde als een Perceel in de BRK."@nl
+.
+req:Concept_broadlyMatches a sh:PropertyShape;
+  rdfs:label "lijkt op breder"@nl;
+  rdfs:label "broadly matches with"@en;
+  sh:name "skos:broadMatch";
+  sh:path skos:broadMatch;
+  sh:node req:ExternalConcept;
+  rdfs:comment "Een begrip kan een specialisatie zijn van een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can be a specializaton of a concept in another domain."@en;
+  skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG."@nl;
+.
+req:Concept_narrowlyMatches a sh:PropertyShape;
+  rdfs:label "lijkt op smaller"@nl;
+  rdfs:label "narrowly matches with"@en;
+  sh:name "skos:narrowMatch";
+  sh:path skos:narrowMatch;
+  sh:node req:ExternalConcept;
+  rdfs:comment "Een begrip kan een generalisatie zijn van een begrip in een ander domein."@nl;
+  rdfs:comment "A concept can be a generalizaton of a concept in another domain."@en;
+  skos:example "Een Postadres is een generalisatie van een Nummeraanduiding en een Postbus."@nl;
+.
+
+#---------------------
+# Bron
+#---------------------
+req:Source a sh:NodeShape;
+  rdfs:label "beschrijvende bron"@nl;
+  rdfs:label "descriptive source"@en;
+  sh:name "frbr:Endeavour (source)";
+  sh:targetClass frbr:Endeavour;
+  rdfs:comment "Een via het web identificeerbare beschrijvende bron."@nl;
+  rdfs:comment "A descriptive source that can be identified via the web."@en;
+  skos:example "Atrikel 1 van het burgerlijk wetboek of atrikel 1 van het burgerlijk wetboek van 1838"@nl;
+  sh:property req:Source_label;
+  sh:property req:Source_isTopicOf
+.
+req:WorkAsSource a sh:NodeShape;
+  rdfs:label "algemeen beschrijvende bron"@nl;
+  rdfs:label "generic descriptive source"@en;
+  sh:name "frbr:Work (source)";
+  sh:targetClass frbr:Work;
+  rdfs:comment "Een via het web identificeerbare beschrijvende bron, zonder dat expliciet wordt verwezen naar een specifieke versie."@nl;
+  rdfs:comment "A descriptive source identifiable via the web, without an explicit reference to a specific version."@en;
+  skos:example "Artikel 1 van het Burgerlijk Wetboek"@nl
+.
+req:ExpressionAsSource a sh:NodeShape;
+  rdfs:label "versie beschrijvende bron"@nl;
+  rdfs:label "version descriptive source"@en;
+  sh:name "frbr:Expression (source version)";
+  sh:targetClass frbr:Expression;
+  rdfs:comment "Een specifieke versie van een op het web identificeerbare beschrijvende bron."@nl;
+  rdfs:comment "A specific version of a descriptive source identifiable on the web."@en;
+  skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl
+.
+req:Source_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
+  rdfs:comment "Een bron heeft een voor mensen leesbaar label";
+  sh:path rdfs:label;
+  rdfs:comment "Een bron heeft een voor mensen leesbare naam."@nl;
+  rdfs:comment "A source has a human readable label."@en;
+  skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een bron heeft een voor mensen leesbare naam."@nl;
+  sh:message "A source has a human readable label."@en
+.
+req:Source_isTopicOf a sh:PropertyShape;
+  rdfs:label "onderwerp van"@nl;
+  rdfs:label "topic of"@en;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:path foaf:isPrimaryTopicOf;
+  sh:node req:SourceDocument;
+  rdfs:comment "Een beschrijvende bron kan een onderwerp zijn van een brondocument."@nl;
+  rdfs:comment "A descriptive source can be a subject of a source document."@en;
+  skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een beschrijvende bron kan een onderwerp zijn van maximaal 1 brondocument."@nl;
+  sh:message "A descriptive source can be a subject of up to 1 source document."@en
+.
+req:SourceDocument a sh:NodeShape;
+  rdfs:label "Brondocument"@nl;
+  rdfs:label "Source document"@en;
+  sh:name "foaf:Document ( source document)";
+  rdfs:comment "Een brondocument dat vindbaar is op het web."@nl;
+  rdfs:comment "A source document that can be found on the web."@nl;
+  skos:example "De volledige tekst van het Burgerlijk Wetboek."@nl;
+  sh:property req:SourceDocument_label
+.
+req:SourceDocument_label a sh:PropertyShape;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+  rdfs:comment "Een brondocument heeft een voor mensen leesbaar label."@nl;
+  rdfs:comment "A source document has a human-readable label."@nl;
+  skos:example "Burgerlijk Wetboek 1838."@nl;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "EEen brondocument heeft een voor mensen leesbaar label."@nl;
+  sh:message "A source document has a human-readable label."@en
 .
 
 #---------------------
 # Extern concept
 #---------------------
-req:ExternConcept a sh:NodeShape;
+req:ExternalConcept a sh:NodeShape;
   sh:name "skos:Concept (extern)";
-    rdfs:label "Extern concept"@nl;
-    sh:property [
+  rdfs:label "Extern begrip"@nl;
+  rdfs:label "Extern concept"@en;
+  rdfs:comment "Een begrip in een ander begrippenkader waarmee een relatie wordt gelegd."@nl;
+  rdfs:comment "A concept in another concept scheme, to which is referenced."@en;
+  rdfs:exampple "Het begrip Nummeraanduiding in de BAG in relatie tot het begrip Postadres in de BRK"@nl;
+  sh:property [
       sh:path rdf:type;
       sh:hasValue skos:Concept;
       sh:minCount 1;
-    ];
+      sh:severity sh:Violation;
+      sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
+      sh:message "A concept in another concept scheme to which is referred has to exist."@en
+  ];
 .
 
 #---------------------
-# Collectie
+# Collection
 #---------------------
-req:Collectie a sh:NodeShape;
+req:Collection a sh:NodeShape;
   rdfs:label "Collectie"@nl;
+  rdfs:label "Collection"@en;
   sh:targetClass skos:Collection;
   sh:name "skos:Collection";
-  sh:property req:Collectie_label;
-  sh:property req:Collectie_heeftLid;
-  sh:property req:Collectie_provenance;
+  rdfs:comment "Een groep samenhangende begrippen kan worden gebundeld in een collectie."@nl;
+  rdfs:comment "A group of coherent concepts can be bundled in a collection."@en;
+  skos:example "De collectie die alle activiteiten in het BAL beschrijft."@nl;
+  sh:property req:Collection_label;
+  sh:property req:Collection_hasMember;
+  sh:property req:Collection_provenance
 .
-req:Collectie_label a sh:PropertyShape;
-  rdfs:label "label"@nl;
+req:Collection_label a sh:PropertyShape;
+  rdfs:label "label (collectie)"@nl;
+  rdfs:label "label (collecion)"@en;
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een collectie schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
-  skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'"
+  rdfs:comment "Een collectie  heeft een voor mensen leesbare naam. Spaties en diacritische tekens zijn daarin toegestaan."@nl;
+  rdfs:comment "A collection has a human readable label. Blanks and diacritics are allowed."@en;
+  skos:example "De collectie die alle activiteiten in het BAL beschrijft heeft als label 'BAL'";
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een collectie heeft altijd een label in de moedertaal."@nl;
+  sh:message "A collection always has a label in native language."@en
 .
-req:Collectie_heeftLid a sh:PropertyShape;
+req:Collection_hasMember a sh:PropertyShape;
   rdfs:label "heeft lid"@nl;
+  rdfs:label "has member"@en;
   sh:name "skos:member";
   sh:path skos:member;
   sh:class skos:Concept;
   rdfs:comment "Een collectie kan één of meerdere begrippen omvatten, die eventueel afkomstig kunnen zijn uit meerdere conceptschema's"@nl;
-  skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'";
+  rdfs:comment "A collection can contain one or more concepts, that possibly come from multiple concept schemes."@en;
+  skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'"
 .
-req:Collectie_provenance a sh:PropertyShape;
+req:Collection_provenance a sh:PropertyShape;
+  rdfs:label "herkomst (collectie)"@nl;
+  rdfs:label "provenance (collection)"@en;
+  sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
+  rdfs:comment "Van een collectie kan de herkomst worden beschreven."@nl;
+  rdfs:comment "Provenance of a collection can be described."@en;
+  skos:example "Op basis van de nieuwe wet op de BAG is een aantal begrippen toegevoegd aan de collectie 'aard gebruik'";
+  sh:minCount 1;
+  sh:severity sh:Warning;
+  sh:message "Van een collectie wordt bij voorkeur herkomst informatie bijgehouden."@nl;
+  sh:message "Prefably provenance information is kept on a collection."@en
 .
 
 #---------------------
@@ -302,24 +513,22 @@ req:Collectie_provenance a sh:PropertyShape;
 req:ConceptScheme a sh:NodeShape;
   rdfs:label "Begrippenkader"@nl;
   rdfs:label "Concept scheme"@en;
+  sh:name "skos:ConceptScheme";
+  sh:targetClass skos:ConceptScheme;
   rdfs:comment "De kennis over de fysieke werkelijkheid wordt beschreven in een talig model, een begrippenmodel.  In een begrippenmodel wordt deze kennis zodanig gestructureerd vastgelegd dat deze door zowel mensen als door computers wordt begrepen."@nl;
   rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
   skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl;
-  sh:name "skos:ConceptScheme";
-  rdfs:comment "De kennis over de fysieke werkelijkheid wordt beschreven in een talig model, een begrippenmodel. In een begrippenmodel wordt deze kennis zodanig gestructureerd vastgelegd dat deze door zowel mensen als door computers wordt begrepen."@nl;
-  rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
-  skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl;
-  sh:targetClass skos:ConceptScheme;
   sh:property req:ConceptScheme_type;
   sh:property req:ConceptScheme_label;
-  sh:property req:ConceptScheme_hasTopConcept;
+  sh:property req:ConceptScheme_hasTopConcept
 .
 req:ConceptScheme_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:path rdfs:label;
   sh:name "rdfs:label";
-  rdfs:comment "Een concepten schema heeft een voor mensen leesbare naam (inclusief spaties en diacrieten)."@nl;
+  rdfs:comment "Een begrippenkader heeft een voor mensen leesbare naam. Spaties en diacritische tekens zijn  toegestaan. "@nl;
+  rdfs:comment "A concept scheme has a human readable label. Blanks and diacritics are allowed."@en;
   skos:example "Het schema dat het domein regelgeving beschrijft heeft als label 'Regelgeving'.";
   sh:minCount 1;
   sh:severity sh:Violation;
@@ -339,6 +548,7 @@ req:ConceptScheme_hasTopConcept a sh:PropertyShape;
 req:ConceptScheme_type a sh:PropertyShape;
   rdfs:label "getypeerd als asset"@nl;
   rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
   rdfs:comment "Een begrippenkader kan worden getypeerd als een asset"@nl;
   rdfs:comment "A concept schema can be typified as an asset"@en;
   sh:path rdf:type;
@@ -346,125 +556,20 @@ req:ConceptScheme_type a sh:PropertyShape;
 .
 
 #---------------------
-# VERSIEBEHEER / PROVENANCE
+# VERSIONING
 #---------------------
 
 #---------------------
-# CatalogGraph
+# General metadata
 #---------------------
-req:CatalogGraph a sh:NodeShape;
-  rdfs:label "Catalogus graph"@nl;
-  rdfs:comment "De catalogus graph omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dwz: een sd:Graph"@nl;
-  sh:name "sd:Graph";
-  sh:targetClass sd:Graph;
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue prov:Entity;
-  ];
-  sh:property req:CatalogGraph_generatedAtTime;
-  sh:property req:CatalogGraph_changeNote;
-  sh:property req:CatalogGraph_attributedTo;
-.
-req:CatalogGraph_generatedAtTime a sh:PropertyShape;
-  rdfs:label "registratiemoment"@nl;
-  rdfs:comment "De datum en tijd van de administratieve handeling wordt bewaard. Daardoor is altijd terug te halen wat op welk tijdstip aan informatie bekend was."@nl;
-  sh:path prov:generatedAtTime;
-  sh:name "prov:generatedAtTime";
-.
-req:CatalogGraph_changeNote a sh:PropertyShape;
-  rdfs:label "wijzigingsnotitie"@nl;
-  sh:path skos:changeNote;
-  sh:name "skos:changeNote";
-  rdfs:comment "De rationale van de aanpassing kan worden aangegeven."@nl;
-  skos:example "Een tikfout.";
-.
-req:CatalogGraph_attributedTo a sh:PropertyShape;
-  rdfs:label "doorgevoerd door"@nl;
-  rdfs:comment "De persoon of organisatie die de wijziging heeft (laten) doorvoeren"@nl;
-  sh:name "prov:wasAttributedTo";
-  sh:path prov:wasAttributedTo;
-  sh:class prov:Agent;
-  skos:example "Het Kadaster";
-.
-
-req:ProvenanceAgent a sh:NodeShape;
-  rdfs:label "Agent"@nl;
-  rdfs:comment "Een agent is een persoon die verantwoordelijk is voor een activiteit, de creatie van een entity of een activiteit van een ander"@nl;
-  sh:name "prov:Agent";
-  sh:targetClass prov:Agent;
-  sh:property req:ProvenanceAgent_OnBehalfOf;
-  sh:property req:ProvenanceAgent_knownAgent
-.
-req:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
-  rdfs:label "uitvoerend namens"@nl;
-  rdfs:comment "Een persoon of organisatie kan opereren namens een andere persoon of organisatie"@nl;
-  skos:example "overheid:Rijkswaterstaat";
-  sh:name "prov:actedOnBehalfOf";
-  sh:path prov:actedOnBehalfOf;
-  sh:class prov:Organization;
-.
-req:ProvenanceAgent_knownAgent a sh:PropertyShape;
-  rdfs:label "geidentificeerd als"@nl;
-  rdfs:comment "Een persoon of organisatie is bekend"@nl;
-  skos:example "overheid:Rijkswaterstaat";
-  sh:path rdf:type;
-  sh:hasValue foaf:Agent;
-.
-
-req:ProvenancePerson a sh:NodeShape;
-  rdfs:label "Persoon"@nl;
-  rdfs:comment "Een natuurlijk persoon"@nl;
-  sh:name "prov:Person";
-  sh:targetClass prov:Person;
-.
-
-req:ProvenanceSoftwareAgent a sh:NodeShape;
-  rdfs:label "Software agent"@nl;
-  rdfs:comment "Software agent, een geautomatiseerd systeem"@nl;
-  sh:name "prov:SoftwareAgent";
-  sh:targetClass prov:SoftwareAgent;
-.
-
-req:ProvenanceOrganization a sh:NodeShape;
-  rdfs:label "Organisatie"@nl;
-  rdfs:comment "Een organisatie is een sociaal en/of juridisch samenwerkingsverband, zoals een bedrijf, instelling"@nl;
-  sh:name "prov:Organization";
-  sh:targetClass prov:Organization;
-.
-
-# Extra info rondom organizations
-req:FoafAgent a sh:NodeShape;
-  rdfs:label "Agent"@nl;
-  sh:name "foaf:Agent";
-  sh:targetClass foaf:Agent;
-.
-req:FoafOrganization a sh:NodeShape;
-  rdfs:label "Organisatie"@nl;
-  sh:name "foaf:Organization";
-  sh:targetClass foaf:Organization
-.
-req:OrgOrganization a sh:NodeShape;
-  rdfs:label "Organisatie"@nl;
-  sh:name "org:Organization";
-  sh:targetClass org:Organization;
-  sh:property req:OrgOrganization_oin
-.
-req:OrgOrganization_oin a sh:PropertyShape;
-  rdfs:label "heeft OIN"@nl;
-  sh:name "org:identifier";
-  sh:path org:identifier;
-  sh:minCount 1;
-  sh:maxCount 1
-.
-
-#---------------------
-# Metadata
-#---------------------
-
 req:Metadata a sh:NodeShape;
+  rdfs:label "Metadata"@nl;
   rdfs:label "Metadata"@nl;
   sh:name "prov:Entity";
   sh:targetClass prov:Entity;
+  rdfs:comment "Metadata van een versie van een entiteit kan worden beschreven."@nl;
+  rdfs:comment "Metadata of a version of an entity can be described."@en;
+  skos:example "De juridische geldigheid en/of de adnimistratieve housekeeping (provenance) gegevens van een entiteit"@nl;
   sh:property req:Metadata_status;
   sh:property req:Metadata_isValidDuring;
   sh:property req:Metadata_isvalidWithin;
@@ -473,77 +578,278 @@ req:Metadata a sh:NodeShape;
 .
 req:Metadata_status a sh:PropertyShape;
   rdfs:label "status"@nl;
+  rdfs:label "status"@en;
   sh:name "adms:status";
   sh:path adms:status;
   sh:node req:Status;
+  rdfs:comment "Een versie heeft een administratieve status op basis van de ADMS waardenlijst."@nl;
+  rdfs:comment "A version has an administrative status based on the ADMS list of values."@en;
+  skos:example "Completed"@nl;
   sh:maxCount 1;
   sh:minCount 1;
-  rdfs:comment "Een versie heeft een administratieve status."@nl;
-  skos:example "Proposed";
-#[IT] skos:example "Completed";
+  sh:severity sh:Violation;
+  sh:message "Een versie heeft altijd 1 administratieve status op basis van de ADMS waardenlijst."@nl;
+  sh:message "A version always has 1 administrative status based on the ADMS list of values."@en
 .
 req:Metadata_changeNote a sh:PropertyShape;
-  rdfs:label "wijzingsnotitie"@nl;
+  rdfs:label "wijzingsnotitie (metadata)"@nl;
+  rdfs:label "change note (metadata)"@en;
   sh:name "skos:changeNote";
   sh:path skos:changeNote;
-  rdfs:comment "Een versie is gemaakt met een bepaalde reden."@nl;
-  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid.";
+  rdfs:comment "De reden van een versie en andere aandachtspunten bij een versie kunnen worden toegelicht."@nl;
+  rdfs:comment "The reason for a version and other points of attention in a version can be explained."@en;
+  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
 .
+
+#---------------------
+# Formal/legal metadata
+#---------------------
 req:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "geldig in tijd"@nl;
+  rdfs:label "temporal validity"@en;
   sh:name "dcterms:temporal";
   sh:path dcterms:temporal;
-  sh:node req:Metadata_Temporal;
+  sh:class dcterms:PeriodOfTime;
+  sh:nodeKind sh:BlankNode;
+  rdfs:comment "Een versie kan formeel/juridisch geldig zijn gedurende een periode."@nl;
+  rdfs:comment "A version can be formally / legally valid for a period."@en;
+  skos:example "22/10/2017 - ";
   sh:maxCount 1;
-  rdfs:comment '''Een versie is formeel/juridisch geldig gedurende een periode.'''@nl;
-  skos:example '''22/10/2017 - ''';
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal op 1 moment in de tijd formeel/juridisch geldig zijn."@nl;
+  sh:message "A version can be formally / legally valid in up to 1 moment in time."@en
 .
 req:Metadata_isvalidWithin a sh:PropertyShape;
-  rdfs:label "geldig in gebied";
+  rdfs:label "geldig in gebied"@nl;
+  rdfs:label "spatial validity"@en;
   sh:name "dcterms:spatial";
   sh:path dcterms:spatial;
   sh:class dcterms:Location;
+  rdfs:comment "Een versie kan formeel/juridisch geldig zijn in een gebied."@nl;
+  rdfs:comment "A version can be formally / legally valid in an area."@en;
+  skos:example "gemeente Apeldoorn";
   sh:maxCount 1;
-  rdfs:comment "Een versie is formeel/juridisch geldig in een gebied."@nl;
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal in 1 gebied formeel/juridisch geldig zijn."@nl;
+  sh:message "A version can be formally / legally valid in up to 1 area."@en
 .
 req:Metadata_isIssued a sh:PropertyShape;
-  rdfs:label "bekendgemaakt op"@nl;
+  rdfs:label "bekendgemaakt"@nl;
+  rdfs:label "issued"@en;
   sh:name "dcterms:issued";
   sh:path dcterms:issued;
+  rdfs:comment "Een versie kan bekend worden gemaakt vanaf een bepaald moment."@nl;
+  rdfs:comment "A version can be issued from a certain moment in time."@en;
+  skos:example "21/10/2017 20:21"@nl;
   sh:maxCount 1;
-  rdfs:comment "Een versie is formeel bekend gemaakt op een bepaald moment."@nl;
-  skos:example '''21/10/2017 20:21''';
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal in 1 keer bekend worden gemaakt."@nl;
+  sh:message "A version can be issued up to 1 time."@en
 .
-
-req:Metadata_Temporal a sh:NodeShape;
+req:PeriodOfTime a sh:NodeShape;
   rdfs:label "Tijdsperiode"@nl;
-  sh:property req:Temporal_Start;
-  sh:property req:Temporal_End;
+  rdfs:label "Time period"@nl;
+  sh:name "dcterms:PeriodOfTime";
+  rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
+  rdfs:comment "A period of time is pointed out by a start date and end date."@en;
+  sh:targetClass dcterms:PeriodOfTime;
+  skos:example "22/10/2017 - 01/08/2018"@nl;
+  sh:property req:MetadataTemporal_start;
+  sh:property req:MetadataTemporal_end
 .
-req:Temporal_Start a sh:PropertyShape;
+req:MetadataTemporal_start a sh:PropertyShape;
   rdfs:label "start"@nl;
+  rdfs:label "start"@en;
   sh:name "dcmiperiod:start";
   sh:path dcmiperiod:start;
-  rdfs:comment "Een versie is formeel/juridisch geldig vanaf"@nl;
-  skos:example "21/10/2017";
+  rdfs:comment "Een periode start op een bepaalde datum. Deze datum kan onbekend (leeg) zijn."@nl;
+  rdfs:comment "A period of time starts at a certain date. This date can be unknown (empty)."@en;
+  skos:example "22/10/2017";
   sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een periode heeft maximaal in 1 startdatum/tijdstip."@nl;
+  sh:message "A period has up to 1 start date / time."@en
 .
-req:Temporal_End a sh:PropertyShape;
+req:MetadataTemporal_end a sh:PropertyShape;
   rdfs:label "einde"@nl;
+  rdfs:label "end"@en;
   sh:name "dcmiperiod:end";
   sh:path dcmiperiod:end;
-  rdfs:comment "Een versie is formeel/juridisch geldig tot"@nl;
-  skos:example "23/10/2017";
+  rdfs:comment "Een periode eindigt op een bepaalde dataum. Deze datum kan onbekend (leeg) zijn."@nl;
+  rdfs:comment "A period of time ends at a certain date. This date can be unknown (empty)."@en;
+  skos:example "01/08/2018";
   sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een periode heeft maximaal in 1 einddatum/tijdstip."@nl;
+  sh:message "A period has up to 1 end date / time."@en
 .
-
 req:Status a sh:NodeShape;
-  sh:name "Status waardelijst"@nl;
+  rdfs:label "Status waardelijst"@nl;
+  rdfs:label "Controlled vocabulary status"@en;
+  sh:name "skos:Concept (adms status)";
+  rdfs:comment "Een versie kan een administratieve status hebben die wordt ontleend aan de ADMS waardenlijst."@nl;
+  rdfs:comment "A version can hav an administrative status that is based on the ADMS controlled vocabulary."@en;
+  skos:example "Completed"@nl;
   sh:property [
     sh:path skos:inScheme;
     sh:minCount 1;
     sh:maxCount 1;
+    sh:severity sh:Violation;
+    sh:hasValue <http://purl.org/adms/status/1.0>;
+    sh:message "De administratieve status wordt ontleend aan de ADMS waardenlijst."@nl;
+    sh:message "The administrative status is based on the ADMS controlled vocabulary."@en
   ];
+.
+
+#---------------------
+# Provenance
+#---------------------
+req:ProvenanceGraph a sh:NodeShape;
+  rdfs:label "Provenance graaf"@nl;
+  rdfs:label "Provenance graph"@en;
+  sh:name "sd:Graph";
+  sh:targetClass sd:Graph;
+  rdfs:comment "De provenance graaf omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dat wil zeggen: een sd:Graph"@nl;
+  rdfs:comment "The provenance graph contains both the concrete data (represented by a prov:Entity), and the metadata of the prov:Entity, that is: an sd:Graph"@en;
+  skos:example "Alle wijzigingen en nieuwe data die op 8 augustus 2018 in een keer zijn geladen."@nl;
+  sh:property req:ProvenanceGraph_type;
+  sh:property req:ProvenanceGraph_generatedAtTime;
+  sh:property req:ProvenanceGraph_changeNote;
+  sh:property req:ProvenanceGraph_attributedTo;
+.
+req:ProvenanceGraph_type a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue prov:Entity;
+.
+req:ProvenanceGraph_generatedAtTime a sh:PropertyShape;
+  rdfs:label "registratiemoment"@nl;
+  rdfs:label "registration moment"@en;
+  sh:path prov:generatedAtTime;
+  sh:name "prov:generatedAtTime";
+  rdfs:comment "De datum en tijd van de administratieve handeling kan worden bewaard. Daardoor is altijd terug te halen wat op welk tijdstip aan informatie bekend was."@nl;
+  rdfs:comment "The date and time of the administrative operation can be saved. This way you can always retrieve what information was known at what time."@en;
+  skos:example "21/10/2017 20:21"@nl;
+.
+req:ProvenanceGraph_changeNote a sh:PropertyShape;
+  rdfs:label "wijzigingsnotitie (provenance graaf)"@nl;
+  rdfs:label "change note (provenance graph)"@en;
+  sh:path skos:changeNote;
+  sh:name "skos:changeNote";
+  rdfs:comment "De reden van een set samenhangende wijzigingen kan worden toegelicht."@nl;
+  rdfs:comment "The reason for a set of related changes can be explained."@en;
+  skos:example "Alle definities zijn aangepast overeenkomstig de nieuwe wet op de BAG."@nl
+.
+req:ProvenanceGraph_attributedTo a sh:PropertyShape;
+  rdfs:label "doorgevoerd door"@nl;
+  rdfs:label "attributed to"@en;
+  sh:name "prov:wasAttributedTo";
+  sh:path prov:wasAttributedTo;
+  sh:class prov:Agent;
+  rdfs:comment "De persoon of organisatie die de wijziging heeft (laten) doorvoeren kan worden vastgelegd"@nl;
+  rdfs:comment "The person or organization that made or let make the change can be recorded."@en;
+  skos:example "Het Kadaster"@nl
+.
+req:ProvenanceAgent a sh:NodeShape;
+  rdfs:label "Agent (provenance)"@nl;
+  rdfs:label "Agent (provenance)"@en;
+  sh:name "prov:Agent";
+  sh:targetClass prov:Agent;
+  rdfs:comment " De persoon of organisatie die verantwoordelijk is voor een activiteit, de creatie van een entity of een activiteit van een ander kan worden vastgelegd."@nl;
+  rdfs:comment "The person or organization that is responsible for an activity, the creation of a entity or an activity of another can be recorded."@en;
+  skos:example "Het Ministerie van BZK"@nl;
+  sh:property req:ProvenanceAgent_OnBehalfOf;
+  sh:property req:ProvenanceAgent_knownAgent
+.
+req:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
+  rdfs:label "uitgevoerd namens"@nl;
+  rdfs:label "acted on behalf of"@en;
+  sh:name "prov:actedOnBehalfOf";
+  sh:path prov:actedOnBehalfOf;
+  sh:class prov:Organization;
+  rdfs:comment "Een persoon of organisatie kan opereren namens een andere persoon of organisatie."@nl;
+  rdfs:comment "A person or organization can act on behalf of another person or organization."@en;
+  skos:example "overheid:Rijkswaterstaat"@nl
+.
+req:ProvenanceAgent_knownAgent a sh:PropertyShape;
+  rdfs:label "geidentificeerd als"@nl;
+  rdfs:label "identified as"@en;
+  sh:path rdf:type;
+  sh:hasValue foaf:Agent;
+  rdfs:comment "Een persoon of organisatie is bekend."@nl;
+  rdfs:comment "A person or organization is known."@en;
+  skos:example "overheid:Rijkswaterstaat"@nl;
+.
+req:ProvenancePerson a sh:NodeShape;
+  rdfs:label "Persoon (provenance)"@nl;
+  rdfs:label "Person (provenance)"@en;
+  sh:name "prov:Person";
+  sh:targetClass prov:Person;
+  rdfs:comment "Een agent (provenance) kan een mens zijn."@nl;
+  rdfs:comment "An agent (provenance can be a human."@en;
+  skos:example "Jan Jansen"@nl;
+.
+req:ProvenanceSoftwareAgent a sh:NodeShape;
+  rdfs:label "Software agent"@nl;
+  rdfs:label "Software agent"@en;
+  sh:name "prov:SoftwareAgent";
+  sh:targetClass prov:SoftwareAgent;
+  rdfs:comment "Een agent (provenance) kan een geautomatiseerde routine zijn."@nl;
+  rdfs:comment "An agent (provenance can be an automated routine."@en;
+  skos:example "Scheduled routine x"@nl;
+.
+req:ProvenanceOrganization a sh:NodeShape;
+  rdfs:label "Organisatie (provenance)"@nl;
+  rdfs:label "Organization (provenance)"@en;
+  sh:name "prov:Organization";
+  sh:targetClass prov:Organization;
+  rdfs:comment "Een agent (provenance) kan een organisatie zijn."@nl;
+  rdfs:comment "An agent (provenance can be an organization."@en;
+  skos:example "Rijkswaterstaat"@nl;
+.
+
+# Extra info about organizations
+req:FoafAgent a sh:NodeShape;
+  rdfs:label "Agent (foaf)"@nl;
+  rdfs:label "Agent (foaf)"@en;
+  sh:name "foaf:Agent";
+  sh:targetClass foaf:Agent;
+  rdfs:comment " De persoon of organisatie die verantwoordelijk is voor een dataset."@nl;
+  rdfs:comment "The person or organization that is responsible for a dataset."@en;
+  skos:example "Het Ministerie van BZK"@nl;
+.
+req:FoafOrganization a sh:NodeShape;
+  rdfs:label "Organisatie (foaf)"@nl;
+  rdfs:label "Organization (foaf)"@en;
+  sh:name "foaf:Organization";
+  sh:targetClass foaf:Organization;
+  rdfs:comment " De organisatie die verantwoordelijk is voor een dataset."@nl;
+  rdfs:comment "The organization that is responsible for a dataset."@en;
+  skos:example "Het Ministerie van BZK"@nl;
+.
+req:OrgOrganization a sh:NodeShape;
+  rdfs:label "Organisatie (org)"@nl;
+  rdfs:label "Organization (org)"@en;
+  sh:name "org:Organization";
+  sh:targetClass org:Organization;
+  rdfs:comment "De organisatie zoals opgenomen in de formele lijst met OIN nummers."@nl;
+  rdfs:comment "The organization as included in the formal list with OIN numbers."@en;
+  skos:example "345879873452"@nl;
+  sh:property req:OrgOrganization_oin
+.
+req:OrgOrganization_oin a sh:PropertyShape;
+  rdfs:label "heeft OIN"@nl;
+  rdfs:label "has OIN"@en;
+  sh:name "org:identifier";
+  sh:path org:identifier;
+  rdfs:comment "De organisatie die verantwoordelijk is voor een dataset is opgenomen in de formele lijst met OIN nummers."@nl;
+  rdfs:comment "The organization that is responsible for a dataset is included in the formal list with OIN numbers."@en;
+  skos:example "345879873452"@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "De organisatie die verantwoordelijk is voor een dataset heeft 1 OIN nummer."@nl;
+  sh:message "The organization that is responsible for a dataset has 1 OIN number."@en
 .
 
 #---------------------
@@ -553,150 +859,507 @@ req:Status a sh:NodeShape;
 #---------------------
 # Act, Object, Actor, Agent
 #---------------------
-req:HandelingAct a sh:NodeShape;
-  rdfs:label "Activiteit"@nl;
-#  rdfs:comment "An act is a legal construct representing a set of activities, performed by an Actor and with respect to some Object.";
-  rdfs:comment "Een activiteit is een juridische constructie als representatie voor een aantal handelingen, uitgevoerd door een Actor met betrekking tot een bepaald Object"@nl;
-  sh:targetClass skoslex:Act;
+req:Act a sh:NodeShape;
+  rdfs:label "Act"@en;
+  rdfs:label "Handeling"@nl;
+  rdfs:comment "The class of Acts. An act is a legal construct representing a set of activities, performed by an Actor and with respect to some Object."@en;
+  rdfs:comment "De klasse van handelingen. Een handeling is een juridische constructie die een verzamelingen activiteiten voorstelt, uitgevoerd door een Actor en op een Object."@nl;
   sh:name "skoslex:Act";
-  sh:property req:Handeling_name;
-  sh:property req:Handeling_actor;
-  sh:property req:Handeling_agent;
-  sh:property req:Handeling_object;
-  sh:property req:Handeling_refersTo;
+  sh:targetClass skoslex:Act;
+  skos:example "De levering van een onroerend goed zoals vastgelegd in een notariele akte (rechtshandeling), Het bouwen van een bouwwerk (handeling)"@nl;
+  sh:property req:Act_actor;
+  sh:property req:Act_agent;
+  sh:property req:Act_object;
+  sh:property req:Act_refersTo;
 .
-req:HandelingActor a sh:NodeShape;
-  rdfs:label "Actor"@nl;
-#  rdfs:comment "An actor is some person (individual, group or organization) that performs some Act";
-  rdfs:comment "Een actor is een persoon (individu, groep of organisatie) die een activiteit uitvoert"@nl;
-  sh:targetClass skoslex:Actor;
-  sh:name "skoslex:Actor";
-  sh:property req:Handeling_name;
-.
-req:HandelingAgent a sh:NodeShape;
-  rdfs:label "Agent"@nl;
-#  rdfs:comment "An agent is some person (individual, group or organization) involved in some act, without actually performing the act.";
-  rdfs:comment "Een agent is een persoon (individu, groep of organisatie) die betrokken is bij een activiteit, zonder daadwerkelijk de activiteit uit te voeren"@nl;
-  sh:targetClass skoslex:Agent;
-  sh:name "skoslex:Agent";
-  sh:property req:Handeling_name;
-.
-req:HandelingObject a sh:NodeShape;
-  rdfs:label "Object"@nl;
-#  rdfs:comment "An object is some thing (not an actor) that is created, used or changed during some Act";
-  rdfs:comment "Een object is een ding (geen actor) die ontstaat, gebruikt wordt of veranderd gedurende een activiteit"@nl;
-  sh:targetClass skoslex:Object;
-  sh:name "skoslex:Object";
-  sh:property req:Handeling_name;
-.
-
-req:Handeling_name a sh:PropertyShape;
-  sh:path rdfs:label;
-.
-req:Handeling_actor a sh:PropertyShape;
-#  rdfs:label "is performed by"@en;
-  rdfs:label "uitgevoerd door"@nl;
+req:Act_actor a sh:PropertyShape;
+  rdfs:label "actor"@en;
+  rdfs:label "actor"@nl;
+  rdfs:comment "Actor relates an Act with the Actor that performs the act."@en;
+  rdfs:comment "Actor relateert een handeling aan de actor die de handeling uitvoert"@nl;
   sh:name "skoslex:actor";
-#  rdfs:comment "actor relates an Act with the Actor that performs the act.";
-  rdfs:comment "De actor die de act uitvoert"@nl;
   sh:path skoslex:actor;
   sh:class skoslex:Actor;
+  skos:example "Jan Jansen in zijn rol van koper van een onroerend goed."@nl;
 .
-req:Handeling_object a sh:PropertyShape;
+req:Act_object a sh:PropertyShape;
+  rdfs:label "object"@en;
   rdfs:label "object"@nl;
+  rdfs:comment "Object relates an Act with the object that is created, changed or used during the act"@en;
+  rdfs:comment "Object relateert een handeling met een object dat ontstaat, wijzigt of wordt gebruikt gedurende een act"@nl;
   sh:name "skoslex:object";
-#  rdfs:comment "object relates an Act with the object that is created, changed or used during the act.";
-  rdfs:comment "Het object m.b.t. de activiteit"@nl;
   sh:path skoslex:object;
   sh:class skoslex:Object;
+  skos:example "Het onroerend goed DPV00 B 1207 als onderwerp van de koop."@nl;
 .
-req:Handeling_agent a sh:PropertyShape;
+req:Act_agent a sh:PropertyShape;
+  rdfs:label "agent"@en;
   rdfs:label "agent"@nl;
+  rdfs:comment "Agent relates an Act with the Agent involved in the act."@en;
+  rdfs:comment "Agent relateert een handeling aan de agent die bij de handeling betrokken is"@nl;
   sh:name "skoslex:agent";
   sh:path skoslex:agent;
   sh:class skoslex:Agent;
-#  rdfs:comment "agent relates an Act with the Agent involved in the act.";
-  rdfs:comment "De agent betrokken bij de activiteit"@nl;
+  skos:example "Een notaris die een akte opmaakt bij de koop van een onroerend goed."@nl;
 .
-req:Handeling_refersTo a sh:PropertyShape;
+req:Act_refersTo a sh:PropertyShape;
+  rdfs:label "refers to"@en;
   rdfs:label "verwijst naar"@nl;
+  rdfs:comment "RefersTo relates a norm with the Act that is refered by the norm. Such an act has some relation with the norm, without further specification. It might be effected by the norm, but could also be a precondition or simply mentioned in the rules."@en;
+  rdfs:comment "Verwijst naar relateert een norm aan de handeling waarnaar de norm refereert. Zo'n handeling heeft een relatie met de norm, zonder verdere specificatie. Het kan zijn dat de norm bepaalde zaken voorschrift, maar het kan ook zijn dat de handeling een preconditie is, of gewoon benoemd is in de regels."@nl;
   sh:name "skoslex:refersTo";
   sh:path skoslex:refersTo;
   sh:class skoslex:Norm;
-#  rdfs:comment "refersTo relates a norm with the Act that is refered by the norm. Such an act has some relation with the norm, without further specification. It might be effected by the norm, but could also be a precondition or simply mentioned in the rules.";
-  rdfs:comment "De activiteit waar de norm naar verwijst"@nl;
+  skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
+.
+
+req:Actor a sh:NodeShape;
+  rdfs:label "Actor"@en;
+  rdfs:label "Actor"@nl;
+  rdfs:comment "The class of Actors. An actor is some person (individual, group or organisation) that performs some Act"@en;
+  rdfs:comment "De klasse van actoren. Een actor is een persoon (individu, groep of organisatie) die een handeling uitvoert"@nl;
+  sh:targetClass skoslex:Actor;
+  sh:name "skoslex:Actor";
+  skos:example "Jan Jansen."@nl;
+.
+req:LegalAgent a sh:NodeShape;
+  rdfs:label "Agent"@en;
+  rdfs:label "Agent"@nl;
+  rdfs:comment "The class of Agent. An agent is some person (individual, group or organisation) involved in some act, without actually performing the act."@en;
+  rdfs:comment "De klasse van agenten. Een agent is een persoon (individu, groep of organisatie) die bij een handeling betrokken is, zonder de handeling feitelijk uit te voeren."@nl;
+  sh:targetClass skoslex:Agent;
+  sh:name "skoslex:Agent";
+  skos:example "Notaris Pietersen."@nl;
+  sh:property req:LegalLabel;
+.
+req:Object a sh:NodeShape;
+  rdfs:label "Object"@en;
+  rdfs:label "Object"@nl;
+  rdfs:comment "The class of objects. An object is some thing (not an actor) that is created, used or changed during some Act"@en;
+  rdfs:comment "De klasse van objecten. Een object is een ding (niet een actor) dat ontstaat, wijzigt of gebruikt wordt gedurende een handeling"@nl;
+  sh:targetClass skoslex:Object;
+  sh:name "skoslex:Object";
+  skos:example "Het onroerend goed DPV00 B 1207."@nl;
+  sh:property req:LegalLabel;
 .
 
 #---------------------
 # Norm
 #---------------------
-req:HandelingNorm a sh:NodeShape;
+req:LegalNorm a sh:NodeShape;
+  rdfs:label "Norm"@en;
   rdfs:label "Norm"@nl;
-#  rdfs:comment "A norm effects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A norm represents the set of rules that apply to an Act.";
+  rdfs:comment "The class of norms. A norm effects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A norm represents the set of rules that apply to an Act."@en;
+  rdfs:comment "The klasse van normen. Een norm heeft effect op een handeling. De norm stelt wat 'zou moeten' of juist 'niet zo moeten' met betrekking tot de handeling. Een norm representeert de regels die gelden voor de handeling."@nl;
   sh:targetClass skoslex:Norm;
   sh:name "skoslex:Norm";
-  sh:property req:Handeling_name;
-  sh:property req:Handeling_affects;
+  skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
+  sh:property req:LegalNorm_label;
+  sh:property req:LegalNorm_affects;
 .
-req:Handeling_affects a sh:PropertyShape;
+req:LegalNorm_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+req:LegalNorm_affects a sh:PropertyShape;
+  rdfs:label "affects"@en;
   rdfs:label "normeert"@nl;
-#  rdfs:comment "Affects relates a norm with the Act that is affected by the norm. Such an act is restricted by the rules identified by the norm.";
-  rdfs:comment "Verwijst naar de activiteit die wordt genormeerd, beperkt, door de norm"@nl;
+  rdfs:comment "Affects relates a norm with the Act that is affected by the norm. Such an act is restricted by the rules identified by the norm"@en;
+  rdfs:comment "Normeert relateert een norm aan de handeling die de norm normeert. Zo'n handeling wordt beperkt door de regels van de norm"@nl;
   sh:name "skoslex:affects";
   sh:path skoslex:affects;
   sh:class skoslex:Act;
 .
 
 #---------------------
-# Bron
+# Assets (Informatiemodel)
 #---------------------
-req:Bron a sh:NodeShape;
-  sh:name "frbr:Endeavour (bron)";
-  rdfs:label "Bron"@nl;
-  rdfs:comment "Een identificeerbare bron die gebruikt is voor informatie die in de Catalogus wordt ontsloten."@nl;
-  sh:targetClass frbr:Endeavour;
-  sh:property req:Bron_label;
-  sh:property req:Bron_isHetOnderwerpVan;
+req:Asset a sh:NodeShape;
+  rdfs:label "Asset"@nl;
+  sh:name "adms:Asset";
+  sh:targetClass adms:Asset;
 .
-req:WerkAlsBron a sh:NodeShape;
-  sh:name "frbr:Work (bron)";
-  rdfs:label "Werk"@nl;
-  rdfs:comment "Een identificeerbare bron, zonder dat expliciet wordt verwezen naar een specifieke versie (bv: 'Artikel 1 Grondwet')"@nl;
-  sh:targetClass frbr:Work;
+req:Informatiemodel rdf:type sh:NodeShape;
+    rdfs:label "Asset (Informatiemodel)"@nl;
+    rdfs:label "Asset (Data model)"@en;
+    sh:name "adms:Asset (Data model)";
+    sh:property req:Informatiemodel_role;
+    sh:property req:Informatiemodel_typeInformatiemodel;
+    sh:property req:Informatiemodel_name;
+    sh:property req:Informatiemodel_distributie;
+    sh:property req:Informatiemodel_landingPage;
 .
-req:ExpressieAlsBron a sh:NodeShape;
-  sh:name "frbr:Expression (bronversie)";
-  rdfs:label "Expressie"@nl;
-  rdfs:comment "Een identificeerbare concrete versie van een bron."@nl;
-  sh:targetClass frbr:Expression;
-.
-req:Bron_label a sh:PropertyShape;
-  sh:name "rdfs:label";
-  rdfs:label "label"@nl;
-  rdfs:comment "Een bron heeft een voor mensen leesbaar label";
-  sh:path rdfs:label;
-  sh:minCount 1;
-.
-req:Bron_isHetOnderwerpVan a sh:PropertyShape;
-  sh:name "foaf:isPrimaryTopicOf";
-  rdfs:label "onderwerp van"@nl;
-  rdfs:comment "Een bron is het onderwerp van een brondocument"@nl;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:node req:Brondocument;
+req:Informatiemodel_landingPage a sh:PropertyShape;
+  sh:name "dcat:landingPage";
+  rdfs:label "landingspagina"@nl;
+  sh:path dcat:landingPage;
+  sh:node req:LandingPage;
   sh:maxCount 1;
 .
-req:Brondocument a sh:NodeShape;
-  sh:name "foaf:Document (brondocument)";
-  rdfs:label "Document"@nl;
-  rdfs:comment "Een brondocument dat vindbaar is op het internet"@nl;
-  sh:property req:Brondocument_label
+req:Informatiemodel_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
 .
-req:Brondocument_label a sh:PropertyShape;
-  sh:name "rdfs:label";
-  rdfs:label "label"@nl;
-  rdfs:comment "Een brondocument heeft een voor mensen leesbaar label"@nl;
-  sh:path rdfs:label;
+req:Informatiemodel_typeInformatiemodel a sh:PropertyShape;
+  rdfs:label "type asset = informatiemodel"@nl;
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
   sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dstype:Datamodel;
+.
+req:Informatiemodel_name rdf:type sh:PropertyShape;
+    rdfs:label "label"@nl;
+    sh:name "rdfs:label";
+    rdfs:comment "Het informatiemodel heeft een naam";
+    skos:example "'IMKAD'";
+    sh:path rdfs:label
+.
+
+req:Informatiemodel_distributie rdf:type sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  sh:name "dcat:distribution";
+  sh:path dcat:distribution;
+  sh:node req:ModelVoorkomen;
+.
+
+req:ModelVoorkomen a sh:NodeShape;
+  rdfs:label "Modelvoorkomen"@nl;
+  sh:name "adms:Distribution";
+  sh:targetClass adms:Distribution;
+  sh:property req:ModelVoorkomen_accessURL;
+  sh:property req:ModelVoorkomen_downloadURL;
+  sh:property req:ModelVoorkomen_representationTechnique;
+.
+
+req:ModelVoorkomen_accessURL a sh:PropertyShape;
+  sh:name "dcat:accessURL";
+  sh:path dcat:accessURL;
+.
+
+req:ModelVoorkomen_downloadURL a sh:PropertyShape;
+  sh:name "dcat:downloadURL";
+  sh:path dcat:downloadURL;
+  sh:node req:DownloadFormat;
+  sh:maxCount 1;
+.
+
+req:ModelVoorkomen_representationTechnique a sh:PropertyShape;
+  sh:name "adms:representationTechnique";
+  sh:path adms:representationTechnique;
+  sh:node req:RepresentationTechnique;
+.
+
+req:RepresentationTechnique a sh:NodeShape;
+  sh:name "skos:Concept (adms representation technique)";
+  sh:property [
+    sh:path skos:inScheme;
+    sh:hasValue <http://purl.org/adms/representationtechnique/1.0>;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+req:Vocabulaire a sh:NodeShape;
+  rdfs:label "Vocabulaire"@nl;
+  sh:name "owl:Ontology";
+  sh:targetClass owl:Ontology;
+  sh:property [
+    sh:path sh:shapesGraph;
+    sh:name "sh:shapesGraph";
+    sh:node req:ShapesGraph
+  ];
+  sh:property [
+    sh:path foaf:isPrimaryTopicOf;
+    sh:name "foaf:isPrimaryTopicOf";
+    sh:node req:LandingPage;
+    sh:maxCount 1;
+  ]
+.
+req:ShapesGraph a sh:NodeShape;
+  rdfs:label "Shapes graph"@nl;
+  sh:name "Shapes graph";
+  sh:property [
+    sh:path rdfs:label;
+    sh:name "rdfs:label";
+  ];
+.
+req:Klasse a sh:NodeShape;
+  sh:name "owl:Class";
+  sh:targetClass owl:Class;
+  sh:property [
+    sh:path rdfs:isDefinedBy;
+    sh:name "rdfs:isDefinedBy";
+    sh:node req:Vocabulaire;
+  ];
+.
+req:NodeShape a sh:NodeShape;
+  rdfs:label "node shape"@nl;
+  sh:name "sh:NodeShape";
+  sh:targetClass sh:NodeShape;
+  sh:property [
+    sh:path sh:targetClass;
+    sh:name "sh:targetClass";
+    sh:class owl:Class
+  ];
+.
+
+#---------------------
+# Controlled vocabularies
+#---------------------
+
+req:ControlledVocabulary rdf:type sh:NodeShape;
+  rdfs:label "Asset (Waardelijst)"@nl;
+  rdfs:label "Asset (ControlledVocabulary)"@en;
+  sh:name "adms:Asset (ControlledVocabulary)";
+  rdfs:comment "Een waardelijst is een verzameling van begrippen of elementen die worden gebruikt om inhoud te indexeren en / of inhoud op te halen via browsen of zoeken. Hij bevat meestal voorkeurs- en varianttermen en heeft een gedefinieerde scope of beschrijft een specifiek domein."@nl;
+  rdfs:comment "A controlled vocabulary is an organized arrangement of concepts or elements used to index content and/or to retrieve content through browsing or searching. It typically includes preferred and variant terms and has a defined scope or describes a specific domain."@en;
+  skos:example "De lijst met Kadastrale gemeenten."@nl;
+  sh:property req:ControlledVocabulary_label;
+  sh:property req:ControlledVocabulary_type;
+  sh:property req:ControlledVocabulary_typeWaardelijst;
+  sh:property req:ControlledVocabulary_partOf;
+  sh:property req:ControlledVocabulary_distribution;
+  sh:property req:ControlledVocabulary_specification;
+  sh:property req:ControlledVocabulary_landingPage
+.
+req:ControlledVocabulary_label rdf:type sh:PropertyShape;
+  rdfs:label "naam (Waardelijst)"@nl;
+  rdfs:label "label (ControlledVocabulary)"@en;
+  sh:name "rdfs:label (ControlledVocabulary)";
+  sh:path rdfs:label;
+  rdfs:comment "Een waardelijst heeft een naam."@nl;
+  rdfs:comment "A controlled vocabulary has a label."@nl;
+  skos:example "Landenlijst";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een waardelijst heeft een naam."@nl;
+  sh:message "A controlled vocabulary has a label."@en
+.
+req:ControlledVocabulary_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+  rdfs:comment "Een waardelijst wordt getypeerd als adms:Asset."@nl;
+  rdfs:comment "A controlled vocabulary is is typed as adms:Asset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
+.
+req:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
+  rdfs:label "type asset = Waardelijst"@nl;
+  rdfs:label "type asset = Controlled vocabulary"@en;
+  sh:name "dcterms:type";
+  sh:path dcterms:type;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dctype:ControlledVocabulary;
+.
+req:ControlledVocabulary_partOf a sh:PropertyShape;
+  rdfs:label "onderdeel van"@nl;
+  rdfs:label "part of"@en;
+  sh:name "dcterms:isPartOf";
+  sh:path dcterms:isPartOf;
+  sh:node req:Dataset;
+  rdfs:comment "Een waardelijst kan onderdeel zijn van een dataset."@nl;
+  rdfs:comment "A controlled vocabulary can be part of a dataset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is onderdeel van de BRK."@nl;
+  sh:maxCount 1;
+  sh:severity sh:Warning;
+  sh:message "Een waardelijst kan onderdeel zijn van maximaal 1 dataset."@nl;
+  sh:message "A controlled vocabulary can be part of up to 1 dataset."@en
+.
+req:ControlledVocabulary_landingPage a sh:PropertyShape;
+  rdfs:label "webpagina"@nl;
+  rdfs:label "landing page"@en;
+  sh:name "dcat:landingPage";
+  sh:path dcat:landingPage;
+  sh:node req:LandingPage;
+  rdfs:comment "Een waardelijst kan vindbaar zijn via een webpagina."@nl;
+  rdfs:comment "A controlled vocabulary can be found via a landing page on the web."@en;
+  skos:example "kadaster.nl/waardelijsten."@nl;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een waardelijst kan maximaal via 1 bronpagina vindbaar zijn."@nl;
+  sh:message "A controlled vocabulary can be found on up to 1 source page."@en
+.
+
+req:ControlledVocabulary_distribution rdf:type sh:PropertyShape;
+  rdfs:label "distributie"@nl;
+  rdfs:label "distribution"@en;
+  sh:name "dcat:distribution";
+  sh:path dcat:distribution;
+  sh:node req:ControlledVocabularyDistribution;
+  rdfs:comment "De wijze waarop een waardelijst wordt gepubliceerd kan worden aangegeven."@nl;
+  rdfs:comment "The way in which a controlled vocabulary is published can be indicated."@en;
+  skos:example "De genericode publicatie van de lijst met Kadastrale gemeenten."@nl
+.
+
+req:ControlledVocabulary_specification a sh:PropertyShape;
+  rdfs:label "specificatie"@nl;
+  rdfs:label "specification"@en;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node req:NodeShape;
+.
+
+req:ControlledVocabularyDistribution a sh:NodeShape;
+  rdfs:label "Waardelijstdistributie"@nl;
+  sh:name "adms:Distribution";
+  sh:targetClass adms:Distribution;
+  sh:property req:WaardelijstDistributie_accessURL;
+  sh:property req:WaardelijstDistributie_downloadURL;
+  sh:property req:WaardelijstDistributie_representationTechnique;
+.
+
+req:WaardelijstDistributie_accessURL a sh:PropertyShape;
+  sh:name "dcat:accessURL";
+  sh:path dcat:accessURL;
+.
+
+req:WaardelijstDistributie_downloadURL a sh:PropertyShape;
+  sh:name "dcat:downloadURL";
+  sh:path dcat:downloadURL;
+  sh:node req:DownloadFormat;
+.
+
+req:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
+  sh:name "adms:representationrTechnique";
+  sh:path adms:representationtechnique;
+  sh:node req:RepresentationTechnique;
+.
+
+req:SchemaWaardelijst a sh:NodeShape;
+  sh:name "sh:NodeShape (ConceptScheme spec)"@nl;
+  sh:property req:SchemaWaardelijst_role;
+  sh:property req:SchemaWaardelijst_property;
+.
+req:SchemaWaardelijst_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+req:SchemaWaardelijst_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node req:SchemaWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+req:SchemaWaardelijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue skos:inScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:ConceptScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+req:CollectieWaardelijst a sh:NodeShape;
+  sh:name "sh:NodeShape (Collection spec)"@nl;
+  sh:property req:CollectieWaardelijst_role;
+  sh:property req:CollectieWaardelijst_property;
+.
+req:CollectieWaardelijst_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+req:CollectieWaardelijst_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node req:CollectieWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+req:CollectieWaardelijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path/sh:inversePath = skos:member"; #Hack, propertypaths are not shown correctly
+#    sh:hasValue skos:member;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:Collection;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+req:Referentielijst a sh:NodeShape;
+  sh:name "sh:Nodeshape (Class spec)";
+  sh:property [
+    sh:path rdf:type;
+    sh:name "rol";
+    sh:hasValue sh:NodeShape;
+  ];
+  sh:property [
+    sh:path sh:property;
+    sh:name "sh:property";
+    sh:node req:ReferentielijstSpec;
+    sh:nodeKind sh:BlankNode;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+req:ReferentielijstSpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue rdf:type;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class owl:Class;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+#
+# Webpages (landingPage, downloadURL)
+#
+req:LandingPage a sh:NodeShape;
+  sh:name "foaf:Document (Landing page)";
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue foaf:Document;
+  ];
+.
+req:DownloadFormat a sh:NodeShape;
+  sh:name "foaf:Document (Download format)";
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue foaf:Document;
+  ];
+  sh:property [
+    sh:name "dcterms:isFormatOf";
+    sh:path dcat:landingPage;
+    sh:node req:LandingPage;
+  ];
 .
 
 #---------------------
@@ -707,6 +1370,7 @@ req:Dataset rdf:type sh:NodeShape;
   sh:name "dcat:Dataset";
   sh:targetClass dcat:Dataset;
   sh:property req:Dataset_name;
+  sh:property req:Dataset_type;
   sh:property req:Dataset_dateIssued;
   sh:property req:Dataset_language;
   sh:property req:Dataset_description;
@@ -716,6 +1380,7 @@ req:Dataset rdf:type sh:NodeShape;
 
 req:Dataset_provenance a sh:PropertyShape;
   sh:path foaf:isPrimaryTopicOf;
+  sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity;
 .
 req:Dataset_name rdf:type sh:PropertyShape;
@@ -724,6 +1389,12 @@ req:Dataset_name rdf:type sh:PropertyShape;
   rdfs:comment "De dataset heeft een naam"@nl;
   skos:example ''''Omgevingswet','BAL','BRK', etc'''';
   sh:path dcterms:title
+.
+req:Dataset_type a sh:PropertyShape;
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
 .
 req:Dataset_dateIssued rdf:type sh:PropertyShape;
   rdfs:label "publicatiedatum"@nl;
@@ -771,6 +1442,14 @@ req:Datasetversie_rol a sh:PropertyShape;
   sh:path rdf:type;
   sh:name "rdf:type";
   sh:hasValue dcat:Dataset;
+.
+req:Datasetversie_type a sh:PropertyShape;
+  rdfs:label "type dataset = dataset version";
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dstype:DatasetVersion;
 .
 req:Datasetversie_version rdf:type sh:PropertyShape;
   rdfs:label "versie"@nl;
@@ -876,368 +1555,6 @@ req:Informatieproduct_distribution a sh:PropertyShape;
 .
 
 #---------------------
-# Assets (Informatiemodel)
-#---------------------
-req:Asset a sh:NodeShape;
-  rdfs:label "Asset"@nl;
-  sh:name "adms:Asset";
-  sh:targetClass adms:Asset;
-.
-req:Informatiemodel rdf:type sh:NodeShape;
-    rdfs:label "Asset (Informatiemodel)"@nl;
-    sh:name "adms:Asset (Informatiemodel)";
-    sh:property req:Informatiemodel_role;
-    sh:property req:Informatiemodel_typeInformatiemodel;
-    sh:property req:Informatiemodel_name;
-    sh:property req:Informatiemodel_distributie;
-    sh:property req:Informatiemodel_landingPage;
-.
-req:Informatiemodel_landingPage a sh:PropertyShape;
-  sh:name "dcat:landingPage";
-  rdfs:label "landingspagina"@nl;
-  sh:path dcat:landingPage;
-  sh:node req:LandingPage;
-  sh:maxCount 1;
-.
-req:Informatiemodel_role a sh:PropertyShape;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue adms:Asset;
-.
-req:Informatiemodel_typeInformatiemodel a sh:PropertyShape;
-  rdfs:label "type asset = informatiemodel";
-  sh:path dcterms:type;
-  sh:name "dcterms:type";
-  sh:minCount 1;
-  sh:maxCount 1;
-  sh:hasValue skostype:Informatiemodel;
-.
-req:Informatiemodel_name rdf:type sh:PropertyShape;
-    rdfs:label "label"@nl;
-    sh:name "rdfs:label";
-    rdfs:comment "Het informatiemodel heeft een naam";
-    skos:example "'IMKAD'";
-    sh:path rdfs:label
-.
-
-req:Informatiemodel_distributie rdf:type sh:PropertyShape;
-  rdfs:label "distributie"@nl;
-  sh:name "dcat:distribution";
-  sh:path dcat:distribution;
-  sh:node req:ModelVoorkomen;
-.
-
-skostype:Informatiemodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  sh:name "skostype:Informatiemodel"
-.
-
-req:ModelVoorkomen a sh:NodeShape;
-  rdfs:label "Modelvoorkomen"@nl;
-  sh:name "adms:Distribution";
-  sh:targetClass adms:Distribution;
-  sh:property req:ModelVoorkomen_accessURL;
-  sh:property req:ModelVoorkomen_downloadURL;
-  sh:property req:ModelVoorkomen_representationTechnique;
-.
-
-req:ModelVoorkomen_accessURL a sh:PropertyShape;
-  sh:name "dcat:accessURL";
-  sh:path dcat:accessURL;
-.
-
-req:ModelVoorkomen_downloadURL a sh:PropertyShape;
-  sh:name "dcat:downloadURL";
-  sh:path dcat:downloadURL;
-  sh:node req:DownloadFormat;
-  sh:maxCount 1;
-.
-
-req:ModelVoorkomen_representationTechnique a sh:PropertyShape;
-  sh:name "adms:representationTechnique";
-  sh:path adms:representationTechnique;
-  sh:node req:RepresentationTechnique;
-.
-
-req:RepresentationTechnique a sh:NodeShape;
-  sh:name "Representation technique waardelijst";
-  sh:property [
-    sh:path skos:inScheme;
-    sh:hasValue <http://purl.org/adms/representationtechnique/1.0>;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-.
-
-req:Vocabulaire a sh:NodeShape;
-  rdfs:label "Vocabulaire"@nl;
-  sh:name "owl:Ontology";
-  sh:targetClass owl:Ontology;
-  sh:property [
-    sh:path sh:shapesGraph;
-    sh:name "sh:shapesGraph";
-    sh:node req:ShapesGraph
-  ];
-  sh:property [
-    sh:path foaf:isPrimaryTopicOf;
-    sh:name "foaf:isPrimaryTopicOf";
-    sh:node req:LandingPage;
-    sh:maxCount 1;
-  ]
-.
-req:ShapesGraph a sh:NodeShape;
-  rdfs:label "Shapes graph"@nl;
-  sh:name "Shapes graph";
-  sh:property [
-    sh:path rdfs:label;
-    sh:name "rdfs:label";
-  ];
-.
-req:Klasse a sh:NodeShape;
-  sh:name "owl:Class";
-  sh:targetClass owl:Class;
-  sh:property [
-    sh:path rdfs:isDefinedBy;
-    sh:name "rdfs:isDefinedBy";
-    sh:node req:Vocabulaire;
-  ];
-.
-req:NodeShape a sh:NodeShape;
-  rdfs:label "node shape"@nl;
-  sh:name "sh:NodeShape";
-  sh:targetClass sh:NodeShape;
-  sh:property [
-    sh:path sh:targetClass;
-    sh:name "sh:targetClass";
-    sh:class owl:Class
-  ];
-.
-
-#---------------------
-# Assets (Waardelijst)
-#---------------------
-
-req:Waardelijst rdf:type sh:NodeShape;
-    rdfs:label "Asset (Waardelijst)"@nl;
-    sh:name "adms:Asset (Waardelijst)";
-    sh:property req:Waardelijst_role;
-    sh:property req:Waardelijst_typeWaardelijst;
-    sh:property req:Waardelijst_name;
-    sh:property req:Waardelijst_distributie;
-    sh:property req:Waardelijst_specificatie;
-    sh:property req:Waardelijst_onderdeelVan;
-    sh:property req:Waardelijst_landingPage;
-.
-req:Waardelijst_role a sh:PropertyShape;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue adms:Asset;
-.
-req:Waardelijst_onderdeelVan a sh:PropertyShape;
-  sh:name "dcterms:isPartOf";
-  sh:path dcterms:isPartOf;
-  sh:node req:Dataset;
-  sh:maxCount 1
-.
-req:Waardelijst_landingPage a sh:PropertyShape;
-  sh:name "dcat:landingPage";
-  sh:path dcat:landingPage;
-  sh:node req:LandingPage;
-  sh:maxCount 1;
-.
-req:Waardelijst_typeWaardelijst a sh:PropertyShape;
-  rdfs:label "type asset = Waardelijst";
-  sh:path dcterms:type;
-  sh:name "dcterms:type";
-  sh:minCount 1;
-  sh:maxCount 1;
-  sh:hasValue skostype:Waardelijst;
-.
-req:Waardelijst_name rdf:type sh:PropertyShape;
-    rdfs:label "label"@nl;
-    sh:name "rdfs:label";
-    rdfs:comment "De waardelijst heeft een naam"@nl;
-    skos:example "'Lijst van landen'";
-    sh:path rdfs:label
-.
-
-req:Waardelijst_distributie rdf:type sh:PropertyShape;
-  rdfs:label "distributie"@nl;
-  sh:name "dcat:distribution";
-  sh:path dcat:distribution;
-  sh:node req:WaardelijstDistributie;
-.
-
-req:Waardelijst_specificatie a sh:PropertyShape;
-  rdfs:label "specificatie"@nl;
-  sh:name "rdfs:isDefinedBy";
-  sh:path rdfs:isDefinedBy;
-  sh:node req:NodeShape;
-.
-
-skostype:Waardelijst a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  sh:name "skostype:Waardelijst"
-.
-
-req:WaardelijstDistributie a sh:NodeShape;
-  rdfs:label "Waardelijstdistributie"@nl;
-  sh:name "adms:Distribution";
-  sh:targetClass adms:Distribution;
-  sh:property req:WaardelijstDistributie_accessURL;
-  sh:property req:WaardelijstDistributie_downloadURL;
-  sh:property req:WaardelijstDistributie_representationTechnique;
-.
-
-req:WaardelijstDistributie_accessURL a sh:PropertyShape;
-  sh:name "dcat:accessURL";
-  sh:path dcat:accessURL;
-.
-
-req:WaardelijstDistributie_downloadURL a sh:PropertyShape;
-  sh:name "dcat:downloadURL";
-  sh:path dcat:downloadURL;
-  sh:node req:DownloadFormat;
-.
-
-req:WaardelijstDistributie_representationTechnique a sh:PropertyShape;
-  sh:name "adms:representationTechnique";
-  sh:path adms:representationTechnique;
-  sh:node req:RepresentationTechnique;
-.
-
-req:SchemaWaardelijst a sh:NodeShape;
-  sh:name "sh:NodeShape (Begrippenkader)"@nl;
-  sh:property req:SchemaWaardelijst_role;
-  sh:property req:SchemaWaardelijst_property;
-.
-req:SchemaWaardelijst_role a sh:PropertyShape;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue sh:NodeShape;
-.
-req:SchemaWaardelijst_property a sh:PropertyShape;
-  sh:path sh:property;
-  sh:name "sh:property";
-  sh:node req:SchemaWaardelijstSpec;
-  sh:nodeKind sh:BlankNode;
-  sh:minCount 1;
-  sh:maxCount 1;
-.
-
-req:SchemaWaardelijstSpec a sh:NodeShape;
-  sh:name "spec";
-  sh:property [
-    sh:path sh:path;
-    sh:name "sh:path";
-    sh:hasValue skos:inScheme;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-  sh:property [
-    sh:path sh:hasValue;
-    sh:name "sh:hasValue";
-    sh:class skos:ConceptScheme;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-.
-
-req:CollectieWaardelijst a sh:NodeShape;
-  sh:name "sh:NodeShape (Collectie)"@nl;
-  sh:property req:CollectieWaardelijst_role;
-  sh:property req:CollectieWaardelijst_property;
-.
-req:CollectieWaardelijst_role a sh:PropertyShape;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue sh:NodeShape;
-.
-req:CollectieWaardelijst_property a sh:PropertyShape;
-  sh:path sh:property;
-  sh:name "sh:property";
-  sh:node req:CollectieWaardelijstSpec;
-  sh:nodeKind sh:BlankNode;
-  sh:minCount 1;
-  sh:maxCount 1;
-.
-
-req:CollectieWaardelijstSpec a sh:NodeShape;
-  sh:name "spec";
-  sh:property [
-    sh:path sh:path;
-    sh:name "sh:path/sh:inversePath = skos:member"; #Hack, propertypaths are not shown correctly
-#    sh:hasValue skos:member;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-  sh:property [
-    sh:path sh:hasValue;
-    sh:name "sh:hasValue";
-    sh:class skos:Collection;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-.
-
-req:Referentielijst a sh:NodeShape;
-  sh:name "sh:Nodeshape (Referentielijst)";
-  sh:property [
-    sh:path rdf:type;
-    sh:name "rol";
-    sh:hasValue sh:NodeShape;
-  ];
-  sh:property [
-    sh:path sh:property;
-    sh:name "sh:property";
-    sh:node req:ReferentielijstSpec;
-    sh:nodeKind sh:BlankNode;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-.
-req:ReferentielijstSpec a sh:NodeShape;
-  sh:name "spec";
-  sh:property [
-    sh:path sh:path;
-    sh:name "sh:path";
-    sh:hasValue rdf:type;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-  sh:property [
-    sh:path sh:hasValue;
-    sh:name "sh:hasValue";
-    sh:class owl:Class;
-    sh:minCount 1;
-    sh:maxCount 1;
-  ];
-.
-
-#
-# Webpages (landingPage, downloadURL)
-#
-req:LandingPage a sh:NodeShape;
-  sh:name "foaf:Document (Landing page)";
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue foaf:Document;
-  ];
-.
-req:DownloadFormat a sh:NodeShape;
-  sh:name "foaf:Document (Download format)";
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue foaf:Document;
-  ];
-  sh:property [
-    sh:name "dcterms:isFormatOf";
-    sh:path dcat:landingPage;
-    sh:node req:LandingPage;
-  ];
-.
-
-#---------------------
 # Catalogus
 #---------------------
 req:Catalogus a sh:NodeShape;
@@ -1337,6 +1654,7 @@ req:Distributie a sh:NodeShape;
   sh:property req:Distributie_provenance;
 .
 req:Distributie_provenance a sh:PropertyShape;
+  sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
 .

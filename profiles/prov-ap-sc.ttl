@@ -1,0 +1,376 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix scprov: <http://bp4mc2.org/somewhere/prov-ap-sc/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived from prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#derived from foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#derived from org
+org:Organization rdfs:subClassOf foaf:Organization.
+
+#derived from adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#derived from dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
+#Extra
+rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
+
+
+#---------------------
+# VERSIONING
+#---------------------
+
+#---------------------
+# General metadata
+#---------------------
+scprov:Metadata a sh:NodeShape;
+  rdfs:label "Metadata"@nl;
+  rdfs:label "Metadata"@nl;
+  sh:name "prov:Entity";
+  sh:targetClass prov:Entity;
+  rdfs:comment "Metadata van een versie van een entiteit kan worden beschreven."@nl;
+  rdfs:comment "Metadata of a version of an entity can be described."@en;
+  skos:example "De juridische geldigheid en/of de adnimistratieve housekeeping (provenance) gegevens van een entiteit"@nl;
+  sh:property scprov:Metadata_status;
+  sh:property scprov:Metadata_isValidDuring;
+  sh:property scprov:Metadata_isvalidWithin;
+  sh:property scprov:Metadata_isIssued;
+  sh:property scprov:Metadata_changeNote;
+.
+scprov:Metadata_status a sh:PropertyShape;
+  rdfs:label "status"@nl;
+  rdfs:label "status"@en;
+  sh:name "adms:status";
+  sh:path adms:status;
+  sh:node scprov:Status;
+  rdfs:comment "Een versie heeft een administratieve status op basis van de ADMS waardenlijst."@nl;
+  rdfs:comment "A version has an administrative status based on the ADMS list of values."@en;
+  skos:example "Completed"@nl;
+  sh:maxCount 1;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een versie heeft altijd 1 administratieve status op basis van de ADMS waardenlijst."@nl;
+  sh:message "A version always has 1 administrative status based on the ADMS list of values."@en
+.
+scprov:Metadata_changeNote a sh:PropertyShape;
+  rdfs:label "wijzingsnotitie (metadata)"@nl;
+  rdfs:label "change note (metadata)"@en;
+  sh:name "skos:changeNote";
+  sh:path skos:changeNote;
+  rdfs:comment "De reden van een versie en andere aandachtspunten bij een versie kunnen worden toegelicht."@nl;
+  rdfs:comment "The reason for a version and other points of attention in a version can be explained."@en;
+  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
+.
+
+#---------------------
+# Formal/legal metadata
+#---------------------
+scprov:Metadata_isValidDuring a sh:PropertyShape;
+  rdfs:label "geldig in tijd"@nl;
+  rdfs:label "temporal validity"@en;
+  sh:name "dcterms:temporal";
+  sh:path dcterms:temporal;
+  sh:class dcterms:PeriodOfTime;
+  sh:nodeKind sh:BlankNode;
+  rdfs:comment "Een versie kan formeel/juridisch geldig zijn gedurende een periode."@nl;
+  rdfs:comment "A version can be formally / legally valid for a period."@en;
+  skos:example "22/10/2017 - ";
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal op 1 moment in de tijd formeel/juridisch geldig zijn."@nl;
+  sh:message "A version can be formally / legally valid in up to 1 moment in time."@en
+.
+scprov:Metadata_isvalidWithin a sh:PropertyShape;
+  rdfs:label "geldig in gebied"@nl;
+  rdfs:label "spatial validity"@en;
+  sh:name "dcterms:spatial";
+  sh:path dcterms:spatial;
+  sh:class dcterms:Location;
+  rdfs:comment "Een versie kan formeel/juridisch geldig zijn in een gebied."@nl;
+  rdfs:comment "A version can be formally / legally valid in an area."@en;
+  skos:example "gemeente Apeldoorn";
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal in 1 gebied formeel/juridisch geldig zijn."@nl;
+  sh:message "A version can be formally / legally valid in up to 1 area."@en
+.
+scprov:Metadata_isIssued a sh:PropertyShape;
+  rdfs:label "bekendgemaakt"@nl;
+  rdfs:label "issued"@en;
+  sh:name "dcterms:issued";
+  sh:path dcterms:issued;
+  rdfs:comment "Een versie kan bekend worden gemaakt vanaf een bepaald moment."@nl;
+  rdfs:comment "A version can be issued from a certain moment in time."@en;
+  skos:example "21/10/2017 20:21"@nl;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal in 1 keer bekend worden gemaakt."@nl;
+  sh:message "A version can be issued up to 1 time."@en
+.
+scprov:PeriodOfTime a sh:NodeShape;
+  rdfs:label "Tijdsperiode"@nl;
+  rdfs:label "Time period"@nl;
+  sh:name "dcterms:PeriodOfTime";
+  rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
+  rdfs:comment "A period of time is pointed out by a start date and end date."@en;
+  sh:targetClass dcterms:PeriodOfTime;
+  skos:example "22/10/2017 - 01/08/2018"@nl;
+  sh:property scprov:MetadataTemporal_start;
+  sh:property scprov:MetadataTemporal_end
+.
+scprov:MetadataTemporal_start a sh:PropertyShape;
+  rdfs:label "start"@nl;
+  rdfs:label "start"@en;
+  sh:name "dcmiperiod:start";
+  sh:path dcmiperiod:start;
+  rdfs:comment "Een periode start op een bepaalde datum. Deze datum kan onbekend (leeg) zijn."@nl;
+  rdfs:comment "A period of time starts at a certain date. This date can be unknown (empty)."@en;
+  skos:example "22/10/2017";
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een periode heeft maximaal in 1 startdatum/tijdstip."@nl;
+  sh:message "A period has up to 1 start date / time."@en
+.
+scprov:MetadataTemporal_end a sh:PropertyShape;
+  rdfs:label "einde"@nl;
+  rdfs:label "end"@en;
+  sh:name "dcmiperiod:end";
+  sh:path dcmiperiod:end;
+  rdfs:comment "Een periode eindigt op een bepaalde dataum. Deze datum kan onbekend (leeg) zijn."@nl;
+  rdfs:comment "A period of time ends at a certain date. This date can be unknown (empty)."@en;
+  skos:example "01/08/2018";
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een periode heeft maximaal in 1 einddatum/tijdstip."@nl;
+  sh:message "A period has up to 1 end date / time."@en
+.
+scprov:Status a sh:NodeShape;
+  rdfs:label "Status waardelijst"@nl;
+  rdfs:label "Controlled vocabulary status"@en;
+  sh:name "skos:Concept (adms status)";
+  rdfs:comment "Een versie kan een administratieve status hebben die wordt ontleend aan de ADMS waardenlijst."@nl;
+  rdfs:comment "A version can hav an administrative status that is based on the ADMS controlled vocabulary."@en;
+  skos:example "Completed"@nl;
+  sh:property [
+    sh:path skos:inScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+    sh:severity sh:Violation;
+    sh:hasValue <http://purl.org/adms/status/1.0>;
+    sh:message "De administratieve status wordt ontleend aan de ADMS waardenlijst."@nl;
+    sh:message "The administrative status is based on the ADMS controlled vocabulary."@en
+  ];
+.
+
+#-----------------------------------------------
+# Provenance / admistrative houskeeping metadata 
+#-----------------------------------------------
+scprov:ProvenanceGraph a sh:NodeShape;
+  rdfs:label "Provenance graaf"@nl;
+  rdfs:label "Provenance graph"@en;
+  sh:name "sd:Graph";
+  sh:targetClass sd:Graph;
+  rdfs:comment "De provenance graaf omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dat wil zeggen: een sd:Graph"@nl;
+  rdfs:comment "The provenance graph contains both the concrete data (represented by a prov:Entity), and the metadata of the prov:Entity, that is: an sd:Graph"@en;
+  skos:example "Alle wijzigingen en nieuwe data die op 8 augustus 2018 in een keer zijn geladen."@nl;
+  sh:property scprov:ProvenanceGraph_type;
+  sh:property scprov:ProvenanceGraph_generatedAtTime;
+  sh:property scprov:ProvenanceGraph_changeNote;
+  sh:property scprov:ProvenanceGraph_attributedTo;
+.
+scprov:ProvenanceGraph_type a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue prov:Entity;
+.
+scprov:ProvenanceGraph_generatedAtTime a sh:PropertyShape;
+  rdfs:label "registratiemoment"@nl;
+  rdfs:label "registration moment"@en;
+  sh:path prov:generatedAtTime;
+  sh:name "prov:generatedAtTime";
+  rdfs:comment "De datum en tijd van de administratieve handeling kan worden bewaard. Daardoor is altijd terug te halen wat op welk tijdstip aan informatie bekend was."@nl;
+  rdfs:comment "The date and time of the administrative operation can be saved. This way you can always retrieve what information was known at what time."@en;
+  skos:example "21/10/2017 20:21"@nl;
+.
+scprov:ProvenanceGraph_changeNote a sh:PropertyShape;
+  rdfs:label "wijzigingsnotitie (provenance graaf)"@nl;
+  rdfs:label "change note (provenance graph)"@en;
+  sh:path skos:changeNote;
+  sh:name "skos:changeNote";
+  rdfs:comment "De reden van een set samenhangende wijzigingen kan worden toegelicht."@nl;
+  rdfs:comment "The reason for a set of related changes can be explained."@en;
+  skos:example "Alle definities zijn aangepast overeenkomstig de nieuwe wet op de BAG."@nl
+.
+scprov:ProvenanceGraph_attributedTo a sh:PropertyShape;
+  rdfs:label "doorgevoerd door"@nl;
+  rdfs:label "attributed to"@en;
+  sh:name "prov:wasAttributedTo";
+  sh:path prov:wasAttributedTo;
+  sh:class prov:Agent;
+  rdfs:comment "De persoon of organisatie die de wijziging heeft (laten) doorvoeren kan worden vastgelegd"@nl;
+  rdfs:comment "The person or organization that made or let make the change can be recorded."@en;
+  skos:example "Het Kadaster"@nl
+.
+scprov:ProvenanceAgent a sh:NodeShape;
+  rdfs:label "Agent (provenance)"@nl;
+  rdfs:label "Agent (provenance)"@en;
+  sh:name "prov:Agent";
+  sh:targetClass prov:Agent;
+  rdfs:comment " De persoon of organisatie die verantwoordelijk is voor een activiteit, de creatie van een entity of een activiteit van een ander kan worden vastgelegd."@nl;
+  rdfs:comment "The person or organization that is responsible for an activity, the creation of a entity or an activity of another can be recorded."@en;
+  skos:example "Het Ministerie van BZK"@nl;
+  sh:property scprov:ProvenanceAgent_OnBehalfOf;
+  sh:property scprov:ProvenanceAgent_knownAgent
+.
+scprov:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
+  rdfs:label "uitgevoerd namens"@nl;
+  rdfs:label "acted on behalf of"@en;
+  sh:name "prov:actedOnBehalfOf";
+  sh:path prov:actedOnBehalfOf;
+  sh:class prov:Organization;
+  rdfs:comment "Een persoon of organisatie kan opereren namens een andere persoon of organisatie."@nl;
+  rdfs:comment "A person or organization can act on behalf of another person or organization."@en;
+  skos:example "overheid:Rijkswaterstaat"@nl
+.
+scprov:ProvenanceAgent_knownAgent a sh:PropertyShape;
+  rdfs:label "geidentificeerd als"@nl;
+  rdfs:label "identified as"@en;
+  sh:path rdf:type;
+  sh:hasValue foaf:Agent;
+  rdfs:comment "Een persoon of organisatie is bekend."@nl;
+  rdfs:comment "A person or organization is known."@en;
+  skos:example "overheid:Rijkswaterstaat"@nl;
+.
+scprov:ProvenancePerson a sh:NodeShape;
+  rdfs:label "Persoon (provenance)"@nl;
+  rdfs:label "Person (provenance)"@en;
+  sh:name "prov:Person";
+  sh:targetClass prov:Person;
+  rdfs:comment "Een agent (provenance) kan een mens zijn."@nl;
+  rdfs:comment "An agent (provenance can be a human."@en;
+  skos:example "Jan Jansen"@nl;
+.
+scprov:ProvenanceSoftwareAgent a sh:NodeShape;
+  rdfs:label "Software agent"@nl;
+  rdfs:label "Software agent"@en;
+  sh:name "prov:SoftwareAgent";
+  sh:targetClass prov:SoftwareAgent;
+  rdfs:comment "Een agent (provenance) kan een geautomatiseerde routine zijn."@nl;
+  rdfs:comment "An agent (provenance can be an automated routine."@en;
+  skos:example "Scheduled routine x"@nl;
+.
+scprov:ProvenanceOrganization a sh:NodeShape;
+  rdfs:label "Organisatie (provenance)"@nl;
+  rdfs:label "Organization (provenance)"@en;
+  sh:name "prov:Organization";
+  sh:targetClass prov:Organization;
+  rdfs:comment "Een agent (provenance) kan een organisatie zijn."@nl;
+  rdfs:comment "An agent (provenance can be an organization."@en;
+  skos:example "Rijkswaterstaat"@nl;
+.
+
+# Extra info about organizations
+scprov:FoafAgent a sh:NodeShape;
+  rdfs:label "Agent (foaf)"@nl;
+  rdfs:label "Agent (foaf)"@en;
+  sh:name "foaf:Agent";
+  sh:targetClass foaf:Agent;
+  rdfs:comment " De persoon of organisatie die verantwoordelijk is voor een dataset."@nl;
+  rdfs:comment "The person or organization that is responsible for a dataset."@en;
+  skos:example "Het Ministerie van BZK"@nl;
+.
+scprov:FoafOrganization a sh:NodeShape;
+  rdfs:label "Organisatie (foaf)"@nl;
+  rdfs:label "Organization (foaf)"@en;
+  sh:name "foaf:Organization";
+  sh:targetClass foaf:Organization;
+  rdfs:comment " De organisatie die verantwoordelijk is voor een dataset."@nl;
+  rdfs:comment "The organization that is responsible for a dataset."@en;
+  skos:example "Het Ministerie van BZK"@nl;
+.
+scprov:OrgOrganization a sh:NodeShape;
+  rdfs:label "Organisatie (org)"@nl;
+  rdfs:label "Organization (org)"@en;
+  sh:name "org:Organization";
+  sh:targetClass org:Organization;
+  rdfs:comment "De organisatie zoals opgenomen in de formele lijst met OIN nummers."@nl;
+  rdfs:comment "The organization as included in the formal list with OIN numbers."@en;
+  skos:example "345879873452"@nl;
+  sh:property scprov:OrgOrganization_oin
+.
+scprov:OrgOrganization_oin a sh:PropertyShape;
+  rdfs:label "heeft OIN"@nl;
+  rdfs:label "has OIN"@en;
+  sh:name "org:identifier";
+  sh:path org:identifier;
+  rdfs:comment "De organisatie die verantwoordelijk is voor een dataset is opgenomen in de formele lijst met OIN nummers."@nl;
+  rdfs:comment "The organization that is responsible for a dataset is included in the formal list with OIN numbers."@en;
+  skos:example "345879873452"@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "De organisatie die verantwoordelijk is voor een dataset heeft 1 OIN nummer."@nl;
+  sh:message "The organization that is responsible for a dataset has 1 OIN number."@en
+.

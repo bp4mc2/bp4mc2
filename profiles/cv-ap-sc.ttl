@@ -1,0 +1,258 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sccv: <http://bp4mc2.org/somewhere/cv-ap-sc/>.
+@prefix scadms: <http://bp4mc2.org/somewhere/adms-ap-sc/>.
+@prefix adms: <http://www.w3.org/ns/adms#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix dqv: <http://www.w3.org/ns/dqv#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dctype: <http://purl.org/dc/dcmitype/>.
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#>.
+@prefix skoslex: <http://bp4mc2.org/def/skos-lex#>.
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcmiperiod:   <http://dublincore.org/documents/2006/04/10/dcmi-period/>.
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+@prefix frbr: <http://purl.org/vocab/frbr/core#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
+
+#---------------------
+# IMPORT
+#---------------------
+
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
+
+#derived from skos-lex
+skoslex:Act rdfs:subClassOf skos:Concept.
+skoslex:Object rdfs:subClassOf skos:Concept.
+skoslex:Actor rdfs:subClassOf skos:Concept.
+skoslex:Agent rdfs:subClassOf skoslex:Actor.
+
+#derived from frbr
+frbr:Work rdfs:subClassOf frbr:Endeavour.
+frbr:Expression rdfs:subClassOf frbr:Endeavour.
+
+#derived from prov
+prov:Person rdfs:subClassOf prov:Agent.
+prov:Organization rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+
+#derived from foaf
+foaf:Organization rdfs:subClassOf foaf:Agent.
+
+#derived from org
+org:Organization rdfs:subClassOf foaf:Organization.
+
+#derived from adms
+adms:Asset rdfs:subClassOf dcat:Dataset.
+adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+#derived from dqv
+dqv:Dimension rdfs:subClassOf skos:Concept.
+dqv:Category rdfs:subClassOf skos:Concept.
+
+#Extra
+rdf:type sh:name "rdf:type".
+dqv:value sh:name "dqv:value".
+skos:inScheme sh:name "skos:inScheme".
+
+#
+#CONTROLLED VOCABULARIES
+#
+
+#general
+
+sccv:ControlledVocabulary rdf:type sh:NodeShape;
+  rdfs:label "Asset (Waardelijst)"@nl;
+  rdfs:label "Asset (ControlledVocabulary)"@en;
+  sh:name "adms:Asset (ControlledVocabulary)";
+  rdfs:comment "Een waardelijst is een verzameling van begrippen of elementen die worden gebruikt om inhoud te indexeren en / of inhoud op te halen via browsen of zoeken. Hij bevat meestal voorkeurs- en varianttermen en heeft een gedefinieerde scope of beschrijft een specifiek domein."@nl;
+  rdfs:comment "A controlled vocabulary is an organized arrangement of concepts or elements used to index content and/or to retrieve content through browsing or searching. It typically includes preferred and variant terms and has a defined scope or describes a specific domain."@en;
+  skos:example "De lijst met Kadastrale gemeenten."@nl;
+  sh:property sccv:ControlledVocabulary_type;
+  sh:property sccv:ControlledVocabulary_typeWaardelijst;
+  sh:property sccv:ControlledVocabulary_specification;
+.
+sccv:ControlledVocabulary_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+  rdfs:comment "Een waardelijst wordt getypeerd als adms:Asset."@nl;
+  rdfs:comment "A controlled vocabulary is typed as adms:Asset."@en;
+  skos:example "De lijst met Kadastrale gemeenten is vindbaar als een adms:Asset."@nl;
+.
+sccv:ControlledVocabulary_typeWaardelijst a sh:PropertyShape;
+  rdfs:label "type asset = Waardelijst"@nl;
+  rdfs:label "type asset = Controlled vocabulary"@en;
+  sh:name "dcterms:type";
+  sh:path dcterms:type;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue dctype:ControlledVocabulary;
+  rdfs:comment "Een waardelijst wordt expliciet getypeerd als waardelijst."@nl;
+  rdfs:comment "A controlled vocabulary is explicitly typed as a controlled vocabulary."@en;
+  skos:example ""@nl;
+.
+sccv:ControlledVocabulary_specification a sh:PropertyShape;
+  rdfs:label "gespecificeerd"@nl;
+  rdfs:label "specified"@en;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node sccv:NodeShape;
+  rdfs:comment "Een waardelijst kan worden gespecificeerd als begrippenkader, collectie van begrippen of als referentielijst."@nl;
+  rdfs:comment "A controlled vocabulary can be specified as a concept scheme, a collection of concepts or as a reference list."@en;
+  skos:example "De referentielijst met Kadastrale gemeenten."@nl;
+.
+
+#controlled vocabulary as a concept scheme
+
+sccv:SchemeControlledVocabulary a sh:NodeShape;
+  rdfs:label "begrippenkader specificatie"@nl;
+  rdfs:label "concept scheme specification"@en;
+  sh:name "sh:NodeShape (ConceptScheme spec)"@nl;
+  sh:property sccv:SchemeControlledVocabulary_role;
+  sh:property sccv:SchemeControlledVocabulary_property;
+  rdfs:comment "Een waardelijst kan worden gespecificeerd als apart begrippenkader."@nl;
+  rdfs:comment "A controlled vocabulary can be specified as a separate concept scheme."@en;
+  skos:example "The Inspire lijst met een europees afgestemd kader voor de typering van kabels en leidingen."@nl;
+.
+sccv:SchemeControlledVocabulary_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+sccv:SchemeControlledVocabulary_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node sccv:SchemeControlledVocabularySpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+sccv:SchemeControlledVocabularySpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue skos:inScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:ConceptScheme;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+#Controlled vocabulary as a collection of concepts as part of a concept scheme
+
+sccv:CollectionControlledVocabulary a sh:NodeShape;
+  rdfs:label "collectie specificatie"@nl;
+  rdfs:label "collection specification"@en;
+  sh:name "sh:NodeShape (Collection spec)"@nl;
+  sh:property sccv:CollectieWaardelijst_role;
+  sh:property sccv:CollectieWaardelijst_property;
+  rdfs:comment "Een waardelijst kan worden gespecificeerd als collectie van begrippen in een begrippenkader."@nl;
+  rdfs:comment "A controlled vocabulary can be specified as a collection of concepts in a concept scheme."@en;
+  skos:example "De lijst met soorten zakelijke rechten die onderdeel zijn van het BRK begrippenkader."@nl;
+.
+sccv:CollectionControlledVocabulary_role a sh:PropertyShape;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue sh:NodeShape;
+.
+sccv:CollectionControlledVocabulary_property a sh:PropertyShape;
+  sh:path sh:property;
+  sh:name "sh:property";
+  sh:node sccv:CollectieWaardelijstSpec;
+  sh:nodeKind sh:BlankNode;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+sccv:CollectionControlledVocabularySpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path/sh:inversePath = skos:member"; #Hack, propertypaths are not shown correctly
+#    sh:hasValue skos:member;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class skos:Collection;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+
+#controlled vocabulary as a reference list that contains instances of classes
+
+sccv:ReferenceControlledVocabulary a sh:NodeShape;
+  rdfs:label "referentie specificatie"@nl;
+  rdfs:label "reference specification"@en;
+  sh:name "sh:Nodeshape (reference spec)";
+  sh:property [
+    sh:path rdf:type;
+    sh:name "rol";
+    sh:hasValue sh:NodeShape;
+  ];
+  sh:property [
+    sh:path sh:property;
+    sh:name "sh:property";
+    sh:node sccv:ReferenceControlledVocabularySpec;
+    sh:nodeKind sh:BlankNode;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  rdfs:comment "Een waardelijst kan worden gespecificeerd als een lijst met instanties van klassen. De structuur bestaat dan uit een (vereenvoudigde) specificatie van klassen en eigenschappen."@nl;
+  rdfs:comment "A value list can be specified as a list of instances of classes. The structure then consists of a (simplified) specification of classes and properties."@en;
+  skos:example "De lijst met Kadastrale gemeenten."@nl;
+.
+sccv:ReferenceControlledVocabularySpec a sh:NodeShape;
+  sh:name "spec";
+  sh:property [
+    sh:path sh:path;
+    sh:name "sh:path";
+    sh:hasValue rdf:type;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path sh:hasValue;
+    sh:name "sh:hasValue";
+    sh:class owl:Class;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
