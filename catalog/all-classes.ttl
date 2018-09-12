@@ -10,13 +10,21 @@ stage:AllClasses	a	elmo:Representation;
 		elmo:applies-to "class";
 		xhtml:link "query/class-instances";
 	];
+	elmo:fragment [
+		elmo:applies-to "graph";
+		elmo:name "graph";
+	];
 	elmo:query '''
-		select ?class (count(?s) as ?class_count) where {
-			graph <http://localhost:8080/catalog/container/concepts> {
+		prefix elmo: <http://bp4mc2.org/elmo/def#>
+		select ?graph ?class (count(?s) as ?class_count) where {
+			graph ?graph {
 				?s a ?class
 			}
+			graph <@STAGE@> {
+				?graph a elmo:Container
+			}
 		}
-		group by ?class
-		order by ?class
+		group by ?graph ?class
+		order by ?graph ?class
 	'''
 .

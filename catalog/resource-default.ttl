@@ -5,6 +5,7 @@
 
 stage:Resource	a	elmo:Representation;
 	elmo:url-pattern	"/resource$";
+	elmo:url-pattern	"/catalog/doc";
 	elmo:layer elmo:BottomLayer;
 	elmo:contains	stage:Menu;
 	elmo:contains stage:Resource_Content;
@@ -18,7 +19,7 @@ stage:Resource_Content a elmo:Part;
 			?o rdfs:label ?olabel
 		}
 		where {
-			graph <http://localhost:8080/catalog/container/concepts> {
+			graph ?graph {
 				<@SUBJECT@> ?p ?o
 				OPTIONAL {
 					?o rdfs:label ?olabel
@@ -37,7 +38,7 @@ stage:Resource_Graph a elmo:Part;
 			?o ?op ?oo.
 		}
 		where {
-			graph <http://localhost:8080/catalog/container/concepts> {
+			graph ?graph {
 				{
 					<@SUBJECT@> ?p ?o
 				}

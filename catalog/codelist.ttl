@@ -1,0 +1,24 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix stage: <http://localhost:8080/catalog/stage#>.
+
+stage:Codelist	a	elmo:Representation;
+	elmo:url-pattern	"/query/codelist$";
+	elmo:contains	stage:Menu;
+	elmo:appearance elmo:TableAppearance;
+	elmo:query '''
+		prefix csvw: <http://www.w3.org/ns/csvw#>
+		construct {
+			?resource ?predicate ?object
+		}
+		where {
+			graph <http://localhost:8080/catalog/container/codelists> {
+				<@SUBJECT@> csvw:row ?row.
+				?row csvw:describes ?resource.
+				?resource ?predicate ?object
+			}
+		}
+		order by ?codelist
+	'''
+.
