@@ -1,0 +1,81 @@
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+@prefix stage: <http://localhost:8080/bp4mc2/stage#>.
+@prefix page: <http://bp4mc2.org/id/page#>.
+@prefix table: <http://bp4mc2.org/id/table#>.
+
+stage:page-skos-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/skos-ap-sc(.md|.html|.ttl|x)$";
+	elmo:contains table:ConceptScheme;
+	elmo:query stage:page-query;
+	rdfs:seeAlso page:skos;
+.
+
+table:ConceptScheme a elmo:Part;
+	elmo:query stage:page-table-query
+.
+
+stage:page-query a elmo:Query;
+	elmo:query '''
+		PREFIX elmo: <http://bp4mc2.org/elmo/def#>
+		prefix dct: <http://purl.org/dc/terms/>
+		prefix cnt: <http://www.w3.org/2011/content#>
+		prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>
+		CONSTRUCT {
+			?page elmo:data ?part.
+			?item rdf:first ?chars.
+			?item rdf:rest ?rest.
+			?item rdf:first ?first.
+			?first xhtml:img ?img.
+			?item rdf:first ?first2.
+			?first2 elmo:contains ?table.
+			?item rdf:first ?first3.
+			?first3 xhtml:heading ?heading.
+		}
+		WHERE {
+			GRAPH <@STAGE@> {
+				<@REPRESENTATION@> rdfs:seeAlso ?page
+			}
+			GRAPH <http://localhost:8080/bp4mc2/container/pages> {
+				?page dct:hasPart ?part.
+				?part (rdf:rest|rdf:rest/rdf:first/dct:hasPart)* ?item.
+				?item (rdf:rest|rdf:rest/rdf:first/dct:hasPart) ?rest.
+				OPTIONAL {
+					?item rdf:first/cnt:chars ?chars
+					FILTER (lang(?chars)="@LANGUAGE@")
+				}
+				OPTIONAL {
+					?item rdf:first ?first.
+					?first xhtml:img ?img.
+				}
+				OPTIONAL {
+					?item rdf:first ?first2.
+					?first2 dct:subject ?subject.
+					BIND (iri(concat("http://bp4mc2.org/id/table#",strafter(str(?subject),"#"))) as ?table)
+				}
+				OPTIONAL {
+					?item rdf:first ?first3.
+					?first3 xhtml:heading ?heading.
+					FILTER (lang(?heading)="@LANGUAGE@")
+				}
+			}
+		}
+	'''
+.
+
+stage:page-table-query a elmo:Query;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		SELECT ?aanduiding
+		WHERE {
+			BIND (iri(concat("http://bp4mc2.org/profiles/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"),"#",strafter("@REPRESENTATION@","#"))) as ?nodeshape)
+			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
+			GRAPH ?graph {
+				?nodeshape sh:property ?pshape.
+				OPTIONAL {
+					?pshape rdfs:label ?aanduiding
+					FILTER (lang(?aanduiding)="@LANGUAGE@")
+				}
+			}
+		}
+	'''
+.

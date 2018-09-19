@@ -25,3 +25,27 @@ container-local:codelists a elmo:Container;
 	rdfs:label "Upload codelists (Genericode)"@en;
 	rdfs:label "Upload waardelijsten (Genericode)"@nl;
 .
+
+container-local:excel a elmo:Container;
+	elmo:contains stage:Menu;
+	elmo:representation elmo:UploadRepresentation;
+	elmo:translator elmo:GenericExcelTranslator;
+	rdfs:label "Upload codelist (Excel)"@en;
+	rdfs:label "Upload waardelijst (Excel)"@nl;
+	elmo:endpoint <http://localhost:3030/ihw/update>;
+	elmo:query '''
+		CLEAR GRAPH <http://aquo.nl/dummydump>;
+		INSERT {
+			GRAPH <http://aquo.nl/dummydump> {
+				?s?p?o
+			}
+		}
+		WHERE {
+			SERVICE <http://localhost:8890/sparql> {
+				GRAPH <http://localhost:8080/catalog/container/excel> {
+					?s?p?o
+				}
+			}
+		};
+	''';
+.

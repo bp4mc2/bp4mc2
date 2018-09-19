@@ -1,0 +1,48 @@
+@prefix cnt: <http://www.w3.org/2011/content#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+@prefix elmo: <http://bp4mc2.org/elmo/def#>.
+
+@prefix page: <http://bp4mc2.org/id/page#>.
+@prefix skosap: <http://bp4mc2.org/profiles/skos-ap-sc#>.
+
+page:skos a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
+    page:skos-body
+    [xhtml:img "skos-ap-sc.png"]
+    page:conceptscheme
+  )
+.
+
+page:skos-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Begrippen maken duidelijk welke 'onderwerpen van gesprek' er bestaan. In een stelselcatalogus worden begrippen formeel gedefinieerd, waarbij iedere definitie wordt opgebouwd volgens strikte regels. De essentie is dat elk begrip in een bepaald domein wordt uitgelegd in termen van andere begrippen. Ook die begrippen worden uitgelegd totdat uiteindelijk elk begrip wat uitleg nodig heeft is gedefinieerd. Uiteindelijk blijven de begrippen over waarvan de betekenis als vanzelfsprekend wordt aangenomen. In een logisch model worden dit axioma's genoemd. Zo ontstaat per domein een axiomatisch begrippenkader.
+
+Voor het beschrijven van begrippen wordt SKOS gebruikt. SKOS staat in Nederland op de pas-toe-leg-uit lijst voor overheden.
+
+- Ieder begrip wordt gerepresenteerd door een skos:concept.
+- Ieder domein heeft zijn eigen begrippenkader. Het begrippenkader voor een bepaald domein wordt gerepresenteerd door een skos:ConceptScheme.
+- Begrippen kunnen worden geordend in collecties. Een collectie wordt gerepresenteerd door een skos:collection.
+- Begrippen in verschillende domeinen kunnen worden verbonden via matching mechanismes. Door deze verbinding van begrippen tussen domeinen ontstaat een stelsel van samenhangende begrippenkaders. Dit stelsel van samenhangende begrippenkaders kan worden gezien als de kennisbasis voor een stelselcatalogus.
+'''@nl,
+'''
+This is the english text...
+'''@en;
+.
+
+page:conceptscheme a cnt:ContentAsText;
+  dct:hasPart (
+    page:sub
+    [xhtml:heading "Begrippenkader"@nl, "Concept scheme"@en]
+    [dct:subject skosap:ConceptScheme]
+  )
+.
+
+page:sub a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Sub"@nl]
+  )
+.
