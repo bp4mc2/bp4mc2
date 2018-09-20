@@ -3,15 +3,38 @@
 @prefix page: <http://bp4mc2.org/id/page#>.
 @prefix table: <http://bp4mc2.org/id/table#>.
 
+table:ConceptScheme a elmo:Part;
+	elmo:query stage:page-property-query
+.
+table:ConceptScheme-inhoud a elmo:Part;
+	elmo:query stage:page-table-query
+.
+table:Concept a elmo:Part;
+	elmo:query stage:page-property-query
+.
+
 stage:page-skos-ap-sc a elmo:Representation;
 	elmo:url-pattern "/query/skos-ap-sc(.md|.html|.ttl|x)$";
+	elmo:contains stage:Properties;
 	elmo:contains table:ConceptScheme;
+	elmo:contains table:ConceptScheme-inhoud;
+	elmo:contains table:Concept;
 	elmo:query stage:page-query;
 	rdfs:seeAlso page:skos;
 .
 
-table:ConceptScheme a elmo:Part;
-	elmo:query stage:page-table-query
+stage:Properties a elmo:part;
+	elmo:query '''
+		CONSTRUCT {
+			?p rdfs:label ?plabel
+		}
+		WHERE {
+			GRAPH <http://localhost:8080/bp4mc2/container/pages> {
+				?p rdfs:label ?plabel
+				FILTER (lang(?plabel)="@LANGUAGE@")
+			}
+		}
+	'''
 .
 
 stage:page-query a elmo:Query;
@@ -30,6 +53,8 @@ stage:page-query a elmo:Query;
 			?first2 elmo:contains ?table.
 			?item rdf:first ?first3.
 			?first3 xhtml:heading ?heading.
+			?item rdf:first ?first4.
+			?first4 elmo:contains ?ctable.
 		}
 		WHERE {
 			GRAPH <@STAGE@> {
@@ -57,12 +82,16 @@ stage:page-query a elmo:Query;
 					?first3 xhtml:heading ?heading.
 					FILTER (lang(?heading)="@LANGUAGE@")
 				}
+				OPTIONAL {
+					?item rdf:first ?first4.
+					?first4 xhtml:contents ?ctable.
+				}
 			}
 		}
 	'''
 .
 
-stage:page-table-query a elmo:Query;
+stage:page-table-queryOLD a elmo:Query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		SELECT ?aanduiding
@@ -76,6 +105,68 @@ stage:page-table-query a elmo:Query;
 					FILTER (lang(?aanduiding)="@LANGUAGE@")
 				}
 			}
+		}
+	'''
+.
+
+stage:page-table-query a elmo:Query;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?pshape ?p ?o.
+			?o rdfs:label ?olabel.
+		}
+		WHERE {
+			BIND (iri(concat("http://bp4mc2.org/profiles/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"),"#",strbefore(strafter("@REPRESENTATION@","#"),"-inhoud"))) as ?nodeshape)
+			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
+			GRAPH ?graph {
+				{
+					?nodeshape sh:property ?pshape.
+					?pshape ?p ?o.
+					FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
+				}
+				UNION
+				{
+					?nodeshape sh:property ?pshape.
+					?pshape ?p ?o.
+					FILTER (isIRI(?o))
+					OPTIONAL {
+						?o rdfs:label ?olabel
+						FILTER (lang(?olabel)="@LANGUAGE@")
+					}
+				}
+			}
+			GRAPH <http://localhost:8080/bp4mc2/container/pages> {?p rdfs:label ?plabel}
+		}
+	'''
+.
+
+stage:page-property-query a elmo:Query;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		CONSTRUCT {
+			?nodeshape ?p ?o.
+			?o rdfs:label ?olabel.
+		}
+		WHERE {
+			BIND (iri(concat("http://bp4mc2.org/profiles/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"),"#",strafter("@REPRESENTATION@","#"))) as ?nodeshape)
+			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
+			GRAPH ?graph {
+				{
+					?nodeshape ?p ?o
+					FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
+				}
+				UNION
+				{
+					?nodeshape ?p ?o.
+					FILTER(isIRI(?o))
+					OPTIONAL {
+						?o rdfs:label ?olabel.
+						FILTER (lang(?olabel)="@LANGUAGE@")
+					}
+				}
+			}
+			GRAPH <http://localhost:8080/bp4mc2/container/pages> {?p rdfs:label ?plabel}
 		}
 	'''
 .

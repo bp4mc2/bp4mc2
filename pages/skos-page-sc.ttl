@@ -6,13 +6,20 @@
 
 @prefix page: <http://bp4mc2.org/id/page#>.
 @prefix skosap: <http://bp4mc2.org/profiles/skos-ap-sc#>.
+@prefix table: <http://bp4mc2.org/id/table#>.
+
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+sh:name rdfs:label "Naam"@nl.
 
 page:skos a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
+    [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
     page:skos-body
     [xhtml:img "skos-ap-sc.png"]
     page:conceptscheme
+    page:concept
   )
 .
 
@@ -35,14 +42,22 @@ This is the english text...
 
 page:conceptscheme a cnt:ContentAsText;
   dct:hasPart (
-    page:sub
     [xhtml:heading "Begrippenkader"@nl, "Concept scheme"@en]
     [dct:subject skosap:ConceptScheme]
+    page:eigenschappen
   )
 .
 
-page:sub a cnt:ContentAsText;
+page:eigenschappen a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Sub"@nl]
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [xhtml:contents table:ConceptScheme-inhoud]
+  )
+.
+
+page:concept a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Begrip"@nl, "Concept"@en]
+    [dct:subject skosap:Concept]
   )
 .
