@@ -2,19 +2,13 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
-@prefix elmo: <http://bp4mc2.org/elmo/def#>.
 
 @prefix page: <http://bp4mc2.org/id/page#>.
 @prefix skosap: <http://bp4mc2.org/profiles/skos-ap-sc#>.
-@prefix table: <http://bp4mc2.org/id/table#>.
-
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-
-sh:name rdfs:label "Naam"@nl.
+@prefix style: <http://bp4mc2.org/id/style#>.
 
 page:skos a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
     [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
     page:skos-body
     [xhtml:img "skos-ap-sc.png"]
@@ -43,7 +37,7 @@ This is the english text...
 page:conceptscheme a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Begrippenkader"@nl, "Concept scheme"@en]
-    [dct:subject skosap:ConceptScheme]
+    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:nodeshape]
     page:eigenschappen
   )
 .
@@ -51,13 +45,13 @@ page:conceptscheme a cnt:ContentAsText;
 page:eigenschappen a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [xhtml:contents table:ConceptScheme-inhoud]
+    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:propertyshape]
   )
 .
 
 page:concept a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Begrip"@nl, "Concept"@en]
-    [dct:subject skosap:Concept]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:nodeshape]
   )
 .
