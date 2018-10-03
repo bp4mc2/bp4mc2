@@ -123,7 +123,21 @@ page:externalConcept a cnt:ContentAsText;
 page:uriStrategy a cnt:ContentAsText;
   cnt:chars
 '''
+Concept schema’s, collecties en concepten krijgen een uri volgens het patroon:
+
+* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} voor begrippenkaders
+* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} voor collecties
+* http://{domain}/id/{Concept}/{UpperCamelCase(skos:prefLabel)} voor concepten
+
+Good practice is om binnen een domein (begrippenkader) alle prefLabels uniek te maken. Soms is het daarbij nodig de context te vermelden. Dit gebeurt dan tussen haakjes, bijvoorbeeld ‘breedteklasse (wegdeel)’ en ‘breedteklasse (waterdeel)’. Als dit niet gebeurt zijn uri’s niet voorspelbaar op basis van het prefLabel en moeten ze handmatig worden toegekend. 
 '''@nl,
 '''
+Concept schemes, collections and concepts get a uri according to the pattern:
+
+* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} for concept schemes
+* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} for collections
+* http://{domain}/id{Concept}/{UpperCamelCase(skos:prefLabel)} for concepts
+
+Good practice is to make all prefLabels unique within a domain (concept scheme). Sometimes it is necessary to mention the context. This is done between brackets, for example 'width class (road section)' and 'width class (water section)'. Without this practice uris are not predictable on base of the prefLabel and must be assigned manually.
 '''@en;
 .
