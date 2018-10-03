@@ -15,26 +15,35 @@ page:skos a cnt:ContentAsText;
     [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
     page:skos-body
     [xhtml:img "skos-ap-sc.png"]
-    page:conceptscheme
+    page:conceptScheme
     page:concept
     page:collection
+    page:externalConcept
+    page:uriStrategy
   )
 .
 
 page:skos-body a cnt:ContentAsText;
   cnt:chars
 '''
-Begrippen maken duidelijk welke 'onderwerpen van gesprek' er bestaan. In een stelselcatalogus worden begrippen formeel gedefinieerd, waarbij iedere definitie wordt opgebouwd volgens strikte regels. De essentie is dat elk begrip in een bepaald domein wordt uitgelegd in termen van andere begrippen. Ook die begrippen worden uitgelegd totdat uiteindelijk elk begrip wat uitleg nodig heeft is gedefinieerd. Uiteindelijk blijven de begrippen over waarvan de betekenis als vanzelfsprekend wordt aangenomen. In een logisch model worden dit axioma's genoemd. Zo ontstaat per domein een axiomatisch begrippenkader.
+Begrippen maken duidelijk welke ‘onderwerpen van gesprek’ er bestaan. In een stelselcatalogus worden begrippen formeel gedefinieerd, waarbij iedere definitie wordt opgebouwd volgens strikte regels. De essentie is dat elk begrip in een bepaald domein wordt uitgelegd in termen van andere begrippen. Ook die begrippen worden uitgelegd totdat uiteindelijk elk begrip wat uitleg nodig heeft is gedefinieerd. Uiteindelijk blijven de begrippen over waarvan de betekenis als vanzelfsprekend wordt aangenomen. In een logisch model worden dit axioma's genoemd. Zo ontstaat per domein een axiomatisch begrippenkader. Dit begrippenkader kan worden beschouwd als een min of meer geformaliseerde beschrijving van de institutionele werkelijkheid van het domein.
 
 Voor het beschrijven van begrippen wordt SKOS gebruikt. SKOS staat in Nederland op de pas-toe-leg-uit lijst voor overheden.
 
-- Ieder begrip wordt gerepresenteerd door een skos:concept.
-- Ieder domein heeft zijn eigen begrippenkader. Het begrippenkader voor een bepaald domein wordt gerepresenteerd door een skos:ConceptScheme.
-- Begrippen kunnen worden geordend in collecties. Een collectie wordt gerepresenteerd door een skos:collection.
-- Begrippen in verschillende domeinen kunnen worden verbonden via matching mechanismes. Door deze verbinding van begrippen tussen domeinen ontstaat een stelsel van samenhangende begrippenkaders. Dit stelsel van samenhangende begrippenkaders kan worden gezien als de kennisbasis voor een stelselcatalogus.
+* Ieder begrip wordt gerepresenteerd door een skos:concept.
+* Ieder domein heeft zijn eigen begrippenkader. Het begrippenkader voor een bepaald domein wordt gerepresenteerd door een skos:ConceptScheme.
+* Begrippen kunnen worden geordend in collecties. Een collectie wordt gerepresenteerd door een skos:collection.
+* Begrippen in verschillende domeinen kunnen worden verbonden via matching mechanismes. Door deze verbinding van begrippen tussen domeinen ontstaat een stelsel van samenhangende begrippenkaders. Dit stelsel van samenhangende begrippenkaders kan worden gezien als de kennisbasis voor een stelselcatalogus.
 '''@nl,
 '''
-This is the english text...
+Concepts make clear which 'topics of conversation' exist. In a system catalog concepts are formally defined. Each definition is built according to strict rules. The essence is that every concept in a certain domain is explained in terms of other concepts. These concepts are also explained until finally every concept that needs some explanation is defined. At the end the concepts  whose meaning is taken for granted remain. In a logical model these are called axioms. This way an axiomatic conceptual framework is created for each domain. This conceptual framework can be regarded as a more or less formalized description of the institutional reality of the domain.
+
+SKOS is used to describe concepts. SKOS is a standard on the appy-or-explain list for governments in the Netherlands.
+
+* Every concept is represented by a skos:concept.
+* Each domain has its own concept scheme. The concept scheme for a particular domain is represented by a skos:ConceptScheme.
+* Concepts can be arranged in collections. A collection is represented by a skos:collection.
+* Concepts in different domains can be linked via matching mechanisms. This connection of concepts between domains creates a system of coherent concept schemes. This system of coherent concepts schemes can be seen as the knowledge base for a system catalog.
 '''@en;
 .
 
@@ -114,4 +123,33 @@ page:collection-relations a cnt:ContentAsText;
     [xhtml:heading "Relaties"@nl, "Relations"@en]
     [dct:subject skosap:Collection; xhtml:stylesheet style:object-properties]
   )
+.
+
+page:externalConcept a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Begrip"@nl, "Concept"@en]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:nodeshape]
+)
+.
+
+page:uriStrategy a cnt:ContentAsText;
+  cnt:chars
+'''
+Concept schema’s, collecties en concepten krijgen een uri volgens het patroon:
+
+* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} voor begrippenkaders
+* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} voor collecties
+* http://{domain}/id/{Concept}/{UpperCamelCase(skos:prefLabel)} voor concepten
+
+Good practice is om binnen een domein (begrippenkader) alle prefLabels uniek te maken. Soms is het daarbij nodig de context te vermelden. Dit gebeurt dan tussen haakjes, bijvoorbeeld ‘breedteklasse (wegdeel)’ en ‘breedteklasse (waterdeel)’. Als dit niet gebeurt zijn uri’s niet voorspelbaar op basis van het prefLabel en moeten ze handmatig worden toegekend.
+'''@nl,
+'''
+Concept schemes, collections and concepts get a uri according to the pattern:
+
+* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} for concept schemes
+* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} for collections
+* http://{domain}/id{Concept}/{UpperCamelCase(skos:prefLabel)} for concepts
+
+Good practice is to make all prefLabels unique within a domain (concept scheme). Sometimes it is necessary to mention the context. This is done between brackets, for example 'width class (road section)' and 'width class (water section)'. Without this practice uris are not predictable on base of the prefLabel and must be assigned manually.
+'''@en;
 .
