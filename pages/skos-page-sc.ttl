@@ -12,8 +12,11 @@ page:skos a cnt:ContentAsText;
     [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
     page:skos-body
     [xhtml:img "skos-ap-sc.png"]
-    page:conceptscheme
+    page:conceptScheme
     page:concept
+    page:collection
+    page:externalConcept
+    page:uriStrategy
   )
 .
 
@@ -41,24 +44,86 @@ SKOS is used to describe concepts. SKOS is a standard on the appy-or-explain lis
 '''@en;
 .
 
-page:conceptscheme a cnt:ContentAsText;
+page:conceptScheme a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Begrippenkader"@nl, "Concept scheme"@en]
     [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:nodeshape]
-    page:eigenschappen
+    page:conceptSchemeProperties
+#    page:conceptSchemeRelations
   )
 .
 
-page:eigenschappen a cnt:ContentAsText;
+page:conceptSchemeProperties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
     [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:propertyshape]
   )
 .
 
+#page:conceptSchemeRelations a cnt:ContentAsText;
+#  dct:hasPart (
+#    [xhtml:heading "Relaties"@nl, "Relations"@en]
+#    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:propertyshape]
+#  )
+#.
+
 page:concept a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Begrip"@nl, "Concept"@en]
     [dct:subject skosap:Concept; xhtml:stylesheet style:nodeshape]
+    page:conceptProperties
+#    page:conceptRelations
+)
+.
+
+page:conceptProperties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:propertyshape]
   )
+.
+
+#page:conceptRelations a cnt:ContentAsText;
+#  dct:hasPart (
+#    [xhtml:heading "Relaties"@nl, "Relations"@en]
+#    [dct:subject skosap:Concept; xhtml:stylesheet style:propertyshape]
+#  )
+#.
+
+page:collection a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Begrip"@nl, "Concept"@en]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:nodeshape]
+    page:collectionProperties
+#    page:collectionRelations
+)
+.
+
+page:collectionProperties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:Collection; xhtml:stylesheet style:propertyshape]
+  )
+.
+
+#page:collectionRelations a cnt:ContentAsText;
+#  dct:hasPart (
+#    [xhtml:heading "Relaties"@nl, "Relations"@en]
+#    [dct:subject skosap:Collection; xhtml:stylesheet style:propertyshape]
+#  )
+#.
+
+page:externalConcept a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Begrip"@nl, "Concept"@en]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:nodeshape]
+)
+.
+
+page:uriStrategy a cnt:ContentAsText;
+  cnt:chars
+'''
+'''@nl,
+'''
+'''@en;
 .
