@@ -7,6 +7,9 @@
 @prefix skosap: <http://bp4mc2.org/profiles/skos-ap-sc#>.
 @prefix style: <http://bp4mc2.org/id/style#>.
 
+# ========================================
+# Main page
+#
 page:skos a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "SKOS Toepassingsprofiel voor begrippenkaders"@nl, "SKOS Profile for conceptschemes"@en]
@@ -14,6 +17,7 @@ page:skos a cnt:ContentAsText;
     [xhtml:img "skos-ap-sc.png"]
     page:conceptscheme
     page:concept
+    page:collection
   )
 .
 
@@ -34,24 +38,80 @@ This is the english text...
 '''@en;
 .
 
+# ========================================
+# ConceptScheme
+#
 page:conceptscheme a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Begrippenkader"@nl, "Concept scheme"@en]
     [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:nodeshape]
-    page:eigenschappen
+    page:conceptscheme-properties
+    page:conceptscheme-relations
   )
 .
 
-page:eigenschappen a cnt:ContentAsText;
+page:conceptscheme-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:propertyshape]
+    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:datatype-properties]
   )
 .
 
+page:conceptscheme-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# Concept
+#
 page:concept a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Begrip"@nl, "Concept"@en]
     [dct:subject skosap:Concept; xhtml:stylesheet style:nodeshape]
+    page:concept-properties
+    page:concept-relations
+  )
+.
+
+page:concept-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:concept-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:Concept; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# Collection
+#
+page:collection a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Collectie"@nl, "Collection"@en]
+    [dct:subject skosap:Collection; xhtml:stylesheet style:nodeshape]
+    page:collection-properties
+    page:collection-relations
+  )
+.
+
+page:collection-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:Collection; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:collection-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:Collection; xhtml:stylesheet style:object-properties]
   )
 .

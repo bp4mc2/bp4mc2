@@ -53,7 +53,7 @@ style:nodeshape a elmo:Part;
 	];
 	elmo:query stage:nodeshape-query;
 .
-style:propertyshape a elmo:Part;
+style:datatype-properties a elmo:Part;
 	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
@@ -116,13 +116,79 @@ style:propertyshape a elmo:Part;
 		rdfs:label "Max card."@en;
 		elmo:index "7";
 	];
-	elmo:query stage:propertyshape-query;
+	elmo:query stage:datatype-properties-query;
+.
+style:object-properties a elmo:Part;
+	elmo:fragment [
+		elmo:applies-to elmo:subject;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to rdf:type;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to sh:name;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to sh:severity;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to sh:message;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to rdfs:label;
+		rdfs:label "Label"@nl;
+		rdfs:label "Label"@en;
+		elmo:index "1";
+	];
+	elmo:fragment [
+		elmo:applies-to sh:path;
+		rdfs:label "Eigenschap"@nl;
+		rdfs:label "Property"@en;
+		elmo:index "2";
+	];
+	elmo:fragment [
+		elmo:applies-to sh:class;
+		rdfs:label "Verwijst naar"@nl;
+		rdfs:label "Refers to"@en;
+		elmo:index "3";
+	];
+	elmo:fragment [
+		elmo:applies-to rdfs:comment;
+		rdfs:label "Uitleg"@nl;
+		rdfs:label "Description"@en;
+		elmo:index "4";
+	];
+	elmo:fragment [
+		elmo:applies-to skos:example;
+		rdfs:label "Voorbeeld"@nl;
+		rdfs:label "Example"@en;
+		elmo:index "5";
+	];
+	elmo:fragment [
+		elmo:applies-to sh:minCount;
+		rdfs:label "Min card."@nl;
+		rdfs:label "Min card."@en;
+		elmo:index "6";
+	];
+	elmo:fragment [
+		elmo:applies-to sh:maxCount;
+		rdfs:label "Max card."@nl;
+		rdfs:label "Max card."@en;
+		elmo:index "7";
+	];
+	elmo:query stage:object-properties-query;
 .
 
 stage:page-skos-ap-sc a elmo:Representation;
 	elmo:url-pattern "/query/skos-ap-sc(.md|.html|.ttl|xmd)$";
 	elmo:contains style:nodeshape;
-	elmo:contains style:propertyshape;
+	elmo:contains style:datatype-properties;
+	elmo:contains style:object-properties;
 	elmo:query stage:page-query;
 	rdfs:seeAlso page:skos;
 .
@@ -176,86 +242,6 @@ stage:page-query a elmo:Query;
 	'''
 .
 
-stage:page-table-queryOLD a elmo:Query;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		SELECT ?aanduiding
-		WHERE {
-			BIND (iri(concat("http://bp4mc2.org/profiles/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"),"#",strafter("@REPRESENTATION@","#"))) as ?nodeshape)
-			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
-			GRAPH ?graph {
-				?nodeshape sh:property ?pshape.
-				OPTIONAL {
-					?pshape rdfs:label ?aanduiding
-					FILTER (lang(?aanduiding)="@LANGUAGE@")
-				}
-			}
-		}
-	'''
-.
-
-stage:page-table-query a elmo:Query;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		CONSTRUCT {
-			?pshape ?p ?o.
-			?o rdfs:label ?olabel.
-		}
-		WHERE {
-			BIND (iri(concat("http://bp4mc2.org/profiles/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"),"#",strbefore(strafter("@REPRESENTATION@","#"),"-inhoud"))) as ?nodeshape)
-			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
-			GRAPH ?graph {
-				{
-					?nodeshape sh:property ?pshape.
-					?pshape ?p ?o.
-					FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
-				}
-				UNION
-				{
-					?nodeshape sh:property ?pshape.
-					?pshape ?p ?o.
-					FILTER (isIRI(?o))
-					OPTIONAL {
-						?o rdfs:label ?olabel
-						FILTER (lang(?olabel)="@LANGUAGE@")
-					}
-				}
-			}
-			GRAPH <http://localhost:8080/bp4mc2/container/pages> {?p rdfs:label ?plabel}
-		}
-	'''
-.
-
-stage:page-property-query a elmo:Query;
-	elmo:query '''
-		PREFIX sh: <http://www.w3.org/ns/shacl#>
-		CONSTRUCT {
-			?nodeshape ?p ?o.
-			?o rdfs:label ?olabel.
-		}
-		WHERE {
-			BIND (iri(concat("http://bp4mc2.org/profiles/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"),"#",strafter("@REPRESENTATION@","#"))) as ?nodeshape)
-			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
-			GRAPH ?graph {
-				{
-					?nodeshape ?p ?o
-					FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
-				}
-				UNION
-				{
-					?nodeshape ?p ?o.
-					FILTER(isIRI(?o))
-					OPTIONAL {
-						?o rdfs:label ?olabel.
-						FILTER (lang(?olabel)="@LANGUAGE@")
-					}
-				}
-			}
-			GRAPH <http://localhost:8080/bp4mc2/container/pages> {?p rdfs:label ?plabel}
-		}
-	'''
-.
-
 stage:nodeshape-query a elmo:query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
@@ -297,7 +283,53 @@ stage:nodeshape-query a elmo:query;
 	''';
 .
 
-stage:propertyshape-query a elmo:query;
+stage:datatype-properties-query a elmo:query;
+	elmo:query '''
+		PREFIX sh: <http://www.w3.org/ns/shacl#>
+		PREFIX elmo: <http://bp4mc2.org/elmo/def#>
+		CONSTRUCT {
+			?pshape elmo:subject ?nodeshape.
+			?pshape ?p ?o.
+			?pshape sh:path ?property.
+			?property rdfs:label ?propertylabel
+		}
+		WHERE {
+			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
+			GRAPH ?graph {
+				{
+					{
+						?nodeshape sh:property ?pshape.
+						?pshape ?p ?o
+						FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
+					}
+					UNION
+					{
+						?nodeshape sh:property ?pshape.
+						?pshape ?p ?o.
+						FILTER(isIRI(?o) && ?p!=sh:path)
+						OPTIONAL {
+							?o rdfs:label ?olabel.
+							FILTER (lang(?olabel)="@LANGUAGE@" || lang(?olabel)="")
+						}
+					}
+					UNION
+					{
+						?pshape sh:path ?property.
+						?pshape sh:name ?propertylabel
+					}
+				}
+				FILTER NOT EXISTS {
+					?pshape sh:path rdf:type
+				}
+				FILTER EXISTS {
+					?pshape sh:datatype ?datatype
+				}
+			}
+		}
+	''';
+.
+
+stage:object-properties-query a elmo:query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		PREFIX elmo: <http://bp4mc2.org/elmo/def#>
@@ -324,7 +356,7 @@ stage:propertyshape-query a elmo:query;
 						FILTER(isIRI(?o) && ?p!=sh:path)
 						OPTIONAL {
 							?o rdfs:label ?olabel.
-							FILTER (lang(?olabel)="@LANGUAGE@")
+							FILTER (lang(?olabel)="@LANGUAGE@" || lang(?olabel)="")
 						}
 					}
 					UNION
@@ -335,6 +367,9 @@ stage:propertyshape-query a elmo:query;
 				}
 				FILTER NOT EXISTS {
 					?pshape sh:path rdf:type
+				}
+				FILTER NOT EXISTS {
+					?pshape sh:datatype ?datatype
 				}
 			}
 		}
