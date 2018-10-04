@@ -201,3 +201,34 @@ page:distribution-relations a cnt:ContentAsText;
     [dct:subject skosap:Distribution; xhtml:stylesheet style:object-properties]
   )
 .
+
+
+page:uriStrategy a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
+    page:uri-body
+  )
+.
+
+page:uri-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Catalogi, datasets (algemeen), datasets (versie), datasets (product) en distirbuties krijgen een uri volgens het patroon:
+
+* http://{domain}/id/{Catalog}/{UpperCamelCase(rdfs:label)} voor catalogi
+* http://{domain}/id/{DatasetGeneral}/{UpperCamelCase(rdfs:label)} voor datasets (algemeen)
+* http://{domain}/id/{DatasetVersion}/{UpperCamelCase(rdfs:label)} voor datasets (versie)
+* http://{domain}/id/{DatasetProduct}/{UpperCamelCase(rdfs:label)} voor datasets (product)
+* http://{domain}/id/{Distribution}/{UpperCamelCase(rdfs:label)} voor distributies
+Dit gebeurt dan tussen haakjes, bijvoorbeeld ‘breedteklasse (wegdeel)’ en ‘breedteklasse (waterdeel)’. Als dit niet gebeurt zijn uri’s niet voorspelbaar op basis van het prefLabel en moeten ze handmatig worden toegekend.
+'''@nl,
+'''
+Concept schemes, collections and concepts get a uri according to the pattern:
+
+* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} for concept schemes
+* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} for collections
+* http://{domain}/id{Concept}/{UpperCamelCase(skos:prefLabel)} for concepts
+
+Good practice is to make all prefLabels unique within a domain (concept scheme). Sometimes it is necessary to mention the context. This is done between brackets, for example 'width class (road section)' and 'width class (water section)'. Without this practice uris are not predictable on base of the prefLabel and must be assigned manually.
+'''@en;
+.
