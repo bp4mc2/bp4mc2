@@ -49,32 +49,155 @@ Een dataset is eigenlijk alles wat je een dataset noemt. Dat geeft de ruimte om 
 * Een distributie beschrijft een fysieke verspreidingsvorm van een dataset. Dit is altijd een informatieproduct, De distributie bevat bijvoorbeeld de verwijzing naar een download of een API.
 '''@nl,
 '''
+For data on the web it is good practice to describe the data in a catalog using DCAT (Data Catalog). DCAT is the W3C standard  to describe data sets and is prescribed by the EU (ISA) for reasons of interoperability. In the Netherlands DCAT is used to describe the open datasets in [data.overheid.nl](https://www.data.overheid.nl). The [national georegister[(https://www.nationaalgeoregister.nl), where all open geo datasets are described, offers a DCAT export. The application profile DCAT-AP-NL was created for data.overheid.nl. It describes which elements from DCAT are used and how these elements are applied. Geo-DCAT-AP for the geo-world is drawn up by the EU (ISA). For the catalog, the application profile for DCAT must comply with existing application profiles for DCAT, in particular DCAT-AP-NL and geoDCAT-AP.
 
+* The [Dutch Application Profile](https://data.overheid.nl/sites/default/files/2014-11-13 DCAT-NL IPM Datasets 0.6 kopie.pdf) for DCAT (DCAT-AP-NL).
+** is based on the DCAT [Application Profile](https://joinup.ec.europa.eu/asset/dcat_application_profile/description) for data portals in Europe.
+** gives guidelines for the translation of metadata in accordance with the Dutch metadata profile on ISO 19115 Geography, 1.3.1 (ISO19115)
+** is specified in an IPM
+* [geoDCAT-AP](https://joinup.ec.europa.eu/node/154143/)
+** is a profile for data portals in Europe for describing geo datasets, datasets series and services.
+** offers an RDF syntax for the all metadata elements of the core profile of ISO 19115: 2003 and those defined in the framework of the [INSPIRE directive](http://eur-lex.europa.eu/LexUriServ /LexUriServ.do?Uri=PB:L:2007:108:0001:0014:nl:PDF) The term Information Publication Model (IPM) is often used. An IPM for datasets provides a standard for the online exchange of metadata between Dutch data and catalogs, including: data.overheid.nl, National Geo Register (NGR) and for example the (open) data catalog of municipalities and provinces.
+
+A system catalog can be set up as Metadata Broker. A Metadata Broker collects meta data from different catalogs and unlocks this collection in a separate catalog. The Broker Metadata Catalog contains descriptions of the other catalogs and their catalog records. For example, datasets are described in several catalogs. This means that these data sets can be described from the same source in different contexts, for example as statistical data and as geographical data.
+
+A dataset is actually everything you call a dataset. A dataset is not defined sharply by the W3C. This is intentionally not done to enable the concept dataset to be widely usable. This enables describing coherent sets of information at different levels as a dataset. We stand for an approach in which the metadata describe each dataset at the source and metadata brokers link to the source. Each dataset is described in 1 catalog. That is the authentic source of that metadata.
+
+* A dataset (general) is the general (versionless) dataset that can be linked once to the catalog. This is done through a link to the publication of the administrator of the original dataset in the dcat repository. The description is about all versions that have ever been or will ever be.
+* A dataset (version) is a version of a dataset that contains concrete information.
+** Dataset versions are published and documented in the dcat repository by the administrator of the original dataset. Because there is already a link from the system catalog to the Abstract dataset and because a Concrete dataset is linked to the Abstract dataset, this information is immediately available in the system catalog.
+** A registration whith many changes every day differs from a traditional dataset of which periodically, for example a new version is distributed monthly. That would yield a new version after each mutation. For descriptions of an authentic registration, a new version of the data model is therefore considered as a new version of the dataset.
+* A 'dataset product' is a description of a subset of a dataset that is available as an data product (for example an API or a SOAP service). Such a subset with concrete data is always a subset of a concrete dataset version.
+* A distribution describes a physical distribution form of a dataset. This is always an data product. For example, the distribution contains the reference to a download or an API.
 '''@en;
 .
 
 # ========================================
-# ConceptScheme
-#
-page:conceptscheme a cnt:ContentAsText;
+# Dataset
+# ========================================
+page:dataset a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Begrippenkader"@nl, "Concept scheme"@en]
-    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:nodeshape]
-    page:conceptscheme-properties
-    page:conceptscheme-relations
+    [xhtml:heading "Dataset (algemeen)"@nl, "Dataset (general)"@en]
+    [dct:subject skosap:Dataset; xhtml:stylesheet style:nodeshape]
+    page:dataset-properties
+    page:dataset-relations
   )
 .
 
-page:conceptscheme-properties a cnt:ContentAsText;
+page:dataset-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:datatype-properties]
+    [dct:subject skosap:Dataset; xhtml:stylesheet style:datatype-properties]
   )
 .
 
-page:conceptscheme-relations a cnt:ContentAsText;
+page:dataset-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:ConceptScheme; xhtml:stylesheet style:object-properties]
+    [dct:subject skosap:Dataset; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# DatasetVersion
+# ========================================
+page:datasetVersion a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Dataset (versie)"@nl, "Dataset (version)"@en]
+    [dct:subject skosap:DatasetVersion; xhtml:stylesheet style:nodeshape]
+    page:datasetVersion-properties
+    page:datasetVersion-relations
+  )
+.
+
+page:datasetVersion-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:DatasetVersion; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:datasetVersion-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:DatasetVersion; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# DatasetProduct
+# ========================================
+page:datasetProduct a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Dataset (product)"@nl, "Dataset (product)"@en]
+    [dct:subject skosap:DatasetProduct; xhtml:stylesheet style:nodeshape]
+    page:datasetProduct-properties
+    page:datasetProduct-relations
+  )
+.
+
+page:datasetProduct-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:DatasetProduct; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:datasetProduct-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:DatasetProduct; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# Catalog
+# ========================================
+page:catalog a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Catalogus"@nl, "Catalog"@en]
+    [dct:subject skosap:Catalog; xhtml:stylesheet style:nodeshape]
+    page:catalog-properties
+    page:catalog-relations
+  )
+.
+
+page:catalog-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:Catalog; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:catalog-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:Catalog; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# Distribution
+# ========================================
+page:distribution a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Distributie"@nl, "Distribution"@en]
+    [dct:subject skosap:Catalog; xhtml:stylesheet style:nodeshape]
+    page:distribution-properties
+    page:distribution-relations
+  )
+.
+
+page:distribution-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:Distribution; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:distribution-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:Distribution; xhtml:stylesheet style:object-properties]
   )
 .
