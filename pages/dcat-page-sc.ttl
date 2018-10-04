@@ -4,7 +4,7 @@
 @prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
 
 @prefix page: <http://bp4mc2.org/id/page#>.
-@prefix skosap: <http://bp4mc2.org/profiles/dcat-ap-sc#>.
+@prefix dcatap: <http://bp4mc2.org/profiles/dcat-ap-sc#>.
 @prefix style: <http://bp4mc2.org/id/style#>.
 
 # ========================================
@@ -19,7 +19,7 @@ page:dcat a cnt:ContentAsText;
     page:datasetVersion
     page:datasetProduct
     page:catalog
-    pag:distribution
+    page:distribution
     page:uriStrategy
   )
 .
@@ -29,23 +29,23 @@ page:dcat-body a cnt:ContentAsText;
 '''
 Op het web is het gebruikelijk data te beschrijven in een catalogus met behulp van DCAT (Data Catalog). DCAT is de W3C standaard die door de EU (ISA) wordt voorgeschreven om datasets binnen Europa op een interoperabele wijze te beschrijven. In Nederland wordt DCAT onder andere toegepast in [data.overheid.nl](https://www.data.overheid.nl), waar alle open datasets in Nederland worden beschreven. Het [nationaal georegister](www.nationaalgeoregister.nl), waar alle open geo-datasets worden beschreven biedt een DCAT export. Voor data.overheid.nl is het toepassingsprofiel DCAT-AP-NL gemaakt. Daarin wordt beschreven welke elementen uit DCAT worden gebruikt en hoe deze elementen specifiek worden ingevuld. Voor de geo-wereld is er Geo-DCAT-AP, dat door de EU (ISA) is opgesteld. Voor de catalogus geldt dat het applicatieprofiel voor DCAT moet voldoen aan bestaande applicatieprofielen voor DCAT, met name DCAT-AP-NL en geoDCAT-AP.
 
-* Het [Nederlands Applicatieprofiel](https://data.overheid.nl/sites/default/files/2014-11-13 DCAT-NL IPM Datasets 0.6 kopie.pdf) voor DCAT (DCAT-AP-NL). 
+* Het [Nederlands Applicatieprofiel](https://data.overheid.nl/sites/default/files/2014-11-13 DCAT-NL IPM Datasets 0.6 kopie.pdf) voor DCAT (DCAT-AP-NL).
 ** is gebaseerd op het DCAT [Application Profile](https://joinup.ec.europa.eu/asset/dcat_application_profile/description) voor data portals in Europa.
 ** geeft richtlijnen voor de vertaling van metagegevens in overeenstemming met het Nederlandse metadata profiel op ISO 19115 Geografie, 1.3.1 (ISO19115)
 ** is gespecificeerd in een IPM
-* [geoDCAT-AP](https://joinup.ec.europa.eu/node/154143/) 
+* [geoDCAT-AP](https://joinup.ec.europa.eu/node/154143/)
 ** is een profiel voor data portals in Europa voor het beschrijven van geo datasets, datasetseries en services.
-** biedt een RDF-syntaxbinding voor de alle metadata-elementen van het kernprofiel van ISO 19115: 2003 en die welke zijn gedefinieerd in het kader van de [INSPIRE-richtlijn](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?Uri=PB:L:2007:108:0001:0014:nl:PDF) Vaak wordt de term Informatie Publicatie Model (IPM) gebruikt. Een IPM voor datasets geeft een norm voor de online uitwisseling van metadata tussen Nederlandse gegevens en catalogi, waaronder: data.overheid.nl, Nationaal Geo Register (NGR) en bijvoorbeeld de (open) data catalogus van gemeenten en provincies. 
+** biedt een RDF-syntaxbinding voor de alle metadata-elementen van het kernprofiel van ISO 19115: 2003 en die welke zijn gedefinieerd in het kader van de [INSPIRE-richtlijn](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?Uri=PB:L:2007:108:0001:0014:nl:PDF) Vaak wordt de term Informatie Publicatie Model (IPM) gebruikt. Een IPM voor datasets geeft een norm voor de online uitwisseling van metadata tussen Nederlandse gegevens en catalogi, waaronder: data.overheid.nl, Nationaal Geo Register (NGR) en bijvoorbeeld de (open) data catalogus van gemeenten en provincies.
 
 Een stelselcatalogus kan worden opgezet als Metadata Broker. Een Metadata Broker verzamelt meta data uit verschillende catalogi en ontgrendelt deze collectie weer in een aparte catalogus. De Broker Metadata Catalogus bevat beschrijvingen van de andere catalogi en hun catalogusrecords. Zo worden datasets beschreven in meerdere catalogi. Dit maakt dat deze datasets vanuit dezelfde bron in verschillende contexten, bijvoorbeeld als statistische gegevens en als geografische gegevens, kunnen worden beschreven.
 
 Een dataset is eigenlijk alles wat je een dataset noemt. Dat geeft de ruimte om samenhangende sets met informatie op verschillende niveaus te beschrijven als dataset. Een dataset wordt daarom door de W3C niet scherp gedefinieerd. Dit is met opzet niet gedaan om mogelijk te maken dat het concept dataset  breed bruikbaar is. We staan voor een aanpak waarin de metadata elke dataset aan de bron worden beschreven en metadata brokers deze informatie aan de bron koppelen. Daarbij wordt iedere dataset in 1 catalogus beschreven. Dat is dan de authentieke bron van die metadata.
 
 * Een dataset (algemeen) is de algemene (versieloze) dataset die 1 keer als aan de catalogus kan worden gekoppeld. Dit gebeurt door een link naar de publicatie van de beheerder van de originele dataset in de dcat repository van deze beheerder. De beschrijving gaat over alle versies die ooit zijn geweest of ooit zullen zijn.
-* Een dataset (versie) is een versie van een dataset die concrete informatie bevat. 
+* Een dataset (versie) is een versie van een dataset die concrete informatie bevat.
 ** Dataset versies worden door de beheerder van de originele dataset gepubliceerd en gedocumenteerd in de dcat repository van deze beheerder. Doordat er vanuit de stelselcatalogus al een link is naar de Abstracte dataset en doordat een Concrete dataset wordt gekoppeld aan de Abstracte dataset, is deze informatie direct beschikbaar in de stelselcatalogus.
-** Bij een registratie waarin dagelijks vele mutaties worden verwerkt is geen sprake van een traditionele dataset waarvan periodiek, bijvoorbeeld maandelijks een nieuwe versie wordt verspreid. Dat zou na iedere mutatie een nieuwe versie opleveren. Voor beschrijvingen van een authentieke registratie wordt daarom een nieuwe versie van het informatiemodel beschouwd als een nieuwe versie van de dataset. 
-* Een ‘dataset product’ is een beschrijving van een subset van een dataset die bijvoorbeeld als informatieproduct (bijvoorbeeld een API of een SOAP service) beschikbaar is. Zo’n subset met concrete data is altijd een subset van een concrete dataset versie. 
+** Bij een registratie waarin dagelijks vele mutaties worden verwerkt is geen sprake van een traditionele dataset waarvan periodiek, bijvoorbeeld maandelijks een nieuwe versie wordt verspreid. Dat zou na iedere mutatie een nieuwe versie opleveren. Voor beschrijvingen van een authentieke registratie wordt daarom een nieuwe versie van het informatiemodel beschouwd als een nieuwe versie van de dataset.
+* Een ‘dataset product’ is een beschrijving van een subset van een dataset die bijvoorbeeld als informatieproduct (bijvoorbeeld een API of een SOAP service) beschikbaar is. Zo’n subset met concrete data is altijd een subset van een concrete dataset versie.
 * Een distributie beschrijft een fysieke verspreidingsvorm van een dataset. Dit is altijd een informatieproduct, De distributie bevat bijvoorbeeld de verwijzing naar een download of een API.
 '''@nl,
 '''
@@ -78,7 +78,7 @@ A dataset is actually everything you call a dataset. A dataset is not defined sh
 page:dataset a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Dataset (algemeen)"@nl, "Dataset (general)"@en]
-    [dct:subject skosap:Dataset; xhtml:stylesheet style:nodeshape]
+    [dct:subject dcatap:Dataset; xhtml:stylesheet style:nodeshape]
     page:dataset-properties
     page:dataset-relations
   )
@@ -87,14 +87,14 @@ page:dataset a cnt:ContentAsText;
 page:dataset-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:Dataset; xhtml:stylesheet style:datatype-properties]
+    [dct:subject dcatap:Dataset; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:dataset-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:Dataset; xhtml:stylesheet style:object-properties]
+    [dct:subject dcatap:Dataset; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -104,7 +104,7 @@ page:dataset-relations a cnt:ContentAsText;
 page:datasetVersion a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Dataset (versie)"@nl, "Dataset (version)"@en]
-    [dct:subject skosap:DatasetVersion; xhtml:stylesheet style:nodeshape]
+    [dct:subject dcatap:DatasetVersion; xhtml:stylesheet style:nodeshape]
     page:datasetVersion-properties
     page:datasetVersion-relations
   )
@@ -113,14 +113,14 @@ page:datasetVersion a cnt:ContentAsText;
 page:datasetVersion-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:DatasetVersion; xhtml:stylesheet style:datatype-properties]
+    [dct:subject dcatap:DatasetVersion; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:datasetVersion-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:DatasetVersion; xhtml:stylesheet style:object-properties]
+    [dct:subject dcatap:DatasetVersion; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -130,7 +130,7 @@ page:datasetVersion-relations a cnt:ContentAsText;
 page:datasetProduct a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Dataset (product)"@nl, "Dataset (product)"@en]
-    [dct:subject skosap:DatasetProduct; xhtml:stylesheet style:nodeshape]
+    [dct:subject dcatap:DatasetProduct; xhtml:stylesheet style:nodeshape]
     page:datasetProduct-properties
     page:datasetProduct-relations
   )
@@ -139,14 +139,14 @@ page:datasetProduct a cnt:ContentAsText;
 page:datasetProduct-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:DatasetProduct; xhtml:stylesheet style:datatype-properties]
+    [dct:subject dcatap:DatasetProduct; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:datasetProduct-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:DatasetProduct; xhtml:stylesheet style:object-properties]
+    [dct:subject dcatap:DatasetProduct; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -156,7 +156,7 @@ page:datasetProduct-relations a cnt:ContentAsText;
 page:catalog a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Catalogus"@nl, "Catalog"@en]
-    [dct:subject skosap:Catalog; xhtml:stylesheet style:nodeshape]
+    [dct:subject dcatap:Catalog; xhtml:stylesheet style:nodeshape]
     page:catalog-properties
     page:catalog-relations
   )
@@ -165,14 +165,14 @@ page:catalog a cnt:ContentAsText;
 page:catalog-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:Catalog; xhtml:stylesheet style:datatype-properties]
+    [dct:subject dcatap:Catalog; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:catalog-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:Catalog; xhtml:stylesheet style:object-properties]
+    [dct:subject dcatap:Catalog; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -182,7 +182,7 @@ page:catalog-relations a cnt:ContentAsText;
 page:distribution a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Distributie"@nl, "Distribution"@en]
-    [dct:subject skosap:Catalog; xhtml:stylesheet style:nodeshape]
+    [dct:subject dcatap:Catalog; xhtml:stylesheet style:nodeshape]
     page:distribution-properties
     page:distribution-relations
   )
@@ -191,14 +191,14 @@ page:distribution a cnt:ContentAsText;
 page:distribution-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:Distribution; xhtml:stylesheet style:datatype-properties]
+    [dct:subject dcatap:Distribution; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:distribution-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:Distribution; xhtml:stylesheet style:object-properties]
+    [dct:subject dcatap:Distribution; xhtml:stylesheet style:object-properties]
   )
 .
 
