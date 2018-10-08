@@ -9,7 +9,7 @@
 
 # ========================================
 # Main page
-#
+# ========================================
 page:adms a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "ADMS toepassingsprofiel voor metadata beschrijvingen"@nl, "ADMS application profile for metadata descriptions"@en]
@@ -24,10 +24,34 @@ page:adms a cnt:ContentAsText;
 page:adms-body a cnt:ContentAsText;
   cnt:chars
 '''
+ADMS is de W3C standaard voor het beschrijven van ‘semantic assets’ die worden gebruikt binnen de eOverheid. In een stelselcatalogus gaat het concreet om herbruikbare metadata van
+* taxonomieën of woordenboeken die het begrippenkader bevatten met de ‘onderwerpen van gesprek’ van een dataset (algemeen).
+* referentiedata en waardelijsten van bij een dataset (algemeen) die kunnen worden hergebruikt in andere domeinen.
+* informatiemodellen van een dataset (versie) of van een dataset (product).
 
+Iedere metadatabeschrijving, in ADMS termen een asset kan een eigen webpagina hebben.
+
+Een metadatabeschrijving kan op verschillende manieren te beschikking worden gesteld, bijvoorbeeld als pdf download, als ttl beschrijving of als html beschrijving. Voor waardelijsten is ook csv en xml/gc (genericode) gangbaar. Voor informatiemodellen is XMI als uitwisselingsstandaard voor UML representaties gangbaar. Iedere vorm waarin een metadatabeschrijving (adms:Asset) beschikbaar wordt gesteld, kan expliciet worden beschreven als distirbutie (adms:Distribution).
+
+Van metadatabeschrijvingen en distributies kan provenance worden bijgehouden. 
+* Voor begrippenkaders en voor referentiedata of waardelijsten geldt dat die meestal in een ‘continious delivery’ proces worden beheerd. Dat wil zeggen dat de metadatabeschrijving 1 keer wordt gepubliceerd en vervolgens de begrippen en referentiedata per begrip respectievelijk referentiegegeven worden beheerd. De provenance wordt dan op het niveau van begrip respectievelijk referentiegegeven beheerd. 
+* Voor waardelijsten kan daarnaast worden gekozen om deze periodiek te releasen. Iedere release wordt dan een nieuwe versie van de metadatabeschrijving.
+* Informatiemodellen worden altijd in zijn geheel in 1 keer gepubliceerd, c.q. gereleased. Iedere release krijgt een nieuwe versie van de metadatabeschrijving.
 '''@nl,
 '''
+ADMS is the W3C standard for describing 'semantic assets' that are used at eGovernment. In a system catalog it is specifically about reusable metadata on
+* taxonomies or dictionaries that contain the concept scheme that contains the 'topics of interest' of a dataset (general).
+* reference data and controlled vocabularies from a dataset (general) that can be reused in other domains.
+* data models of a dataset (version) or of a dataset (product).
 
+Every metadata description, in ADMS an asset, can have its own webpage.
+
+A metadata description can be published in various ways, for example as a pdf download, as a ttl description or as a html description. For controlled vocabularies also csv and xml / gc (genericode) are common. For data models XMI is common as an exchange format for UML representations. Every format in which a metadata description (adms: Asset) is published can be explicitly described as distirbution (adms: Distribution).
+
+Provenance can be tracked of metadata descriptions and distributions.
+* For concept schemes and for reference data or controlled vocabularies, that are usually managed in a of 'continious delivery' process. This means that the metadata description is published once. The provenance is then managed at the level of a concept or reference entity.
+* In addition, controlled vocabularies can periodically releases. Each release then becomes a new version of the metadata description.
+* Data models are always published or released in full at once. Each release receives a new version of the metadata description.
 '''@en;
 .
 
@@ -55,4 +79,57 @@ page:asset-relations a cnt:ContentAsText;
     [xhtml:heading "Relaties"@nl, "Relations"@en]
     [dct:subject skosap:Asset; xhtml:stylesheet style:object-properties]
   )
+.
+
+# ========================================
+# AssetDistribution
+# ========================================
+page:assetDistribution a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Asset distributie"@nl, "Asset distribution"@en]
+    [dct:subject skosap:AssetDistribution; xhtml:stylesheet style:nodeshape]
+    page:assetDistribution-properties
+    page:assetDistribution-relations
+  )
+.
+
+page:assetDistribution-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject skosap:AssetDistribution; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:assetDistribution-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject skosap:Asset; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# Uri strategy
+# ========================================
+
+page:admsUriStrategy a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
+    page:dcat-uri-body
+  )
+.
+
+page:adms-uri-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Assets en asset distributies krijgen een uri volgens het patroon:
+
+* http://{domain}/id/{Asset}/{UpperCamelCase(rdfs:label)} voor assets
+* http://{domain}/id/{AssetDistribution}/{UpperCamelCase(rdfs:label)} voor asset distributies
+'''@nl,
+'''
+Assets en asset  distirbutions get a uri according to the pattern:
+
+* http://{domain}/id/{Asset}/{UpperCamelCase(rdfs:label)} for assets
+* http://{domain}/id/{AssetDistribution}/{UpperCamelCase(rdfs:label)} for asset distributions
+'''@en;
 .
