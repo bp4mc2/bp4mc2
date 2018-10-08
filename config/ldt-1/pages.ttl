@@ -223,6 +223,8 @@ stage:page-query a elmo:Query;
 			?item rdf:first ?first4.
 			?first4 elmo:contains ?ctable.
 			?first4 elmo:subject ?ctablesubject.
+			?item rdf:first ?first2.
+			?first2 dct:hasPart ?subpart.
 		}
 		WHERE {
 			GRAPH <@STAGE@> {
@@ -231,7 +233,12 @@ stage:page-query a elmo:Query;
 			GRAPH <http://localhost:8080/bp4mc2/container/pages> {
 				?page dct:hasPart ?part.
 				?part (rdf:rest|rdf:rest/rdf:first/dct:hasPart)* ?item.
-				?item (rdf:rest|rdf:rest/rdf:first/dct:hasPart) ?rest.
+#				?item (rdf:rest|rdf:rest/rdf:first/dct:hasPart) ?rest.
+				?item rdf:rest ?rest.
+				OPTIONAL {
+					?item rdf:first ?first2.
+					?first2 dct:hasPart ?subpart.
+				}
 				OPTIONAL {
 					?item rdf:first/cnt:chars ?chars
 					FILTER (lang(?chars)="@LANGUAGE@")
