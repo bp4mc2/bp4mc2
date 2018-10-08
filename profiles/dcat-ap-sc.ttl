@@ -78,15 +78,15 @@ dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
 
 #---------------------
-# Dataset (general)
+# Dataset
 #---------------------
 dcatap:Dataset rdf:type sh:NodeShape;
-  rdfs:label "Dataset (algemeen)"@nl;
-  rdfs:label "Dataset (general)"@en;
-  sh:name "dcat:Dataset (general)";
+  rdfs:label "Dataset"@nl;
+  rdfs:label "Dataset"@en;
+  sh:name "dcat:Dataset";
   sh:targetClass dcat:Dataset;
-  rdfs:comment "Een dataset (algemeen) is een algemene beschrijving van een verzameling data, gepubliceerd of samengesteld door één beheerder."@nl;
-  rdfs:comment "A dataset (general) is a general description of a collection of data, published or curated by a single agent."@en;
+  rdfs:comment "Een dataset is een algemene beschrijving van een verzameling data, gepubliceerd of samengesteld door één beheerder."@nl;
+  rdfs:comment "A dataset is a description of a collection of data, published or curated by a single agent."@en;
   skos:example "De Basisregistratie Kadaster (BRK) bestaat uit de kadastrale registratie van onroerende zaken, zakelijke rechten en de kadastrale kaart."@nl;
   sh:property dcatap:Dataset_type;
   sh:property dcatap:Dataset_label;
@@ -96,14 +96,11 @@ dcatap:Dataset rdf:type sh:NodeShape;
   sh:property dcatap:Dataset_provenance;
 .
 dcatap:Dataset_type a sh:PropertyShape;
-  rdfs:label "type dataset = DatasetAlgemeen"@nl;
-  rdfs:label "type dataset = DatasetGeneral"@en;
+  rdfs:label "type dataset"@nl;
+  rdfs:label "type dataset"@en;
   sh:path dcterms:type;
   sh:name "dcterms:type";
-  sh:hasValue dctype:DatasetGeneral;
-  rdfs:comment "Een dataset (algemeen) wordt expliciet getypeerd als DatasetAlgemeen."@nl;
-  rdfs:comment "A dataset (general) is explicitly typed as a DatasetGeneral."@en;
-  skos:example ""@nl;
+  sh:node dcatap:DatasetType;
   sh:minCount 1;
   sh:maxCount 1;
 .
@@ -112,6 +109,7 @@ dcatap:Dataset_label rdf:type sh:PropertyShape;
   rdfs:label "label (dataset)"@en;
   sh:name "dcterms:title";
   sh:path dcterms:title;
+  sh:datatype xsd:string;
   rdfs:comment "Een dataset heeft een naam."@nl;
   rdfs:comment "A dataset has a label."@en;
   skos:example "de BRK (in algemene zin)"@nl;
@@ -126,6 +124,7 @@ dcatap:Dataset_language rdf:type sh:PropertyShape;
   rdfs:label "language"@en;
   sh:name "dcterms:language";
   sh:path dcterms:language;
+  sh:node dcatap:Language;
   rdfs:comment "De taal waarin de dataset is beschreven (vanwege de compatibiliteit met het DCAT-AP NL) kan worden vastgelegd."@nl;
   rdfs:comment "The language in which the dataset is described (because of the compatibility with the DCAT-AP NL) can be recorded."@en;
   skos:example "@nl"@nl;
@@ -134,6 +133,7 @@ dcatap:Dataset_description rdf:type sh:PropertyShape;
   rdfs:label "beschrijving"@nl;
   rdfs:label "description"@en;
   sh:name "dcterms:description";
+  sh:datatype xsd:string;
   rdfs:comment "De dataset kan een duidelijke beschrijving hebben."@nl;
   rdfs:comment "The dataset can have a clear description."@en;
   skos:example "Met de Omgevingswet wil de overheid de regels voor ruimtelijke ontwikkeling vereenvoudigen en samenvoegen. Zodat het straks bijvoorbeeld makkelijker is om bouwprojecten te starten. De Crisis- en herstelwet (Chw) maakt dit nu al mogelijk, bijvoorbeeld door bestaande regels aan te passen. Naar verwachting treedt de Omgevingswet in 2019 in werking."@nl;
@@ -169,10 +169,10 @@ dcatap:Dataset_provenance a sh:PropertyShape;
 #---------------------
 
 dcatap:DatasetVersion rdf:type sh:NodeShape;
+  skos:inScheme dcatap:DatasetTypes; #A bit weird, but OK: the valuelist for dataset types, we reuse the shape
   rdfs:label "Dataset (versie)"@nl;
   rdfs:label "Dataset (version)"@en;
   sh:name "dcat:Dataset (version)";
-#  moet hier geen target class worden gedefinieerd?
   rdfs:comment "Een dataset (versie) is een concrete, geversioneerde beschrijving van een verzameling data, gepubliceerd of samengesteld door één beheerder."@nl;
   rdfs:comment "A dataset (general) is a concrete, versioned description of a collection of data, published or curated by a single agent."@en;
   skos:example "De Basisregistratie Kadaster (BRK) zoals beschreven in IMKAD 2.1."@nl;
@@ -198,9 +198,9 @@ dcatap:DatasetVersion_type a sh:PropertyShape;
   rdfs:label "type dataset = DatasetVersion"@en;
   sh:path dcterms:type;
   sh:name "dcterms:type";
-  sh:hasValue dctype:DatasetVersion;
-  rdfs:comment "Een dataset (algemeen) wordt expliciet getypeerd als DatasetVersie."@nl;
-  rdfs:comment "A dataset (general) is explicitly typed as a DatasetVersion."@en;
+  sh:hasValue dcatap:DatasetVersion;
+  rdfs:comment "Indien sprake is van een datasetversie, dan wordt deze als zodanig getypeerd"@nl;
+  rdfs:comment "In case of a dataset version, the dataset is typed accordingly"@en;
   skos:example ""@nl;
   sh:minCount 1;
   sh:maxCount 1;
@@ -210,6 +210,7 @@ dcatap:DatasetVersion_version rdf:type sh:PropertyShape;
   rdfs:label "version (dataset version)"@en;
   sh:name "adms:version (dataset version)";
   sh:path adms:version;
+  sh:datatype xsd:string;
   rdfs:comment "Een dataset (versie) kan een versie aanduiding hebben."@nl;
   rdfs:comment "A dataset (version) can have a version indication."@en;
   skos:example "2.1.0"@nl;
@@ -219,6 +220,7 @@ dcatap:DatasetVersion_versionNotes rdf:type sh:PropertyShape;
   rdfs:label "version notes (dataset version)"@en;
   sh:name "adms:versionNotes (dataset version)";
   sh:path adms:versionNotes;
+  sh:datatype xsd:string;
   rdfs:comment "Een dataset (versie) kan release notes bevatten."@nl;
   rdfs:comment "A dataset (version) can contain release notes."@en;
   skos:example "IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log."@nl;
@@ -296,14 +298,15 @@ dcatap:DatasetVersion_provenance a sh:PropertyShape;
 #---------------------
 
 dcatap:DatasetProduct rdf:type sh:NodeShape;
+  skos:inScheme dcatap:DatasetTypes; #A bit weird, but OK: the valuelist for dataset types, we reuse the shape
   rdfs:label "dataset (product)"@nl;
   rdfs:label "dataset (product)"@en;
   sh:name "dcat:Dataset (product)";
-#  moet hier geen target class worden gedefinieerd?
   rdfs:comment "Een dataset (product) is een concreet, geversioneerd informatieproduct op basis van de data in een dataset (versie)"@nl;
   rdfs:comment "A dataset (product) is a concrete, versioned information product based on the data in a dataset (version)."@en;
   skos:example "De BRK levering versie 2.2 zoals beschreven in BRKlevering.uml"@nl;
   sh:property dcatap:DatasetProduct_role;
+  sh:property dcatap:DatasetVersion_type;
   sh:property dcatap:DatasetProduct_version;
   sh:property dcatap:DatasetProduct_versionNotes;
   sh:property dcatap:DatasetProduct_distribution;
@@ -312,16 +315,28 @@ dcatap:DatasetProduct rdf:type sh:NodeShape;
   sh:property dcatap:DatasetProduct_provenance;
 .
 dcatap:DatasetProduct_role a sh:PropertyShape;
-#label, comment en voorbeeld?
   sh:path rdf:type;
   sh:name "rdf:type";
   sh:hasValue dcat:Dataset;
+.
+dcatap:DatasetProduct_type a sh:PropertyShape;
+  rdfs:label "type dataset = DatasetProduct"@nl;
+  rdfs:label "type dataset = DatasetProduct"@en;
+  sh:path dcterms:type;
+  sh:name "dcterms:type";
+  sh:hasValue dcatap:DatasetProduct;
+  rdfs:comment "Indien sprake is van een datasetproduct, dan wordt deze als zodanig getypeerd"@nl;
+  rdfs:comment "In case of a dataset product, the dataset is typed accordingly"@en;
+  skos:example ""@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
 .
 dcatap:DatasetProduct_version rdf:type sh:PropertyShape;
   rdfs:label "versie (product)"@nl;
   rdfs:label "version (product)"@en;
   sh:name "adms:version (product)";
   sh:path adms:version;
+  sh:datatype xsd:string;
   skos:example "2.1.0";
   rdfs:comment "Een dataset (product) kan een versie aanduiding hebben."@nl;
   rdfs:comment "A dataset (product) can have a version indication."@en;
@@ -331,6 +346,7 @@ dcatap:DatasetProduct_versionNotes rdf:type sh:PropertyShape;
   rdfs:label "versie notities (product)"@nl;
   rdfs:label "version notes (product)"@en;
   sh:name "adms:versionNotes (product)";
+  sh:datatype xsd:string;
   sh:path adms:versionNotes;
   rdfs:comment "Een dataset (product) kan release notes bevatten."@nl;
   rdfs:comment "A dataset (product) can contain release notes."@en;
@@ -406,6 +422,7 @@ dcatap:Catalog_name rdf:type sh:PropertyShape;
   rdfs:label "label (catalog)"@en;
   sh:name "dcterms:title (catalog)";
   sh:path dcterms:title;
+  sh:datatype xsd:string;
   rdfs:comment "De catalogus kan een naam hebben"@nl;
   rdfs:comment "The catalog can have has a label"@en;
   skos:example "Catalogus Omgevingswet";
@@ -415,6 +432,7 @@ dcatap:Catalog_description rdf:type sh:PropertyShape;
   rdfs:label "description (catalog)"@en;
   sh:name "dcterms:description (catalog)";
   sh:path dcterms:description;
+  sh:datatype xsd:string;
   rdfs:comment "De catalogus kan een beschrijving hebben."@nl;
   rdfs:comment "De catalog can be described."@en;
   skos:example "De Catalogus voor de Omgevingswet is een centrale ingang tot het stelsel, waarin wetgeving, begrippen, regels, informatiemodellen, datasets, producten en services met elkaar worden verbonden. De catalogus is daarmee een centrale plek waar de verschillende gebruikersgroepen van het stelsel kunnen zien waar het stelsel uit bestaat, wat begrippen betekenen en hoe de verschillende elementen van het stelsel aan elkaar zijn gerelateerd."@nl;
@@ -424,7 +442,7 @@ dcatap:Catalog_language rdf:type sh:PropertyShape;
   rdfs:label "language"@en;
   sh:name "dcterms:language";
   sh:path dcterms:language;
-#iso waardelijst?
+  sh:node dcatap:Language;
   rdfs:comment "De taal waarin de metadata de catalogus is beschreven kan worden gespecificeerd."@nl;
   rdfs:comment "The language in which the metadata in the catalog is desribed can be recorded."@en;
   skos:example "@nl"@nl;
@@ -502,6 +520,7 @@ dcatap:Distribution_name rdf:type sh:PropertyShape;
   rdfs:label "label (distribution)"@en;
   sh:name "dcterms:title (distribution)";
   sh:path dcterms:title;
+  sh:datatype xsd:string;
   rdfs:comment "De distributie kan een naam hebben"@nl;
   rdfs:comment "De distribution can have a label"@en;
   skos:example "Digitale Kadastrale Kaart download service"@nl;
@@ -511,6 +530,7 @@ dcatap:Distribution_description rdf:type sh:PropertyShape;
   rdfs:label "description (distribution)"@en;
   sh:name "dcterms:description (distribution)";
   sh:path dcterms:description;
+  sh:datatype xsd:string;
   rdfs:comment "De distributie kan een beschrijving hebben."@nl;
   rdfs:comment "De distribution can be described."@en;
   skos:example "Het Kadaster is houder van de Basisregistratie Kadaster (BRK). Onderdeel van de BRK is de Digitale kadastrale kaart. Deze is beschikbaar als open data en nu via dit portaal ook als Linked Open Data (vooralsnog zonder de topografie)."@nl;
@@ -565,4 +585,29 @@ dcatap:Distribution_provenance a sh:PropertyShape;
   sh:severity sh:Warning;
   sh:message "Van een distributie wordt bij voorkeur herkomst informatie bijgehouden."@nl;
   sh:message "Prefably provenance information is kept on a distribution."@en
+.
+
+dcatap:Language a sh:NodeShape;
+  sh:name "Language (dct:LinguisticSystem)"^^xsd:string;
+  sh:property [
+      sh:path skos:inScheme;
+      sh:hasValue <http://publications.europa.eu/mdr/authority/language/>
+  ];
+  rdfs:label "Language"@en;
+  rdfs:label "Taal"@nl
+.
+
+dcatap:DatasetType a sh:NodeShape;
+  sh:name "Dataset type (skos:Concept)";
+  sh:property [
+      sh:path skos:inScheme;
+      sh:hasValue dcatap:DatasetTypes
+  ];
+  rdfs:label "Dataset type"@en;
+  rdfs:label "Datasettype"@nl
+.
+
+dcatap:DatasetTypes a skos:ConceptScheme;
+  rdfs:label "Dataset types"@en;
+  rdfs:label "Datasettypes"@nl;
 .
