@@ -9,6 +9,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 style:nodeshape a elmo:Part;
+	elmo:index "2";
 	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
@@ -54,6 +55,7 @@ style:nodeshape a elmo:Part;
 	elmo:query stage:nodeshape-query;
 .
 style:datatype-properties a elmo:Part;
+	elmo:index "3";
 	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
@@ -119,6 +121,7 @@ style:datatype-properties a elmo:Part;
 	elmo:query stage:datatype-properties-query;
 .
 style:object-properties a elmo:Part;
+	elmo:index "4";
 	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
@@ -192,11 +195,13 @@ style:object-properties a elmo:Part;
 
 stage:page-topmodel a elmo:Representation;
 	elmo:url-pattern "/query/topmodel(.md|.html|.ttl|xmd)$";
+	elmo:index "1";
 	elmo:query stage:page-query;
 	rdfs:seeAlso page:topmodel;
 .
 stage:page-skos-ap-sc a elmo:Representation;
 	elmo:url-pattern "/query/skos-ap-sc(.md|.html|.ttl|xmd)$";
+	elmo:index "1";
 	elmo:contains style:nodeshape;
 	elmo:contains style:datatype-properties;
 	elmo:contains style:object-properties;
@@ -205,6 +210,7 @@ stage:page-skos-ap-sc a elmo:Representation;
 .
 stage:page-frbr-ap-sc a elmo:Representation;
 	elmo:url-pattern "/query/frbr-ap-sc(.md|.html|.ttl|xmd)$";
+	elmo:index "1";
 	elmo:contains style:nodeshape;
 	elmo:contains style:datatype-properties;
 	elmo:contains style:object-properties;
@@ -213,6 +219,7 @@ stage:page-frbr-ap-sc a elmo:Representation;
 .
 stage:page-skoslex-ap-sc a elmo:Representation;
 	elmo:url-pattern "/query/skoslex-ap-sc(.md|.html|.ttl|xmd)$";
+	elmo:index "1";
 	elmo:contains style:nodeshape;
 	elmo:contains style:datatype-properties;
 	elmo:contains style:object-properties;
@@ -221,11 +228,21 @@ stage:page-skoslex-ap-sc a elmo:Representation;
 .
 stage:page-dcat-ap-sc a elmo:Representation;
 	elmo:url-pattern "/query/dcat-ap-sc(.md|.html|.ttl|xmd)$";
+	elmo:index "1";
 	elmo:contains style:nodeshape;
 	elmo:contains style:datatype-properties;
 	elmo:contains style:object-properties;
 	elmo:query stage:page-query;
 	rdfs:seeAlso page:dcat;
+.
+stage:page-dqv-ap-sc a elmo:Representation;
+	elmo:url-pattern "/query/dqv-ap-sc(.md|.html|.ttl|xmd)$";
+	elmo:index "1";
+	elmo:contains style:nodeshape;
+	elmo:contains style:datatype-properties;
+	elmo:contains style:object-properties;
+	elmo:query stage:page-query;
+	rdfs:seeAlso page:dqv;
 .
 
 stage:page-query a elmo:Query;
