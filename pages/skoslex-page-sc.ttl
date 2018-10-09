@@ -30,10 +30,10 @@ page:skoslex-body a cnt:ContentAsText;
 Gebeurtenissen kunnen worden beschreven als begrippen. Ze hebben dan dezelfde kenmerken als begrippen, die ‘objecten’ aanduiden, maar hebben ook nog enkele andere kenmerken.
 * Gebeurtenissen worden in wet- en regelgeving beschreven als mogelijke (rechts)handelingen die kunnen plaatsvinden in een bepaald domein. Een voorbeeld is het exploiteren van een jachthaven in het domein van het Besluit Activiteiten Leefomgeving (BAL).
 * Gebeurtenissen maken de dynamiek van de institutionele werkelijkheid zichtbaar. Bij een wijziging in de registratie kan worden gerefereerd aan de gebeurtenis.  Dit helpt om bij een wijziging te begrijpen ‘wat er is gebeurd’. Een voorbeeld is een nieuwe eigenaar van een onroerend goed in de BRK, waarbij wordt vastgelegd dat deze situatie is ontstaan door een overdracht, vererving, boedelverdeling, etc.
-* Een gebeurtenis heeft betrekking op een object. Dit object is een ‘gewoon’ begrip. Bij het voorbeeld van de overdracht in de BRK is het object het onroerend goed.   
+* Een gebeurtenis heeft betrekking op een object. Dit object is een ‘gewoon’ begrip. Bij het voorbeeld van de overdracht in de BRK is het object het onroerend goed.
 * Institutionele gebeurtenissen of rechtshandelingen kennen een of meerdere actoren, bijvoorbeeld de verkoper en de koper bij de overdracht van een huis. In gevallen waar de wet- en regelgeving vooral bedoeld is om de regels (normen) te beschrijvingen word een actor ook wel een normadressaat genoemd. Actoren zijn ook ‘gewone’ begrippen.
 * En niet iedereen is bevoegd om een institutionele gebeurtenis vast te leggen. Dat gebeurt door een beëdigd ambtenaar of door een notaris. Dit wordt een ‘agent’ (in de Engelse betekenis van het woord) genoemd. Dit een een speciaal soort actor.
-* Tot slot zijn er de regels ofwel normen waaraan een rechtshandeling moet voldoen. Normen zijn géén begrippen. 
+* Tot slot zijn er de regels ofwel normen waaraan een rechtshandeling moet voldoen. Normen zijn géén begrippen.
 '''@nl,
 '''
 Events can be described as concepts. They then have the same characteristics as concepts, which denote 'objects', but they also have some other characteristics.
@@ -53,8 +53,8 @@ page:act a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Handeling"@nl, "Act"@en]
     [dct:subject skoslexap:Act; xhtml:stylesheet style:nodeshape]
-    page:asset-properties
-    page:asset-relations
+    page:act-properties
+    page:act-relations
   )
 .
 
@@ -80,7 +80,6 @@ page:object a cnt:ContentAsText;
     [xhtml:heading "Object"@nl, "Object"@en]
     [dct:subject skoslexap:Object; xhtml:stylesheet style:nodeshape]
     page:object-properties
-    page:object-relations
   )
 .
 
@@ -91,13 +90,6 @@ page:object-properties a cnt:ContentAsText;
   )
 .
 
-page:object-relations a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skoslexap:Object; xhtml:stylesheet style:object-properties]
-  )
-.
-
 # ========================================
 # Actor
 # ========================================
@@ -105,22 +97,6 @@ page:actor a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Actor"@nl, "Actor"@en]
     [dct:subject skoslexap:Object; xhtml:stylesheet style:nodeshape]
-    page:actor-properties
-    page:actor-relations
-  )
-.
-
-page:actor-properties a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skoslexap:Actor; xhtml:stylesheet style:datatype-properties]
-  )
-.
-
-page:actor-relations a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skoslexap:Actor; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -130,26 +106,9 @@ page:actor-relations a cnt:ContentAsText;
 page:agent a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Agent"@nl, "Agent"@en]
-    [dct:subject skoslexap:Agent; xhtml:stylesheet style:nodeshape]
-    page:agent-properties
-    page:agent-relations
+    [dct:subject skoslexap:LegalAgent; xhtml:stylesheet style:nodeshape]
   )
 .
-
-page:agent-properties a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skoslexap:Agent; xhtml:stylesheet style:datatype-properties]
-  )
-.
-
-page:agent-relations a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skoslexap:Agent; xhtml:stylesheet style:object-properties]
-  )
-.
-
 
 # ========================================
 # Norm
@@ -157,7 +116,7 @@ page:agent-relations a cnt:ContentAsText;
 page:norm a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Norm"@nl, "Norm"@en]
-    [dct:subject skoslexap:Norm; xhtml:stylesheet style:nodeshape]
+    [dct:subject skoslexap:LegalNorm; xhtml:stylesheet style:nodeshape]
     page:norm-properties
     page:norm-relations
   )
@@ -166,28 +125,28 @@ page:norm a cnt:ContentAsText;
 page:norm-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skoslexap:Norm; xhtml:stylesheet style:datatype-properties]
+    [dct:subject skoslexap:LegalNorm; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:norm-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skoslexap:Norm; xhtml:stylesheet style:object-properties]
+    [dct:subject skoslexap:LegalNorm; xhtml:stylesheet style:object-properties]
   )
 .
 # ========================================
 # Uri strategy
 # ========================================
 
-page:admsUriStrategy a cnt:ContentAsText;
+page:skoslexUriStrategy a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
-    page:dcat-uri-body
+    page:skoslex-uri-body
   )
 .
 
-page:adms-uri-body a cnt:ContentAsText;
+page:skoslex-uri-body a cnt:ContentAsText;
   cnt:chars
 '''
 Assets en asset distributies krijgen een uri volgens het patroon:

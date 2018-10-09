@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix apskoslex: <http://bp4mc2.org/somewhere/apskoslex>.
+@prefix skoslexap: <http://bp4mc2.org/profiles/skoslex-ap-sc#>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -85,7 +85,7 @@ skos:inScheme sh:name "skos:inScheme".
 #---------------------
 # Act, Object, Actor, Agent
 #---------------------
-apskoslex:Act a sh:NodeShape;
+skoslexap:Act a sh:NodeShape;
   rdfs:label "Act"@en;
   rdfs:label "Handeling"@nl;
   rdfs:comment "The class of Acts. An act is a legal construct representing a set of activities, performed by an Actor and with respect to some Object."@en;
@@ -93,12 +93,12 @@ apskoslex:Act a sh:NodeShape;
   sh:name "skoslex:Act";
   sh:targetClass skoslex:Act;
   skos:example "De levering van een onroerend goed zoals vastgelegd in een notariele akte (rechtshandeling), Het bouwen van een bouwwerk (handeling)"@nl;
-  sh:property apskoslex:Act_actor;
-  sh:property apskoslex:Act_agent;
-  sh:property apskoslex:Act_object;
-  sh:property apskoslex:Act_refersTo;
+  sh:property skoslexap:Act_actor;
+  sh:property skoslexap:Act_agent;
+  sh:property skoslexap:Act_object;
+  sh:property skoslexap:Act_refersTo;
 .
-apskoslex:Act_actor a sh:PropertyShape;
+skoslexap:Act_actor a sh:PropertyShape;
   rdfs:label "actor"@en;
   rdfs:label "actor"@nl;
   rdfs:comment "Actor relates an Act with the Actor that performs the act."@en;
@@ -108,7 +108,7 @@ apskoslex:Act_actor a sh:PropertyShape;
   sh:class skoslex:Actor;
   skos:example "Jan Jansen in zijn rol van koper van een onroerend goed."@nl;
 .
-apskoslex:Act_object a sh:PropertyShape;
+skoslexap:Act_object a sh:PropertyShape;
   rdfs:label "object"@en;
   rdfs:label "object"@nl;
   rdfs:comment "Object relates an Act with the object that is created, changed or used during the act"@en;
@@ -118,7 +118,7 @@ apskoslex:Act_object a sh:PropertyShape;
   sh:class skoslex:Object;
   skos:example "Het onroerend goed DPV00 B 1207 als onderwerp van de koop."@nl;
 .
-apskoslex:Act_agent a sh:PropertyShape;
+skoslexap:Act_agent a sh:PropertyShape;
   rdfs:label "agent"@en;
   rdfs:label "agent"@nl;
   rdfs:comment "Agent relates an Act with the Agent involved in the act."@en;
@@ -128,7 +128,7 @@ apskoslex:Act_agent a sh:PropertyShape;
   sh:class skoslex:Agent;
   skos:example "Een notaris die een akte opmaakt bij de koop van een onroerend goed."@nl;
 .
-apskoslex:Act_refersTo a sh:PropertyShape;
+skoslexap:Act_refersTo a sh:PropertyShape;
   rdfs:label "refers to"@en;
   rdfs:label "verwijst naar"@nl;
   rdfs:comment "RefersTo relates a norm with the Act that is refered by the norm. Such an act has some relation with the norm, without further specification. It might be effected by the norm, but could also be a precondition or simply mentioned in the rules."@en;
@@ -139,7 +139,7 @@ apskoslex:Act_refersTo a sh:PropertyShape;
   skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
 .
 
-apskoslex:Actor a sh:NodeShape;
+skoslexap:Actor a sh:NodeShape;
   rdfs:label "Actor"@en;
   rdfs:label "Actor"@nl;
   rdfs:comment "The class of Actors. An actor is some person (individual, group or organisation) that performs some Act"@en;
@@ -148,7 +148,7 @@ apskoslex:Actor a sh:NodeShape;
   sh:name "skoslex:Actor";
   skos:example "Jan Jansen."@nl;
 .
-apskoslex:LegalAgent a sh:NodeShape;
+skoslexap:LegalAgent a sh:NodeShape;
   rdfs:label "Agent"@en;
   rdfs:label "Agent"@nl;
   rdfs:comment "The class of Agent. An agent is some person (individual, group or organisation) involved in some act, without actually performing the act."@en;
@@ -158,9 +158,9 @@ feitelijk uit te voeren."@nl;
   sh:targetClass skoslex:Agent;
   sh:name "skoslex:Agent";
   skos:example "Notaris Pietersen."@nl;
-  sh:property apskoslex:LegalLabel;
+  sh:property skoslexap:LegalLabel;
 .
-apskoslex:Object a sh:NodeShape;
+skoslexap:Object a sh:NodeShape;
   rdfs:label "Object"@en;
   rdfs:label "Object"@nl;
   rdfs:comment "The class of objects. An object is some thing (not an actor) that is created, used or changed during some Act"@en;
@@ -168,13 +168,13 @@ apskoslex:Object a sh:NodeShape;
   sh:targetClass skoslex:Object;
   sh:name "skoslex:Object";
   skos:example "Het onroerend goed DPV00 B 1207."@nl;
-  sh:property apskoslex:LegalLabel;
+  sh:property skoslexap:LegalLabel;
 .
 
 #---------------------
 # Norm
 #---------------------
-apskoslex:LegalNorm a sh:NodeShape;
+skoslexap:LegalNorm a sh:NodeShape;
   rdfs:label "Norm"@en;
   rdfs:label "Norm"@nl;
   rdfs:comment "The class of norms. A norm effects an Act. It implies what 'ought' or 'should not' be done with regard to an Act. A norm represents the set of rules that apply to an Act."@en;
@@ -182,14 +182,14 @@ apskoslex:LegalNorm a sh:NodeShape;
   sh:targetClass skoslex:Norm;
   sh:name "skoslex:Norm";
   skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
-  sh:property apskoslex:LegalNorm_label;
-  sh:property apskoslex:LegalNorm_affects;
+  sh:property skoslexap:LegalNorm_label;
+  sh:property skoslexap:LegalNorm_affects;
 .
-apskoslex:LegalNorm_label a sh:PropertyShape;
+skoslexap:LegalNorm_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
-apskoslex:LegalNorm_affects a sh:PropertyShape;
+skoslexap:LegalNorm_affects a sh:PropertyShape;
   rdfs:label "affects"@en;
   rdfs:label "normeert"@nl;
   rdfs:comment "Affects relates a norm with the Act that is affected by the norm. Such an act is restricted by the rules identified by the norm"@en;
