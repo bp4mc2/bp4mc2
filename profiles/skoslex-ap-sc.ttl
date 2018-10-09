@@ -44,10 +44,10 @@ dstype:DatasetVersion a skos:Concept;
 .
 
 #derived from skos-lex
-skoslex:Act rdfs:subClassOf skos:Concept.
-skoslex:Object rdfs:subClassOf skos:Concept.
-skoslex:Actor rdfs:subClassOf skos:Concept.
-skoslex:Agent rdfs:subClassOf skoslex:Actor.
+skoslex:Act a owl:Class; rdfs:subClassOf skos:Concept.
+skoslex:Object a owl:Class; rdfs:subClassOf skos:Concept.
+skoslex:Actor a owl:Class; rdfs:subClassOf skos:Concept.
+skoslex:Agent a owl:Class; rdfs:subClassOf skoslex:Actor.
 
 #derived from frbr
 frbr:Work rdfs:subClassOf frbr:Endeavour.
@@ -77,6 +77,12 @@ rdf:type sh:name "rdf:type".
 dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
 
+skoslexap:Concept a sh:NodeShape;
+  rdfs:label "Concept"@en;
+  rdfs:label "Begrip"@nl;
+  sh:name "skos:Concept";
+  sh:targetClass skos:Concept;
+.
 
 #---------------------
 # SKOS Lex (legal skos)
