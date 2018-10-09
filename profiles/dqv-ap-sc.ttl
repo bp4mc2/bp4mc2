@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix scdqv: <http://bp4mc2.org/somewhere/dqv-ap-sc/>.
+@prefix dqvap: <http://bp4mc2.org/profiles/dqv-ap-sc#>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -26,51 +26,21 @@
 # IMPORT
 #---------------------
 
-#derived from dataset-type
-dstype:Datamodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  rdfs:label "Datamodel"@en;
-  sh:name "dstype:Datamodel"
-.
-dstype:ControlledVocabulary a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  rdfs:label "Controlled vocabulary"@en;
-  sh:name "dstype:ControlledVocabulary"
-.
-dstype:DatasetVersion a skos:Concept;
-  rdfs:label "Datasetversie"@nl;
-  rdfs:label "Dataset version"@en;
-  sh:name "dstype:DatasetVersion"
+#imported from skos-ap-sc
+dqv:Concept a sh:NodeShape;
+  sh:targetClass skos:Concept;
+  sh:name "skos:Concept";
 .
 
-#derived from skos-lex
-skoslex:Act rdfs:subClassOf skos:Concept.
-skoslex:Object rdfs:subClassOf skos:Concept.
-skoslex:Actor rdfs:subClassOf skos:Concept.
-skoslex:Agent rdfs:subClassOf skoslex:Actor.
-
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
-
-#derived from prov
-prov:Person rdfs:subClassOf prov:Agent.
-prov:Organization rdfs:subClassOf prov:Agent.
-prov:SoftwareAgent rdfs:subClassOf prov:Agent.
-
-#derived from foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
-
-#derived from org
-org:Organization rdfs:subClassOf foaf:Organization.
-
-#derived from adms
-adms:Asset rdfs:subClassOf dcat:Dataset.
-adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+#impored from dm-ap-sc
+dqv:NodeShape a sh:NodeShape;
+  sh:targetClass sh:NodeShape;
+  sh:name "sh:NodeShape";
+.
 
 #derived from dqv
-dqv:Dimension rdfs:subClassOf skos:Concept.
-dqv:Category rdfs:subClassOf skos:Concept.
+dqv:Dimension a owl:Class; rdfs:subClassOf skos:Concept.
+dqv:Category a owl:Class; rdfs:subClassOf skos:Concept.
 
 #Extra
 rdf:type sh:name "rdf:type".
@@ -80,128 +50,128 @@ skos:inScheme sh:name "skos:inScheme".
 #---------------------
 # Datakwaliteitseisen
 #---------------------
-scdqv:QualityDimension a sh:NodeShape;
+dqvap:QualityDimension a sh:NodeShape;
   sh:targetClass dqv:Dimension;
   rdfs:label "Kwaliteitsdimensie"@nl;
   rdfs:label "Quality dimension"@en;
   sh:name "dqv:Dimension";
-  sh:property scdqv:QualityDimension_label;
+  sh:property dqvap:QualityDimension_label;
 .
 
-scdqv:QualityDimension_label a sh:PropertyShape;
+dqvap:QualityDimension_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
 
-scdqv:QualityIndicator a sh:NodeShape;
+dqvap:QualityIndicator a sh:NodeShape;
   sh:name "Indicator (dqv:Dimension)";
   rdfs:label "Quality indicator"@en;
   rdfs:label "Kwaliteitsindicator"@nl;
-  sh:property scdqv:QualityIndicator_label;
-  sh:property scdqv:QualityIndicator_broader;
-  sh:property scdqv:QualityIndicator_role;
+  sh:property dqvap:QualityIndicator_label;
+  sh:property dqvap:QualityIndicator_broader;
+  sh:property dqvap:QualityIndicator_role;
 .
 
-scdqv:QualityIndicator_role a sh:PropertyShape;
+dqvap:QualityIndicator_role a sh:PropertyShape;
   sh:name "role";
   sh:path rdf:type;
   sh:hasValue dqv:Dimension;
 .
-scdqv:QualityIndicator_label a sh:PropertyShape;
+dqvap:QualityIndicator_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
-scdqv:QualityIndicator_broader a sh:PropertyShape;
+dqvap:QualityIndicator_broader a sh:PropertyShape;
   sh:name "skos:broader";
   sh:path skos:broader;
-  sh:node scdqv:QualityDimension;
+  sh:node dqvap:QualityDimension;
 .
 
-scdqv:QualityMetric a sh:NodeShape;
+dqvap:QualityMetric a sh:NodeShape;
   sh:targetClass dqv:Metric;
   rdfs:label "Meetfunctie"@nl;
   rdfs:label "Quality metric"@en;
   sh:name "dqv:Metric";
-  sh:property scdqv:QualityMetric_label;
-  sh:property scdqv:QualityMetric_inDimension;
-  sh:property scdqv:QualityMetric_expectedDataType;
+  sh:property dqvap:QualityMetric_label;
+  sh:property dqvap:QualityMetric_inDimension;
+  sh:property dqvap:QualityMetric_expectedDataType;
 .
 
-scdqv:QualityMetric_label a sh:PropertyShape;
+dqvap:QualityMetric_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
-scdqv:QualityMetric_inDimension a sh:PropertyShape;
+dqvap:QualityMetric_inDimension a sh:PropertyShape;
   sh:name "dqv:inDimension";
   sh:path dqv:inDimension;
-  sh:node scdqv:QualityIndicator;
+  sh:node dqvap:QualityIndicator;
 .
-scdqv:QualityMetric_expectedDataType a sh:PropertyShape;
+dqvap:QualityMetric_expectedDataType a sh:PropertyShape;
   sh:name "dqv:expectedDataType";
   sh:path dqv:expectedDataType;
 .
 
-scdqv:QualityMeasurement a sh:NodeShape;
+dqvap:QualityMeasurement a sh:NodeShape;
   sh:targetClass dqv:QualityMeasurement;
   sh:name "dqv:QualityMeasurement";
-  sh:property scdqv:QualityMeasurement_isMeasurementOf;
-  sh:property scdqv:QualityMeasurement_value;
+  sh:property dqvap:QualityMeasurement_isMeasurementOf;
+  sh:property dqvap:QualityMeasurement_value;
 .
 
-scdqv:QualityMeasurement_isMeasurementOf a sh:PropertyShape;
+dqvap:QualityMeasurement_isMeasurementOf a sh:PropertyShape;
   sh:name "dqv:isMeasurementOf";
   sh:path dqv:isMeasurementOf;
   sh:class dqv:Metric;
   sh:minCount 1;
   sh:maxCount 1;
 .
-scdqv:QualityMeasurement_value a sh:PropertyShape;
+dqvap:QualityMeasurement_value a sh:PropertyShape;
   sh:name "dqv:value";
   sh:path dqv:value;
   sh:minCount 1;
   sh:maxCount 1;
 .
 
-scdqv:QualityPolicy a sh:NodeShape;
+dqvap:QualityPolicy a sh:NodeShape;
   sh:name "dqv:QualityPolicy";
   rdfs:label "Quality policy"@en;
   rdfs:label "Kwaliteitseis"@nl;
-  sh:property scdqv:QualityPolicy_role;
-  sh:property scdqv:QualityPolicy_targetNode;
-  sh:property scdqv:QualityPolicy_message;
-  sh:property scdqv:QualityPolicy_severity;
-  sh:property scdqv:QualityPolicy_property;
+  sh:property dqvap:QualityPolicy_role;
+  sh:property dqvap:QualityPolicy_targetNode;
+  sh:property dqvap:QualityPolicy_message;
+  sh:property dqvap:QualityPolicy_severity;
+  sh:property dqvap:QualityPolicy_property;
 .
 
-scdqv:QualityPolicy_role a sh:PropertyShape;
+dqvap:QualityPolicy_role a sh:PropertyShape;
   sh:name "role";
   sh:path rdf:type;
   sh:hasValue sh:NodeShape;
 .
-scdqv:QualityPolicy_targetNode a sh:PropertyShape;
+dqvap:QualityPolicy_targetNode a sh:PropertyShape;
   sh:name "sh:targetNode";
   sh:class dqv:Metric;
   sh:minCount 1;
   sh:maxCount 1;
 .
-scdqv:QualityPolicy_message a sh:PropertyShape;
+dqvap:QualityPolicy_message a sh:PropertyShape;
   sh:name "sh:message";
   sh:datatype xsd:string;
 .
-scdqv:QualityPolicy_severity a sh:PropertyShape;
+dqvap:QualityPolicy_severity a sh:PropertyShape;
   sh:name "sh:severity";
   sh:maxCount 1;
 .
-scdqv:QualityPolicy_property a sh:PropertyShape;
+dqvap:QualityPolicy_property a sh:PropertyShape;
   sh:name "sh:property";
   sh:path sh:property;
   sh:nodeKind sh:BlankNode;
-  sh:node scdqv:QualityPolicySpec;
+  sh:node dqvap:QualityPolicySpec;
   sh:minCount 1;
   sh:maxCount 1
 .
 
-scdqv:QualityPolicySpec a sh:NodeShape;
+dqvap:QualityPolicySpec a sh:NodeShape;
   sh:name "spec";
   sh:property [
     sh:path sh:path;
@@ -214,24 +184,24 @@ scdqv:QualityPolicySpec a sh:NodeShape;
     sh:path sh:node;
     sh:name "sh:node";
     sh:nodeKind sh:BlankNode;
-    sh:node scdqv:QualityPolicyMeasurement;
+    sh:node dqvap:QualityPolicyMeasurement;
     sh:minCount 1;
     sh:maxCount 1
   ]
 .
 
-scdqv:QualityPolicyMeasurement a sh:NodeShape;
+dqvap:QualityPolicyMeasurement a sh:NodeShape;
   sh:name "measurement";
   sh:property [
     sh:nodeKind sh:BlankNode;
     sh:path sh:property;
     sh:name "sh:property";
-    sh:node scdqv:QualityPolicyValue;
+    sh:node dqvap:QualityPolicyValue;
     sh:maxCount 1;
   ]
 .
 
-scdqv:QualityPolicyValue a sh:NodeShape;
+dqvap:QualityPolicyValue a sh:NodeShape;
   sh:name "value";
   sh:property [
     sh:path sh:path;

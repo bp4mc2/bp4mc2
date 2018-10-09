@@ -1,0 +1,40 @@
+@prefix cnt: <http://www.w3.org/2011/content#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+
+@prefix page: <http://bp4mc2.org/id/page#>.
+@prefix dqvap: <http://bp4mc2.org/profiles/dqv-ap-sc#>.
+@prefix style: <http://bp4mc2.org/id/style#>.
+
+# ========================================
+# Main page
+# ========================================
+page:dqv a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Datakwaliteit"@nl, "Data quality"@en]
+    page:dqv-body
+    [xhtml:img "dqv-ap-sc.png"]
+    page:quality-dimension
+  )
+.
+
+page:dqv-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Datakwaliteit
+'''@nl,
+'''
+Data quality
+'''@en;
+.
+
+# ========================================
+# QualityDimension
+# ========================================
+page:quality-dimension a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Kwaliteitsdimensie"@nl, "Quality dimension"@en]
+    [dct:subject dqvap:QualityDimension; xhtml:stylesheet style:nodeshape]
+  )
+.
