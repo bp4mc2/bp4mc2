@@ -4,7 +4,7 @@
 @prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
 
 @prefix page: <http://bp4mc2.org/id/page#>.
-@prefix skosap: <http://bp4mc2.org/profiles/adms-ap-sc#>.
+@prefix admsap: <http://bp4mc2.org/profiles/adms-ap-sc#>.
 @prefix style: <http://bp4mc2.org/id/style#>.
 
 # ========================================
@@ -61,7 +61,7 @@ Provenance can be tracked of metadata descriptions and distributions.
 page:asset a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Asset"@nl, "Asset"@en]
-    [dct:subject skosap:Asset; xhtml:stylesheet style:nodeshape]
+    [dct:subject admsap:Asset; xhtml:stylesheet style:nodeshape]
     page:asset-properties
     page:asset-relations
   )
@@ -70,14 +70,14 @@ page:asset a cnt:ContentAsText;
 page:asset-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:Asset; xhtml:stylesheet style:datatype-properties]
+    [dct:subject admsap:Asset; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:asset-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:Asset; xhtml:stylesheet style:object-properties]
+    [dct:subject admsap:Asset; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -87,7 +87,7 @@ page:asset-relations a cnt:ContentAsText;
 page:assetDistribution a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Asset distributie"@nl, "Asset distribution"@en]
-    [dct:subject skosap:AssetDistribution; xhtml:stylesheet style:nodeshape]
+    [dct:subject admsap:AssetDistribution; xhtml:stylesheet style:nodeshape]
     page:assetDistribution-properties
     page:assetDistribution-relations
   )
@@ -96,17 +96,68 @@ page:assetDistribution a cnt:ContentAsText;
 page:assetDistribution-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:AssetDistribution; xhtml:stylesheet style:datatype-properties]
+    [dct:subject admsap:AssetDistribution; xhtml:stylesheet style:datatype-properties]
   )
 .
 
 page:assetDistribution-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject skosap:Asset; xhtml:stylesheet style:object-properties]
+    [dct:subject admsap:Asset; xhtml:stylesheet style:object-properties]
   )
 .
 
+# ========================================
+# LandingPage
+# ========================================
+page:landingPage a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Webpagina"@nl, "Landing page"@en]
+    [dct:subject admsap:landingPage; xhtml:stylesheet style:nodeshape]
+    page:landingPage-properties
+    page:landingPage-relations
+  )
+.
+
+page:landingPage-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject admsap:AssetDistribution; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:landingPage-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject admsap:Asset; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# DownloadFormat
+# ========================================
+page:downloadFormat a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Download formaat"@nl, "Download format"@en]
+    [dct:subject admsap:downloadFormat; xhtml:stylesheet style:nodeshape]
+    page:downloadFormat-properties
+    page:downloadFormat-relations
+  )
+.
+
+page:downloadFormat-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject admsap:AssetDistribution; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:downloadFormat-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject admsap:Asset; xhtml:stylesheet style:object-properties]
+  )
+.
 # ========================================
 # Uri strategy
 # ========================================
