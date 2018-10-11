@@ -26,10 +26,22 @@ page:frbr a cnt:ContentAsText;
 page:frbr-body a cnt:ContentAsText;
   cnt:chars
 '''
-Bronverwijzingen
+FRBR is de standaard om te kunnen verwijzen naar een bibliografische bron (bijvoorbeeld een wetsartikel) in het algemeen of een versie van een bron zoals dat op een bepaald moment geldig was. Formele begrippen worden meestal gedefinieerd in een besluit of een wet. Bij verwijzing naar zo’n begrip is het belangrijk om te weten of naar dat begrip in het algemeen of naar een beschrijving van dat begrip op een specifiek moment wordt verwezen.
+
+Het FRBR toepassingsprofiel maakt het mogelijk te verwijzen naar:
+* een beschrijving van een document dat zelf niet vindbaar is op het web, bijvoorbeeld een boek. De beschrijving van het boek is wel vindbaar, het boek zelf met de inhoud niet.
+* een bibliografische bron op het web, waarvan de inhoud direct via het web beschikbaar is, een web’resource’. Een verwijzing naar een dergelijke bron kan twee vormen hebben:
+** de verwijzing naar de beschrijving in het algemeen
+** de verwijzing naar een specifieke versie van de beschrijving zoals die op een bepaald moment geldig was.
 '''@nl,
 '''
-Bibliographic references
+FRBR is the standard to refer to a bibliographic source (for example a legal article) in general or a version of a bibliographic source as it was valid at a certain time. Formal concepts are usually defined in a decree or a law. Referring to such a concept, it is important to know whether to reference to that concept in general or to a description of that concept at a specific moment in time.
+
+The FRBR application profile makes it possible to refer to:
+* a description of a document that cannot be found on the web itself, for example a book. The description of the book can be found, but not the book itself with the content.
+* a bibliographic source on the web, of which the content is directly available via the web, a web'resource '. A reference to such a source can take two forms:
+** the reference to the description in general
+** the reference to a specific version of the description as valid at a certain moment in time.
 '''@en;
 .
 
@@ -86,21 +98,19 @@ page:frbrUriStrategy a cnt:ContentAsText;
 page:frbr-uri-body a cnt:ContentAsText;
   cnt:chars
 '''
-Concept schema’s, collecties en concepten krijgen een uri volgens het patroon:
+Een brondocument, bron op het web, werk als bron, respectievelijk expressie als bron krijgt een uri volgens het patroon:
 
-* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} voor begrippenkaders
-* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} voor collecties
-* http://{domain}/id/{Concept}/{UpperCamelCase(skos:prefLabel)} voor concepten
-
-Good practice is om binnen een domein (begrippenkader) alle prefLabels uniek te maken. Soms is het daarbij nodig de context te vermelden. Dit gebeurt dan tussen haakjes, bijvoorbeeld ‘breedteklasse (wegdeel)’ en ‘breedteklasse (waterdeel)’. Als dit niet gebeurt zijn uri’s niet voorspelbaar op basis van het prefLabel en moeten ze handmatig worden toegekend.
+* http://{domain}/id/{SourceDocument}/{UpperCamelCase(rdfs:Label)} voor een brondocument
+* http://{domain}/id/{Source}/{UpperCamelCase(rdfs:Label)} voor een bibliografische bron op het web
+* http://{domain}/id/{WorkAsSource}/{UpperCamelCase(rdfs:Label)} voor een algemeen bibliografische bron op het web
+* http://{domain}/id/{ExpressionAsSource}/{UpperCamelCase(rdfs:Label)} voor een specifieke versie van een bibliografische bron op het web
 '''@nl,
 '''
-Concept schemes, collections and concepts get a uri according to the pattern:
+A source document, source on the web, work as source, respectively expression as source gets a uri according to the pattern:
 
-* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} for concept schemes
-* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} for collections
-* http://{domain}/id{Concept}/{UpperCamelCase(skos:prefLabel)} for concepts
-
-Good practice is to make all prefLabels unique within a domain (concept scheme). Sometimes it is necessary to mention the context. This is done between brackets, for example 'width class (road section)' and 'width class (water section)'. Without this practice uris are not predictable on base of the prefLabel and must be assigned manually.
+* http://{domain}/id/{SourceDocument}/{UpperCamelCase(rdfs:Label)} for a source document
+* http://{domain}/id/{Source}/{UpperCamelCase(rdfs:Label)} for a bibliographic source on the web
+* http://{domain}/id/{WorkAsSource}/{UpperCamelCase(rdfs:Label)} for a general bibliographic resource on the web
+* http://{domain}/id/{ExpressionAsSource}/{UpperCamelCase(rdfs:Label)} for a specific version of a bibliographic source on the web
 '''@en;
 .
