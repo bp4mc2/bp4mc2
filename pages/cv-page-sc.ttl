@@ -79,3 +79,113 @@ page:controlledVocabulary-relations a cnt:ContentAsText;
     [dct:subject cvap:ControlledVocabulary; xhtml:stylesheet style:object-properties]
   )
 .
+
+# ========================================
+# SchemeControlledVocabulary
+# ========================================
+page:schemeControlledVocabulary a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Waardelijst als begrippenkader"@nl, "Controlled vocabulary as concept scheme"@en]
+    [dct:subject cvap:SchemeControlledVocabulary; xhtml:stylesheet style:nodeshape]
+    page:schemeControlledVocabulary-properties
+    page:schemeControlledVocabulary-relations
+  )
+.
+
+page:schemeControlledVocabulary-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject cvap:SchemeControlledVocabulary; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:schemeControlledVocabulary-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject cvap:SchemeControlledVocabulary; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# CollectionControlledVocabulary
+# ========================================
+page:CollectionControlledVocabulary a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Waardelijst als collection"@nl, "Controlled vocabulary as collection"@en]
+    [dct:subject cvap:collectionControlledVocabulary; xhtml:stylesheet style:nodeshape]
+    page:collectionControlledVocabulary-properties
+    page:collectionControlledVocabulary-relations
+  )
+.
+
+page:collectionControlledVocabulary-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject cvap:CollectionControlledVocabulary; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:collectionControlledVocabulary-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject cvap:CollectionControlledVocabulary; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# ReferenceControlledVocabulary
+# ========================================
+page:ReferenceControlledVocabulary a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Waardelijst als referentielijst"@nl, "Controlled vocabulary as reference list"@en]
+    [dct:subject cvap:ReferenceControlledVocabulary; xhtml:stylesheet style:nodeshape]
+    page:referenceControlledVocabulary-properties
+    page:referenceControlledVocabulary-relations
+  )
+.
+
+page:referenceControlledVocabulary-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject cvap:ReferenceControlledVocabulary; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:referenceControlledVocabulary-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject cvap:ReferenceControlledVocabulary; xhtml:stylesheet style:object-properties]
+  )
+.
+# ========================================
+# Uri strategy
+# ========================================
+
+page:cvUriStrategy a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
+    page:cv-uri-body
+  )
+.
+
+page:cv-uri-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Een lijst (collectie of schema) van begrippen of een lijst met instanties van een klasse krijgt een uri conform de beschrijvende asset.
+
+Een waarde in een lijst (collectie of schema) van begrippen krijgt een uri volgens het patroon: 
+* https://{domein}/id/Concept/{rdfs:label}, waarbij het rdfs:label het label van de collectie of het schema is.
+
+Een waarde in een lijst met instanties van een klasse krijgt een uri volgens het patroon:
+* https://{domein}/id/{Klassenaam}/{rdfs:label}, waarbij het rdfs:label de naam van de betreffende instantie is.
+'''@nl,
+'''
+A list (collection or scheme) of concepts or a list of instances of a class gets a uri from the asset that describes the list.
+
+A value in a list (collection or schema) of concepts gets a uri according to the pattern:
+* https://{domain}/id/Concept/{rdfs:label}, where the rdfs:label is the label of the collection or schema.
+
+A value in a list of instances of a class is given a uri according to the pattern:
+* https://{domain}/id/{ClassName}/{rdfs:label}, where the rdfs:label is the label of the relevant instance.
+'''@en;
+.
