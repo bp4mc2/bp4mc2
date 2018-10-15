@@ -17,9 +17,7 @@ page:dm a cnt:ContentAsText;
     [xhtml:img "dm-ap-sc.png"]
     page:dataModel
     page:shapesGraph
-    page:class
-    page:nodeShape
-    page:cvUriStrategy
+    page:dmUriStrategy
   )
 .
 
@@ -42,7 +40,7 @@ Bij het maken van een informatiemodel op basis van een begrippenkader kunnen de 
 Een op deze manier uitgewerkt voorbeeld van het model van de BAG is te vinden op [https://bag.basisregistraties.overheid.nl/def]. Via #-uri’s kan worden verwezen naar elementen in dit model, bijvoorbeeld [https://bag.basisregistraties.overheid.nl/def/objectklasse/AdresseerbaarObject#hoofdadres]. Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie. Dit voorbeeld laat ook mooi zien hoe de uri-strategie voor het beschrijven van een datamodel werkt. Het intypen van bovenstaande URL zal leiden tot de weergave van de pagina [http://bag.basisregistraties.overheid.nl/def/objectklasse/AdresseerbaarObject] (het deel voor de ‘#’). Met andere woorden: de beschrijving van de entiteit ‘Adresseerbaar object’.
 '''@nl,
 '''
-An data model is a description of the structure in which data about things that are described by concepts in a concept scheme can be stored. The concept scheme can be used to communicate with domain owners and users on the content of a registration. Translating a concept scheme into a coherent data model is the domain of the data architect.
+A data model is a description of the structure in which data about things that are described by concepts in a concept scheme can be stored. The concept scheme can be used to communicate with domain owners and users on the content of a registration. Translating a concept scheme into a coherent data model is the domain of the data architect.
 
 One way for building a data model is to use the Dutch Metamodel for Data models (MIM), (see [https://www.geonovum.nl/geo-standards/metamodel-informatiemodellering/nationaal-metamodel-voor-informatiemodellering]) . This meta model contains object classes, attribute types, data groups, data group types, generalizations, relationship types, and relationship classes. An data model created on base of the MIM can be expressed in UML or in RDF. In other words, it is 'form-free'. A MIM class is usually a realization of a concept. For example, the attribute type 'main address' in the BAG is the realization of the term 'Main address' and the object class 'AddressableObject', where a 'main address' is the realization of the term 'AddressableObject'. The term 'AddressableObject' is about the (linguistic) meaning of an addressable object. The object class is a kind of 'box' in which the data about an addressable object can be stored.
 
@@ -55,7 +53,7 @@ When building an data model based on a concept scheme, the following good practi
 * Specializations, generalizations, and partitive relationships in the concept scheme are translated into specializations, generalizations and partitive relationships in the data model.
 * For each semantic relation in the conceptual model, a relation is defined in the data model (in linked data an object property). An example is 'lies in' as a relation between the classes 'Public Space' and 'Residence' as an elaboration of the semantic relationship between the terms 'Public Space' and 'Residence'.
 
-An example of the BAG model elaborated in this way can be found at [https://bag.basisregistraties.overheid.nl/def]. #-uri’s can be used to reference to elements in this model, for example [https://bag.basisregistraties.overheid.nl/def/objectklasse/ AdresseerbaarObject#hoofdadres]. This example is available as a html web page, in turtle and as a graph. This example also shows how the uri strategy works to describe a data model. Typing in the above URL will lead to the display the part for the '#'of the page [http://bag.basisregistraties.overheid.nl/def/objectklasse/ AdresseerbaarObject]. In other words: the description of the entity 'Addressable object'.
+An example of the BAG model elaborated in this way can be found at [https://bag.basisregistraties.overheid.nl/def]. #-uri's can be used to reference to elements in this model, for example [https://bag.basisregistraties.overheid.nl/def/objectklasse/ AdresseerbaarObject#hoofdadres]. This example is available as a html web page, in turtle and as a graph. This example also shows how the uri strategy works to describe a data model. Typing in the above URL will lead to the display the part for the '#'of the page [http://bag.basisregistraties.overheid.nl/def/objectklasse/ AdresseerbaarObject]. In other words: the description of the entity 'Addressable object'.
 '''@en;
 .
 
@@ -83,4 +81,32 @@ page:dataModel-relations a cnt:ContentAsText;
     [xhtml:heading "Relaties"@nl, "Relations"@en]
     [dct:subject dmap:DataModel; xhtml:stylesheet style:object-properties]
   )
+.
+  
+
+#---------------------
+# ShapesGraph
+#---------------------
+page:shapesGraph a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "model beschrijving"@nl, "shapes graph"@en]
+    [dct:subject dmap:ShapesGraph; xhtml:stylesheet style:nodeshape]
+  )
+.
+  
+page:dmUriStrategy a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
+    page:dm-uri-body
+  )
+.
+
+page:dm-uri-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Een informatiemodel krijgt een uri conform de beschrijvende asset.
+'''@nl;
+'''
+A data model gets a uri from the asset that describes the model.
+...@en';
 .
