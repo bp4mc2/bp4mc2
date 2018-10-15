@@ -77,7 +77,6 @@ rdf:type sh:name "rdf:type".
 dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
 
-
 #---------------------
 # Asset (DataModel)
 #---------------------
@@ -91,6 +90,7 @@ scdm:DataModel rdf:type sh:NodeShape;
   skos:example "De lijst met Kadastrale gemeenten."@nl;
   sh:property scdm:DataModel_type;
   sh:property scdm:DataModel_typeDataModel;
+  sh:property scdm:DataModel_shapesGraph;
 .
 
 scdm:DataModel_type a sh:PropertyShape;
@@ -116,50 +116,19 @@ scdm:DataModel_typeDataModel a sh:PropertyShape;
   skos:example ""@nl;
 .
 
-#---------------------
-# Vocabulary
-#---------------------
-
-scdm:Vocabulary a sh:NodeShape;
-  rdfs:label "Vocabulaire"@nl;
-  rdfs:label "Vocabulary"@en;
-  sh:name "owl:Ontology";
-  sh:targetClass owl:Ontology;
-  rdfs:comment "Een informatiemodel wordt beschreven in een vocabulaire dat alle klassen, eigenschappen, relaties, et cetera definieert, inclusief alle bijbehorende metadata."@nl;
-  rdfs:comment "A data model is described in a vocabulary that defines all classes, properties, relations, et cetera, including all corresponding metadata."@en;
-  skos:example "De beschrijving van de BRK in het InformatieModel Kadaster (IMKAD)."@nl;
-  sh:property scdm:Vocabulary_shapesGraph;
-  sh:property scdm:Vocabulary_isPrimaryTopicOf;
-.
-
-scdm:Vocabulary_shapesGraph rdf:type sh:PropertyShape;
-  rdfs:label "is grafisch beschreven"@nl;
-  rdfs:label "is graphically described"@en;
+scdm:DataModel_shapesGraph rdf:type sh:PropertyShape;
+  rdfs:label "is beschreven"@nl;
+  rdfs:label "is described"@en;
   sh:name "sh:shapesGraph";
   sh:path sh:shapesGraph;
   sh:node scdm:ShapesGraph;
-  rdfs:comment "Een informatiemodel kan grafisch worden weergeven."@nl;
+  rdfs:comment "Een informatiemodel kan worden beschreven in een 'shape graph'."@nl;
   rdfs:comment "A data model can be described in a shapes graph."@en;
-  skos:example "De verwijzing naar de grafische beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
-  sh:maxCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een informatiemodel kent maximaal 1 grafische weergave."@nl;
-  sh:message "An data model has up to 1 shapes graph."@en
-.
-
-scdm:Vocabulary_isPrimaryTopicOf rdf:type sh:PropertyShape;
-  rdfs:label "is beschreven in"@nl;
-  rdfs:label "is topic of"@en;
-  sh:name "foaf:isPrimaryTopicOf (vocabulary)";
-  sh:path foaf:isPrimaryTopicOf;
-  sh:node scdm:Vocabulary;
-  rdfs:comment "Een informatiemodel kan worden beschreven in een vocabulaire."@nl;
-  rdfs:comment "A data model can be described in a vocabulary."@en;
   skos:example "De verwijzing naar de beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
   sh:maxCount 1;
   sh:severity sh:Violation;
-  sh:message "Een informatiemodel kent maximaal 1 beschrijving."@nl;
-  sh:message "An data model has up to 1 vocabulary."@en
+  sh:message "Een informatiemodel kent maximaal 1 model beschrijving."@nl;
+  sh:message "An data model has up to 1 shapes graph."@en
 .
 
 #---------------------
@@ -167,90 +136,10 @@ scdm:Vocabulary_isPrimaryTopicOf rdf:type sh:PropertyShape;
 #---------------------
 
 scdm:ShapesGraph rdf:type sh:NodeShape;
-  rdfs:label "grafische weergave model"@nl;
+  rdfs:label "model beschrijving"@nl;
   rdfs:label "Shapes graph"@nl;
   sh:name "Shapes graph";
-  rdfs:comment "De grafische weergave van een vocabulaire."@nl;
-  rdfs:comment "A shapes graph of a vocabulary."@en;
-  skos:example "De grafische beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
-  sh:property scdm:ShapesGraph_label;
-.
-
-scdm:ShapesGraph_label rdf:type sh:PropertyShape;
-  rdfs:label "heeft label"@nl;
-  rdfs:label "has label"@en;
-  sh:name "rdfs:label (Shapes graph)";
-  rdfs:comment "Een grafische weergave van een v heeft een ."@nl;
-  rdfs:comment "A data model can be described in a vocabulary."@en;
-  skos:example "De verwijzing naar de beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
-  sh:maxCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een informatiemodel kent maximaal 1 beschrijving."@nl;
-  sh:message "An data model has up to 1 vocabulary."@en
-.
-
-
-
-#? scdm:Class a sh:NodeShape;
-#?  sh:name "owl:Class";
-#?  sh:targetClass owl:Class;
-#?  sh:property [
-#?  sh:path rdfs:isDefinedBy;
-#?    sh:name "rdfs:isDefinedBy";
-#?    sh:node scdm:Vocabulary;
-#?  ];
-#?.
-#?scdm:NodeShape a sh:NodeShape;
-#?  rdfs:label "node shape"@nl;
-#?  sh:name "sh:NodeShape";
-#?  sh:targetClass sh:NodeShape;
-#?  sh:property [
-#?    sh:path sh:targetClass;
-#?    sh:name "sh:targetClass";
-#?    sh:class owl:Class
-#?  ];
-#?.
-
-#---------------------
-# Class
-#---------------------
-
-scdm:Class a sh:NodeShape;
-  rdfs:label "Klasse"@nl;
-  rdfs:label "Class"@en;
-  sh:targetClass owl:Class;
-  sh:name "owl:Class";
-  sh:property scdm:Klasse_label;
-  sh:property scdm:Klasse_onderwerp;
-.
-scdm:Klasse_label a sh:PropertyShape;
-  rdfs:label "label"@nl;
-  sh:name "rdfs:label";
-  sh:path rdfs:label;
-.
-scdm:Klasse_onderwerp a sh:PropertyShape;
-  rdfs:label "onderwerp"@nl;
-  sh:name "dcterms:subject";
-  sh:path dcterms:subject;
-.
-
-#---------------------
-# Property
-#---------------------
-scdm:Eigenschap a sh:NodeShape;
-  rdfs:label "Eigenschap"@nl;
-  sh:targetClass rdf:Property;
-  sh:name "rdf:Property";
-  sh:property scdm:Eigenschap_onderwerp;
-  sh:property scdm:Eigenschap_label;
-.
-scdm:Eigenschap_label a sh:PropertyShape;
-  rdfs:label "label"@nl;
-  sh:name "rdfs:label";
-  sh:path rdfs:label;
-.
-scdm:Eigenschap_onderwerp a sh:PropertyShape;
-  rdfs:label "onderwerp"@nl;
-  sh:name "dcterms:subject";
-  sh:path dcterms:subject;
-.
+  rdfs:comment "De beschrijving van een informatiemodel."@nl;
+  rdfs:comment "A shapes graph of a data model."@en;
+  skos:example "De beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
+ .
