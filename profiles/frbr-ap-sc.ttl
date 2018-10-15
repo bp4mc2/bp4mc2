@@ -40,46 +40,47 @@ frbrap:Concept_dctsource a sh:PropertyShape;
 # Source document
 # ========================================
 
-frbrap:SourceDocument a sh:NodeShape;
+frbrap:DocumentAsSource a sh:NodeShape;
   rdfs:label "Brondocument"@nl;
   rdfs:label "Source document"@en;
   sh:name "foaf:Document ( source document)";
+# moet hier nog een sh:targetClass foaf:Document;?
   rdfs:comment "Een brondocument dat vindbaar is op het web."@nl;
-  rdfs:comment "A source document that can be found on the web."@nl;
+  rdfs:comment "A source document that can be found on the web."@en;
   skos:example "De volledige tekst van het Burgerlijk Wetboek."@nl;
-  sh:property frbrap:SourceDocument_label
+  sh:property frbrap:DocumentAsSource_label
 .
-frbrap:SourceDocument_label a sh:PropertyShape;
+frbrap:DocumentAsSource_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label";
   sh:path rdfs:label;
   rdfs:comment "Een brondocument heeft een voor mensen leesbaar label."@nl;
-  rdfs:comment "A source document has a human-readable label."@nl;
+  rdfs:comment "A source document has a human-readable label."@en;
   skos:example "Burgerlijk Wetboek 1838."@nl;
   sh:minCount 1;
   sh:severity sh:Violation;
-  sh:message "EEen brondocument heeft een voor mensen leesbaar label."@nl;
+  sh:message "Een brondocument heeft een voor mensen leesbaar label."@nl;
   sh:message "A source document has a human-readable label."@en
 .
 
 # ========================================
-# Source (endeavour)
+# Endeavour (source)
 # ========================================
 
-frbrap:Source a sh:NodeShape;
+frbrap:EndeavourAsSource a sh:NodeShape;
   rdfs:label "bibliografische bron"@nl;
   rdfs:label "bibliographic source"@en;
-  sh:name "frbr:Endeavour (source)";
+  sh:name "frbr:Endeavour";
   sh:targetClass frbr:Endeavour;
   rdfs:comment "Een via het web identificeerbare bibliografische bron."@nl;
   rdfs:comment "A bibliographic source that can be identified via the web."@en;
   skos:example "Atrikel 1 van het burgerlijk wetboek of atrikel 1 van het burgerlijk wetboek van 1838"@nl;
-  sh:property frbrap:Source_label;
-  sh:property frbrap:Source_isTopicOf
+  sh:property frbrap:EndeavourAsSource_label;
+  sh:property frbrap:EndeavourAsSource_isTopicOf
 .
 
-frbrap:Source_label a sh:PropertyShape;
+frbrap:EndeavourAsSource_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label";
@@ -93,12 +94,12 @@ frbrap:Source_label a sh:PropertyShape;
   sh:message "A bibliographic source has a human readable label."@en
 .
 
-frbrap:Source_isTopicOf a sh:PropertyShape;
+frbrap:EndeavourAsSource_isTopicOf a sh:PropertyShape;
   rdfs:label "onderwerp van"@nl;
   rdfs:label "topic of"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
-  sh:node frbrap:SourceDocument;
+  sh:node frbrap:DocumentAsSource;
   rdfs:comment "Een bibliografische bron kan een onderwerp zijn van een brondocument."@nl;
   rdfs:comment "A bibliographic source can be a subject of a source document."@en;
   skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl;
@@ -114,7 +115,7 @@ frbrap:Source_isTopicOf a sh:PropertyShape;
 frbrap:WorkAsSource a sh:NodeShape;
   rdfs:label "algemeen bibliografische bron"@nl;
   rdfs:label "generic bibliographic source"@en;
-  sh:name "frbr:Work (source)";
+  sh:name "frbr:Work";
   sh:targetClass frbr:Work;
   rdfs:comment "Een via het web identificeerbare bibliografische bron, zonder dat expliciet wordt verwezen naar een specifieke versie."@nl;
   rdfs:comment "A bibliographic source identifiable via the web, without an explicit reference to a specific version."@en;
@@ -128,7 +129,7 @@ frbrap:WorkAsSource a sh:NodeShape;
 frbrap:ExpressionAsSource a sh:NodeShape;
   rdfs:label "versie bibliografische bron"@nl;
   rdfs:label "version bibliographic source"@en;
-  sh:name "frbr:Expression (source version)";
+  sh:name "frbr:Expression";
   sh:targetClass frbr:Expression;
   rdfs:comment "Een specifieke versie van een op het web identificeerbare bibliografische bron."@nl;
   rdfs:comment "A specific version of a bibliographic source identifiable on the web."@en;
