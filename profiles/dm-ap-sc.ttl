@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix scim: <http://bp4mc2.org/somewhere/dm-ap-sc/>.
+@prefix scdm: <http://bp4mc2.org/somewhere/dm-ap-sc/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -79,17 +79,21 @@ skos:inScheme sh:name "skos:inScheme".
 
 
 #---------------------
-# Assets (DataModel)
+# Asset (DataModel)
 #---------------------
 
-scim:Informatiemodel rdf:type sh:NodeShape;
+scdm:DataModel rdf:type sh:NodeShape;
   rdfs:label "Asset (Informatiemodel)"@nl;
   rdfs:label "Asset (Data model)"@en;
   sh:name "adms:Asset (Data model)";
-  sh:property scim:DataModel_type;
-  sh:property scim:DataModel_typeDataModel;
+  rdfs:comment "Een informatiemodel is een beschrijving van de structuur waarin data over dingen in een  specifiek domein worden opgeslagen."@nl;
+  rdfs:comment "An data model is a description of the structure in which data about things in a specific domain are stored."@en;
+  skos:example "De lijst met Kadastrale gemeenten."@nl;
+  sh:property scdm:DataModel_type;
+  sh:property scdm:DataModel_typeDataModel;
 .
-scim:DataModel_type a sh:PropertyShape;
+
+scdm:DataModel_type a sh:PropertyShape;
   rdfs:label "getypeerd als asset"@nl;
   rdfs:label "typified as asset"@en;
   sh:name "rdf:type";
@@ -99,7 +103,7 @@ scim:DataModel_type a sh:PropertyShape;
   rdfs:comment "A data model is typed as adms:Asset."@en;
   skos:example "IMKAD is vindbaar als een adms:Asset."@nl;
 .
-scim:DataModel_typeDataModel a sh:PropertyShape;
+scdm:DataModel_typeDataModel a sh:PropertyShape;
   rdfs:label "type asset = informatiemodel"@nl;
    rdfs:label "type asset = data model"@en;
  sh:path dcterms:type;
@@ -112,40 +116,52 @@ scim:DataModel_typeDataModel a sh:PropertyShape;
   skos:example ""@nl;
 .
 
-scim:Vocabulaire a sh:NodeShape;
+#---------------------
+# Vocabulary
+#---------------------
+
+scdm:Vocabulary a sh:NodeShape;
   rdfs:label "Vocabulaire"@nl;
+  rdfs:label "Vocabulary"@en;
   sh:name "owl:Ontology";
   sh:targetClass owl:Ontology;
+  rdfs:comment "Een informatiemodel wordt beschreven in een vocabulaire dat alle klassen, eigenschappen, relaties, et cetera definieert, inclusief alle bijbehorende metadata."@nl;
+  rdfs:comment "A data model is described in a vocabulary that defines all classes, properties, relations, et cetera, including all corresponding metadata."@en;
+  skos:example "De beschrijving van de BRK in het InformatieModel Kadaster (IMKAD)."@nl;
   sh:property [
     sh:path sh:shapesGraph;
     sh:name "sh:shapesGraph";
-    sh:node scim:ShapesGraph
+    sh:node scdm:ShapesGraph
   ];
   sh:property [
     sh:path foaf:isPrimaryTopicOf;
     sh:name "foaf:isPrimaryTopicOf";
-    sh:node scim:LandingPage;
+    sh:node scdm:LandingPage;
     sh:maxCount 1;
   ]
 .
-scim:ShapesGraph a sh:NodeShape;
+scdm:ShapesGraph a sh:NodeShape;
+  rdfs:label "grafische weergave model"@nl;
   rdfs:label "Shapes graph"@nl;
   sh:name "Shapes graph";
+  rdfs:comment "Een informatiemodel kan grafisch worden weergeven."@nl;
+  rdfs:comment "A data model can be described in a shapes graph."@en;
+  skos:example "Het grafische klassendiagram van het InformatieModel Kadaster (IMKAD)."@nl;
   sh:property [
     sh:path rdfs:label;
     sh:name "rdfs:label";
   ];
 .
-scim:Klasse a sh:NodeShape;
+scdm:Klasse a sh:NodeShape;
   sh:name "owl:Class";
   sh:targetClass owl:Class;
   sh:property [
     sh:path rdfs:isDefinedBy;
     sh:name "rdfs:isDefinedBy";
-    sh:node scim:Vocabulaire;
+    sh:node scdm:Vocabulaire;
   ];
 .
-scim:NodeShape a sh:NodeShape;
+scdm:NodeShape a sh:NodeShape;
   rdfs:label "node shape"@nl;
   sh:name "sh:NodeShape";
   sh:targetClass sh:NodeShape;
@@ -159,19 +175,19 @@ scim:NodeShape a sh:NodeShape;
 #---------------------
 # Classes
 #---------------------
-scim:Klasse a sh:NodeShape;
+scdm:Klasse a sh:NodeShape;
   rdfs:label "Gegevensklasse"@nl;
   sh:targetClass owl:Class;
   sh:name "owl:Class";
-  sh:property scim:Klasse_label;
-  sh:property scim:Klasse_onderwerp;
+  sh:property scdm:Klasse_label;
+  sh:property scdm:Klasse_onderwerp;
 .
-scim:Klasse_label a sh:PropertyShape;
+scdm:Klasse_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
-scim:Klasse_onderwerp a sh:PropertyShape;
+scdm:Klasse_onderwerp a sh:PropertyShape;
   rdfs:label "onderwerp"@nl;
   sh:name "dcterms:subject";
   sh:path dcterms:subject;
@@ -179,19 +195,19 @@ scim:Klasse_onderwerp a sh:PropertyShape;
 #---------------------
 # Properties
 #---------------------
-scim:Eigenschap a sh:NodeShape;
+scdm:Eigenschap a sh:NodeShape;
   rdfs:label "Eigenschap"@nl;
   sh:targetClass rdf:Property;
   sh:name "rdf:Property";
-  sh:property scim:Eigenschap_onderwerp;
-  sh:property scim:Eigenschap_label;
+  sh:property scdm:Eigenschap_onderwerp;
+  sh:property scdm:Eigenschap_label;
 .
-scim:Eigenschap_label a sh:PropertyShape;
+scdm:Eigenschap_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
-scim:Eigenschap_onderwerp a sh:PropertyShape;
+scdm:Eigenschap_onderwerp a sh:PropertyShape;
   rdfs:label "onderwerp"@nl;
   sh:name "dcterms:subject";
   sh:path dcterms:subject;
