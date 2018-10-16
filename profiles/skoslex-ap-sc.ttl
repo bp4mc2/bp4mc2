@@ -26,57 +26,13 @@
 # IMPORT
 #---------------------
 
-#derived from dataset-type
-dstype:Datamodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  rdfs:label "Datamodel"@en;
-  sh:name "dstype:Datamodel"
-.
-dstype:ControlledVocabulary a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  rdfs:label "Controlled vocabulary"@en;
-  sh:name "dstype:ControlledVocabulary"
-.
-dstype:DatasetVersion a skos:Concept;
-  rdfs:label "Datasetversie"@nl;
-  rdfs:label "Dataset version"@en;
-  sh:name "dstype:DatasetVersion"
-.
-
-#derived from skos-lex
+#imported from skoslex vocabulary
 skoslex:Act a owl:Class; rdfs:subClassOf skos:Concept.
 skoslex:Object a owl:Class; rdfs:subClassOf skos:Concept.
 skoslex:Actor a owl:Class; rdfs:subClassOf skos:Concept.
 skoslex:Agent a owl:Class; rdfs:subClassOf skoslex:Actor.
 
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
-
-#derived from prov
-prov:Person rdfs:subClassOf prov:Agent.
-prov:Organization rdfs:subClassOf prov:Agent.
-prov:SoftwareAgent rdfs:subClassOf prov:Agent.
-
-#derived from foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
-
-#derived from org
-org:Organization rdfs:subClassOf foaf:Organization.
-
-#derived from adms
-adms:Asset rdfs:subClassOf dcat:Dataset.
-adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
-
-#derived from dqv
-dqv:Dimension rdfs:subClassOf skos:Concept.
-dqv:Category rdfs:subClassOf skos:Concept.
-
-#Extra
-rdf:type sh:name "rdf:type".
-dqv:value sh:name "dqv:value".
-skos:inScheme sh:name "skos:inScheme".
-
+#imported from skos application profile
 skoslexap:Concept a sh:NodeShape;
   rdfs:label "Concept"@en;
   rdfs:label "Begrip"@nl;
@@ -85,11 +41,7 @@ skoslexap:Concept a sh:NodeShape;
 .
 
 #---------------------
-# SKOS Lex (legal skos)
-#---------------------
-
-#---------------------
-# Act, Object, Actor, Agent
+# Act
 #---------------------
 skoslexap:Act a sh:NodeShape;
   rdfs:label "Act"@en;
@@ -145,6 +97,9 @@ skoslexap:Act_refersTo a sh:PropertyShape;
   skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
 .
 
+#---------------------
+# Actor
+#---------------------
 skoslexap:Actor a sh:NodeShape;
   rdfs:label "Actor"@en;
   rdfs:label "Actor"@nl;
@@ -154,18 +109,24 @@ skoslexap:Actor a sh:NodeShape;
   sh:name "skoslex:Actor";
   skos:example "Jan Jansen."@nl;
 .
+
+#---------------------
+# Agent
+#---------------------
 skoslexap:LegalAgent a sh:NodeShape;
   rdfs:label "Agent"@en;
   rdfs:label "Agent"@nl;
   rdfs:comment "The class of Agent. An agent is some person (individual, group or organisation) involved in some act, without actually performing the act."@en;
-  rdfs:comment "De klasse van agenten. Een agent is een persoon (individu, groep of organisatie) die bij een handeling betrokken is, zonder de handeling
-
-feitelijk uit te voeren."@nl;
+  rdfs:comment "De klasse van agenten. Een agent is een persoon (individu, groep of organisatie) die bij een handeling betrokken is, zonder de handeling feitelijk uit te voeren."@nl;
   sh:targetClass skoslex:Agent;
   sh:name "skoslex:Agent";
   skos:example "Notaris Pietersen."@nl;
   sh:property skoslexap:LegalLabel;
 .
+
+#---------------------
+# Object
+#---------------------
 skoslexap:Object a sh:NodeShape;
   rdfs:label "Object"@en;
   rdfs:label "Object"@nl;
@@ -194,6 +155,7 @@ skoslexap:LegalNorm a sh:NodeShape;
 skoslexap:LegalNorm_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
+  sh:datatype xsd:string;
 .
 skoslexap:LegalNorm_affects a sh:PropertyShape;
   rdfs:label "affects"@en;
