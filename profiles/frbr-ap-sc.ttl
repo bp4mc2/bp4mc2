@@ -40,28 +40,28 @@ frbrap:Concept_dctsource a sh:PropertyShape;
 # Source document
 # ========================================
 
-frbrap:DocumentAsSource a sh:NodeShape;
-  rdfs:label "Brondocument"@nl;
-  rdfs:label "Source document"@en;
-  sh:name "foaf:Document ( source document)";
-# moet hier nog een sh:targetClass foaf:Document;?
-  rdfs:comment "Een brondocument dat vindbaar is op het web."@nl;
-  rdfs:comment "A source document that can be found on the web."@en;
-  skos:example "De volledige tekst van het Burgerlijk Wetboek."@nl;
-  sh:property frbrap:DocumentAsSource_label
+frbrap:Document a sh:NodeShape;
+  rdfs:label "Document"@nl;
+  rdfs:label "Document"@en;
+  sh:name "foaf:Document";
+  rdfs:comment "Een document dat vindbaar is op het web."@nl;
+  rdfs:comment "A document that can be found on the web."@en;
+  skos:example <https://wetten.overheid.nl/BWBR0001840/2017-11-17>;
+  sh:property frbrap:Document_label
 .
-frbrap:DocumentAsSource_label a sh:PropertyShape;
+frbrap:Document_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label";
   sh:path rdfs:label;
-  rdfs:comment "Een brondocument heeft een voor mensen leesbaar label."@nl;
-  rdfs:comment "A source document has a human-readable label."@en;
-  skos:example "Burgerlijk Wetboek 1838."@nl;
+  sh:datatype xsd:string;
+  rdfs:comment "Een document heeft een voor mensen leesbaar label."@nl;
+  rdfs:comment "A document has a human-readable label."@en;
+  skos:example "Grondwet"@nl;
   sh:minCount 1;
   sh:severity sh:Violation;
-  sh:message "Een brondocument heeft een voor mensen leesbaar label."@nl;
-  sh:message "A source document has a human-readable label."@en
+  sh:message "Een document heeft een voor mensen leesbaar label."@nl;
+  sh:message "A document has a human-readable label."@en
 .
 
 # ========================================
