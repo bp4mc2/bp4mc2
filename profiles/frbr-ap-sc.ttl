@@ -65,60 +65,61 @@ frbrap:Document_label a sh:PropertyShape;
 .
 
 # ========================================
-# Endeavour (source)
+# Endeavour
 # ========================================
 
-frbrap:EndeavourAsSource a sh:NodeShape;
-  rdfs:label "bibliografische bron"@nl;
-  rdfs:label "bibliographic source"@en;
+frbrap:Endeavour a sh:NodeShape;
+  rdfs:label "bibliografische beschrijving"@nl;
+  rdfs:label "bibliographic reference"@en;
   sh:name "frbr:Endeavour";
   sh:targetClass frbr:Endeavour;
-  rdfs:comment "Een via het web identificeerbare bibliografische bron."@nl;
-  rdfs:comment "A bibliographic source that can be identified via the web."@en;
-  skos:example "Atrikel 1 van het burgerlijk wetboek of atrikel 1 van het burgerlijk wetboek van 1838"@nl;
-  sh:property frbrap:EndeavourAsSource_label;
-  sh:property frbrap:EndeavourAsSource_isTopicOf
+  rdfs:comment "Een bibliografische beschrijving van een werk of expressie."@nl;
+  rdfs:comment "A bibliographic reference of a work or expression."@en;
+  skos:example "Artikel 1 van het burgerlijk wetboek of artikel 1 van het burgerlijk wetboek van 1838"@nl;
+  sh:property frbrap:Endeavour_label;
+  sh:property frbrap:Endeavour_isTopicOf
 .
 
-frbrap:EndeavourAsSource_label a sh:PropertyShape;
+frbrap:Endeavour_label a sh:PropertyShape;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label";
   sh:path rdfs:label;
-  rdfs:comment "Een bibliografische bron heeft een voor mensen leesbare naam."@nl;
-  rdfs:comment "A bibliographic source has a human readable label."@en;
+  sh:datatype xsd:string;
+  rdfs:comment "Een bibliografische beschrijving heeft een voor mensen leesbare naam."@nl;
+  rdfs:comment "A bibliographic reference has a human readable label."@en;
   skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl;
   sh:minCount 1;
   sh:severity sh:Violation;
-  sh:message "Een bibliografischebron heeft een voor mensen leesbare naam."@nl;
-  sh:message "A bibliographic source has a human readable label."@en
+  sh:message "Een bibliografische beschrijving heeft een voor mensen leesbare naam."@nl;
+  sh:message "A bibliographic reference has a human readable label."@en
 .
 
-frbrap:EndeavourAsSource_isTopicOf a sh:PropertyShape;
+frbrap:Endeavour_isTopicOf a sh:PropertyShape;
   rdfs:label "onderwerp van"@nl;
   rdfs:label "topic of"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
-  sh:node frbrap:DocumentAsSource;
-  rdfs:comment "Een bibliografische bron kan een onderwerp zijn van een brondocument."@nl;
-  rdfs:comment "A bibliographic source can be a subject of a source document."@en;
+  sh:node frbrap:Document;
+  rdfs:comment "Een bibliografische beschrijving kan een onderwerp zijn van een document."@nl;
+  rdfs:comment "A bibliographic reference can be a subject of a document."@en;
   skos:example "Artikel 1 BW is een onderwerp in het Burgerlijk Wetboek"@nl;
   sh:maxCount 1;
   sh:severity sh:Violation;
-  sh:message "Een bibliografische bron kan een onderwerp zijn van maximaal 1 brondocument."@nl;
-  sh:message "A bibliographic source can be a subject of up to 1 source document."@en
+  sh:message "Een bibliografische beschrijving kan een onderwerp zijn van maximaal 1 document."@nl;
+  sh:message "A bibliographic reference can be a subject of up to 1 document."@en
 .
 # ========================================
 # Work
 # ========================================
 
-frbrap:WorkAsSource a sh:NodeShape;
-  rdfs:label "algemeen bibliografische bron"@nl;
-  rdfs:label "generic bibliographic source"@en;
+frbrap:Work a sh:NodeShape;
+  rdfs:label "Werk"@nl;
+  rdfs:label "Work"@en;
   sh:name "frbr:Work";
   sh:targetClass frbr:Work;
-  rdfs:comment "Een via het web identificeerbare bibliografische bron, zonder dat expliciet wordt verwezen naar een specifieke versie."@nl;
-  rdfs:comment "A bibliographic source identifiable via the web, without an explicit reference to a specific version."@en;
+  rdfs:comment "Een bibliografische beschrijving, zonder dat expliciet wordt verwezen naar een specifieke versie."@nl;
+  rdfs:comment "A bibliographic reference, without an explicit reference to a specific version."@en;
   skos:example "Artikel 1 van het Burgerlijk Wetboek"@nl
 .
 
@@ -126,12 +127,12 @@ frbrap:WorkAsSource a sh:NodeShape;
 # Expression
 # ========================================
 
-frbrap:ExpressionAsSource a sh:NodeShape;
-  rdfs:label "versie bibliografische bron"@nl;
-  rdfs:label "version bibliographic source"@en;
+frbrap:Expression a sh:NodeShape;
+  rdfs:label "expressie, versie van een werk"@nl;
+  rdfs:label "expression, version of a work"@en;
   sh:name "frbr:Expression";
   sh:targetClass frbr:Expression;
-  rdfs:comment "Een specifieke versie van een op het web identificeerbare bibliografische bron."@nl;
-  rdfs:comment "A specific version of a bibliographic source identifiable on the web."@en;
+  rdfs:comment "Een specifieke versie van een werk."@nl;
+  rdfs:comment "A specific version of a work."@en;
   skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl
 .
