@@ -12,10 +12,12 @@
 # ========================================
 page:prov a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "PROV Toepassingsprofiel voor herkomstinformatie"@nl, "PROV Application profile for provenance information"@en]
+    [xhtml:heading "Toepassingsprofiel voor provenance informatie"@nl, "Application profile for provenance information"@en]
     page:prov-body
     [xhtml:img "prov-ap-sc.png"]
-    page:provenance
+    page:metadata
+    page:status
+    page:
     page:provUriStrategy
   )
 .
@@ -23,19 +25,106 @@ page:prov a cnt:ContentAsText;
 page:prov-body a cnt:ContentAsText;
   cnt:chars
 '''
-Administratieve aspecten worden bijgehouden conform het de prov ontologie. Hierbij gaat het om wie, wat, wanneer en om wat voor reden heeft vastgelegd of gewijzigd.
+Formeel/juridische geldigheid en administratieve aspecten worden bijgehouden conform het de prov ontologie. Hierbij gaat het om wie, wat, wanneer en om wat voor reden heeft vastgelegd of gewijzigd.
 
-* Daartoe worden begrippen en hun metadata, collecties, catalogus, dataset en distributie beschreven in een prov:Entity.
-* Op het informatiemodel en het begrippenmodel wordt geen provenance bijgehouden. Dit gebeurt via de abstracte respectievelijk concrete dataset.
+* Daartoe worden de metadata beschreven in een prov:Entity.
+* De stelselcatalogus zelf is de meest generieke provenance eenheid. Daarmee worden alle wijzigingen in de catalogus beschrijving bewaard.
+* Ook van de beschrijvingen van datasets (dataset, dataset versie en dataset product) en (dataset) distributies wordt provenance bijgehouden.
+* Voor begrippenmodellen, waardelijsten en informatiemodellen, die worden beschreven als een asset, geldt dat provenance wordt bijgehouden voor de asset beschrijving en voor de asset distributie beschrijving.
+* Voor begrippen en collecties wordt per begrip en collectie provenance bijgehouden.
 
-Een wijziging in de data wordt vastgelegd in een eigen sd:graph (de verzameling van gewijzigde elementen in 1 transactie). Deze wijziging is afkomstig van een prov:agent. Deze prov:agent dient geautoriseerd te zijn om een dergelijke wijziging uit te voeren. Dit betekent dat de prov:agent ook als foaf:Agent bekend is in een lijst met partijen (feitelijk een lijst van organisaties). Via de relatie dcterms:publisher is duidelijk wie de publicist is van een dataset, en daarmee degene die wijzigingen op de informatie over deze dataset mag doorvoeren.
+De provenance kent 2 aspecten:
+* De formele en juridische geldigheid.
+** De formele geldigheid wordt vastgelegd in de formele bekendmakingsdatum. Daarbij kan ook de formele status worden vastgelegd, waarvoor de EU waardelijst voor statussen (adms:status) wordt gehanteerd.
+** De juridische geldigheid in tijd en plaats kan worden vastgelegd in een tijdsperiode en een verwijzing naar een geografisch gebied.
+** Voor begrippen en collecties van begrippen die hun oorsprong vinden in de onderliggende wet- en regelgeving geldt dat deze tijdsperiode de periode is zoals in die wet- en regelgeving is vastgelegd en het geografisch gebied het gebied is waarover het betreffende bevoegd gezag zeggenschap heeft.
+* De administratief/huishoudelijke aspecten. 
+** Een wijziging in de data wordt vastgelegd in een eigen sd:graph (de verzameling van gewijzigde elementen in 1 transactie). 
+** Deze wijziging wordt doorgevoerd door een prov:agent. 
+** Deze prov:agent dient geautoriseerd te zijn om een dergelijke wijziging uit te voeren. Dit betekent dat de prov:agent ook als foaf:Agent bekend is in een lijst met partijen (feitelijk een lijst van organisaties). Via de relatie dcterms:publisher is duidelijk wie de publicist is van een dataset, en daarmee degene die wijzigingen op de informatie over deze dataset mag doorvoeren.
 '''@nl,
 '''
-Administrative aspects are recorded in accordance with the prov ontology. This involves who, what, when and for whatever reason has been recorded or changed.
+Formal/legal validity and administrative aspects are recorded in accordance with the prov ontology. This involves who, what, when and for whatever reason has been recorded or changed.
 
-* To this end, concepts and their metadata, collections, catalogs, datasets and distributions are described in a prov:Entity.
-* No provenance is recorded on the information model and the conceptual model. This is done via the abstract and concrete data set.
+* To this end metadata are described in a prov:Entity.
+* The system catalog itself is the most generic unit on which provenance is recorded. This means that all changes in the catalog description are kept.
+* Provenance is also recorded on the descriptions of datasets (dataset, dataset version and dataset product) and (dataset) distributions.
+* For concepts models, value lists and information models, which are described as an asset, provenance is recorded on the asset description and on the asset distribution description.
+* For concepts and collections provenance is recorded per concept and collection.
 
-A change in the data is recorded in an sd:graph (the set of changed elements in 1 transaction). This change comes from a prov:Agent. This prov:Agent must be authorized to make such a change. This means that the prov:Agent is also known as a foaf:Agent in a list of parties (actually a list of organizations). Via the dcterms:publisher relationship, it is clear who is the publisher of a dataset, and thus the person who is allowed to make changes to the information about this dataset.
+The provenance has two aspects:
+* The formal and legal validity.
+** The formal validity is recorded in the formal issued date. The formal status can also be established. For the formal status the EU value list for statuses (adms:status) is used.
+** The legal validity in time and place can be recorded in a time period and in a reference to a geographical area.
+** For concepts and collections of concepts that originate from the underlying laws and regulations, this period of time is the period as laid down in those laws and regulations. The geographical area is the area over which the relevant competent authority has jurisdiction.
+* The administrative / household aspects.
+** A change in the data is recorded in an sd:graph. The graph is the collection of changed elements in 1 transaction.
+** This change is made by a prov:agent.
+** This prov:agent must be authorized to make such a change. This implies that the prov:agent needs to be known as a foaf:Agent in a list of parties (actually a list of organizations). Via the dcterms:publisher relationship, it is clear who is the publicist of a dataset, and thus who is allowed to make changes to the information about this dataset.
 '''@en;
 .
+
+#---------------------
+# Metadata (Versioning)
+#---------------------
+
+page:metadata a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Metadata"@nl, "Metadata"@en]
+    [dct:subject provap:Metadata; xhtml:stylesheet style:nodeshape]
+    page:metadata-properties
+    page:metadata-relations
+  )
+.
+
+page:metadata-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject provap:Metadata; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:metadata-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject provap:Metadata; xhtml:stylesheet style:object-properties]
+  )
+.
+
+#------------------------------
+# Status
+#------------------------------
+
+page:status a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Adms status"@nl, "Adms status"@en]
+    [dct:subject provap:Status; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+#------------------------------
+# Formal/legal validity in time
+#------------------------------
+
+page:metadata a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Metadata"@nl, "Metadata"@en]
+    [dct:subject scprov:PeriodOfTime; xhtml:stylesheet style:nodeshape]
+    page:metadata-properties
+    page:metadata-relations
+  )
+.
+
+page:metadata-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject provap:Metadata; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+
+#-----------------------------------------------
+# Provenance / admistrative houskeeping metadata 
+#-----------------------------------------------
+
+
