@@ -17,7 +17,16 @@ page:prov a cnt:ContentAsText;
     [xhtml:img "prov-ap-sc.png"]
     page:metadata
     page:status
-    page:
+    page:periodOfTime
+    page:location
+    page:provenanceGraph
+    page:provenanceAgent
+    page:provenancePerson
+    page:provenanceSoftwareAgent
+    page:provenanceOrganization
+    page:foafAgent
+    page:foafOrganization
+    page:orgOrganization
     page:provUriStrategy
   )
 .
@@ -28,7 +37,7 @@ page:prov-body a cnt:ContentAsText;
 Formeel/juridische geldigheid en administratieve aspecten worden bijgehouden conform het de prov ontologie. Hierbij gaat het om wie, wat, wanneer en om wat voor reden heeft vastgelegd of gewijzigd.
 
 * Daartoe worden de metadata beschreven in een prov:Entity.
-* De stelselcatalogus zelf is de meest generieke provenance eenheid. Daarmee worden alle wijzigingen in de catalogus beschrijving bewaard.
+* De stelselcatalogus zelf is de meest generieke provenance entiteit. Daarmee worden alle wijzigingen in de catalogus beschrijving bewaard.
 * Ook van de beschrijvingen van datasets (dataset, dataset versie en dataset product) en (dataset) distributies wordt provenance bijgehouden.
 * Voor begrippenmodellen, waardelijsten en informatiemodellen, die worden beschreven als een asset, geldt dat provenance wordt bijgehouden voor de asset beschrijving en voor de asset distributie beschrijving.
 * Voor begrippen en collecties wordt per begrip en collectie provenance bijgehouden.
@@ -47,7 +56,7 @@ De provenance kent 2 aspecten:
 Formal/legal validity and administrative aspects are recorded in accordance with the prov ontology. This involves who, what, when and for whatever reason has been recorded or changed.
 
 * To this end metadata are described in a prov:Entity.
-* The system catalog itself is the most generic unit on which provenance is recorded. This means that all changes in the catalog description are kept.
+* The system catalog itself is the most generic entity on which provenance is recorded. This means that all changes in the catalog description are kept.
 * Provenance is also recorded on the descriptions of datasets (dataset, dataset version and dataset product) and (dataset) distributions.
 * For concepts models, value lists and information models, which are described as an asset, provenance is recorded on the asset description and on the asset distribution description.
 * For concepts and collections provenance is recorded per concept and collection.
@@ -106,25 +115,138 @@ page:status a cnt:ContentAsText;
 # Formal/legal validity in time
 #------------------------------
 
-page:metadata a cnt:ContentAsText;
+page:periodOfTime a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Metadata"@nl, "Metadata"@en]
-    [dct:subject scprov:PeriodOfTime; xhtml:stylesheet style:nodeshape]
-    page:metadata-properties
-    page:metadata-relations
+    [dct:subject provap:PeriodOfTime; xhtml:stylesheet style:nodeshape]
+    page:periodOfTime-properties
   )
 .
 
-page:metadata-properties a cnt:ContentAsText;
+page:periodOfTime-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Tijdsperiode"@nl, "Time period"@en]
+    [dct:subject provap:PeriodOfTime; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+#------------------------------
+# Formal/legal validity in space
+#------------------------------
+
+page:location a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Geografisch gebied"@nl, "Geographical area"@en]
+    [dct:subject provap:Location; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+#----------------------------------
+# Admistrative houskeeping metadata 
+#----------------------------------
+
+page:provenanceGraph a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Provenance graaf"@nl, "Provenance graph"@en]
+    [dct:subject provap:ProvenanceGraph; xhtml:stylesheet style:nodeshape]
+    page:dataset-properties
+    page:dataset-relations
+  )
+.
+
+page:provenanceGraph-properties a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject provap:Metadata; xhtml:stylesheet style:datatype-properties]
+    [dct:subject provap:ProvenanceGraph; xhtml:stylesheet style:datatype-properties]
   )
 .
 
+page:provenanceGraph-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject provap:ProvenanceGraph; xhtml:stylesheet style:object-properties]
+  )
+.
 
-#-----------------------------------------------
-# Provenance / admistrative houskeeping metadata 
-#-----------------------------------------------
+page:provenanceAgent a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Agent (provenance)"@nl, "Agent (provenance)"@en]
+    [dct:subject provap:ProvenanceAgent; xhtml:stylesheet style:nodeshape]
+    page:dataset-properties
+    page:dataset-relations
+  )
+.
 
+page:provenanceAgent-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject provap:ProvenanceAgent; xhtml:stylesheet style:datatype-properties]
+  )
+.
 
+page:provenanceAgent-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject provap:ProvenanceAgent; xhtml:stylesheet style:object-properties]
+  )
+.
+
+page:provenancePerson a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Persoon (provenance)"@nl, "Person (provenance)"@en]
+    [dct:subject provap:ProvenancePerson; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+page:provenanceSoftwareAgent a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Software agent"@nl, "Software agent"@en]
+    [dct:subject provap:ProvenanceSoftwareAgent; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+page:provenanceOrganization a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Organisatie (provenance)"@nl, "Organization (provenance)"@en]
+    [dct:subject provap:ProvenanceOrganization; xhtml:stylesheet style:nodeshape]
+  )
+.
+page:foafAgent a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Agent (foaf)"@nl, "Agent (foaf)"@en]
+    [dct:subject provap:FoafAgent; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+page:foafOrganization a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Organisatie (foaf)"@nl, "Organization (foaf)"@en]
+    [dct:subject provap:FoafOrganization; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+page:orgOrganization a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Organisatie (org)"@nl, "Organization (org)"@en]
+    [dct:subject provap:OrgOrganization; xhtml:stylesheet style:nodeshape]
+  )
+.
+page:provUriStrategy a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
+    page:prov-uri-body
+  )
+.
+
+page:prov-uri-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Provenance hoort altijd bij een entiteit. 
+* De gegevens over een entiteit zoals die op een bepaald moment geldig is kunnen worden opgevraagd via de doc-uri, aangevuld met yyyy/mm/dd
+#* De gegevens over een locatie zoals die op een bepaalde plaats geldig is kunnen worden opgevraagd via de doc-uri, aangevuld met {UpperCamelCase (rdfs:label van de Locatie)}
+'''@nl,
+'''
+* The information about an entity as valid at a certain time can be requested via the doc-uri, supplemented with yyyy/mm/dd
+#* The information about a location as valid at a certain place can be requested via the doc-uri, supplemented with {UpperCamelCase (rdfs:label of the Location)}
+'''@en;
+.
