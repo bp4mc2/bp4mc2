@@ -24,6 +24,21 @@
 @prefix dstype: <http://bp4mc2.org/def/dataset-type#>.
 
 #---------------------
+# IMPORT
+#---------------------
+
+#Import from adms
+skosap:Asset a sh:NodeShape;
+  sh:targetClass adms:Asset;
+  sh:name "adms:Asset";
+.
+#Import from rdfs
+skosap:Resource a sh:NodeShape;
+  sh:targetClass rdfs:Resource;
+  sh:name "rdfs:Resource";
+.
+
+#---------------------
 # Concept
 #---------------------
 skosap:Concept a sh:NodeShape;
@@ -166,7 +181,9 @@ skosap:Concept_dctsource a sh:PropertyShape;
   rdfs:label "source on the web"@en;
   sh:name "dcterms:source";
   sh:path dcterms:source;
-  sh:node [ sh:xone (frbrap:Source frbrap:SourceDocument)];
+  sh:class rdfs:Resource;
+# The constraint below is handled in the FRBR profile
+#  sh:node [ sh:xone (frbrap:Source frbrap:SourceDocument)];
   rdfs:comment "Een begrip kan zijn ontleend aan een op het web vindbare bron. Dit kan een (versie van) een beschrijving van een specifiek begrip of een document waarin een beschrijving van het begrip is te vinden."@nl;
   rdfs:comment "A concept can be derived from a source that can be found on the web. This can be a (version of) a description of a specific concept or a document in which a description of the concept can be found."@en;
   skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
