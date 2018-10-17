@@ -176,13 +176,33 @@ page:adms-uri-body a cnt:ContentAsText;
 '''
 Assets en asset distributies krijgen een uri volgens het patroon:
 
-* http://{domain}/id/{Asset}/{UpperCamelCase(rdfs:label)} voor assets
-* http://{domain}/id/{AssetDistribution}/{UpperCamelCase(rdfs:label)} voor asset distributies
+* http://{domain}/id/{asset-type}/{UpperCamelCase(rdfs:label)} voor assets
+* http://{domain}/id/{asset-type}/{UpperCamelCase(rdfs:label)}.{extension} voor asset distributies
+
+Daarbij geldt dat `{asset-type}` de volgende waarden kan hebben, afhankelijk van het type asset:
+* `codelist` voor waardelijsten;
+* `scheme` voor begrippenkaders;
+* `model` voor informatiemodellen.
+
+En voor `{extension}` geldt dat hiervoor de standaard bestandsformaat extensies worden gebruikt, zoals:
+* `ttl` voor turtle bestanden;
+* `pdf` voor pdf bestanden;
+* `xml` voor xml bestanden.
 '''@nl,
 '''
-Assets en asset  distirbutions get a uri according to the pattern:
+Assets en asset distributions get a uri according to the pattern:
 
-* http://{domain}/id/{Asset}/{UpperCamelCase(rdfs:label)} for assets
-* http://{domain}/id/{AssetDistribution}/{UpperCamelCase(rdfs:label)} for asset distributions
+* `http://{domain}/id/{asset-type}/{UpperCamelCase(rdfs:label)}` for assets
+* `http://{domain}/id/{asset-type}/{UpperCamelCase(rdfs:label)}.{extension}` for asset distributions
+
+Depending on the type of asset, `{asset-type}` is one of the following values:
+* `codelist` voor waardelijsten;
+* `scheme` voor begrippenkaders;
+* `model` voor informatiemodellen.
+
+And for `{extension}` the regular extensions for file types are used:
+* `ttl` for turtle files;
+* `pdf` for pdf files;
+* `xml` for xml files.
 '''@en;
 .

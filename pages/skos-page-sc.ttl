@@ -150,19 +150,23 @@ page:skos-uri-body a cnt:ContentAsText;
 '''
 Concept schema’s, collecties en concepten krijgen een uri volgens het patroon:
 
-* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} voor begrippenkaders
-* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} voor collecties
-* http://{domain}/id/{Concept}/{UpperCamelCase(skos:prefLabel)} voor concepten
+* `http://{domain}/id/scheme/{UpperCamelCase(rdfs:label)}` voor begrippenkaders
+* `http://{domain}/id/collection/{UpperCamelCase(rdfs:label)}` voor collecties
+* `http://{domain}/id/concept/{UpperCamelCase(skos:prefLabel)}` voor concepten
 
-Good practice is om binnen een domein (begrippenkader) alle prefLabels uniek te maken. Soms is het daarbij nodig de context te vermelden. Dit gebeurt dan tussen haakjes, bijvoorbeeld ‘breedteklasse (wegdeel)’ en ‘breedteklasse (waterdeel)’. Als dit niet gebeurt zijn uri’s niet voorspelbaar op basis van het prefLabel en moeten ze handmatig worden toegekend.
+Bovenstaande gaat er vanuit dat `{domain}` het begrippenkader al uniek identificeert, waardoor de toevoegen van het `rdfs:label` puur voor opslaggemak zorgt. Mocht echter het `{domain}` het begrippenkader *niet* uniek identificeren, dan geldt voor concepten en collecties de volgende uitbreiding:
+* `http://{domain}/id/concept/{conceptscheme}/{term}` voor concepten
+* `http://{domain}/id/collection/{conceptscheme}/{term}` voor collecties
+
+The `{skos:prefLabel}` should be unique for all concepts in a particular concept scheme. If this is not the case, the URI should be extended with a `_{context}` postfix.
 '''@nl,
 '''
 Concept schemes, collections and concepts get a uri according to the pattern:
 
-* http://{domain}/id/{ConceptScheme}/{UpperCamelCase(rdfs:label)} for concept schemes
-* http://{domain}/id/{Collection}/{UpperCamelCase(rdfs:label)} for collections
-* http://{domain}/id{Concept}/{UpperCamelCase(skos:prefLabel)} for concepts
+* `http://{domain}/id/scheme/{UpperCamelCase(rdfs:label)}` for concept schemes
+* `http://{domain}/id/collection/{UpperCamelCase(rdfs:label)}` for collections
+* `http://{domain}/id/concept/{UpperCamelCase(skos:prefLabel)}` for concepts
 
-Good practice is to make all prefLabels unique within a domain (concept scheme). Sometimes it is necessary to mention the context. This is done between brackets, for example 'width class (road section)' and 'width class (water section)'. Without this practice uris are not predictable on base of the prefLabel and must be assigned manually.
+Het `{skos:prefLabel}` hoort uniek te zijn voor alla concepten in een begrippenkader. Als dit niet het geval is, dan wordt de URI uitgebreid met een `_{context}` postfix.
 '''@en;
 .
