@@ -77,13 +77,8 @@ rdf:type sh:name "rdf:type".
 dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
 
-
 #---------------------
-# VERSIONING
-#---------------------
-
-#---------------------
-# General metadata
+# Metadata (Versioning)
 #---------------------
 scprov:Metadata a sh:NodeShape;
   rdfs:label "Metadata"@nl;
@@ -93,12 +88,37 @@ scprov:Metadata a sh:NodeShape;
   rdfs:comment "Metadata van een versie van een entiteit kan worden beschreven."@nl;
   rdfs:comment "Metadata of a version of an entity can be described."@en;
   skos:example "De juridische geldigheid en/of de adnimistratieve housekeeping (provenance) gegevens van een entiteit"@nl;
+  sh:property scprov:Metadata_isIssued;
+  sh:property scprov:Metadata_changeNote;
   sh:property scprov:Metadata_status;
   sh:property scprov:Metadata_isValidDuring;
   sh:property scprov:Metadata_isvalidWithin;
-  sh:property scprov:Metadata_isIssued;
-  sh:property scprov:Metadata_changeNote;
 .
+
+scprov:Metadata_isIssued a sh:PropertyShape;
+  rdfs:label "bekendgemaakt"@nl;
+  rdfs:label "issued"@en;
+  sh:name "dcterms:issued";
+  sh:path dcterms:issued;
+  rdfs:comment "Een versie kan bekend worden gemaakt vanaf een bepaald moment."@nl;
+  rdfs:comment "A version can be issued from a certain moment in time."@en;
+  skos:example "21/10/2017 20:21"@nl;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een versie kan maximaal in 1 keer bekend worden gemaakt."@nl;
+  sh:message "A version can be issued up to 1 time."@en
+.
+
+scprov:Metadata_changeNote a sh:PropertyShape;
+  rdfs:label "wijzingsnotitie (metadata)"@nl;
+  rdfs:label "change note (metadata)"@en;
+  sh:name "skos:changeNote";
+  sh:path skos:changeNote;
+  rdfs:comment "De reden van een versie en andere aandachtspunten bij een versie kunnen worden toegelicht."@nl;
+  rdfs:comment "The reason for a version and other points of attention in a version can be explained."@en;
+  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
+.
+
 scprov:Metadata_status a sh:PropertyShape;
   rdfs:label "status"@nl;
   rdfs:label "status"@en;
@@ -114,19 +134,7 @@ scprov:Metadata_status a sh:PropertyShape;
   sh:message "Een versie heeft altijd 1 administratieve status op basis van de ADMS waardenlijst."@nl;
   sh:message "A version always has 1 administrative status based on the ADMS list of values."@en
 .
-scprov:Metadata_changeNote a sh:PropertyShape;
-  rdfs:label "wijzingsnotitie (metadata)"@nl;
-  rdfs:label "change note (metadata)"@en;
-  sh:name "skos:changeNote";
-  sh:path skos:changeNote;
-  rdfs:comment "De reden van een versie en andere aandachtspunten bij een versie kunnen worden toegelicht."@nl;
-  rdfs:comment "The reason for a version and other points of attention in a version can be explained."@en;
-  skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
-.
 
-#---------------------
-# Formal/legal metadata
-#---------------------
 scprov:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "geldig in tijd"@nl;
   rdfs:label "temporal validity"@en;
@@ -148,64 +156,18 @@ scprov:Metadata_isvalidWithin a sh:PropertyShape;
   sh:name "dcterms:spatial";
   sh:path dcterms:spatial;
   sh:class dcterms:Location;
-  rdfs:comment "Een versie kan formeel/juridisch geldig zijn in een gebied."@nl;
-  rdfs:comment "A version can be formally / legally valid in an area."@en;
+  rdfs:comment "Een versie kan formeel/juridisch geldig zijn in een geografisch gebied."@nl;
+  rdfs:comment "A version can be formally / legally valid in an geographical area."@en;
   skos:example "gemeente Apeldoorn";
   sh:maxCount 1;
   sh:severity sh:Violation;
   sh:message "Een versie kan maximaal in 1 gebied formeel/juridisch geldig zijn."@nl;
   sh:message "A version can be formally / legally valid in up to 1 area."@en
 .
-scprov:Metadata_isIssued a sh:PropertyShape;
-  rdfs:label "bekendgemaakt"@nl;
-  rdfs:label "issued"@en;
-  sh:name "dcterms:issued";
-  sh:path dcterms:issued;
-  rdfs:comment "Een versie kan bekend worden gemaakt vanaf een bepaald moment."@nl;
-  rdfs:comment "A version can be issued from a certain moment in time."@en;
-  skos:example "21/10/2017 20:21"@nl;
-  sh:maxCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een versie kan maximaal in 1 keer bekend worden gemaakt."@nl;
-  sh:message "A version can be issued up to 1 time."@en
-.
-scprov:PeriodOfTime a sh:NodeShape;
-  rdfs:label "Tijdsperiode"@nl;
-  rdfs:label "Time period"@nl;
-  sh:name "dcterms:PeriodOfTime";
-  rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
-  rdfs:comment "A period of time is pointed out by a start date and end date."@en;
-  sh:targetClass dcterms:PeriodOfTime;
-  skos:example "22/10/2017 - 01/08/2018"@nl;
-  sh:property scprov:MetadataTemporal_start;
-  sh:property scprov:MetadataTemporal_end
-.
-scprov:MetadataTemporal_start a sh:PropertyShape;
-  rdfs:label "start"@nl;
-  rdfs:label "start"@en;
-  sh:name "dcmiperiod:start";
-  sh:path dcmiperiod:start;
-  rdfs:comment "Een periode start op een bepaalde datum. Deze datum kan onbekend (leeg) zijn."@nl;
-  rdfs:comment "A period of time starts at a certain date. This date can be unknown (empty)."@en;
-  skos:example "22/10/2017";
-  sh:maxCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een periode heeft maximaal in 1 startdatum/tijdstip."@nl;
-  sh:message "A period has up to 1 start date / time."@en
-.
-scprov:MetadataTemporal_end a sh:PropertyShape;
-  rdfs:label "einde"@nl;
-  rdfs:label "end"@en;
-  sh:name "dcmiperiod:end";
-  sh:path dcmiperiod:end;
-  rdfs:comment "Een periode eindigt op een bepaalde dataum. Deze datum kan onbekend (leeg) zijn."@nl;
-  rdfs:comment "A period of time ends at a certain date. This date can be unknown (empty)."@en;
-  skos:example "01/08/2018";
-  sh:maxCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een periode heeft maximaal in 1 einddatum/tijdstip."@nl;
-  sh:message "A period has up to 1 end date / time."@en
-.
+
+#------------------------------
+# Status
+#------------------------------
 scprov:Status a sh:NodeShape;
   rdfs:label "Status waardelijst"@nl;
   rdfs:label "Controlled vocabulary status"@en;
@@ -224,8 +186,64 @@ scprov:Status a sh:NodeShape;
   ];
 .
 
+#------------------------------
+# Formal/legal validity in time
+#------------------------------
+scprov:PeriodOfTime a sh:NodeShape;
+  rdfs:label "Tijdsperiode"@nl;
+  rdfs:label "Time period"@en;
+  sh:name "dcterms:PeriodOfTime";
+  rdfs:comment "Een periode kan worden aangeduid met een startdatum en einddatum. "@nl;
+  rdfs:comment "A period of time is pointed out by a start date and end date."@en;
+  sh:targetClass dcterms:PeriodOfTime;
+  skos:example "22/10/2017 - 01/08/2018"@nl;
+  sh:property scprov:PeriodOfTime_start;
+  sh:property scprov:PeriodOfTime_end
+.
+
+scprov:PeriodOfTime_start a sh:PropertyShape;
+  rdfs:label "start"@nl;
+  rdfs:label "start"@en;
+  sh:name "dcmiperiod:start";
+  sh:path dcmiperiod:start;
+  rdfs:comment "Een periode start op een bepaalde datum. Deze datum kan onbekend (leeg) zijn."@nl;
+  rdfs:comment "A period of time starts at a certain date. This date can be unknown (empty)."@en;
+  skos:example "22/10/2017";
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een periode heeft maximaal in 1 startdatum/tijdstip."@nl;
+  sh:message "A period has up to 1 start date / time."@en
+.
+scprov:PeriodOfTime_end a sh:PropertyShape;
+  rdfs:label "einde"@nl;
+  rdfs:label "end"@en;
+  sh:name "dcmiperiod:end";
+  sh:path dcmiperiod:end;
+  rdfs:comment "Een periode eindigt op een bepaalde dataum. Deze datum kan onbekend (leeg) zijn."@nl;
+  rdfs:comment "A period of time ends at a certain date. This date can be unknown (empty)."@en;
+  skos:example "01/08/2018";
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een periode heeft maximaal in 1 einddatum/tijdstip."@nl;
+  sh:message "A period has up to 1 end date / time."@en
+.
+
+#------------------------------
+# Formal/legal validity in space
+#------------------------------
+
+scprov:Location a sh:NodeShape;
+  rdfs:label "Geografisch gebied"@nl;
+  rdfs:label "Geographical area"@en;
+  sh:name "dcterms:Location";
+  sh:targetClass dcterms:Location;
+  rdfs:comment "De beschrijving van het geografisch gebied waarin een versie geldig is"@nl;
+  rdfs:comment "The description of the geographical area in which a version is valid."@en;
+  skos:example "de gemeente Apeldoorn"@nl;
+.
+
 #-----------------------------------------------
-# Provenance / admistrative houskeeping metadata 
+# Admistrative houskeeping metadata 
 #-----------------------------------------------
 scprov:ProvenanceGraph a sh:NodeShape;
   rdfs:label "Provenance graaf"@nl;
