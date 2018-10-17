@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix scdm: <http://bp4mc2.org/somewhere/dm-ap-sc/>.
+@prefix dmap: <http://bp4mc2.org/somewhere/dm-ap-sc/>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -26,74 +26,40 @@
 # IMPORT
 #---------------------
 
-#derived from dataset-type
-dstype:Datamodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  rdfs:label "Datamodel"@en;
-  sh:name "dstype:Datamodel"
-.
-dstype:ControlledVocabulary a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  rdfs:label "Controlled vocabulary"@en;
-  sh:name "dstype:ControlledVocabulary"
-.
-dstype:DatasetVersion a skos:Concept;
-  rdfs:label "Datasetversie"@nl;
-  rdfs:label "Dataset version"@en;
-  sh:name "dstype:DatasetVersion"
-.
-
-#derived from skos-lex
-skoslex:Act rdfs:subClassOf skos:Concept.
-skoslex:Object rdfs:subClassOf skos:Concept.
-skoslex:Actor rdfs:subClassOf skos:Concept.
-skoslex:Agent rdfs:subClassOf skoslex:Actor.
-
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
-
-#derived from prov
-prov:Person rdfs:subClassOf prov:Agent.
-prov:Organization rdfs:subClassOf prov:Agent.
-prov:SoftwareAgent rdfs:subClassOf prov:Agent.
-
-#derived from foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
-
-#derived from org
-org:Organization rdfs:subClassOf foaf:Organization.
-
 #derived from adms
 adms:Asset rdfs:subClassOf dcat:Dataset.
 adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+
+dmap:Asset a sh:NodeShape;
+  sh:name "adms:Asset";
+  sh:targetClass adms:Asset;
+.
+dmap:AssetDistribution a sh:NodeShape;
+  sh:name "adms:AssetDistribution";
+  sh:targetClass adms:AssetDistribution;
+.
 
 #derived from dqv
 dqv:Dimension rdfs:subClassOf skos:Concept.
 dqv:Category rdfs:subClassOf skos:Concept.
 
-#Extra
-rdf:type sh:name "rdf:type".
-dqv:value sh:name "dqv:value".
-skos:inScheme sh:name "skos:inScheme".
-
 #---------------------
 # Asset (DataModel)
 #---------------------
 
-scdm:DataModel rdf:type sh:NodeShape;
+dmap:DataModel rdf:type sh:NodeShape;
   rdfs:label "Asset (Informatiemodel)"@nl;
   rdfs:label "Asset (Data model)"@en;
   sh:name "adms:Asset (Data model)";
   rdfs:comment "Een informatiemodel is een beschrijving van de structuur waarin data over dingen in een  specifiek domein worden opgeslagen."@nl;
   rdfs:comment "An data model is a description of the structure in which data about things in a specific domain are stored."@en;
   skos:example "De lijst met Kadastrale gemeenten."@nl;
-  sh:property scdm:DataModel_type;
-  sh:property scdm:DataModel_typeDataModel;
-  sh:property scdm:DataModel_shapesGraph;
+  sh:property dmap:DataModel_type;
+  sh:property dmap:DataModel_typeDataModel;
+  sh:property dmap:DataModel_shapesGraph;
 .
 
-scdm:DataModel_type a sh:PropertyShape;
+dmap:DataModel_type a sh:PropertyShape;
   rdfs:label "getypeerd als asset"@nl;
   rdfs:label "typified as asset"@en;
   sh:name "rdf:type";
@@ -103,25 +69,25 @@ scdm:DataModel_type a sh:PropertyShape;
   rdfs:comment "A data model is typed as adms:Asset."@en;
   skos:example "IMKAD is vindbaar als een adms:Asset."@nl;
 .
-scdm:DataModel_typeDataModel a sh:PropertyShape;
+dmap:DataModel_typeDataModel a sh:PropertyShape;
   rdfs:label "type asset = informatiemodel"@nl;
    rdfs:label "type asset = data model"@en;
  sh:path dcterms:type;
   sh:name "dcterms:type";
   sh:minCount 1;
   sh:maxCount 1;
-  sh:hasValue dstype:Datamodel;
+  sh:hasValue dmap:DataModel;
   rdfs:comment "Een informatiemodel wordt expliciet getypeerd als informatiemodel."@nl;
   rdfs:comment "A data model is explicitly typed as a data model."@en;
   skos:example ""@nl;
 .
 
-scdm:DataModel_shapesGraph rdf:type sh:PropertyShape;
+dmap:DataModel_shapesGraph rdf:type sh:PropertyShape;
   rdfs:label "is beschreven"@nl;
   rdfs:label "is described"@en;
   sh:name "sh:shapesGraph";
   sh:path sh:shapesGraph;
-  sh:node scdm:ShapesGraph;
+  sh:node dmap:ShapesGraph;
   rdfs:comment "Een informatiemodel kan worden beschreven in een 'shape graph'."@nl;
   rdfs:comment "A data model can be described in a shapes graph."@en;
   skos:example "De verwijzing naar de beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
@@ -135,11 +101,24 @@ scdm:DataModel_shapesGraph rdf:type sh:PropertyShape;
 # ShapesGraph
 #---------------------
 
-scdm:ShapesGraph rdf:type sh:NodeShape;
+dmap:ShapesGraph rdf:type sh:NodeShape;
   rdfs:label "model beschrijving"@nl;
   rdfs:label "Shapes graph"@nl;
   sh:name "Shapes graph";
   rdfs:comment "De beschrijving van een informatiemodel."@nl;
   rdfs:comment "A shapes graph of a data model."@en;
   skos:example "De beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
+ .
+
+ dmap:LandingPage a sh:NodeShape;
+   rdfs:label "webpagina"@nl;
+   rdfs:label "landing page"@en;
+   sh:name "foaf:Document (Landing page)";
+   sh:property [
+     sh:path rdf:type;
+     sh:hasValue foaf:Document;
+   ];
+   rdfs:comment "De webpagina va welke een asset vindbaar is."@nl;
+   rdfs:comment "The landing page on the web on which an asset can be found."@en;
+   skos:example "kadaster.nl/waardelijsten."@nl;
  .

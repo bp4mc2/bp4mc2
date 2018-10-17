@@ -81,6 +81,17 @@ skos:inScheme sh:name "skos:inScheme".
 # ASSETS
 #---------------------
 
+scadms:Document rdf:type sh:NodeShape;
+  sh:name "foaf:Document";
+  sh:targetClass foaf:Document;
+  rdfs:label "Document"@nl;
+  sh:property scadms:Document_label
+.
+scadms:Document_label a sh:PropertyShape;
+  sh:name "rdfs:label";
+  sh:path rdfs:label;
+.
+
 scadms:Asset rdf:type sh:NodeShape;
   rdfs:label "Asset"@nl;
   rdfs:label "Asset"@en;
@@ -195,9 +206,8 @@ scadms:AssetDistribution_downloadURL a sh:PropertyShape;
 scadms:AssetDistribution_representationTechnique a sh:PropertyShape;
   rdfs:label "representatie formaat"@nl;
   rdfs:label "representation format"@en;
-  sh:name "dcat:downloadURL";
-  sh:name "adms:representationrTechnique";
-  sh:path adms:representationtechnique;
+  sh:name "adms:representationTechnique";
+  sh:path adms:representationTechnique;
   sh:node scadms:RepresentationTechnique;
   rdfs:comment "Het formaat waarin een distributie beschikbaar is kan worden gespecificeerd op basis van de adms waardelijst representation techniques."@nl;
   rdfs:comment "The format in which a distribution is available can be specified based on the adms controlled vocabulary on representation techniques."@en;
@@ -226,28 +236,44 @@ scadms:LandingPage a sh:NodeShape;
   rdfs:label "webpagina"@nl;
   rdfs:label "landing page"@en;
   sh:name "foaf:Document (Landing page)";
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue foaf:Document;
-  ];
+  sh:property scadms:LandingPage_type;
   rdfs:comment "De webpagina va welke een asset vindbaar is."@nl;
   rdfs:comment "The landing page on the web on which an asset can be found."@en;
   skos:example "kadaster.nl/waardelijsten."@nl;
 .
+scadms:LandingPage_type a sh:PropertyShape;
+  sh:name "type";
+  sh:path rdf:type;
+  sh:hasValue foaf:Document;
+.
+
 scadms:DownloadFormat a sh:NodeShape;
   rdfs:label "download formaat"@nl;
   rdfs:label "download format"@en;
   sh:name "foaf:Document (Download format)";
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue foaf:Document;
-  ];
-  sh:property [
-    sh:name "dcterms:isFormatOf";
-    sh:path dcat:landingPage;
-    sh:node scadms:LandingPage;
-  ];
+  sh:property scadms:DownloadFormat_type;
+  sh:property scadms:DownloadFormat_isFormatOf;
   rdfs:comment "De download kan een bestand zijn of een webpagina met informatie."@nl;
   rdfs:comment "The download can be a file or a landing page with information."@en;
   skos:example "het csv bestand met de waardelijst Kadastrale gemeenten."@nl;
+.
+scadms:DownloadFormat_type a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:name "type";
+  sh:hasValue foaf:Document;
+.
+scadms:DownloadFormat_isFormatOf a sh:PropertyShape;
+  sh:name "dcterms:isFormatOf";
+  sh:path dcat:landingPage;
+  sh:node scadms:LandingPage;
+.
+
+scadms:RepresentationTechnique a sh:NodeShape;
+  sh:name "skos:Concept (adms representation technique)";
+  sh:property [
+    sh:path skos:inScheme;
+    sh:hasValue <http://purl.org/adms/representationtechnique/1.0>;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
 .
