@@ -20,6 +20,7 @@ page:dcat a cnt:ContentAsText;
     page:datasetProduct
     page:catalog
     page:distribution
+    page:language
     page:dcatUriStrategy
   )
 .
@@ -30,12 +31,12 @@ page:dcat-body a cnt:ContentAsText;
 Op het web is het gebruikelijk data te beschrijven in een catalogus met behulp van DCAT (Data Catalog). DCAT is de W3C standaard die door de EU (ISA) wordt voorgeschreven om datasets binnen Europa op een interoperabele wijze te beschrijven. In Nederland wordt DCAT onder andere toegepast in [data.overheid.nl](https://www.data.overheid.nl), waar alle open datasets in Nederland worden beschreven. Het [nationaal georegister](www.nationaalgeoregister.nl), waar alle open geo-datasets worden beschreven biedt een DCAT export. Voor data.overheid.nl is het toepassingsprofiel DCAT-AP-NL gemaakt. Daarin wordt beschreven welke elementen uit DCAT worden gebruikt en hoe deze elementen specifiek worden ingevuld. Voor de geo-wereld is er Geo-DCAT-AP, dat door de EU (ISA) is opgesteld. Voor de catalogus geldt dat het applicatieprofiel voor DCAT moet voldoen aan bestaande applicatieprofielen voor DCAT, met name DCAT-AP-NL en geoDCAT-AP.
 
 * Het [Nederlands Applicatieprofiel](https://data.overheid.nl/sites/default/files/2014-11-13 DCAT-NL IPM Datasets 0.6 kopie.pdf) voor DCAT (DCAT-AP-NL).
-** is gebaseerd op het DCAT [Application Profile](https://joinup.ec.europa.eu/asset/dcat_application_profile/description) voor data portals in Europa.
-** geeft richtlijnen voor de vertaling van metagegevens in overeenstemming met het Nederlandse metadata profiel op ISO 19115 Geografie, 1.3.1 (ISO19115)
-** is gespecificeerd in een IPM
+  * is gebaseerd op het DCAT [Application Profile](https://joinup.ec.europa.eu/asset/dcat_application_profile/description) voor data portals in Europa.
+  * geeft richtlijnen voor de vertaling van metagegevens in overeenstemming met het Nederlandse metadata profiel op ISO 19115 Geografie, 1.3.1 (ISO19115)
+  * is gespecificeerd in een IPM
 * [geoDCAT-AP](https://joinup.ec.europa.eu/node/154143/)
-** is een profiel voor data portals in Europa voor het beschrijven van geo datasets, datasetseries en services.
-** biedt een RDF-syntaxbinding voor de alle metadata-elementen van het kernprofiel van ISO 19115: 2003 en die welke zijn gedefinieerd in het kader van de [INSPIRE-richtlijn](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?Uri=PB:L:2007:108:0001:0014:nl:PDF) Vaak wordt de term Informatie Publicatie Model (IPM) gebruikt. Een IPM voor datasets geeft een norm voor de online uitwisseling van metadata tussen Nederlandse gegevens en catalogi, waaronder: data.overheid.nl, Nationaal Geo Register (NGR) en bijvoorbeeld de (open) data catalogus van gemeenten en provincies.
+  * is een profiel voor data portals in Europa voor het beschrijven van geo datasets, datasetseries en services.
+  * biedt een RDF-syntaxbinding voor de alle metadata-elementen van het kernprofiel van ISO 19115: 2003 en die welke zijn gedefinieerd in het kader van de [INSPIRE-richtlijn](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?Uri=PB:L:2007:108:0001:0014:nl:PDF) Vaak wordt de term Informatie Publicatie Model (IPM) gebruikt. Een IPM voor datasets geeft een norm voor de online uitwisseling van metadata tussen Nederlandse gegevens en catalogi, waaronder: data.overheid.nl, Nationaal Geo Register (NGR) en bijvoorbeeld de (open) data catalogus van gemeenten en provincies.
 
 Een stelselcatalogus kan worden opgezet als Metadata Broker. Een Metadata Broker verzamelt meta data uit verschillende catalogi en ontgrendelt deze collectie weer in een aparte catalogus. De Broker Metadata Catalogus bevat beschrijvingen van de andere catalogi en hun catalogusrecords. Zo worden datasets beschreven in meerdere catalogi. Dit maakt dat deze datasets vanuit dezelfde bron in verschillende contexten, bijvoorbeeld als statistische gegevens en als geografische gegevens, kunnen worden beschreven.
 
@@ -202,7 +203,6 @@ page:distribution-relations a cnt:ContentAsText;
   )
 .
 
-
 page:dcatUriStrategy a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
@@ -230,4 +230,11 @@ Catalogs, datasets (general), datasets (version), datasets (product) and distirb
 * http: // {domain}/id/{DatasetProduct}/{UpperCamelCase (rdfs: label)} for datasets (product)
 * http: // {domain}/id/{Distribution}/{UpperCamelCase (rdfs: label)} for distributions
 '''@en;
+.
+
+page:language a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Taal"@nl, "Language"@en]
+    [dct:subject dcatap:Language; xhtml:stylesheet style:nodeshape]
+  )
 .

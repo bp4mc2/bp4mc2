@@ -346,14 +346,15 @@ skosap:ExternalConcept a sh:NodeShape;
   rdfs:comment "Een begrip in een ander begrippenkader waarmee een relatie wordt gelegd."@nl;
   rdfs:comment "A concept in another concept scheme, to which is referenced."@en;
   rdfs:example "Het begrip Nummeraanduiding in de BAG in relatie tot het begrip Postadres in de BRK"@nl;
-  sh:property [
-      sh:path rdf:type;
-      sh:hasValue skos:Concept;
-      sh:minCount 1;
-      sh:severity sh:Violation;
-      sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
-      sh:message "A concept in another concept scheme to which is referred has to exist."@en
-  ];
+  sh:property skosap:ExternalConcept_type;
+.
+skosap:ExternalConcept_type a sh:PropertyShape;
+  sh:path rdf:type;
+  sh:hasValue skos:Concept;
+  sh:minCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
+  sh:message "A concept in another concept scheme to which is referred has to exist."@en
 .
 
 #---------------------

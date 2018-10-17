@@ -52,6 +52,14 @@ style:nodeshape a elmo:Part;
 		rdfs:label "Properties en relations"@en;
 		elmo:index "5";
 	];
+	elmo:fragment [
+		elmo:applies-to sh:property;
+		elmo:applies-to [sh:path skos:inScheme];
+		elmo:select sh:hasValue;
+		rdfs:label "Waardelijst"@nl;
+		rdfs:label "Controlled vocabulary"@en;
+		elmo:index "6";
+	];
 	elmo:query stage:nodeshape-query;
 .
 style:datatype-properties a elmo:Part;
@@ -346,17 +354,23 @@ stage:nodeshape-query a elmo:query;
 			?nodeshape ?p ?o.
 			?o rdfs:label ?olabel.
 			?nodeshape sh:targetClass ?class.
-			?class rdfs:label ?classlabel
+			?class rdfs:label ?classlabel.
+			?ns3 sh:property ?sb.
+			?sb sh:path ?pb.
+			?sb sh:hasValue ?ob.
 		}
 		WHERE {
 			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
 			GRAPH ?graph {
 				{
+					?nodeshape a sh:NodeShape.
 					?nodeshape ?p ?o
 					FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
+					BIND (?nodeshape as ?subject)
 				}
 				UNION
 				{
+					?nodeshape a sh:NodeShape.
 					?nodeshape ?p ?o.
 					FILTER(isIRI(?o) && ?p!=sh:targetClass)
 					OPTIONAL {
@@ -372,6 +386,13 @@ stage:nodeshape-query a elmo:query;
 				{
 					?nodeshape sh:targetClass ?class.
 					?nodeshape sh:name ?classlabel
+				}
+				UNION
+				{
+					?ns3 sh:property ?sb.
+					?sb sh:path ?pb.
+					?sb sh:hasValue ?ob.
+					FILTER(isBlank(?sb))
 				}
 			}
 		}
