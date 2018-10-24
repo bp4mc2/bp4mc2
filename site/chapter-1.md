@@ -53,7 +53,7 @@ Er zijn echter nog weinig beschreven practices waarin wordt beschreven hoe en in
 
 BP4mc2 (in het Engels: Best Practices for Meaningful Connected Computing) is een methode om vanuit juridische en andere vakmatige richtlijnen de betekenis, structuur en dynamiek van een informatiesysteem te beschrijven. Daarbij wordt gebruik gemaakt van concepten uit de semantiek en de wereld van Linked Data. BP4mc2 is open. Iedereen wordt dan ook uitgenodigd om een bijdrage te leveren aan het verbeteren en optimaliseren van BP4mc2.
 
-## 1.4 Opbouw van deze website
+## Opbouw van deze website
 
 Hoofdstuk 2 geeft een overzicht van de belangrijkste elementen in BP4mc2. In de volgende hoofdstukken worden al deze elementen uitgediept. Dat gebeurt aan de hand van het raamwerk van Seligman, Wijers en Sol. In dit raamwerk worden vier aspecten van een methode onderscheiden [MSISD]:
 
@@ -64,7 +64,7 @@ Hoofdstuk 2 geeft een overzicht van de belangrijkste elementen in BP4mc2. In de 
 
 ## Schrijfconventies
 
-**Dubbele of enkele**
+**Dubbele of enkele quotes**
 
 Deze website gaat voor een groot deel over taal en het gebruik van woorden (termen) om begrippen aan te duiden. We maken dan ook regelmatig onderscheid tussen een begrip en de term die we gebruiken om dat begrip mee aan te duiden. Om niet steeds expliciet te hoeven benoemen of we de term of het begrip bedoelen maken we gebruik van enkele of dubbele aanhalingstekens.
 
