@@ -460,3 +460,51 @@ skosap:ConceptScheme_type a sh:PropertyShape;
   sh:path rdf:type;
   sh:hasValue adms:Asset
 .
+
+# ========================================
+# Asset (ConceptScheme)
+# ========================================
+
+skosap:AssetConceptScheme rdf:type sh:NodeShape;
+  rdfs:label "Asset (Begrippenkader)"@nl;
+  rdfs:label "Asset (ConceptScheme)"@en;
+  sh:name "adms:Asset (ConceptScheme)";
+  rdfs:comment "Een begrippenkader kan worden gemetadateerd als een asset."@nl;
+  rdfs:comment "A concept scheme can be metadated as an asset."@en;
+  skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein kunnen worden gemetadateerd als asset voor de BRK dataset."@nl;
+  sh:property skosap:AssetConceptScheme_type;
+  sh:property skosap:AssetConceptScheme_typeConceptScheme;
+  sh:property skosap:AssetConceptScheme_specification;
+.
+skosap:AssetConceptScheme_type a sh:PropertyShape;
+  rdfs:label "getypeerd als asset"@nl;
+  rdfs:label "typified as asset"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset;
+  rdfs:comment "Een begrippenkader wordt getypeerd als een adms:Asset."@nl;
+  rdfs:comment "A concept scheme is typed as adms:Asset."@en;
+  skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
+.
+skosap:AssetConceptScheme_typeConceptSchem a sh:PropertyShape;
+  rdfs:label "type asset = Begrippenkader"@nl;
+  rdfs:label "type asset = Concept scheme"@en;
+  sh:name "dcterms:type";
+  sh:path dcterms:type;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:hasValue skosap:AssetConceptScheme;
+  rdfs:comment "Een begrippenkader wordt expliciet getypeerd als begrippenkader."@nl;
+  rdfs:comment "A concept scheme is explicitly typed as a concept scheme."@en;
+  skos:example ""@nl;
+.
+skosap:AssetConceptScheme_specification a sh:PropertyShape;
+  rdfs:label "uitgewerkt in"@nl;
+  rdfs:label "defined by"@en;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node skosap:ConceptScheme;
+  rdfs:comment "Een begrippenkader asset wordt uitgewerkt in een skos begrippenkader."@nl;
+  rdfs:comment "A concept scheme asset is defined by a skos concept scheme."@en;
+  skos:example "Het BRK begrippenkader."@nl;
+.
