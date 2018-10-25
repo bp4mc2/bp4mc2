@@ -17,7 +17,7 @@ Een belangrijk aspect van communicatie en informatica is het gebruik van symbole
 
 Dit model is afkomstig uit de semiotiek en beschrijft hoe symbolen (of 'termen') gebruikt worden door een spreker om te verwijzen naar een specifiek 'ding'.
 
-![](image-ch2-1.png)
+![](image-ch3-1.png)
 
 De derde hoek van de driehoek bestaat uit de gedachte die de spreker had over dit 'ding' op het moment dat hij hierover sprak. De spreker heeft het feitelijk niet over het echte 'ding', maar over zijn gedachte over dit 'ding'.
 
@@ -25,7 +25,7 @@ De derde hoek van de driehoek bestaat uit de gedachte die de spreker had over di
 
 Een belangrijk aspect van de begripsdriehoek is het idee dat een term verwijst naar een ding zoals de spreker dit bedoelt. De toehoorder zal bij het horen van de mededeling van de spreker altijd zijn eigen gedachte bij de term hebben, en dus mogelijk een ander 'ding' of ander aspect van dit 'ding' voor ogen hebben.
 
-![](image-ch2-2.png)
+![](image-ch3-2.png)
 
 Bovenstaand figuur geeft een voorbeeld waar een dergelijke spraakverwarring is afgebeeld. De spreker gebruikt de term "Lange Jan" en heeft daarbij zijn eigen gedachte over een specifiek gebouw (de Onze Lieve Vrouwetoren in Amersfoort, Kadastraal middelpunt van Nederland en in de volksmond ook wel de "Lange Jan" genoemd). De toehoorder zit met zijn gedachten ergens anders (namelijk: in de Efteling), en verwacht dat de spreker het over iets heel anders heeft dan een gebouw.
 
@@ -75,7 +75,7 @@ URI staat voor "Uniform Resource Identifier". Een URI is dus iets waarmee je op 
 
 Http-URIs hebben de vorm van een URL (de L staat voor Locator) en dus kun je ze 'activeren'. Met een URL kun je informatie ophalen die op een server beschikbaar wordt gesteld. Een belangrijke bijkomstigheid is dat een http-URI duidelijk maakt van wie die informatie afkomstig is: van de eigenaar van het internetdomein van de URI. De URI verenigt zo de term en (gedachte)eigenaar in een identifier.
 
-![](image-ch2-3.png)
+![](image-ch3-3.png)
 
 Merk op dat we in dit plaatje expliciet niet spreken over de 'BAG gedachte van de Lange Jan'. Informatiesystemen (zowel geautomatiseerd als handmatig) zijn deterministisch en hebben geen gedachten, zoals mensen deze hebben. Daarom spreken wij hier van het (conceptueel) model dat de BAG heeft van de Lange Jan. Dit wil overigens nog niet zeggen dat dit model altijd goed beschreven is! Een slecht gedocumenteerd informatiesysteem kan net zo ondoorgrondelijk zijn als de gedachten van een mens!
 
@@ -83,15 +83,15 @@ Merk op dat we in dit plaatje expliciet niet spreken over de 'BAG gedachte van d
 
 | Begrip | Definitie |
 |--------|-----------|
-|![](image-ch2-4.png)|Een **term** is een aaneenschakeling van één of meerdere woorden.|
-|![](image-ch2-5.png)|Een **ding** is iets in de natuurlijke werkelijkheid: een object, mens, machine, etc.|
-|![](image-ch2-6.png)|Een **naam** is een term die gebruikt wordt om te verwijzen naar een ding.|
-|![](image-ch2-7.png)|Een **actor** is een mens of IT systeem: iemand of iets dat een communicatieve handeling kan uitvoeren.|
-|![](image-ch2-8.png)|Een **gedachte** is het denkbeeld dat een mens heeft in een bepaalde context over een ding.
-|![](image-ch2-9.png)|Een **URI-term** is een term waarmee een resource op een eenduidige manier wordt geïdentificeerd.|
-|![](image-ch2-10.png)|Een **context** is een begrip waarbinnen andere begrippen begrepen kunnen worden.|
-|![](image-ch2-11.png)|Een **begrip** is de overeengekomen betekenis van een term in een bepaalde context.|
-|![](image-ch2-12.png)|Een **model** is een vereenvoudigde representatie van een ding.|
+|![](image-ch3-4.png)|Een **term** is een aaneenschakeling van één of meerdere woorden.|
+|![](image-ch3-5.png)|Een **ding** is iets in de natuurlijke werkelijkheid: een object, mens, machine, etc.|
+|![](image-ch3-6.png)|Een **naam** is een term die gebruikt wordt om te verwijzen naar een ding.|
+|![](image-ch3-7.png)|Een **actor** is een mens of IT systeem: iemand of iets dat een communicatieve handeling kan uitvoeren.|
+|![](image-ch3-8.png)|Een **gedachte** is het denkbeeld dat een mens heeft in een bepaalde context over een ding.
+|![](image-ch3-9.png)|Een **URI-term** is een term waarmee een resource op een eenduidige manier wordt geïdentificeerd.|
+|![](image-ch3-10.png)|Een **context** is een begrip waarbinnen andere begrippen begrepen kunnen worden.|
+|![](image-ch3-11.png)|Een **begrip** is de overeengekomen betekenis van een term in een bepaalde context.|
+|![](image-ch3-12.png)|Een **model** is een vereenvoudigde representatie van een ding.|
 
 ## Vorm van communicatie
 
@@ -99,19 +99,19 @@ Merk op dat we in dit plaatje expliciet niet spreken over de 'BAG gedachte van d
 
 Communicatie in natuurlijke taal vindt plaats volgens een model dat we de grammatica van een taal noemen. Eenvoudige uitspraken hebben de vorm [onderwerp] – [gezegde] – [lijdend voorwerp]. Bijvoorbeeld in de zin "Paul kent John" is "Paul" het onderwerp, "kent" het gezegde en "John" het lijdend voorwerp. Linked Data is gebaseerd op het uitgangspunt dat we ook met data dergelijke basale uitspraken kunnen doen. Hiervoor is RDF bedacht, het Resource Description Framework [RDF]. RDF is een standaard van het World Wide Web Consortium (W3C), oorspronkelijk ontworpen als een metadata-model, maar gaandeweg gebruikt als een formaat om gegevens in het algemeen voor te stellen en uit te wisselen. Uitspraken in RDF volgen een grammatica die erg veel lijkt op die van natuurlijke taal. Ze hebben de vorm van een triple: [subject] – [predicate] – [object].
 
-![](image-ch2-13.png)
+![](image-ch3-13.png)
 
 Met een triple wordt in feite een 'korte zin' uitgedrukt (zie ook 'Wat is een zin', Algemene Nederlandse Spraakkunst [ANS-ZIN]). De drie onderdelen van de triple, namelijk 'subject', 'predicate' en 'object' corresponderen met onderwerp, gezegde en (lijdend) voorwerp uit de natuurlijke taal. Een 'object' kan weer een 'subject' zijn in een volgende uitspraak, waardoor een netwerk van samenhangende dingen en uitspraken ontstaat. Grafisch wordt een triple vaak afgebeeld als een gerichte graaf: twee bolletjes (voorstelling van subject en object) die met elkaar verbonden zijn met een pijl die het predicate voorstelt. Als het object zelf niet gebruikt wordt om verder door te verwijzen (omdat het geen URI is, maar een vaste waarde, een literal [LITERAL]), dan wordt vaak in plaats van een bolletje een rechthoek gebruikt.
 
-![](image-ch2-14.png)
+![](image-ch3-14.png)
 
 Bovenstaand voorbeeld toont plaatjes in plaats van URIs voor de (menselijke) leesbaarheid. Dit plaatje zou er als RDF met echte URIs als volgt uitzien. Voor de leesbaarheid zijn deze URIs met prefixen. Een prefix is een verkorte weergaven van een http domeinnaam.
 
-![](image-ch2-15.png)
+![](image-ch3-15.png)
 
 Aangezien alleen ruimte is voor een onderwerp, gezegde en (lijdend) voorwerp, is er in de korte zin geen mogelijkheid om ook de context uit te drukken waarbinnen een mededeling als 'waar' moet worden beschouwd. Hiervoor biedt RDF de mogelijkheid van een 'named graph' (in goed Nederlands de "benoemde graaf"). Een set samenhangende triples vormt samen een 'named graph' die zelf ook weer een URI heeft, en de context van deze triples geeft. Via de URI van de 'graph' kan ook de herkomst van de mededeling worden vastgelegd: wie deed de mededeling, wanneer en vanuit welke gedachte?
 
-![](image-ch2-16.png)
+![](image-ch3-16.png)
 
 ### Soorten zinnen naar communicatieve functie
 
@@ -213,7 +213,7 @@ In het voorbeeld kan dit het volgende gesprek opleveren:
 
 Of in Linked Data (Turtle syntax):
 
-![](image-ch2-17.png)
+![](image-ch3-17.png)
 
 ### Overige URL vragen
 
@@ -223,7 +223,7 @@ Zo willen we onderscheid maken tussen de URL-Naam en de URL-Vraag. Elke URL-Vraa
 
 Om in de vormgeving een URL-Naam te kunnen onderscheiden van een URL-Vraag stellen we voor om in de URL een vraagteken op te nemen, gevolgd door aanvullende informatie met betrekking tot de vraag, dus bijvoorbeeld:
 
-![](image-ch2-18.png)
+![](image-ch3-18.png)
 
 Deze URL-Vraag komt overeen met de zin in natuurlijk taal:
 
@@ -233,8 +233,8 @@ Deze URL-Vraag komt overeen met de zin in natuurlijk taal:
 
 | Begrip | Definitie |
 |--------|-----------|
-|![](image-ch2-19.png)|Een **triple** is een combinatie van 'onderwerp', 'gezegde' en '(lijdend) voorwerp': [subject, predicate, object].|
-|![](image-ch2-20.png)|Een **graph** is een verzameling van triples.|
+|![](image-ch3-19.png)|Een **triple** is een combinatie van 'onderwerp', 'gezegde' en '(lijdend) voorwerp': [subject, predicate, object].|
+|![](image-ch3-20.png)|Een **graph** is een verzameling van triples.|
 
 ## Betekenis van communicatie
 
@@ -242,7 +242,7 @@ Deze URL-Vraag komt overeen met de zin in natuurlijk taal:
 
 Volgens wikipedia is een feit "een gebeurtenis of omstandigheid waarvan de werkelijkheid vaststaat, ofwel zintuiglijk kan worden waargenomen of instrumenteel gemeten". [FEIT] Het tijdsaspect is van belang bij het beschouwen van een feit: de werkelijkheid van een omstandigheid kan vaststaan op één moment in tijd, maar op een ander moment in tijd juist zijn verdwenen.
 
-![](image-ch2-21.png)
+![](image-ch3-21.png)
 
 Gebeurtenissen zijn juist nooit op een stilstaand moment te aanschouwen. Een gebeurtenis stelt feitelijk voor dat de ene omstandigheid verandert in een andere omstandigheid. Wil een gebeurtenis een feit zijn, dan moet de werkelijkheid van beide omstandigheden vaststaan, maar bovendien moet vaststaan dat er een 'regel' is die feitelijk (dus waarvan de werkelijkheid ook vaststaat) bepaalt dat omstandigheid A wetmatig resulteert in omstandigheid B. Zie voor een uitleg van wat een regel is: defining business rules – what are they really [RULES]. In de natuurlijke werkelijkheid zijn deze regels de natuurwetten. Zo valt een appel van een boom als de zwaartekracht die op deze appel wordt uitgeoefend groter is dan de sterkte van de verbinding tussen de appel en de tak waaraan hij hangt.
 
@@ -271,7 +271,7 @@ Volgens de paradigma's in de rechtsinformatica (zie [RECHTPARA]) is de wet opgeb
 * Gebeurtenissen of handelingen die met betrekking tot de dingen die met deze begrippen worden aangeduid kunnen plaatsvinden.
 * De voorwaarden waaronder rechtshandelingen mogen worden uitgevoerd en die de rechtsgevolgen ervan bepalen.
 
-![](image-ch2-22.png)
+![](image-ch3-22.png)
 
 Het bovenstaande figuur laat de dynamiek zien waarlangs rechtsgevolgen ontstaan door gebeurtenissen in de natuurlijke werkelijkheid.
 
@@ -285,7 +285,7 @@ Aanleiding, voorwaarde en eindsituatie kunnen worden beschreven in de vorm van r
 
 De institutionele (en daarmee ook de juridische) werkelijkheid is niet waar te nemen. Het is als een mondelinge afspraak: achteraf kun je alleen nog via menselijke en 'stille' getuigen (akten e.d.) achterhalen wat de institutionele feiten zouden moeten zijn.
 
-![](image-ch2-23.png)
+![](image-ch3-23.png)
 
 Registreren van juridische feiten in een administratie is dan ook noodzakelijk voor een goede verstandhouding tussen mensen, en in het bijzonder: voor een goede rechtsorde. Het figuur op de vorige pagina laat zien hoe dit proces in zijn werk gaat:
 
@@ -299,19 +299,19 @@ Er is sprake van compliancy als de procesafspraken leiden tot geregistreerde geg
 
 | Begrip | Definitie |
 |--------|-----------|
-|![](image-ch2-24.png)|Een feit is een gebeurtenis of omstandigheid waarvan de werkelijkheid vaststaat.|
-|![](image-ch2-25.png)|Een natuurlijk feit is een feit dat werkelijkheid is in de natuurlijke werkelijkheid.|
-|![](image-ch2-26.png)|Een gegeven is een administratief feit dat als zodanig is geregistreerd in een informatiesysteem.|
-|![](image-ch2-27.png)|Een institutioneel feit is een feit dat werkelijkheid is conform een stelsel van afspraken (die zijn opgesteld door een instituut).|
-|![](image-ch2-28.png)|Een regel beschrijft hoe feitelijke situaties zich ten opzichte van elkaar verhouden|
-|![](image-ch2-29.png)|Een levensgebeurtenis is een gebeurtenis in de natuurlijke <br> werkelijkheid, in 'het leven van een mens'.|
-|![](image-ch2-30.png)|Een administratieve gebeurtenis is een gebeurtenis in een IT-systeem (zoals het toevoegen van data).|
-|![](image-ch2-31.png)|Een institutionele gebeurtenis is een gebeurtenis die plaatsvindt in de institutionele werkelijkheid.|
-|![](image-ch2-32.png)|De werkelijkheid is datgene dat iemand voor waar aanneemt.|
-|![](image-ch2-33.png)|De natuurlijke werkelijkheid is de werkelijkheid waarin wij leven, waarin natuurwetten gelden.|
-|![](image-ch2-34.png)|Een administratieve werkelijkheid is een representatie van de natuurlijke werkelijkheid in een informatie systeem.|
-|![](image-ch2-35.png)|Een institutionele werkelijkheid is een werkelijkheid volgens algemeen aanvaarde afspraken.|
-|![](image-ch2-36.png)|Een juridische werkelijkheid is een institutionele werkelijkheid waarin de wet- en regelgeving geldt.|
+|![](image-ch3-24.png)|Een feit is een gebeurtenis of omstandigheid waarvan de werkelijkheid vaststaat.|
+|![](image-ch3-25.png)|Een natuurlijk feit is een feit dat werkelijkheid is in de natuurlijke werkelijkheid.|
+|![](image-ch3-26.png)|Een gegeven is een administratief feit dat als zodanig is geregistreerd in een informatiesysteem.|
+|![](image-ch3-27.png)|Een institutioneel feit is een feit dat werkelijkheid is conform een stelsel van afspraken (die zijn opgesteld door een instituut).|
+|![](image-ch3-28.png)|Een regel beschrijft hoe feitelijke situaties zich ten opzichte van elkaar verhouden|
+|![](image-ch3-29.png)|Een levensgebeurtenis is een gebeurtenis in de natuurlijke <br> werkelijkheid, in 'het leven van een mens'.|
+|![](image-ch3-30.png)|Een administratieve gebeurtenis is een gebeurtenis in een IT-systeem (zoals het toevoegen van data).|
+|![](image-ch3-31.png)|Een institutionele gebeurtenis is een gebeurtenis die plaatsvindt in de institutionele werkelijkheid.|
+|![](image-ch3-32.png)|De werkelijkheid is datgene dat iemand voor waar aanneemt.|
+|![](image-ch3-33.png)|De natuurlijke werkelijkheid is de werkelijkheid waarin wij leven, waarin natuurwetten gelden.|
+|![](image-ch3-34.png)|Een administratieve werkelijkheid is een representatie van de natuurlijke werkelijkheid in een informatie systeem.|
+|![](image-ch3-35.png)|Een institutionele werkelijkheid is een werkelijkheid volgens algemeen aanvaarde afspraken.|
+|![](image-ch3-36.png)|Een juridische werkelijkheid is een institutionele werkelijkheid waarin de wet- en regelgeving geldt.|
 
 ## Gebruik
 
@@ -323,11 +323,11 @@ Het lukt dus nooit om de hele context van een natuurlijke situatie, zoals die op
 
 In de voorgaande paragraaf hebben we het over concrete zaken gehad: een geboorte, een gebouw, een registratie van gegevens. Om de betekenis van deze zaken te kunnen beschrijven, is het noodzakelijk om een abstractie te introduceren: de abstractie van 'begrippen'.
 
-![](image-ch2-37.png)
+![](image-ch3-37.png)
 
 Een 'begrip' is de abstractie van een 'ding' in de natuurlijke werkelijkheid. Een begrip wordt aangeduid met minimaal één voorkeurs-term. Ook hier kunnen we de begripsdriehoek gebruiken. Alleen gaat het in dit geval niet om een gedachte, maar om een afspraak over wat het begrip zou moeten betekenen. Het onderstaande figuur geeft de driehoek weer voor het begrip "Pand" uit de BAG.
 
-![](image-ch2-38.png)
+![](image-ch3-38.png)
 
 Het 'ding' aan de rechterkant is in dit geval geen concreet 'ding', maar een abstractie: een 'pand' zoals bedoeld in de BAG. Het wolkje bovenin betreft de afspraak over de betekenis van een 'Pand'.
 
@@ -335,11 +335,11 @@ Het 'ding' aan de rechterkant is in dit geval geen concreet 'ding', maar een abs
 
 Een begrip is te identificeren door een term te verbinden met een context. Hiermee is duidelijk wanneer twee begrippen dezelfde betekenis hebben (term+context is gelijk), of wanneer twee begrippen van elkaar verschillen (term+context is anders).
 
-![](image-ch2-39.png)
+![](image-ch3-39.png)
 
 Dit geeft nog geen duiding aan de betekenis van het begrip. Daarvoor is het noodzakelijk om begrippen met elkaar te verbinden op een manier waardoor de betekenis verder wordt geduid. Hiervoor biedt het vakgebied van de semantiek aanknopingspunten. In dit vakgebied is het gebruikelijk om 'description logic' toe te passen voor het beschrijven van de betekenis van begrippen. Het idee hierachter is dat betekenis uitgedrukt kan worden in classificaties. Elk begrip is dan een classificatie van concrete voorkomens. De verzameling van alle potentiële voorkomens waarvan gezegd kan worden: "Dit is er zo 1", wordt de extensie van een dergelijke classificatie genoemd. Twee begrippen hebben vervolgens dezelfde betekenis is als de bijbehorende extensies precies dezelfde elementen bevatten.
 
-![](image-ch2-40.png)
+![](image-ch3-40.png)
 
 Een begrippenmodel kan qua diepgang beperkt zijn of juist heel diep gaan:
 
