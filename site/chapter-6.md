@@ -16,14 +16,14 @@ Standaard kent een triple store de mogelijkheid om via een SPARQL-endpoint data 
 
 In het voorbeeld van de BAG kan aan een SPARQL endpoint bijvoorbeeld de volgende vraag worden gesteld. Deze vraagt de gegevens op van het pand aan de Krankeledenstraaat 30 in Amersfoort:
 
-    prefix bag: http://bag.kadaster.nl/def#
+    prefix bag: <http://bag.basisregistraties.overheid.nl/def/bag#>
     select ?pand ?eigenschap ?waarde
     where {
-      ?openbareRuimte bag:naamOpenbareRuimte "krankeledenstraat".
-      ?nummeraanduiding bag:gerelateerdeOpenbareRuimte ?openbareRuimte.
-      ?nummeraanduiding bag:huisnummer "30".
+      ?openbareRuimte bag:naamOpenbareRuimte "Krankeledenstraat".
+      ?nummeraanduiding bag:bijbehorendeOpenbareRuimte ?openbareRuimte.
+      ?nummeraanduiding bag:huisnummer 30 .
       ?verblijfsobject bag:hoofdadres ?nummeraanduiding.
-      ?verblijfsobject bag:onderdeelVan ?pand.
+      ?verblijfsobject bag:pandrelatering ?pand.
       ?pand ?eigenschap ?waarde
     }
 
@@ -32,7 +32,7 @@ Om zo’n vraag te kunnen stellen is toch wel wat gespecialiseerde SPARQL kennis
 ### Linked Data API
 De Linked Data API is een voorziening die het mogelijk maakt om antwoord te geven op URLs en URL-Vragen naar linked data. Zo kun je direct in de browser de volgende relatief eenvoudige URL-vraag stellen:
 
-`http://bag.kadaster.nl/query/pand-aan?naamOpenbareRuimte=Krankeledenstraat&amp;huisnummer=30&amp;woonplaatsnaam=Amersfoort`
+> `http://bag.basisregistraties.overheid.nl/ldapi/pand-aan?naamOpenbareRuimte=Krankeledenstraat&amp;huisnummer=30&amp;woonplaatsnaam=Amersfoort`
 
 Als deze vraag wordt gesteld vanuit de browser herkent de API dat en toont deze als antwoord een nette, in de gewenste huisstijl van de organisatie opgemaakte webpagina.
 
