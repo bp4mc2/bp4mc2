@@ -1,16 +1,8 @@
 # Literatuurlijst
 | Referentie | Titel en Locatie |
 |------------|------------------|
-|[<a href="#10rules#></a>10RULES]|10 Rules for persistent URIs. Een veelomvattend rapport van de EU met vergelijkbare initiatieven en een waardevol overzicht van de laatste best-practices. [https://joinup.ec.europa.eu/sites/default/files/D7.1.3 - Study on persistent URIs_0.pdf](https://joinup.ec.europa.eu/sites/default/files/D7.1.3 - Study on persistent URIs_0.pdf)|
-|[AANW161]|Aanwijzing 161, http://wetten.overheid.nl/BWBR0005730/Hoofdstuk4/411/Aanwijzing161|
-
-#### Test {#testing}
-
-##### Test {#testing1}
-
-Test {#testing2}
-
-###### Test {#testing3}
+|#### [10RULES] {#10rules}]|10 Rules for persistent URIs. Een veelomvattend rapport van de EU met vergelijkbare initiatieven en een waardevol overzicht van de laatste best-practices. [https://joinup.ec.europa.eu/sites/default/files/D7.1.3 - Study on persistent URIs_0.pdf](https://joinup.ec.europa.eu/sites/default/files/D7.1.3 - Study on persistent URIs_0.pdf)|
+|#### [AANW161] {aanw161}|Aanwijzing 161, http://wetten.overheid.nl/BWBR0005730/Hoofdstuk4/411/Aanwijzing161|
 
 <tr><td>[AJAX]</td><td>
                 AJAX - Asynchronous Javascript and XML<br>
