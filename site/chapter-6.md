@@ -60,7 +60,7 @@ Het http protocol kent de mogelijkheid van 'content negotiation'. Dit betekent d
 
 ![](image-ch6-3.png)
 
-In bovenstaand plaatje is dit uitgebeeld. De URL http://bag.kadaster.nl/doc/pand/0307100000333887 kan hier op drie verschillende manieren worden weergegeven:
+In bovenstaand plaatje is dit uitgebeeld. De URL http://bag.basisregistraties.nl/doc/pand/0307100000333887 kan hier op drie verschillende manieren worden weergegeven:
 
 * Als 'gewone' webpagina (html), voor menselijke eindgebruikers. Het intypen van de URL in een browser zal normaal gesproken dit gedrag vertonen
 * Als JSON-LD document, voor App bouwers die van JSON services houden (de meeste programmeurs);
@@ -68,7 +68,7 @@ In bovenstaand plaatje is dit uitgebeeld. De URL http://bag.kadaster.nl/doc/pand
 
 Overigens is het gebruikelijk om ook specifiek (los van de http-request header) een formaat op te vragen, door achter de URL een extensie toe te voegen die het formaat weergeeft. Zo geeft onderstaande URL-vraag een JSON response terug.
 
-- `http://bag.kadaster.nl/query/pand-aan.json?naamOpenbareRuimte=Krankeledenstraat&amp;huisnummer=30&amp;woonplaatsnaam=Amersfoort`
+> `http://bag.baisregistraties.overheid.nl/ldapi/pand-aan.json?naamOpenbareRuimte=Krankeledenstraat&amp;huisnummer=30&amp;woonplaatsnaam=Amersfoort`
 
 Bovenstaand figuur laat ook het http-303 redirect gedrag zien. Op grond van de richtlijnen uit de URI strategie zal de "id" URL leiden tot een http-303 redirect response. Dit leidt ertoe dat de browser opnieuw een pagina zal opvragen, in dit geval de "doc" URL.
 
