@@ -58,7 +58,7 @@ Het bepalen van de vorm waarin het resultaat wordt teruggegeven gebeurt via 'con
 
 Het http protocol kent de mogelijkheid van 'content negotiation'. Dit betekent dat op basis van de http-request header, de http server een andere 'vorm' van de webpagina zal teruggeven.
 
-![](image-ch6-3.png)
+![](image-ch6-2.png)
 
 In bovenstaand plaatje is dit uitgebeeld. De URL http://bag.basisregistraties.nl/doc/pand/0307100000333887 kan hier op drie verschillende manieren worden weergegeven:
 
@@ -70,7 +70,7 @@ Overigens is het gebruikelijk om ook specifiek (los van de http-request header) 
 
 > `http://bag.baisregistraties.overheid.nl/ldapi/pand-aan.json?naamOpenbareRuimte=Krankeledenstraat&amp;huisnummer=30&amp;woonplaatsnaam=Amersfoort`
 
-Bovenstaand figuur laat ook het http-303 redirect gedrag zien. Op grond van de richtlijnen uit de URI strategie zal de "id" URL leiden tot een http-303 redirect response. Dit leidt ertoe dat de browser opnieuw een pagina zal opvragen, in dit geval de "doc" URL.
+Bovenstaand figuur laat ook het http-303 redirect gedrag zien. Op grond van de richtlijnen uit de URI strategie zal de `id` URL http://bag.basisregistraties.nl/doc/pand/0307100000333887 leiden tot een http-303 redirect response. Dit leidt ertoe dat de browser opnieuw een pagina zal opvragen, in dit geval de `doc` URL.
 
 ## Core vocabulaires
 
