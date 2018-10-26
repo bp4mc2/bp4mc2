@@ -76,8 +76,8 @@ http://nl.wikipedia.org/wiki/Gegeven
 Directed graph
 http://en.wikipedia.org/wiki/Directed_graph
 
-###### [GRAPHSTORE] SPARQL
-1.1 Graph Store HTTP Protocol
+###### [GRAPHSTORE]
+SPARQL 1.1 Graph Store HTTP Protocol
 http://www.w3.org/TR/sparql11-http-rdf-update/
 
 ###### [HTTP]
