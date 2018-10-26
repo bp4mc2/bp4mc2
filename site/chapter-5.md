@@ -1,10 +1,10 @@
 # Werkwijze
 De werkwijze bij BP4mc2 bestaat grofweg uit vier fasen, te weten:
 
-1. Inventariseren en analyseren van de samenhang van begrippen
-2. Redigeren, valideren en verifiëren van begrippen
-3. Aanbrengen van samenhang tussen begrippen en het datamodel
-4. Publiceren
+1. Inventariseren en analyseren van de samenhang van begrippen;
+2. Redigeren, valideren en verifiëren van begrippen;
+3. Aanbrengen van samenhang tussen begrippen en het datamodel;
+4. Publiceren.
 
 In elke paragraaf van dit hoofdstuk gaan we op een fase in.
 
@@ -127,17 +127,17 @@ Omdat alle begrippen om pragmatische redenen al waren afgeleid uit het datamodel
 
 Definities van data-objecten krijgen dan de volgende vorm:
 
-- "Het entiteittype OpenbareRuimte bevat de data over objecten die worden aangeduid met het begrip OpenbareRuimte."
+> "Het entiteittype OpenbareRuimte bevat de data over objecten die worden aangeduid met het begrip OpenbareRuimte."
 
 Soms worden begrippen in een datamodel gegroepeerd en gegeneraliseerd. Dat leidt tot een definitie als:
 
-- "Het entiteittype AdresseerbaarObject is een generalisatie van de entiteittype Verblijfsobject, Ligplaats en Standplaats."
+> "Het entiteittype AdresseerbaarObject is een generalisatie van de entiteittype Verblijfsobject, Ligplaats en Standplaats."
 
 Het begrip 'adresseerbaar object' komt in de wet niet voor, maar is in het datamodel opgevoerd als hulpmiddel om aan zowel verblijfsobjecten, ligplaatsen en standplaatsen een adres te kunnen toekennen, het is een zogenaamd 'abstract datatype', dat niet zichtbaar is in de natuurlijke, noch in de juridische werkelijkheid.
 
 Een laatste categorie zijn begrippen die juridisch allemaal hun eigen betekenis hebben, maar in het datamodel geclusterd worden. Dit komt vooral voor in meer ingewikkelde registraties die al wat een langere geschiedenis hebben. Een voorbeeld zijn de rechten die worden vastgelegd in de BRK:
 
-- "Het datatype ZakelijkRecht bevat de data over objecten die worden aangeduid met de begrippen Eigendom, Opstal, Erfpacht, Vruchtgebruik,.."
+> "Het datatype ZakelijkRecht bevat de data over objecten die worden aangeduid met de begrippen Eigendom, Opstal, Erfpacht, Vruchtgebruik,.."
 
 ### Beschrijven van een ontologie
 
@@ -153,7 +153,7 @@ Datamodellen omvatten ook data die betrekking heeft op de data in het datamodel 
 
 2. Gebruik maken van het feit dat triples onderdeel zijn van een graph. Dat wil zeggen dat alle triples die dezelfde "metadata" hebben ook in dezelfde graph worden gezet. Door deze graph een URI te geven (het wordt dan een 'named graph'), kan extra data over de graph weer als 'normale' triples opgeslagen worden. Het nadeel van deze methode is dat hiervoor een quad store noodzakelijk is, en dit zal gaan leiden tot erg veel verschillende named graphs. Niet elke quad store is ingericht op een zeer groot aantal graphs.
 
-Puur functioneel gaat onze voorkeur uit naar de tweede oplossing. Deze oplossing is in de praktijk ook al vaker ingezet (zie bijvoorbeeld: [JENI]). Het betekent wel dat de Linked Data representatie zal afwijken van de oorspronkelijke relationele beschrijving van het datamodel.
+Puur functioneel gaat onze voorkeur uit naar de tweede oplossing. Deze oplossing is in de praktijk ook al vaker ingezet (zie bijvoorbeeld: [[JENI](references.md#jeni)]). Het betekent wel dat de Linked Data representatie zal afwijken van de oorspronkelijke relationele beschrijving van het datamodel.
 
 In de Linked Data representatie komt veel meer nadruk te liggen op de gebeurtenissen die aanleiding hebben gehad tot het wijzigen van de data in de administratie. Voor elk van deze gebeurtenissen wordt vastgelegd:
 
@@ -165,7 +165,7 @@ Door deze manier van modelleren blijkt bovendien dat er in termen van Linked Dat
 
 Op deze wijze kan invulling gegeven worden aan het principe: "anybody can say anything about anything". Maar bovendien wordt ook de integriteit van de uitspraken (de data) behouden: bij het vastleggen wordt ook vastgelegd wie de uitspraak deed, wanneer dit werd gedaan en vanuit welke context. Op die wijze is altijd helder welke data op een zeker moment in tijd en vanuit welke context de 'correcte' data is.
 
-Een dergelijk manier van publiceren lijkt sterk op het idee van een datamodel zoals is ontwikkeld voor datawarehouses (datavault technologie, zie [DATAVAULT]) en voor sommige gedistribueerde database systemen (bijvoorbeeld Datomic, zie [DATOMIC]).
+Een dergelijk manier van publiceren lijkt sterk op het idee van een datamodel zoals is ontwikkeld voor datawarehouses (datavault technologie, zie [[DATAVAULT](references.md#datavault)]) en voor sommige gedistribueerde database systemen (bijvoorbeeld Datomic, zie [[DATOMIC](references.md#datomic)]).
 
 ## Publiceren
 
@@ -185,13 +185,13 @@ De eerste stap in deze fase is het bepalen van een domeinnaam waarbinnen de data
 
 Op basis van de uitgangspunten en aanbevelingen ligt voor de BAG een domein http://bag.nl voor de hand of http://bag.basisregistratie.nl. De meeste drieletterige domeinnamen die beginnen met een “b” blijken in Nederland echter geregistreerd bij bureaus die allerlei diensten verlenen, meestal op het gebied van financiële advisering of kredietbemiddeling. Ook de domeinnamen "basisregistratie.nl" is al geregistreerd door een dienstverlenend bedrijf.
 
-In deze jungle van domeinnamen is het eigenlijk onmogelijk zomaar een domeinnaam te introduceren die het vertrouwen geeft dat deze de bron is van een authentieke registratie. De meest solide manier is het vastleggen van de domeinnaam die de authentieke bron representeert in wetgeving. Een voorbeeld is [https://www.officielebekendmakingen.nl](https://www.officielebekendmakingen.nl), waar alle officiële bekendmakingen van de overheid worden gepubliceerd. Deze domeinnaam is vastgelegd in artikel 1 van de Bekendmakingsregeling.
+In deze jungle van domeinnamen is het eigenlijk onmogelijk zomaar een domeinnaam te introduceren die het vertrouwen geeft dat deze de bron is van een authentieke registratie. De meest solide manier is het vastleggen van de domeinnaam die de authentieke bron representeert in wetgeving. Een voorbeeld is https://www.officielebekendmakingen.nl, waar alle officiële bekendmakingen van de overheid worden gepubliceerd. Deze domeinnaam is vastgelegd in artikel 1 van de Bekendmakingsregeling.
 
 Voor de BAG is, in afwachting van een wetsaanpassing waarin een domeinnaam voor publicatie van de authentieke data wordt vastgesteld, gekozen voor een tussenoplossing. In de Wet Basisregistraties adressen en gebouwen staat in Hoofdstuk 4, artikel 26: 'De Dienst (i.c. het Kadaster) houdt een geautomatiseerde landelijke voorziening waarin de data uit de in de gemeenten gehouden adressenregistraties en de gebouwenregistraties zijn opgenomen.' Daarom lijkt "http://bag.kadaster.nl/" op dit moment de meest bruikbare domeinnaam waaraan zichtbaar is dat het om de authentieke data uit de landelijke voorziening voor de BAG gaat.
 
 ### type, concept en referentie toegepast op het begrippenkader
 
-Alle in het begrippenkader gedefinieerde begrippen zijn ook concepten. Conform de URI-strategie krijgt ieder begrip een id en wordt de documentatie over een begrip via een 303-redirect gepresenteerd met een doc-URI.
+Alle in het begrippenkader gedefinieerde begrippen zijn ook concepten. Conform de URI-strategie krijgt ieder begrip een id en wordt de documentatie over een begrip via een 303-redirect gepresenteerd met een `doc` URI.
 
 * Zo krijgt het begrip ‘nummeraanduiding’ in de BAG de URI http://bag.kadaster.nl/id/begrip/Nummeraanduiding. Dit is de identificatie (type=id) van het begrip (concept) dat wordt aangeduid met de term Nummeraanduiding (referentie).
 * Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie over het begrip dat wordt aangeduid met de term Nummeraanduiding gepresenteerd in een html pagina met als URI http://bag.kadaster.nl/doc/begrip/Nummeraanduiding.
@@ -199,7 +199,7 @@ Alle in het begrippenkader gedefinieerde begrippen zijn ook concepten. Conform d
 
 ### type, concept en referentie toegepast op het datamodel
 
-In de URI-strategie wordt aanbevolen data te definiëren met “def” URI-type.
+In de URI-strategie wordt aanbevolen data te definiëren met `def` URI-type.
 
 * Zo krijgt het gegevenselement 'nummeraanduiding' in de BAG de URI http://bag.kadaster.nl/def/gegevenselement/Nummeraanduiding#. Dit is de definitie (type=`def`) van het gegevenselement dat verwijst naar de data die opgeslagen is bij klassen aangeduid met de term Nummeraanduiding (referentie).
 * Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie en metadata over het data-element OpenbareRuimte gepresenteerd in een html pagina met als URI http://bag.kadaster.nl/def/gegevenselement/Nummeraanduiding.
@@ -207,7 +207,7 @@ In de URI-strategie wordt aanbevolen data te definiëren met “def” URI-type.
 
 ### type, concept en referentie toegepast op de data
 
-In de URI-strategie wordt aanbevolen data te definiëren met het URI-type id.
+In de URI-strategie wordt aanbevolen data te definiëren met het URI-type `id`.
 
 * Zo krijgt de woonplaats "Amersfoort" in de BAG de URI “http://bag.kadaster.nl/id/woonplaats/1664”. Dit is de identificatie (type=id) van de woonplaats die in de BAG de identificatie "1664" heeft.
 * Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie en metadata over de gegevens van Amersfoort gepresenteerd in een html pagina met als URI http://bag.kadaster.nl/doc/woonplaats/1664.
@@ -219,14 +219,14 @@ De volgende best-practices gelden voor het formuleren van de URI:
 
 * Voor begrippen en klassen is de identificatie gelijk aan de term van het begrip. Het is gangbaar om deze te schrijven als UpperCamelCase. Dat wil zeggen: als de aanduiding voor een begrip in natuurlijke taal uit meerdere woorden bestaat schrijven we de woorden aan elkaar waarbij elk woord met een hoofdletter begint, gevolgd door kleine letters. Diacrieten worden verwijderd. Leestekens zoals haakjes, komma’s, "`#`" en "`&`" dienen te worden vermeden.
 * Voor eigenschappen geldt hetzelfde maar dan voor lowerCamelCase: Het eerste woord waarmee de eigenschap in natuurlijke taal wordt aangeduid begint met een kleine letter.
-* Voor begrippen is het handig om als `{concept}` te kiezen voor "`begrip`" of het Engelse "`concept`".
-* Voor entiteit-attribuut modellen is het handig om als {`concept`} te kiezen voor "`element`".
-* Voor klasse-eigenschap modellen is het handig om als {`concept`} te kiezen voor "`ontologie`" of het engelse "`ontology`".
+* Voor begrippen is het handig om als `{concept}` te kiezen voor `begrip` of het Engelse `concept`.
+* Voor entiteit-attribuut modellen is het handig om als `{concept}` te kiezen voor `element`.
+* Voor klasse-eigenschap modellen is het handig om als `{concept}` te kiezen voor `ontologie` of het engelse `ontology`.
 * Voor entiteit-attribuut modellen is het handig om voor de "`#`" de klassenaam te plaatsen en achter de "`#`" het attribuut (of relatie).
 * Voor klasse-entiteit modellen is het handig om zowel de klasse als de entiteit achter de "`#`" te plaatsen.
 
 De volgende best-practices gelden voor de redirect:
 * Maak gebruik van 303-redirect met `id` en `doc` URIs.
-De redirect kan gaan naar de meest  actuele versie (een "`doc`" URI zonder een datum of tijdnotatie), dan wel naar een specifieke versie.
+De redirect kan gaan naar de meest  actuele versie (een `doc` URI zonder een datum of tijdnotatie), dan wel naar een specifieke versie.
 * De datum en/of tijdnotatie in de URL behoort te verwijzen naar een peildatum. De gegevens die worden teruggegeven zouden niet meer mogen wijzigen, ook als op een later moment opnieuw dezelfde vraag wordt gesteld.
 * Aanvullende contextuele vragen horen geen URIs te zijn volgens de URI-strategie, maar URI-Vragen (dus met een "`?`").
