@@ -36,21 +36,21 @@ De Linked Data API is een voorziening die het mogelijk maakt om antwoord te geve
 
 Als deze vraag wordt gesteld vanuit de browser herkent de API dat en toont deze als antwoord een nette, in de gewenste huisstijl van de organisatie opgemaakte webpagina.
 
-Het is ook mogelijk om een voor programmeurs aantrekkelijk protocol te gebruiken, namelijk RESTful services [REST] die JSON [JSON] retourneren. Daardoor hebben programmeurs niet (veel) kennis nodig van Linked Data om een app of programma maken waarin linked data wordt gebruikt.
+Het is ook mogelijk om een voor programmeurs aantrekkelijk protocol te gebruiken, namelijk RESTful services [[REST](references.md#rest)] die JSON [[JSON](references.md#json)] retourneren. Daardoor hebben programmeurs niet (veel) kennis nodig van Linked Data om een app of programma maken waarin linked data wordt gebruikt.
 
 De API biedt bovendien de mogelijkheid om autorisatie toe te passen op de getoonde informatie, zodat alleen geautoriseerde personen toegang hebben tot de gegevens. Dan zijn het niet meer open data, maar moet er bijvoorbeeld voor worden betaald of zijn bepaalde data niet voor iedereen toegankelijk.
 
 De Linked Data API kent als interface een ‘normaal’ http endpoint. Dat betekent dat http GET requests afgehandeld worden door de Linked Data API. Voor de specificaties van de Linked Data API bestaan op dit moment twee varianten:
 
-* De vrij generieke en vanuit de W3C opgestelde Linked Data Platform (LDP) [LDP];
-* De meer specifieke en op implementatie gerichte Linked Data API specificatie [LDAPI].
+* De vrij generieke en vanuit de W3C opgestelde Linked Data Platform (LDP) [[LDP](references.md#ldp)];
+* De meer specifieke en op implementatie gerichte Linked Data API specificatie [[LDAPI](references.md#ldapi)].
 
 Door het aanbieden van een Linked Data API kunnen verschillende systemen aansluiten op de Linked Data API:
 
 * Een App, waarbij de App via een RESTful JSON http service gegevens opvraagd van de Linked Data API;
 * Een website, waarbij http links zijn opgenomen. Door te klikken op de website, navigeer je naar de website, en zal in de browser van de gebruiker de linked data als een html webpagina worden getoond;
-* Een informatiesysteem, waarbij een machine-naar-machine interface is geïmplementeerd door middel van een RESTful http webservice. Daarmee biedt deze architectuur de mogelijkheid om opgenomen te worden in een SOA landschap (maar dan niet met een SOAP webservice [SOAP], maar een RESTful webservice).
-* Een interactieve website, waarbij via Javascript Ajax-calls [AJAX] worden uitgevoerd, zodat de inhoud van het scherm dynamisch kan worden bijgewerkt, bijvoorbeeld voor het tonen van een grafische representatie.
+* Een informatiesysteem, waarbij een machine-naar-machine interface is geïmplementeerd door middel van een RESTful http webservice. Daarmee biedt deze architectuur de mogelijkheid om opgenomen te worden in een SOA landschap (maar dan niet met een SOAP webservice [[SOAP](references.md#soap)], maar een RESTful webservice).
+* Een interactieve website, waarbij via Javascript Ajax-calls [[AJAX](references.md#ajax)] worden uitgevoerd, zodat de inhoud van het scherm dynamisch kan worden bijgewerkt, bijvoorbeeld voor het tonen van een grafische representatie.
 
 Het bepalen van de vorm waarin het resultaat wordt teruggegeven gebeurt via 'content negotiation'.
 
