@@ -37,6 +37,9 @@ foaf:Organization a rdfs:Class; rdfs:subClassOf foaf:Agent.
 #derived from org
 org:Organization a rdfs:Class; rdfs:subClassOf foaf:Organization.
 
+#imported from adms
+adms:Asset a rdfs:Class; rdfs:subClassOf dcat:Dataset.
+
 #---------------------
 # Stating which items can be a prov:Entity
 #
@@ -47,31 +50,50 @@ scprov:Metadata_isPrimaryTopicOf a sh:PropertyShape;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity
 .
+scprov:Metadata_asDataset a sh:PropertyShape;
+  sh:name "as dcat:Dataset";
+  sh:path rdf:type;
+  sh:hasValue dcat:Dataset
+.
+scprov:Metadata_asAsset a sh:PropertyShape;
+  sh:name "as adms:Asset";
+  sh:path rdf:type;
+  sh:hasValue adms:Asset
+.
+scprov:Dataset_publisher a sh:PropertyShape;
+  sh:name "dcterms:publisher";
+  sh:class foaf:Agent;
+  sh:path dcterms:publisher;
+.
 scprov:Dataset a sh:NodeShape;
   sh:name "dcat:Dataset";
   sh:targetClass dcat:Dataset;
-  sh:property scprov:Metadata_isPrimaryTopicOf
+  sh:property scprov:Metadata_isPrimaryTopicOf;
+  sh:property scprov:Dataset_publisher;
 .
 scprov:Collection a sh:NodeShape;
   sh:name "skos:Collection";
   sh:property scprov:Metadata_isPrimaryTopicOf
 .
 scprov:Concept a sh:NodeShape;
-  sh:name "skos:Collection";
+  sh:name "skos:Concept";
   sh:property scprov:Metadata_isPrimaryTopicOf
 .
 scprov:Distribution a sh:NodeShape;
-  sh:name "skos:Collection";
+  sh:name "dcat:Distribution";
   sh:property scprov:Metadata_isPrimaryTopicOf
+.
+scprov:Asset a sh:NodeShape;
+  sh:name "adms:Asset";
+  sh:targetClass adms:Asset;
 .
 scprov:ConceptScheme a sh:NodeShape;
   sh:name "skos:ConceptScheme";
-  sh:property scprov:Metadata_asDataset
+  sh:property scprov:Metadata_asAsset
 .
-scprov:Metadata_asDataset a sh:PropertyShape;
-  sh:name "as dcat:Dataset";
-  sh:path rdf:type;
-  sh:hasValue dcat:Dataset
+scprov:ControlledVocabulary a sh:NodeShape;
+  sh:name "adms:Asset (Controlled Vocabulary)";
+  sh:property scprov:Metadata_asAsset
 .
 
 #---------------------
