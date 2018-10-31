@@ -26,56 +26,53 @@
 # IMPORT
 #---------------------
 
-#derived from dataset-type
-dstype:Datamodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  rdfs:label "Datamodel"@en;
-  sh:name "dstype:Datamodel"
-.
-dstype:ControlledVocabulary a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  rdfs:label "Controlled vocabulary"@en;
-  sh:name "dstype:ControlledVocabulary"
-.
-dstype:DatasetVersion a skos:Concept;
-  rdfs:label "Datasetversie"@nl;
-  rdfs:label "Dataset version"@en;
-  sh:name "dstype:DatasetVersion"
-.
-
-#derived from skos-lex
-skoslex:Act rdfs:subClassOf skos:Concept.
-skoslex:Object rdfs:subClassOf skos:Concept.
-skoslex:Actor rdfs:subClassOf skos:Concept.
-skoslex:Agent rdfs:subClassOf skoslex:Actor.
-
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
-
 #derived from prov
-prov:Person rdfs:subClassOf prov:Agent.
-prov:Organization rdfs:subClassOf prov:Agent.
-prov:SoftwareAgent rdfs:subClassOf prov:Agent.
+prov:Person a rdfs:Class; rdfs:subClassOf prov:Agent.
+prov:Organization a rdfs:Class; rdfs:subClassOf prov:Agent.
+prov:SoftwareAgent a rdfs:Class; rdfs:subClassOf prov:Agent.
 
 #derived from foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
+foaf:Organization a rdfs:Class; rdfs:subClassOf foaf:Agent.
 
 #derived from org
-org:Organization rdfs:subClassOf foaf:Organization.
+org:Organization a rdfs:Class; rdfs:subClassOf foaf:Organization.
 
-#derived from adms
-adms:Asset rdfs:subClassOf dcat:Dataset.
-adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
-
-#derived from dqv
-dqv:Dimension rdfs:subClassOf skos:Concept.
-dqv:Category rdfs:subClassOf skos:Concept.
-
-#Extra
-rdf:type sh:name "rdf:type".
-dqv:value sh:name "dqv:value".
-skos:inScheme sh:name "skos:inScheme".
+#---------------------
+# Stating which items can be a prov:Entity
+#
+# The documentation for these relations are part of the profiles that contain these items
+# In this profile, we only state these items for reference
+#---------------------
+scprov:Metadata_isPrimaryTopicOf a sh:PropertyShape;
+  sh:name "foaf:isPrimaryTopicOf";
+  sh:class prov:Entity
+.
+scprov:Dataset a sh:NodeShape;
+  sh:name "dcat:Dataset";
+  sh:targetClass dcat:Dataset;
+  sh:property scprov:Metadata_isPrimaryTopicOf
+.
+scprov:Collection a sh:NodeShape;
+  sh:name "skos:Collection";
+  sh:property scprov:Metadata_isPrimaryTopicOf
+.
+scprov:Concept a sh:NodeShape;
+  sh:name "skos:Collection";
+  sh:property scprov:Metadata_isPrimaryTopicOf
+.
+scprov:Distribution a sh:NodeShape;
+  sh:name "skos:Collection";
+  sh:property scprov:Metadata_isPrimaryTopicOf
+.
+scprov:ConceptScheme a sh:NodeShape;
+  sh:name "skos:ConceptScheme";
+  sh:property scprov:Metadata_asDataset
+.
+scprov:Metadata_asDataset a sh:PropertyShape;
+  sh:name "as dcat:Dataset";
+  sh:path rdf:type;
+  sh:hasValue dcat:Dataset
+.
 
 #---------------------
 # Metadata (Versioning)
@@ -243,7 +240,7 @@ scprov:Location a sh:NodeShape;
 .
 
 #-----------------------------------------------
-# Admistrative houskeeping metadata 
+# Admistrative houskeeping metadata
 #-----------------------------------------------
 scprov:ProvenanceGraph a sh:NodeShape;
   rdfs:label "Provenance graaf"@nl;
@@ -316,6 +313,7 @@ scprov:ProvenanceAgent_knownAgent a sh:PropertyShape;
   rdfs:label "geidentificeerd als"@nl;
   rdfs:label "identified as"@en;
   sh:path rdf:type;
+  sh:name "as foaf:Agent";
   sh:hasValue foaf:Agent;
   rdfs:comment "Een persoon of organisatie is bekend."@nl;
   rdfs:comment "A person or organization is known."@en;
