@@ -19,6 +19,7 @@ page:skos a cnt:ContentAsText;
     page:concept
     page:collection
     page:externalConcept
+    page:assetConceptScheme
     page:skosUriStrategy
   )
 .
@@ -52,18 +53,18 @@ SKOS is used to describe concepts. SKOS is a standard on the appy-or-explain lis
 # ========================================
 page:assetConceptScheme a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Begrippenkader asset"@nl, "Concept scheme asset"@en]
+    [xhtml:heading "Begrippenkader als asset"@nl, "Concept scheme asset"@en]
+    page:assetConceptScheme-body
     [dct:subject skosap:AssetConceptScheme; xhtml:stylesheet style:nodeshape]
-    page:assetConceptScheme-properties
     page:assetConceptScheme-relations
   )
 .
 
-page:assetConceptScheme-porperties a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject skosap:AssetConceptScheme; xhtml:stylesheet style:datatype-properties]
-  )
+page:assetConceptScheme-body a cnt:ContentAsText;
+  cnt:chars
+'''
+Een begrippenkader kan gezien worden als een asset. Deze Asset betreft een Dataset met als inhoud alle eigenschappen van de begrippen en collecties binnen dit begrippenkader.
+'''@nl;
 .
 
 page:assetConceptScheme-relations a cnt:ContentAsText;
