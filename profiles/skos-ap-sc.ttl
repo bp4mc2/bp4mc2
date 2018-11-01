@@ -31,6 +31,7 @@
 skosap:Asset a sh:NodeShape;
   sh:targetClass adms:Asset;
   sh:name "adms:Asset";
+  sh:property [ a sh:PropertyShape] # Bugfix: anders wordt de Asset niet getoond...
 .
 #Import from rdfs
 skosap:Resource a sh:NodeShape;
@@ -423,9 +424,8 @@ skosap:ConceptScheme a sh:NodeShape;
   rdfs:comment "De kennis over de fysieke werkelijkheid wordt beschreven in een talig model, een begrippenmodel.  In een begrippenmodel wordt deze kennis zodanig gestructureerd vastgelegd dat deze door zowel mensen als door computers wordt begrepen."@nl;
   rdfs:comment "The knowledge about physical reality is described in a linguistic model, a conceptual model. In a conceptual model, this knowledge is structured in such a way that it is understood by both people and computers."@en;
   skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein. Deze begrippen vinden hun oorsprong in de Kadasterwet, die beschrijft wat percelen en rechten daarop betekenen."@nl;
-  sh:property skosap:ConceptScheme_type;
   sh:property skosap:ConceptScheme_label;
-  sh:property skosap:ConceptScheme_hasTopConcept
+  sh:property skosap:ConceptScheme_hasTopConcept;
 .
 skosap:ConceptScheme_label a sh:PropertyShape;
   rdfs:label "label"@nl;
@@ -451,15 +451,6 @@ skosap:ConceptScheme_hasTopConcept a sh:PropertyShape;
   rdfs:comment "A concept schema can contain concepts that are the most generic in a hierarchy of specializations / generalizations."@en;
   skos:example "Het concept 'Zakelijk recht' als meest generieke concept voor 'Eigendom', 'Opstal', 'Erfpacht', etc."@nl
 .
-skosap:ConceptScheme_type a sh:PropertyShape;
-  rdfs:label "getypeerd als asset"@nl;
-  rdfs:label "typified as asset"@en;
-  sh:name "rdf:type";
-  rdfs:comment "Een begrippenkader kan worden getypeerd als een asset"@nl;
-  rdfs:comment "A concept schema can be typified as an asset"@en;
-  sh:path rdf:type;
-  sh:hasValue adms:Asset
-.
 
 # ========================================
 # Asset (ConceptScheme)
@@ -472,11 +463,11 @@ skosap:AssetConceptScheme rdf:type sh:NodeShape;
   rdfs:comment "Een begrippenkader kan worden gemetadateerd als een asset."@nl;
   rdfs:comment "A concept scheme can be metadated as an asset."@en;
   skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein kunnen worden gemetadateerd als asset voor de BRK dataset."@nl;
-  sh:property skosap:AssetConceptScheme_type;
+  sh:property skosap:AssetConceptScheme_roleAsset;
+  sh:property skosap:AssetConceptScheme_roleConceptScheme;
   sh:property skosap:AssetConceptScheme_typeConceptScheme;
-  sh:property skosap:AssetConceptScheme_specification;
 .
-skosap:AssetConceptScheme_type a sh:PropertyShape;
+skosap:AssetConceptScheme_roleAsset a sh:PropertyShape;
   rdfs:label "getypeerd als asset"@nl;
   rdfs:label "typified as asset"@en;
   sh:name "rdf:type";
@@ -486,7 +477,17 @@ skosap:AssetConceptScheme_type a sh:PropertyShape;
   rdfs:comment "A concept scheme is typed as adms:Asset."@en;
   skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
 .
-skosap:AssetConceptScheme_typeConceptSchem a sh:PropertyShape;
+skosap:AssetConceptScheme_roleConceptScheme a sh:PropertyShape;
+  rdfs:label "getypeerd als begrippenkader"@nl;
+  rdfs:label "typified as concept scheme"@en;
+  sh:name "rdf:type";
+  sh:path rdf:type;
+  sh:hasValue skos:ConceptScheme;
+  rdfs:comment "Een begrippenkader wordt getypeerd als een adms:Asset."@nl;
+  rdfs:comment "A concept scheme is typed as adms:Asset."@en;
+  skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
+.
+skosap:AssetConceptScheme_typeConceptScheme a sh:PropertyShape;
   rdfs:label "type asset = Begrippenkader"@nl;
   rdfs:label "type asset = Concept scheme"@en;
   sh:name "dcterms:type";
@@ -497,14 +498,4 @@ skosap:AssetConceptScheme_typeConceptSchem a sh:PropertyShape;
   rdfs:comment "Een begrippenkader wordt expliciet getypeerd als begrippenkader."@nl;
   rdfs:comment "A concept scheme is explicitly typed as a concept scheme."@en;
   skos:example ""@nl;
-.
-skosap:AssetConceptScheme_specification a sh:PropertyShape;
-  rdfs:label "uitgewerkt in"@nl;
-  rdfs:label "defined by"@en;
-  sh:name "rdfs:isDefinedBy";
-  sh:path rdfs:isDefinedBy;
-  sh:node skosap:ConceptScheme;
-  rdfs:comment "Een begrippenkader asset wordt uitgewerkt in een skos begrippenkader."@nl;
-  rdfs:comment "A concept scheme asset is defined by a skos concept scheme."@en;
-  skos:example "Het BRK begrippenkader."@nl;
 .
