@@ -24,9 +24,7 @@ style:nodeshape a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
-		rdfs:label "Label"@nl;
-		rdfs:label "Label"@en;
-		elmo:index "1";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		elmo:applies-to sh:targetClass;
@@ -94,8 +92,8 @@ style:datatype-properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
-		rdfs:label "Label"@nl;
-		rdfs:label "Label"@en;
+		rdfs:label "Naam"@nl;
+		rdfs:label "Naam"@en;
 		elmo:index "1";
 	];
 	elmo:fragment [
@@ -105,9 +103,9 @@ style:datatype-properties a elmo:Part;
 		elmo:index "2";
 	];
 	elmo:fragment [
-		elmo:applies-to sh:class;
-		rdfs:label "Verwijst naar"@nl;
-		rdfs:label "Refers to"@en;
+		elmo:applies-to sh:datatype;
+		rdfs:label "Datatype"@nl;
+		rdfs:label "Datatype"@en;
 		elmo:index "3";
 	];
 	elmo:fragment [
@@ -421,7 +419,8 @@ stage:datatype-properties-query a elmo:query;
 			?pshape elmo:subject ?nodeshape.
 			?pshape ?p ?o.
 			?pshape sh:path ?property.
-			?property rdfs:label ?propertylabel
+			?property rdfs:label ?propertylabel.
+			?datatype rdfs:label ?dlabel.
 		}
 		WHERE {
 			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
@@ -453,6 +452,16 @@ stage:datatype-properties-query a elmo:query;
 				}
 				FILTER EXISTS {
 					?pshape sh:datatype ?datatype
+				}
+			}
+			OPTIONAL {
+				GRAPH ?graph {
+					?nodeshape sh:property/sh:datatype ?datatype
+				}
+				GRAPH <@STAGE@> {
+					?dshape sh:targetClass ?datatype.
+					?dshape rdfs:label ?dlabel.
+					FILTER (lang(?dlabel)="@LANGUAGE@")
 				}
 			}
 		}
