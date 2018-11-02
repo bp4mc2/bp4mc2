@@ -367,9 +367,11 @@ stage:nodeshape-query a elmo:query;
 			?o rdfs:label ?olabel.
 			?nodeshape sh:targetClass ?class.
 			?class rdfs:label ?classlabel.
-			?ns3 sh:property ?sb.
-			?sb sh:path ?pb.
-			?sb sh:hasValue ?ob.
+			?ns3 sh:property [
+			  sh:path ?pb;
+			  sh:hasValue ?ob;
+			].
+			?ns4 sh:type ?roletype
 		}
 		WHERE {
 			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)

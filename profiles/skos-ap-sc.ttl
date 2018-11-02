@@ -332,15 +332,14 @@ skosap:ExternalConcept a sh:NodeShape;
   rdfs:comment "Een begrip in een ander begrippenkader waarmee een relatie wordt gelegd."@nl;
   rdfs:comment "A concept in another concept scheme, to which is referenced."@en;
   skos:example "Het begrip Nummeraanduiding in de BAG in relatie tot het begrip Postadres in de BRK"@nl;
-  sh:property skosap:ExternalConcept_type;
-.
-skosap:ExternalConcept_type a sh:PropertyShape;
-  sh:path rdf:type;
-  sh:hasValue skos:Concept;
-  sh:minCount 1;
-  sh:severity sh:Violation;
-  sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
-  sh:message "A concept in another concept scheme to which is referred has to exist."@en
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue skos:Concept;
+    sh:minCount 1;
+    sh:severity sh:Violation;
+    sh:message "Een begrip in een ander begrippenkader waaraan wordt gerefereerd moet bestaan."@nl;
+    sh:message "A concept in another concept scheme to which is referred has to exist."@en
+  ];
 .
 
 #---------------------
@@ -387,7 +386,6 @@ skosap:Collection_provenance a sh:PropertyShape;
   rdfs:label "provenance"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
-  sh:datatype xsd:string;
   sh:class prov:Entity;
   rdfs:comment "Van een collectie kan de herkomst worden beschreven."@nl;
   rdfs:comment "Provenance of a collection can be described."@en;
@@ -448,29 +446,27 @@ skosap:AssetConceptScheme rdf:type sh:NodeShape;
   rdfs:comment "Een begrippenkader kan worden gezien als een asset."@nl;
   rdfs:comment "A concept scheme can be identified as an asset."@en;
   skos:example "De thesaurus of taxonomie met alle begrippen in het Kadastrale domein kunnen worden gezien als asset voor de BRK dataset."@nl;
-  sh:property skosap:AssetConceptScheme_roleAsset;
-  sh:property skosap:AssetConceptScheme_roleConceptScheme;
+  sh:property [
+    rdfs:label "getypeerd als asset"@nl;
+    rdfs:label "typified as asset"@en;
+    sh:name "rdf:type";
+    sh:path rdf:type;
+    sh:hasValue adms:Asset;
+    rdfs:comment "Een begrippenkader wordt getypeerd als een adms:Asset."@nl;
+    rdfs:comment "A concept scheme is typed as adms:Asset."@en;
+    skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
+  ];
+  sh:property [
+    rdfs:label "getypeerd als begrippenkader"@nl;
+    rdfs:label "typified as concept scheme"@en;
+    sh:name "rdf:type";
+    sh:path rdf:type;
+    sh:hasValue skos:ConceptScheme;
+    rdfs:comment "Een begrippenkader wordt getypeerd als een adms:Asset."@nl;
+    rdfs:comment "A concept scheme is typed as adms:Asset."@en;
+    skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
+  ];
   sh:property skosap:AssetConceptScheme_typeConceptScheme;
-.
-skosap:AssetConceptScheme_roleAsset a sh:PropertyShape;
-  rdfs:label "getypeerd als asset"@nl;
-  rdfs:label "typified as asset"@en;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue adms:Asset;
-  rdfs:comment "Een begrippenkader wordt getypeerd als een adms:Asset."@nl;
-  rdfs:comment "A concept scheme is typed as adms:Asset."@en;
-  skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
-.
-skosap:AssetConceptScheme_roleConceptScheme a sh:PropertyShape;
-  rdfs:label "getypeerd als begrippenkader"@nl;
-  rdfs:label "typified as concept scheme"@en;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue skos:ConceptScheme;
-  rdfs:comment "Een begrippenkader wordt getypeerd als een adms:Asset."@nl;
-  rdfs:comment "A concept scheme is typed as adms:Asset."@en;
-  skos:example "Het BRK begrippenkader is vindbaar als een adms:Asset."@nl;
 .
 skosap:AssetConceptScheme_typeConceptScheme a sh:PropertyShape;
   rdfs:label "type asset = Begrippenkader"@nl;
