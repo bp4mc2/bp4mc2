@@ -15,6 +15,7 @@ page:frbr a cnt:ContentAsText;
     [xhtml:heading "FRBR Toepassingsprofiel voor bronbeschrijvingen"@nl, "FRBR Appication profile for Bibliographic references"@en]
     page:frbr-body
     [xhtml:img "frbr-ap-sc.png"]
+    page:frbr-concept
     page:document
     page:endeavour
     page:work
@@ -46,11 +47,27 @@ The FRBR application profile makes it possible to refer to:
 .
 
 # ========================================
+# Concept
+# ========================================
+page:frbr-concept a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Begrip"@nl, "Concept"@en]
+    page:frbr-ConceptRelations
+  )
+.
+page:frbr-ConceptRelations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject frbrap:Concept; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
 # Source document
 # ========================================
 page:document a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Document"@nl, "document"@en]
+    [xhtml:heading "Document"@nl, "Document"@en]
     [dct:subject frbrap:Document; xhtml:stylesheet style:nodeshape]
     page:documentProperties
   )
