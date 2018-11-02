@@ -62,7 +62,6 @@ skosap:Concept a sh:NodeShape;
   # Object properties
   sh:property skosap:Concept_dctsource;
   sh:property skosap:Concept_domain;
-  sh:property skosap:Concept_metadata;
   # References to other concepts
   sh:property skosap:Concept_isRelatedTo;
   sh:property skosap:Concept_specialisationOf;
@@ -80,8 +79,8 @@ skosap:Concept a sh:NodeShape;
 .
 # Datatype properties
 skosap:Concept_label a sh:PropertyShape;
-  rdfs:label "label (begrip)"@nl;
-  rdfs:label "label (concept)"@en;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
   sh:name "rdfs:label";
   sh:path rdfs:label;
   sh:datatype xsd:string;
@@ -204,20 +203,6 @@ skosap:Concept_domain a sh:PropertyShape;
   sh:message "Een begrip bestaat altijd binnen de context van een domein."@nl;
   sh:message "A concept allways exists in the context of a domain."@en
 .
-skosap:Concept_metadata a sh:PropertyShape;
-  rdfs:label "herkomst (begrip)"@nl;
-  rdfs:label "provenance (concept)"@en;
-  sh:path foaf:isPrimaryTopicOf;
-  sh:class prov:Entity;
-  sh:name "foaf:isPrimaryTopicOf";
-  rdfs:comment "Van een begrip kan de herkomst, geldigheid en status worden beschreven."@nl;
-  rdfs:comment "Provenance, validity and status of a concept can be described."@en;
-  skos:example "De uitleg van een begrip is aangepast naar aanleiding van een vraag van een klant"@nl;
-  sh:minCount 1;
-  sh:severity sh:Warning;
-  sh:message "Van een begrip wordt bij voorkeur herkomst-, geldigheid- en statusinformatie bijgehouden."@nl;
-  sh:message "Prefably provenance, validity and status information is kept on a concept."@en
-.
 # References to other concepts
 skosap:Concept_isRelatedTo a sh:PropertyShape;
   rdfs:label "gerelateerd aan"@nl;
@@ -323,8 +308,8 @@ skosap:Concept_narrowlyMatches a sh:PropertyShape;
 
 #provenance
 skosap:Concept_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (begrip)"@nl;
-  rdfs:label "provenance (concept)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:name "foaf:isPrimaryTopicOf (concept)";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
@@ -374,8 +359,8 @@ skosap:Collection a sh:NodeShape;
   sh:property skosap:Collection_provenance
 .
 skosap:Collection_label a sh:PropertyShape;
-  rdfs:label "label (collectie)"@nl;
-  rdfs:label "label (collecion)"@en;
+  rdfs:label "label"@nl;
+  rdfs:label "label"@en;
   sh:path rdfs:label;
   sh:datatype xsd:string;
   sh:name "rdfs:label";
@@ -398,8 +383,8 @@ skosap:Collection_hasMember a sh:PropertyShape;
   skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'"
 .
 skosap:Collection_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (collectie)"@nl;
-  rdfs:label "provenance (collection)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:datatype xsd:string;
