@@ -26,27 +26,23 @@
 # IMPORT
 #---------------------
 
-#derived from dataset-type
-dstype:Datamodel a skos:Concept;
-  rdfs:label "Informatiemodel"@nl;
-  rdfs:label "Datamodel"@en;
-  sh:name "dstype:Datamodel"
-.
-dstype:ControlledVocabulary a skos:Concept;
-  rdfs:label "Waardelijst"@nl;
-  rdfs:label "Controlled vocabulary"@en;
-  sh:name "dstype:ControlledVocabulary"
-.
-dstype:DatasetVersion a skos:Concept;
-  rdfs:label "Datasetversie"@nl;
-  rdfs:label "Dataset version"@en;
-  sh:name "dstype:DatasetVersion"
+#Import from rdfs
+dcatap:Resource a sh:NodeShape;
+  sh:targetClass rdfs:Resource;
+  sh:name "rdfs:Resource";
 .
 
 #imported from prov
 dcatap:Entity a sh:NodeShape;
   sh:targetClass prov:Entity;
   sh:name "prov:Entity";
+.
+
+#imported from dm
+dcatap:Datamodel a sh:NodeShape;
+  sh:name "adms:Asset (Datamodel)";
+  rdfs:label "Datamodel"@nl;
+  rdfs:label "Datamodel"@en;
 .
 
 #imported from foaf
@@ -71,10 +67,39 @@ dcatap:Dqv a sh:NodeShape;
   rdfs:label "Quality measurement"@en;
 .
 
+#imported from dct
+dcatap:Location a sh:NodeShape;
+  sh:targetClass dcterms:Location;
+  sh:name "dcterms:Location";
+  rdfs:label "Geografische locatie"@nl;
+  rdfs:label "Geospatial location"@en;
+.
+
 #Extra
+# (zijn deze drie nog nodig?)
 rdf:type sh:name "rdf:type".
 dqv:value sh:name "dqv:value".
 skos:inScheme sh:name "skos:inScheme".
+
+#---------------------
+# Dataset types controlled vocabulary
+#---------------------
+#derived from dataset-type
+dstype:Datamodel a skos:Concept;
+  rdfs:label "Informatiemodel"@nl;
+  rdfs:label "Datamodel"@en;
+  sh:name "dstype:Datamodel"
+.
+dstype:ControlledVocabulary a skos:Concept;
+  rdfs:label "Waardelijst"@nl;
+  rdfs:label "Controlled vocabulary"@en;
+  sh:name "dstype:ControlledVocabulary"
+.
+dstype:DatasetVersion a skos:Concept;
+  rdfs:label "Datasetversie"@nl;
+  rdfs:label "Dataset version"@en;
+  sh:name "dstype:DatasetVersion"
+.
 
 #---------------------
 # Dataset
@@ -263,7 +288,7 @@ dcatap:DatasetVersion_describedBy rdf:type sh:PropertyShape;
   rdfs:label "described by"@en;
   sh:name "wdrs:describedBy";
   sh:path wdrs:describedBy;
-#moet hier niet een link naar de adms:Asset (informatiemodel)?
+  sh:node dcatap:Datamodel;
   rdfs:comment "De data in een dataset (version) is beschreven door een informatiemodel."@nl;
   rdfs:comment "The data in a dataset (version) is decribed by a data model."@en;
   skos:example "kadaster.nl/schemas/imkad";
@@ -339,7 +364,6 @@ dcatap:DatasetProduct_version a sh:PropertyShape;
   skos:example "2.1.0";
   rdfs:comment "Een dataset (product) kan een versie aanduiding hebben."@nl;
   rdfs:comment "A dataset (product) can have a version indication."@en;
-  skos:example "2.1.0"@nl;
 .
 dcatap:DatasetProduct_versionNotes rdf:type sh:PropertyShape;
   rdfs:label "versie notities"@nl;
@@ -451,6 +475,7 @@ dcatap:Catalog_homepage rdf:type sh:PropertyShape;
   rdfs:label "landing page"@en;
   sh:name "foaf:homepage";
   sh:path foaf:homepage;
+  sh:class foaf:Document;
   rdfs:comment "De webpagina via welke de catalogus vindbaar is kan worden gespecificeerd."@nl;
   rdfs:comment "De landing page on which the catalog can be found can be recorded."@en;
   skos:example "http://catalogus.kadaster.nl/";
@@ -562,6 +587,7 @@ dcatap:Distribution_accessURL rdf:type sh:PropertyShape;
   rdfs:label "access url"@en;
   sh:name "dcat:accessURL";
   sh:path dcat:accessURL;
+  sh:class rdfs:Resource;
   rdfs:comment "Een distributie kan een API zijn of een webservice die toegankelijk is via een url."@nl;
   rdfs:comment "A distribution can be an API or a web service that is accesable via a url."@en;
   skos:example "https://data.pdok.nl/brk/api/v1"@nl;
@@ -571,6 +597,7 @@ dcatap:Distribution_downloadURL rdf:type sh:PropertyShape;
   rdfs:label "download url"@en;
   sh:name "dcat:downloadURL";
   sh:path dcat:downloadURL;
+  sh:class rdfs:Resource;
   rdfs:comment "Een distributie kan een downloadservice zijn die toegankelijk is via een url."@nl;
   rdfs:comment "A distribution can be a download service that is accesable via a url"@en;
   skos:example "https://www.pdok.nl/nl/producten/pdok-downloads/basis-registratie-kadaster/kadastrale-kaart"@nl;
