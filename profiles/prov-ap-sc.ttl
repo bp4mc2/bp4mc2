@@ -2,7 +2,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix scprov: <http://bp4mc2.org/somewhere/prov-ap-sc/>.
+@prefix provap: <http://bp4mc2.org/profiles/prov-ap-sc#>.
 @prefix adms: <http://www.w3.org/ns/adms#>.
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix dcat: <http://www.w3.org/ns/dcat#>.
@@ -46,60 +46,60 @@ adms:Asset a rdfs:Class; rdfs:subClassOf dcat:Dataset.
 # The documentation for these relations are part of the profiles that contain these items
 # In this profile, we only state these items for reference
 #---------------------
-scprov:Metadata_isPrimaryTopicOf a sh:PropertyShape;
+provap:Metadata_isPrimaryTopicOf a sh:PropertyShape;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity
 .
-scprov:Metadata_asDataset a sh:PropertyShape;
+provap:Metadata_asDataset a sh:PropertyShape;
   sh:name "as dcat:Dataset";
   sh:path rdf:type;
   sh:hasValue dcat:Dataset
 .
-scprov:Metadata_asAsset a sh:PropertyShape;
+provap:Metadata_asAsset a sh:PropertyShape;
   sh:name "as adms:Asset";
   sh:path rdf:type;
   sh:hasValue adms:Asset
 .
-scprov:Dataset_publisher a sh:PropertyShape;
+provap:Dataset_publisher a sh:PropertyShape;
   sh:name "dcterms:publisher";
   sh:class foaf:Agent;
   sh:path dcterms:publisher;
 .
-scprov:Dataset a sh:NodeShape;
+provap:Dataset a sh:NodeShape;
   sh:name "dcat:Dataset";
   sh:targetClass dcat:Dataset;
-  sh:property scprov:Metadata_isPrimaryTopicOf;
-  sh:property scprov:Dataset_publisher;
+  sh:property provap:Metadata_isPrimaryTopicOf;
+  sh:property provap:Dataset_publisher;
 .
-scprov:Collection a sh:NodeShape;
+provap:Collection a sh:NodeShape;
   sh:name "skos:Collection";
-  sh:property scprov:Metadata_isPrimaryTopicOf
+  sh:property provap:Metadata_isPrimaryTopicOf
 .
-scprov:Concept a sh:NodeShape;
+provap:Concept a sh:NodeShape;
   sh:name "skos:Concept";
-  sh:property scprov:Metadata_isPrimaryTopicOf
+  sh:property provap:Metadata_isPrimaryTopicOf
 .
-scprov:Distribution a sh:NodeShape;
+provap:Distribution a sh:NodeShape;
   sh:name "dcat:Distribution";
-  sh:property scprov:Metadata_isPrimaryTopicOf
+  sh:property provap:Metadata_isPrimaryTopicOf
 .
-scprov:Asset a sh:NodeShape;
+provap:Asset a sh:NodeShape;
   sh:name "adms:Asset";
   sh:targetClass adms:Asset;
 .
-scprov:ConceptScheme a sh:NodeShape;
+provap:ConceptScheme a sh:NodeShape;
   sh:name "skos:ConceptScheme";
-  sh:property scprov:Metadata_asAsset
+  sh:property provap:Metadata_asAsset
 .
-scprov:ControlledVocabulary a sh:NodeShape;
+provap:ControlledVocabulary a sh:NodeShape;
   sh:name "adms:Asset (Controlled Vocabulary)";
-  sh:property scprov:Metadata_asAsset
+  sh:property provap:Metadata_asAsset
 .
 
 #---------------------
 # Metadata (Versioning)
 #---------------------
-scprov:Metadata a sh:NodeShape;
+provap:Metadata a sh:NodeShape;
   rdfs:label "Metadata"@nl;
   rdfs:label "Metadata"@nl;
   sh:name "prov:Entity";
@@ -107,14 +107,14 @@ scprov:Metadata a sh:NodeShape;
   rdfs:comment "Metadata van een versie van een entiteit kan worden beschreven."@nl;
   rdfs:comment "Metadata of a version of an entity can be described."@en;
   skos:example "De juridische geldigheid en/of de adnimistratieve housekeeping (provenance) gegevens van een entiteit"@nl;
-  sh:property scprov:Metadata_isIssued;
-  sh:property scprov:Metadata_changeNote;
-  sh:property scprov:Metadata_status;
-  sh:property scprov:Metadata_isValidDuring;
-  sh:property scprov:Metadata_isvalidWithin;
+  sh:property provap:Metadata_isIssued;
+  sh:property provap:Metadata_changeNote;
+  sh:property provap:Metadata_status;
+  sh:property provap:Metadata_isValidDuring;
+  sh:property provap:Metadata_isvalidWithin;
 .
 
-scprov:Metadata_isIssued a sh:PropertyShape;
+provap:Metadata_isIssued a sh:PropertyShape;
   rdfs:label "bekendgemaakt"@nl;
   rdfs:label "issued"@en;
   sh:name "dcterms:issued";
@@ -128,7 +128,7 @@ scprov:Metadata_isIssued a sh:PropertyShape;
   sh:message "A version can be issued up to 1 time."@en
 .
 
-scprov:Metadata_changeNote a sh:PropertyShape;
+provap:Metadata_changeNote a sh:PropertyShape;
   rdfs:label "wijzingsnotitie (metadata)"@nl;
   rdfs:label "change note (metadata)"@en;
   sh:name "skos:changeNote";
@@ -138,12 +138,12 @@ scprov:Metadata_changeNote a sh:PropertyShape;
   skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
 .
 
-scprov:Metadata_status a sh:PropertyShape;
+provap:Metadata_status a sh:PropertyShape;
   rdfs:label "status"@nl;
   rdfs:label "status"@en;
   sh:name "adms:status";
   sh:path adms:status;
-  sh:node scprov:Status;
+  sh:node provap:Status;
   rdfs:comment "Een versie heeft een administratieve status op basis van de ADMS waardenlijst."@nl;
   rdfs:comment "A version has an administrative status based on the ADMS list of values."@en;
   skos:example "Completed"@nl;
@@ -154,7 +154,7 @@ scprov:Metadata_status a sh:PropertyShape;
   sh:message "A version always has 1 administrative status based on the ADMS list of values."@en
 .
 
-scprov:Metadata_isValidDuring a sh:PropertyShape;
+provap:Metadata_isValidDuring a sh:PropertyShape;
   rdfs:label "geldig in tijd"@nl;
   rdfs:label "temporal validity"@en;
   sh:name "dcterms:temporal";
@@ -169,7 +169,7 @@ scprov:Metadata_isValidDuring a sh:PropertyShape;
   sh:message "Een versie kan maximaal op 1 moment in de tijd formeel/juridisch geldig zijn."@nl;
   sh:message "A version can be formally / legally valid in up to 1 moment in time."@en
 .
-scprov:Metadata_isvalidWithin a sh:PropertyShape;
+provap:Metadata_isvalidWithin a sh:PropertyShape;
   rdfs:label "geldig in gebied"@nl;
   rdfs:label "spatial validity"@en;
   sh:name "dcterms:spatial";
@@ -187,7 +187,7 @@ scprov:Metadata_isvalidWithin a sh:PropertyShape;
 #------------------------------
 # Status
 #------------------------------
-scprov:Status a sh:NodeShape;
+provap:Status a sh:NodeShape;
   rdfs:label "Status waardelijst"@nl;
   rdfs:label "Controlled vocabulary status"@en;
   sh:name "skos:Concept (adms status)";
@@ -208,7 +208,7 @@ scprov:Status a sh:NodeShape;
 #------------------------------
 # Formal/legal validity in time
 #------------------------------
-scprov:PeriodOfTime a sh:NodeShape;
+provap:PeriodOfTime a sh:NodeShape;
   rdfs:label "Tijdsperiode"@nl;
   rdfs:label "Time period"@en;
   sh:name "dcterms:PeriodOfTime";
@@ -216,11 +216,11 @@ scprov:PeriodOfTime a sh:NodeShape;
   rdfs:comment "A period of time is pointed out by a start date and end date."@en;
   sh:targetClass dcterms:PeriodOfTime;
   skos:example "22/10/2017 - 01/08/2018"@nl;
-  sh:property scprov:PeriodOfTime_start;
-  sh:property scprov:PeriodOfTime_end
+  sh:property provap:PeriodOfTime_start;
+  sh:property provap:PeriodOfTime_end
 .
 
-scprov:PeriodOfTime_start a sh:PropertyShape;
+provap:PeriodOfTime_start a sh:PropertyShape;
   rdfs:label "start"@nl;
   rdfs:label "start"@en;
   sh:name "dcmiperiod:start";
@@ -233,7 +233,7 @@ scprov:PeriodOfTime_start a sh:PropertyShape;
   sh:message "Een periode heeft maximaal in 1 startdatum/tijdstip."@nl;
   sh:message "A period has up to 1 start date / time."@en
 .
-scprov:PeriodOfTime_end a sh:PropertyShape;
+provap:PeriodOfTime_end a sh:PropertyShape;
   rdfs:label "einde"@nl;
   rdfs:label "end"@en;
   sh:name "dcmiperiod:end";
@@ -251,7 +251,7 @@ scprov:PeriodOfTime_end a sh:PropertyShape;
 # Formal/legal validity in space
 #------------------------------
 
-scprov:Location a sh:NodeShape;
+provap:Location a sh:NodeShape;
   rdfs:label "Geografisch gebied"@nl;
   rdfs:label "Geographical area"@en;
   sh:name "dcterms:Location";
@@ -264,7 +264,7 @@ scprov:Location a sh:NodeShape;
 #-----------------------------------------------
 # Admistrative houskeeping metadata
 #-----------------------------------------------
-scprov:ProvenanceGraph a sh:NodeShape;
+provap:ProvenanceGraph a sh:NodeShape;
   rdfs:label "Provenance graaf"@nl;
   rdfs:label "Provenance graph"@en;
   sh:name "sd:Graph";
@@ -272,17 +272,17 @@ scprov:ProvenanceGraph a sh:NodeShape;
   rdfs:comment "De provenance graaf omvat zowel de concrete data (gerepresenteerd door een prov:Entity), als de metadata van de prov:Entity, dat wil zeggen: een sd:Graph"@nl;
   rdfs:comment "The provenance graph contains both the concrete data (represented by a prov:Entity), and the metadata of the prov:Entity, that is: an sd:Graph"@en;
   skos:example "Alle wijzigingen en nieuwe data die op 8 augustus 2018 in een keer zijn geladen."@nl;
-  sh:property scprov:ProvenanceGraph_type;
-  sh:property scprov:ProvenanceGraph_generatedAtTime;
-  sh:property scprov:ProvenanceGraph_changeNote;
-  sh:property scprov:ProvenanceGraph_attributedTo;
+  sh:property provap:ProvenanceGraph_type;
+  sh:property provap:ProvenanceGraph_generatedAtTime;
+  sh:property provap:ProvenanceGraph_changeNote;
+  sh:property provap:ProvenanceGraph_attributedTo;
 .
-scprov:ProvenanceGraph_type a sh:PropertyShape;
+provap:ProvenanceGraph_type a sh:PropertyShape;
   sh:name "rdf:type";
   sh:path rdf:type;
   sh:hasValue prov:Entity;
 .
-scprov:ProvenanceGraph_generatedAtTime a sh:PropertyShape;
+provap:ProvenanceGraph_generatedAtTime a sh:PropertyShape;
   rdfs:label "registratiemoment"@nl;
   rdfs:label "registration moment"@en;
   sh:path prov:generatedAtTime;
@@ -291,7 +291,7 @@ scprov:ProvenanceGraph_generatedAtTime a sh:PropertyShape;
   rdfs:comment "The date and time of the administrative operation can be saved. This way you can always retrieve what information was known at what time."@en;
   skos:example "21/10/2017 20:21"@nl;
 .
-scprov:ProvenanceGraph_changeNote a sh:PropertyShape;
+provap:ProvenanceGraph_changeNote a sh:PropertyShape;
   rdfs:label "wijzigingsnotitie (provenance graaf)"@nl;
   rdfs:label "change note (provenance graph)"@en;
   sh:path skos:changeNote;
@@ -300,7 +300,7 @@ scprov:ProvenanceGraph_changeNote a sh:PropertyShape;
   rdfs:comment "The reason for a set of related changes can be explained."@en;
   skos:example "Alle definities zijn aangepast overeenkomstig de nieuwe wet op de BAG."@nl
 .
-scprov:ProvenanceGraph_attributedTo a sh:PropertyShape;
+provap:ProvenanceGraph_attributedTo a sh:PropertyShape;
   rdfs:label "doorgevoerd door"@nl;
   rdfs:label "attributed to"@en;
   sh:name "prov:wasAttributedTo";
@@ -310,7 +310,7 @@ scprov:ProvenanceGraph_attributedTo a sh:PropertyShape;
   rdfs:comment "The person or organization that made or let make the change can be recorded."@en;
   skos:example "Het Kadaster"@nl
 .
-scprov:ProvenanceAgent a sh:NodeShape;
+provap:ProvenanceAgent a sh:NodeShape;
   rdfs:label "Agent (provenance)"@nl;
   rdfs:label "Agent (provenance)"@en;
   sh:name "prov:Agent";
@@ -318,10 +318,10 @@ scprov:ProvenanceAgent a sh:NodeShape;
   rdfs:comment " De persoon of organisatie die verantwoordelijk is voor een activiteit, de creatie van een entity of een activiteit van een ander kan worden vastgelegd."@nl;
   rdfs:comment "The person or organization that is responsible for an activity, the creation of a entity or an activity of another can be recorded."@en;
   skos:example "Het Ministerie van BZK"@nl;
-  sh:property scprov:ProvenanceAgent_OnBehalfOf;
-  sh:property scprov:ProvenanceAgent_knownAgent
+  sh:property provap:ProvenanceAgent_OnBehalfOf;
+  sh:property provap:ProvenanceAgent_knownAgent
 .
-scprov:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
+provap:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
   rdfs:label "uitgevoerd namens"@nl;
   rdfs:label "acted on behalf of"@en;
   sh:name "prov:actedOnBehalfOf";
@@ -331,7 +331,7 @@ scprov:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
   rdfs:comment "A person or organization can act on behalf of another person or organization."@en;
   skos:example "overheid:Rijkswaterstaat"@nl
 .
-scprov:ProvenanceAgent_knownAgent a sh:PropertyShape;
+provap:ProvenanceAgent_knownAgent a sh:PropertyShape;
   rdfs:label "geidentificeerd als"@nl;
   rdfs:label "identified as"@en;
   sh:path rdf:type;
@@ -341,7 +341,7 @@ scprov:ProvenanceAgent_knownAgent a sh:PropertyShape;
   rdfs:comment "A person or organization is known."@en;
   skos:example "overheid:Rijkswaterstaat"@nl;
 .
-scprov:ProvenancePerson a sh:NodeShape;
+provap:ProvenancePerson a sh:NodeShape;
   rdfs:label "Persoon (provenance)"@nl;
   rdfs:label "Person (provenance)"@en;
   sh:name "prov:Person";
@@ -350,7 +350,7 @@ scprov:ProvenancePerson a sh:NodeShape;
   rdfs:comment "An agent (provenance can be a human."@en;
   skos:example "Jan Jansen"@nl;
 .
-scprov:ProvenanceSoftwareAgent a sh:NodeShape;
+provap:ProvenanceSoftwareAgent a sh:NodeShape;
   rdfs:label "Software agent"@nl;
   rdfs:label "Software agent"@en;
   sh:name "prov:SoftwareAgent";
@@ -359,7 +359,7 @@ scprov:ProvenanceSoftwareAgent a sh:NodeShape;
   rdfs:comment "An agent (provenance can be an automated routine."@en;
   skos:example "Scheduled routine x"@nl;
 .
-scprov:ProvenanceOrganization a sh:NodeShape;
+provap:ProvenanceOrganization a sh:NodeShape;
   rdfs:label "Organisatie (provenance)"@nl;
   rdfs:label "Organization (provenance)"@en;
   sh:name "prov:Organization";
@@ -370,7 +370,7 @@ scprov:ProvenanceOrganization a sh:NodeShape;
 .
 
 # Extra info about organizations
-scprov:FoafAgent a sh:NodeShape;
+provap:FoafAgent a sh:NodeShape;
   rdfs:label "Agent (foaf)"@nl;
   rdfs:label "Agent (foaf)"@en;
   sh:name "foaf:Agent";
@@ -379,7 +379,7 @@ scprov:FoafAgent a sh:NodeShape;
   rdfs:comment "The person or organization that is responsible for a dataset."@en;
   skos:example "Het Ministerie van BZK"@nl;
 .
-scprov:FoafOrganization a sh:NodeShape;
+provap:FoafOrganization a sh:NodeShape;
   rdfs:label "Organisatie (foaf)"@nl;
   rdfs:label "Organization (foaf)"@en;
   sh:name "foaf:Organization";
@@ -388,7 +388,7 @@ scprov:FoafOrganization a sh:NodeShape;
   rdfs:comment "The organization that is responsible for a dataset."@en;
   skos:example "Het Ministerie van BZK"@nl;
 .
-scprov:OrgOrganization a sh:NodeShape;
+provap:OrgOrganization a sh:NodeShape;
   rdfs:label "Organisatie (org)"@nl;
   rdfs:label "Organization (org)"@en;
   sh:name "org:Organization";
@@ -396,9 +396,9 @@ scprov:OrgOrganization a sh:NodeShape;
   rdfs:comment "De organisatie zoals opgenomen in de formele lijst met OIN nummers."@nl;
   rdfs:comment "The organization as included in the formal list with OIN numbers."@en;
   skos:example "345879873452"@nl;
-  sh:property scprov:OrgOrganization_oin
+  sh:property provap:OrgOrganization_oin
 .
-scprov:OrgOrganization_oin a sh:PropertyShape;
+provap:OrgOrganization_oin a sh:PropertyShape;
   rdfs:label "heeft OIN"@nl;
   rdfs:label "has OIN"@en;
   sh:name "org:identifier";
