@@ -11,6 +11,15 @@
 style:nodeshape a elmo:Part;
 	elmo:index "2";
 	elmo:fragment [
+		elmo:applies-to elmo:PropertyLabel;
+		rdf:value "!form data!Klasse"@nl;
+		rdf:value "!form data!Class"@en;
+	];
+	elmo:fragment [
+		elmo:applies-to elmo:ValueLabel;
+		elmo:select rdfs:label;
+	];
+	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
 	];
@@ -28,16 +37,16 @@ style:nodeshape a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to sh:targetClass;
-		rdfs:label "Klasse"@nl;
-		rdfs:label "Class"@en;
-		elmo:index "2";
+		rdfs:label "Gebruikte term"@nl;
+		rdfs:label "Used term"@en;
+		elmo:index "1";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:property;
 		elmo:applies-to [sh:path rdf:type];
 		elmo:select sh:hasValue;
-		rdfs:label "Rol"@nl;
-		rdfs:label "Role"@en;
+		rdfs:label "Getypeerd als"@nl;
+		rdfs:label "Typed as"@en;
 		elmo:index "2";
 	];
 	elmo:fragment [
@@ -71,6 +80,15 @@ style:nodeshape a elmo:Part;
 style:datatype-properties a elmo:Part;
 	elmo:index "3";
 	elmo:fragment [
+		elmo:applies-to elmo:PropertyLabel;
+		rdf:value "!form data!Eigenschap"@nl;
+		rdf:value "!form data!Property"@en;
+	];
+	elmo:fragment [
+		elmo:applies-to elmo:ValueLabel;
+		elmo:select rdfs:label;
+	];
+	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
 	];
@@ -92,51 +110,58 @@ style:datatype-properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
-		rdfs:label "Naam"@nl;
-		rdfs:label "Naam"@en;
-		elmo:index "1";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		elmo:applies-to sh:path;
 		rdfs:label "Eigenschap"@nl;
 		rdfs:label "Property"@en;
-		elmo:index "2";
+		elmo:index "1";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:datatype;
 		rdfs:label "Datatype"@nl;
 		rdfs:label "Datatype"@en;
-		elmo:index "3";
+		elmo:index "2";
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:comment;
 		rdfs:label "Uitleg"@nl;
 		rdfs:label "Description"@en;
-		elmo:index "4";
+		elmo:index "3";
 	];
 	elmo:fragment [
 		elmo:applies-to skos:example;
 		rdfs:label "Voorbeeld"@nl;
 		rdfs:label "Example"@en;
-		elmo:index "5";
+		elmo:index "4";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:minCount;
 		rdfs:label "Min card."@nl;
 		rdfs:label "Min card."@en;
-		elmo:index "6";
+		elmo:index "5";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:maxCount;
 		rdfs:label "Max card."@nl;
 		rdfs:label "Max card."@en;
-		elmo:index "7";
+		elmo:index "6";
 	];
 	elmo:query stage:datatype-properties-query;
 .
 style:object-properties a elmo:Part;
 	elmo:index "4";
 	elmo:fragment [
+		elmo:applies-to elmo:PropertyLabel;
+		rdf:value "!form data!Eigenschap"@nl;
+		rdf:value "!form data!Property"@en;
+	];
+	elmo:fragment [
+		elmo:applies-to elmo:ValueLabel;
+		elmo:select rdfs:label;
+	];
+	elmo:fragment [
 		elmo:applies-to elmo:subject;
 		elmo:appearance elmo:HiddenAppearance;
 	];
@@ -158,21 +183,19 @@ style:object-properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
-		rdfs:label "Label"@nl;
-		rdfs:label "Label"@en;
-		elmo:index "1";
+		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
 		elmo:applies-to sh:path;
 		rdfs:label "Eigenschap"@nl;
 		rdfs:label "Property"@en;
-		elmo:index "2";
+		elmo:index "1";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:hasValue;
 		rdfs:label "Waarde"@nl;
 		rdfs:label "Value"@en;
-		elmo:index "3";
+		elmo:index "2";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:class;
