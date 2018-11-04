@@ -26,99 +26,227 @@
 # IMPORT
 #---------------------
 
-#derived from adms
-adms:Asset rdfs:subClassOf dcat:Dataset.
-adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
+#imported from owl
+owl:DatatypeProperty rdfs:subPropertyOf rdf:Property.
+owl:ObjectProperty rdfs:subPropertyOf rdf:Property.
 
+#imported from adms
+adms:Asset rdfs:subClassOf dcat:Dataset;
+#  a rdfs:Class;
+.
+
+#imported from adms-ap-sc
 dmap:Asset a sh:NodeShape;
   sh:name "adms:Asset";
   sh:targetClass adms:Asset;
 .
-dmap:AssetDistribution a sh:NodeShape;
-  sh:name "adms:AssetDistribution";
-  sh:targetClass adms:AssetDistribution;
+#imported from dcat-ap-sc
+dmap:Dataset a sh:NodeShape;
+  sh:name "dcat:Dataset";
+  sh:targetClass dcat:Dataset;
+  sh:property []; # Hack to show dataset correctly
 .
-
-#derived from dqv
-dqv:Dimension rdfs:subClassOf skos:Concept.
-dqv:Category rdfs:subClassOf skos:Concept.
+dmap:DatasetVersion a sh:NodeShape;
+  sh:name "dcat:Dataset (version)";
+  sh:property [
+    sh:name "role";
+    sh:path rdf:type;
+    sh:hasValue dcat:Dataset;
+  ];
+  sh:property [
+    sh:name "dcterms:isVersionOf";
+    sh:path dcterms:isVersionOf;
+    sh:maxCount 1;
+    sh:node dmap:Dataset;
+  ];
+  sh:property [
+    sh:name "wdrs:describedBy";
+    sh:path wdrs:describedBy;
+    sh:node dmap:DataModel;
+  ]
+.
+dmap:DatasetProduct a sh:NodeShape;
+  sh:name "dcat:Dataset (product)";
+  sh:property [
+    sh:name "role";
+    sh:path rdf:type;
+    sh:hasValue dcat:Dataset;
+  ];
+  sh:property [
+    sh:name "dcterms:relation";
+    sh:path dcterms:relation;
+    sh:node dmap:DatasetVersion;
+  ];
+  sh:property [
+    sh:name "wdrs:describedBy";
+    sh:path wdrs:describedBy;
+    sh:node dmap:DataModel;
+  ]
+.
 
 #---------------------
 # Asset (DataModel)
 #---------------------
 
 dmap:DataModel rdf:type sh:NodeShape;
-  rdfs:label "Asset (Informatiemodel)"@nl;
+  rdfs:label "Asset (Datamodel)"@nl;
   rdfs:label "Asset (Data model)"@en;
   sh:name "adms:Asset (Data model)";
-  rdfs:comment "Een informatiemodel is een beschrijving van de structuur waarin data over dingen in een  specifiek domein worden opgeslagen."@nl;
+  rdfs:comment "Een datamodel is een beschrijving van de structuur waarin data over dingen in een  specifiek domein worden opgeslagen."@nl;
   rdfs:comment "An data model is a description of the structure in which data about things in a specific domain are stored."@en;
   skos:example "De lijst met Kadastrale gemeenten."@nl;
-  sh:property dmap:DataModel_type;
+  sh:property [
+    sh:name "rdf:type";
+    sh:path rdf:type;
+    sh:hasValue adms:Asset;
+  ];
   sh:property dmap:DataModel_typeDataModel;
-  sh:property dmap:DataModel_shapesGraph;
 .
 
-dmap:DataModel_type a sh:PropertyShape;
-  rdfs:label "getypeerd als asset"@nl;
-  rdfs:label "typified as asset"@en;
-  sh:name "rdf:type";
-  sh:path rdf:type;
-  sh:hasValue adms:Asset;
-  rdfs:comment "Een informatiemodel wordt getypeerd als adms:Asset."@nl;
-  rdfs:comment "A data model is typed as adms:Asset."@en;
-  skos:example "IMKAD is vindbaar als een adms:Asset."@nl;
-.
 dmap:DataModel_typeDataModel a sh:PropertyShape;
-  rdfs:label "type asset = informatiemodel"@nl;
-   rdfs:label "type asset = data model"@en;
- sh:path dcterms:type;
+  rdfs:label "type asset = datamodel"@nl;
+  rdfs:label "type asset = data model"@en;
+  sh:path dcterms:type;
   sh:name "dcterms:type";
   sh:minCount 1;
   sh:maxCount 1;
   sh:hasValue dmap:DataModel;
-  rdfs:comment "Een informatiemodel wordt expliciet getypeerd als informatiemodel."@nl;
+  rdfs:comment "Een datamodel wordt expliciet getypeerd als datamodel."@nl;
   rdfs:comment "A data model is explicitly typed as a data model."@en;
-  skos:example ""@nl;
 .
 
-dmap:DataModel_shapesGraph rdf:type sh:PropertyShape;
-  rdfs:label "is beschreven"@nl;
-  rdfs:label "is described"@en;
+#---------------------
+# Ontology
+#---------------------
+dmap:Ontology a sh:NodeShape;
+  rdfs:label "Vocabulaire"@nl;
+  rdfs:label "Vocabulary"@en;
+  sh:name "owl:Ontology";
+  sh:targetClass owl:Ontology;
+  rdfs:comment "De beschrijving van de vocabulaire en zijn semantiek (ontologie)"@nl;
+  rdfs:comment "The description of the vocabulary and its semantics (ontology)"@en;
+  sh:property dmap:Ontology_shapesGraph;
+.
+
+dmap:Ontology_shapesGraph rdf:type sh:PropertyShape;
+  rdfs:label "structuurbeschrijving"@nl;
+  rdfs:label "shape description"@en;
   sh:name "sh:shapesGraph";
   sh:path sh:shapesGraph;
-  sh:node dmap:ShapesGraph;
+  sh:node dmap:DataModel;
   rdfs:comment "Een informatiemodel kan worden beschreven in een 'shape graph'."@nl;
   rdfs:comment "A data model can be described in a shapes graph."@en;
   skos:example "De verwijzing naar de beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
-  sh:maxCount 1;
   sh:severity sh:Violation;
-  sh:message "Een informatiemodel kent maximaal 1 model beschrijving."@nl;
-  sh:message "An data model has up to 1 shapes graph."@en
 .
 
 #---------------------
-# ShapesGraph
+# NodeShape
 #---------------------
 
-dmap:ShapesGraph rdf:type sh:NodeShape;
-  rdfs:label "model beschrijving"@nl;
-  rdfs:label "Shapes graph"@nl;
-  sh:name "Shapes graph";
-  rdfs:comment "De beschrijving van een informatiemodel."@nl;
-  rdfs:comment "A shapes graph of a data model."@en;
-  skos:example "De beschrijving van het InformatieModel Kadaster (IMKAD)."@nl;
- .
+dmap:NodeShape a sh:NodeShape;
+  sh:name "sh:NodeShape";
+  sh:targetClass sh:NodeShape;
+  sh:property dmap:NodeShape_isDefinedBy;
+  sh:property dmap:NodeShape_targetClass;
+  sh:property dmap:NodeShape_name;
+  sh:property dmap:NodeShape_property;
+.
 
- dmap:LandingPage a sh:NodeShape;
-   rdfs:label "webpagina"@nl;
-   rdfs:label "landing page"@en;
-   sh:name "foaf:Document (Landing page)";
-   sh:property [
-     sh:path rdf:type;
-     sh:hasValue foaf:Document;
-   ];
-   rdfs:comment "De webpagina va welke een asset vindbaar is."@nl;
-   rdfs:comment "The landing page on the web on which an asset can be found."@en;
-   skos:example "kadaster.nl/waardelijsten."@nl;
- .
+dmap:NodeShape_isDefinedBy a sh:PropertyShape;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node dmap:DataModel;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+dmap:NodeShape_name a sh:PropertyShape;
+  sh:name "sh:name";
+  sh:path sh:name;
+  sh:datatype xsd:string;
+  sh:maxCount 1;
+.
+
+dmap:NodeShape_targetClass a sh:PropertyShape;
+  sh:name "sh:targetClass";
+  sh:path sh:targetClass;
+  sh:class owl:Class;
+.
+
+dmap:NodeShape_property a sh:PropertyShape;
+  sh:name "sh:property";
+  sh:path sh:property;
+  sh:class sh:PropertyShape;
+.
+
+#---------------------
+# PropertyShape
+#---------------------
+
+dmap:PropertyShape a sh:NodeShape;
+  sh:name "sh:PropertyShape";
+  sh:targetClass sh:PropertyShape;
+  sh:property dmap:PropertyShape_name;
+.
+
+dmap:PropertyShape_name a sh:PropertyShape;
+  sh:name "sh:name";
+  sh:path sh:name;
+  sh:datatype xsd:string;
+  sh:maxCount 1;
+.
+
+#---------------------
+# Class
+#---------------------
+
+dmap:Class a sh:NodeShape;
+  sh:name "owl:Class";
+  sh:targetClass owl:Class;
+  sh:property dmap:Class_isDefinedBy;
+.
+
+dmap:Class_isDefinedBy a sh:PropertyShape;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:node dmap:Ontology;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+#---------------------
+# Property
+#---------------------
+
+dmap:Property a sh:NodeShape;
+  sh:name "rdf:Property";
+  sh:targetClass rdf:Property;
+  sh:property dmap:Property_isDefinedBy;
+.
+
+dmap:Property_isDefinedBy a sh:PropertyShape;
+  sh:name "rdfs:isDefinedBy";
+  sh:path rdfs:isDefinedBy;
+  sh:class owl:Ontology;
+  sh:minCount 1;
+  sh:maxCount 1;
+.
+
+#---------------------
+# ObjectProperty
+#---------------------
+
+dmap:ObjectProperty a sh:NodeShape;
+  sh:name "owl:ObjectProperty";
+  sh:targetClass owl:ObjectProperty;
+.
+
+#---------------------
+# DatatypeProperty
+#---------------------
+
+dmap:DatatypeProperty a sh:NodeShape;
+  sh:name "owl:DatatypeProperty";
+  sh:targetClass owl:DatatypeProperty;
+.
