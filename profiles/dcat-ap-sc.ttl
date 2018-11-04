@@ -43,39 +43,33 @@ dstype:DatasetVersion a skos:Concept;
   sh:name "dstype:DatasetVersion"
 .
 
-#derived from skos-lex
-skoslex:Act rdfs:subClassOf skos:Concept.
-skoslex:Object rdfs:subClassOf skos:Concept.
-skoslex:Actor rdfs:subClassOf skos:Concept.
-skoslex:Agent rdfs:subClassOf skoslex:Actor.
-
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
-
-#derived from prov
-prov:Person rdfs:subClassOf prov:Agent.
-prov:Organization rdfs:subClassOf prov:Agent.
-prov:SoftwareAgent rdfs:subClassOf prov:Agent.
-
+#imported from prov
 dcatap:Entity a sh:NodeShape;
   sh:targetClass prov:Entity;
   sh:name "prov:Entity";
 .
 
-#derived from foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
+#imported from foaf
+dcatap:Agent a sh:NodeShape;
+  sh:targetClass foaf:Agent;
+  sh:name "foaf:Agent";
+  rdfs:label "Agent (foaf)"@nl;
+  rdfs:label "Agent (foaf)"@en;
+.
+dcatap:Document a sh:NodeShape;
+  sh:targetClass foaf:Document;
+  sh:name "foaf:Document";
+  rdfs:label "Webpagina"@nl;
+  rdfs:label "Web page"@en;
+.
 
-#derived from org
-org:Organization rdfs:subClassOf foaf:Organization.
-
-#derived from adms
-adms:Asset rdfs:subClassOf dcat:Dataset.
-adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
-
-#derived from dqv
-dqv:Dimension rdfs:subClassOf skos:Concept.
-dqv:Category rdfs:subClassOf skos:Concept.
+#imported from dqv
+dcatap:Dqv a sh:NodeShape;
+  sh:targetClass dqv:QualityMeasurement;
+  sh:name "dqv:QualityMeasurement";
+  rdfs:label "Kwaliteitseigenschap"@nl;
+  rdfs:label "Quality measurement"@en;
+.
 
 #Extra
 rdf:type sh:name "rdf:type".
@@ -211,8 +205,8 @@ dcatap:DatasetVersion_type a sh:PropertyShape;
   sh:maxCount 1;
 .
 dcatap:DatasetVersion_version rdf:type sh:PropertyShape;
-  rdfs:label "versie (dataset versie)"@nl;
-  rdfs:label "version (dataset version)"@en;
+  rdfs:label "versie"@nl;
+  rdfs:label "version"@en;
   sh:name "adms:version";
   sh:path adms:version;
   sh:datatype xsd:string;
@@ -221,8 +215,8 @@ dcatap:DatasetVersion_version rdf:type sh:PropertyShape;
   skos:example "2.1.0"@nl;
 .
 dcatap:DatasetVersion_versionNotes rdf:type sh:PropertyShape;
-  rdfs:label "versie-notities (dataset versie)"@nl;
-  rdfs:label "version notes (dataset version)"@en;
+  rdfs:label "versie-notities"@nl;
+  rdfs:label "version notes"@en;
   sh:name "adms:versionNotes";
   sh:path adms:versionNotes;
   sh:datatype xsd:string;
@@ -231,8 +225,8 @@ dcatap:DatasetVersion_versionNotes rdf:type sh:PropertyShape;
   skos:example "IMKAD 2.1.0 (publicatie 22-11-2011) is de final draft versie van IMKAD 2 zoals die is aangeboden aan belanghebbenden voor beoordeling. Het commentaar is voor zover mogelijk verwerkt in versie 2.1.1. Deze wijzigingen zijn terug te vinden in de change log."@nl;
 .
 dcatap:DatasetVersion_distribution a sh:PropertyShape;
-  rdfs:label "distributie (dataset versie)"@nl;
-  rdfs:label "distribution (dataset version)"@en;
+  rdfs:label "distributie"@nl;
+  rdfs:label "distribution"@en;
   sh:name "dcat:distribution";
   sh:path dcat:distribution;
   sh:class dcat:Distribution;
@@ -284,8 +278,8 @@ dcatap:Location a sh:NodeShape;
   skos:example "gemeente Apeldoorn"@nl;
 .
 dcatap:DatasetVersion_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (dataset versie)"@nl;
-  rdfs:label "provenance (dataset version)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity;
@@ -304,8 +298,8 @@ dcatap:DatasetVersion_provenance a sh:PropertyShape;
 
 dcatap:DatasetProduct rdf:type sh:NodeShape;
   skos:inScheme dcatap:DatasetTypes; #A bit weird, but OK: the valuelist for dataset types, we reuse the shape
-  rdfs:label "dataset (product)"@nl;
-  rdfs:label "dataset (product)"@en;
+  rdfs:label "Dataset (product)"@nl;
+  rdfs:label "Dataset (product)"@en;
   sh:name "dcat:Dataset (product)";
   rdfs:comment "Een dataset (product) is een concreet, geversioneerd informatieproduct op basis van de data in een dataset (versie)"@nl;
   rdfs:comment "A dataset (product) is a concrete, versioned information product based on the data in a dataset (version)."@en;
@@ -337,8 +331,8 @@ dcatap:DatasetProduct_type a sh:PropertyShape;
   sh:maxCount 1;
 .
 dcatap:DatasetProduct_version a sh:PropertyShape;
-  rdfs:label "versie (product)"@nl;
-  rdfs:label "version (product)"@en;
+  rdfs:label "versie"@nl;
+  rdfs:label "version"@en;
   sh:name "adms:version";
   sh:path adms:version;
   sh:datatype xsd:string;
@@ -348,8 +342,8 @@ dcatap:DatasetProduct_version a sh:PropertyShape;
   skos:example "2.1.0"@nl;
 .
 dcatap:DatasetProduct_versionNotes rdf:type sh:PropertyShape;
-  rdfs:label "versie notities (product)"@nl;
-  rdfs:label "version notes (product)"@en;
+  rdfs:label "versie notities"@nl;
+  rdfs:label "version notes"@en;
   sh:name "adms:versionNotes";
   sh:datatype xsd:string;
   sh:path adms:versionNotes;
@@ -358,8 +352,8 @@ dcatap:DatasetProduct_versionNotes rdf:type sh:PropertyShape;
   skos:example "BRK levering 2.2 is aangepast aan IMKAD 2.1.0, waarmee de volgende nieuwe functionaliteit is toegevoegd ..."@nl;
 .
 dcatap:DatasetProduct_distribution a sh:PropertyShape;
-  rdfs:label "distributie (product)"@nl;
-  rdfs:label "distribution (product)"@en;
+  rdfs:label "distributie"@nl;
+  rdfs:label "distribution"@en;
   sh:path dcat:distribution;
   sh:name "dcat:distribution";
   sh:class dcat:Distribution;
@@ -388,8 +382,8 @@ dcatap:DatasetProduct_qualityMeasurement a sh:PropertyShape;
   skos:example "De data in het BAG extract voor de gemeente Apeldoorn zijn voor 99,5% corect op basis van handmatige controle van een steekproef."@nl;
 .
 dcatap:DatasetProduct_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (product)"@nl;
-  rdfs:label "provenance (product)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity;
@@ -423,8 +417,8 @@ dcatap:Catalog a sh:NodeShape;
   sh:property dcatap:Catalog_provenance;
 .
 dcatap:Catalog_name rdf:type sh:PropertyShape;
-  rdfs:label "naam (catalogus)"@nl;
-  rdfs:label "label (catalog)"@en;
+  rdfs:label "naam"@nl;
+  rdfs:label "label"@en;
   sh:name "dcterms:title";
   sh:path dcterms:title;
   sh:datatype xsd:string;
@@ -433,8 +427,8 @@ dcatap:Catalog_name rdf:type sh:PropertyShape;
   skos:example "Catalogus Omgevingswet";
 .
 dcatap:Catalog_description rdf:type sh:PropertyShape;
-  rdfs:label "beschrijving (catalogus)"@nl;
-  rdfs:label "description (catalog)"@en;
+  rdfs:label "beschrijving"@nl;
+  rdfs:label "description"@en;
   sh:name "dcterms:description";
   sh:path dcterms:description;
   sh:datatype xsd:string;
@@ -462,19 +456,21 @@ dcatap:Catalog_homepage rdf:type sh:PropertyShape;
   skos:example "http://catalogus.kadaster.nl/";
 .
 dcatap:Catalog_licence rdf:type sh:PropertyShape;
-  rdfs:label "licentie (catalogus)"@nl;
-  rdfs:label "license (catalog)"@en;
+  rdfs:label "licentie"@nl;
+  rdfs:label "license"@en;
   sh:name "dcterms:license";
   sh:path dcterms:license;
+  sh:class dcterms:LicenseDocument;
   rdfs:comment "De licentie is van toepassing op de catalogus kan worden gespecificeerd. Dit kan een andere licentie zijn als de licentie voor distributies van datasets."@nl;
   rdfs:comment "The license applied to the catalog can be specified. This can be another license as the license for distributions of datasets."@en;
   skos:example "Creative Commons Naamsvermelding 4.0 licentie";
 .
 dcatap:Catalog_rights rdf:type sh:PropertyShape;
-  rdfs:label "rechten (catalogus)"@nl;
-  rdfs:label "rights (catalog)"@en;
+  rdfs:label "rechten"@nl;
+  rdfs:label "rights"@en;
   sh:name "dcterms:rights";
   sh:path dcterms:rights;
+  sh:class dcterms:RightsStatement;
   rdfs:comment "De rechten die van toepassing zijn op de catalogus kunnen worden beschreven. Dit kunnen andere rechten zijn als die voor distributies van datasets"@nl;
   rdfs:comment "The rights applied to the catalog can be specified. This can be nother rights as the rights for distributions of datasets."@en;
   skos:example "Proclaimer: De Catalogus voor de Omgevingswet verbindt definities, toelichtingen en uitleg van begrippen, regels, informatiemodellen, producten en services met elkaar. De datasets waarin deze worden beschreven worden federatief beheerd door de betreffende bronhouders. Bij iedere dataset wordt aangegeven wie de bronhouder is en daarmee verantwoordelijk is voor de inhoud."@nl;
@@ -490,8 +486,8 @@ dcatap:Catalog_dataset a sh:PropertyShape;
   skos:example "De opname van de beschrijving van de BAG in de stelselcatalogus Omgevingswet via een link naar bag.basisregsitraties.overheid.nl/id/dataset/BAG"@nl;
 .
 dcatap:Catalog_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (catalogus)"@nl;
-  rdfs:label "provenance (catalog)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity;
@@ -531,8 +527,8 @@ dcatap:Distribution_name rdf:type sh:PropertyShape;
   skos:example "Digitale Kadastrale Kaart download service"@nl;
 .
 dcatap:Distribution_description rdf:type sh:PropertyShape;
-  rdfs:label "beschrijving (distributie)"@nl;
-  rdfs:label "description (distribution)"@en;
+  rdfs:label "beschrijving"@nl;
+  rdfs:label "description"@en;
   sh:name "dcterms:description";
   sh:path dcterms:description;
   sh:datatype xsd:string;
@@ -541,19 +537,21 @@ dcatap:Distribution_description rdf:type sh:PropertyShape;
   skos:example "Het Kadaster is houder van de Basisregistratie Kadaster (BRK). Onderdeel van de BRK is de Digitale kadastrale kaart. Deze is beschikbaar als open data en nu via dit portaal ook als Linked Open Data (vooralsnog zonder de topografie)."@nl;
 .
 dcatap:Distribution_license rdf:type sh:PropertyShape;
-  rdfs:label "licentie (distributie)"@nl;
-  rdfs:label "license (distribution)"@en;
+  rdfs:label "licentie"@nl;
+  rdfs:label "license"@en;
   sh:name "dcterms:license";
   sh:path dcterms:license;
+  sh:class dcterms:LicenseDocument;
   rdfs:comment "De licentie is van toepassing op de distributie kan worden gespecificeerd. Dit kan een andere licentie zijn als de licentie voor de catalogus."@nl;
   rdfs:comment "The license applied to the distribution can be specified. This can be another license as the license for the catalog."@en;
   skos:example "Creative Commons Naamsvermelding 4.0 licentie"@nl;
 .
 dcatap:Distribution_rights rdf:type sh:PropertyShape;
-  rdfs:label "rechten (distributie)"@nl;
-  rdfs:label "rights (distribution)"@en;
+  rdfs:label "rechten"@nl;
+  rdfs:label "rights"@en;
   sh:name "dcterms:rights";
   sh:path dcterms:rights;
+  sh:class dcterms:RightsStatement;
   rdfs:comment "De rechten die van toepassing zijn op de distributie kunnen worden beschreven. Dit kunnen andere rechten zijn als die voor distributies van de catalogus. Zie ook: svbg:gebruiksvoorwaarden en iso:confidentiality."@nl;
   rdfs:comment "The rights applied to the distribution can be specified. This can be nother rights as the rights for the catalog."@en;
   rdfs:comment "De rechten met betrekking tot de distributie zijn beschreven. See also svbg:gebruiksvoorwaarden en iso:confidentiality."@nl;
@@ -578,8 +576,8 @@ dcatap:Distribution_downloadURL rdf:type sh:PropertyShape;
   skos:example "https://www.pdok.nl/nl/producten/pdok-downloads/basis-registratie-kadaster/kadastrale-kaart"@nl;
 .
 dcatap:Distribution_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (distributie)"@nl;
-  rdfs:label "provenance (distribution)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:path foaf:isPrimaryTopicOf;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity;
@@ -592,8 +590,55 @@ dcatap:Distribution_provenance a sh:PropertyShape;
   sh:message "Prefably provenance information is kept on a distribution."@en
 .
 
+dcatap:LicenseDocument a sh:NodeShape;
+  sh:name "dcterms:LicenseDocument";
+  sh:targetClass dcterms:LicenseDocument;
+  rdfs:label "Licentiedocument"@nl;
+  rdfs:label "License document"@en;
+  sh:property dcatap:LicenseDocument_title;
+.
+
+dcatap:LicenseDocument_title rdf:type sh:PropertyShape;
+  rdfs:label "titel"@nl;
+  rdfs:label "title"@en;
+  sh:name "dcterms:title";
+  sh:path dcterms:title;
+  sh:datatype xsd:string;
+  rdfs:comment "Een licentiedocument heeft een titel."@nl;
+  rdfs:comment "A license document has a title."@en;
+  skos:example "Creative Commons Naamsvermelding 4.0 licentie"@nl;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een licentiedocument moet een titel hebben."@nl;
+  sh:message "A license document must have a title."@en
+.
+
+dcatap:RightsStatement a sh:NodeShape;
+  sh:name "dcterms:RightsStatement";
+  sh:targetClass dcterms:RightsStatement;
+  rdfs:label "Rechtenbeschrijving"@nl;
+  rdfs:label "Rights statement"@en;
+  sh:property dcatap:RightsStatement_title;
+.
+
+dcatap:RightsStatement_title rdf:type sh:PropertyShape;
+  rdfs:label "titel"@nl;
+  rdfs:label "title"@en;
+  sh:name "dcterms:title";
+  sh:path dcterms:title;
+  sh:datatype xsd:string;
+  rdfs:comment "Een rechtenbeschrijving heeft een titel."@nl;
+  rdfs:comment "A rights statement has a title."@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:severity sh:Violation;
+  sh:message "Een rechtenbeschrijving moet een titel hebben."@nl;
+  sh:message "A rights statement must have a title."@en
+.
+
 dcatap:Language a sh:NodeShape;
-  sh:name "Language (dct:LinguisticSystem)"^^xsd:string;
+  sh:name "Language (dct:LinguisticSystem)";
   sh:property [
     sh:path rdf:type;
     sh:hasValue dcterms:LinguisticSystem;
@@ -607,7 +652,7 @@ dcatap:Language a sh:NodeShape;
 .
 
 dcatap:DatasetType a sh:NodeShape;
-  sh:name "Dataset type (skos:Concept)";
+  sh:name "Dataset type";
   sh:property [
       sh:path skos:inScheme;
       sh:hasValue dcatap:DatasetTypes

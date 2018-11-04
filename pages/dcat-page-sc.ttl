@@ -20,7 +20,10 @@ page:dcat a cnt:ContentAsText;
     page:datasetProduct
     page:catalog
     page:distribution
+    page:licenseDocument
+    page:rightsStatement
     page:language
+    page:datasetType
     page:dcatUriStrategy
   )
 .
@@ -203,6 +206,62 @@ page:distribution-relations a cnt:ContentAsText;
   )
 .
 
+# ========================================
+# License document
+# ========================================
+page:licenseDocument a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Licentiedocument"@nl, "License document"@en]
+    [dct:subject dcatap:LicenseDocument; xhtml:stylesheet style:nodeshape]
+    page:licenseDocument-properties
+  )
+.
+
+page:licenseDocument-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dcatap:LicenseDocument; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+# ========================================
+# Rights statement
+# ========================================
+page:rightsStatement a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Rechtenbeschrijving"@nl, "Rights statement"@en]
+    [dct:subject dcatap:RightsStatement; xhtml:stylesheet style:nodeshape]
+    page:rightsStatement-properties
+  )
+.
+
+page:rightsStatement-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dcatap:RightsStatement; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+# ========================================
+# Language
+# ========================================
+page:language a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Taal"@nl, "Language"@en]
+    [dct:subject dcatap:Language; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+# ========================================
+# Dataset type
+# ========================================
+page:datasetType a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Dataset type"@nl, "Dataset type"@en]
+    [dct:subject dcatap:DatasetType; xhtml:stylesheet style:nodeshape]
+  )
+.
+
 page:dcatUriStrategy a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
@@ -230,11 +289,4 @@ Catalogs, datasets (general), datasets (version), datasets (product) and distirb
 * `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` for datasets (product)
 * `http://{domain}/id/distribution/{UpperCamelCase(rdfs:label)}` for distributions
 '''@en;
-.
-
-page:language a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Taal"@nl, "Language"@en]
-    [dct:subject dcatap:Language; xhtml:stylesheet style:nodeshape]
-  )
 .
