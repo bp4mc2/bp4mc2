@@ -55,19 +55,13 @@ dqvap:QualityDimension a sh:NodeShape;
   rdfs:label "Kwaliteitsdimensie"@nl;
   rdfs:label "Quality dimension"@en;
   sh:name "dqv:Dimension";
-  sh:property dqvap:QualityDimension_label;
-.
-
-dqvap:QualityDimension_label a sh:PropertyShape;
-  sh:name "rdfs:label";
-  sh:path rdfs:label;
+  sh:property []; #Hack to show QualityDimension
 .
 
 dqvap:QualityIndicator a sh:NodeShape;
   sh:name "Indicator (dqv:Dimension)";
   rdfs:label "Quality indicator"@en;
   rdfs:label "Kwaliteitsindicator"@nl;
-  sh:property dqvap:QualityIndicator_label;
   sh:property dqvap:QualityIndicator_broader;
   sh:property dqvap:QualityIndicator_role;
 .
@@ -87,26 +81,26 @@ dqvap:QualityIndicator_broader a sh:PropertyShape;
   sh:node dqvap:QualityDimension;
 .
 
-dqvap:QualityMetric a sh:NodeShape;
+dqvap:Metric a sh:NodeShape;
   sh:targetClass dqv:Metric;
   rdfs:label "Meetfunctie"@nl;
   rdfs:label "Quality metric"@en;
   sh:name "dqv:Metric";
-  sh:property dqvap:QualityMetric_label;
-  sh:property dqvap:QualityMetric_inDimension;
-  sh:property dqvap:QualityMetric_expectedDataType;
+  sh:property dqvap:Metric_label;
+  sh:property dqvap:Metric_inDimension;
+  sh:property dqvap:Metric_expectedDataType;
 .
 
-dqvap:QualityMetric_label a sh:PropertyShape;
+dqvap:Metric_label a sh:PropertyShape;
   sh:name "rdfs:label";
   sh:path rdfs:label;
 .
-dqvap:QualityMetric_inDimension a sh:PropertyShape;
+dqvap:Metric_inDimension a sh:PropertyShape;
   sh:name "dqv:inDimension";
   sh:path dqv:inDimension;
   sh:node dqvap:QualityIndicator;
 .
-dqvap:QualityMetric_expectedDataType a sh:PropertyShape;
+dqvap:Metric_expectedDataType a sh:PropertyShape;
   sh:name "dqv:expectedDataType";
   sh:path dqv:expectedDataType;
 .

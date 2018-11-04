@@ -15,7 +15,11 @@ page:dqv a cnt:ContentAsText;
     [xhtml:heading "DQV Toepassingsprofiel voor datakwaliteit"@nl, "DQV Application profile for data quality"@en]
     page:dqv-body
     [xhtml:img "dqv-ap-sc.png"]
-    page:quality-dimension
+    page:qualityDimension
+    page:qualityIndicator
+    page:metric
+    page:qualityMeasurement
+    page:qualityPolicy
   )
 .
 
@@ -32,9 +36,97 @@ Data quality
 # ========================================
 # QualityDimension
 # ========================================
-page:quality-dimension a cnt:ContentAsText;
+page:qualityDimension a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Kwaliteitsdimensie"@nl, "Quality dimension"@en]
     [dct:subject dqvap:QualityDimension; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+# ========================================
+# Indicator
+# ========================================
+page:qualityIndicator a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Kwaliteitsindicator"@nl, "Quality indicator"@en]
+    [dct:subject dqvap:QualityIndicator; xhtml:stylesheet style:nodeshape]
+  )
+.
+
+# ========================================
+# Metric
+# ========================================
+page:metric a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Meting"@nl, "Metric"@en]
+    [dct:subject dqvap:Metric; xhtml:stylesheet style:nodeshape]
+    page:metric-properties
+    page:metric-relations
+  )
+.
+
+page:metric-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dqvap:Metric; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:metric-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dqvap:Metric; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# QualityMeasurement
+# ========================================
+page:qualityMeasurement a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Kwaliteitsmeetwaarde"@nl, "Quality measurement"@en]
+    [dct:subject dqvap:QualityMeasurement; xhtml:stylesheet style:nodeshape]
+    page:qualityMeasurement-properties
+    page:qualityMeasurement-relations
+  )
+.
+
+page:qualityMeasurement-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dqvap:QualityMeasurement; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:qualityMeasurement-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dqvap:QualityMeasurement; xhtml:stylesheet style:object-properties]
+  )
+.
+
+# ========================================
+# QualityPolicy
+# ========================================
+page:qualityPolicy a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Kwaliteitseis"@nl, "Quality policy"@en]
+    [dct:subject dqvap:QualityPolicy; xhtml:stylesheet style:nodeshape]
+    page:qualityPolicy-properties
+    page:qualityPolicy-relations
+  )
+.
+
+page:qualityPolicy-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dqvap:QualityPolicy; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:qualityMeasurement-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dqvap:QualityPolicy; xhtml:stylesheet style:object-properties]
   )
 .
