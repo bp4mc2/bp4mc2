@@ -43,34 +43,11 @@ dstype:DatasetVersion a skos:Concept;
   sh:name "dstype:DatasetVersion"
 .
 
-#derived from skos-lex
-skoslex:Act rdfs:subClassOf skos:Concept.
-skoslex:Object rdfs:subClassOf skos:Concept.
-skoslex:Actor rdfs:subClassOf skos:Concept.
-skoslex:Agent rdfs:subClassOf skoslex:Actor.
-
-#derived from frbr
-frbr:Work rdfs:subClassOf frbr:Endeavour.
-frbr:Expression rdfs:subClassOf frbr:Endeavour.
-
-#derived from prov
-prov:Person rdfs:subClassOf prov:Agent.
-prov:Organization rdfs:subClassOf prov:Agent.
-prov:SoftwareAgent rdfs:subClassOf prov:Agent.
-
-#derived from foaf
-foaf:Organization rdfs:subClassOf foaf:Agent.
-
-#derived from org
-org:Organization rdfs:subClassOf foaf:Organization.
-
-#derived from adms
-adms:Asset rdfs:subClassOf dcat:Dataset.
-adms:AssetDistribution rdfs:subClassOf dcat:Distribution.
-
-#derived from dqv
-dqv:Dimension rdfs:subClassOf skos:Concept.
-dqv:Category rdfs:subClassOf skos:Concept.
+#Import from prov
+admsap:Entity a sh:NodeShape;
+  sh:targetClass prov:Entity;
+  sh:name "prov:Entity";
+.
 
 #Extra
 rdf:type sh:name "rdf:type".
@@ -108,8 +85,9 @@ admsap:Asset rdf:type sh:NodeShape;
 admsap:Asset_label rdf:type sh:PropertyShape;
   rdfs:label "naam"@nl;
   rdfs:label "label"@en;
-  sh:name "rdfs:label (Asset)";
+  sh:name "rdfs:label";
   sh:path rdfs:label;
+  sh:datatype xsd:string;
   rdfs:comment "Een asset heeft een naam."@nl;
   rdfs:comment "An asset has a label."@en;
   skos:example "Landenlijst";
@@ -158,8 +136,8 @@ admsap:Asset_distribution rdf:type sh:PropertyShape;
   skos:example "De lijst met Kadastrale gemeenten kan worden gepubliceerd in genericode."@nl
 .
 admsap:Asset_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (asset)"@nl;
-  rdfs:label "provenance (asset)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
@@ -172,8 +150,8 @@ admsap:Asset_provenance a sh:PropertyShape;
   sh:message "Prefably provenance information is kept on an asset."@en
 .
 admsap:AssetDistribution a sh:NodeShape;
-  rdfs:label "distributie"@nl;
-  rdfs:label "distribution"@en;
+  rdfs:label "Distributie"@nl;
+  rdfs:label "Distribution"@en;
   sh:name "distribution";
   sh:targetClass adms:Distribution;
   sh:property admsap:AssetDistribution_accessURL;
@@ -214,8 +192,8 @@ admsap:AssetDistribution_representationTechnique a sh:PropertyShape;
   skos:example "genericode"@nl;
 .
 admsap:AssetDistribution_provenance a sh:PropertyShape;
-  rdfs:label "herkomst (asset distributie)"@nl;
-  rdfs:label "provenance (asset distribution)"@en;
+  rdfs:label "herkomst"@nl;
+  rdfs:label "provenance"@en;
   sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
@@ -233,11 +211,11 @@ admsap:AssetDistribution_provenance a sh:PropertyShape;
 #
 
 admsap:LandingPage a sh:NodeShape;
-  rdfs:label "webpagina"@nl;
-  rdfs:label "landing page"@en;
+  rdfs:label "Webpagina"@nl;
+  rdfs:label "Landing page"@en;
   sh:name "foaf:Document (Landing page)";
   sh:property admsap:LandingPage_type;
-  rdfs:comment "De webpagina va welke een asset vindbaar is."@nl;
+  rdfs:comment "De webpagina van welke een asset vindbaar is."@nl;
   rdfs:comment "The landing page on the web on which an asset can be found."@en;
   skos:example "kadaster.nl/waardelijsten."@nl;
 .
