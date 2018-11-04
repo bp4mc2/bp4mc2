@@ -47,9 +47,9 @@ De provenance kent 2 aspecten:
 ** De formele geldigheid wordt vastgelegd in de formele bekendmakingsdatum. Daarbij kan ook de formele status worden vastgelegd, waarvoor de EU waardelijst voor statussen (adms:status) wordt gehanteerd.
 ** De juridische geldigheid in tijd en plaats kan worden vastgelegd in een tijdsperiode en een verwijzing naar een geografisch gebied.
 ** Voor begrippen en collecties van begrippen die hun oorsprong vinden in de onderliggende wet- en regelgeving geldt dat deze tijdsperiode de periode is zoals in die wet- en regelgeving is vastgelegd en het geografisch gebied het gebied is waarover het betreffende bevoegd gezag zeggenschap heeft.
-* De administratief/huishoudelijke aspecten. 
-** Een wijziging in de data wordt vastgelegd in een eigen sd:graph (de verzameling van gewijzigde elementen in 1 transactie). 
-** Deze wijziging wordt doorgevoerd door een prov:agent. 
+* De administratief/huishoudelijke aspecten.
+** Een wijziging in de data wordt vastgelegd in een eigen sd:graph (de verzameling van gewijzigde elementen in 1 transactie).
+** Deze wijziging wordt doorgevoerd door een prov:agent.
 ** Deze prov:agent dient geautoriseerd te zijn om een dergelijke wijziging uit te voeren. Dit betekent dat de prov:agent ook als foaf:Agent bekend is in een lijst met partijen (feitelijk een lijst van organisaties). Via de relatie dcterms:publisher is duidelijk wie de publicist is van een dataset, en daarmee degene die wijzigingen op de informatie over deze dataset mag doorvoeren.
 '''@nl,
 '''
@@ -106,7 +106,7 @@ page:metadata-relations a cnt:ContentAsText;
 
 page:status a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Adms status"@nl, "Adms status"@en]
+    [xhtml:heading "Status"@nl, "Status"@en]
     [dct:subject provap:Status; xhtml:stylesheet style:nodeshape]
   )
 .
@@ -117,7 +117,7 @@ page:status a cnt:ContentAsText;
 
 page:periodOfTime a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Metadata"@nl, "Metadata"@en]
+    [xhtml:heading "Tijdsperiode"@nl, "Period of time"@en]
     [dct:subject provap:PeriodOfTime; xhtml:stylesheet style:nodeshape]
     page:periodOfTime-properties
   )
@@ -125,7 +125,7 @@ page:periodOfTime a cnt:ContentAsText;
 
 page:periodOfTime-properties a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Tijdsperiode"@nl, "Time period"@en]
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
     [dct:subject provap:PeriodOfTime; xhtml:stylesheet style:datatype-properties]
   )
 .
@@ -142,15 +142,15 @@ page:location a cnt:ContentAsText;
 .
 
 #----------------------------------
-# Admistrative houskeeping metadata 
+# Admistrative houskeeping metadata
 #----------------------------------
 
 page:provenanceGraph a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Provenance graaf"@nl, "Provenance graph"@en]
+    [xhtml:heading "Data graaf"@nl, "Data graph"@en]
     [dct:subject provap:ProvenanceGraph; xhtml:stylesheet style:nodeshape]
-    page:dataset-properties
-    page:dataset-relations
+    page:provenanceGraph-properties
+    page:provenanceGraph-relations
   )
 .
 
@@ -168,19 +168,15 @@ page:provenanceGraph-relations a cnt:ContentAsText;
   )
 .
 
+#----------------------------------
+# Provenance agent
+#----------------------------------
+
 page:provenanceAgent a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Agent (provenance)"@nl, "Agent (provenance)"@en]
     [dct:subject provap:ProvenanceAgent; xhtml:stylesheet style:nodeshape]
-    page:dataset-properties
-    page:dataset-relations
-  )
-.
-
-page:provenanceAgent-properties a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject provap:ProvenanceAgent; xhtml:stylesheet style:datatype-properties]
+    page:provenanceAgent-relations
   )
 .
 
@@ -190,6 +186,10 @@ page:provenanceAgent-relations a cnt:ContentAsText;
     [dct:subject provap:ProvenanceAgent; xhtml:stylesheet style:object-properties]
   )
 .
+
+#----------------------------------
+# Provenance person and subclasses
+#----------------------------------
 
 page:provenancePerson a cnt:ContentAsText;
   dct:hasPart (
@@ -213,7 +213,7 @@ page:provenanceOrganization a cnt:ContentAsText;
 .
 page:foafAgent a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "Agent (foaf)"@nl, "Agent (foaf)"@en]
+    [xhtml:heading "Geregistreerde Agent"@nl, "Registered Agent"@en]
     [dct:subject provap:FoafAgent; xhtml:stylesheet style:nodeshape]
   )
 .
@@ -241,7 +241,7 @@ page:provUriStrategy a cnt:ContentAsText;
 page:prov-uri-body a cnt:ContentAsText;
   cnt:chars
 '''
-Provenance hoort altijd bij een entiteit. 
+Provenance hoort altijd bij een entiteit.
 * De gegevens over een entiteit zoals die op een bepaald moment geldig is kunnen worden opgevraagd via de doc-uri, aangevuld met yyyy/mm/dd
 #* De gegevens over een locatie zoals die op een bepaalde plaats geldig is kunnen worden opgevraagd via de doc-uri, aangevuld met {UpperCamelCase (rdfs:label van de Locatie)}
 '''@nl,
