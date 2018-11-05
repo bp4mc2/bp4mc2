@@ -35,17 +35,17 @@ Het vervelende aan natuurlijke taal is echter dat in geschreven taal aan de term
 
 In 'Through the looking-glass' van Lewis Caroll wordt deze innige relatie tussen de betekenis van een term en zijn spreker verwoord in het gesprek tussen Alice en Humpty-Dumpty:
 
-*"I don't know what you mean by 'glory'", Alice said.*
-
-*Humpty Dumpty smiled contemptuously. "Of course you don't. Till I tell you. I meant 'there's a nice knock-down argument for you!'"*
-
-*"But 'glory' doesn't mean 'a nice knock-down argument'," Alice objected.*
-
-*"When I use a word," Humpty Dumpty said in rather a scornful tone. "It means just what I choose it to mean - neither more or less."*
-
-*"The question is," said Alice, "whether you can make words mean so many different things."*
-
-*"The question is," said Humpty Dumpty, "which is to be master - that's all."*
+>"*I don't know what you mean by 'glory'*", Alice said.
+>
+>Humpty Dumpty smiled contemptuously. "*Of course you don't. Till I tell you. I meant 'there's a nice knock-down argument for you!'*"
+>
+>"*But 'glory' doesn't mean 'a nice knock-down argument'*" Alice objected.
+>
+>"*When I use a word,*" Humpty Dumpty said in rather a scornful tone. "*It means just what I choose it to mean - neither more or less.*"
+>
+>"*The question is,*" said Alice, "*whether you can make words mean so many different things.*"
+>
+>"*The question is,*" said Humpty Dumpty, "*which is to be master - that's all.*"
 
 Hier stelt Humpty Dumpty dat hijzelf, en alleen hijzelf kan bepalen wat een woord betekent. Strikt genomen heeft hij gelijk. Maar als men betekenisvol wil communiceren en daarmee ook betekenisvol modelleren, dan is enige duidelijkheid nodig wat 'we' er mee bedoelen. Deze duidelijkheid kan worden bereikt door het definiëren van begrippen.</p>
 
@@ -97,7 +97,7 @@ Merk op dat we in dit plaatje expliciet niet spreken over de 'BAG gedachte van d
 
 ### Grammatica
 
-Communicatie in natuurlijke taal vindt plaats volgens een model dat we de grammatica van een taal noemen. Eenvoudige uitspraken hebben de vorm [onderwerp] – [gezegde] – [lijdend voorwerp]. Bijvoorbeeld in de zin "Paul kent John" is "Paul" het onderwerp, "kent" het gezegde en "John" het lijdend voorwerp. Linked Data is gebaseerd op het uitgangspunt dat we ook met data dergelijke basale uitspraken kunnen doen. Hiervoor is RDF bedacht, het Resource Description Framework [RDF]. RDF is een standaard van het World Wide Web Consortium (W3C), oorspronkelijk ontworpen als een metadata-model, maar gaandeweg gebruikt als een formaat om gegevens in het algemeen voor te stellen en uit te wisselen. Uitspraken in RDF volgen een grammatica die erg veel lijkt op die van natuurlijke taal. Ze hebben de vorm van een triple: [subject] – [predicate] – [object].
+Communicatie in natuurlijke taal vindt plaats volgens een model dat we de grammatica van een taal noemen. Eenvoudige uitspraken hebben de vorm [onderwerp] – [gezegde] – [lijdend voorwerp]. Bijvoorbeeld in de zin "Paul kent John" is "Paul" het onderwerp, "kent" het gezegde en "John" het lijdend voorwerp. Linked Data is gebaseerd op het uitgangspunt dat we ook met data dergelijke basale uitspraken kunnen doen. Hiervoor is RDF bedacht, het Resource Description Framework [RDF]. RDF is een standaard van het World Wide Web Consortium (W3C), oorspronkelijk ontworpen als een metadata-model, maar gaandeweg gebruikt als een formaat om gegevens in het algemeen voor te stellen en uit te wisselen. Uitspraken in RDF volgen een grammatica die erg veel lijkt op die van natuurlijke taal. Ze hebben de vorm van een triple: `<subject> – <predicate> – <object>`.
 
 ![](image-ch3-13.png)
 
@@ -127,9 +127,11 @@ Voor vragende zinnen is het gebruikelijk om een vraagteken ("?") aan het einde v
 
 Voorbeelden van deze drie soorten zinnen zijn:
 
-* "Jan is geboren op 17 maart." (mededeling);
-* "Kun je iets vertellen over Jan?" (vraag);
-*	"Vergeet alles wat je over Jan kunt vertellen!" (bevel).
+>"Jan is geboren op 17 maart." (mededeling);
+>
+>"Kun je iets vertellen over Jan?" (vraag);
+>
+>"Vergeet alles wat je over Jan kunt vertellen!" (bevel).
 
 ### HTTP (Hypertext Transfer Protocol)
 
@@ -173,9 +175,11 @@ Dit betekent dat in een mededelende zin veel woorden (beter gezegd: termen) verv
 
 De volgende voorbeelden laten dit zien:
 
-* Marco zei tegen Marco: "Heb je Marco al gesproken?"
-* Marco Polo zei tegen Marco Janssen: "Heb je Marco Janssen al gesproken?"
-* De persoon met BSN 1234 zei tegen de persoon met BSN 4321: "Heb je de persoon met BSN 8743 al gesproken?"
+>Marco zei tegen Marco: "Heb je Marco al gesproken?"
+>
+>Marco Polo zei tegen Marco Janssen: "Heb je Marco Janssen al gesproken?"
+>
+>De persoon met BSN 1234 zei tegen de persoon met BSN 4321: "Heb je de persoon met BSN 8743 al gesproken?"
 
 De eerste zin kent de minst specifieke aanduiding voor de drie personen die in de zin voorkomen. Dit maakt de zin ambigu en dus lastig te begrijpen. Immers: over welke Marco hebben we het? In de tweede zin worden de personen al iets specifieker aangeduid. Deze zin klinkt een stuk formeler, en leest minder prettig, maar is wel beter te begrijpen. De derde zin kent een zeer specifieke aanduiding. De derde zin is volstrekt duidelijk en ondubbelzinnig, maar nogal omslachtig geformuleerd.
 
@@ -217,7 +221,21 @@ In het voorbeeld kan dit het volgende gesprek opleveren:
 
 Of in Linked Data (Turtle syntax):
 
-![](image-ch3-17.png)
+```
+http-request:
+http://bp4mc2.org/voorbeeld/id/persoon/1234
+
+http-response:
+@prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
+@prefix vbpers: <http://bp4mc2.org/voorbeeld/id/Persoon/> .
+
+vbpers:1234
+  vb:naam "Marco Polo" ;
+  vb:roepnaam "Marco" ;
+  vb:BSN 1234 ;
+  vb:sprak-met vbpers:8743
+.
+```
 
 ### Overige URL vragen
 
