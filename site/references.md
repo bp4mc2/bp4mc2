@@ -127,7 +127,7 @@ Linked Data Platform 1.0 http://www.w3.org/TR/ldp/
 Linked knowledge space
 http://www.pilod.nl/w/images/5/5c/Christophe_Gueret_Linking_Knowledge_Spaces.pdf
 
-###### [LINKEDDATA]
+###### [LINKED-DATA]
 Linked Data Design Issues
 http://www.w3.org/DesignIssues/LinkedData.html
 

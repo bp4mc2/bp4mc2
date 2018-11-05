@@ -10,11 +10,11 @@ Als het om data gaat, gaan we nog vaak hetzelfde te werk als dertig jaar geleden
 
 ### Linked Data
 
-Linked Data is dé technologie om (overheids)data direct via het web te publiceren. In het artikel 'Een nieuwe wereld, een nieuwe informatie architectuur' [RIJNSANT] beschrijven Ria van Rijn en Arjen Santema de mogelijkheden die linked data bieden. Momenteel wordt data in het beste geval via webservices, maar vaak ook nog gewoon als databestand tussen organisaties uitgewisseld. Dergelijke oplossingen hebben vaak als kenmerk dat ze als point-to-point-solution zijn gerealiseerd en moeilijk op te schalen zijn naar breder gebruik. Een belangrijke reden hiervoor is dat een impliciete context wordt verondersteld waarbinnen de data bruikbaar is, zonder dat deze context met de data wordt meegeleverd.
+Linked Data is dé technologie om (overheids)data direct via het web te publiceren. In het artikel 'Een nieuwe wereld, een nieuwe informatie architectuur' [[RIJNSANT]] beschrijven Ria van Rijn en Arjen Santema de mogelijkheden die linked data bieden. Momenteel wordt data in het beste geval via webservices, maar vaak ook nog gewoon als databestand tussen organisaties uitgewisseld. Dergelijke oplossingen hebben vaak als kenmerk dat ze als point-to-point-solution zijn gerealiseerd en moeilijk op te schalen zijn naar breder gebruik. Een belangrijke reden hiervoor is dat een impliciete context wordt verondersteld waarbinnen de data bruikbaar is, zonder dat deze context met de data wordt meegeleverd.
 
 Door data via het web te publiceren wordt deze in een keer, voor iedereen beschikbaar, vanuit een herkenbare bron gepubliceerd. Linked data kan inclusief context worden gepubliceerd. Met context wordt de uitleg van de betekenis van data en metadata bedoeld. Metadata gaan bijvoorbeeld over de wijze van inwinning, volledigheid, betrouwbaarheid, tijdigheid, en herkomst. Linked data biedt de mogelijkheid om deze metadata in dezelfde vorm te publiceren als de data zelf.
 
-Tim Berners Lee stelt vier eenvoudige principes voor om te hanteren als je data via het web publiceert [LINKEDDATA]:
+Tim Berners Lee stelt vier eenvoudige principes voor om te hanteren als je data via het web publiceert [[LINKED-DATA]]:
 
 * Use URIs as names for things;
 * Use HTTP URIs so that people can look up those names;
@@ -24,13 +24,13 @@ Tim Berners Lee stelt vier eenvoudige principes voor om te hanteren als je data 
 Met deze principes worden data gepubliceerd ALS webpagina's in plaats van OP webpagina's. Dit is fundamenteel anders dan het 'jaren negentig-achtige' op het web zetten van een databestand en een welgemeend 'zoek het verder zelf maar uit!'.
 
 ### Api economie
-<nog invullen>
+>Deze sectie wordt nog aangevuld
 
 ## De waarde van data en informatie
 
-In onze maatschappij is (goede) informatie altijd belangrijk geweest. Algemeen geaccepteerd is het principe dat goede bedrijfsbeslissingen, die ervoor zorgen dat een bedrijf of instelling haar doelstellingen sneller, beter, goedkoper kan bereiken, afhankelijk zijn van de toegang tot goede informatie. De afgelopen jaren is het besef dat informatie van strategische waarde is voor een organisatie alleen maar toegenomen. Een voorbeeld van dit besef is de ontwikkeling van infonomics, het vakgebied dat (bedrijfs)economie en informatie bij elkaar brengt [INFONOMICS].
+In onze maatschappij is (goede) informatie altijd belangrijk geweest. Algemeen geaccepteerd is het principe dat goede bedrijfsbeslissingen, die ervoor zorgen dat een bedrijf of instelling haar doelstellingen sneller, beter, goedkoper kan bereiken, afhankelijk zijn van de toegang tot goede informatie. De afgelopen jaren is het besef dat informatie van strategische waarde is voor een organisatie alleen maar toegenomen. Een voorbeeld van dit besef is de ontwikkeling van infonomics, het vakgebied dat (bedrijfs)economie en informatie bij elkaar brengt [[INFONOMICS]].
 
-Infonomics kan bedrijven helpen om te komen tot betere bedrijfsresultaten, door strategische beslissingen te nemen over het beheer en vergaren van (goede) informatie. In 'The economics of information management' [ECONIM] worden daarbij de volgende principes neergezet voor het verbeteren van de informatie in een organisatie:</p>
+Infonomics kan bedrijven helpen om te komen tot betere bedrijfsresultaten, door strategische beslissingen te nemen over het beheer en vergaren van (goede) informatie. In 'The economics of information management' [[ECONIM]] worden daarbij de volgende principes neergezet voor het verbeteren van de informatie in een organisatie:</p>
 
 * Verbeter de kwaliteit;
 * Verbeter de beschikbaarheid;
@@ -38,7 +38,7 @@ Infonomics kan bedrijven helpen om te komen tot betere bedrijfsresultaten, door 
 * Innoveer: introduceer nieuwe technologie (zodat data omgezet kan worden in beter bruikbare informatie);
 * Voeg nieuwe of (toegang tot) externe databronnen toe.
 
-‘Data centric’ organisaties gaan nog een stap verder. Zij bouwen bedrijf primair op data.  De top3 bedrijven met de hoogste markwaarde in de wereld, die onlangs door de 1 triljoen dollar  zijn geschoten (BRON…), zijn bedrijven die data-gedreven werken. Een beetje jammer is wel dat bij deze alle kennis en baten uit die data terugvloeien naar deze bedrijven zelf en niet wordt gedeeld. Het internet was ooit was bedoeld als open samenwerkingsplatform, maar is inmiddels doorgegroeid naar een netwerk van platforms per domein als entertainment (Apple), informatie (Google), handel (Amazon) en sociale netwerken (Facebook). Elke platform heeft zijn eigen ‘platform leader’ die  via een winner-takes-it-all mechanisme feitelijk de monopolist  waarnaar alle winst uit dat platform terugvloeit. 
+‘Data centric’ organisaties gaan nog een stap verder. Zij bouwen bedrijf primair op data.  De top3 bedrijven met de hoogste markwaarde in de wereld, die onlangs door de 1 triljoen dollar  zijn geschoten (BRON…), zijn bedrijven die data-gedreven werken. Een beetje jammer is wel dat bij deze alle kennis en baten uit die data terugvloeien naar deze bedrijven zelf en niet wordt gedeeld. Het internet was ooit was bedoeld als open samenwerkingsplatform, maar is inmiddels doorgegroeid naar een netwerk van platforms per domein als entertainment (Apple), informatie (Google), handel (Amazon) en sociale netwerken (Facebook). Elke platform heeft zijn eigen ‘platform leader’ die  via een winner-takes-it-all mechanisme feitelijk de monopolist  waarnaar alle winst uit dat platform terugvloeit.
 
 De ontwikkeling naar platforms is een brede. Gawer (GAWER) beschrijft vanuit een traditionele economische benadering en de technologische benadering de beweging naar dergelijke brede technologische platforms in de digitale wereld. Zij schetst een ontwikkeling waarbij nadat organisaties hun interne platforms op orde hadden (fase 1) in‘supply chain’ platforms bilaterale samenwerking in ketens werd gezocht (fase 2) naar ‘industry platforms’ per domein. Voorbeelden van dergelijke ‘industry platforms’ zijn zoals hierboven beschreven Apple, Google, Amazon en Facebook. Deze bedrijven zijn allemaal Amerikaans en alle winsten vloeien terug naar Silicon Valley.
 
@@ -48,7 +48,7 @@ Marleen Stikker benoemde in Zomergasten (12 augustus 2018) een ‘derde weg’ v
 
 In Nederland wordt in het rapport ‘Maak waar!’ aangegeven dat de digitale infrastructuur vitaal is voor de Nederlandse samenleving. In de huidige informatiesamenleving zijn publieke diensten ook steeds meer als ‘informatiediensten’ te typeren. De kwaliteit en toegankelijkheid van digitale informatie is onontbeerlijk voor een kwalitatief hoogwaardige dienstverlening (OECD 2014).  Ook de AVG dwingt de overheid na te denken over registraties. Door gegevens steeds via bilaterale platforms te kopiëren van de ene naar de andere organisatie ontstaan overal kopieën. Degene waarover de data gaan heeft daardoor geen enkel zicht op welke data waar is opgeslagen. En als ergens een fout zit, kan die vaak nog wel in de bron worden hersteld, maar blijft deze in allerlei kopieën rondzwerven.
 
-Ook de Nederlandse Overheid zet daarom in op het gebruik van webstandaarden om de waarde en toegankelijkheid van informatie te vergroten (NORA). Door het gebruik van webstandaarden wordt informatie computer interpreteerbaar en vindbaar voor zoekmachines. De informatie wordt bij wijze van spreken uit het ‘dark web’ van tweezijdig samenwerkende partijen gehaald en wordt deel van het open wereldwijde web. Een eerste voorbeeld is het stelsel van basisregistraties, waarvoor alle authentieke informatie wordt beschreven in een stelselcatalogus. Het digitaal stelsel voor de Omgevingswet is een stelsel waarin alle informatie over wat mag en wat kan digitaal inzichtelijk wordt. Wat mag ligt vast in wet- en regelgeving, zoals de Omgevingswet, AMVB’s en Omgevingsplannen. De 'Aanwijzingen voor de regelgeving' [AANW161] schrijven voor dat waar mogelijk wordt aangesloten op begrippen in basisregistraties. Ook is er onlangs een nieuwe aanwijzing bij gekomen die het mogelijk maakt om vanuit de wetgeving te linken aan URI's. Lijkt me goed om dat in de inleiding toch wel te benoemen, misschien bij het stukje verder over de overheid?Voor wat kan, kan informatie worden toegevoegd uit zogenaamde informatiehuizen. Deze data varieert van uitstoot- of lozingsberekeningen voor lucht of water tot data over natura 2000 gebieden en data uit basisregistraties zoals de BGT. Ook voor het digitaal stelsel Omgevingswet wordt een stelselcatalogus gerealiseerd. 
+Ook de Nederlandse Overheid zet daarom in op het gebruik van webstandaarden om de waarde en toegankelijkheid van informatie te vergroten (NORA). Door het gebruik van webstandaarden wordt informatie computer interpreteerbaar en vindbaar voor zoekmachines. De informatie wordt bij wijze van spreken uit het ‘dark web’ van tweezijdig samenwerkende partijen gehaald en wordt deel van het open wereldwijde web. Een eerste voorbeeld is het stelsel van basisregistraties, waarvoor alle authentieke informatie wordt beschreven in een stelselcatalogus. Het digitaal stelsel voor de Omgevingswet is een stelsel waarin alle informatie over wat mag en wat kan digitaal inzichtelijk wordt. Wat mag ligt vast in wet- en regelgeving, zoals de Omgevingswet, AMVB’s en Omgevingsplannen. De 'Aanwijzingen voor de regelgeving' [[AANW161]] schrijven voor dat waar mogelijk wordt aangesloten op begrippen in basisregistraties. Ook is er onlangs een nieuwe aanwijzing bij gekomen die het mogelijk maakt om vanuit de wetgeving te linken aan URI's. Lijkt me goed om dat in de inleiding toch wel te benoemen, misschien bij het stukje verder over de overheid?Voor wat kan, kan informatie worden toegevoegd uit zogenaamde informatiehuizen. Deze data varieert van uitstoot- of lozingsberekeningen voor lucht of water tot data over natura 2000 gebieden en data uit basisregistraties zoals de BGT. Ook voor het digitaal stelsel Omgevingswet wordt een stelselcatalogus gerealiseerd.
 
 ## BP4MC2: Een aanpak
 
@@ -59,7 +59,7 @@ Ook BP4mc2 zelf is open. Iedereen wordt dan ook uitgenodigd om een bijdrage te l
 
 ## Opbouw van deze website
 
-Hoofdstuk 2 geeft een overzicht van de belangrijkste elementen in BP4mc2. In de volgende hoofdstukken worden al deze elementen uitgediept. Dat gebeurt aan de hand van het raamwerk van Seligman, Wijers en Sol. In dit raamwerk worden vier aspecten van een methode onderscheiden [MSISD]:
+Hoofdstuk 2 geeft een overzicht van de belangrijkste elementen in BP4mc2. In de volgende hoofdstukken worden al deze elementen uitgediept. Dat gebeurt aan de hand van het raamwerk van Seligman, Wijers en Sol. In dit raamwerk worden vier aspecten van een methode onderscheiden [[MSISD]]:
 
 * Hoofdstuk 3 beschrijft de denkwijze (way of thinking), het theoretisch kader dat we hebben gebruikt bij het uitwerken van onze methode;
 * Hoofdstuk 4 beschrijft de modelleringswijze (way of modelling). Dit hoofstuk geeft een beschrijving van de gebruikte vocabulaires en modellen en de wijze waarop deze modellen gerepresenteerd kunnen worden;
@@ -83,4 +83,3 @@ Als we het over 'Linked Data' als methode hebben, dan gebruiken we hoofdletters.
 **(Linked) data: enkelvoud of meervoud**
 
 'Linked Data', de methode dus, is enkelvoud. Als we 'data' bedoelen als 'een verzameling gegevens' dan is het ook enkelvoud, maar als we het bedoelen als 'telbare gegevens' dan meervoud.
-

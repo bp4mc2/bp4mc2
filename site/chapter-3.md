@@ -161,7 +161,11 @@ Deze vorm is identiek aan de opzet van een triple in Linked Data:
 
 Zo is de zin: "Jan kent Piet" gelijk aan de Linked Data representatie in Turtle-syntax [TURTLE]:
 
-<img src="image400.png"
+```
+@prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
+@prefix vbpers: <http://bp4mc2.org/voorbeeld/id/Persoon/> .
+vpers:Jan vb:kent vbpers:Piet .
+```
 
 In een triple wordt subject en predicate altijd afgebeeld op een URI. Een object mag zowel afgebeeld zijn op een URI als op een literal. Een literal is een stukje tekst, een datum, of een getal.
 
@@ -204,7 +208,7 @@ Ook is duidelijk dat een URL nooit een mededelende zin kan zijn. Zo'n zin is imm
 - `<http://bp4mc2.org/voorbeeld/id/persoon/1234>.`
 - `<http://bp4mc2.org/voorbeeld/id/persoon/1234> <http://bp4mc2.org/voorbeeld/def#sprak-met> <http://bp4mc2.org/voorbeeld/id/persoon/8743>.`
 
-In de wereld van Linked Data kan een URL ook worden gebruikt als vraag. Het derde Linked Data principe stelt: "When someone looks up a URI, provide useful information" [LINKEDDATA])
+In de wereld van Linked Data kan een URL ook worden gebruikt als vraag. Het derde Linked Data principe stelt: "When someone looks up a URI, provide useful information" [LINKED-DATA])
 
 In het voorbeeld kan dit het volgende gesprek opleveren:
 
