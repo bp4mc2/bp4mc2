@@ -82,6 +82,7 @@ var localBiblio = {
   },
   "LIVAN": {
     title: "Liversidge versus Anderson",
+    publisher: "Wikipedia",
     href: "http://en.wikipedia.org/wiki/Liversidge_v._Anderson",
   },
   "ONTOMETA": {
