@@ -1,5 +1,14 @@
 # Inleiding
 
+## Introductie bij versie 2.0 van dit document
+De originele eerste versie van dit document is gepubliceerd in zowel boekvorm als website op 18 juni 2014. Sinds dat moment zijn er veel nieuwe toepassingen gerealiseerd en ervaringen opgedaan met betrekking tot Linked Data en in het bijzonder BP4mc2. Deze nieuwe ervaringen liggen met name in de wijze van modelleren, de werkwijze en de beschikbare ondersteuning. De denkwijze is daarbij grotendeels hetzelfde gebleven. Dit is ook terug te zien in deze nieuwe versie. De wijzigingen zitten met name in de hoofdstukken 4, 5 en 6. Hoofdstukken 1, 2 en 3 zijn grotendeels hetzelfde gebleven.
+
+Daarnaast zijn drie specifieke onderwerpen verder uitgewerkt en hebben een eigen pagina gekregen:
+
+* [Fudamentals of Linked Data](http://bp4mc2.org/modeling) behandelt in detail de concepten en de fundamenten van Linked Data. Het is een verdieping van hoofdstuk 3, denkwijze. Must-read voor iedereen die alle details van Linked Data wil doorgronden en op zoek is naar argumenten in ontwerpdiscussies, met name als het gaat om de verschillen tussen traditionele relationele of object-georienteerde modellering en het modelleren op basis van Linked Data principes.
+* [Value lists](http://bp4mc2.org/modeling/value-lists) behandelt in detail de rationale bij het ontwerpen van Linked Data oplossingen voor waarde- of referentielijsten. Het is een verdieping van hoofdstuk 4, modelleringswijze.
+* [Profielen](http://bp4mc2.org/model) beschrijft in de detail de profielen die gebruikt kunnen worden bij het modelleren van Linked Data ontwerpen. Dit document betreft de grootste toevoeging t.o.v. de eerste versie, en behandelt veel van de best practices die in afgelopen jaren zijn opgedaan.
+
 ## Aanleiding
 
 ### Een informatie gedreven samenleving
