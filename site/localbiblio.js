@@ -127,9 +127,13 @@ var localBiblio = {
     publisher: "Wikipedia",
     href: "http://nl.wikipedia.org/wiki/Steen_van_Rosetta",
   },
-  "": {
-    title: "",
-    href: "",
+  "URISTRAT": {
+    title: "Aanzet tot een nationale URI-Strategie voor Linked Data van de Nederlandse overheid",
+    authors: [
+      "Hans Overbeek",
+      "Linda van den Brink"
+    ],
+    href: "http://www.pilod.nl/wiki/Boek/URI-strategie",
   },
   "": {
     title: "",

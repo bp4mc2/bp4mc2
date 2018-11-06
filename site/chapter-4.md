@@ -8,7 +8,7 @@ In dit hoofdstuk beschrijven we:
 
 ## De URI-strategie
 
-Deze paragraaf beschrijft een voorstel voor een Nederlandse URI-strategie. De tekst is voor het grootste deel ontleend aan "Aanzet tot een nationale URI-Strategie voor Linked Data van de Nederlandse overheid" dat in het vorig jaar van de PiLOD is geschreven. [URISTRAT]. De URI-strategie beschrijft een aantal principes voor het opstellen van een patroon (syntax) van de URIs waarmee je de data in je informatiesysteem als betrouwbare en toegankelijke linked data kunt publiceren op het web.
+Deze paragraaf beschrijft een voorstel voor een Nederlandse URI-strategie. De tekst is voor het grootste deel ontleend aan "Aanzet tot een nationale URI-Strategie voor Linked Data van de Nederlandse overheid" dat in het vorig jaar van de PiLOD is geschreven. [[URISTRAT]]. De URI-strategie beschrijft een aantal principes voor het opstellen van een patroon (syntax) van de URIs waarmee je de data in je informatiesysteem als betrouwbare en toegankelijke linked data kunt publiceren op het web.
 
 ### Scope
 De URI-strategie richt zich met name op data waarmee objecten of concepten worden gedefinieerd, waar andere toepassingen naar kunnen verwijzen. Data waar niet naar wordt gelinkt valt buiten de scope. Om dit toe te lichten onderscheiden we drie categorieën informatiesystemen:
