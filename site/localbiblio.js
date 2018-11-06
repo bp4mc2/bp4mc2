@@ -135,8 +135,46 @@ var localBiblio = {
     ],
     href: "http://www.pilod.nl/wiki/Boek/URI-strategie",
   },
-  "": {
-    title: "",
-    href: "",
+  "10RULES": {
+    title: "10 Rules for persistent URIs.",
+    description: "Een veelomvattend rapport van de EU met vergelijkbare initiatieven en een waardevol overzicht van de laatste best-practices.",
+    href: "https://joinup.ec.europa.eu/sites/default/files/D7.1.3%20-%20Study%20on%20persistent%20URIs_0.pdf",
+  },
+  "AXIOMS": {
+    title: "opaque",
+    href: "http://www.w3.org/DesignIssues/Axioms.html#opaque",
+  },
+  "ECLI": {
+    title: "European Case Law Identifier",
+    publisher: "Wikipedia",
+    href: "http://nl.wikipedia.org/wiki/European_Case_Law_Identifier",
+  },
+  "JURICON": {
+    title: "Juriconnect: Platform voor informatieuitwisseling en –standaardisatie in het juridisch domein.",
+    href: "http://juriconnect.nl/",
+  },
+  "SIDN": {
+    title: "Domeinregistratie SIDN",
+    href: "http://www.sidn.nl",
+  },
+  "URI-SETS": {
+    title: "Designing URI sets for the UK Public Sector.",
+    description: "Een aanbeveling van de Britse overheid die voorlopers zijn op het gebied van het publiceren van Linked Open Overheids-Data.",
+    href: "https://www.gov.uk/government/publications/designing-uri-sets-for-the-uk-public-sector",
+  },
+  "DOMNAAM": {
+    title: "Domeinnaam",
+    publisher: "Wikipedia",
+    href: "http://nl.wikipedia.org/wiki/Domeinnaam",
+  },
+  "BIOTAX": {
+    title: "Taxonomie (biologie)",
+    publisher: "Wikipedia",
+    href: "https://nl.wikipedia.org/wiki/Taxonomie_(biologie)",
+  },
+  "CELEMP": {
+    title: "Celestial Emporium of Benevolent Knowledge",
+    publisher: "Wikipedia",
+    href: "https://en.wikipedia.org/wiki/Celestial_Emporium_of_Benevolent_Knowledge",
   },
 };

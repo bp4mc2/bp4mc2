@@ -63,7 +63,7 @@ Een URI 'hoort' bij de registratie die oorspronkelijk de URI heeft gemunt. Maar 
 
 **Het register is zo betrouwbaar als zijn eigenaar**
 
-De huidige eigenaar van de registratie bepaalt wat de URI inhoudt. Voor het vertrouwen in de kwaliteit van de data is het is dan ook belangrijk dat je (op betrouwbare wijze) de eigenaar van een register kunt achterhalen. Op het web houden TLD-registrars bij wie de eigenaar van een domeinnaam en dus van dat domein is [DOMNAAM]. Voor het Top Level Domain .nl is dit SIDN [SIDN]. Op die manier is duidelijk wie de 'eigenaar' is van deze URI, en daarmee van de betekenis en de identificatie.
+De huidige eigenaar van de registratie bepaalt wat de URI inhoudt. Voor het vertrouwen in de kwaliteit van de data is het is dan ook belangrijk dat je (op betrouwbare wijze) de eigenaar van een register kunt achterhalen. Op het web houden TLD-registrars bij wie de eigenaar van een domeinnaam en dus van dat domein is [[DOMNAAM]]. Voor het Top Level Domain .nl is dit SIDN [[SIDN]]. Op die manier is duidelijk wie de 'eigenaar' is van deze URI, en daarmee van de betekenis en de identificatie.
 
 **Hergebruik zonder register**
 
@@ -71,7 +71,7 @@ Bovenstaande opmerkingen lijken te suggereren dat het altijd noodzakelijk is om 
 
 URNs zijn uniforme namen die geen internetdomein bevatten en dus niet gekoppeld zijn aan een specifiek domein en dus aan een specifieke uitgever. Het gebruik van URNs is aan te bevelen als meerdere partijen URIs moeten kunnen munten, maar onderling toch willen kunnen vaststellen dat ze dezelfde 'dingen' identificeren. Voorbeelden hiervan zijn de European Case Law Identifier (ECLI) en de Nederlandse Juriconnect standaarden.
 
-ECLI is een unieke codering om Europese gerechtelijke uitspraken te kunnen identificeren [ECLI]. Elk land bepaalt zelf hoe dit nationaal georganiseerd wordt. In Nederland publiceert de Raad voor de Rechtspraak (RvdR) een selectie van interessante rechterlijke uitspraken op rechtspraak.nl en voorziet deze van een ECLI-code. Echter niet alle uitspraken worden door de RvdR gepubliceerd. Uitgevers van juridische vakbladen publiceren soms ook uitspraken die niet door de RvdR zijn gepubliceerd. Ook deze krijgen een ECLI-code. Publiceer je een uitspraak die al een ECLI nummer heeft, dan dien je dat nummer te gebruiken. Het voordeel van de ECLI-standaard is dat deze Europa-breed wordt gebruikt. Ook de Juriconnectstandaarden [JURICON] zijn opgezet om uniformiteit te brengen in de verwijzing naar wet- en regelgeving in publicaties door verschillende partijen. In dergelijke gevallen is het voorlopig nog eenvoudiger om in het patroon voor de identifiers geen http-domein op te nemen.
+ECLI is een unieke codering om Europese gerechtelijke uitspraken te kunnen identificeren [[ECLI]]. Elk land bepaalt zelf hoe dit nationaal georganiseerd wordt. In Nederland publiceert de Raad voor de Rechtspraak (RvdR) een selectie van interessante rechterlijke uitspraken op rechtspraak.nl en voorziet deze van een ECLI-code. Echter niet alle uitspraken worden door de RvdR gepubliceerd. Uitgevers van juridische vakbladen publiceren soms ook uitspraken die niet door de RvdR zijn gepubliceerd. Ook deze krijgen een ECLI-code. Publiceer je een uitspraak die al een ECLI nummer heeft, dan dien je dat nummer te gebruiken. Het voordeel van de ECLI-standaard is dat deze Europa-breed wordt gebruikt. Ook de Juriconnectstandaarden [[JURICON]] zijn opgezet om uniformiteit te brengen in de verwijzing naar wet- en regelgeving in publicaties door verschillende partijen. In dergelijke gevallen is het voorlopig nog eenvoudiger om in het patroon voor de identifiers geen http-domein op te nemen.
 
 Het gebruik van een UUID is aan te bevelen als het gaat om data waarvan niet verwacht wordt dat deze buiten de applicatie wordt gebruikt.
 
@@ -126,8 +126,8 @@ Menselijke leesbaarheid is ook belangrijk om te zorgen dat men oplossingen vertr
 Om te komen tot een nationale URI-strategie zijn we uitgegaan van de specificatie van de internationale best practices in drie bronnen:
 
 1. De **Inspire** richtlijn, die een nationale strategie voorschrijft voor URIs voor geo-informatie met de aanbeveling om deze geo-strategie te verbinden met een generieke nationale strategie [INSPIRE]
-2. **Designing URI sets for the UK Public Sector**. Een aanbeveling van de Britse overheid die voorlopers zijn op het gebied van het publiceren van Linked Open Overheids-Data [URI-SETS]
-3. **10 Rules for persistent URIs**. Een veelomvattend rapport van de EU met vergelijkbare initiatieven en een waardevol overzicht van de laatste best-practices [10RULES]
+2. **Designing URI sets for the UK Public Sector**. Een aanbeveling van de Britse overheid die voorlopers zijn op het gebied van het publiceren van Linked Open Overheids-Data [[URI-SETS]]
+3. **10 Rules for persistent URIs**. Een veelomvattend rapport van de EU met vergelijkbare initiatieven en een waardevol overzicht van de laatste best-practices [[10RULES]]
 
 In navolging van deze drie bronnen ligt het voor de hand om http-URIs te gebruiken. In alle drie de strategieën wordt uitgegaan van nadere afspraken over het te gebruiken patroon om de http-URI op te bouwen. Het patroon voor http-URIs dat in deze bronnen wordt aanbevolen - en dat wij daarom overnemen - is:
 
@@ -141,7 +141,7 @@ Het {domain} deel bevat het internet domein en eventueel een pad binnen dat dome
 
 `{domain} = {internet domain}/{path}.`
 
-Het `{domain}` dient twee doelen. Ten eerste is het een belangrijk instrument om unieke identificaties te verkrijgen: twee objecten die beheerd worden in twee verschillende databases, kunnen toevallig dezelfde identificatie krijgen (bijvoorbeeld een kadastraal perceel met id 010101 en een rechtspersoon met id 010101). Als nu zowel het Kadaster als het Nieuw HandelsRegister (NHR) besluit om deze objecten als linked data te publiceren, worden er toch twee unieke URIs gevormd: de een begint bijvoorbeeld met http://brk.nl/ en de ander met http://nhr.nl/. Ten tweede zorgt een goedgekozen domein voor herkenbaarheid en vertrouwen. Kadastrale percelen met een URI als http://data.brk.nl/perceel/010101 hebben een betrouwbaarder uitstraling dan bijvoorbeeld http://data.vindhethier.eu/perceel/010101.
+Het `{domain}` dient twee doelen. Ten eerste is het een belangrijk instrument om unieke identificaties te verkrijgen: twee objecten die beheerd worden in twee verschillende databases, kunnen toevallig dezelfde identificatie krijgen (bijvoorbeeld een kadastraal perceel met id 010101 en een rechtspersoon met id 010101). Als nu zowel het Kadaster als het Nieuw HandelsRegister (NHR) besluit om deze objecten als linked data te publiceren, worden er toch twee unieke URIs gevormd: de een begint bijvoorbeeld met http://brk.basisregistraties.overheid.nl/ en de ander met http://nhr.basisregistraties.overheid.nl/. Ten tweede zorgt een goedgekozen domein voor herkenbaarheid en vertrouwen. Kadastrale percelen met een URI als http://brk.basisregistraties.overheid.nl/id/perceel/370290171 hebben een betrouwbaarder uitstraling dan bijvoorbeeld http://data.vindhethier.eu/perceel/370290171.
 
 Het `{path}` kan worden gebruikt als binnen een register verschillende verzamelingen objecten leven, waarbij dubbele id's kunnen voorkomen. Het `{path}` kan dan gebruikt worden om extra namespaces te creëren.
 
@@ -169,7 +169,7 @@ Het `{type}` geeft aan om wat voor soort URI het gaat. Dit kan zijn:
 Het `{concept}` geeft de menselijke lezer van de URI (bijvoorbeeld een ontwikkelaar) een indicatie van het concept waartoe het ding behoort dat door de URI wordt identificeert. Het `{concept}` is belangrijk om twee redenen. Ten eerste kan het een uitkomst bieden als objecten binnen de registratie geen unieke identifiers hebben, maar wel uniek zijn per soort concept. Bijvoorbeeld 'gemeente' Utrecht en 'provincie' Utrecht. Ten tweede, en dit is belangrijker, levert het een begrijpelijker URI op. Een menselijke lezer kan vermoeden dat http://bagregister.nl/id/pand/01010101 de URI van een pand uit de BAG is. Een mogelijk nadeel van het opnemen van `{concept}` in de URI is dat hiermee betekenis in de URI wordt opgenomen, terwijl betekenisloze IDs over het algemeen eenvoudiger persistent te maken zijn.
 
 **Aanbevelingen**
-1. `{concept}` betekent niets voor de machine, alleen voor de mens. Het is zeer onverstandig om {concept} enige betekenis toe te kennen voor de machine. URIs zijn in technische zin opaque [AXIOMS]. Het is dus niet zo dat het `{concept}` per se de klasse is waartoe een object behoort. Het helpt alleen de menselijke lezer, bijvoorbeeld de beheerder van een semantisch model, om de URIs te herkennen. [[COOLURIS]] en [[URISTYLE]]
+1. `{concept}` betekent niets voor de machine, alleen voor de mens. Het is zeer onverstandig om {concept} enige betekenis toe te kennen voor de machine. URIs zijn in technische zin opaque [[AXIOMS]]. Het is dus niet zo dat het `{concept}` per se de klasse is waartoe een object behoort. Het helpt alleen de menselijke lezer, bijvoorbeeld de beheerder van een semantisch model, om de URIs te herkennen. [[COOLURIS]] en [[URISTYLE]]
 2. Denk ook bij het kiezen van `{concept}` aan persistentie. Als het in een registratie denkbaar is dat objecttypen (klassen) van naam veranderen, maar dan nog wel dezelfde klasse vertegenwoordigen, is het niet verstandig dit onderdeel in de URI op te nemen. Neem in dat geval een hogere klasse op. Volgens sommigen betekent het veranderen van het type van een instance per definitie dat er niet langer sprake is van dezelfde instance, maar van een andere instance, van het andere type. Voorbeeld: stel dat het Centraal Orgaan opvang Asielzoekers (COA) wordt omgevormd van zelfstandig bestuursorgaan (zbo) naar agentschap. [KST-33042-21] En dat we als URI van het COA zouden kiezen voor: `{domein}/id/zbo/coa`. Dan wordt dat na de omvorming `{domein}/id/agentschap/coa`. Zouden we kiezen voor `{domein}/id/organisatie/coa` dan hoeven we de URI niet aan te passen, maar kunnen we met de URI ook geen onderscheid meer maken tussen de COA als ZBO en de COA als agentschap en moeten we dat onderscheid in andere data vastleggen.
 
 ### URI-patroon: {reference}
@@ -192,12 +192,21 @@ Begrippen maken duidelijk welke 'onderwerpen van gesprek' er bestaan: over welke
 
 ![](image-ch4-5.png) ![](image-ch4-6.png)
 
-Iedere definitie heeft een duidelijke opbouw, namelijk 'Een {te definiëren begrip} Is een {ander begrip} dat...'. Bijvoorbeeld in de context van het Kadaster: 'Een zakelijk recht is een recht dat..' Een recht is een typisch voorbeeld van een basisbegrip ofwel een axioma in het model. Dit kan juridisch worden uitgelegd, maar voor een leek zal die niet meer duidelijkheid geven dan het besef dat het bij het Kadaster net als bij elke overheidsorganisatie om het vastleggen en bewaken van rechten en plichten gaat.
+Iedere definitie heeft een duidelijke opbouw, namelijk:
+
+> 'Een {te definiëren begrip} Is een {ander begrip} dat...'.
+
+Bijvoorbeeld in de context van het Kadaster:
+
+> 'Een zakelijk recht is een recht dat..'
+
+Een recht is een typisch voorbeeld van een basisbegrip ofwel een axioma in het model. Dit kan juridisch worden uitgelegd, maar voor een leek zal die niet meer duidelijkheid geven dan het besef dat het bij het Kadaster net als bij elke overheidsorganisatie om het vastleggen en bewaken van rechten en plichten gaat.
 
 Het definiëren van een begrip in termen van een ander begrip kan op twee manieren:
 
-* Een {begrip} is een {een ander begrip} dat..
-* Een {begrip} is een {een ander begrip} of {nog een ander begrip} of..
+> * Een {begrip} is een {een ander begrip} dat..
+>
+> * Een {begrip} is een {een ander begrip} of {nog een ander begrip} of..
 
 In het eerste geval gaat het om een specialisatie. In het tweede geval gaat het om een generalisatie. Een voorbeeld van een specialisatie is het hierboven genoemde 'zakelijk recht' dat een specialisatie is van 'recht'. Je moet eerst het begrip 'recht' begrijpen om te begrijpen wat een 'zakelijk recht is'.
 
@@ -209,13 +218,13 @@ Een voorbeeld van een generalisatie is het begrip 'persoon' bij de overheid. Dit
 
 Soms komt het voor dat een bepaald begrip bestaat uit onderdelen van andere begrippen. Deze constructie heeft een opbouw vergelijkbaar met een specialisatie of generalisatie:
 
-* Een {begrip} bestaat uit een {een ander begrip} en een {nog een ander begrip} en..
+> Een {begrip} bestaat uit een {een ander begrip} en een {nog een ander begrip} en..
 
 Een voorbeeld is het begrip 'adres' in de BAG. Dit wordt gedefinieerd als: "Een adres is een .. bestaande uit de naam van een openbare ruimte, een nummeraanduiding en de naam van een woonplaats". Om te begrijpen wat een adres betekent moet je begrijpen wat een 'openbare ruimte' is, wat een 'nummeraanduiding' is en wat een 'woonplaats' is.
 
 Ook het tegenovergestelde komt voor. Een begrip kan onderdeel zijn van een ander begrip. Deze constructie ziet er als volgt uit:
 
-* Een {begrip} is een onderdeel van een {een ander begrip} dat..
+> Een {begrip} is een onderdeel van een {een ander begrip} dat..
 
 Een voorbeeld is het begrip 'vestiging' in het NHR. Dit wordt gedefinieerd als 'Een vestiging is een onderdeel van een maatschappelijke activiteit dat..'. Om dit te begrijpen moet je eerst begrijpen wat een maatschappelijke activiteit is.
 
@@ -225,7 +234,7 @@ Een voorbeeld is het begrip 'vestiging' in het NHR. Dit wordt gedefinieerd als '
 
 Tot slot kan een begrip betrekking hebben op een ander begrip. Dat heet een semantische relatie. Deze constructie komt vaak voor in combinatie met een specialisatie en ziet er dan als volgt uit:
 
-* Een {begrip} is een {een ander begrip} dat betrekking heeft op {nog een ander begrip}..
+> Een {begrip} is een {een ander begrip} dat betrekking heeft op {nog een ander begrip}..
 
 Een voorbeeld is het eerder genoemde begrip 'zakelijk recht' bij het Kadaster. De volledige definitie daarvan is 'Een zakelijk recht is een .. recht op een zaak..'. In dit geval moet je ook begrijpen wat een 'zaak' is om het begrip 'zakelijk recht' te begrijpen.
 
@@ -254,50 +263,15 @@ De klare taal uitleg verbindt vakjargon met het begrippenkader dat we als gewone
 
 ![](image-ch4-10.png)
 
-Er is voor gekozen om een volledig eigen vocabulaire op te bouwen. De reden hiervoor is om vrijheid te behouden in de precieze betekenis die we aan het model willen geven, in het bijzonder vanwege het axiomatisch stelsel. Zo zijn in SKOS de termen 'broader' en 'narrower' gespiegeld, waardoor cirkelredeneringen mogelijk worden. BP4mc2 verwijst zo veel mogelijk naar standaard vocabulaires. Daardoor kunnen applicaties die deze standaard vocabulaires 'begrijpen' al heel veel van de samenhang van de in BP4mc2 gedefinieerde begrippen 'begrijpen'. De volgende standaarden worden gebruikt:
+### Vocabulaires
 
-| Vocabulaire | URI |
-|-------------|-----|
-| SKOS | http://www.w3.org/2004/02/skos/core# |
-| RDFS | http://www.w3.org/2000/01/rdf-schema# |
-| DC | http://dublincore.org/documents/dcmi-terms/ |
-| OWL | http://www.w3.org/2002/07/owl# |
-| Lifecycle | http://vocab.org/lifecycle/schema |
-| RO | http://www.obofoundry.org/ro/ |
+Het volledige profiel voor begrippen is uitgewerkt in [skos applicatieprofiel](http://bp4mc2.org/profiles/#skos-toepassingsprofiel-voor-begrippenkaders). In dit document volstaan we met een opsomming van de gebruikte vocabulaires.
 
-Het volledige begrippenkader met het bijbehorende vocabulaire is weergegeven in de onderstaande tabel.
-
-| Eigenschap | Afgeleid van |
-|------------|--------------|
-| begrip | skos:Concept |
-| naam | skos:prevLabel |
-| domein | skos:inSchem |
-| definitie | skos:definition |
-| uitleg | rdfs:comment |
-| toelichting | skos:scopeNote |
-| rationale | skos:editorialNote |
-| synoniem | skos:altLabel |
-| bron | dc:source |
-| specialisatie van | skos:broader |
-| generalisatie van | skos:narrower |
-| onderdeel van | ro:part_of |
-| bestaat uit |ro:has_part |
-| gerelateerd aan | skos:semanticRelation |
-| zie ook | skos:related |
-| lijkt op | skos:relatedMatch |
-| gelijk aan | skos:exactMatch |
-| exact gelijk aan | owl:sameAs |
-
-### meta-eigenschappen
-
-Naast deze eigenschappen, kent de beschrijving van het begrip ook nog enkele specifieke meta-elementen. Deze meta-elementen helpen bij vastleggen en ondersteunen van het proces voor het beschrijven van een begrip. De meta-elementen zijn:
-
-| Eigenschap | Afgeleid van |
-|------------|--------------|
-| status | lifecycle:status |
-| verificatie annotatie | skos:editorialNote |
-| validatie annotatie | skos:editorialNote |
-| wijzigingsnotitie | skos:changeNote |
+| Vocabulaire | URI | Gebruik
+|-------------|-----|---------
+| SKOS | http://www.w3.org/2004/02/skos/core# | De beschrijving van begrippen
+| RDFS | http://www.w3.org/2000/01/rdf-schema# | Algemene Linked Data eigenschappen
+| DCT | http://dublincore.org/documents/dcmi-terms/ | Bronverwijzingen
 
 ### Grafische representative
 
@@ -346,9 +320,15 @@ Een gestippelde lijn met pijlpunt en een open bolletje geeft aan dat een begrip 
 
 ### Voorbeeld
 
-Een op deze manier uitgewerkt voorbeeld van het model van de BAG is te vinden op [http://bag.kadaster.nl](http://bag.kadaster.nl). Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie.
+Een op deze manier uitgewerkt voorbeeld van het model van de BAG is te vinden op http://bag.basisregistraties.overheid.nl/id/begrip/Pand. Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie:
 
-Dit voorbeeld laat ook mooi zien hoe de uri-strategie werkt. Wanneer in de browser de 'vraag' [http://bag.kadaster.nl/id/begrip/Nummeraanduiding](http://bag.kadaster.nl/id/begrip/Nummeraanduiding) wordt ingetoetst, geeft de achterliggende linked data store "some usefull information" terug via de webpagina [http://bag.kadaster.nl/doc/begrip/Nummeraanduiding](http://bag.kadaster.nl/doc/begrip/Nummeraanduiding) en toont de bij dit begrip behorende informatie.
+* Html en grafisch: https://bag.basisregistraties.overheid.nl/doc/begrip/Pand;
+* Turtle: https://bag.basisregistraties.overheid.nl/doc/begrip/Pand?format=ttl;
+* JSON-LD: https://bag.basisregistraties.overheid.nl/doc/begrip/Pand?format=json.
+
+Dit voorbeeld laat ook mooi zien hoe de uri-strategie werkt. Wanneer in de browser de 'vraag' http://bag.basisregistraties.overheid.nl/id/begrip/Pand wordt ingetoetst, geeft de achterliggende linked data store "some usefull information" terug via de webpagina https://bag.basisregistraties.overheid.nl/doc/begrip/Pand en toont de bij dit begrip behorende informatie, op een veilige en betrouwbare manier (https):
+
+![](image-ch4-18.png)
 
 ## Gebeurtenissen
 
@@ -358,35 +338,50 @@ Gebeurtenissen hebben dezelfde kenmerken als begrippen die objecten aanduiden, m
 
 Omdat het begrippenkader is gebaseerd op een institutionele bron gaat het daarbij nog steeds om institutionele gebeurtenissen, bijvoorbeeld rechtshandelingen. Deze hebben altijd een aanleiding in de natuurlijke werkelijkheid. Institutionele gebeurtenissen zijn, zoals in de denkwijze aangegeven, onderdeel van de institutionele werkelijkheid en kennen daarmee vaak één of meerdere actoren, bijvoorbeeld de verkoper en de koper bij de overdracht van een huis. En niet iedereen is bevoegd om een institutionele gebeurtenis vast te leggen. Dat gebeurt door een beëdigd ambtenaar of door een notaris. Dit wordt een 'agent' (in de Engelse betekenis van het woord) genoemd. Tot slot zijn er de regels waaraan voldaan moet zijn voordat het feit kan plaatsvinden, de voorwaarde en de regels waaraan het resultaat van de gebeurtenis voldoet, de eindsituatie.
 
-Bij het definiëren van begrippen worden de volgende richtlijnen gebruikt:
+**Gebeurtenis en handeling**
+
+Bij het definiëren van gebeurtenissen worden de volgende richtlijnen gebruikt:
 
 * Een gebeurtenis hangt sterk samen met een handeling (in het engels een 'Act'). Een handeling kan beschreven worden met een werkwoord, bijvoorbeeld x 'betaalt' y. Een gebeurtenis kan worden beschreven met een verzelfstandigd werkwoord, bijvoorbeeld 'Het betalen'. Of als handeling: 'Betalen rekening' (dan is ook gelijk duidelijk waarop het werkwoord betrekking heeft). Voor gebeurtenissen geldt dat de nadruk niet ligt op de handeling ('Het betalen'), maar op de overgang van beginsituatie (aanleiding+voorwaarde) naar eindsituatie. Dit zijn vaak woorden die eindigen op 'ing' (hoewel dat niet altijd zo hoeft te zijn). In dit geval dus: 'De betaling' (De gebeurtenis bij het overdragen is niet overdraging, maar overdracht). Dit staat bekend onder het substantiveren van werkwoorden. Grappig is dat dit niet werkt voor werkwoorden die niet leiden tot een resultaat. Het lukt bijvoorbeeld niet voor 'lopen': de handeling lukt nog wel ('het lopen'), maar de gebeurtenis niet.
 * Daarnaast wordt ook voor een gebeurtenis de definitievorm "een {gebeurtenis} is {uitleg}" gehanteerd. Dan worden weer werkwoorden gebruikt in de definitie die algemener zijn dan in de gebeurtenis. Ook hier ontstaat dus uiteindelijk een axiomatisch begrippenstelsel van gebeurtenissen.
 * De aanleiding wordt altijd beschreven met een voltooid deelwoord, bijvoorbeeld 'koper en verkoper zijn overeengekomen dat een bepaald zakelijk recht wordt verkocht'.
 * De voorwaarde wordt beschreven met een werkwoord in de tegenwoordige tijd. Bijvoorbeeld 'de verkoper is eigenaar'. 'De levering gebeurt per notariële akte, die aan de volgende voorwaarden ... voldoet'.
 * Ook de eindsituatie wordt beschreven in termen van een voltooid deelwoord, bijvoorbeeld 'de koper is eigenaar geworden'.
+* Aanleiding, voorwaarde en eindsituatie worden opgenomen als onderdeel van de toelichting op de definitie, zoals bij "normale" begrippen.
 
-### Gebeurtenis
+**Actor**
+Een actor is degene die betrokken is bij de handeling. In het geval van gebeurtenissen waarbij geen sprake is van een actor (bijvoorbeeld het verlopen van een vergunning) is ook geen sprake van een handeling. Er kunnen meerdere actoren betrokken zijn bij de handeling. De beschrijving van de betreffende actor geeft dan aan hoe deze actor een rol speelt. Bijvoorbeeld:
 
-Een gebeurtenis kent, naast de eigenschappen van een begrip, de volgende eigenschappen:
+>* Een hypotheekgever is de schuldenaar die als zekerheid een recht van hypotheek geeft op zijn registergoed
+>
+>* De Hypotheeknemer is de schuldeiser die een recht van hypotheek heeft op het registergoed van de hypotheekgever
 
-| Eigenschap | Afgeleid van |
-|------------|--------------|
-| actor | BP4mc2 specifiek |
-| agent | BP4mc2 specifiek |
-| object | BP4mc2 specifiek |
-|aanleiding | BP4mc2 specifiek |
-|voorwaarde | BP4mc2 specifiek |
-|eindsituatie | BP4mc2 specifiek |
-|tijdsaspecten | BP4mc2 specifiek |
+Overigens geeft dit voorbeeld gelijk aan hoe een begrippenkader bij kan dragen aan meer begrip. Velen zullen een 'hypotheek' zien als synoniem voor een 'hypotheeklening'. Dit zijn echter twee volledig andere begrippen. Waar bij een hypotheeklening de bank degene is die een lening "geeft", is het bij een recht van hypotheek juist degene die de lening krijgt, de hypotheekgever. Zo "krijgt" de hypotheekgever zijn lening feitelijk in ruil voor een recht op hypotheek.
 
-De beschrijving van de gebeurtenis kent dezelfde meta-elementen als de beschrijving van begrippen.
+Uit de definities blijkt dat een hypotheekgever een specialisatie is van een schuldenaar, wat weer een specialisatie is van persoon. En zo is hypotheeknemer een specialisatie van schuldeiser, wat ook weer een specialisatie is van een persoon. Toch moet opgepast worden om op deze wijze een taxonomie (ordening) van personen op te stellen. Hypotheekgevers, hypotheeknemers, schuldenaars en schuldeisers zijn rollen van een persoon. Deze zijn alleen geldig in de context van de handeling. Zo'n indeling van personen is dan ook alleen geldig in deze context. Vandaar dat we deze begrippen speciaal typeren als `skos-lex:Actor`. Voor een stabiele taxonomie is het beter om gebruik te maken van een ordening die niet context-gevoelig is, maar gebaseerd is op de intrinsieke eigenschappen van de begrippen, zoals bijvoorbeeld de taxonomie van dieren zoals in de hedendaagse biologie gebruikelijk [[BIOTAX]].
 
-Een gebeurtenis is gerelateerd aan één of meerdere actoren, objecten en/of agenten. Actoren, objecten en agenten kunnen worden beschreven als 'gewone' begrippen.
+Een voorbeeld van een taxonomie waar juist veel rollen in worden gebruikt (en dan ook gezien wordt als voorbeeld van een foute taxonomie), is de (mogelijk fictieve) Celestial Emporium of Benevolent Knowledge [[CELEMP]]
+
+**Agent**
+Een agent is een speciaal soort actor die wel betrokken is bij een handeling, maar er niet "echt" aan meedoet. Een voorbeeld hiervan is een ambtenaar van de burgelijke stand. Zonder deze ambtenaar kan er van een huwelijk geen sprake zijn. Toch wordt de ambtenaar niet in de echt verbonden: alleen de twee gehuwden zijn actoren in de handeling. De ambtenaar is slechts agent, en zorgt ervoor dat een levensgebeurtenis ook gezien wordt in de institutionele werkelijkheid.
+
+**Object**
+Een object betreft een begrip dat betrekking heeft op iets dat niet handelt in de handeling, maar duidelijk we het object is van de handeling. In bovengenoemd voorbeeld was het recht van hypotheek het object van handelen. Overigens kan een persoon wel het object zijn in een handeling, als het bijvoorbeeld "over" hen gaat, maar niet "met" hen.
+
+### Vocabulaires
+
+Het volledige profiel voor begrippen is uitgewerkt in [skos-lex applicatieprofiel](http://bp4mc2.org/profiles/#skos-lex-toepassingsprofiel-voor-rechts-handelingen). In dit document volstaan we met een opsomming van de gebruikte vocabulaires.
+
+| Vocabulaire | URI | Gebruik
+|-------------|-----|---------
+| SKOS | http://www.w3.org/2004/02/skos/core# | De beschrijving van begrippen
+| RDFS | http://www.w3.org/2000/01/rdf-schema# | Algemene Linked Data eigenschappen
+| DCT | http://dublincore.org/documents/dcmi-terms/ | Bronverwijzingen
+| SKOS-LEX | http://bp4mc2.org/def/skos-lex# | Aanvullingen voor het beschrijven van handelingen
 
 ### Voorbeeld
 
-Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden op [http://brk.kadaster.nl/id/begrip/Overdracht_eigendom](http://brk.kadaster.nl/id/begrip/Overdracht_eigendom). Ook dit is beschikbaar in turtle, als html webpagina en als grafische representatie.
+Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden op http://brk.basisregistraties.overheid.nl/id/begrip/Overdracht_eigendom. Ook dit voorbeeld is beschikbaar in turtle, als html webpagina en als grafische representatie.
 
 ## Datamodel
 
