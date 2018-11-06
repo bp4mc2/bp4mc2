@@ -177,4 +177,17 @@ var localBiblio = {
     publisher: "Wikipedia",
     href: "https://en.wikipedia.org/wiki/Celestial_Emporium_of_Benevolent_Knowledge",
   },
+  "SKOSOWL": {
+    authors: [
+      "Lieke Verhelst",
+      "Marco Brattinga",
+    ],
+    title: "Ontwerp en overwegingen voor de relatie tussen skos:Concept en owl:Class",
+    href: "http://www.pilod.nl/wiki/SKOS-AX_Ontwerp",
+  },
+  "MIM": {
+    title: "Metamodel voor Informatiemodellen",
+    date: "2017-06-14",
+    href: "https://docs.geostandaarden.nl/mim/def-st-mim10-20170614/doc.pdf",
+  },
 };

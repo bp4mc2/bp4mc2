@@ -328,7 +328,7 @@ Een op deze manier uitgewerkt voorbeeld van het model van de BAG is te vinden op
 
 Dit voorbeeld laat ook mooi zien hoe de uri-strategie werkt. Wanneer in de browser de 'vraag' http://bag.basisregistraties.overheid.nl/id/begrip/Pand wordt ingetoetst, geeft de achterliggende linked data store "some usefull information" terug via de webpagina https://bag.basisregistraties.overheid.nl/doc/begrip/Pand en toont de bij dit begrip behorende informatie, op een veilige en betrouwbare manier (https):
 
-![](image-ch4-18.png)
+![](image-ch4-17.png)
 
 ## Gebeurtenissen
 
@@ -390,15 +390,35 @@ Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden op
 
 De registratie zelf bevat data. Deze wordt vastgelegd conform een datamodel waarin dataklassen, eigenschappen e.d. worden beschreven. Dat kan een klassiek relationeel datamodel zijn dat typisch wordt vastgelegd in UML, bijvoorbeeld conform het best-practices metamodel. Het kan ook een ontologie zijn die één op één uitwerking is van het begrippenmodel.
 
+Een datamodel verbindt over het algemeen een structuur met de termen die verwijzen naar een specifieke betekenis. In veel traditionele datamodellen wordt deze specifieke betekenis niet verder uitgemodelleerd. Het blijft bij het benoemen van de term, en in bepaalde gevallen het toevoegen van een voor mensen leesbare definitie.
+
+UML class diagrams worden vaak gebruikt voor het beschrijven van datamodellen. In dergelijke gevallen kan in een UML class diagram een class wordt geinterpreteerd conform object-georienteerde principes: een class met methoden en eigenschappen, die instanties kunnen hebben die dan deze methoden en eigenschappen hebben. De UML class specificatie kan ook gebruikt worden bij het beschrijven van een datastructuur, bijvoorbeeld in de vorm van een relationele tabel of de structuur van een XML bericht (een XSD).
+
+In dit document richten we ons op die datamodellen die de structuur van de data beschrijven, inclusief een volledige verwijzing naar de semantiek van de termen die daarbij gebruikt worden. Om dit voor elkaar te krijgen, is de best practice om daarbij gebruik te maken van drie recommendations die door de W3c zijn uitgegeven:
+
+1. RDFS/OWL voor het formeel (machine-leesbaar) beschrijven van de semantiek van termen die verwijzen naar classes en properties;
+2. SKOS voor het informeel (leesbaar voor mensen) beschrijven van de semantiek van termen;
+3. SHACL voor het formeel (machine-leesbaar) beschrijven van de structuur waarin bovengenoemde termen gebruikt kunnen worden.
+
+Een van de voordelen van UML (en een nadeel van bovengenoemde recommendations) is het grafisch kunnen tonen van het datamodel. Daarvoor stellen we in dit document een grafische weergave voor die een datamodel kan weergevan dat gebaseerd is op bovengenoemde recommendations.
+
+De bovengenoemde recommendations kunnen met elkaar worden verbonden door middel van enkele properties die inmiddels algemeen voor dit doel worden ingezet, zoals afgebeeld in onderstaand figuur.
+
+![](image-ch4-18.png)
+
+Merk op dat in dit figuur niet alle elementen zijn afgebeeld. Details zijn te vinden in de betreffende profielen [skos-ap-sc](http://bp4mc2.org/profiles/#skos-toepassingsprofiel-voor-begrippenkaders) en [dm-ap-sc](http://bp4mc2.org/profiles/#dm-toepassingsprofiel-voor-informatiemodellen). De rationale voor de keuze op `dct:subject` te gebruiken als link tussen de ontologie en het begrippenkader kan gevonden worden in [[SKOSOWL]].
+
 ### Vertaling begrippenkader naar een relationeel datamodel
 
-Het begrippenkader is bruikbaar om met domeineigenaren en data afnemers te communiceren over de inhoud van een registratie. Het vertalen van dit begrip naar een samenhangend datamodel is het werkveld van de data architect. Een datamodel kan worden opgevat als een ontwerp van een structuur waarin data over de begrippen in het semantische model kunnen worden opgeslagen. Het onderstaande model is een metamodel voor een relationeel model dat is gebaseerd op het metamodel dat is ontwikkeld in de werkgroep 'best practices basisregistraties'. Dit metamodel is gebaseerd op het RSGB metamodel. Het model bevat objectklassen, attribuutklassen, gegevensgroepen (een set samenhangende attribuutklassen) en relatieklassen.
+Het begrippenkader is bruikbaar om met domeineigenaren en data afnemers te communiceren over de inhoud van een registratie. Het vertalen van dit begrip naar een samenhangend datamodel is het werkveld van de data architect. Een datamodel kan worden opgevat als een ontwerp van een structuur waarin data over de begrippen in het semantische model kunnen worden opgeslagen. Het Metamodel voor Informatiemodellen [[MIM]] is een metamodel voor een relationeel model dat is gebaseerd op het metamodel dat is ontwikkeld in de werkgroep 'best practices basisregistraties'. Het model bevat objectklassen, attribuutklassen, gegevensgroepen (een set samenhangende attribuutklassen) en relatieklassen.
 
-Met behulp van onderstaand vocabulaire wordt een klassiek relationeel model dat is gemaakt op basis van het RSGB metamodel één op één vertaald naar een rdf beschrijving. Het model blijft natuurlijk gewoon relationeel, maar de beschrijving van de data (in UML de 'classes') in het relationele systeem komt hiermee beschikbaar als linked data en kan daardoor worden verbonden met de beschrijving van andere data.
+Met behulp van bovengenoemde recommendations wordt een klassiek relationeel model dat is gemaakt op basis van het MiM één op één vertaald naar een rdf beschrijving. Het model blijft natuurlijk gewoon relationeel, maar de beschrijving van de data (in UML de 'classes') in het relationele systeem komt hiermee beschikbaar als linked data en kan daardoor worden verbonden met de beschrijving van andere data.
 
-Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden op [http://brk.kadaster.nl/def/gegevenselement/AdresseerbaarObject#hoofdadres](http://brk.kadaster.nl/def/gegevenselement/AdresseerbaarObject#hoofdadres). Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie.
+Een op deze manier uitgewerkt voorbeeld van het model van de BRK is te vinden via de eigenschap http://bag.basisregistraties.overheid.nl/def/bag#hoofdadres. Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie.
 
-Dit voorbeeld laat ook mooi zien hoe de uri-strategie voor het beschrijven van een datamodel werkt. Het intypen van bovenstaande URL zal leiden tot de weergave van de pagina [http://brk.kadaster.nl/def/gegevenselement/AdresseerbaarObject](http://brk.kadaster.nl/def/gegevenselement/AdresseerbaarObject) (het deel voor de "#"). Met andere woorden: de beschrijving van de entiteit "Adresseerbaar object".
+Dit voorbeeld laat ook mooi zien hoe de uri-strategie voor het beschrijven van een datamodel werkt. Het intypen van bovenstaande URL zal leiden tot de weergave van de pagina https://bag.basisregistraties.overheid.nl/def/bag (het deel voor de "#"). Met andere woorden: de beschrijving van de ontologie van de bag.
+
+Vanuit deze ontologie kan ook de structuur van het datamodel bekeken worden, bijvoorbeeld voor de beschrijving van de structuur van een Verblijfsobject: [http://bag.basisregistraties.overheid.nl/def/bag/Verblijfsobject](https://bag.basisregistraties.overheid.nl/resource?subject=http%3A%2F%2Fbag.basisregistraties.overheid.nl%2Fdef%2Fbag%23Verblijfsobject).
 
 ### Metadata
 
@@ -412,28 +432,192 @@ Een speciale categorie waarin informatie over begrippen wordt vastgelegd betreft
 
 Elementen in een waardelijst worden stuk voor stuk aangeduid met een begrip in het begrippenkader. Een voorbeeld uit de BAG is het 'gebruiksdoel' van een 'pand'. Dat kan 'wonen', 'winkel', 'kantoor', et cetera zijn. Semantisch betekent dit dat er verschillende soorten panden zijn, namelijk woonhuizen, winkels en kantoren. Om het datamodel overzichtelijk te houden is in de BAG de ontwerpkeuze gemaakt om 1 objecttype te definiëren. Dit heeft als attribuuttype 'gebruiksdoel', dat de waarden "wonen", "winkel", "kantoor", et cetera in de waardelijst kan aannemen. Bijkomend voordeel is dat het datamodel niet hoeft te worden aangepast als er een gebruiksdoel bij komt. Dan hoeft alleen maar een nieuw element aan de waardelijst te worden toegevoegd.
 
-### Vertaling van het begrippenkader naar een owl/dl ontologie
+In klassieke datamodellen wordt geen onderscheid gemaakt tussen de verschillende soorten van waardelijsten. Toch kunnen we enkele soorten onderkennen die feitelijk een geheel eigen betekenis hebben:
 
-De traditionele manier is om een datamodel te presenteren als entiteit-attribuut model (relationeel model of object model. Dergelijke modellen zijn 'closed world' modellen: het model veronderstelt dat de gegevens in het model niets meer betekenen dan wat oorspronkelijk bedoeld was met dit model. Een gegeven behoort bij een entiteit. Zo'n model zou je kunnen representeren als een letterbak: het maakt niet uit wat je er in stopt, maar linksboven horen de A's te zitten. Een andere eigenschap van een entiteit-attribuut model is dat een attribuut slechts betekenis heeft als onderdeel van de entiteit. Zo heeft het attribuut "naam" pas betekenis als duidelijk is waar het attribuut bij hoort: woonplaats.naam, openbareRuimte.naam.
+1. Waardelijsten die betrekking hebben op soorten, typen, etc. Dit betreffen waardelijsten met begrippen zoals hierboven vermeld;
+2. Waardelijsten die betrekking hebben op elementen die feitelijk "gewoon" data zijn, maar buiten het beheer van de originele databron vallen. Dit betreffen waardelijsten als "de lijst met landen", of "de lijst met automerken";
+3. Waardelijsten die de mogelijke waarden van een veld beperken, bv. "`I`", "`II`", "`III`", zonder dat daarbij extra betekenis wordt toegekend aan de waarde zelf.
 
-Een datamodel dat meer bij Linked Data past is een ontologie. Een ontologie kent een klasse-eigenschap model. Dergelijke modellen zijn 'open world' modellen: het model veronderstelt dat er eerst gegevens zijn, en dat vervolgens deze gegevens worden geclassificeerd. Meerdere classificaties op hetzelfde gegeven zijn daarbij gebruikelijk. Zo'n model zou je kunnen representeren als een 'tag': je begint met de gegevens, om ze vervolgens een of meerdere 'tags' te geven. Een andere eigenschap van een klasse-eigenschap model is dat een eigenschap op zichzelf betekenis heeft. Het is geen onderdeel van de klasse. Zo heeft de eigenschap "naam" al direct betekenis. Als er onderscheid nodig is tussen de naam van een woonplaats en de naam van een openbare ruimte, dan zijn twee eigenschappen nodig: woonplaatsnaam, naamOpenbareRuimte.
-
-Waar de toepassing van SKOS gebruikelijk is voor het definiëren van begrippen, is het gebruik van OWL gebruikelijk bij het maken van een instantieerbare ontologie.
+Type-3 waardelijsten zien we als specifieke structuurbeperkingsregels en niet "echt" als waardelijsten. Type-2 waardelijsten zien we, vanuit datamodel optiek, "gewoon" als een eigen klasse met instanties. Een meer uitgebreidere toelichting is opgenomen in de bijlage: http://bp4mc2.org/modeling/value-lists/.
 
 ### Grafische representatie
 
-![](image-ch4-17.png)
+**Klasse: sh:NodeShape met owl:Class**
 
-Voor elke owl:Class wordt een elipse gebruikt. Voor elk owl:DatatypeProperty wordt een rechthoek gebruikt. Voor elk owl:ObjectProperty wordt een rechthoek met afgevlakte hoeken gebruikt. In bovenstaand voorbeeld is bovendien een kleurstelling gebruikt. Deze is vrij te kiezen.
+Een owl:Class wordt samen met een sh:NodeShape afgebeeld als een rechthoek met bovenin de naam van de klasse (inclusief prefix), en onderin de eigenschappen die voor deze owl:Class conform de sh:NodeShape zijn toegestaan. Zowel attributen (eigenschappen met een datatype) als relaties (eigenschappen die verwijzen naar een andere owl:Class) kunnen daarbij getoond worden. Het datatype van een attribuut wordt tussen haakjes getoond. Een relatie naar een andere klasse wordt getoond door middel van een pijl. Een relatie wordt alleen in de rechthoek getoond, als de gerelateerde klasse niet zelf ook als rechthoek in het diagram staat. De cardinaliteit wordt getoond door middel van blokhaken, volgens het template `[{minimum},{maximum}]`.
 
-Alle pijlen in het model hebben een richting:
+![](image-ch4-19.png)
 
-* De vaste pijl met open pijlpunt geeft een rdfs:subClassOf relatie aan
-* De gebogen lijn zonder pijlpunt geeft aan dat het rdfs:domein van het betreffende owl:DatatypeProperty of owl:ObjectProperty gelijk is aan de owl:Class waar de lijn uitkomt
-* De vaste pijl vanuit een een owl:ObjectProperty verbindt deze met een owl:Class (de rdfs:range)
+Bovenstaand figuur is de visualisatie van onderstaande Linked Data specificatie:
 
-Merk op dat het niet verplicht is dat een owl:objectProperty en een owl:DatatypeProperty een rdfs:range of rdfs:domein hebben. Zij kunnen dus ook los op zichzelf, of (bij objectproperties) slecht aan 1 kant verbonden zijn met een ander element.
+```
+  bagshape:Verblijfsobject a sh:NodeShape;
+    sh:targetClass bag:Verblijfsobject;
+    sh:name "bag:Verblijfsobject";
+    sh:property bagshape:Verblijfsobject_oppervlakte;
+    sh:property bagshape:Verblijfsobject_geometrie;
+  .
+  bagshape:Verblijfsobject_oppervlakte;
+    sh:path bag:oppervlakte;
+    sh:name "bag:oppervlakte";
+    sh:datatype xsd:integer;
+    sh:minCount 1;
+    sh:maxCount 1;
+  .
+  bagshape:Verblijfsobject_geometrie;
+    sh:path bag:geometrie;
+    sh:name "bag:geometrie";
+    sh:class geo:Geometry;
+    sh:minCount 1;
+    sh:maxCount 1;
+  .
+```
+
+**Subclassificatie**
+
+Om aan te geven dat een klasse een subklasse is van een andere klasse, wordt gebruik gemaakt van een pijl die eindigt met een witte driehoek.
+
+![](image-ch4-20.png)
+
+De subclassificatie uit bovenstaand figuur is de visualisatie van onderstaande Linked Data specificatie:
+
+```
+  bag:Verblijfsobject a owl:Class;
+    rdfs:subClassOf bag:AdresseerbaarObject;
+  .
+```
+
+**Rol: sh:NodeShape zonder owl:Class**
+
+In bepaalde gevallen is het belangrijk om aan te geven dat een bepaalde structuur wordt verwacht van een instantie van een bepaalde klasse, zonder dat sprake is van subclassificatie in formele zin. Je zou kunnen zeggen dat in zo'n geval sprake is van een specifieke "rol" die vervult wordt door instanties die aan deze shape moeten voldoen. Hiervoor wordt gebruik gemaakt van een pijl die eindigt met een witte driehoek, met een onderbroken lijn. De rechthoek bevat daarbij de naam van de rol, met tussen haakjes de naam van de klasse.
+
+![](image-ch4-21.png)
+
+De rol-relatie (en de beschrijving van Woning) uit bovenstaand figuur is de visualisatie van onderstaande Linked Data specificatie:
+
+```
+  bagshape:Woning a sh:NodeShape;
+    sh:property [
+      sh:path rdf:type;
+      sh:hasValue bag:Verblijfsobject;
+    ];
+    sh:property bagshape:Woning_gebruiksfunctieWoning;
+  .
+  bagshape:Woning_gebruiksfunctieWoning a sh:PropertyShape;
+    sh:property [
+      sh:path bag:gebruiksfunctie;
+      sh:name "bag:gebruiksfunctie";
+      sh:hasValue bagfunctie:Wonen
+    ]
+  .
+```
+
+In dit voorbeeld is ook getoond hoe aangegeven kan worden dat een bepaalde eigenschap een specifieke waarde moet hebben.
+
+**Attributen en relaties**
+
+In bovenstaande voorbeelden kwamen attributen en relaties eigenlijk al aan bod. Een attribuut betreft een eigenschap met een datatype (`sh:datetype`). Een relatie betreft een eigenschap die gerelateerd is aan een andere klasse: `sh:class`. Indien deze klasse ook in het figuur voorkomt, dan wordt de relatie als pijl tussen twee rechthoeken afgebeeld.
+
+![](image-ch4-22.png)
+
+De relaties uit bovenstaand figuur is de visualisatie van onderstaande Linked Data specificatie:
+
+```
+  bagshape:Verblijfsobject_pandrelatering a sh:PropertyShape;
+    sh:property [
+      sh:path bag:pandrelatering;
+      sh:name "bag:pandrelatering";
+      sh:class bag:Pand;
+      sh:maxCount 1;
+    ]
+  .
+```
+
+Soms is het wenselijk om een relatie te leggen naar een rol, dwz: een sh:NodeShape zonder een owl:Class. In dat geval kan geen gebruik worden gemaakt `sh:class`, maar kan gebruik worden gemaakt van `sh:node`:
+
+![](image-ch4-23.png)
+
+Dit voorbeeld geeft aan dat de relatie van een `brp:Persoon` naar een `bag:Verblijfsobject` alleen mag, indien dit verblijfsobject een woning betreft. Bovenstaande is een visualisatie van de volgende Linked Data specificatie:
+
+```
+  brpshape:Persoon_bewoont a sh:PropertyShape;
+    sh:property [
+      sh:path brp:bewoont;
+      sh:name "brp:bewoont";
+      sh:node bagshape:Woning;
+    ];
+  .
+```
+
+**Attribuutgroepen**
+
+In datamodellen komen soms attribuutgroepen voor: complexe attributen die alleen gezamenlijk betekenis hebben. In Linked Data zou een dergelijke groep als een blank node gemodelleerd kunnen worden. Dergelijke attribuutgroepen worden afgebeeld met behulp van een zwarte ruit aan het begin van de pijl:
+
+![](image-ch4-24.png)
+
+Bovenstaand figuur betreft de visualisatie van de onderstaande Linked Data specificatie:
+
+```
+  bagshape:Verblijfsobject_oppervlakte a sh:PropertyShape;
+    sh:path bag:oppervlakte;
+    sh:name "bag:oppervlakte";
+    sh:minCount 1;
+    sh:maxCount 1;
+    sh:nodeKind sh:BlankNode;
+    sh:node [
+      sh:property bagshape:Oppervlakte_oppervlakte;
+      sh:property bagshape:Oppervlakte_eenheid;
+    ]
+  .
+  bagshape:Oppervlakte_oppervlakte a sh:PropertyShape;
+    sh:path bag:oppervlakte;
+    sh:name "bag:oppervlakte";
+    sh:datatype xsd:integer;
+    sh:minCount 1;
+    sh:maxCount 1;
+  .
+  bagshape:Oppervlakte_eenheid a sh:PropertyShape;
+    sh:path bag:eenheid;
+    sh:name "bag:eenheid";
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1;
+  .
+```
+
+**Waardelijsten**
+
+In het vorige voorbeeld werd een eenheid geïntroduceerd als een string (zoals "m", "cm", "km"). Beter zou in dit geval zijn om een waardelijst te introduceren met meeteenheden. En omdat in dit geval de meeteenheden beperkt kunnen blijven tot meters en centimeters, heeft het toegevoegde waarde om de waardelijst ook daadwerkelijk grafisch af te beelden. Onderstaand figuur geeft dit weer.
+
+![](image-ch4-25.png)
+
+Deze visualisatie is gebaseerd op onderstaande Linked Data specificatie:
+
+```
+  bagshape:Oppervlakte_eenheid a sh:PropertyShape;
+    sh:path bag:eenheid;
+    sh:name "bag:eenheid";
+    sh:node bagshape:Eenheden;
+    sh:minCount 1;
+    sh:maxCount 1;
+  .
+  bagshape:Eenheden a sh:NodeShape;
+    sh:name "Eenheden";
+    sh:property [
+      sh:path skos:inScheme;
+      sh:hasValue bag:Eenheden
+    ];
+  .
+  bag:Eenheden a skos:ConceptScheme.
+  bagbegrip:Meter a skos:Concept;
+    skos:prefLabel "meter";
+    skos:inScheme bag:Eenheden;
+  .
+  bagbegrip:Centimeter a skos:Concept;
+    skos:prefLabel "centimeter";
+    skos:inScheme bag:Eenheden;
+  .
+```
 
 ### Voorbeeld
-Een op deze manier uitgewerkt voorbeeld van het model van de BAG is te vinden op
-[http://bag.kadaster.nl/def/ontologie#AdresseerbaarObject](http://bag.kadaster.nl/def/ontologie#AdresseerbaarObject). Dit voorbeeld is beschikbaar als html webpagina, in turtle en als grafische representatie.
+Een voorbeeld van een datamodel gebaseerd op deze opzet is te vinden bij de [profielen](http://bp4mc2.org/profiles). Elk van de profielen kent een grafische representatie die gebaseerd is op een SHACL en RDFS/OWL model. Deze SHACL en RDFS/OWL modellen zijn te vinden op https://github.com/bp4mc2/bp4mc2/tree/master/profiles.
