@@ -29,9 +29,9 @@ Een belangrijk aspect van de begripsdriehoek is het idee dat een term verwijst n
 
 Bovenstaand figuur geeft een voorbeeld waar een dergelijke spraakverwarring is afgebeeld. De spreker gebruikt de term "Lange Jan" en heeft daarbij zijn eigen gedachte over een specifiek gebouw (de Onze Lieve Vrouwetoren in Amersfoort, Kadastraal middelpunt van Nederland en in de volksmond ook wel de "Lange Jan" genoemd). De toehoorder zit met zijn gedachten ergens anders (namelijk: in de Efteling), en verwacht dat de spreker het over iets heel anders heeft dan een gebouw.
 
-Begrip ontstaat als er voldoende overlap is in de gedachten die sprekers en toehoorders hebben bij eenzelfde term. Dit idee is voor het eerst uitgewerkt door Peirce, en de consequenties voor de ICT verder door Sowa in "Ontology, Metadata and Semiotics" [ONTOMETA]. Context is daarbij cruciaal: verschillende contexten maken dat dezelfde termen naar andere begrippen verwijzen. Dit verschil in context wordt mooi geïllustreerd in het sesamstraat tekenfilmpje over 'grote dingen' [SS-TAAT].
+Begrip ontstaat als er voldoende overlap is in de gedachten die sprekers en toehoorders hebben bij eenzelfde term. Dit idee is voor het eerst uitgewerkt door Peirce, en de consequenties voor de ICT verder door Sowa in "Ontology, Metadata and Semiotics" [[ONTOMETA]]. Context is daarbij cruciaal: verschillende contexten maken dat dezelfde termen naar andere begrippen verwijzen. Dit verschil in context wordt mooi geïllustreerd in het sesamstraat tekenfilmpje over 'grote dingen' [[SS-TAAT]].
 
-Het vervelende aan natuurlijke taal is echter dat in geschreven taal aan de term niet zichtbaar is wie de spreker is. Bij gesproken taal is dit anders. Daar is duidelijk wie de woorden uitspreekt, dus ook wie 'bezitter' is van de gedachte. Zo kan een gesprek ontstaan, waarbij de toehoorder aan de 'bezitter' vragen stelt over de gedachte, om zo beter te begrijpen wat de spreker bedoelt. Zie bijvoorbeeld het sesamstraat filmpje 'Guess who I met today' [SS-GWIMT]
+Het vervelende aan natuurlijke taal is echter dat in geschreven taal aan de term niet zichtbaar is wie de spreker is. Bij gesproken taal is dit anders. Daar is duidelijk wie de woorden uitspreekt, dus ook wie 'bezitter' is van de gedachte. Zo kan een gesprek ontstaan, waarbij de toehoorder aan de 'bezitter' vragen stelt over de gedachte, om zo beter te begrijpen wat de spreker bedoelt. Zie bijvoorbeeld het sesamstraat filmpje 'Guess who I met today' [[SS-GWIMT]]
 
 In 'Through the looking-glass' van Lewis Caroll wordt deze innige relatie tussen de betekenis van een term en zijn spreker verwoord in het gesprek tussen Alice en Humpty-Dumpty:
 
@@ -49,11 +49,11 @@ In 'Through the looking-glass' van Lewis Caroll wordt deze innige relatie tussen
 
 Hier stelt Humpty Dumpty dat hijzelf, en alleen hijzelf kan bepalen wat een woord betekent. Strikt genomen heeft hij gelijk. Maar als men betekenisvol wil communiceren en daarmee ook betekenisvol modelleren, dan is enige duidelijkheid nodig wat 'we' er mee bedoelen. Deze duidelijkheid kan worden bereikt door het definiëren van begrippen.</p>
 
-Het belang van de interpretatie van woorden wordt bijvoorbeeld duidelijk in de rechtspraak. Een voorbeeld (waarbij bovendien de woorden van Lewis Caroll worden geciteerd) is de zaak Liversidge versus Anderson uit 1942 in Engeland [LIVAN]. Daar lag de vraag op tafel of de woorden van een wet in verschillende situaties anders uitgelegd mochten worden, ofwel: wie bepaalt in ultimo wat de betekenis is van de letter van de wet?
+Het belang van de interpretatie van woorden wordt bijvoorbeeld duidelijk in de rechtspraak. Een voorbeeld (waarbij bovendien de woorden van Lewis Caroll worden geciteerd) is de zaak Liversidge versus Anderson uit 1942 in Engeland [[LIVAN]]. Daar lag de vraag op tafel of de woorden van een wet in verschillende situaties anders uitgelegd mochten worden, ofwel: wie bepaalt in ultimo wat de betekenis is van de letter van de wet?
 
-Een voorbeeld uit Nederland is het elektriciteitsarrest [EARREST], waarin een Haagse tandarts beschuldigd wordt van diefstal van elektriciteit door de meter te blokkeren met een breinaald. In cassatie verweert de tandarts zich met de stelling dat elektriciteit niet als 'enig goed' valt te kwalificeren, zodat niet aan de delictsomschrijving van artikel 310 uit het Wetboek van strafrecht (diefstal) is voldaan. Hij betwistte het begrip 'goed', of in elk geval de toepasselijkheid daarvan op iets immaterieels als elektriciteit.
+Een voorbeeld uit Nederland is het elektriciteitsarrest [[EARREST]], waarin een Haagse tandarts beschuldigd wordt van diefstal van elektriciteit door de meter te blokkeren met een breinaald. In cassatie verweert de tandarts zich met de stelling dat elektriciteit niet als 'enig goed' valt te kwalificeren, zodat niet aan de delictsomschrijving van artikel 310 uit het Wetboek van strafrecht (diefstal) is voldaan. Hij betwistte het begrip 'goed', of in elk geval de toepasselijkheid daarvan op iets immaterieels als elektriciteit.
 
-Om de betekenis van symbolen te begrijpen, is het van belang om de afspraken te kennen waarmee de symbolen zijn gemaakt, of ten minste een verwijzing te hebben naar een ander symbool waar de afspraak wel van bekend is. Een voorbeeld van dit laatste is de Rosetta Stone [ROSETTA].
+Om de betekenis van symbolen te begrijpen, is het van belang om de afspraken te kennen waarmee de symbolen zijn gemaakt, of ten minste een verwijzing te hebben naar een ander symbool waar de afspraak wel van bekend is. Een voorbeeld van dit laatste is de Rosetta Stone [[ROSETTA]].
 
 Het is dus nodig afspraken te maken over de manier waarop waarnemingen van dingen en gebeurtenissen in de werkelijkheid worden vertaald naar een representatie van deze dingen en gebeurtenissen in taal. Die representatie kan worden geïnterpreteerd, en weer worden terugvertaald naar de werkelijkheid zoals iemand zich die voorstelt. Op die manier kan iemand zich een beeld vormen van de werkelijkheid, ook al heeft hij die niet zelf waargenomen. Vanaf nu maken we onderscheid tussen de natuurlijke werkelijkheid en de administratieve werkelijkheid. De natuurlijke werkelijkheid is de 'echte', 'alledaagse', 'brute' werkelijkheid waarin we leven. De administratieve werkelijkheid is een representatie van de natuurlijke werkelijkheid in informatiesystemen.
 
@@ -97,11 +97,11 @@ Merk op dat we in dit plaatje expliciet niet spreken over de 'BAG gedachte van d
 
 ### Grammatica
 
-Communicatie in natuurlijke taal vindt plaats volgens een model dat we de grammatica van een taal noemen. Eenvoudige uitspraken hebben de vorm [onderwerp] – [gezegde] – [lijdend voorwerp]. Bijvoorbeeld in de zin "Paul kent John" is "Paul" het onderwerp, "kent" het gezegde en "John" het lijdend voorwerp. Linked Data is gebaseerd op het uitgangspunt dat we ook met data dergelijke basale uitspraken kunnen doen. Hiervoor is RDF bedacht, het Resource Description Framework [RDF]. RDF is een standaard van het World Wide Web Consortium (W3C), oorspronkelijk ontworpen als een metadata-model, maar gaandeweg gebruikt als een formaat om gegevens in het algemeen voor te stellen en uit te wisselen. Uitspraken in RDF volgen een grammatica die erg veel lijkt op die van natuurlijke taal. Ze hebben de vorm van een triple: `<subject> – <predicate> – <object>`.
+Communicatie in natuurlijke taal vindt plaats volgens een model dat we de grammatica van een taal noemen. Eenvoudige uitspraken hebben de vorm `<onderwerp> – <gezegde> – <lijdend voorwerp>`. Bijvoorbeeld in de zin "Paul kent John" is "Paul" het onderwerp, "kent" het gezegde en "John" het lijdend voorwerp. Linked Data is gebaseerd op het uitgangspunt dat we ook met data dergelijke basale uitspraken kunnen doen. Hiervoor is RDF bedacht, het Resource Description Framework [[RDF-CONCEPTS]]. RDF is een standaard van het World Wide Web Consortium (W3C), oorspronkelijk ontworpen als een metadata-model, maar gaandeweg gebruikt als een formaat om gegevens in het algemeen voor te stellen en uit te wisselen. Uitspraken in RDF volgen een grammatica die erg veel lijkt op die van natuurlijke taal. Ze hebben de vorm van een triple: `<subject> – <predicate> – <object>`.
 
 ![](image-ch3-13.png)
 
-Met een triple wordt in feite een 'korte zin' uitgedrukt (zie ook 'Wat is een zin', Algemene Nederlandse Spraakkunst [ANS-ZIN]). De drie onderdelen van de triple, namelijk 'subject', 'predicate' en 'object' corresponderen met onderwerp, gezegde en (lijdend) voorwerp uit de natuurlijke taal. Een 'object' kan weer een 'subject' zijn in een volgende uitspraak, waardoor een netwerk van samenhangende dingen en uitspraken ontstaat. Grafisch wordt een triple vaak afgebeeld als een gerichte graaf: twee bolletjes (voorstelling van subject en object) die met elkaar verbonden zijn met een pijl die het predicate voorstelt. Als het object zelf niet gebruikt wordt om verder door te verwijzen (omdat het geen URI is, maar een vaste waarde, een literal [LITERAL]), dan wordt vaak in plaats van een bolletje een rechthoek gebruikt.
+Met een triple wordt in feite een 'korte zin' uitgedrukt (zie ook 'Wat is een zin', Algemene Nederlandse Spraakkunst [ANS-ZIN]). De drie onderdelen van de triple, namelijk 'subject', 'predicate' en 'object' corresponderen met onderwerp, gezegde en (lijdend) voorwerp uit de natuurlijke taal. Een 'object' kan weer een 'subject' zijn in een volgende uitspraak, waardoor een netwerk van samenhangende dingen en uitspraken ontstaat. Grafisch wordt een triple vaak afgebeeld als een gerichte graaf: twee bolletjes (voorstelling van subject en object) die met elkaar verbonden zijn met een pijl die het predicate voorstelt. Als het object zelf niet gebruikt wordt om verder door te verwijzen (omdat het geen URI is, maar een vaste waarde, een literal [[LITERAL]]), dan wordt vaak in plaats van een bolletje een rechthoek gebruikt.
 
 ![](image-ch3-14.png)
 
@@ -115,7 +115,7 @@ Aangezien alleen ruimte is voor een onderwerp, gezegde en (lijdend) voorwerp, is
 
 ### Soorten zinnen naar communicatieve functie
 
-Natuurlijke taal kent drie soorten zinnen naar communicatieve functie (bron: Algemene Nederlandse Spraakkunst [ANS]):
+Natuurlijke taal kent drie soorten zinnen naar communicatieve functie (bron: Algemene Nederlandse Spraakkunst [[ANS]]):
 
 * *Mededelende zinnen*: een **uiting** van een bewering, dat wil zeggen: een mededeling;
 * *Vragende zinnen*: een **verzoek** om een mededeling, dat wil zeggen: een vraag;
@@ -135,7 +135,7 @@ Voorbeelden van deze drie soorten zinnen zijn:
 
 ### HTTP (Hypertext Transfer Protocol)
 
-Het World Wide Web, dat toegankelijk is via de browser en waar ook Linked Data op is gebaseerd, volgt het Hypertext Transfer Protocol (http). Dit protocol [HTTP] [PROTOCOLS] is vergelijkbaar met hoe een gesprek wordt gevoerd tussen twee mensen.
+Het World Wide Web, dat toegankelijk is via de browser en waar ook Linked Data op is gebaseerd, volgt het Hypertext Transfer Protocol (http). Dit protocol [[HTTP]] [[PROTOCOLS]] is vergelijkbaar met hoe een gesprek wordt gevoerd tussen twee mensen.
 
 Een http-request komt overeen met:
 
@@ -161,7 +161,7 @@ Deze vorm is identiek aan de opzet van een triple in Linked Data:
 
 `<subject> <predicate> <object>`
 
-Zo is de zin: "Jan kent Piet" gelijk aan de Linked Data representatie in Turtle-syntax [TURTLE]:
+Zo is de zin: "Jan kent Piet" gelijk aan de Linked Data representatie in Turtle-syntax [[TURTLE]]:
 
 ```
 @prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
@@ -185,7 +185,7 @@ De eerste zin kent de minst specifieke aanduiding voor de drie personen die in d
 
 ### De URI (Uniform Resource Identifier)
 
-In een RDF triple worden het onderwerp, gezegde en soms ook het (lijdend) voorwerp geïdentificeerd door middel van URIs. Een URI kan verschillende vormen hebben. Zie hiervoor de URI specificaties [RFC3986], of de meer leesbare wikipedia beschrijving [URI].
+In een RDF triple worden het onderwerp, gezegde en soms ook het (lijdend) voorwerp geïdentificeerd door middel van URIs. Een URI kan verschillende vormen hebben. Zie hiervoor de URI specificaties [[RFC3986]], of de meer leesbare wikipedia beschrijving [[URI]].
 
 Voorbeelden van correcte URI-namen van 'Marco', 'Marco Polo' en 'BSN 1234' zijn:
 
@@ -212,7 +212,7 @@ Ook is duidelijk dat een URL nooit een mededelende zin kan zijn. Zo'n zin is imm
 - `<http://bp4mc2.org/voorbeeld/id/persoon/1234>.`
 - `<http://bp4mc2.org/voorbeeld/id/persoon/1234> <http://bp4mc2.org/voorbeeld/def#sprak-met> <http://bp4mc2.org/voorbeeld/id/persoon/8743>.`
 
-In de wereld van Linked Data kan een URL ook worden gebruikt als vraag. Het derde Linked Data principe stelt: "When someone looks up a URI, provide useful information" [LINKED-DATA])
+In de wereld van Linked Data kan een URL ook worden gebruikt als vraag. Het derde Linked Data principe stelt: "When someone looks up a URI, provide useful information" [[LINKED-DATA]])
 
 In het voorbeeld kan dit het volgende gesprek opleveren:
 
@@ -245,7 +245,10 @@ Zo willen we onderscheid maken tussen de URL-Naam en de URL-Vraag. Elke URL-Vraa
 
 Om in de vormgeving een URL-Naam te kunnen onderscheiden van een URL-Vraag stellen we voor om in de URL een vraagteken op te nemen, gevolgd door aanvullende informatie met betrekking tot de vraag, dus bijvoorbeeld:
 
-![](image-ch3-18.png)
+```
+http:request:
+http://bp4mc2.org/voorbeeld/query/kunt-je-iets-vertellen?over=personen&voornaam=Marco
+```
 
 Deze URL-Vraag komt overeen met de zin in natuurlijk taal:
 
@@ -262,11 +265,11 @@ Deze URL-Vraag komt overeen met de zin in natuurlijk taal:
 
 ### Feiten in de natuurlijke en institutionele werkelijkheid
 
-Volgens wikipedia is een feit "een gebeurtenis of omstandigheid waarvan de werkelijkheid vaststaat, ofwel zintuiglijk kan worden waargenomen of instrumenteel gemeten". [FEIT] Het tijdsaspect is van belang bij het beschouwen van een feit: de werkelijkheid van een omstandigheid kan vaststaan op één moment in tijd, maar op een ander moment in tijd juist zijn verdwenen.
+Volgens wikipedia is een feit "een gebeurtenis of omstandigheid waarvan de werkelijkheid vaststaat, ofwel zintuiglijk kan worden waargenomen of instrumenteel gemeten". [[FEIT]] Het tijdsaspect is van belang bij het beschouwen van een feit: de werkelijkheid van een omstandigheid kan vaststaan op één moment in tijd, maar op een ander moment in tijd juist zijn verdwenen.
 
 ![](image-ch3-21.png)
 
-Gebeurtenissen zijn juist nooit op een stilstaand moment te aanschouwen. Een gebeurtenis stelt feitelijk voor dat de ene omstandigheid verandert in een andere omstandigheid. Wil een gebeurtenis een feit zijn, dan moet de werkelijkheid van beide omstandigheden vaststaan, maar bovendien moet vaststaan dat er een 'regel' is die feitelijk (dus waarvan de werkelijkheid ook vaststaat) bepaalt dat omstandigheid A wetmatig resulteert in omstandigheid B. Zie voor een uitleg van wat een regel is: defining business rules – what are they really [RULES]. In de natuurlijke werkelijkheid zijn deze regels de natuurwetten. Zo valt een appel van een boom als de zwaartekracht die op deze appel wordt uitgeoefend groter is dan de sterkte van de verbinding tussen de appel en de tak waaraan hij hangt.
+Gebeurtenissen zijn juist nooit op een stilstaand moment te aanschouwen. Een gebeurtenis stelt feitelijk voor dat de ene omstandigheid verandert in een andere omstandigheid. Wil een gebeurtenis een feit zijn, dan moet de werkelijkheid van beide omstandigheden vaststaan, maar bovendien moet vaststaan dat er een 'regel' is die feitelijk (dus waarvan de werkelijkheid ook vaststaat) bepaalt dat omstandigheid A wetmatig resulteert in omstandigheid B. Zie voor een uitleg van wat een regel is: defining business rules – what are they really [[RULES]]. In de natuurlijke werkelijkheid zijn deze regels de natuurwetten. Zo valt een appel van een boom als de zwaartekracht die op deze appel wordt uitgeoefend groter is dan de sterkte van de verbinding tussen de appel en de tak waaraan hij hangt.
 
 De Wikipedia-definitie van 'feit' kent een open eind: Wat staat als werkelijkheid vast? Van enkele zaken zal iedereen veronderstellen dat deze ‘vaststaan’. Weinig mensen zullen ontkennen dat de brug waarmee zij een rivier oversteken 'bestaat'. Zonder de brug zou je immers vallen (een natuurwet). Andere aspecten die wij mensen als de 'vaststaande werkelijkheid' beschouwen zijn echter niet natuurlijk en hebben te maken met sociale afspraken: Dat er zoiets bestaat als de 'soevereine en democratische rechtsstaat Nederland' is een afspraak waar de meeste mensen zich aan houden, dus daarmee is dat (op dit moment) een feit. Maar in 1500 was de 'soevereine en democratische rechtsstaat Nederland' nog geen feit.
 
@@ -287,7 +290,7 @@ Het recht kent hiervoor de volgende vier principes:
 * *Lex posterior derogat legi priori/anteriori* - jongere wetgeving gaat voor oudere wetgeving.
 * *Jurisprudentie* – rechtsvormende uitspraken. In het bijzonder uitspraken van rechters in concrete rechtszaken. Jurisprudentie kan invulling geven aan de betekenis van wetgeving.
 
-Volgens de paradigma's in de rechtsinformatica (zie [RECHTPARA]) is de wet opgebouwd uit:
+Volgens de paradigma's in de rechtsinformatica (zie onder andere [[RECHTPARA-1]] en [[RECHTPARA-2]]) is de wet opgebouwd uit:
 
 * Begrippen die dingen in de (natuurlijke) werkelijkheid aanduiden waar de betreffende wet betrekking op heeft.
 * Gebeurtenissen of handelingen die met betrekking tot de dingen die met deze begrippen worden aangeduid kunnen plaatsvinden.
@@ -382,7 +385,7 @@ Voor het rechtlijnig kunnen redeneren op basis van een begrippenstelsel is een b
 * Er mogen geen circulaire relaties ontstaan. Dat betekent dat niet mag gelden: A->B->C->A.
 * Het axiomatisch begrippenstelsel kent uiteindelijk 'axioma's': begrippen die niet verder worden gedefinieerd in termen van andere begrippen. Er wordt verondersteld dat de beoogde toehoorder deze begrippen al begrijpt.
 
-Optimaal is als de axioma's begrippen zijn die als 'eenvoudig' worden gekenmerkt, zie hiervoor: woordenlijst taalniveau B1 [EENVWOORD].
+Optimaal is als de axioma's begrippen zijn die als 'eenvoudig' worden gekenmerkt, zie hiervoor: woordenlijst taalniveau B1 [[EENVWOORD]].
 
 ### Natuurlijke werkelijkheid versus data
 
@@ -392,13 +395,13 @@ Zo kan in de BAG bij een ‘nummeraanduiding’ worden gedefinieerd dat deze 'is
 
 Wat daarbij soms uit het oog wordt verloren, is het feit dat het om een registratie gaat, dus om de administratieve werkelijkheid, en niet om de 'echte', natuurlijke werkelijkheid. Een registratie bevat alleen maar data die iets veronderstellen over de natuurlijke werkelijkheid. Het bevat niet de natuurlijke werkelijkheid zelf: een klantenregistratie bevat geen 'klanten', maar 'data over klanten'. En zelfs een registratie van artikelprijzen bevat geen 'artikelprijzen', maar slechts 'data over artikelprijzen'.
 
-Als het onderscheid tussen natuurlijke en administratieve werkelijkheid uit het oog wordt verloren, kan dat leiden tot Kafkaëske-toestanden: 'Ik bel u, omdat ik een aanmaning heb ontvangen dat ik mijn telefoonabonnement niet zou hebben betaald, maar ik ben helemaal geen klant van u'. Reactie: 'Dat klopt, u staat niet in ons computersysteem. U hoeft niet te betalen'. Vervolg: 'Maar er staat nu wel een deurwaarder mijn huis leeg te halen!!'. Reactie: 'Dat kan niet, u bent geen klant volgens ons computersysteem'. Hier wordt de natuurlijke werkelijkheid ontkend, en de administratieve werkelijkheid als de ware verondersteld. (meer voorbeelden op bijvoorbeeld "Computer says no" [COMPSAYSNO]).
+Als het onderscheid tussen natuurlijke en administratieve werkelijkheid uit het oog wordt verloren, kan dat leiden tot Kafkaëske-toestanden: 'Ik bel u, omdat ik een aanmaning heb ontvangen dat ik mijn telefoonabonnement niet zou hebben betaald, maar ik ben helemaal geen klant van u'. Reactie: 'Dat klopt, u staat niet in ons computersysteem. U hoeft niet te betalen'. Vervolg: 'Maar er staat nu wel een deurwaarder mijn huis leeg te halen!!'. Reactie: 'Dat kan niet, u bent geen klant volgens ons computersysteem'. Hier wordt de natuurlijke werkelijkheid ontkend, en de administratieve werkelijkheid als de ware verondersteld. (meer voorbeelden op bijvoorbeeld "Computer says no" [[COMPSAYSNO]]).
 
 Als sketch in een humoristisch programma zal iedereen dit herkennen en er om lachen, maar er zijn ook schrijnende gevallen waarbij mensen hun uitkering of toeslagen verliezen omdat de administratieve werkelijkheid voor de waarheid wordt gehouden. Aan de andere kant wordt ook misbruik gemaakt van de soms gebrekkige koppeling tussen data in administratieve werkelijkheden, bijvoorbeeld bij B.V. fraudes.
 
 ### Context van data
 
-Een informatiesysteem bevat data. Wij gebruiken in dit document het begrip 'data' als synoniem voor 'gegevens'. Data zijn de vastgelegde uitdrukking van 1 of meerdere feiten (zie ook [GEGEVEN]). Die feiten kunnen afkomstig zijn uit verschillende werkelijkheden:
+Een informatiesysteem bevat data. Wij gebruiken in dit document het begrip 'data' als synoniem voor 'gegevens'. Data zijn de vastgelegde uitdrukking van 1 of meerdere feiten (zie ook [[GEGEVEN]]). Die feiten kunnen afkomstig zijn uit verschillende werkelijkheden:
 
 Het kunnen feiten uit de natuurlijke werkelijkheid zijn die zijn waargenomen door een sensor of een persoon. Deze heeft de relevante aspecten van die waarneming ingevoerd in het informatiesysteem dat deze aspecten vervolgens als data heeft vastgelegd.
 

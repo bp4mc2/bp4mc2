@@ -7,7 +7,7 @@ Daarnaast zijn drie specifieke onderwerpen verder uitgewerkt en hebben een eigen
 
 * [Fudamentals of Linked Data](http://bp4mc2.org/modeling) behandelt in detail de concepten en de fundamenten van Linked Data. Het is een verdieping van hoofdstuk 3, denkwijze. Must-read voor iedereen die alle details van Linked Data wil doorgronden en op zoek is naar argumenten in ontwerpdiscussies, met name als het gaat om de verschillen tussen traditionele relationele of object-georienteerde modellering en het modelleren op basis van Linked Data principes.
 * [Value lists](http://bp4mc2.org/modeling/value-lists) behandelt in detail de rationale bij het ontwerpen van Linked Data oplossingen voor waarde- of referentielijsten. Het is een verdieping van hoofdstuk 4, modelleringswijze.
-* [Profielen](http://bp4mc2.org/model) beschrijft in de detail de profielen die gebruikt kunnen worden bij het modelleren van Linked Data ontwerpen. Dit document betreft de grootste toevoeging t.o.v. de eerste versie, en behandelt veel van de best practices die in afgelopen jaren zijn opgedaan.
+* [Profielen](http://bp4mc2.org/profiles) beschrijft in de detail de profielen die gebruikt kunnen worden bij het modelleren van Linked Data ontwerpen. Dit document betreft de grootste toevoeging t.o.v. de eerste versie, en behandelt veel van de best practices die in afgelopen jaren zijn opgedaan.
 
 ## Aanleiding
 
