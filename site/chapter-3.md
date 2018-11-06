@@ -101,7 +101,7 @@ Communicatie in natuurlijke taal vindt plaats volgens een model dat we de gramma
 
 ![](image-ch3-13.png)
 
-Met een triple wordt in feite een 'korte zin' uitgedrukt (zie ook 'Wat is een zin', Algemene Nederlandse Spraakkunst [ANS-ZIN]). De drie onderdelen van de triple, namelijk 'subject', 'predicate' en 'object' corresponderen met onderwerp, gezegde en (lijdend) voorwerp uit de natuurlijke taal. Een 'object' kan weer een 'subject' zijn in een volgende uitspraak, waardoor een netwerk van samenhangende dingen en uitspraken ontstaat. Grafisch wordt een triple vaak afgebeeld als een gerichte graaf: twee bolletjes (voorstelling van subject en object) die met elkaar verbonden zijn met een pijl die het predicate voorstelt. Als het object zelf niet gebruikt wordt om verder door te verwijzen (omdat het geen URI is, maar een vaste waarde, een literal [[LITERAL]]), dan wordt vaak in plaats van een bolletje een rechthoek gebruikt.
+Met een triple wordt in feite een 'korte zin' uitgedrukt (zie ook 'Wat is een zin', Algemene Nederlandse Spraakkunst [[ANS-ZIN]]). De drie onderdelen van de triple, namelijk 'subject', 'predicate' en 'object' corresponderen met onderwerp, gezegde en (lijdend) voorwerp uit de natuurlijke taal. Een 'object' kan weer een 'subject' zijn in een volgende uitspraak, waardoor een netwerk van samenhangende dingen en uitspraken ontstaat. Grafisch wordt een triple vaak afgebeeld als een gerichte graaf: twee bolletjes (voorstelling van subject en object) die met elkaar verbonden zijn met een pijl die het predicate voorstelt. Als het object zelf niet gebruikt wordt om verder door te verwijzen (omdat het geen URI is, maar een vaste waarde, een literal [[LITERAL]]), dan wordt vaak in plaats van een bolletje een rechthoek gebruikt.
 
 ![](image-ch3-14.png)
 
@@ -185,7 +185,7 @@ De eerste zin kent de minst specifieke aanduiding voor de drie personen die in d
 
 ### De URI (Uniform Resource Identifier)
 
-In een RDF triple worden het onderwerp, gezegde en soms ook het (lijdend) voorwerp geïdentificeerd door middel van URIs. Een URI kan verschillende vormen hebben. Zie hiervoor de URI specificaties [[RFC3986]], of de meer leesbare wikipedia beschrijving [[URI]].
+In een RDF triple worden het onderwerp, gezegde en soms ook het (lijdend) voorwerp geïdentificeerd door middel van URIs. Een URI kan verschillende vormen hebben. Zie hiervoor de URI specificaties [[RFC3986]], of de meer leesbare wikipedia beschrijving [[WIKI-URI]].
 
 Voorbeelden van correcte URI-namen van 'Marco', 'Marco Polo' en 'BSN 1234' zijn:
 

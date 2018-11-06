@@ -228,4 +228,26 @@ var localBiblio = {
     publisher: "Wikipedia",
     href: "http://en.wikipedia.org/wiki/Ajax%20(programming",
   },
+  "ANS-ZIN": {
+    title: "Wat is een zin, Algemene Nederlandse Spraakkunst",
+    href: "http://ans.ruhosting.nl/e-ans/19/01/01/body.html",
+  },
+  "INSPIRE": {
+    title: "De Inspire richtlijn",
+    description: "Schrijft een nationale strategie voor m.b.t. URIs voor geo-informatie met de aanbeveling om deze geo-strategie te verbinden met een generieke nationale strategie.",
+    href: "http://inspire.jrc.ec.europa.eu/",
+  },
+  "ISSUE2": {
+    title: "Issue 2: Herkenbaar internetdomein",
+    href: "http://www.pilod.nl/wiki/Boek/URI-strategie#Issue_2:_Herkenbaar_internetdomein",
+  },
+  "KST-33042-21": {
+    title: "Kamerstuk 10-04-2013 over het COA",
+    href: "https://zoek.officielebekendmakingen.nl/kst-33042-21.html",
+  },
+  "WIKI-URI": {
+    title: "URI - Uniform Resource Identifier",
+    publisher: "Wikipedia",
+    href: "http://en.wikipedia.org/wiki/Uniform_resource_identifier",
+  },
 };
