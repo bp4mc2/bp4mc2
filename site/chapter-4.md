@@ -350,6 +350,7 @@ Bij het definiëren van gebeurtenissen worden de volgende richtlijnen gebruikt:
 * Aanleiding, voorwaarde en eindsituatie worden opgenomen als onderdeel van de toelichting op de definitie, zoals bij "normale" begrippen.
 
 **Actor**
+
 Een actor is degene die betrokken is bij de handeling. In het geval van gebeurtenissen waarbij geen sprake is van een actor (bijvoorbeeld het verlopen van een vergunning) is ook geen sprake van een handeling. Er kunnen meerdere actoren betrokken zijn bij de handeling. De beschrijving van de betreffende actor geeft dan aan hoe deze actor een rol speelt. Bijvoorbeeld:
 
 >* Een hypotheekgever is de schuldenaar die als zekerheid een recht van hypotheek geeft op zijn registergoed
@@ -363,9 +364,11 @@ Uit de definities blijkt dat een hypotheekgever een specialisatie is van een sch
 Een voorbeeld van een taxonomie waar juist veel rollen in worden gebruikt (en dan ook gezien wordt als voorbeeld van een foute taxonomie), is de (mogelijk fictieve) Celestial Emporium of Benevolent Knowledge [[CELEMP]]
 
 **Agent**
+
 Een agent is een speciaal soort actor die wel betrokken is bij een handeling, maar er niet "echt" aan meedoet. Een voorbeeld hiervan is een ambtenaar van de burgelijke stand. Zonder deze ambtenaar kan er van een huwelijk geen sprake zijn. Toch wordt de ambtenaar niet in de echt verbonden: alleen de twee gehuwden zijn actoren in de handeling. De ambtenaar is slechts agent, en zorgt ervoor dat een levensgebeurtenis ook gezien wordt in de institutionele werkelijkheid.
 
 **Object**
+
 Een object betreft een begrip dat betrekking heeft op iets dat niet handelt in de handeling, maar duidelijk we het object is van de handeling. In bovengenoemd voorbeeld was het recht van hypotheek het object van handelen. Overigens kan een persoon wel het object zijn in een handeling, als het bijvoorbeeld "over" hen gaat, maar niet "met" hen.
 
 ### Vocabulaires
