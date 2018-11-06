@@ -190,4 +190,42 @@ var localBiblio = {
     date: "2017-06-14",
     href: "https://docs.geostandaarden.nl/mim/def-st-mim10-20170614/doc.pdf",
   },
+  "JENI": {
+    authors: ["Jeni Tennison"],
+    title: "Jeni’s Musings - Versioning (UK Government) Linked Data",
+    href: "http://www.jenitennison.com/blog/node/141",
+  },
+  "DATOMIC": {
+    title: "Datomic website - Rationale",
+    href: "http://www.datomic.com/rationale.html",
+  },
+  "DATAVAULT": {
+    title: "Data Vault Modeling",
+    publisher: "Wikipedia",
+    href: "http://en.wikipedia.org/wiki/Data_Vault_Modeling",
+  },
+  "REST": {
+    title: "RESTful - Representational State Transfer",
+    publisher: "Wikipedia",
+    href: "http://en.wikipedia.org/wiki/Representational_state_transfer",
+  },
+  "JSON": {
+    title: "JSON - JavaScript Object Notation",
+    publisher: "Wikipedia",
+    href: "http://en.wikipedia.org/wiki/JSON",
+  },
+  "LDAPI": {
+    title: "Linked Data API",
+    href: "http://code.google.com/p/linked-data-api/",
+  },
+  "SOAP": {
+    title: "SOAP - Simple Object Access Protocol",
+    publisher: "Wikipedia",
+    href: "http://en.wikipedia.org/wiki/SOAP",
+  },
+  "AJAX": {
+    title: "AJAX - Asynchronous Javascript and XML",
+    publisher: "Wikipedia",
+    href: "http://en.wikipedia.org/wiki/Ajax%20(programming",
+  },
 };

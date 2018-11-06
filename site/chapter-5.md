@@ -153,7 +153,7 @@ Datamodellen omvatten ook data die betrekking heeft op de data in het datamodel 
 
 2. Gebruik maken van het feit dat triples onderdeel zijn van een graph. Dat wil zeggen dat alle triples die dezelfde "metadata" hebben ook in dezelfde graph worden gezet. Door deze graph een URI te geven (het wordt dan een 'named graph'), kan extra data over de graph weer als 'normale' triples opgeslagen worden. Het nadeel van deze methode is dat hiervoor een quad store noodzakelijk is, en dit zal gaan leiden tot erg veel verschillende named graphs. Niet elke quad store is ingericht op een zeer groot aantal graphs.
 
-Puur functioneel gaat onze voorkeur uit naar de tweede oplossing. Deze oplossing is in de praktijk ook al vaker ingezet (zie bijvoorbeeld: [[JENI](references.md#jeni)]). Het betekent wel dat de Linked Data representatie zal afwijken van de oorspronkelijke relationele beschrijving van het datamodel.
+Puur functioneel gaat onze voorkeur uit naar de tweede oplossing. Deze oplossing is in de praktijk ook al vaker ingezet (zie bijvoorbeeld: [[JENI]]. Het betekent wel dat de Linked Data representatie zal afwijken van de oorspronkelijke relationele beschrijving van het datamodel.
 
 In de Linked Data representatie komt veel meer nadruk te liggen op de gebeurtenissen die aanleiding hebben gehad tot het wijzigen van de data in de administratie. Voor elk van deze gebeurtenissen wordt vastgelegd:
 
@@ -165,7 +165,7 @@ Door deze manier van modelleren blijkt bovendien dat er in termen van Linked Dat
 
 Op deze wijze kan invulling gegeven worden aan het principe: "anybody can say anything about anything". Maar bovendien wordt ook de integriteit van de uitspraken (de data) behouden: bij het vastleggen wordt ook vastgelegd wie de uitspraak deed, wanneer dit werd gedaan en vanuit welke context. Op die wijze is altijd helder welke data op een zeker moment in tijd en vanuit welke context de 'correcte' data is.
 
-Een dergelijk manier van publiceren lijkt sterk op het idee van een datamodel zoals is ontwikkeld voor datawarehouses (datavault technologie, zie [[DATAVAULT](references.md#datavault)]) en voor sommige gedistribueerde database systemen (bijvoorbeeld Datomic, zie [[DATOMIC](references.md#datomic)]).
+Een dergelijk manier van publiceren lijkt sterk op het idee van een datamodel zoals is ontwikkeld voor datawarehouses (datavault technologie, zie [[DATAVAULT]] en voor sommige gedistribueerde database systemen (bijvoorbeeld Datomic, zie [[DATOMIC]]).
 
 ## Publiceren
 
@@ -187,31 +187,33 @@ Op basis van de uitgangspunten en aanbevelingen ligt voor de BAG een domein http
 
 In deze jungle van domeinnamen is het eigenlijk onmogelijk zomaar een domeinnaam te introduceren die het vertrouwen geeft dat deze de bron is van een authentieke registratie. De meest solide manier is het vastleggen van de domeinnaam die de authentieke bron representeert in wetgeving. Een voorbeeld is https://www.officielebekendmakingen.nl, waar alle officiële bekendmakingen van de overheid worden gepubliceerd. Deze domeinnaam is vastgelegd in artikel 1 van de Bekendmakingsregeling.
 
-Voor de BAG is, in afwachting van een wetsaanpassing waarin een domeinnaam voor publicatie van de authentieke data wordt vastgesteld, gekozen voor een tussenoplossing. In de Wet Basisregistraties adressen en gebouwen staat in Hoofdstuk 4, artikel 26: 'De Dienst (i.c. het Kadaster) houdt een geautomatiseerde landelijke voorziening waarin de data uit de in de gemeenten gehouden adressenregistraties en de gebouwenregistraties zijn opgenomen.' Daarom lijkt "http://bag.kadaster.nl/" op dit moment de meest bruikbare domeinnaam waaraan zichtbaar is dat het om de authentieke data uit de landelijke voorziening voor de BAG gaat.
+Gewenst is dat de authentieke domeinnaam daadwerkelijk in de wet wordt opgenomen. In afwachting van de wetsaanpassing waarin een domeinnaam voor publicatie van de authentieke dat wordt vastgesteld, is gekozen voor de volgende oplossing. In de Wet Basisregistraties adressen en gebouwen staat in Hoofdstuk 4, artikel 26: 'De Dienst (i.c. het Kadaster) houdt een geautomatiseerde landelijke voorziening waarin de data uit de in de gemeenten gehouden adressenregistraties en de gebouwenregistraties zijn opgenomen.'. Het Kadaster is onderdeel van de overheid. En de domeinnaam `overheid.nl` is al van de overheid. Daarnaast is de bag een basisregistratie. Hierdoor lijkt de domeinnaam http://bag.basisregistraties.overheid.nl op dit moment de beste oplossing.
+
+Om dit voor elkaar te krijgen, was het wel nodig dat de eigenaar van het domein `overheid.nl` registreert dat http://bag.basisregistraties.overheid.nl mag bestaan, en verwijst naar een website van het Kadaster. Tot die dat was deze URL niet beschikbaar, en werd de data zolang op http://bag.kadaster.nl gehost. Doordat er standaard heradresseringsmogelijkheden aanwezig zijn op het web, is het nog steeds mogelijk om beide domeinnamen te gebruiken: er is daadwerkelijk sprake van persistente URLs!
 
 ### type, concept en referentie toegepast op het begrippenkader
 
 Alle in het begrippenkader gedefinieerde begrippen zijn ook concepten. Conform de URI-strategie krijgt ieder begrip een id en wordt de documentatie over een begrip via een 303-redirect gepresenteerd met een `doc` URI.
 
-* Zo krijgt het begrip ‘nummeraanduiding’ in de BAG de URI http://bag.kadaster.nl/id/begrip/Nummeraanduiding. Dit is de identificatie (type=id) van het begrip (concept) dat wordt aangeduid met de term Nummeraanduiding (referentie).
-* Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie over het begrip dat wordt aangeduid met de term Nummeraanduiding gepresenteerd in een html pagina met als URI http://bag.kadaster.nl/doc/begrip/Nummeraanduiding.
-* De documentatie over een bepaald begrip kan in de loop der tijd wijzigen. Daarom is het ook mogelijk om een jaar, maand en dag toe te voegen aan de referentie om de documentatie op een specifiek tijdstip op te vragen. Dit kan via URI http://bag.kadaster.nl/doc/2014/04/01/begrip/Nummeraanduiding.
+* Zo krijgt het begrip ‘nummeraanduiding’ in de BAG de URI http://bag.basisregistraties.overheid.nl/id/begrip/Nummeraanduiding. Dit is de identificatie (type=id) van het begrip (concept) dat wordt aangeduid met de term Nummeraanduiding (referentie).
+* Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie over het begrip dat wordt aangeduid met de term Nummeraanduiding gepresenteerd in een html pagina met als URI http://bag.basisregistraties.overheid.nl/doc/begrip/Nummeraanduiding.
+* De documentatie over een bepaald begrip kan in de loop der tijd wijzigen. Daarom is het ook mogelijk om een jaar, maand en dag toe te voegen aan de referentie om de documentatie op een specifiek tijdstip op te vragen. Dit kan via URI http://bag.basisregistraties.overheid.nl/doc/2014/04/01/begrip/Nummeraanduiding.
 
 ### type, concept en referentie toegepast op het datamodel
 
 In de URI-strategie wordt aanbevolen data te definiëren met `def` URI-type.
 
-* Zo krijgt het gegevenselement 'nummeraanduiding' in de BAG de URI http://bag.kadaster.nl/def/gegevenselement/Nummeraanduiding#. Dit is de definitie (type=`def`) van het gegevenselement dat verwijst naar de data die opgeslagen is bij klassen aangeduid met de term Nummeraanduiding (referentie).
-* Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie en metadata over het data-element OpenbareRuimte gepresenteerd in een html pagina met als URI http://bag.kadaster.nl/def/gegevenselement/Nummeraanduiding.
-* De documentatie over een bepaald begrip kan in de loop der tijd wijzigen. Daarom is het ook mogelijk om een jaar, maand en dag toe te voegen aan de referentie om de documentatie op een specifiek tijdstip op te vragen. Dit kan via URI http://bag.kadaster.nl/def/2014/04/01/gegevenselement/Nummeraanduiding.
+* Zo krijgt het gegevenselement 'nummeraanduiding' in de BAG de URI http://bag.basisregistraties.overheid.nl/def/bag#Nummeraanduiding. Dit is de definitie (type=`def`) van de klasse aangeduid met de term Nummeraanduiding (referentie).
+* Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie en metadata over het data-element OpenbareRuimte gepresenteerd in een html pagina met als URI http://bag.basisregistraties.overheid.nl/def/bag.
+* De documentatie over een bepaald begrip kan in de loop der tijd wijzigen. Daarom is het ook mogelijk om een jaar, maand en dag toe te voegen aan de referentie om de documentatie op een specifiek tijdstip op te vragen. Dit kan via URI http://bag.basisregistraties.overheid.nl/def/2014/04/01/bag.
 
 ### type, concept en referentie toegepast op de data
 
 In de URI-strategie wordt aanbevolen data te definiëren met het URI-type `id`.
 
-* Zo krijgt de woonplaats "Amersfoort" in de BAG de URI “http://bag.kadaster.nl/id/woonplaats/1664”. Dit is de identificatie (type=id) van de woonplaats die in de BAG de identificatie "1664" heeft.
-* Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie en metadata over de gegevens van Amersfoort gepresenteerd in een html pagina met als URI http://bag.kadaster.nl/doc/woonplaats/1664.
-* De gegevens over een bepaalde woonplaats kunnen in de loop der tijd wijzigen. Daarom ondersteunt de BAG de mogelijkheid om een jaar, maand en dag toe te voegen aan de referentie om de documentatie op een specifiek tijdstip op te vragen. Dit via URI http://bag.kadaster.nl/doc/2014/04/01/woonplaats/1664.
+* Zo krijgt de woonplaats "Amersfoort" in de BAG de URI "http://bag.basisregistraties.overheid.nl/id/woonplaats/1664". Dit is de identificatie (type=id) van de woonplaats die in de BAG de identificatie "1664" heeft.
+* Als deze URI als http-vraag wordt ingetoetst in de browser wordt de documentatie en metadata over de gegevens van Amersfoort gepresenteerd in een html pagina met als URI http://bag.basisregistraties.overheid.nl/doc/woonplaats/1664.
+* De gegevens over een bepaalde woonplaats kunnen in de loop der tijd wijzigen. Daarom ondersteunt de BAG de mogelijkheid om een jaar, maand en dag toe te voegen aan de referentie om de documentatie op een specifiek tijdstip op te vragen. Dit via URI http://bag.basisregistraties.overheid.nl/doc/2014/04/01/woonplaats/1664.
 
 ### Formuleren van de URI
 
