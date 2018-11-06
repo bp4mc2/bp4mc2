@@ -164,9 +164,9 @@ Deze vorm is identiek aan de opzet van een triple in Linked Data:
 Zo is de zin: "Jan kent Piet" gelijk aan de Linked Data representatie in Turtle-syntax [[TURTLE]]:
 
 ```
-@prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
-@prefix vbpers: <http://bp4mc2.org/voorbeeld/id/Persoon/> .
-vpers:Jan vb:kent vbpers:Piet .
+  @prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
+  @prefix vbpers: <http://bp4mc2.org/voorbeeld/id/Persoon/> .
+  vpers:Jan vb:kent vbpers:Piet .
 ```
 
 In een triple wordt subject en predicate altijd afgebeeld op een URI. Een object mag zowel afgebeeld zijn op een URI als op een literal. Een literal is een stukje tekst, een datum, of een getal.
@@ -222,19 +222,19 @@ In het voorbeeld kan dit het volgende gesprek opleveren:
 Of in Linked Data (Turtle syntax):
 
 ```
-http-request:
-http://bp4mc2.org/voorbeeld/id/persoon/1234
+  http-request:
+  http://bp4mc2.org/voorbeeld/id/persoon/1234
 
-http-response:
-@prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
-@prefix vbpers: <http://bp4mc2.org/voorbeeld/id/Persoon/> .
+  http-response:
+  @prefix vb: <http://bp4mc2.org/voorbeeld/def#> .
+  @prefix vbpers: <http://bp4mc2.org/voorbeeld/id/Persoon/> .
 
-vbpers:1234
-  vb:naam "Marco Polo" ;
-  vb:roepnaam "Marco" ;
-  vb:BSN 1234 ;
-  vb:sprak-met vbpers:8743
-.
+  vbpers:1234
+    vb:naam "Marco Polo" ;
+    vb:roepnaam "Marco" ;
+    vb:BSN 1234 ;
+    vb:sprak-met vbpers:8743
+  .
 ```
 
 ### Overige URL vragen
@@ -246,8 +246,8 @@ Zo willen we onderscheid maken tussen de URL-Naam en de URL-Vraag. Elke URL-Vraa
 Om in de vormgeving een URL-Naam te kunnen onderscheiden van een URL-Vraag stellen we voor om in de URL een vraagteken op te nemen, gevolgd door aanvullende informatie met betrekking tot de vraag, dus bijvoorbeeld:
 
 ```
-http:request:
-http://bp4mc2.org/voorbeeld/query/kunt-je-iets-vertellen?over=personen&voornaam=Marco
+  http:request:
+  http://bp4mc2.org/voorbeeld/query/kunt-je-iets-vertellen?over=personen&voornaam=Marco
 ```
 
 Deze URL-Vraag komt overeen met de zin in natuurlijk taal:

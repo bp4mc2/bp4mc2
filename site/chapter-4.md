@@ -620,4 +620,5 @@ Deze visualisatie is gebaseerd op onderstaande Linked Data specificatie:
 ```
 
 ### Voorbeeld
+
 Een voorbeeld van een datamodel gebaseerd op deze opzet is te vinden bij de [profielen](http://bp4mc2.org/profiles). Elk van de profielen kent een grafische representatie die gebaseerd is op een SHACL en RDFS/OWL model. Deze SHACL en RDFS/OWL modellen zijn te vinden op https://github.com/bp4mc2/bp4mc2/tree/master/profiles.
