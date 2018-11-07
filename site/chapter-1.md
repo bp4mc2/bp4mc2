@@ -21,6 +21,8 @@ Als het om data gaat, gaan we nog vaak hetzelfde te werk als dertig jaar geleden
 
 Linked Data is dé technologie om (overheids)data direct via het web te publiceren. In het artikel 'Een nieuwe wereld, een nieuwe informatie architectuur' [[RIJNSANT]] beschrijven Ria van Rijn en Arjen Santema de mogelijkheden die linked data bieden. Momenteel wordt data in het beste geval via webservices, maar vaak ook nog gewoon als databestand tussen organisaties uitgewisseld. Dergelijke oplossingen hebben vaak als kenmerk dat ze als point-to-point-solution zijn gerealiseerd en moeilijk op te schalen zijn naar breder gebruik. Een belangrijke reden hiervoor is dat een impliciete context wordt verondersteld waarbinnen de data bruikbaar is, zonder dat deze context met de data wordt meegeleverd.
 
+> Aanvullen met verwijzing en intro van Data on the Web Best Practices (https://www.w3.org/TR/dwbp/)
+
 Door data via het web te publiceren wordt deze in een keer, voor iedereen beschikbaar, vanuit een herkenbare bron gepubliceerd. Linked data kan inclusief context worden gepubliceerd. Met context wordt de uitleg van de betekenis van data en metadata bedoeld. Metadata gaan bijvoorbeeld over de wijze van inwinning, volledigheid, betrouwbaarheid, tijdigheid, en herkomst. Linked data biedt de mogelijkheid om deze metadata in dezelfde vorm te publiceren als de data zelf.
 
 Tim Berners Lee stelt vier eenvoudige principes voor om te hanteren als je data via het web publiceert [[LINKED-DATA]]:
@@ -33,6 +35,7 @@ Tim Berners Lee stelt vier eenvoudige principes voor om te hanteren als je data 
 Met deze principes worden data gepubliceerd ALS webpagina's in plaats van OP webpagina's. Dit is fundamenteel anders dan het 'jaren negentig-achtige' op het web zetten van een databestand en een welgemeend 'zoek het verder zelf maar uit!'.
 
 ### Api economie
+
 >Deze sectie wordt nog aangevuld
 
 ## De waarde van data en informatie
