@@ -7,6 +7,7 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
 
 style:nodeshape a elmo:Part;
 	elmo:index "2";
@@ -86,8 +87,9 @@ style:datatype-properties a elmo:Part;
 	elmo:index "3";
 	elmo:fragment [
 		elmo:applies-to elmo:PropertyLabel;
-		rdf:value "!form data!Eigenschap"@nl;
-		rdf:value "!form data!Property"@en;
+#		rdf:value "!form data!Eigenschap"@nl;
+#		rdf:value "!form data!Property"@en;
+		elmo:select dc:title;
 	];
 	elmo:fragment [
 		elmo:applies-to elmo:ValueLabel;
@@ -115,6 +117,10 @@ style:datatype-properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to dc:title;
 		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
@@ -159,8 +165,9 @@ style:object-properties a elmo:Part;
 	elmo:index "4";
 	elmo:fragment [
 		elmo:applies-to elmo:PropertyLabel;
-		rdf:value "!form data!Eigenschap"@nl;
-		rdf:value "!form data!Property"@en;
+#		rdf:value "!form data!Eigenschap"@nl;
+#		rdf:value "!form data!Property"@en;
+		elmo:select dc:title;
 	];
 	elmo:fragment [
 		elmo:applies-to elmo:ValueLabel;
@@ -192,6 +199,10 @@ style:object-properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to sh:nodeKind;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to dc:title;
 		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
@@ -449,10 +460,12 @@ stage:datatype-properties-query a elmo:query;
 	elmo:query '''
 		PREFIX sh: <http://www.w3.org/ns/shacl#>
 		PREFIX elmo: <http://bp4mc2.org/elmo/def#>
+		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		CONSTRUCT {
 			?pshape elmo:subject ?nodeshape.
 			?pshape ?p ?o.
 			?pshape sh:path ?property.
+			?pshape dc:title ?ptitlenl.
 			?property rdfs:label ?propertylabel.
 			?datatype rdfs:label ?dlabel.
 		}
@@ -464,6 +477,7 @@ stage:datatype-properties-query a elmo:query;
 						?nodeshape sh:property ?pshape.
 						?pshape ?p ?o
 						FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
+						BIND (concat("!form data#",strafter(str(?pshape),"#"),"!Eigenschap") as ?ptitlenl)
 					}
 					UNION
 					{
@@ -474,6 +488,7 @@ stage:datatype-properties-query a elmo:query;
 							?o rdfs:label ?olabel.
 							FILTER (lang(?olabel)="@LANGUAGE@" || lang(?olabel)="")
 						}
+						BIND (concat("!form data#",strafter(str(?pshape),"#"),"!Eigenschap") as ?ptitlenl)
 					}
 					UNION
 					{
@@ -511,6 +526,7 @@ stage:object-properties-query a elmo:query;
 			?pshape ?p ?o.
 			?o rdfs:label ?olabel.
 			?pshape sh:path ?property.
+			?pshape dc:title ?ptitlenl.
 			?property rdfs:label ?propertylabel
 		}
 		WHERE {
@@ -521,6 +537,7 @@ stage:object-properties-query a elmo:query;
 						?nodeshape sh:property ?pshape.
 						?pshape ?p ?o
 						FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
+						BIND (concat("!form data#",strafter(str(?pshape),"#"),"!Eigenschap") as ?ptitlenl)
 					}
 					UNION
 					{
@@ -531,6 +548,7 @@ stage:object-properties-query a elmo:query;
 							?o rdfs:label ?olabel.
 							FILTER (lang(?olabel)="@LANGUAGE@" || lang(?olabel)="")
 						}
+						BIND (concat("!form data#",strafter(str(?pshape),"#"),"!Eigenschap") as ?ptitlenl)
 					}
 					UNION
 					{
