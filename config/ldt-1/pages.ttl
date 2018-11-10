@@ -13,8 +13,9 @@ style:nodeshape a elmo:Part;
 	elmo:index "2";
 	elmo:fragment [
 		elmo:applies-to elmo:PropertyLabel;
-		rdf:value "!form data!Klasse"@nl;
-		rdf:value "!form data!Class"@en;
+#		rdf:value "!form data!Klasse"@nl;
+#		rdf:value "!form data!Class"@en;
+		elmo:select dc:title;
 	];
 	elmo:fragment [
 		elmo:applies-to elmo:ValueLabel;
@@ -34,6 +35,10 @@ style:nodeshape a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to rdfs:label;
+		elmo:appearance elmo:HiddenAppearance;
+	];
+	elmo:fragment [
+		elmo:applies-to dc:title;
 		elmo:appearance elmo:HiddenAppearance;
 	];
 	elmo:fragment [
@@ -220,12 +225,15 @@ style:object-properties a elmo:Part;
 	];
 	elmo:fragment [
 		elmo:applies-to sh:class;
+		# LocalLink works, because the node and the class have the same local-name. This MUST be enforced in every profile!!!
+		elmo:appearance elmo:LocalLink;
 		rdfs:label "Verwijst naar"@nl;
 		rdfs:label "Refers to"@en;
 		elmo:index "3";
 	];
 	elmo:fragment [
 		elmo:applies-to sh:node;
+		elmo:appearance elmo:LocalLink;
 		rdfs:label "Relatie met"@nl;
 		rdfs:label "Related with"@en;
 		elmo:index "4";
@@ -407,6 +415,7 @@ stage:nodeshape-query a elmo:query;
 		PREFIX elmo: <http://bp4mc2.org/elmo/def#>
 		CONSTRUCT {
 			?nodeshape elmo:subject ?nodeshape.
+			?nodeshape dc:title ?ctitlenl.
 			?nodeshape ?p ?o.
 			?o rdfs:label ?olabel.
 			?nodeshape sh:targetClass ?class.
@@ -425,6 +434,7 @@ stage:nodeshape-query a elmo:query;
 					?nodeshape ?p ?o
 					FILTER (lang(?o)="@LANGUAGE@" || lang(?o)="")
 					BIND (?nodeshape as ?subject)
+					BIND (concat("!form data#",strafter(str(?nodeshape),"#"),"!Klasse") as ?ctitlenl)
 				}
 				UNION
 				{

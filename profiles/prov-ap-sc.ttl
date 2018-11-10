@@ -46,16 +46,16 @@ adms:Asset a rdfs:Class; rdfs:subClassOf dcat:Dataset.
 # The documentation for these relations are part of the profiles that contain these items
 # In this profile, we only state these items for reference
 #---------------------
-provap:Metadata_isPrimaryTopicOf a sh:PropertyShape;
+provap:Entity_isPrimaryTopicOf a sh:PropertyShape;
   sh:name "foaf:isPrimaryTopicOf";
   sh:class prov:Entity
 .
-provap:Metadata_asDataset a sh:PropertyShape;
+provap:Entity_asDataset a sh:PropertyShape;
   sh:name "as dcat:Dataset";
   sh:path rdf:type;
   sh:hasValue dcat:Dataset
 .
-provap:Metadata_asAsset a sh:PropertyShape;
+provap:Entity_asAsset a sh:PropertyShape;
   sh:name "as adms:Asset";
   sh:path rdf:type;
   sh:hasValue adms:Asset
@@ -68,20 +68,20 @@ provap:Dataset_publisher a sh:PropertyShape;
 provap:Dataset a sh:NodeShape;
   sh:name "dcat:Dataset";
   sh:targetClass dcat:Dataset;
-  sh:property provap:Metadata_isPrimaryTopicOf;
+  sh:property provap:Entity_isPrimaryTopicOf;
   sh:property provap:Dataset_publisher;
 .
 provap:Collection a sh:NodeShape;
   sh:name "skos:Collection";
-  sh:property provap:Metadata_isPrimaryTopicOf
+  sh:property provap:Entity_isPrimaryTopicOf
 .
 provap:Concept a sh:NodeShape;
   sh:name "skos:Concept";
-  sh:property provap:Metadata_isPrimaryTopicOf
+  sh:property provap:Entity_isPrimaryTopicOf
 .
 provap:Distribution a sh:NodeShape;
   sh:name "dcat:Distribution";
-  sh:property provap:Metadata_isPrimaryTopicOf
+  sh:property provap:Entity_isPrimaryTopicOf
 .
 provap:Asset a sh:NodeShape;
   sh:name "adms:Asset";
@@ -89,17 +89,17 @@ provap:Asset a sh:NodeShape;
 .
 provap:ConceptScheme a sh:NodeShape;
   sh:name "skos:ConceptScheme";
-  sh:property provap:Metadata_asAsset
+  sh:property provap:Entity_asAsset
 .
 provap:ControlledVocabulary a sh:NodeShape;
   sh:name "adms:Asset (Controlled Vocabulary)";
-  sh:property provap:Metadata_asAsset
+  sh:property provap:Entity_asAsset
 .
 
 #---------------------
 # Metadata (Versioning)
 #---------------------
-provap:Metadata a sh:NodeShape;
+provap:Entity a sh:NodeShape;
   rdfs:label "Metadata"@nl;
   rdfs:label "Metadata"@nl;
   sh:name "prov:Entity";
@@ -107,14 +107,14 @@ provap:Metadata a sh:NodeShape;
   rdfs:comment "Metadata van een versie van een entiteit kan worden beschreven."@nl;
   rdfs:comment "Metadata of a version of an entity can be described."@en;
   skos:example "De juridische geldigheid en/of de adnimistratieve housekeeping (provenance) gegevens van een entiteit"@nl;
-  sh:property provap:Metadata_isIssued;
-  sh:property provap:Metadata_changeNote;
-  sh:property provap:Metadata_status;
-  sh:property provap:Metadata_isValidDuring;
-  sh:property provap:Metadata_isvalidWithin;
+  sh:property provap:Entity_isIssued;
+  sh:property provap:Entity_changeNote;
+  sh:property provap:Entity_status;
+  sh:property provap:Entity_isValidDuring;
+  sh:property provap:Entity_isvalidWithin;
 .
 
-provap:Metadata_isIssued a sh:PropertyShape;
+provap:Entity_isIssued a sh:PropertyShape;
   rdfs:label "datum bekendgemaakt"@nl;
   rdfs:label "date issued"@en;
   sh:name "dcterms:issued";
@@ -129,7 +129,7 @@ provap:Metadata_isIssued a sh:PropertyShape;
   sh:message "A version can be issued only ones."@en
 .
 
-provap:Metadata_changeNote a sh:PropertyShape;
+provap:Entity_changeNote a sh:PropertyShape;
   rdfs:label "wijzingsnotitie"@nl;
   rdfs:label "change note"@en;
   sh:name "skos:changeNote";
@@ -140,7 +140,7 @@ provap:Metadata_changeNote a sh:PropertyShape;
   skos:example "De toelichting is uitgebreid vanwege een onduidelijkheid."@nl
 .
 
-provap:Metadata_status a sh:PropertyShape;
+provap:Entity_status a sh:PropertyShape;
   rdfs:label "status"@nl;
   rdfs:label "status"@en;
   sh:name "adms:status";
@@ -156,7 +156,7 @@ provap:Metadata_status a sh:PropertyShape;
   sh:message "A version always has 1 administrative status based on the ADMS list of values."@en
 .
 
-provap:Metadata_isValidDuring a sh:PropertyShape;
+provap:Entity_isValidDuring a sh:PropertyShape;
   rdfs:label "geldig in tijd"@nl;
   rdfs:label "temporal validity"@en;
   sh:name "dcterms:temporal";
@@ -171,7 +171,7 @@ provap:Metadata_isValidDuring a sh:PropertyShape;
   sh:message "Een versie kan maximaal op 1 moment in de tijd formeel/juridisch geldig zijn."@nl;
   sh:message "A version can be formally / legally valid in up to 1 moment in time."@en
 .
-provap:Metadata_isvalidWithin a sh:PropertyShape;
+provap:Entity_isvalidWithin a sh:PropertyShape;
   rdfs:label "geldig in gebied"@nl;
   rdfs:label "spatial validity"@en;
   sh:name "dcterms:spatial";
