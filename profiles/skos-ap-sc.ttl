@@ -59,11 +59,14 @@ skosap:Concept a sh:NodeShape;
   # Datatype properties
   sh:property skosap:Concept_label;
   sh:property skosap:Concept_prefLabel;
-  sh:property skosap:Concept_synonym;
+  sh:property skosap:Concept_altLabel;
+  sh:property skosap:Concept_hiddenLabel;
   sh:property skosap:Concept_comment;
   sh:property skosap:Concept_definition;
   sh:property skosap:Concept_scopeNote;
   sh:property skosap:Concept_editorialNote;
+  sh:property skosap:Concept_example;
+  sh:property skosap:Concept_notation;
   sh:property skosap:Concept_dcsource;
   # Object properties
   sh:property skosap:Concept_dctsource;
@@ -85,6 +88,7 @@ skosap:Concept a sh:NodeShape;
 .
 # Datatype properties
 skosap:Concept_label a sh:PropertyShape;
+  sh:order 1;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:name "rdfs:label";
@@ -99,6 +103,7 @@ skosap:Concept_label a sh:PropertyShape;
   sh:message "A concept always has a human readable label"@en
 .
 skosap:Concept_prefLabel a sh:PropertyShape;
+  sh:order 2;
   rdfs:label "voorkeursterm"@nl;
   rdfs:label "preferred label"@en;
   sh:name "skos:prefLabel";
@@ -113,7 +118,8 @@ skosap:Concept_prefLabel a sh:PropertyShape;
   sh:message "Een begrip heeft altijd 1 voorkeursterm."@nl;
   sh:message "A concept always has 1 preferred label"@en
 .
-skosap:Concept_synonym a sh:PropertyShape;
+skosap:Concept_altLabel a sh:PropertyShape;
+  sh:order 3;
   rdfs:label "alternatieve aanduiding"@nl;
   rdfs:label "alternative label"@en;
   sh:name "skos:altLabel";
@@ -123,7 +129,19 @@ skosap:Concept_synonym a sh:PropertyShape;
   rdfs:comment "A concept can have an alternative label, a synonym"@en;
   skos:example "KadastraalPerceel"@nl
 .
+skosap:Concept_hiddenLabel a sh:PropertyShape;
+  sh:order 4;
+  rdfs:label "overige zoektermen"@nl;
+  rdfs:label "other search labels"@en;
+  sh:name "skos:hiddenLabel";
+  sh:path skos:hiddenLabel;
+  sh:datatype xsd:string;
+  rdfs:comment "Een begrip kan aanvullende zoektermen hebben. Deze zijn normaal niet zichtbaar, maar leiden wel tot het betreffende begrip als er naar wordt gezocht"@nl;
+  rdfs:comment "A concept can have other search labels. These labels are normally not visible, but when search for, the corresponding concept will be found"@en;
+  skos:example "Panden (bij het begrip Pand), of Belgie (bij het begrip België)";
+.
 skosap:Concept_comment a sh:PropertyShape;
+  sh:order 5;
   rdfs:label "uitleg"@nl;
   rdfs:label "comment"@en;
   sh:name "rdfs:comment";
@@ -138,6 +156,7 @@ skosap:Concept_comment a sh:PropertyShape;
   sh:message "Prefably a concept always has comment in 'clear language'"@en
 .
 skosap:Concept_definition a sh:PropertyShape;
+  sh:order 6;
   rdfs:label "definitie"@nl;
   rdfs:label "definition"@en;
   sh:name "skos:definition";
@@ -152,6 +171,7 @@ skosap:Concept_definition a sh:PropertyShape;
   sh:message "Prefably a concept always has a formal definition"@en
 .
 skosap:Concept_scopeNote a sh:PropertyShape;
+  sh:order 7;
   rdfs:label "toelichting"@nl;
   rdfs:label "scope note"@en;
   sh:name "skos:scopeNote";
@@ -162,6 +182,7 @@ skosap:Concept_scopeNote a sh:PropertyShape;
   skos:example '''Een perceel is een (2D) vlakvormig ruimtelijk object dat "opdelend" van structuur is. Dit betekent dat Nederland altijd naadloos en volledig is bedekt met perceelsvlakken, die elkaar niet mogen overlappen.'''@nl;
 .
 skosap:Concept_editorialNote a sh:PropertyShape;
+  sh:order 8;
   rdfs:label "redactionele opmerking"@nl;
   rdfs:label "editorial note"@en;
   sh:name "skos:editorialNote";
@@ -171,9 +192,32 @@ skosap:Concept_editorialNote a sh:PropertyShape;
   rdfs:comment "A concept can have an editorial comment."@en;
   skos:example "Dit begrip wordt nog gewijzigd bij het invoeringsbesluit."@nl
 .
+skosap:Concept_example a sh:PropertyShape;
+  sh:order 9;
+  rdfs:label "voorbeeld"@nl;
+  rdfs:label "example"@en;
+  sh:name "skos:example";
+  sh:path skos:example;
+  sh:datatype xsd:string;
+  rdfs:comment "Een voorbeeld van het betreffende begrip"@nl;
+  rdfs:comment "An example of the corresponding concept"@en;
+  skos:example "Pand"@nl;
+.
+skosap:Concept_notation a sh:PropertyShape;
+  sh:order 10;
+  rdfs:label "notatie"@nl;
+  rdfs:label "notation"@en;
+  sh:name "skos:notation";
+  sh:path skos:notation;
+  sh:datatype xsd:string;
+  rdfs:comment "Een notatie of code die overeen komt met het begrip"@nl;
+  rdfs:comment "A notation or code that corresponds to the concept"@en;
+  skos:example "AU (bij het begrip 'Goud', de chemische notatie)";
+.
 skosap:Concept_dcsource a sh:PropertyShape;
-  rdfs:label "geschreven bron"@nl;
-  rdfs:label "written source"@en;
+  sh:order 11;
+  rdfs:label "bron"@nl;
+  rdfs:label "source"@en;
   sh:name "dc:source";
   sh:path dc:source;
   sh:datatype xsd:string;
@@ -183,8 +227,9 @@ skosap:Concept_dcsource a sh:PropertyShape;
 .
 # Object properties
 skosap:Concept_dctsource a sh:PropertyShape;
-  rdfs:label "bron op het web"@nl;
-  rdfs:label "source on the web"@en;
+  sh:order 12;
+  rdfs:label "bronverwijzing"@nl;
+  rdfs:label "source reference"@en;
   sh:name "dcterms:source";
   sh:path dcterms:source;
   sh:class rdfs:Resource;
@@ -195,6 +240,7 @@ skosap:Concept_dctsource a sh:PropertyShape;
   skos:example "<jci1.3:c:BWBR0005416&titel=IV&hoofdstuk=XV&paragraaf=3&artikel=222>"@nl
 .
 skosap:Concept_domain a sh:PropertyShape;
+  sh:order 13;
   rdfs:label "domein"@nl;
   rdfs:label "domain"@en;
   sh:name "skos:inScheme";
@@ -211,6 +257,7 @@ skosap:Concept_domain a sh:PropertyShape;
 .
 # References to other concepts
 skosap:Concept_isRelatedTo a sh:PropertyShape;
+  sh:order 14;
   rdfs:label "gerelateerd aan"@nl;
   rdfs:label "related to"@en;
   sh:name "skos:semanticRelation";
@@ -221,6 +268,7 @@ skosap:Concept_isRelatedTo a sh:PropertyShape;
   skos:example "Een perceel is gerelateerd aan KadastraleGrens."@nl
 .
 skosap:Concept_specialisationOf a sh:PropertyShape;
+  sh:order 15;
   rdfs:label "specialisatie van"@nl;
   rdfs:label "specialization of"@en;
   sh:name "skosthes:broaderGeneric";
@@ -231,6 +279,7 @@ skosap:Concept_specialisationOf a sh:PropertyShape;
   skos:example "Een Perceel is een OnroerendGoed."@nl
 .
 skosap:Concept_generalisationOf a sh:PropertyShape;
+  sh:order 16;
   rdfs:label "generalisatie van"@nl;
   rdfs:label "generalization of"@en;
   sh:name "skosthes:narrowerGeneric";
@@ -241,6 +290,7 @@ skosap:Concept_generalisationOf a sh:PropertyShape;
   skos:example "Een KadastraalObject is een OnroerendGoed of een Registergoed."@nl
 .
 skosap:Concept_partOf a sh:PropertyShape;
+  sh:order 17;
   rdfs:label "onderdeel van"@nl;
   rdfs:label "part of"@en;
   sh:name "skosthes:broaderPartitive";
@@ -251,6 +301,7 @@ skosap:Concept_partOf a sh:PropertyShape;
   skos:example "Een motor is onderdeel van een schip."@nl
 .
 skosap:Concept_consistsOf a sh:PropertyShape;
+  sh:order 18;
   rdfs:label "bestaat uit"@nl;
   rdfs:label "consists of"@en;
   sh:name "skosthes:narrowerPartitive";
@@ -262,6 +313,7 @@ skosap:Concept_consistsOf a sh:PropertyShape;
 .
 # References to other concepts in other concept schemes
 skosap:Concept_seeAlso a sh:PropertyShape;
+  sh:order 19;
   rdfs:label "gerelateerd aan"@nl;
   rdfs:label "related to"@en;
   sh:name "skos:relatedMatch";
@@ -272,6 +324,7 @@ skosap:Concept_seeAlso a sh:PropertyShape;
   skos:example "Een Perceel in de BRK is gerelateerd aan een adres (Nummeraanduiding) in de BAG."@nl
 .
 skosap:Concept_closelyMatches a sh:PropertyShape;
+  sh:order 20;
   rdfs:label "vergelijkbaar met"@nl;
   rdfs:label "closely matches with"@en;
   sh:name "skos:closeMatch";
@@ -282,6 +335,7 @@ skosap:Concept_closelyMatches a sh:PropertyShape;
   skos:example "Een OnroerendGoed in de BRK is ongeveer hetzelfde als een WOZobject in de WOZ."@nl
 .
 skosap:Concept_exactlyMatches a sh:PropertyShape;
+  sh:order 21;
   rdfs:label "exact gelijk aan"@nl;
   rdfs:label "exactly matches with"@en;
   sh:name "skos:exactMatch";
@@ -292,6 +346,7 @@ skosap:Concept_exactlyMatches a sh:PropertyShape;
   skos:example "Een Perceel in het BAL betekent hetzelfde als een Perceel in de BRK."@nl
 .
 skosap:Concept_broadlyMatches a sh:PropertyShape;
+  sh:order 22;
   rdfs:label "lijkt op breder"@nl;
   rdfs:label "broadly matches with"@en;
   sh:name "skos:broadMatch";
@@ -302,6 +357,7 @@ skosap:Concept_broadlyMatches a sh:PropertyShape;
   skos:example "Een Appartementsrecht in de BRK is een specialisatie van een Verblijfsobject in de BAG."@nl;
 .
 skosap:Concept_narrowlyMatches a sh:PropertyShape;
+  sh:order 23;
   rdfs:label "lijkt op smaller"@nl;
   rdfs:label "narrowly matches with"@en;
   sh:name "skos:narrowMatch";
@@ -314,15 +370,15 @@ skosap:Concept_narrowlyMatches a sh:PropertyShape;
 
 #provenance
 skosap:Concept_provenance a sh:PropertyShape;
+  sh:order 24;
   rdfs:label "herkomst"@nl;
   rdfs:label "provenance"@en;
-  sh:name "foaf:isPrimaryTopicOf (concept)";
+  sh:name "foaf:isPrimaryTopicOf";
   sh:path foaf:isPrimaryTopicOf;
   sh:class prov:Entity;
   rdfs:comment "Van een begrip kan de herkomst worden beschreven."@nl;
   rdfs:comment "Provenance of a concept can be described."@en;
   skos:example "Op basis van de nieuwe wet op de BAG is de definitie van het begrip 'verblijfsobject' aangepast.";
-  sh:minCount 1;
   sh:severity sh:Warning;
   sh:message "Van een begrip wordt bij voorkeur herkomst informatie bijgehouden."@nl;
   sh:message "Prefably provenance information is kept on a concept."@en
@@ -364,6 +420,7 @@ skosap:Collection a sh:NodeShape;
   sh:property skosap:Collection_provenance
 .
 skosap:Collection_label a sh:PropertyShape;
+  sh:order 1;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:path rdfs:label;
@@ -378,6 +435,7 @@ skosap:Collection_label a sh:PropertyShape;
   sh:message "A collection always has a label in native language."@en
 .
 skosap:Collection_hasMember a sh:PropertyShape;
+  sh:order 2;
   rdfs:label "heeft lid"@nl;
   rdfs:label "has member"@en;
   sh:name "skos:member";
@@ -388,6 +446,7 @@ skosap:Collection_hasMember a sh:PropertyShape;
   skos:example "de collectie 'Zakelijke rechten' bevat het begrip 'Erfpacht'"
 .
 skosap:Collection_provenance a sh:PropertyShape;
+  sh:order 3;
   rdfs:label "herkomst"@nl;
   rdfs:label "provenance"@en;
   sh:name "foaf:isPrimaryTopicOf";
@@ -396,7 +455,6 @@ skosap:Collection_provenance a sh:PropertyShape;
   rdfs:comment "Van een collectie kan de herkomst worden beschreven."@nl;
   rdfs:comment "Provenance of a collection can be described."@en;
   skos:example "Op basis van de nieuwe wet op de BAG is een aantal begrippen toegevoegd aan de collectie 'aard gebruik'";
-  sh:minCount 1;
   sh:severity sh:Warning;
   sh:message "Van een collectie wordt bij voorkeur herkomst informatie bijgehouden."@nl;
   sh:message "Prefably provenance information is kept on a collection."@en
@@ -417,6 +475,7 @@ skosap:ConceptScheme a sh:NodeShape;
   sh:property skosap:ConceptScheme_hasTopConcept;
 .
 skosap:ConceptScheme_label a sh:PropertyShape;
+  sh:order 1;
   rdfs:label "label"@nl;
   rdfs:label "label"@en;
   sh:path rdfs:label;
@@ -431,6 +490,7 @@ skosap:ConceptScheme_label a sh:PropertyShape;
   sh:message "A concept scheme always has a label in the native language."@en
 .
 skosap:ConceptScheme_hasTopConcept a sh:PropertyShape;
+  sh:order 2;
   rdfs:label "top concept"@nl;
   rdfs:label "top concept"@en;
   sh:path skos:hasTopConcept;
@@ -475,6 +535,7 @@ skosap:AssetConceptScheme rdf:type sh:NodeShape;
   sh:property skosap:AssetConceptScheme_typeConceptScheme;
 .
 skosap:AssetConceptScheme_typeConceptScheme a sh:PropertyShape;
+  sh:order 1;
   rdfs:label "type asset = Begrippenkader"@nl;
   rdfs:label "type asset = Concept scheme"@en;
   sh:name "dcterms:type";
@@ -484,5 +545,4 @@ skosap:AssetConceptScheme_typeConceptScheme a sh:PropertyShape;
   sh:hasValue skosap:AssetConceptScheme;
   rdfs:comment "Een begrippenkader wordt expliciet getypeerd als begrippenkader."@nl;
   rdfs:comment "A concept scheme is explicitly typed as a concept scheme."@en;
-  skos:example ""@nl;
 .
