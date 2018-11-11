@@ -307,8 +307,8 @@ provap:ProvenanceGraph_changeNote a sh:PropertyShape;
   skos:example "Alle definities zijn aangepast overeenkomstig de nieuwe wet op de BAG."@nl
 .
 provap:ProvenanceGraph_attributedTo a sh:PropertyShape;
-  rdfs:label "doorgevoerd door"@nl;
-  rdfs:label "attributed to"@en;
+  rdfs:label "is doorgevoerd door"@nl;
+  rdfs:label "was attributed to"@en;
   sh:name "prov:wasAttributedTo";
   sh:path prov:wasAttributedTo;
   sh:class prov:Agent;
@@ -316,7 +316,7 @@ provap:ProvenanceGraph_attributedTo a sh:PropertyShape;
   rdfs:comment "The person or organization that made or let make the change can be recorded."@en;
   skos:example "Het Kadaster"@nl
 .
-provap:ProvenanceAgent a sh:NodeShape;
+provap:Agent a sh:NodeShape;
   rdfs:label "Agent (provenance)"@nl;
   rdfs:label "Agent (provenance)"@en;
   sh:name "prov:Agent";
@@ -324,10 +324,10 @@ provap:ProvenanceAgent a sh:NodeShape;
   rdfs:comment " De persoon of organisatie die verantwoordelijk is voor een activiteit, de creatie van een entity of een activiteit van een ander kan worden vastgelegd."@nl;
   rdfs:comment "The person or organization that is responsible for an activity, the creation of a entity or an activity of another can be recorded."@en;
   skos:example "Het Ministerie van BZK"@nl;
-  sh:property provap:ProvenanceAgent_OnBehalfOf;
-  sh:property provap:ProvenanceAgent_knownAgent
+  sh:property provap:Agent_OnBehalfOf;
+  sh:property provap:Agent_knownAgent
 .
-provap:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
+provap:Agent_OnBehalfOf a sh:PropertyShape;
   rdfs:label "uitgevoerd namens"@nl;
   rdfs:label "acted on behalf of"@en;
   sh:name "prov:actedOnBehalfOf";
@@ -337,7 +337,7 @@ provap:ProvenanceAgent_OnBehalfOf a sh:PropertyShape;
   rdfs:comment "A person or organization can act on behalf of another person or organization."@en;
   skos:example "overheid:Rijkswaterstaat"@nl
 .
-provap:ProvenanceAgent_knownAgent a sh:PropertyShape;
+provap:Agent_knownAgent a sh:PropertyShape;
   rdfs:label "geidentificeerd als"@nl;
   rdfs:label "identified as"@en;
   sh:path rdf:type;

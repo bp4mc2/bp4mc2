@@ -538,7 +538,11 @@ stage:object-properties-query a elmo:query;
 			?o rdfs:label ?olabel.
 			?pshape sh:path ?property.
 			?pshape dc:title ?ptitlenl.
-			?property rdfs:label ?propertylabel
+			?pshape sh:class ?class.
+			?pshape sh:node ?node.
+			?property rdfs:label ?propertylabel.
+			?class rdfs:label ?classlabel.
+			?node rdfs:label ?nodelabel.
 		}
 		WHERE {
 			BIND (iri(concat("http://localhost:8080/bp4mc2/container/",strbefore(strafter("@DOCSUBJECT@","query/"),".md"))) as ?graph)
@@ -554,12 +558,33 @@ stage:object-properties-query a elmo:query;
 					{
 						?nodeshape sh:property ?pshape.
 						?pshape ?p ?o.
-						FILTER(isIRI(?o) && ?p!=sh:path)
+						FILTER(isIRI(?o) && ?p!=sh:path && ?p!=sh:class && ?p!=sh:node)
 						OPTIONAL {
 							?o rdfs:label ?olabel.
 							FILTER (lang(?olabel)="@LANGUAGE@" || lang(?olabel)="")
 						}
 						BIND (concat("!form data#",strafter(str(?pshape),"#"),"!Eigenschap") as ?ptitlenl)
+					}
+				  UNION
+					{
+						?nodeshape sh:property ?pshape.
+						?pshape sh:class ?class.
+						OPTIONAL {
+							?class rdfs:label ?classlabel.
+							FILTER (lang(?classlabel)="@LANGUAGE@" || lang(?classlabel)="")
+						}
+						FILTER NOT EXISTS {
+							?pshape sh:node ?hasnode.
+						}
+					}
+					UNION
+					{
+						?nodeshape sh:property ?pshape.
+						?pshape sh:node ?node.
+						OPTIONAL {
+							?node rdfs:label ?nodelabel.
+							FILTER (lang(?nodelabel)="@LANGUAGE@" || lang(?nodelabel)="")
+						}
 					}
 					UNION
 					{
