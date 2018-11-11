@@ -42,11 +42,6 @@ dqv:NodeShape a sh:NodeShape;
   ]
 .
 
-#imported from rdfs
-dqv:Datatype a sh:NodeShape;
-  sh:targetClass rdfs:Datatype;
-  sh:name "rdfs:Datatype";
-.
 dqv:Literal a sh:NodeShape;
   sh:targetClass rdfs:Literal;
   sh:name "rdfs:Literal";
@@ -59,7 +54,7 @@ dqv:Dimension a owl:Class; rdfs:subClassOf skos:Concept.
 dqv:value sh:name "dqv:value".
 
 #---------------------
-# Datakwaliteitseisen
+# QualityDimension
 #---------------------
 dqvap:QualityDimension a sh:NodeShape;
   sh:targetClass dqv:Dimension;
@@ -69,6 +64,9 @@ dqvap:QualityDimension a sh:NodeShape;
   sh:property []; #Hack to show QualityDimension
 .
 
+#---------------------
+# QualityIndicator
+#---------------------
 dqvap:QualityIndicator a sh:NodeShape;
   sh:name "Indicator (dqv:Dimension)";
   rdfs:label "Quality indicator"@en;
@@ -93,6 +91,9 @@ dqvap:QualityIndicator_broader a sh:PropertyShape;
   sh:maxCount 1;
 .
 
+#---------------------
+# Metric
+#---------------------
 dqvap:Metric a sh:NodeShape;
   sh:targetClass dqv:Metric;
   rdfs:label "Meetfunctie"@nl;
@@ -131,6 +132,9 @@ dqvap:Metric_expectedDataType a sh:PropertyShape;
   rdfs:comment "The expected datatype of the metric"@en;
 .
 
+#---------------------
+# QualityMeasurement
+#---------------------
 dqvap:QualityMeasurement a sh:NodeShape;
   sh:targetClass dqv:QualityMeasurement;
   sh:name "dqv:QualityMeasurement";
@@ -163,6 +167,9 @@ dqvap:QualityMeasurement_value a sh:PropertyShape;
   sh:maxCount 1;
 .
 
+#---------------------
+# QualityPolicy
+#---------------------
 dqvap:QualityPolicy a sh:NodeShape;
   sh:name "dqv:QualityPolicy";
   rdfs:label "Quality policy"@en;
@@ -240,6 +247,9 @@ dqvap:QualityPolicySpec a sh:NodeShape;
   ]
 .
 
+#---------------------
+# QualityPolicyMeasurement
+#---------------------
 dqvap:QualityPolicyMeasurement a sh:NodeShape;
   sh:name "measurement";
   rdfs:label "Expected measurement"@en;
@@ -255,6 +265,9 @@ dqvap:QualityPolicyMeasurement a sh:NodeShape;
   ]
 .
 
+#---------------------
+# QualityPolicyValue
+#---------------------
 dqvap:QualityPolicyValue a sh:NodeShape;
   sh:name "value";
   sh:property [
@@ -274,4 +287,14 @@ dqvap:QualityPolicyValue a sh:NodeShape;
     rdfs:label "waarde"@nl;
     rdfs:label "value"@en;
   ]
+.
+
+#---------------------
+# Datatype
+#---------------------
+dqvap:Datatype a sh:NodeShape;
+  rdfs:label "Datatype"@nl;
+  rdfs:label "Datatype"@en;
+  sh:targetClass rdfs:Datatype;
+  sh:name "rdfs:Datatype";
 .
