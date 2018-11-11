@@ -17,6 +17,14 @@ frbr:Expression a rdfs:Class;
   rdfs:subClassOf frbr:Endeavour
 .
 
+#implictly defined
+frbr:Endeavour a rdfs:Class;
+  rdfs:subClassOf rdfs:Resource
+.
+foaf:Document a rdfs:Class;
+  rdfs:subClassOf rdfs:Resource
+.
+
 # ========================================
 # Shape outside this model, but used as reference
 # ========================================
@@ -129,11 +137,24 @@ frbrap:Work a sh:NodeShape;
 # ========================================
 
 frbrap:Expression a sh:NodeShape;
-  rdfs:label "expressie, versie van een werk"@nl;
-  rdfs:label "expression, version of a work"@en;
+  rdfs:label "Expressie, versie van een werk"@nl;
+  rdfs:label "Expression, version of a work"@en;
   sh:name "frbr:Expression";
   sh:targetClass frbr:Expression;
   rdfs:comment "Een specifieke versie van een werk."@nl;
   rdfs:comment "A specific version of a work."@en;
   skos:example "Artikel 1 van het Burgerlijk Wetboek van 1838"@nl
+.
+
+# ========================================
+# Resource
+# ========================================
+
+frbrap:Resource a sh:NodeShape;
+  rdfs:label "Resource"@nl;
+  rdfs:label "Resource"@en;
+  sh:name "rdfs:Resource";
+  sh:targetClass rdfs:Resource;
+  rdfs:comment "Een ding, geidentificeerd met een URI"@nl;
+  rdfs:comment "A thing, identified by a URI"@en;
 .
