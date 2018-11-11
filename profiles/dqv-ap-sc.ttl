@@ -27,13 +27,13 @@
 #---------------------
 
 #imported from skos-ap-sc
-dqv:Concept a sh:NodeShape;
+dqvap:Concept a sh:NodeShape;
   sh:targetClass skos:Concept;
   sh:name "skos:Concept";
 .
 
 #imported from dm-ap-sc
-dqv:NodeShape a sh:NodeShape;
+dqvap:NodeShape a sh:NodeShape;
   sh:targetClass sh:NodeShape;
   sh:name "sh:NodeShape";
   sh:property [
@@ -42,7 +42,7 @@ dqv:NodeShape a sh:NodeShape;
   ]
 .
 
-dqv:Literal a sh:NodeShape;
+dqvap:Literal a sh:NodeShape;
   sh:targetClass rdfs:Literal;
   sh:name "rdfs:Literal";
 .
@@ -54,14 +54,14 @@ dqv:Dimension a owl:Class; rdfs:subClassOf skos:Concept.
 dqv:value sh:name "dqv:value".
 
 #---------------------
-# QualityDimension
+# Dimension
 #---------------------
-dqvap:QualityDimension a sh:NodeShape;
+dqvap:Dimension a sh:NodeShape;
   sh:targetClass dqv:Dimension;
   rdfs:label "Kwaliteitsdimensie"@nl;
   rdfs:label "Quality dimension"@en;
   sh:name "dqv:Dimension";
-  sh:property []; #Hack to show QualityDimension
+  sh:property []; #Hack to show Dimension
 .
 
 #---------------------
@@ -84,7 +84,7 @@ dqvap:QualityIndicator_broader a sh:PropertyShape;
   sh:path skos:broader;
   rdfs:label "Specialisatie van"@nl;
   rdfs:label "Specialization of"@en;
-  sh:node dqvap:QualityDimension;
+  sh:node dqvap:Dimension;
   rdfs:comment "Een kwaliteitsindicator valt binnen een kwaliteitsdimensie"@nl;
   rdfs:comment "A quality indicator belongs to a particular quality dimension"@en;
   sh:minCount 1;

@@ -17,6 +17,11 @@ page:dm a cnt:ContentAsText;
     [xhtml:img "dm-ap-sc.png"]
     page:dataModel
     page:shapesGraph
+    page:ontology
+    page:nodeShape
+    page:class
+    page:propertyShape
+    page:property
     page:dmUriStrategy
   )
 .
@@ -64,15 +69,7 @@ page:dataModel a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Informatiemodel"@nl, "Data model"@en]
     [dct:subject dmap:DataModel; xhtml:stylesheet style:nodeshape]
-    page:dataModel-properties
     page:dataModel-relations
-  )
-.
-
-page:dataModel-properties a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject dmap:DataModel; xhtml:stylesheet style:datatype-properties]
   )
 .
 
@@ -83,17 +80,124 @@ page:dataModel-relations a cnt:ContentAsText;
   )
 .
 
-
 #---------------------
 # ShapesGraph
 #---------------------
 page:shapesGraph a cnt:ContentAsText;
   dct:hasPart (
-    [xhtml:heading "model beschrijving"@nl, "shapes graph"@en]
+    [xhtml:heading "Model beschrijving"@nl, "Shapes graph"@en]
     [dct:subject dmap:ShapesGraph; xhtml:stylesheet style:nodeshape]
   )
 .
 
+#---------------------
+# Ontology
+#---------------------
+page:ontology a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Vocabulaire"@nl, "Vocabulary"@en]
+    [dct:subject dmap:Ontology; xhtml:stylesheet style:nodeshape]
+    page:ontology-relations
+  )
+.
+
+page:ontology-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dmap:Ontology; xhtml:stylesheet style:object-properties]
+  )
+.
+
+#---------------------
+# NodeShape
+#---------------------
+page:nodeShape a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Klassebeschrijving"@nl, "node shape"@en]
+    [dct:subject dmap:NodeShape; xhtml:stylesheet style:nodeshape]
+    page:nodeShape-properties
+    page:nodeShape-relations
+  )
+.
+page:nodeShape-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dmap:NodeShape; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:nodeShape-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dmap:NodeShape; xhtml:stylesheet style:object-properties]
+  )
+.
+
+#---------------------
+# PropertyShape
+#---------------------
+page:propertyShape a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschapbeschrijving"@nl, "property shape"@en]
+    [dct:subject dmap:PropertyShape; xhtml:stylesheet style:nodeshape]
+    page:propertyShape-properties
+    page:propertyShape-relations
+  )
+.
+
+page:propertyShape-properties a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
+    [dct:subject dmap:PropertyShape; xhtml:stylesheet style:datatype-properties]
+  )
+.
+
+page:propertyShape-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dmap:PropertyShape; xhtml:stylesheet style:object-properties]
+  )
+.
+
+#---------------------
+# Class
+#---------------------
+page:class a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Klasse"@nl, "class"@en]
+    [dct:subject dmap:Class; xhtml:stylesheet style:nodeshape]
+    page:class-relations
+  )
+.
+
+page:class-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dmap:Class; xhtml:stylesheet style:object-properties]
+  )
+.
+
+#---------------------
+# Property
+#---------------------
+page:property a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Eigenschap"@nl, "class"@en]
+    [dct:subject dmap:Property; xhtml:stylesheet style:nodeshape]
+    page:property-relations
+  )
+.
+
+page:property-relations a cnt:ContentAsText;
+  dct:hasPart (
+    [xhtml:heading "Relaties"@nl, "Relations"@en]
+    [dct:subject dmap:Property; xhtml:stylesheet style:object-properties]
+  )
+.
+
+#---------------------
+# URI Strategy
+#---------------------
 page:dmUriStrategy a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Uri strategie"@nl, "Uri strategy"@en]
