@@ -16,7 +16,6 @@ page:dcat a cnt:ContentAsText;
     page:dcat-body
     [xhtml:img "dcat-ap-sc.png"]
     page:dataset
-    page:datasetVersion
     page:datasetProduct
     page:catalog
     page:distribution
@@ -46,10 +45,7 @@ Een stelselcatalogus kan worden opgezet als Metadata Broker. Een Metadata Broker
 Een dataset is eigenlijk alles wat je een dataset noemt. Dat geeft de ruimte om samenhangende sets met informatie op verschillende niveaus te beschrijven als dataset. Een dataset wordt daarom door de W3C niet scherp gedefinieerd. Dit is met opzet niet gedaan om mogelijk te maken dat het concept dataset  breed bruikbaar is. We staan voor een aanpak waarin de metadata elke dataset aan de bron worden beschreven en metadata brokers deze informatie aan de bron koppelen. Daarbij wordt iedere dataset in 1 catalogus beschreven. Dat is dan de authentieke bron van die metadata.
 
 * Een dataset (algemeen) is de algemene (versieloze) dataset die 1 keer als aan de catalogus kan worden gekoppeld. Dit gebeurt door een link naar de publicatie van de beheerder van de originele dataset in de dcat repository van deze beheerder. De beschrijving gaat over alle versies die ooit zijn geweest of ooit zullen zijn.
-* Een dataset (versie) is een versie van een dataset die concrete informatie bevat.
-** Dataset versies worden door de beheerder van de originele dataset gepubliceerd en gedocumenteerd in de dcat repository van deze beheerder. Doordat er vanuit de stelselcatalogus al een link is naar de Abstracte dataset en doordat een Concrete dataset wordt gekoppeld aan de Abstracte dataset, is deze informatie direct beschikbaar in de stelselcatalogus.
-** Bij een registratie waarin dagelijks vele mutaties worden verwerkt is geen sprake van een traditionele dataset waarvan periodiek, bijvoorbeeld maandelijks een nieuwe versie wordt verspreid. Dat zou na iedere mutatie een nieuwe versie opleveren. Voor beschrijvingen van een authentieke registratie wordt daarom een nieuwe versie van het informatiemodel beschouwd als een nieuwe versie van de dataset.
-* Een ‘dataset product’ is een beschrijving van een subset van een dataset die bijvoorbeeld als informatieproduct (bijvoorbeeld een API of een SOAP service) beschikbaar is. Zo’n subset met concrete data is altijd een subset van een concrete dataset versie.
+* Een ‘dataset product’ is een beschrijving van een subset van een dataset die bijvoorbeeld als informatieproduct (bijvoorbeeld een API of een SOAP service) beschikbaar is. Zo’n subset met concrete data heeft meestal een versie.
 * Een distributie beschrijft een fysieke verspreidingsvorm van een dataset. Dit is altijd een informatieproduct, De distributie bevat bijvoorbeeld de verwijzing naar een download of een API.
 '''@nl,
 '''
@@ -68,10 +64,7 @@ A system catalog can be set up as Metadata Broker. A Metadata Broker collects me
 A dataset is actually everything you call a dataset. A dataset is not defined sharply by the W3C. This is intentionally not done to enable the concept dataset to be widely usable. This enables describing coherent sets of information at different levels as a dataset. We stand for an approach in which the metadata describe each dataset at the source and metadata brokers link to the source. Each dataset is described in 1 catalog. That is the authentic source of that metadata.
 
 * A dataset (general) is the general (versionless) dataset that can be linked once to the catalog. This is done through a link to the publication of the administrator of the original dataset in the dcat repository. The description is about all versions that have ever been or will ever be.
-* A dataset (version) is a version of a dataset that contains concrete information.
-** Dataset versions are published and documented in the dcat repository by the administrator of the original dataset. Because there is already a link from the system catalog to the Abstract dataset and because a Concrete dataset is linked to the Abstract dataset, this information is immediately available in the system catalog.
-** A registration whith many changes every day differs from a traditional dataset of which periodically, for example a new version is distributed monthly. That would yield a new version after each mutation. For descriptions of an authentic registration, a new version of the data model is therefore considered as a new version of the dataset.
-* A 'dataset product' is a description of a subset of a dataset that is available as an data product (for example an API or a SOAP service). Such a subset with concrete data is always a subset of a concrete dataset version.
+* A 'dataset product' is a description of a subset of a dataset that is available as an data product (for example an API or a SOAP service). Such a subset with concrete data is mostly versioned.
 * A distribution describes a physical distribution form of a dataset. This is always an data product. For example, the distribution contains the reference to a download or an API.
 '''@en;
 .
@@ -99,32 +92,6 @@ page:dataset-relations a cnt:ContentAsText;
   dct:hasPart (
     [xhtml:heading "Relaties"@nl, "Relations"@en]
     [dct:subject dcatap:Dataset; xhtml:stylesheet style:object-properties]
-  )
-.
-
-# ========================================
-# DatasetVersion
-# ========================================
-page:datasetVersion a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Dataset (versie)"@nl, "Dataset (version)"@en]
-    [dct:subject dcatap:DatasetVersion; xhtml:stylesheet style:nodeshape]
-    page:datasetVersion-properties
-    page:datasetVersion-relations
-  )
-.
-
-page:datasetVersion-properties a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Eigenschappen"@nl, "Properties"@en]
-    [dct:subject dcatap:DatasetVersion; xhtml:stylesheet style:datatype-properties]
-  )
-.
-
-page:datasetVersion-relations a cnt:ContentAsText;
-  dct:hasPart (
-    [xhtml:heading "Relaties"@nl, "Relations"@en]
-    [dct:subject dcatap:DatasetVersion; xhtml:stylesheet style:object-properties]
   )
 .
 
@@ -276,7 +243,6 @@ Catalogi, datasets (algemeen), datasets (versie), datasets (product) en distirbu
 
 * `http://{domain}/id/catalog/{UpperCamelCase(rdfs:label)}` voor catalogi
 * `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` voor datasets (algemeen)
-* `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` voor datasets (versie)
 * `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` voor datasets (product)
 * `http://{domain}/id/distribution/{UpperCamelCase(rdfs:label)}` voor distributies
 '''@nl,
@@ -285,7 +251,6 @@ Catalogs, datasets (general), datasets (version), datasets (product) and distirb
 
 * `http://{domain}/id/catalog/{UpperCamelCase(rdfs:label)}` for catalogs
 * `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` for datasets (general)
-* `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` for datasets (version)
 * `http://{domain}/id/dataset/{UpperCamelCase(rdfs:label)}` for datasets (product)
 * `http://{domain}/id/distribution/{UpperCamelCase(rdfs:label)}` for distributions
 '''@en;
