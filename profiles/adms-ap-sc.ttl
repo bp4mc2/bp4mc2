@@ -80,6 +80,8 @@ admsap:Asset rdf:type sh:NodeShape;
   sh:property admsap:Asset_partOf;
   sh:property admsap:Asset_landingPage;
   sh:property admsap:Asset_distribution;
+  sh:property admsap:Asset_version;
+  sh:property admsap:Asset_versionNotes;
   sh:property admsap:Asset_provenance
 .
 admsap:Asset_label rdf:type sh:PropertyShape;
@@ -134,6 +136,26 @@ admsap:Asset_distribution rdf:type sh:PropertyShape;
   rdfs:comment "De wijze waarop een asset wordt gepubliceerd kan worden aangegeven."@nl;
   rdfs:comment "The way in which an asset is published can be indicated."@en;
   skos:example "De lijst met Kadastrale gemeenten kan worden gepubliceerd in genericode."@nl
+.
+admsap:Asset_version a sh:PropertyShape;
+  rdfs:label "versie (asset)"@nl;
+  rdfs:label "version (asset)"@en;
+  sh:name "adms:version (asset)";
+  sh:path adms:version;
+  sh:datatype xsd:string;
+  skos:example "2.1.0";
+  rdfs:comment "Een asset beschrijving kan een versie aanduiding hebben."@nl;
+  rdfs:comment "A asset description can have a version indication."@en;
+.
+admsap:Asset_versionNotes rdf:type sh:PropertyShape;
+  rdfs:label "versie notities (asset)"@nl;
+  rdfs:label "version notes (asset)"@en;
+  sh:name "adms:versionNotes (asset)";
+  sh:datatype xsd:string;
+  sh:path adms:versionNotes;
+  rdfs:comment "Een asset beschrijving kan release notes bevatten."@nl;
+  rdfs:comment "A asset description can contain release notes."@en;
+  skos:example "Het informatiemodel voor de BRK levering 2.2 is aangepast aan IMKAD 2.1.0"@nl;
 .
 admsap:Asset_provenance a sh:PropertyShape;
   rdfs:label "herkomst"@nl;
