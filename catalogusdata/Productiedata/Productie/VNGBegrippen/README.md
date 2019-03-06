@@ -12,3 +12,5 @@ In de laatste vier bestanden staat bovenin de comment de URI van de named graph 
 
 - Bij de mastergraph betreft het een *AANVULLING*, dus een POST-query.
 - Bij de transaction graphs betreft het een *NIEUWE*, dus een PUT-query.
+
+![](VNGBegrippen.png)
