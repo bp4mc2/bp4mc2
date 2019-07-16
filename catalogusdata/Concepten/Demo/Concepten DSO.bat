@@ -1,9 +1,0 @@
-@echo off
-echo Creating concatenated file O...
-powershell -Command "$myFile = (gc 'Concepten DSO local.ttl') -replace 'http://localhost:8080', 'http://data.ontwikkeling.pdok.nl'; [System.IO.File]::WriteAllLines('Concepten DSO O.ttl', $myFile)"
-echo Creating concatenated file T...
-powershell -Command "$myFile = (gc 'Concepten DSO local.ttl') -replace 'http://localhost:8080', 'http://data.test.pdok.nl'; [System.IO.File]::WriteAllLines('Concepten DSO T.ttl', $myFile)"
-echo Creating concatenated file A...
-powershell -Command "$myFile = (gc 'Concepten DSO local.ttl') -replace 'http://localhost:8080', 'http://data.acceptatie.pdok.nl'; [System.IO.File]::WriteAllLines('Concepten DSO A.ttl', $myFile)"
-echo Whoohoo! All done!
-pause
