@@ -31,6 +31,7 @@ skoslex:Act a owl:Class; rdfs:subClassOf skos:Concept.
 skoslex:Object a owl:Class; rdfs:subClassOf skos:Concept.
 skoslex:Actor a owl:Class; rdfs:subClassOf skos:Concept.
 skoslex:Agent a owl:Class; rdfs:subClassOf skoslex:Actor.
+skoslex:Record a owl:Class; rdfs:subClassOf skoslex:Object.
 
 #imported from skos application profile
 skoslexap:Concept a sh:NodeShape;
@@ -55,6 +56,7 @@ skoslexap:Act a sh:NodeShape;
   sh:property skoslexap:Act_agent;
   sh:property skoslexap:Act_object;
   sh:property skoslexap:Act_refersTo;
+  sh:property skoslexap:Act_record;
 .
 skoslexap:Act_actor a sh:PropertyShape;
   rdfs:label "actor"@en;
@@ -97,7 +99,16 @@ skoslexap:Act_refersTo a sh:PropertyShape;
   sh:class skoslex:Norm;
   skos:example "De verkoper van een onroerend goed moet bij de verkoop ervan kunnen aantonen dat hij eigenaar is."@nl;
 .
-
+skoslexap:Act_record a sh:PropertyShape;
+  rdfs:label "record"@en;
+  rdfs:label "record"@nl;
+  rdfs:comment "Record relates an Act with the record that is created to capture the execution of the act"@en;
+  rdfs:comment "Een record verbindt een Act met het het record dat is gemaakt om de uivoering van de act vast te leggen"@nl;
+  sh:name "skoslex:refersTo";
+  sh:path skoslex:refersTo;
+  sh:class skoslex:Record;
+  skos:example "De notaris legt de levering van een onroerend goed vast in een akte"@nl;
+.
 #---------------------
 # Actor
 #---------------------
@@ -135,6 +146,19 @@ skoslexap:Object a sh:NodeShape;
   sh:targetClass skoslex:Object;
   sh:name "skoslex:Object";
   skos:example "Het onroerend goed DPV00 B 1207."@nl;
+.
+
+#---------------------
+# Record
+#---------------------
+skoslexap:Record a sh:NodeShape;
+  rdfs:label "Record"@en;
+  rdfs:label "Record"@nl;
+  rdfs:comment "The class of records. A record is a some object that is created to capture the execution of an act."@en;
+  rdfs:comment "De klasse van records. Een record is een object dat wordt gemaakt om de uitvoering van een act vast te leggen "@nl;
+  sh:targetClass skoslex:Record;
+  sh:name "skoslex:Record";
+  skos:example "Een notariële akte."@nl;
 .
 
 #---------------------
